@@ -15,32 +15,50 @@ This is a flutter project designed to cultivate habits based on praise and encou
 ### Installation
 
 1. Git Clone 
-
-```bash
-$ git clone https://github.com/cau-bootcamp/wehavit.git 
-$ cd wehavit
-```
+    
+    ```bash
+    $ git clone https://github.com/cau-bootcamp/wehavit.git 
+    $ cd wehavit
+    ```
 
 2. Install the dependencies
 
-```bash
-flutter pub get
-```
+    ```bash
+    flutter pub get
+    ```
 
 3. Run wehavit
 
-```bash
-flutter run
-```
+    ```bash
+    flutter run
+    ```
 ### Structure
 
 * TBD
+
+### Development
+
+#### Test
+
+```bash
+# Test all
+$ flutter test
+
+# Test file
+$ flutter test test/{file_name}
+```
+
+#### Lint
+
+```bash
+flutter analyzer
+```
 
 ### Versions and Dependencies
 
 #### Flutter Version
 
-Flutter 3.13.6
+Flutter `3.13.6`
 
 #### Flutter Packages
 
