@@ -10,8 +10,5 @@ assignees: ''
 ## Task
 **Related to User Story**: #
 
-### 예상되는 시간
-5
-
 ### 설명
 ...
