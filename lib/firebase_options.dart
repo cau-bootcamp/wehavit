@@ -49,7 +49,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '764897522660',
     projectId: 'we-havit-be',
     authDomain: 'we-havit-be.firebaseapp.com',
+    databaseURL: 'https://we-havit-be-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'we-havit-be.appspot.com',
+    measurementId: 'G-707T7ETWGP',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
@@ -57,6 +59,7 @@ class DefaultFirebaseOptions {
     appId: '1:764897522660:android:8591da5b662a75acb1cdf1',
     messagingSenderId: '764897522660',
     projectId: 'we-havit-be',
+    databaseURL: 'https://we-havit-be-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'we-havit-be.appspot.com',
   );
 
@@ -65,7 +68,10 @@ class DefaultFirebaseOptions {
     appId: '1:764897522660:ios:538d4f2955a97d8bb1cdf1',
     messagingSenderId: '764897522660',
     projectId: 'we-havit-be',
+    databaseURL: 'https://we-havit-be-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'we-havit-be.appspot.com',
+    androidClientId: '764897522660-88jtfk0rhihjcduu4dfjqm0a0nuqdlei.apps.googleusercontent.com',
+    iosClientId: '764897522660-sjvso167hu6518he4g11332qng3ajc3f.apps.googleusercontent.com',
     iosBundleId: 'com.example.wehavit',
   );
 
@@ -74,7 +80,10 @@ class DefaultFirebaseOptions {
     appId: '1:764897522660:ios:3f699b0d7e039c91b1cdf1',
     messagingSenderId: '764897522660',
     projectId: 'we-havit-be',
+    databaseURL: 'https://we-havit-be-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'we-havit-be.appspot.com',
+    androidClientId: '764897522660-88jtfk0rhihjcduu4dfjqm0a0nuqdlei.apps.googleusercontent.com',
+    iosClientId: '764897522660-24o2k5p5lcbjldg5t57r7jt6djh4tvhc.apps.googleusercontent.com',
     iosBundleId: 'com.example.wehavit.RunnerTests',
   );
 }
