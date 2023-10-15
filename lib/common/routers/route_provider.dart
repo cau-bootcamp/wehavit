@@ -5,6 +5,7 @@ import 'package:wehavit/common/routers/error_screen.dart';
 import 'package:wehavit/common/routers/route_location.dart';
 // import 'package:wehavit/common/routers/routes.dart';
 import 'package:wehavit/features/features.dart';
+import 'package:wehavit/features/my_page/presentation/screens/my_page_screen.dart';
 
 part 'route_provider.g.dart';
 
@@ -15,7 +16,8 @@ final routerProvider = Provider<GoRouter>(
     // final authState = ref.watch(authStateChangesProvider);
 
     return GoRouter(
-      initialLocation: RouteLocation.splash,
+      // initialLocation: RouteLocation.splash,
+      initialLocation: RouteLocation.myPage,
       navigatorKey: navigationKey,
       debugLogDiagnostics: true,
       routes: $appRoutes,
@@ -57,6 +59,18 @@ class HomeRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const HomeScreen();
+  }
+}
+
+@TypedGoRoute<MyPageRoute>(path: MyPageRoute.path)
+class MyPageRoute extends GoRouteData {
+  const MyPageRoute();
+
+  static const path = RouteLocation.myPage;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const MyPageScreen();
   }
 }
 
