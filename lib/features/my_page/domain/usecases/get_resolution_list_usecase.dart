@@ -3,9 +3,9 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/features/my_page/domain/models/resolution_model.dart';
 import 'package:wehavit/features/my_page/domain/repositories/resolution_repository.dart';
 
-class GetMyResolutionsUseCase
+class GetResolutionListUseCase
     implements UseCase<List<ResolutionModel>, NoParams> {
-  GetMyResolutionsUseCase(this._resolutionRepository);
+  GetResolutionListUseCase(this._resolutionRepository);
 
   final ResolutionRepository _resolutionRepository;
 
