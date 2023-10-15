@@ -7,13 +7,11 @@ import 'package:wehavit/features/my_page/domain/models/resolution_model.dart';
 import 'package:wehavit/features/my_page/domain/repositories/resolution_repository.dart';
 
 class ResolutionRepositoryImpl implements ResolutionRepository {
-  ResolutionRepositoryImpl() {
-    Provider((ref) {
-      _resolutionDatasource = ref.watch(resolutionDatasourceProvider);
-    });
+  ResolutionRepositoryImpl(dynamic ref) {
+    _resolutionDatasource = ref.watch(resolutionDatasourceProvider);
   }
 
-  late ResolutionDatasource _resolutionDatasource;
+  late final ResolutionDatasource _resolutionDatasource;
 
   @override
   Future<Either<Failure, List<ResolutionModel>>> getResolutionModelList() {

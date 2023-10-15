@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:wehavit/features/my_page/domain/models/resolution_model.dart';
 import 'package:wehavit/features/my_page/presentation/providers/my_page_resolution_list_provider.dart';
 
 class MyPageScreen extends ConsumerWidget {
@@ -25,7 +27,16 @@ class MyPageScreen extends ConsumerWidget {
                       .getResolutionList();
                 },
               ),
-              Text(resolutionListProvider.getRight().toString()),
+              resolutionListProvider.fold(
+                  (left) => null,
+                  (right) => Expanded(
+                          child: ListView.builder(
+                        itemCount: (right as List<ResolutionModel>).length,
+                        itemBuilder: (context, index) {
+                          return Text(right[index].goal);
+                        },
+                      ))) as Widget
+              // Text(resolutionListProvider.getRight().name),
             ],
           ),
         ),

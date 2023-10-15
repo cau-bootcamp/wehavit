@@ -11,8 +11,14 @@ class ResolutionRemoteDatasourceImpl implements ResolutionDatasource {
     return Future.delayed(Duration(milliseconds: 1000), () {
       return Right(<ResolutionModel>[
         ResolutionModel(
-          goal: "Hello",
-          action: "world",
+          goal: "First Goal",
+          action: "First Action",
+          period: 1111100,
+          startDate: DateTime.now(),
+        ),
+        ResolutionModel(
+          goal: "Second Goal",
+          action: "Second Action",
           period: 1111100,
           startDate: DateTime.now(),
         ),
