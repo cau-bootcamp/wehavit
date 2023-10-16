@@ -11,6 +11,6 @@ class GetResolutionListUseCase
 
   @override
   Future<Either<Failure, List<ResolutionModel>>> call(NoParams params) async {
-    return await _resolutionRepository.getResolutionModelList();
+    return await _resolutionRepository.getActiveResolutionModelList();
   }
 }

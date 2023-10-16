@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/features/my_page/data/datasources/resolution_datasource.dart';
@@ -14,7 +13,8 @@ class ResolutionRepositoryImpl implements ResolutionRepository {
   late final ResolutionDatasource _resolutionDatasource;
 
   @override
-  Future<Either<Failure, List<ResolutionModel>>> getResolutionModelList() {
-    return _resolutionDatasource.getResolutionModelList();
+  Future<Either<Failure, List<ResolutionModel>>>
+      getActiveResolutionModelList() {
+    return _resolutionDatasource.getActiveResolutionModelList();
   }
 }

@@ -8,4 +8,11 @@ class FirebaseFieldName {
   static const displayName = 'displayName';
   static const email = 'email';
   static const imageUrl = 'imageUrl';
+
+  // resolutions
+  static const resolutionGoalStatement = 'goalStatement';
+  static const resolutionActionStatement = 'actionStatement';
+  static const resolutionStartDate = 'startDate';
+  static const resolutionPeriod = 'period';
+  static const resolutionIsActive = 'isActive';
 }

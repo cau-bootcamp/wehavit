@@ -15,20 +15,12 @@ final myPageResolutionListProvider = StateNotifierProvider<
 class MyPageResolutionListProvider
     extends StateNotifier<Either<Failure, List<ResolutionModel>>> {
   MyPageResolutionListProvider(dynamic ref) : super(const Right([])) {
-    print(getResolutionListUseCaseProvider);
     provider = ref.watch(getResolutionListUseCaseProvider);
-    print("DEBUG : PROVIDER INIT");
-    print(provider);
-    // 이제 provider를 사용할 수 있습니다.
-    // provider를 초기화하거나 필요한 작업을 수행하세요.
   }
 
   late final GetResolutionListUseCase provider;
 
-  Future<void> getResolutionList() async {
-    print("DEBUG : NO PROVIDER");
-    print("${provider}");
-
+  Future<void> getActiveResolutionList() async {
     state = await provider.call(NoParams());
   }
 }

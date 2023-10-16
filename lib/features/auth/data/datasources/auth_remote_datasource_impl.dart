@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:wehavit/common/constants.dart';
-import 'package:wehavit/common/constants/firebase_collection_name.dart';
+import 'package:wehavit/common/utils/firebase_collection_name.dart';
 import 'package:wehavit/common/constants/firebase_field_name.dart';
 import 'package:wehavit/features/auth/auth.dart';
 
