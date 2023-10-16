@@ -14,7 +14,7 @@ final myPageResolutionListProvider = StateNotifierProvider<
 
 class MyPageResolutionListProvider
     extends StateNotifier<Either<Failure, List<ResolutionModel>>> {
-  MyPageResolutionListProvider(dynamic ref) : super(const Right([])) {
+  MyPageResolutionListProvider(Ref ref) : super(const Right([])) {
     provider = ref.watch(getResolutionListUseCaseProvider);
   }
 
