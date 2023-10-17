@@ -4,6 +4,7 @@ import 'package:wehavit/common/constants/firebase_field_name.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/utils/firebase_collection_name.dart';
 import 'package:wehavit/features/my_page/data/datasources/resolution_datasource.dart';
+import 'package:wehavit/features/my_page/data/entities/new_resolution_entity.dart';
 import 'package:wehavit/features/my_page/domain/models/resolution_model.dart';
 
 class ResolutionRemoteDatasourceImpl implements ResolutionDatasource {
@@ -72,6 +73,24 @@ class ResolutionRemoteDatasourceImpl implements ResolutionDatasource {
           );
 
       return Future(() => right(resolutionList));
+    } on Exception {
+      return Future(
+        () => left(
+          const Failure('catch error on getActiveResolutionModelList'),
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> uploadResolutionEntity(
+      ResolutionToUploadEntity entity) async {
+    try {
+      FirebaseFirestore.instance
+          .collection(FirebaseCollectionName.resolutions)
+          .add(entity.toFirebaseDocument());
+
+      return Future(() => right(true));
     } on Exception {
       return Future(
         () => left(

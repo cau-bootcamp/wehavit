@@ -3,7 +3,7 @@ import 'package:wehavit/features/my_page/domain/repositories/resolution_reposito
 import 'package:wehavit/features/my_page/domain/usecases/get_resolution_list_usecase.dart';
 
 final getResolutionListUseCaseProvider =
-    Provider<GetResolutionListUseCase>((ref) {
+    Provider<GetResolutionListUsecase>((ref) {
   final resolutionRepository = ref.watch(resolutionRepositoryProvider);
-  return GetResolutionListUseCase(resolutionRepository);
+  return GetResolutionListUsecase(resolutionRepository);
 });

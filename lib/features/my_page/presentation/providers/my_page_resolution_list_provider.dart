@@ -15,12 +15,12 @@ final myPageResolutionListProvider = StateNotifierProvider<
 class MyPageResolutionListProvider
     extends StateNotifier<Either<Failure, List<ResolutionModel>>> {
   MyPageResolutionListProvider(Ref ref) : super(const Right([])) {
-    provider = ref.watch(getResolutionListUseCaseProvider);
+    getResolutionListUsecase = ref.watch(getResolutionListUseCaseProvider);
   }
 
-  late final GetResolutionListUseCase provider;
+  late final GetResolutionListUsecase getResolutionListUsecase;
 
   Future<void> getActiveResolutionList() async {
-    state = await provider.call(NoParams());
+    state = await getResolutionListUsecase.call(NoParams());
   }
 }

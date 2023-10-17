@@ -73,20 +73,20 @@ class MyPageScreen extends ConsumerWidget {
                       return ResolutionDashboardWidget(model: right[index]);
                     } else {
                       return Container(
-                        margin: EdgeInsets.symmetric(vertical: 8),
+                        margin: const EdgeInsets.symmetric(vertical: 8),
+                        decoration: BoxDecoration(border: Border.all()),
+                        height: 150,
                         child: TextButton(
-                          onPressed: () {
-                            context.push("/addResolution");
+                          onPressed: () async {
+                            context.push('/addResolution');
                           },
-                          child: Center(
+                          child: const Center(
                             child: Text(
-                              "추가하기",
+                              '추가하기',
                               style: TextStyle(color: Colors.black),
                             ),
                           ),
                         ),
-                        decoration: BoxDecoration(border: Border.all()),
-                        height: 150,
                       );
                     }
                   },
