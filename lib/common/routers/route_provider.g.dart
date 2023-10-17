@@ -11,6 +11,7 @@ List<RouteBase> get $appRoutes => [
       $authRoute,
       $homeRoute,
       $myPageRoute,
+      $addResolutionRoute,
     ];
 
 RouteBase get $splashRoute => GoRouteData.$route(
@@ -89,6 +90,29 @@ extension $MyPageRouteExtension on MyPageRoute {
 
   String get location => GoRouteData.$location(
         '/myPage',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $addResolutionRoute => GoRouteData.$route(
+      path: '/addResolution',
+      factory: $AddResolutionRouteExtension._fromState,
+    );
+
+extension $AddResolutionRouteExtension on AddResolutionRoute {
+  static AddResolutionRoute _fromState(GoRouterState state) =>
+      const AddResolutionRoute();
+
+  String get location => GoRouteData.$location(
+        '/addResolution',
       );
 
   void go(BuildContext context) => context.go(location);

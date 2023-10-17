@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wehavit/features/my_page/presentation/providers/my_page_resolution_list_provider.dart';
 import 'package:wehavit/features/my_page/presentation/widgets/resolution_dashboard_widget.dart';
 
@@ -66,15 +67,32 @@ class MyPageScreen extends ConsumerWidget {
               (left) => null,
               (right) => Expanded(
                 child: ListView.builder(
-                  itemCount: right.length,
+                  itemCount: right.length + 1,
                   itemBuilder: (context, index) {
-                    return ResolutionDashboardWidget(model: right[index]);
+                    if (index < right.length) {
+                      return ResolutionDashboardWidget(model: right[index]);
+                    } else {
+                      return Container(
+                        margin: EdgeInsets.symmetric(vertical: 8),
+                        child: TextButton(
+                          onPressed: () {
+                            context.push("/addResolution");
+                          },
+                          child: Center(
+                            child: Text(
+                              "추가하기",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
+                        ),
+                        decoration: BoxDecoration(border: Border.all()),
+                        height: 150,
+                      );
+                    }
                   },
                 ),
               ),
             ) as Widget,
-            // MyResolutionWidget(),
-            // MyResolutionWidget(),
           ],
         ),
       ),
