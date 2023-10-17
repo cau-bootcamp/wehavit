@@ -49,6 +49,7 @@ dependencies:
   fpdart: ^1.1.0
   uuid: ^4.1.0
   syncfusion_flutter_charts: ^23.1.40
+  syncfusion_flutter_gauges: ^23.1.40
 
 
 dev_dependencies:

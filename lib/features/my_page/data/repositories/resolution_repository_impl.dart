@@ -7,7 +7,7 @@ import 'package:wehavit/features/my_page/domain/models/resolution_model.dart';
 import 'package:wehavit/features/my_page/domain/repositories/resolution_repository.dart';
 
 class ResolutionRepositoryImpl implements ResolutionRepository {
-  ResolutionRepositoryImpl(ProviderRef ref) {
+  ResolutionRepositoryImpl(Ref ref) {
     _resolutionDatasource = ref.watch(resolutionDatasourceProvider);
   }
 
