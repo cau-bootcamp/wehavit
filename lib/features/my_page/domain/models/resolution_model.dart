@@ -1,8 +1,5 @@
-import 'dart:isolate';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:wehavit/common/constants/firebase_field_name.dart';
-import 'package:wehavit/features/my_page/domain/models/add_resolution_model.dart';
 
 class ResolutionModel {
   ResolutionModel({
@@ -23,7 +20,7 @@ class ResolutionModel {
 
   String goal;
   String action;
-  int period;
+  int period; // period는 월화수목금토일 -> 1000101(2) 로 2진수로 대응됨
   DateTime startDate;
   bool isActive;
 }

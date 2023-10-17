@@ -21,7 +21,7 @@ class ResolutionToUploadEntity {
     var result = 0;
     for (var element in periodList) {
       result += element ? 1 : 0;
-      result << 2;
+      result = result << 1;
     }
     return result;
   }

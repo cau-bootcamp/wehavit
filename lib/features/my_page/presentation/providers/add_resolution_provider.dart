@@ -2,12 +2,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/features/my_page/domain/models/add_resolution_model.dart';
-import 'package:wehavit/features/my_page/domain/models/resolution_model.dart';
 import 'package:wehavit/features/my_page/domain/usecases/upload_resolution_usecase.dart';
 import 'package:wehavit/features/my_page/domain/usecases/upload_resolution_usecase_provider.dart';
 
-final addResolutionProvider =
-    StateNotifierProvider<AddResolutionNotifier, AddResolutionModel>((ref) {
+final addResolutionProvider = StateNotifierProvider.autoDispose<
+    AddResolutionNotifier, AddResolutionModel>((ref) {
   return AddResolutionNotifier(ref);
 });
 
@@ -20,8 +19,7 @@ class AddResolutionNotifier extends StateNotifier<AddResolutionModel> {
 
   void changePeriodState(int day) {
     state = state.copyWith(
-      isDaySelectedList:
-          state.getToggledDaySelectedList(state.isDaySelectedList, day),
+      isDaySelectedList: state.getToggledDaySelectedList(day),
     );
   }
 

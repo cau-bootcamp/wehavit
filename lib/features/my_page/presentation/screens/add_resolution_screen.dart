@@ -10,7 +10,7 @@ class AddResolutionScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.watch(addResolutionProvider);
-    final dayList = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    // final dayList = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     return Scaffold(
       appBar: AppBar(
         shadowColor: Colors.transparent,
@@ -23,7 +23,13 @@ class AddResolutionScreen extends ConsumerWidget {
           },
         ),
         Text("실천할 행동"),
-        TextField(),
+        TextField(
+          onChanged: (value) {
+            ref
+                .read(addResolutionProvider.notifier)
+                .changeActionStatement(value);
+          },
+        ),
         Text("실천 주기"),
         Row(
           children: [
@@ -155,7 +161,11 @@ class AddResolutionScreen extends ConsumerWidget {
           // }).toList(),
         ),
         Text("나의 다짐"),
-        TextField(),
+        TextField(
+          onChanged: (value) {
+            ref.read(addResolutionProvider.notifier).changeOathStatement(value);
+          },
+        ),
         ElevatedButton(
             onPressed: () async {
               ref
