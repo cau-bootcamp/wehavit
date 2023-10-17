@@ -37,10 +37,11 @@ class AddResolutionNotifier extends StateNotifier<AddResolutionModel> {
 
   Future<Either<Failure, bool>> uploadResolutionModel() {
     AddResolutionModel newModel = AddResolutionModel(
-        goalStatement: state.goalStatement,
-        actionStatement: state.actionStatement,
-        oathStatement: state.oathStatement,
-        isDaySelectedList: state.isDaySelectedList);
+      goalStatement: state.goalStatement,
+      actionStatement: state.actionStatement,
+      oathStatement: state.oathStatement,
+      isDaySelectedList: state.isDaySelectedList,
+    );
 
     return _uploadResolutionUsecase.call(newModel);
   }

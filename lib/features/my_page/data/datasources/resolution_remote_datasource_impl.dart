@@ -84,7 +84,8 @@ class ResolutionRemoteDatasourceImpl implements ResolutionDatasource {
 
   @override
   Future<Either<Failure, bool>> uploadResolutionEntity(
-      ResolutionToUploadEntity entity) async {
+    ResolutionToUploadEntity entity,
+  ) async {
     try {
       FirebaseFirestore.instance
           .collection(FirebaseCollectionName.resolutions)
