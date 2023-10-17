@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:wehavit/features/my_page/presentation/providers/add_resolution_provider.dart';
 import 'package:wehavit/features/my_page/presentation/providers/my_page_resolution_list_provider.dart';
 
+// 여기에 뷰가 적용되면 수정할 예정임.
 class AddResolutionScreen extends ConsumerWidget {
   const AddResolutionScreen({super.key});
 
@@ -11,6 +12,7 @@ class AddResolutionScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.watch(addResolutionProvider);
     // final dayList = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
     return Scaffold(
       appBar: AppBar(
         shadowColor: Colors.transparent,

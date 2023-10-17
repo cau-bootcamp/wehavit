@@ -1,7 +1,6 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/usecases/usecase.dart';
-import 'package:wehavit/common/utils/no_params.dart';
 import 'package:wehavit/features/my_page/domain/models/add_resolution_model.dart';
 import 'package:wehavit/features/my_page/domain/repositories/resolution_repository.dart';
 

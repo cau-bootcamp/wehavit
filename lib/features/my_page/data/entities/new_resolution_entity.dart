@@ -8,7 +8,7 @@ class ResolutionToUploadEntity {
     startDate = DateTime.now();
     isActive = true;
 
-    period = _periodToInt(model.isDaySelectedList);
+    period = _periodListToInt(model.isDaySelectedList);
   }
 
   late String goal;
@@ -17,7 +17,8 @@ class ResolutionToUploadEntity {
   late DateTime startDate;
   late bool isActive;
 
-  int _periodToInt(List<bool> periodList) {
+  /// List 타입으로 되어있는 요일 별 실천 일정을 2진수로 대응되는 int 타입으로 변경
+  int _periodListToInt(List<bool> periodList) {
     var result = 0;
     for (var element in periodList) {
       result += element ? 1 : 0;
