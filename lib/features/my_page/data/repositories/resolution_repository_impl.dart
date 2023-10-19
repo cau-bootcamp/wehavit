@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
-import 'package:wehavit/common/errors/failure.dart';
+import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/features/my_page/data/datasources/resolution_datasource.dart';
 import 'package:wehavit/features/my_page/data/datasources/resolution_datasource_provider.dart';
 import 'package:wehavit/features/my_page/data/entities/new_resolution_entity.dart';
@@ -16,13 +15,12 @@ class ResolutionRepositoryImpl implements ResolutionRepository {
   late final ResolutionDatasource _resolutionDatasource;
 
   @override
-  Future<Either<Failure, List<ResolutionModel>>>
-      getActiveResolutionModelList() async {
+  EitherFuture<List<ResolutionModel>> getActiveResolutionModelList() async {
     return await _resolutionDatasource.getActiveResolutionModelList();
   }
 
   @override
-  Future<Either<Failure, bool>> uploadResolutionModel(
+  EitherFuture<bool> uploadResolutionModel(
     AddResolutionModel model,
   ) async {
     final entity = ResolutionToUploadEntity(model);

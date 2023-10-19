@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
-import 'package:wehavit/common/errors/failure.dart';
+import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/features/my_page/domain/models/add_resolution_model.dart';
 import 'package:wehavit/features/my_page/domain/usecases/upload_resolution_usecase.dart';
 import 'package:wehavit/features/my_page/domain/usecases/upload_resolution_usecase_provider.dart';
@@ -35,7 +34,7 @@ class AddResolutionNotifier extends StateNotifier<AddResolutionModel> {
     state = state.copyWith(oathStatement: newStatement);
   }
 
-  Future<Either<Failure, bool>> uploadResolutionModel() {
+  EitherFuture<bool> uploadResolutionModel() {
     AddResolutionModel newModel = AddResolutionModel(
       goalStatement: state.goalStatement,
       actionStatement: state.actionStatement,

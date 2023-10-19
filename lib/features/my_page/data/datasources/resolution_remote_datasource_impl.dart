@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/constants/firebase_field_name.dart';
 import 'package:wehavit/common/errors/failure.dart';
+import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/common/utils/firebase_collection_name.dart';
 import 'package:wehavit/features/my_page/data/datasources/resolution_datasource.dart';
 import 'package:wehavit/features/my_page/data/entities/new_resolution_entity.dart';
@@ -15,8 +16,7 @@ class ResolutionRemoteDatasourceImpl implements ResolutionDatasource {
   ///
   /// 만약 보관된 도전들까지 모두 가져오고 싶다면 `getAllResolutionModelList()` 함수를 실행해주면 된다.
   @override
-  Future<Either<Failure, List<ResolutionModel>>>
-      getActiveResolutionModelList() async {
+  EitherFuture<List<ResolutionModel>> getActiveResolutionModelList() async {
     List<ResolutionModel> resolutionList = [];
 
     try {
@@ -53,8 +53,7 @@ class ResolutionRemoteDatasourceImpl implements ResolutionDatasource {
   ///
   /// 만약 활성화된 도전들만 가져오고 싶다면 `getActiveResolutionModelList()` 함수를 실행해주면 된다.
   @override
-  Future<Either<Failure, List<ResolutionModel>>>
-      getAllResolutionModelList() async {
+  EitherFuture<List<ResolutionModel>> getAllResolutionModelList() async {
     List<ResolutionModel> resolutionList = [];
 
     try {
@@ -83,7 +82,7 @@ class ResolutionRemoteDatasourceImpl implements ResolutionDatasource {
   }
 
   @override
-  Future<Either<Failure, bool>> uploadResolutionEntity(
+  EitherFuture<bool> uploadResolutionEntity(
     ResolutionToUploadEntity entity,
   ) async {
     try {
