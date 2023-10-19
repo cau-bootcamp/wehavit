@@ -17,8 +17,8 @@ final routerProvider = Provider<GoRouter>(
     // final authState = ref.watch(authStateChangesProvider);
 
     return GoRouter(
-      initialLocation: RouteLocation.splash,
-      // initialLocation: RouteLocation.myPage,
+      // initialLocation: RouteLocation.splash,
+      initialLocation: RouteLocation.myPage,
       navigatorKey: navigationKey,
       debugLogDiagnostics: true,
       routes: $appRoutes,

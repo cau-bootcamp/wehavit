@@ -27,7 +27,7 @@ class _ResolutionDashboardWidgetState extends State<ResolutionDashboardWidget> {
         borderRadius: BorderRadius.all(Radius.circular(15)),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
             flex: 2,
@@ -56,12 +56,15 @@ class _ResolutionDashboardWidgetState extends State<ResolutionDashboardWidget> {
             ),
           ),
           Expanded(
-            child: AspectRatio(
-              aspectRatio: 1,
-              child: Container(
-                padding: const EdgeInsets.all(4),
-                decoration: const BoxDecoration(color: Colors.amber),
-                child: const ResolutionDoughnutGraphWidget(),
+            child: Padding(
+              padding: const EdgeInsets.only(right: 16.0),
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: const BoxDecoration(color: Colors.amber),
+                  child: const ResolutionDoughnutGraphWidget(),
+                ),
               ),
             ),
           ),
