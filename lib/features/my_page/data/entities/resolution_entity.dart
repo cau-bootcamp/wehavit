@@ -49,7 +49,6 @@ extension ResolutionEntityConvertFunctions on ResolutionEntity {
       startDate: startDate,
       oathStatement: '',
     );
-    print(this.goal);
     return model;
   }
 }

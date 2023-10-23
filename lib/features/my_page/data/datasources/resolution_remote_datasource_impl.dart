@@ -16,23 +16,18 @@ class ResolutionRemoteDatasourceImpl implements ResolutionDatasource {
   /// 만약 보관된 도전들까지 모두 가져오고 싶다면 `getAllResolutionEntityList()` 함수를 실행해주면 된다.
   @override
   EitherFuture<List<ResolutionEntity>> getActiveResolutionEntityList() async {
-    List<ResolutionEntity> resolutionEntityList = [];
+    List<ResolutionEntity> resolutionEntityList;
 
     try {
-      FirebaseFirestore.instance
+      final fetchResult = await FirebaseFirestore.instance
           .collection(FirebaseCollectionName.resolutions)
           .where(FirebaseFieldName.resolutionIsActive, isEqualTo: true)
-          .snapshots()
-          .listen(
-            (data) => {
-              for (var doc in data.docs)
-                {
-                  resolutionEntityList.add(
-                    ResolutionEntity.fromFirebaseDocument(doc.data()),
-                  ),
-                },
-            },
-          );
+          .get();
+
+      resolutionEntityList = fetchResult.docs
+          .map((doc) => ResolutionEntity.fromFirebaseDocument(doc.data()))
+          .toList();
+
       return Future(() => right(resolutionEntityList));
     } on Exception {
       return Future(
@@ -51,22 +46,16 @@ class ResolutionRemoteDatasourceImpl implements ResolutionDatasource {
   /// 만약 활성화된 도전들만 가져오고 싶다면 `getActiveResolutionEntityList()` 함수를 실행해주면 된다.
   @override
   EitherFuture<List<ResolutionEntity>> getAllResolutionEntityList() async {
-    List<ResolutionEntity> resolutionEntityList = [];
+    List<ResolutionEntity> resolutionEntityList;
 
     try {
-      FirebaseFirestore.instance
+      final fetchResult = await FirebaseFirestore.instance
           .collection(FirebaseCollectionName.resolutions)
-          .snapshots()
-          .listen(
-            (data) => {
-              for (var doc in data.docs)
-                {
-                  resolutionEntityList.add(
-                    ResolutionEntity.fromFirebaseDocument(doc.data()),
-                  ),
-                },
-            },
-          );
+          .get();
+
+      resolutionEntityList = fetchResult.docs
+          .map((doc) => ResolutionEntity.fromFirebaseDocument(doc.data()))
+          .toList();
 
       return Future(() => right(resolutionEntityList));
     } on Exception {
@@ -78,6 +67,11 @@ class ResolutionRemoteDatasourceImpl implements ResolutionDatasource {
     }
   }
 
+  /// Firebase로 나의 도전 목표 데이터를 업로드한다.
+  ///
+  /// ResolutionEntity 타입의 객체를 인자로 전달받으면
+  /// 이를 사용자의 도전 목표 컬렉션에 저장해주고,
+  /// 업로드에 성공하였음을 Future<bool>을 통해 전달한다.
   @override
   EitherFuture<bool> uploadResolutionEntity(
     ResolutionEntity entity,

@@ -21,11 +21,5 @@ class MyPageResolutionListProvider
 
   Future<void> getActiveResolutionList() async {
     state = await getResolutionListUsecase.call(NoParams());
-    state.fold((l) {
-      print("WRONG");
-    }, (r) {
-      Future.delayed(Duration(seconds: 2));
-      print(r.length);
-    });
   }
 }
