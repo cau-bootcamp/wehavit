@@ -12,6 +12,7 @@ class FirebaseFieldName {
   // resolutions
   static const resolutionGoalStatement = 'goalStatement';
   static const resolutionActionStatement = 'actionStatement';
+  static const resolutionOathStatement = 'oathStatement';
   static const resolutionStartDate = 'startDate';
   static const resolutionPeriod = 'period';
   static const resolutionIsActive = 'isActive';

@@ -5,8 +5,7 @@ import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/common/utils/firebase_collection_name.dart';
 import 'package:wehavit/features/my_page/data/datasources/resolution_datasource.dart';
-import 'package:wehavit/features/my_page/data/entities/new_resolution_entity.dart';
-import 'package:wehavit/features/my_page/domain/models/resolution_model.dart';
+import 'package:wehavit/features/my_page/data/entities/resolution_entity.dart';
 
 class ResolutionRemoteDatasourceImpl implements ResolutionDatasource {
   /// Firebase에서 나의 도전 목표 데이터를 받아온다.
@@ -14,10 +13,10 @@ class ResolutionRemoteDatasourceImpl implements ResolutionDatasource {
   /// `FirebaseCollectionName.resolutions` 변수에 접근하여 나의 resolution 이 담겨있는 collection에 접근할 수 있으며,
   /// 여기에 접근해 현재 활성화가 되어있는 도전들만 가져온다. (보관되지 않은 도전)
   ///
-  /// 만약 보관된 도전들까지 모두 가져오고 싶다면 `getAllResolutionModelList()` 함수를 실행해주면 된다.
+  /// 만약 보관된 도전들까지 모두 가져오고 싶다면 `getAllResolutionEntityList()` 함수를 실행해주면 된다.
   @override
-  EitherFuture<List<ResolutionModel>> getActiveResolutionModelList() async {
-    List<ResolutionModel> resolutionList = [];
+  EitherFuture<List<ResolutionEntity>> getActiveResolutionEntityList() async {
+    List<ResolutionEntity> resolutionEntityList = [];
 
     try {
       FirebaseFirestore.instance
@@ -28,19 +27,17 @@ class ResolutionRemoteDatasourceImpl implements ResolutionDatasource {
             (data) => {
               for (var doc in data.docs)
                 {
-                  // TODO : Entity 로 받은 뒤 Model로 Casting 하여 전달해줘야 함
-                  resolutionList.add(
-                    ResolutionModel.fromMapData(doc.data()),
+                  resolutionEntityList.add(
+                    ResolutionEntity.fromFirebaseDocument(doc.data()),
                   ),
                 },
             },
           );
-
-      return Future(() => right(resolutionList));
+      return Future(() => right(resolutionEntityList));
     } on Exception {
       return Future(
         () => left(
-          const Failure('catch error on getActiveResolutionModelList'),
+          const Failure('catch error on getActiveResolutionEntityList'),
         ),
       );
     }
@@ -51,10 +48,10 @@ class ResolutionRemoteDatasourceImpl implements ResolutionDatasource {
   /// `FirebaseCollectionName.resolutions` 변수에 접근하여 나의 resolution 이 담겨있는 collection에 접근할 수 있으며,
   /// 여기에 접근해 현재 활성화가 되어있는 도전들만 가져온다. (보관되지 않은 도전)
   ///
-  /// 만약 활성화된 도전들만 가져오고 싶다면 `getActiveResolutionModelList()` 함수를 실행해주면 된다.
+  /// 만약 활성화된 도전들만 가져오고 싶다면 `getActiveResolutionEntityList()` 함수를 실행해주면 된다.
   @override
-  EitherFuture<List<ResolutionModel>> getAllResolutionModelList() async {
-    List<ResolutionModel> resolutionList = [];
+  EitherFuture<List<ResolutionEntity>> getAllResolutionEntityList() async {
+    List<ResolutionEntity> resolutionEntityList = [];
 
     try {
       FirebaseFirestore.instance
@@ -64,18 +61,18 @@ class ResolutionRemoteDatasourceImpl implements ResolutionDatasource {
             (data) => {
               for (var doc in data.docs)
                 {
-                  resolutionList.add(
-                    ResolutionModel.fromMapData(doc.data()),
+                  resolutionEntityList.add(
+                    ResolutionEntity.fromFirebaseDocument(doc.data()),
                   ),
                 },
             },
           );
 
-      return Future(() => right(resolutionList));
+      return Future(() => right(resolutionEntityList));
     } on Exception {
       return Future(
         () => left(
-          const Failure('catch error on getActiveResolutionModelList'),
+          const Failure('catch error on getAllResolutionEntityList'),
         ),
       );
     }
@@ -83,7 +80,7 @@ class ResolutionRemoteDatasourceImpl implements ResolutionDatasource {
 
   @override
   EitherFuture<bool> uploadResolutionEntity(
-    ResolutionToUploadEntity entity,
+    ResolutionEntity entity,
   ) async {
     try {
       FirebaseFirestore.instance
@@ -94,7 +91,7 @@ class ResolutionRemoteDatasourceImpl implements ResolutionDatasource {
     } on Exception {
       return Future(
         () => left(
-          const Failure('catch error on getActiveResolutionModelList'),
+          const Failure('catch error on uploadResolutionEntity'),
         ),
       );
     }

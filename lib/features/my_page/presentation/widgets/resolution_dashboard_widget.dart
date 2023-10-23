@@ -15,8 +15,8 @@ class ResolutionDashboardWidget extends StatefulWidget {
 }
 
 class _ResolutionDashboardWidgetState extends State<ResolutionDashboardWidget> {
-  late String goalStatement = widget.model.goal;
-  late String actionStatement = widget.model.action;
+  late String goalStatement = widget.model.goalStatement;
+  late String actionStatement = widget.model.actionStatement;
 
   @override
   Widget build(BuildContext context) {
