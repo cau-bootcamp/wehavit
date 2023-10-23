@@ -7,4 +7,6 @@ class RouteLocation {
   static const String home = '/home';
   static const String auth = '/auth';
   static const String profile = '/profile';
+  static const String myPage = '/myPage';
+  static const String addResolution = '/addResolution';
 }

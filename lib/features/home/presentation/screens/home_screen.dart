@@ -16,9 +16,14 @@ class HomeScreen extends ConsumerWidget {
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.all(16),
-        child: Text(
-          'home',
-          style: Theme.of(context).textTheme.displayMedium,
+        child: TextButton(
+          child: Text(
+            'home',
+            style: Theme.of(context).textTheme.displayMedium,
+          ),
+          onPressed: () async {
+            context.push('/mypage');
+          },
         ),
       ),
     );
