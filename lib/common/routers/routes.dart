@@ -15,4 +15,8 @@ final routes = [
     path: RouteLocation.auth,
     builder: AuthScreen.builder,
   ),
+  GoRoute(
+    path: RouteLocation.friendList,
+    builder: FriendListScreen.builder,
+  ),
 ];

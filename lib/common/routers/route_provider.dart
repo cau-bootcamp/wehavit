@@ -17,8 +17,9 @@ final routerProvider = Provider<GoRouter>(
     // final authState = ref.watch(authStateChangesProvider);
 
     return GoRouter(
-      // initialLocation: RouteLocation.splash,
-      initialLocation: RouteLocation.myPage,
+      //initialLocation: RouteLocation.splash,
+      initialLocation: RouteLocation.friendList,
+      //initialLocation: ,
       navigatorKey: navigationKey,
       debugLogDiagnostics: true,
       routes: $appRoutes,
@@ -84,6 +85,18 @@ class AddResolutionRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const AddResolutionScreen();
+  }
+}
+
+@TypedGoRoute<FriendListRoute>(path: FriendListRoute.path)
+class FriendListRoute extends GoRouteData {
+  const FriendListRoute();
+
+  static const path = RouteLocation.friendList;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const FriendListScreen();
   }
 }
 

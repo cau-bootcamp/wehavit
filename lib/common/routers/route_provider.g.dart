@@ -12,6 +12,7 @@ List<RouteBase> get $appRoutes => [
       $homeRoute,
       $myPageRoute,
       $addResolutionRoute,
+      $friendListRoute,
     ];
 
 RouteBase get $splashRoute => GoRouteData.$route(
@@ -113,6 +114,29 @@ extension $AddResolutionRouteExtension on AddResolutionRoute {
 
   String get location => GoRouteData.$location(
         '/addResolution',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $friendListRoute => GoRouteData.$route(
+      path: '/friendList',
+      factory: $FriendListRouteExtension._fromState,
+    );
+
+extension $FriendListRouteExtension on FriendListRoute {
+  static FriendListRoute _fromState(GoRouterState state) =>
+      const FriendListRoute();
+
+  String get location => GoRouteData.$location(
+        '/friendList',
       );
 
   void go(BuildContext context) => context.go(location);
