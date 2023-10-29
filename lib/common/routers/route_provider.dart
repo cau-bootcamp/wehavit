@@ -19,7 +19,7 @@ final routerProvider = Provider<GoRouter>(
     return GoRouter(
       //initialLocation: RouteLocation.splash,
       initialLocation: RouteLocation.friendList,
-      //initialLocation: ,
+      //initialLocation: RouteLocation.home,
       navigatorKey: navigationKey,
       debugLogDiagnostics: true,
       routes: $appRoutes,
