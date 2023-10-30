@@ -15,7 +15,7 @@ List<RouteBase> get $appRoutes => [
     ];
 
 RouteBase get $splashRoute => GoRouteData.$route(
-      path: '/',
+      path: '/splash',
       factory: $SplashRouteExtension._fromState,
     );
 
@@ -23,7 +23,7 @@ extension $SplashRouteExtension on SplashRoute {
   static SplashRoute _fromState(GoRouterState state) => const SplashRoute();
 
   String get location => GoRouteData.$location(
-        '/',
+        '/splash',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -59,7 +59,7 @@ extension $AuthRouteExtension on AuthRoute {
 }
 
 RouteBase get $homeRoute => GoRouteData.$route(
-      path: '/home',
+      path: '/',
       factory: $HomeRouteExtension._fromState,
     );
 
@@ -67,7 +67,7 @@ extension $HomeRouteExtension on HomeRoute {
   static HomeRoute _fromState(GoRouterState state) => const HomeRoute();
 
   String get location => GoRouteData.$location(
-        '/home',
+        '/',
       );
 
   void go(BuildContext context) => context.go(location);

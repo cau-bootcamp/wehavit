@@ -1,9 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wehavit/common/routers/error_screen.dart';
 import 'package:wehavit/common/routers/route_location.dart';
-// import 'package:wehavit/common/routers/routes.dart';
 import 'package:wehavit/features/features.dart';
 import 'package:wehavit/features/my_page/presentation/screens/add_resolution_screen.dart';
 import 'package:wehavit/features/my_page/presentation/screens/my_page_screen.dart';
@@ -14,15 +15,26 @@ final navigationKey = GlobalKey<NavigatorState>();
 
 final routerProvider = Provider<GoRouter>(
   (ref) {
-    // final authState = ref.watch(authStateChangesProvider);
+    final authState = ref.watch(authStateChangesProvider);
 
     return GoRouter(
-      // initialLocation: RouteLocation.splash,
-      initialLocation: RouteLocation.myPage,
+      initialLocation: RouteLocation.splash,
       navigatorKey: navigationKey,
       debugLogDiagnostics: true,
       routes: $appRoutes,
       errorBuilder: (context, state) => const ErrorScreen(),
+      redirect: (context, state) async {
+        final loggedIn = authState.when(
+          data: (value) => value != null,
+          loading: () => false,
+          error: (error, stackTrace) => false,
+        );
+        final loggingIn = state.matchedLocation == RouteLocation.auth;
+
+        if( !loggedIn && !loggingIn ) return RouteLocation.auth;
+        if( loggedIn && loggingIn ) return RouteLocation.myPage;
+        return null;
+      },
     );
   },
 );
@@ -32,6 +44,26 @@ class SplashRoute extends GoRouteData {
   const SplashRoute();
 
   static const path = RouteLocation.splash;
+
+  @override
+  FutureOr<String?> redirect(BuildContext context, GoRouterState state) {
+    final authState = ProviderScope.containerOf(context).read(
+        authStateChangesProvider,
+    );
+
+    final loggedIn = authState.when(
+      data: (value) => value != null,
+      loading: () => false,
+      error: (error, stackTrace) => false,
+    );
+    final loggingIn = state.matchedLocation == RouteLocation.auth;
+    if ( !loggedIn && !loggingIn ) {
+      return RouteLocation.auth;
+    }
+
+    if( loggedIn ) return RouteLocation.myPage;
+    return null;
+  }
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
