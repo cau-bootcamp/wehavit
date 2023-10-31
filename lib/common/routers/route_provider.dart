@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wehavit/common/routers/error_screen.dart';
-import 'package:wehavit/common/routers/route_location.dart';
+import 'package:wehavit/common/common.dart';
 import 'package:wehavit/features/features.dart';
 import 'package:wehavit/features/my_page/presentation/screens/add_resolution_screen.dart';
 import 'package:wehavit/features/my_page/presentation/screens/my_page_screen.dart';
@@ -31,8 +30,15 @@ final routerProvider = Provider<GoRouter>(
         );
         final isLoggingIn = state.matchedLocation == RouteLocation.auth;
 
-        if( !isLoggedIn && !isLoggingIn ) return RouteLocation.auth;
-        if( isLoggedIn && isLoggingIn ) return RouteLocation.myPage;
+        if (!isLoggedIn && !isLoggingIn) return RouteLocation.auth;
+        if (isLoggedIn && isLoggingIn) {
+          // Redirect to TestScreen if environment is development
+          if (Application.environment == Environment.development.toString()) {
+            debugPrint('Redirect to TestScreen on development');
+            return RouteLocation.testPage;
+          }
+          return RouteLocation.myPage;
+        }
         return null;
       },
     );
@@ -48,20 +54,28 @@ class SplashRoute extends GoRouteData {
   @override
   FutureOr<String?> redirect(BuildContext context, GoRouterState state) {
     final authState = ProviderScope.containerOf(context).read(
-        authStateChangesProvider,
+      authStateChangesProvider,
     );
 
-    final loggedIn = authState.when(
+    final isLoggedIn = authState.when(
       data: (value) => value != null,
       loading: () => false,
       error: (error, stackTrace) => false,
     );
-    final loggingIn = state.matchedLocation == RouteLocation.auth;
-    if ( !loggedIn && !loggingIn ) {
+    final isLoggingIn = state.matchedLocation == RouteLocation.auth;
+    if (!isLoggedIn && !isLoggingIn) {
       return RouteLocation.auth;
     }
 
-    if( loggedIn ) return RouteLocation.myPage;
+    if (isLoggedIn) {
+      // Redirect to TestScreen if environment is development
+      if (Application.environment == Environment.development.toString()) {
+        debugPrint('Redirects to TestScreen on development');
+        return RouteLocation.testPage;
+      }
+
+      return RouteLocation.myPage;
+    }
     return null;
   }
 
@@ -104,6 +118,18 @@ class MyPageRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const MyPageScreen();
+  }
+}
+
+@TypedGoRoute<TestPageRoute>(path: TestPageRoute.path)
+class TestPageRoute extends GoRouteData {
+  const TestPageRoute();
+
+  static const path = RouteLocation.testPage;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const TestPage();
   }
 }
 

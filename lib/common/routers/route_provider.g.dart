@@ -11,6 +11,7 @@ List<RouteBase> get $appRoutes => [
       $authRoute,
       $homeRoute,
       $myPageRoute,
+      $testPageRoute,
       $addResolutionRoute,
     ];
 
@@ -90,6 +91,28 @@ extension $MyPageRouteExtension on MyPageRoute {
 
   String get location => GoRouteData.$location(
         '/myPage',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $testPageRoute => GoRouteData.$route(
+      path: '/testPage',
+      factory: $TestPageRouteExtension._fromState,
+    );
+
+extension $TestPageRouteExtension on TestPageRoute {
+  static TestPageRoute _fromState(GoRouterState state) => const TestPageRoute();
+
+  String get location => GoRouteData.$location(
+        '/testPage',
       );
 
   void go(BuildContext context) => context.go(location);

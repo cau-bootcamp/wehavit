@@ -9,4 +9,5 @@ class RouteLocation {
   static const String profile = '/profile';
   static const String myPage = '/myPage';
   static const String addResolution = '/addResolution';
+  static const String testPage = '/testPage';
 }

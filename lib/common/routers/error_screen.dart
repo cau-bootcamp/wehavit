@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:wehavit/common/routers/route_location.dart';
 import 'package:wehavit/common/theme/theme.dart';
-
-import '../../features/auth/auth.dart';
 
 class ErrorScreen extends ConsumerWidget {
   const ErrorScreen({super.key});
@@ -21,11 +21,10 @@ class ErrorScreen extends ConsumerWidget {
       body: Center(
         child: ElevatedButton(
           onPressed: () async {
-            await ref.read(authProvider.notifier).logOut();
-            // context.go(RouteLocation.home);
+            context.go(RouteLocation.auth);
           },
           child: Text(
-            'Log out and Go to home',
+            'Go to Home Page',
             style: textTheme.bodyMedium,
           ),
         ),
