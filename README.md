@@ -51,7 +51,7 @@ $ flutter test test/{file_name}
 #### Lint
 
 ```bash
-flutter analyzer
+flutter analyze
 ```
 
 ### Versions and Dependencies

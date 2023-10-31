@@ -11,11 +11,12 @@ List<RouteBase> get $appRoutes => [
       $authRoute,
       $homeRoute,
       $myPageRoute,
+      $testPageRoute,
       $addResolutionRoute,
     ];
 
 RouteBase get $splashRoute => GoRouteData.$route(
-      path: '/',
+      path: '/splash',
       factory: $SplashRouteExtension._fromState,
     );
 
@@ -23,7 +24,7 @@ extension $SplashRouteExtension on SplashRoute {
   static SplashRoute _fromState(GoRouterState state) => const SplashRoute();
 
   String get location => GoRouteData.$location(
-        '/',
+        '/splash',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -59,7 +60,7 @@ extension $AuthRouteExtension on AuthRoute {
 }
 
 RouteBase get $homeRoute => GoRouteData.$route(
-      path: '/home',
+      path: '/',
       factory: $HomeRouteExtension._fromState,
     );
 
@@ -67,7 +68,7 @@ extension $HomeRouteExtension on HomeRoute {
   static HomeRoute _fromState(GoRouterState state) => const HomeRoute();
 
   String get location => GoRouteData.$location(
-        '/home',
+        '/',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -90,6 +91,28 @@ extension $MyPageRouteExtension on MyPageRoute {
 
   String get location => GoRouteData.$location(
         '/myPage',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $testPageRoute => GoRouteData.$route(
+      path: '/testPage',
+      factory: $TestPageRouteExtension._fromState,
+    );
+
+extension $TestPageRouteExtension on TestPageRoute {
+  static TestPageRoute _fromState(GoRouterState state) => const TestPageRoute();
+
+  String get location => GoRouteData.$location(
+        '/testPage',
       );
 
   void go(BuildContext context) => context.go(location);
