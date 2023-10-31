@@ -24,15 +24,15 @@ final routerProvider = Provider<GoRouter>(
       routes: $appRoutes,
       errorBuilder: (context, state) => const ErrorScreen(),
       redirect: (context, state) async {
-        final loggedIn = authState.when(
+        final isLoggedIn = authState.when(
           data: (value) => value != null,
           loading: () => false,
           error: (error, stackTrace) => false,
         );
-        final loggingIn = state.matchedLocation == RouteLocation.auth;
+        final isLoggingIn = state.matchedLocation == RouteLocation.auth;
 
-        if( !loggedIn && !loggingIn ) return RouteLocation.auth;
-        if( loggedIn && loggingIn ) return RouteLocation.myPage;
+        if( !isLoggedIn && !isLoggingIn ) return RouteLocation.auth;
+        if( isLoggedIn && isLoggingIn ) return RouteLocation.myPage;
         return null;
       },
     );
