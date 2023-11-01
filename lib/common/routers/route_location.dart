@@ -10,4 +10,6 @@ class RouteLocation {
   static const String myPage = '/myPage';
   static const String addResolution = '/addResolution';
   static const String testPage = '/testPage';
+  static const String waitingRoom = '/waitingRoom';
+  static const String liveWriting = '$waitingRoom/liveWriting';
 }

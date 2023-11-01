@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/features/features.dart';
+import 'package:wehavit/features/live_writing/presentation/screens/live_writing_page.dart';
 import 'package:wehavit/features/my_page/presentation/screens/add_resolution_screen.dart';
 import 'package:wehavit/features/my_page/presentation/screens/my_page_screen.dart';
 
@@ -142,6 +143,18 @@ class AddResolutionRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const AddResolutionScreen();
+  }
+}
+
+@TypedGoRoute<LiveWritingRoute>(path: LiveWritingRoute.path)
+class LiveWritingRoute extends GoRouteData {
+  const LiveWritingRoute();
+
+  static const path = RouteLocation.liveWriting;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const LiveWritingPage();
   }
 }
 
