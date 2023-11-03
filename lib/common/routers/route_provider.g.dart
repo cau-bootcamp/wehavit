@@ -12,6 +12,7 @@ List<RouteBase> get $appRoutes => [
       $homeRoute,
       $myPageRoute,
       $addResolutionRoute,
+      $swipeViewRoute,
     ];
 
 RouteBase get $splashRoute => GoRouteData.$route(
@@ -113,6 +114,29 @@ extension $AddResolutionRouteExtension on AddResolutionRoute {
 
   String get location => GoRouteData.$location(
         '/addResolution',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $swipeViewRoute => GoRouteData.$route(
+      path: '/swipeView',
+      factory: $SwipeViewRouteExtension._fromState,
+    );
+
+extension $SwipeViewRouteExtension on SwipeViewRoute {
+  static SwipeViewRoute _fromState(GoRouterState state) =>
+      const SwipeViewRoute();
+
+  String get location => GoRouteData.$location(
+        '/swipeView',
       );
 
   void go(BuildContext context) => context.go(location);

@@ -7,6 +7,7 @@ import 'package:wehavit/common/routers/route_location.dart';
 import 'package:wehavit/features/features.dart';
 import 'package:wehavit/features/my_page/presentation/screens/add_resolution_screen.dart';
 import 'package:wehavit/features/my_page/presentation/screens/my_page_screen.dart';
+import 'package:wehavit/features/swipe_view/presentation/screen/swipe_view.dart';
 
 part 'route_provider.g.dart';
 
@@ -18,7 +19,7 @@ final routerProvider = Provider<GoRouter>(
 
     return GoRouter(
       // initialLocation: RouteLocation.splash,
-      initialLocation: RouteLocation.myPage,
+      initialLocation: RouteLocation.swipeView,
       navigatorKey: navigationKey,
       debugLogDiagnostics: true,
       routes: $appRoutes,
@@ -84,6 +85,18 @@ class AddResolutionRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const AddResolutionScreen();
+  }
+}
+
+@TypedGoRoute<SwipeViewRoute>(path: SwipeViewRoute.path)
+class SwipeViewRoute extends GoRouteData {
+  const SwipeViewRoute();
+
+  static const path = RouteLocation.swipeView;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const SwipeView();
   }
 }
 
