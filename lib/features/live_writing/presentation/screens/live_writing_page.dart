@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:wehavit/features/live_writing/data/datasources/confirm_post_remote_datasource_impl.dart';
-import 'package:wehavit/features/live_writing/presentation/widgets/confirm_post_from.dart';
-import 'package:wehavit/features/live_writing/presentation/widgets/user_active_goal_dropdown.dart';
+import 'package:wehavit/features/live_writing/presentation/widgets/widgets.dart';
 
 class LiveWritingPage extends HookConsumerWidget {
   const LiveWritingPage({super.key});
@@ -23,7 +21,7 @@ class LiveWritingPage extends HookConsumerWidget {
       ),
       body: Container(
         padding: const EdgeInsets.all(16),
-        child: LiveWritingBody(),
+        child: const LiveWritingBody(),
       ),
     );
   }
@@ -50,8 +48,8 @@ class LiveWritingBody extends HookConsumerWidget {
     useEffect(() {
       isSubmitted.value = false;
       userInput.value = '';
-      print('>>>>>>>>>>>>>>>>>>>object');
-      ConfirmPostRemoteDatasourceImpl().getAllConfirmPosts();
+      // print('>>>>>>>>>>>>>>>>>>>object');
+      // ref.read(confirmPostRepositoryProvider).getAllConfirmPosts();
 
       return null;
     }, []);
