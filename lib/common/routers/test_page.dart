@@ -36,6 +36,18 @@ class TestPage extends ConsumerWidget {
             ),
             MoveButton(
               onPressCallback: () async {
+                context.go(RouteLocation.home);
+              },
+              buttonText: 'Go to Main View',
+            ),
+            MoveButton(
+              onPressCallback: () async {
+                context.go(RouteLocation.friendList);
+              },
+              buttonText: 'Go to Friends List View',
+            ),
+            MoveButton(
+              onPressCallback: () async {
                 context.go(RouteLocation.profile);
               },
               buttonText: 'Go to Profile Page',
