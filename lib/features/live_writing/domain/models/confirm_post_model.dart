@@ -18,6 +18,7 @@ class ConfirmPostModel with _$ConfirmPostModel {
   @Assert('updatedAt != null', 'createdAt must not be empty')
   @Assert('roles != null', 'roles must not be empty')
   @Assert('attributes != null', 'roles must not be empty')
+  @TimestampConverter()
   @DocumentReferenceJsonConverter()
   factory ConfirmPostModel({
     required String? resolutionGoalStatement,
@@ -52,4 +53,16 @@ class DocumentReferenceJsonConverter
 
   @override
   Object? toJson(DocumentReference? documentReference) => documentReference;
+}
+
+class TimestampConverter implements JsonConverter<DateTime, Timestamp> {
+  const TimestampConverter();
+
+  @override
+  DateTime fromJson(Timestamp timestamp) {
+    return timestamp.toDate();
+  }
+
+  @override
+  Timestamp toJson(DateTime date) => Timestamp.fromDate(date);
 }

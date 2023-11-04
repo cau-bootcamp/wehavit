@@ -216,6 +216,7 @@ class __$$ConfirmPostModelImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
+@TimestampConverter()
 @DocumentReferenceJsonConverter()
 class _$ConfirmPostModelImpl implements _ConfirmPostModel {
   _$ConfirmPostModelImpl(
