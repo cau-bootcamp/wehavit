@@ -21,6 +21,6 @@ class SwipeViewProvider
   late final GetTodayConfirmPostListUsecase _getTodayConfirmPostListUsecase;
 
   Future<void> getTodayConfirmPostList() async {
-    _getTodayConfirmPostListUsecase.call(NoParams());
+    state = await _getTodayConfirmPostListUsecase.call(NoParams());
   }
 }

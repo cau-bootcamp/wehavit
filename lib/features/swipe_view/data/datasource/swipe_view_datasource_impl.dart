@@ -55,36 +55,44 @@ class SwipeViewDatasourceImpl implements SwipeViewDatasource {
           await FirebaseFirestore.instance.collection("confirm_posts").get();
 
       final modelList = fetchResult.docs
-          .where((json) => json.data().containsKey('resolutionGoalStatement'))
-          .map((json) => ConfirmPostModel(
-                resolutionGoalStatement:
-                    json['resolutionGoalStatement'] as String?,
-                resolutionId: const DocumentReferenceJsonConverter()
-                    .fromJson(json['resolutionId']),
-                title: json['title'] as String?,
-                content: json['content'] as String?,
-                imageUrl: json['imageUrl'] as String?,
-                recentStrike: json['recentStrike'] as int?,
-                createdAt: json['createdAt'] == null
-                    ? null
-                    : DateTime.parse(json['createdAt'] as String),
-                updatedAt: json['updatedAt'] == null
-                    ? null
-                    : DateTime.parse(json['updatedAt'] as String),
-                roles: (json['roles'] as Map<String, dynamic>?)?.map(
-                  (k, e) => MapEntry(k, e as String),
+          .where((doc) => doc.data().containsKey('resolutionGoalStatement'))
+          .map((json) {
+        return ConfirmPostModel(
+          resolutionGoalStatement: json['resolutionGoalStatement'] as String?,
+          resolutionId: const DocumentReferenceJsonConverter()
+              .fromJson(json['resolutionId']),
+          title: json['title'] as String?,
+          content: json['content'] as String?,
+          imageUrl: json['imageUrl'] as String?,
+          recentStrike: json['recentStrike'] as int?,
+          createdAt: json['createdAt'] == null
+              ? null
+              : DateTime.parse(
+                  (json['createdAt'] as Timestamp).toDate().toString(),
                 ),
-                attributes: (json['attributes'] as Map<String, dynamic>?)?.map(
-                  (k, e) => MapEntry(k, e as bool),
+          updatedAt: json['updatedAt'] == null
+              ? null
+              : DateTime.parse(
+                  (json['createdAt'] as Timestamp).toDate().toString(),
                 ),
-              ))
-          .toList();
+          roles: (json['roles'] as Map<String, dynamic>?)?.map(
+            (k, e) => MapEntry(k, e as String),
+          ),
+          attributes: (json['attributes'] as Map<String, dynamic>?)?.map(
+            (k, e) => MapEntry(k, e as bool),
+          ),
+        );
+      }).toList();
+      print("CAPTURE");
 
-      return Future(() => right(modelList));
+      print(modelList.first);
+      final temp = modelList.toList();
+
+      return Future(() => right(temp));
     } on Exception {
       return Future(
         () => left(
-          const Failure("catch error on fetchLiveWrittenConfirmPostList"),
+          const Failure("catch error on fetchTodayConfirmPostList"),
         ),
       );
     }
