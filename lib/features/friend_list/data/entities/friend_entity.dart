@@ -4,11 +4,10 @@ import 'package:wehavit/features/friend_list/domain/models/friend_model.dart';
 import 'package:wehavit/features/friend_list/domain/models/add_friend_model.dart';
 
 class FriendEntity {
-  FriendEntity.fromFirebaseDocument(Map<String, dynamic> data)
-
+  FriendEntity.fromFirebaseDocument(Map<String, dynamic> data, Map<String, dynamic> usersData)
       : friendID = data[FirebaseFieldName.friendID],
-        friendName = data[FirebaseFieldName.friendName],
-        friendImageUrl = data[FirebaseFieldName.friendImageUrl];
+        friendName = usersData[FirebaseFieldName.displayName],
+        friendImageUrl = usersData[FirebaseFieldName.imageUrl];
   FriendEntity.fromFriendModel(AddFriendModel model) {
     friendID = model.friendID;
   }

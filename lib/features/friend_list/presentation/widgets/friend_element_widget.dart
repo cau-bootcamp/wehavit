@@ -23,7 +23,6 @@ class _FriendElementWidgetState extends State<FriendElementWidget> {
         backgroundImage: AssetImage(friendImageUrl),
       ),
       title: Text(friendName),
-      trailing: IconButton(icon: const Icon(Icons.link), color: Colors.black87, onPressed: (){},),
     );
   }
 }

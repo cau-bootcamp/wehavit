@@ -16,9 +16,17 @@ class FriendRemoteDatasourceImpl implements FriendDatasource {
       final fetchResult = await FirebaseFirestore.instance
           .collection(FirebaseCollectionName.friends)
           .get();
-
+      final documentIds = fetchResult.docs.map((doc) => doc.id);
+      final fetchFriendResult = await FirebaseFirestore.instance
+          .collection(FirebaseCollectionName.users)
+          .where(FieldPath.documentId, whereIn: documentIds)
+          .get();
+      var friendMap = {
+        for (var doc in fetchFriendResult.docs) doc.id : doc.data(),
+      };
       friendEntityList = fetchResult.docs
-          .map((doc) => FriendEntity.fromFirebaseDocument(doc.data()))
+          .map((doc) => FriendEntity
+          .fromFirebaseDocument(doc.data(), friendMap),)
           .toList();
 
       return Future(() => right(friendEntityList));
@@ -26,29 +34,6 @@ class FriendRemoteDatasourceImpl implements FriendDatasource {
       return Future(
             () => left(
           const Failure('catch error on getActiveFriendEntityList'),
-        ),
-      );
-    }
-  }
-
-  @override
-  EitherFuture<List<FriendEntity>> getAllFriendEntityList() async {
-    List<FriendEntity> friendEntityList;
-
-    try {
-      final fetchResult = await FirebaseFirestore.instance
-          .collection(FirebaseCollectionName.friends)
-          .get();
-
-      friendEntityList = fetchResult.docs
-          .map((doc) => FriendEntity.fromFirebaseDocument(doc.data()))
-          .toList();
-
-      return Future(() => right(friendEntityList));
-    } on Exception {
-      return Future(
-            () => left(
-          const Failure('catch error on getAllFriendEntityList'),
         ),
       );
     }
