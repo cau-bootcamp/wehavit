@@ -20,19 +20,39 @@ class FriendListScreen extends ConsumerWidget {
     var v_friendListProvider = ref.watch(friendListProvider);
 
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(128),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            AppBar(),
-          ],
-        ),
-      ),
-      body :
-      v_friendListProvider.fold(
-            (left) => null,
-            (right) => Expanded(
+      appBar: AppBar(),
+      body : Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.only(bottom: 16),
+            child: Row(
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(right: 16.0),
+                  child: CircleAvatar(
+                    radius: 40,
+                    foregroundImage:
+                    NetworkImage(currentUser?.photoURL ?? 'DEBUG_URL'),
+                  ),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(currentUser?.displayName ?? 'DEBUG_NONAME'),
+                    Text(currentUser?.email ?? 'DEBUG_UserID'),
+                  ],
+                ),
+               Container(
+                 margin: const EdgeInsets.only(right: 16.0),
+                  child: IconButton(icon: const Icon(Icons.add), color: Colors.black87, onPressed: (){},),
+               ),
+              ],
+            ),
+          ),
+          v_friendListProvider.fold(
+                (left) => null,
+                (right) => Expanded(
               child: ListView.builder(
                 itemCount: right.length + 1,
                 itemBuilder: (context, index) {
@@ -42,13 +62,15 @@ class FriendListScreen extends ConsumerWidget {
                     return Container(
                       margin: const EdgeInsets.symmetric(vertical: 8),
                       decoration: BoxDecoration(border: Border.all()),
-                      height: 150,
+                      height: 100,
                     );
-              }
-            },
-          ),
-        ),
-      ) as Widget,
+                  }
+                },
+              ),
+            ),
+          ) as Widget,
+        ],
+      ),
     );
   }
 }

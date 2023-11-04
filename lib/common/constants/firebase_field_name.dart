@@ -10,6 +10,7 @@ class FirebaseFieldName {
   static const imageUrl = 'imageUrl';
 
   //friend
+  static const friendID = 'friendID';
   static const friendName = 'friendName';
   static const friendImageUrl = 'friendImageUrl';
 
