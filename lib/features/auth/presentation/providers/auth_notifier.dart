@@ -28,7 +28,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     );
   }
 
-  Future<void> signOut() async {
+  Future<void> logOut() async {
     state.copyWith(isLoading: true);
     await _logOut().then((value) {
       state = state.copyWith(

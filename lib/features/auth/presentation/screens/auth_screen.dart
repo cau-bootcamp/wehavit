@@ -21,7 +21,9 @@ class AuthScreen extends ConsumerWidget {
 
     ref.listen(authProvider, (previous, next) {
       if (next.authResult == AuthResult.success) {
-        context.go(RouteLocation.home);
+        context.go(RouteLocation.myPage);
+      } else {
+        context.go(RouteLocation.auth);
       }
     });
 
