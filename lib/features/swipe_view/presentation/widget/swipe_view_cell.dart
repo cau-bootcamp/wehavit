@@ -60,14 +60,14 @@ class SwipeViewCellWidget extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Container(
                 color: Colors.pink.shade200,
-                constraints: BoxConstraints.expand(height: 120),
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
+                constraints: const BoxConstraints.expand(height: 120),
+                child: const Padding(
+                  padding: EdgeInsets.all(4.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(4.0),
+                        padding: EdgeInsets.all(4.0),
                         child: Text("인증글 제목"),
                       ),
                       Divider(
@@ -75,7 +75,7 @@ class SwipeViewCellWidget extends StatelessWidget {
                         color: Colors.black,
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(4.0),
+                        padding: EdgeInsets.all(4.0),
                         child: Text(
                           "인증글 본문은 이렇게 작성이 길게 될 수도 있습니다. 인증글 본문은 이렇게 작성이 길게 될 수도 있습니다. 인증글 본문은 이렇게 작성이 길게 될 수도 있습니다.",
                         ),
