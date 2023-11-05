@@ -6,13 +6,19 @@ part 'confirm_post_model.g.dart';
 
 @freezed
 class ConfirmPostModel with _$ConfirmPostModel {
-  @Assert('resolutionGoalStatement != null',
-      'resolutionGoalStatement must not be null')
-  @Assert('resolutionGoalStatement!.isNotEmpty',
-      'resolutionGoalStatement must not be empty')
+  @Assert(
+    'resolutionGoalStatement != null',
+    'resolutionGoalStatement must not be null',
+  )
+  @Assert(
+    'resolutionGoalStatement!.isNotEmpty',
+    'resolutionGoalStatement must not be empty',
+  )
   @Assert('recentStrike != null', 'recentStrike must not be null')
-  @Assert('recentStrike! >= 0 && recentStrike! <= 170',
-      'recentStrike must be between b0000000 and b1111111')
+  @Assert(
+    'recentStrike! >= 0 && recentStrike! <= 170',
+    'recentStrike must be between b0000000 and b1111111',
+  )
   @Assert('resolutionId != null', 'resolutionId must not be null')
   @Assert('createdAt != null', 'createdAt must not be empty')
   @Assert('updatedAt != null', 'createdAt must not be empty')

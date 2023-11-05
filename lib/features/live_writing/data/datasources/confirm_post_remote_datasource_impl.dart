@@ -7,10 +7,12 @@ import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
 
 class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
+  // TODO. move to constants
   static const CONFIRM_POST_COLLECTION = 'confirm_posts';
   static const CONFIRM_POST_ROLES_COMPILIMENTER = 'complimenter';
   static const CONFIRM_POST_ROLES_OWNER = 'owner';
 
+  @override
   EitherFuture<List<ConfirmPostModel>> getAllConfirmPosts() async {
     try {
       final fetchResult = await FirebaseFirestore.instance
@@ -26,8 +28,6 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
       List<ConfirmPostModel> confirmPosts = fetchResult.docs
           .map((doc) => ConfirmPostModel.fromJson(doc.data()))
           .toList();
-
-      print('TEST >>>>>>>>>>>>>>>>>>>${confirmPosts}');
 
       return Future(() => right(confirmPosts));
     } on Exception {
@@ -62,6 +62,7 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
   }
 }
 
+// TODO. move to different file
 abstract class ConfirmPostDatasource {
   EitherFuture<List<ConfirmPostModel>> getAllConfirmPosts();
 
@@ -74,6 +75,7 @@ abstract class ConfirmPostDatasource {
   void getConfirmPostByUserId();
 }
 
+// TODO. move to different file
 final confirmPostDatasourceProvider = Provider<ConfirmPostDatasource>((ref) {
   return ConfirmPostRemoteDatasourceImpl();
 });

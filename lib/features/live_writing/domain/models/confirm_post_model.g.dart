@@ -39,9 +39,13 @@ Map<String, dynamic> _$$ConfirmPostModelImplToJson(
       'imageUrl': instance.imageUrl,
       'recentStrike': instance.recentStrike,
       'createdAt': _$JsonConverterToJson<Timestamp, DateTime>(
-          instance.createdAt, const TimestampConverter().toJson),
+        instance.createdAt,
+        const TimestampConverter().toJson,
+      ),
       'updatedAt': _$JsonConverterToJson<Timestamp, DateTime>(
-          instance.updatedAt, const TimestampConverter().toJson),
+        instance.updatedAt,
+        const TimestampConverter().toJson,
+      ),
       'roles': instance.roles,
       'attributes': instance.attributes,
     };

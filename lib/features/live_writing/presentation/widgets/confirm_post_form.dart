@@ -1,41 +1,80 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:wehavit/features/live_writing/presentation/widgets/user_input.dart';
+import 'package:wehavit/features/live_writing/presentation/widgets/confirm_post_content_input.dart';
+import 'package:wehavit/features/live_writing/presentation/widgets/confirm_post_title_input.dart';
 
 class ConfirmPostForm extends HookConsumerWidget {
   ConfirmPostForm({
     super.key,
     required this.isSubmitted,
-    required this.onUserInput,
+    required this.onSubmit,
   });
 
   final ValueNotifier<bool> isSubmitted;
-  final Function(String) onUserInput;
+  final Function(String, String) onSubmit;
   final _confirmPostFormKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final titleTextController =
-    //     useTextEditingController(text: confirmModel.title ?? '');
+    var titleController = useTextEditingController();
+    var contentController = useTextEditingController();
+
+    void onSave() {
+      if (_confirmPostFormKey.currentState!.validate()) {
+        _confirmPostFormKey.currentState!.save();
+        onSubmit(titleController.text, contentController.text);
+        isSubmitted.value = true;
+      }
+    }
 
     return Expanded(
-      child: Container(
-        color: Colors.blueGrey,
-        width: double.infinity,
-        height: 100,
-        child: Column(
-          children: [
-            ConfirmPostTitleTextField(),
-
-            /// Confirm Post Content
-            Expanded(
-              child: ConfirmPostContentTextField(
-                /**/
-                isSubmitted: isSubmitted.value,
-                onSubmitted: onUserInput,
+      child: Form(
+        key: _confirmPostFormKey,
+        child: SizedBox(
+          width: double.infinity,
+          child: Column(
+            children: [
+              Expanded(
+                flex: 2,
+                child: ConfirmPostTitleTextFormField(
+                  isSubmitted: isSubmitted,
+                  titleController: titleController,
+                  titleValidator: (value) =>
+                      (value ?? '').isEmpty ? '제목을 입력해주세요' : null,
+                ),
               ),
-            ),
-          ],
+
+              /// Confirm Post Content
+              Expanded(
+                flex: 3,
+                child: ConfirmPostContentTextFormField(
+                  isSubmitted: isSubmitted,
+                  contentController: contentController,
+                  contentValidator: (value) =>
+                      (value ?? '').isEmpty ? '내용을 입력해주세요' : null,
+                ),
+              ),
+              // Confirm Post Button
+              ElevatedButton(
+                onPressed: onSave,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  maximumSize: const Size(65, 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: const Text(
+                  '완료',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 10,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

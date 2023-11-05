@@ -1,48 +1,59 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ActiveGoalDropdown extends HookConsumerWidget {
   const ActiveGoalDropdown({
+    required this.selectedResolutionGoal,
+    required this.activeResolutionList,
     required this.isSubmitted,
-    required this.onResolutionGoalSelected,
     super.key,
   });
 
+  final ValueNotifier<String> selectedResolutionGoal;
   final ValueNotifier<bool> isSubmitted;
-  final void Function(String) onResolutionGoalSelected;
-  final activeResolutionGoals = const [
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-  ]; // TODO: fetch from server
+  final List<String> activeResolutionList;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedGoal = useState('1');
-
-    if (!isSubmitted.value) {
-      return Container(
-        width: double.infinity,
-        height: 50,
-        color: Colors.amber,
-        child: DropdownButton<String>(
-          value: selectedGoal.value,
-          onChanged: (String? newValue) {
-            onResolutionGoalSelected(newValue ?? '');
-          },
-          items: activeResolutionGoals
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text('목표 $value'),
-            );
-          }).toList(),
+    return Container(
+      width: double.infinity,
+      height: 50,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.white,
         ),
-      );
-    }
-    return const Placeholder();
+      ),
+      // padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: DropdownMenu<String>(
+        width: 200,
+        textStyle: const TextStyle(
+          color: Colors.black,
+          fontSize: 15,
+        ),
+        inputDecorationTheme: const InputDecorationTheme(
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.zero,
+        ),
+        trailingIcon: const Icon(
+          Icons.arrow_drop_down,
+          color: Colors.black,
+          size: 15,
+        ),
+        enabled: !isSubmitted.value,
+        initialSelection: selectedResolutionGoal.value,
+        onSelected: (newValue) {
+          if (!isSubmitted.value) {
+            selectedResolutionGoal.value = newValue!;
+          }
+        },
+        dropdownMenuEntries:
+            activeResolutionList.map<DropdownMenuEntry<String>>((String value) {
+          return DropdownMenuEntry<String>(
+            value: value,
+            label: value,
+          );
+        }).toList(),
+      ),
+    );
   }
 }
