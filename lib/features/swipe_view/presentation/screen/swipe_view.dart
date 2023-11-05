@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:carousel_slider/carousel_controller.dart';
@@ -25,6 +26,8 @@ class SwipeViewState extends ConsumerState<SwipeView> {
   @override
   Widget build(BuildContext context) {
     var swipeViewProviderList = ref.watch(swipeViewProvider);
+    Map<Key, ShootEmojiWidget> emojiWidgets = {};
+    int countSend = 0;
 
     return Scaffold(
       // appBar: AppBar(),
@@ -55,9 +58,10 @@ class SwipeViewState extends ConsumerState<SwipeView> {
                             key: ValueKey(index),
                             // padding: EdgeInsets.symmetric(horizontal: 15),
                             decoration: BoxDecoration(
-                                color: _currentCellNumber == index
-                                    ? Colors.amber
-                                    : Colors.grey[400]),
+                              color: _currentCellNumber == index
+                                  ? Colors.amber
+                                  : Colors.grey[400],
+                            ),
                             height: 8,
                           ),
                         ),
@@ -97,10 +101,140 @@ class SwipeViewState extends ConsumerState<SwipeView> {
                     Row(
                       children: [
                         Expanded(child: Container()),
-                        ElevatedButton.icon(
-                          onPressed: () {},
-                          icon: Icon(Icons.emoji_emotions),
-                          label: Text(""),
+                        GestureDetector(
+                          onTapUp: (details) => showModalBottomSheet(
+                              backgroundColor: Colors.transparent,
+                              clipBehavior: Clip.none,
+                              elevation: 0,
+                              context: context,
+                              builder: (context) {
+                                void disposeWidget(UniqueKey key) {
+                                  setState(() {
+                                    emojiWidgets.remove(key);
+                                  });
+                                }
+
+                                return StatefulBuilder(builder:
+                                    (BuildContext context,
+                                        StateSetter setState) {
+                                  return Stack(
+                                    alignment: Alignment.center,
+                                    clipBehavior: Clip.none,
+                                    children: [
+                                      Stack(
+                                        alignment: Alignment.topCenter,
+                                        clipBehavior: Clip.none,
+                                        children: emojiWidgets.values.toList(),
+                                      ),
+                                      Container(
+                                        clipBehavior: Clip.hardEdge,
+                                        decoration: const BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(20),
+                                            topRight: Radius.circular(20),
+                                          ),
+                                        ),
+                                      ),
+                                      Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 30.0),
+                                            child: Text(
+                                                "반응을 $countSend 회 보냈어요!",
+                                                style: TextStyle(fontSize: 20)),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8.0),
+                                            child: Column(
+                                                children: List<Widget>.generate(
+                                              3,
+                                              (index) => Row(
+                                                children: List<Widget>.generate(
+                                                    5, (index) {
+                                                  final key = GlobalKey();
+                                                  return Expanded(
+                                                    key: key,
+                                                    flex: 1,
+                                                    child: GestureDetector(
+                                                      onTapDown: (detail) {},
+                                                      onTapUp: (detail) {
+                                                        setState(
+                                                          () {
+                                                            countSend++;
+                                                            final animationWidgetKey =
+                                                                UniqueKey();
+                                                            emojiWidgets
+                                                                .addEntries({
+                                                              animationWidgetKey: ShootEmojiWidget(
+                                                                  key:
+                                                                      animationWidgetKey,
+                                                                  currentPos: Point(
+                                                                      detail
+                                                                          .globalPosition
+                                                                          .dx,
+                                                                      detail
+                                                                          .globalPosition
+                                                                          .dy),
+                                                                  targetPos: Point(
+                                                                      MediaQuery.of(context)
+                                                                              .size
+                                                                              .width /
+                                                                          2,
+                                                                      MediaQuery.of(context)
+                                                                              .size
+                                                                              .height +
+                                                                          50),
+                                                                  disposeWidgetFromParent:
+                                                                      disposeWidget)
+                                                            }.entries);
+                                                          },
+                                                        );
+                                                        print(emojiWidgets
+                                                            .length);
+                                                      },
+                                                      // },
+                                                      child: Stack(
+                                                        clipBehavior: Clip.none,
+                                                        children: [
+                                                          // Image(
+                                                          //   image: AssetImage(
+                                                          //       "images/sample_emoji.png"),
+                                                          // ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  );
+                                                }),
+                                              ),
+                                            )),
+                                          ),
+                                          SizedBox(
+                                            height: 60,
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  );
+                                });
+                              }).whenComplete(() => emojiWidgets.clear()),
+                          child: Container(
+                            width: 50,
+                            height: 50,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              // color: Colors.black,
+                            ),
+                            child: const Center(
+                              child: Text(
+                                "😄",
+                                style: TextStyle(fontSize: 30),
+                              ),
+                            ),
+                          ),
                         ),
                         SizedBox(
                           width: 10,
@@ -121,6 +255,84 @@ class SwipeViewState extends ConsumerState<SwipeView> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class ShootEmojiWidget extends StatefulWidget {
+  ShootEmojiWidget(
+      {super.key,
+      required this.disposeWidgetFromParent,
+      required this.currentPos,
+      required this.targetPos});
+  Function disposeWidgetFromParent;
+  Point currentPos;
+  Point targetPos;
+
+  @override
+  State<ShootEmojiWidget> createState() => _ShootEmojiWidgetState();
+}
+
+class _ShootEmojiWidgetState extends State<ShootEmojiWidget>
+    with TickerProviderStateMixin {
+  late AnimationController _controller;
+  late var _yAnimation, _xAnimation;
+  late Function disposeWidgetFromParent;
+  late double targetXPos;
+  final double emojiSize = 50;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    disposeWidgetFromParent = widget.disposeWidgetFromParent;
+
+    _controller = AnimationController(
+        vsync: this, duration: Duration(milliseconds: 1500));
+    _yAnimation = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOut,
+    ));
+    _xAnimation = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
+    // _animation = Tween<double>(begin: 0, end: 1).animate(_controller, );
+    _controller.forward(from: 0.0);
+    _controller.addListener(() {
+      if (mounted) {
+        setState(() {});
+      }
+    });
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        disposeWidgetFromParent(widget.key);
+        // dispose();
+        // super.dispose();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      bottom: (widget.targetPos.y * 1.0 * _yAnimation.value) +
+          (400) * (1 - _yAnimation.value),
+      left: widget.targetPos.x.toDouble() * _xAnimation.value +
+          (widget.currentPos.x.toDouble()) * (1 - _xAnimation.value) -
+          emojiSize / 2,
+      child: Image(
+        width: emojiSize,
+        height: emojiSize,
+        image: AssetImage("images/heart_icon.png"),
       ),
     );
   }
