@@ -5,7 +5,7 @@ import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wehavit/features/swipe_view/data/enitty/DEBUG_confirm_post_model.dart';
+import 'package:wehavit/common/utils/emoji_assets.dart';
 import 'package:wehavit/features/swipe_view/presentation/provider/swipe_view_provider.dart';
 import 'package:wehavit/features/swipe_view/presentation/widget/swipe_view_cell.dart';
 
@@ -147,14 +147,14 @@ class SwipeViewState extends ConsumerState<SwipeView> {
                                                 style: TextStyle(fontSize: 20)),
                                           ),
                                           Padding(
-                                            padding: const EdgeInsets.symmetric(
+                                            padding: EdgeInsets.symmetric(
                                                 horizontal: 8.0),
                                             child: Column(
                                                 children: List<Widget>.generate(
                                               3,
                                               (index) => Row(
                                                 children: List<Widget>.generate(
-                                                    5, (index) {
+                                                    5, (jndex) {
                                                   final key = GlobalKey();
                                                   return Expanded(
                                                     key: key,
@@ -172,6 +172,9 @@ class SwipeViewState extends ConsumerState<SwipeView> {
                                                               animationWidgetKey: ShootEmojiWidget(
                                                                   key:
                                                                       animationWidgetKey,
+                                                                  emojiIndex:
+                                                                      index * 5 +
+                                                                          jndex,
                                                                   currentPos: Point(
                                                                       detail
                                                                           .globalPosition
@@ -200,10 +203,13 @@ class SwipeViewState extends ConsumerState<SwipeView> {
                                                       child: Stack(
                                                         clipBehavior: Clip.none,
                                                         children: [
-                                                          // Image(
-                                                          //   image: AssetImage(
-                                                          //       "images/sample_emoji.png"),
-                                                          // ),
+                                                          Image(
+                                                            image: AssetImage(
+                                                              Emojis.emojiList[
+                                                                  index * 5 +
+                                                                      jndex],
+                                                            ),
+                                                          ),
                                                         ],
                                                       ),
                                                     ),
@@ -265,7 +271,9 @@ class ShootEmojiWidget extends StatefulWidget {
       {super.key,
       required this.disposeWidgetFromParent,
       required this.currentPos,
-      required this.targetPos});
+      required this.targetPos,
+      required this.emojiIndex});
+  int emojiIndex;
   Function disposeWidgetFromParent;
   Point currentPos;
   Point targetPos;
@@ -329,10 +337,15 @@ class _ShootEmojiWidgetState extends State<ShootEmojiWidget>
       left: widget.targetPos.x.toDouble() * _xAnimation.value +
           (widget.currentPos.x.toDouble()) * (1 - _xAnimation.value) -
           emojiSize / 2,
-      child: Image(
-        width: emojiSize,
-        height: emojiSize,
-        image: AssetImage("images/heart_icon.png"),
+      child: Opacity(
+        opacity: _controller.status == AnimationStatus.completed ? 0.0 : 1.0,
+        child: Image(
+          width: emojiSize,
+          height: emojiSize,
+          image: AssetImage(
+            Emojis.emojiList[widget.emojiIndex],
+          ),
+        ),
       ),
     );
   }
