@@ -1,14 +1,17 @@
 import 'package:flutter/foundation.dart' show immutable;
 
 @immutable
-class FirebaseFieldName {
-  const FirebaseFieldName._();
+class FirebaseUserFieldName {
+  const FirebaseUserFieldName._();
 
   //users
   static const displayName = 'displayName';
   static const email = 'email';
   static const imageUrl = 'imageUrl';
+}
 
+@immutable
+class FirebaseResolutionFieldName {
   // resolutions
   static const resolutionGoalStatement = 'goalStatement';
   static const resolutionActionStatement = 'actionStatement';
