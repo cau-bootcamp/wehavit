@@ -12,13 +12,16 @@ class ResolutionModel {
   });
 
   ResolutionModel.fromMapData(Map<String, dynamic> data)
-      : goalStatement = data[FirebaseFieldName.resolutionGoalStatement],
-        actionStatement = data[FirebaseFieldName.resolutionActionStatement],
-        isDaySelectedList = data[FirebaseFieldName.resolutionPeriod],
+      : goalStatement =
+            data[FirebaseResolutionFieldName.resolutionGoalStatement],
+        actionStatement =
+            data[FirebaseResolutionFieldName.resolutionActionStatement],
+        isDaySelectedList = data[FirebaseResolutionFieldName.resolutionPeriod],
         startDate =
-            (data[FirebaseFieldName.resolutionStartDate] as Timestamp).toDate(),
-        isActive = data[FirebaseFieldName.resolutionIsActive],
-        oathStatement = data[FirebaseFieldName];
+            (data[FirebaseResolutionFieldName.resolutionStartDate] as Timestamp)
+                .toDate(),
+        isActive = data[FirebaseResolutionFieldName.resolutionIsActive],
+        oathStatement = data[FirebaseResolutionFieldName];
 
   String goalStatement;
   String actionStatement;
