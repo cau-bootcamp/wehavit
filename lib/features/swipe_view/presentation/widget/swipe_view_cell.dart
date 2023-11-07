@@ -30,10 +30,6 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
   @override
   Widget build(BuildContext context) {
     _fetchUserDataFromIdUsecase = ref.watch(fetchUserDataFromIdUsecaseProvider);
-    // _fetchUserDataFromIdUsecase.call(
-    //     widget.model.roles!.keys.firstWhere((element) => element == "onwer"));
-    // ref.read(swipeViewCellUserModelProvider.notifier).getUserModelFromUi(
-    //     widget.model.roles!.keys.firstWhere((element) => element == "onwer"));
 
     // TODO : User
     return Expanded(
@@ -44,29 +40,37 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
             Column(
               children: [
                 FutureBuilder(
-                  future: _fetchUserDataFromIdUsecase.call(widget
-                      .model.roles!.keys
-                      .firstWhere((element) => element == "onwer",
-                          orElse: () => "")),
+                  future: _fetchUserDataFromIdUsecase.call(
+                    widget.model.roles!.keys.firstWhere(
+                      (element) => widget.model.roles![element] == "owner",
+                    ),
+                  ),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     //해당 부분은 data를 아직 받아 오지 못했을때 실행되는 부분을 의미한다.
                     if (snapshot.hasData == false) {
-                      return CircularProgressIndicator();
+                      return Container(
+                        width: 80,
+                        height: 100,
+                        child: CircularProgressIndicator(),
+                      );
                     } else if (snapshot.hasError == true) {
-                      return CircularProgressIndicator();
+                      return Container(
+                        width: 80,
+                        height: 100,
+                        child: CircularProgressIndicator(),
+                      );
                     } else {
                       return Column(
                         children: [
                           CircleAvatar(
                             radius: 40,
-                            foregroundImage: NetworkImage(
-                              // widget.model.owner.imageUrl,
-                              snapshot.data.fold(
-                                (failure) => "NoImageUrl",
-                                (model) => model.imageUrl,
+                            foregroundImage: snapshot.data.fold(
+                              (failure) => null,
+                              (model) => NetworkImage(
+                                model.imageUrl,
                               ),
                             ),
-                            backgroundColor: Colors.white,
+                            backgroundColor: Colors.grey,
                           ),
                           Text(
                             snapshot.data.fold(
