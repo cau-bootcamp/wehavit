@@ -5,6 +5,6 @@ import 'package:wehavit/features/swipe_view/domain/usecase/get_today_confirm_pos
 
 final getTodayConfirmPostListUsecaseProvider =
     Provider<GetTodayConfirmPostListUsecase>((ref) {
-  final _confirmPostRepository = ref.watch(confirmPostRepositoryProvider);
-  return GetTodayConfirmPostListUsecase(_confirmPostRepository);
+  final confirmPostRepository = ref.watch(confirmPostRepositoryProvider);
+  return GetTodayConfirmPostListUsecase(confirmPostRepository);
 });

@@ -4,10 +4,13 @@ import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/models/user_model/user_model.dart';
 import 'package:wehavit/common/utils/utils.dart';
 import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
+import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';
 import 'package:wehavit/features/swipe_view/domain/usecase/fetch_user_data_from_id_usecase.dart';
 import 'package:wehavit/features/swipe_view/domain/usecase/fetch_user_data_from_id_usecase_provider.dart';
 import 'package:wehavit/features/swipe_view/domain/usecase/get_today_confirm_post_list_usecase.dart';
 import 'package:wehavit/features/swipe_view/domain/usecase/get_today_confirm_post_list_usecase_proivder.dart';
+import 'package:wehavit/features/swipe_view/domain/usecase/send_reaction_to_target_confirm_post.dart';
+import 'package:wehavit/features/swipe_view/domain/usecase/send_reaction_to_target_confirm_post_provider.dart';
 import 'package:wehavit/features/swipe_view/presentation/widget/swipe_view_cell.dart';
 
 final swipeViewProvider = StateNotifierProvider<SwipeViewProvider,
@@ -19,10 +22,14 @@ class SwipeViewProvider
     _getTodayConfirmPostListUsecase =
         ref.watch(getTodayConfirmPostListUsecaseProvider);
     _fetchUserDataFromIdUsecase = ref.watch(fetchUserDataFromIdUsecaseProvider);
+    _sendReactionToTargetConfirmPostUsecase =
+        ref.watch(sendReactionToTargetConfirmPostUsecaseProvider);
   }
 
   late final GetTodayConfirmPostListUsecase _getTodayConfirmPostListUsecase;
   late final FetchUserDataFromIdUsecase _fetchUserDataFromIdUsecase;
+  late final SendReactionToTargetConfirmPostUsecase
+      _sendReactionToTargetConfirmPostUsecase;
 
   Future<void> getTodayConfirmPostModelList() async {
     final confirmPostModelFetchResult =
@@ -54,5 +61,13 @@ class SwipeViewProvider
     });
 
     throw UnimplementedError();
+  }
+
+  Future<void> sendReactionToTargetConfirmPost(
+    String targetConfirmPostId,
+    ReactionModel reactionModel,
+  ) async {
+    _sendReactionToTargetConfirmPostUsecase
+        .call((targetConfirmPostId, reactionModel));
   }
 }

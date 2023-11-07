@@ -3,22 +3,21 @@ import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
+import 'package:wehavit/features/swipe_view/data/datasource/reaction_datasource.dart';
+import 'package:wehavit/features/swipe_view/data/datasource/reaction_datasource_provider.dart';
 import 'package:wehavit/features/swipe_view/data/datasource/swipe_view_datasource.dart';
 import 'package:wehavit/features/swipe_view/data/datasource/swipe_view_datasource_provider.dart';
+import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';
 import 'package:wehavit/features/swipe_view/domain/repository/swipe_view_repository.dart';
 
 class SwipeViewRepositoryImpl implements SwipeViewRepository {
   SwipeViewRepositoryImpl(Ref ref) {
     _swipeViewDatasource = ref.watch(swipeViewDatasourceProvider);
+    _reactionDatasource = ref.watch(reactionDatasourceProvider);
   }
 
   late final SwipeViewDatasource _swipeViewDatasource;
-
-  @override
-  void addReactionToConfirmPost() {
-    // TODO: implement addReactionToConfirmPost
-    return;
-  }
+  late final ReactionDatasource _reactionDatasource;
 
   @override
   EitherFuture<List<ConfirmPostModel>> getLiveWrittenConformPostList() async {
@@ -37,5 +36,13 @@ class SwipeViewRepositoryImpl implements SwipeViewRepository {
   @override
   EitherFuture<List<ConfirmPostModel>> getTodayConfrmPostList() async {
     return _swipeViewDatasource.fetchTodayConfirmPostList();
+  }
+
+  @override
+  EitherFuture<bool> addReactionToConfirmPost(
+      String targetConfirmPostId, ReactionModel reactionModel) {
+    return _reactionDatasource.sendReactionToTargetConfirmPost(
+        targetConfirmPostId, reactionModel);
+    // TODO: implement addReactionToConfirmPost
   }
 }

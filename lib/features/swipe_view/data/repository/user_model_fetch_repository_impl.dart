@@ -15,8 +15,5 @@ class UserModelFetchRepositoryImpl implements UserModelFetchRepository {
   @override
   EitherFuture<UserModel> fetchUserModelFromId(String targetUserId) {
     return _userModelFetchDatasource.fetchUserModelFromId(targetUserId);
-
-    // TODO: implement fetchUserModelFromId
-    throw UnimplementedError();
   }
 }

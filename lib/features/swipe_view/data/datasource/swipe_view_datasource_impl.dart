@@ -75,9 +75,4 @@ class SwipeViewDatasourceImpl implements SwipeViewDatasource {
       );
     }
   }
-
-  @override
-  void postEncourageToConfirmPost() {
-    // TODO: implement postEncourageToConfirmPost
-  }
 }

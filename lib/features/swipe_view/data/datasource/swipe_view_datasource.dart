@@ -4,5 +4,4 @@ import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.d
 abstract class SwipeViewDatasource {
   EitherFuture<List<ConfirmPostModel>> fetchLiveWrittenConfirmPostList();
   EitherFuture<List<ConfirmPostModel>> fetchTodayConfirmPostList();
-  void postEncourageToConfirmPost();
 }

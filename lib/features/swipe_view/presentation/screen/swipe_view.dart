@@ -3,9 +3,12 @@ import 'dart:ui';
 
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/utils/emoji_assets.dart';
+import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';
 import 'package:wehavit/features/swipe_view/presentation/provider/swipe_view_provider.dart';
 import 'package:wehavit/features/swipe_view/presentation/widget/swipe_view_cell.dart';
 
@@ -27,8 +30,10 @@ class SwipeViewState extends ConsumerState<SwipeView> {
   @override
   Widget build(BuildContext context) {
     _swipeViewProvider = ref.watch(swipeViewProvider);
+    // TODO : 코드 진짜 더럽다... 재정리가 필요함!!
     Map<Key, ShootEmojiWidget> emojiWidgets = {};
     int countSend = 0;
+    var sendingEmojis = List<int>.generate(15, (index) => 0);
 
     return Scaffold(
       // appBar: AppBar(),
@@ -103,7 +108,7 @@ class SwipeViewState extends ConsumerState<SwipeView> {
                       children: [
                         Expanded(child: Container()),
                         GestureDetector(
-                          onTapUp: (details) => showModalBottomSheet(
+                          onTapUp: (details) async => showModalBottomSheet(
                               backgroundColor: Colors.transparent,
                               clipBehavior: Clip.none,
                               elevation: 0,
@@ -166,6 +171,9 @@ class SwipeViewState extends ConsumerState<SwipeView> {
                                                         setState(
                                                           () {
                                                             countSend++;
+                                                            sendingEmojis[
+                                                                index * 5 +
+                                                                    jndex] += 1;
                                                             final animationWidgetKey =
                                                                 UniqueKey();
                                                             emojiWidgets
@@ -227,7 +235,38 @@ class SwipeViewState extends ConsumerState<SwipeView> {
                                     ],
                                   );
                                 });
-                              }).whenComplete(() => emojiWidgets.clear()),
+                              }).whenComplete(() async {
+                            emojiWidgets.clear();
+
+                            print(sendingEmojis);
+                            final Map<String, int> emojiMap = {};
+                            sendingEmojis.asMap().forEach(
+                                  (index, value) => emojiMap.addAll(
+                                    {'t$index': value},
+                                  ),
+                                );
+                            final reactionModel = ReactionModel(
+                              complementerUid:
+                                  FirebaseAuth.instance.currentUser!.uid,
+                              hasRead: false,
+                              instantPhotoUrl: '',
+                              reactionType: ReactionType.emoji.index,
+                              comment: '',
+                              emoji: emojiMap,
+                            );
+
+                            print(emojiMap);
+                            ref
+                                .read(swipeViewProvider.notifier)
+                                .sendReactionToTargetConfirmPost(
+                                  // TODO : ConfirmPostModel의 문서 id 여기 넣어주기
+                                  "JYWKwvxuYzfF3Sq3Lt5z",
+                                  reactionModel,
+                                );
+
+                            sendingEmojis =
+                                List<int>.generate(15, (index) => 0);
+                          }),
                           child: Container(
                             width: 50,
                             height: 50,

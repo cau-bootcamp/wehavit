@@ -12,7 +12,5 @@ class FetchUserDataFromIdUsecase extends UseCase<UserModel, String> {
   @override
   EitherFuture<UserModel> call(params) {
     return _userModelFetchRepository.fetchUserModelFromId(params);
-    // TODO: implement call
-    throw UnimplementedError();
   }
 }

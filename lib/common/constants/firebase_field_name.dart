@@ -20,3 +20,13 @@ class FirebaseResolutionFieldName {
   static const resolutionPeriod = 'period';
   static const resolutionIsActive = 'isActive';
 }
+
+@immutable
+class FirebaseReactionFieldName {
+  static const complementerUid = 'complementerUid';
+  static const comment = 'comment';
+  static const emoji = 'emoji';
+  static const hasRead = 'hasRead';
+  static const instantPhotoUrl = 'instantPhotoUrl';
+  static const reactionType = 'reactionType';
+}
