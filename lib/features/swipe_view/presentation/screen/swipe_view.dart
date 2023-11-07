@@ -22,20 +22,21 @@ class SwipeView extends ConsumerStatefulWidget {
 class SwipeViewState extends ConsumerState<SwipeView> {
   int _currentCellNumber = 0;
   final CarouselController _carouselController = CarouselController();
+  late var _swipeViewProvider;
 
   @override
   Widget build(BuildContext context) {
-    var swipeViewProviderList = ref.watch(swipeViewProvider);
+    _swipeViewProvider = ref.watch(swipeViewProvider);
     Map<Key, ShootEmojiWidget> emojiWidgets = {};
     int countSend = 0;
 
     return Scaffold(
       // appBar: AppBar(),
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        ref.read(swipeViewProvider.notifier).getTodayConfirmPostList();
+      floatingActionButton: FloatingActionButton(onPressed: () async {
+        ref.read(swipeViewProvider.notifier).getTodayConfirmPostModelList();
       }),
       body: SafeArea(
-        child: swipeViewProviderList.fold(
+        child: _swipeViewProvider.fold(
           (failure) => Container(
             color: Colors.cyan,
           ),
@@ -267,12 +268,13 @@ class SwipeViewState extends ConsumerState<SwipeView> {
 }
 
 class ShootEmojiWidget extends StatefulWidget {
-  ShootEmojiWidget(
-      {super.key,
-      required this.disposeWidgetFromParent,
-      required this.currentPos,
-      required this.targetPos,
-      required this.emojiIndex});
+  ShootEmojiWidget({
+    super.key,
+    required this.disposeWidgetFromParent,
+    required this.currentPos,
+    required this.targetPos,
+    required this.emojiIndex,
+  });
   int emojiIndex;
   Function disposeWidgetFromParent;
   Point currentPos;

@@ -1,14 +1,41 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:wehavit/features/swipe_view/data/enitty/DEBUG_confirm_post_model.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:wehavit/common/errors/failure.dart';
+import 'package:wehavit/common/models/user_model/user_model.dart';
+import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
+import 'package:wehavit/features/swipe_view/domain/usecase/fetch_user_data_from_id_usecase.dart';
+import 'package:wehavit/features/swipe_view/domain/usecase/fetch_user_data_from_id_usecase_provider.dart';
+import 'package:wehavit/features/swipe_view/presentation/provider/swipe_view_cell_user_model_provider.dart';
 
-class SwipeViewCellWidget extends StatelessWidget {
+class SwipeViewCellWidget extends ConsumerStatefulWidget {
   SwipeViewCellWidget({super.key, required this.model});
 
   ConfirmPostModel model;
 
   @override
+  ConsumerState<SwipeViewCellWidget> createState() =>
+      _SwipeViewCellWidgetState();
+}
+
+class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
+  late FetchUserDataFromIdUsecase _fetchUserDataFromIdUsecase;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    _fetchUserDataFromIdUsecase = ref.watch(fetchUserDataFromIdUsecaseProvider);
+    // _fetchUserDataFromIdUsecase.call(
+    //     widget.model.roles!.keys.firstWhere((element) => element == "onwer"));
+    // ref.read(swipeViewCellUserModelProvider.notifier).getUserModelFromUi(
+    //     widget.model.roles!.keys.firstWhere((element) => element == "onwer"));
+
+    // TODO : User
     return Expanded(
       child: Center(
         child: Column(
@@ -16,19 +43,46 @@ class SwipeViewCellWidget extends StatelessWidget {
             // 프로필 영역
             Column(
               children: [
-                CircleAvatar(
-                  radius: 40,
-                  foregroundImage: NetworkImage(
-                    "https://image.yes24.com/momo/TopCate55/MidCate10/5490248.jpg",
-                  ),
-                ),
-                Text(
-                  "NAME",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                FutureBuilder(
+                  future: _fetchUserDataFromIdUsecase.call(widget
+                      .model.roles!.keys
+                      .firstWhere((element) => element == "onwer",
+                          orElse: () => "")),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    //해당 부분은 data를 아직 받아 오지 못했을때 실행되는 부분을 의미한다.
+                    if (snapshot.hasData == false) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasError == true) {
+                      return CircularProgressIndicator();
+                    } else {
+                      return Column(
+                        children: [
+                          CircleAvatar(
+                            radius: 40,
+                            foregroundImage: NetworkImage(
+                              // widget.model.owner.imageUrl,
+                              snapshot.data.fold(
+                                (failure) => "NoImageUrl",
+                                (model) => model.imageUrl,
+                              ),
+                            ),
+                            backgroundColor: Colors.white,
+                          ),
+                          Text(
+                            snapshot.data.fold(
+                              (failure) => "NoName",
+                              (model) => model.displayName,
+                            ),
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      );
+                    }
+                  },
+                )
               ],
             ),
             // 사진 영역
@@ -38,11 +92,25 @@ class SwipeViewCellWidget extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Container(
                   constraints: BoxConstraints.expand(),
-                  child: Image(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(
-                      "https://t4.daumcdn.net/thumb/R720x0/?fname=http://t1.daumcdn.net/brunch/service/user/2WQk/image/9bTOhsLJcfWTFwZBoTDmu1E83i8.jpg",
-                    ),
+                  child: Image.network(
+                    widget.model.imageUrl ?? "",
+                    errorBuilder: (context, error, stackTrace) {
+                      return Placeholder();
+                    },
+                    loadingBuilder: (BuildContext context, Widget child,
+                        ImageChunkEvent? loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child;
+                      }
+                      return Center(
+                        child: CircularProgressIndicator(
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded /
+                                  loadingProgress.expectedTotalBytes!
+                              : null,
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),
@@ -61,14 +129,14 @@ class SwipeViewCellWidget extends StatelessWidget {
               child: Container(
                 color: Colors.pink.shade200,
                 constraints: const BoxConstraints.expand(height: 120),
-                child: const Padding(
+                child: Padding(
                   padding: EdgeInsets.all(4.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
                         padding: EdgeInsets.all(4.0),
-                        child: Text("인증글 제목"),
+                        child: Text(widget.model.title ?? ""),
                       ),
                       Divider(
                         thickness: 2.5,
@@ -77,7 +145,7 @@ class SwipeViewCellWidget extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.all(4.0),
                         child: Text(
-                          "인증글 본문은 이렇게 작성이 길게 될 수도 있습니다. 인증글 본문은 이렇게 작성이 길게 될 수도 있습니다. 인증글 본문은 이렇게 작성이 길게 될 수도 있습니다.",
+                          widget.model.content ?? "",
                         ),
                       ),
                     ],
@@ -90,4 +158,12 @@ class SwipeViewCellWidget extends StatelessWidget {
       ),
     );
   }
+}
+
+class SwipeViewCellWidgetModel {
+  SwipeViewCellWidgetModel(
+      {required this.confirmPostModel, required this.owner});
+
+  late final ConfirmPostModel confirmPostModel;
+  late final UserModel owner;
 }

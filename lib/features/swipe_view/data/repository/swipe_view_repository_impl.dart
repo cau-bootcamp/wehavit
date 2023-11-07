@@ -2,9 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
+import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
 import 'package:wehavit/features/swipe_view/data/datasource/swipe_view_datasource.dart';
 import 'package:wehavit/features/swipe_view/data/datasource/swipe_view_datasource_provider.dart';
-import 'package:wehavit/features/swipe_view/data/enitty/DEBUG_confirm_post_model.dart';
 import 'package:wehavit/features/swipe_view/domain/repository/swipe_view_repository.dart';
 
 class SwipeViewRepositoryImpl implements SwipeViewRepository {

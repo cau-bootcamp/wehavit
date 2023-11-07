@@ -58,6 +58,12 @@ class TestPage extends ConsumerWidget {
               },
               buttonText: 'Log out',
             ),
+            MoveButton(
+              onPressCallback: () async {
+                context.go(RouteLocation.swipeView);
+              },
+              buttonText: 'Swipe View',
+            ),
           ],
         ),
       ),
