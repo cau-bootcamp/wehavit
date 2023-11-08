@@ -26,7 +26,7 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
           .get();
 
       List<ConfirmPostModel> confirmPosts = fetchResult.docs
-          .map((doc) => ConfirmPostModel.fromJson(doc.data()))
+          .map((doc) => ConfirmPostModel.fromFireStoreDocument(doc))
           .toList();
 
       return Future(() => right(confirmPosts));

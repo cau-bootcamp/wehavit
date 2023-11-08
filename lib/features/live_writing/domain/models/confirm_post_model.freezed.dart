@@ -20,6 +20,8 @@ ConfirmPostModel _$ConfirmPostModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ConfirmPostModel {
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  String? get id => throw _privateConstructorUsedError;
   String? get resolutionGoalStatement => throw _privateConstructorUsedError;
   DocumentReference<Map<String, dynamic>>? get resolutionId =>
       throw _privateConstructorUsedError;
@@ -45,7 +47,8 @@ abstract class $ConfirmPostModelCopyWith<$Res> {
       _$ConfirmPostModelCopyWithImpl<$Res, ConfirmPostModel>;
   @useResult
   $Res call(
-      {String? resolutionGoalStatement,
+      {@JsonKey(includeFromJson: false, includeToJson: false) String? id,
+      String? resolutionGoalStatement,
       DocumentReference<Map<String, dynamic>>? resolutionId,
       String? title,
       String? content,
@@ -70,6 +73,7 @@ class _$ConfirmPostModelCopyWithImpl<$Res, $Val extends ConfirmPostModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = freezed,
     Object? resolutionGoalStatement = freezed,
     Object? resolutionId = freezed,
     Object? title = freezed,
@@ -82,6 +86,10 @@ class _$ConfirmPostModelCopyWithImpl<$Res, $Val extends ConfirmPostModel>
     Object? attributes = freezed,
   }) {
     return _then(_value.copyWith(
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
       resolutionGoalStatement: freezed == resolutionGoalStatement
           ? _value.resolutionGoalStatement
           : resolutionGoalStatement // ignore: cast_nullable_to_non_nullable
@@ -135,7 +143,8 @@ abstract class _$$ConfirmPostModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? resolutionGoalStatement,
+      {@JsonKey(includeFromJson: false, includeToJson: false) String? id,
+      String? resolutionGoalStatement,
       DocumentReference<Map<String, dynamic>>? resolutionId,
       String? title,
       String? content,
@@ -158,6 +167,7 @@ class __$$ConfirmPostModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = freezed,
     Object? resolutionGoalStatement = freezed,
     Object? resolutionId = freezed,
     Object? title = freezed,
@@ -170,6 +180,10 @@ class __$$ConfirmPostModelImplCopyWithImpl<$Res>
     Object? attributes = freezed,
   }) {
     return _then(_$ConfirmPostModelImpl(
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
       resolutionGoalStatement: freezed == resolutionGoalStatement
           ? _value.resolutionGoalStatement
           : resolutionGoalStatement // ignore: cast_nullable_to_non_nullable
@@ -220,7 +234,8 @@ class __$$ConfirmPostModelImplCopyWithImpl<$Res>
 @DocumentReferenceJsonConverter()
 class _$ConfirmPostModelImpl implements _ConfirmPostModel {
   _$ConfirmPostModelImpl(
-      {required this.resolutionGoalStatement,
+      {@JsonKey(includeFromJson: false, includeToJson: false) this.id = '',
+      required this.resolutionGoalStatement,
       required this.resolutionId,
       required this.title,
       required this.content,
@@ -248,6 +263,9 @@ class _$ConfirmPostModelImpl implements _ConfirmPostModel {
   factory _$ConfirmPostModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$ConfirmPostModelImplFromJson(json);
 
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final String? id;
   @override
   final String? resolutionGoalStatement;
   @override
@@ -286,7 +304,7 @@ class _$ConfirmPostModelImpl implements _ConfirmPostModel {
 
   @override
   String toString() {
-    return 'ConfirmPostModel(resolutionGoalStatement: $resolutionGoalStatement, resolutionId: $resolutionId, title: $title, content: $content, imageUrl: $imageUrl, recentStrike: $recentStrike, createdAt: $createdAt, updatedAt: $updatedAt, roles: $roles, attributes: $attributes)';
+    return 'ConfirmPostModel(id: $id, resolutionGoalStatement: $resolutionGoalStatement, resolutionId: $resolutionId, title: $title, content: $content, imageUrl: $imageUrl, recentStrike: $recentStrike, createdAt: $createdAt, updatedAt: $updatedAt, roles: $roles, attributes: $attributes)';
   }
 
   @override
@@ -294,6 +312,7 @@ class _$ConfirmPostModelImpl implements _ConfirmPostModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ConfirmPostModelImpl &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(
                     other.resolutionGoalStatement, resolutionGoalStatement) ||
                 other.resolutionGoalStatement == resolutionGoalStatement) &&
@@ -318,6 +337,7 @@ class _$ConfirmPostModelImpl implements _ConfirmPostModel {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      id,
       resolutionGoalStatement,
       resolutionId,
       title,
@@ -346,7 +366,8 @@ class _$ConfirmPostModelImpl implements _ConfirmPostModel {
 
 abstract class _ConfirmPostModel implements ConfirmPostModel {
   factory _ConfirmPostModel(
-      {required final String? resolutionGoalStatement,
+      {@JsonKey(includeFromJson: false, includeToJson: false) final String? id,
+      required final String? resolutionGoalStatement,
       required final DocumentReference<Map<String, dynamic>>? resolutionId,
       required final String? title,
       required final String? content,
@@ -360,6 +381,9 @@ abstract class _ConfirmPostModel implements ConfirmPostModel {
   factory _ConfirmPostModel.fromJson(Map<String, dynamic> json) =
       _$ConfirmPostModelImpl.fromJson;
 
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  String? get id;
   @override
   String? get resolutionGoalStatement;
   @override
