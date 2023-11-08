@@ -1,3 +1,4 @@
+// ignore_for_file: invalid_annotation_target
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -27,6 +28,9 @@ class ConfirmPostModel with _$ConfirmPostModel {
   @TimestampConverter()
   @DocumentReferenceJsonConverter()
   factory ConfirmPostModel({
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default('')
+    String? id,
     required String? resolutionGoalStatement,
     required DocumentReference<Map<String, dynamic>>? resolutionId,
     required String? title,
@@ -41,6 +45,13 @@ class ConfirmPostModel with _$ConfirmPostModel {
 
   factory ConfirmPostModel.fromJson(Map<String, dynamic> json) =>
       _$ConfirmPostModelFromJson(json);
+
+  factory ConfirmPostModel.fromFireStoreDocument(DocumentSnapshot doc) {
+    if (doc.data() == null) throw Exception('Document data was null');
+
+    return ConfirmPostModel.fromJson(doc.data() as Map<String, Object?>)
+        .copyWith(id: doc.id);
+  }
 }
 
 T? tryCast<T>(value) {
