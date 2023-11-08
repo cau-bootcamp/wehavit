@@ -47,6 +47,7 @@ class FriendRemoteDatasourceImpl implements FriendDatasource {
       return Future(
             () => left(
           const Failure('catch error on getActiveFriendEntityList'),
+
         ),
       );
     }
