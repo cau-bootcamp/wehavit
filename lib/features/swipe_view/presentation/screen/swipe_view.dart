@@ -360,12 +360,19 @@ class SwipeViewState extends ConsumerState<SwipeView> {
 
   Future<bool> initializeCamera() async {
     print("try camera");
-    CameraDescription description = await availableCameras().then((cameras) =>
-        cameras.firstWhere(
-            (camera) => camera.lensDirection == CameraLensDirection.front));
-    _cameraController = CameraController(description, ResolutionPreset.medium);
+    CameraDescription description = await availableCameras().then(
+      (cameras) => cameras.firstWhere(
+          (camera) => camera.lensDirection == CameraLensDirection.front),
+    );
+    if (!_isCameraInitialized) {
+      _cameraController =
+          CameraController(description, ResolutionPreset.medium);
 
-    await _cameraController.initialize();
+      await _cameraController.initialize();
+      setState(() {
+        _isCameraInitialized = true;
+      });
+    }
 
     return Future(() => true);
   }

@@ -76,8 +76,8 @@ class _ReactionCameraWidgetState extends State<ReactionCameraWidget> {
     screenHeight = View.of(context).physicalSize.height / 3;
 
     cameraWidgetPositionX = screenWidth / 2;
-    cameraWidgetPositionY = screenHeight / 2.5;
-    cameraWidgetRadius = screenWidth / 3;
+    cameraWidgetPositionY = screenHeight / 3;
+    cameraWidgetRadius = screenWidth / 2.3;
   }
 
   @override
