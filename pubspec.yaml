@@ -53,6 +53,10 @@ dependencies:
   syncfusion_flutter_charts: ^23.1.40
   syncfusion_flutter_gauges: ^23.1.40
   carousel_slider: ^4.2.1
+  camera: ^0.10.5+5
+  flutter_native_image: ^0.0.6+1
+  path: ^1.8.3
+  path_provider: ^2.1.1
 
 
 dev_dependencies:

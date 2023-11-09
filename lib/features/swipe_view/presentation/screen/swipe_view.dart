@@ -1,19 +1,21 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:camera/camera.dart';
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/utils/emoji_assets.dart';
 import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';
 import 'package:wehavit/features/swipe_view/presentation/provider/swipe_view_provider.dart';
+import 'package:wehavit/features/swipe_view/presentation/widget/reaction_camera_widget.dart';
 import 'package:wehavit/features/swipe_view/presentation/widget/swipe_view_cell.dart';
 
 class SwipeView extends ConsumerStatefulWidget {
   SwipeView({super.key});
+  // CameraController cameraController;
 
   @override
   ConsumerState<SwipeView> createState() {
@@ -24,12 +26,24 @@ class SwipeView extends ConsumerStatefulWidget {
 
 class SwipeViewState extends ConsumerState<SwipeView> {
   int _currentCellNumber = 0;
-  final CarouselController _carouselController = CarouselController();
+  late final CarouselController _carouselController;
   late var _swipeViewProvider;
+
+  // Camera View Properties
+  late CameraController _cameraController;
+  bool _isCameraInitialized = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _carouselController = CarouselController();
+  }
 
   @override
   Widget build(BuildContext context) {
     _swipeViewProvider = ref.watch(swipeViewProvider);
+
     // TODO : 코드 진짜 더럽다... 재정리가 필요함!!
     Map<Key, ShootEmojiWidget> emojiWidgets = {};
     int countSend = 0;
@@ -40,269 +54,320 @@ class SwipeViewState extends ConsumerState<SwipeView> {
       floatingActionButton: FloatingActionButton(onPressed: () async {
         ref.read(swipeViewProvider.notifier).getTodayConfirmPostModelList();
       }),
-      body: SafeArea(
-        child: _swipeViewProvider.fold(
-          (failure) => Container(
-            color: Colors.cyan,
-          ),
-          (modelList) => Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(bottom: 8),
-                  height: 10,
-                  color: Colors.blueGrey,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: List<Widget>.generate(
-                      modelList.length,
-                      (index) => Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: Container(
-                            key: ValueKey(index),
-                            // padding: EdgeInsets.symmetric(horizontal: 15),
-                            decoration: BoxDecoration(
-                              color: _currentCellNumber == index
-                                  ? Colors.amber
-                                  : Colors.grey[400],
-                            ),
-                            height: 8,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: CarouselSlider(
-                    options: CarouselOptions(
-                        viewportFraction: 1.0,
-                        height: MediaQuery.of(context).size.height,
-                        onPageChanged: (index, reason) {
-                          setState(() {
-                            _currentCellNumber = index;
-                          });
-                        },
-                        enableInfiniteScroll: false),
-                    carouselController: _carouselController,
-                    items: List<Widget>.generate(
-                      modelList.length,
-                      (index) {
-                        return Flex(
-                          direction: Axis.vertical,
-                          children: [
-                            SwipeViewCellWidget(
-                              model: modelList[index],
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  ),
-                ),
-                Column(
+      body: Stack(
+        children: [
+          SafeArea(
+            child: _swipeViewProvider.fold(
+              (failure) => Container(
+                color: Colors.cyan,
+              ),
+              (modelList) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Column(
                   children: [
-                    Row(
-                      children: [
-                        Expanded(child: Container()),
-                        GestureDetector(
-                          onTapUp: (details) async => showModalBottomSheet(
-                              backgroundColor: Colors.transparent,
-                              clipBehavior: Clip.none,
-                              elevation: 0,
-                              context: context,
-                              builder: (context) {
-                                void disposeWidget(UniqueKey key) {
-                                  setState(() {
-                                    emojiWidgets.remove(key);
-                                  });
-                                }
-
-                                return StatefulBuilder(builder:
-                                    (BuildContext context,
-                                        StateSetter setState) {
-                                  return Stack(
-                                    alignment: Alignment.center,
-                                    clipBehavior: Clip.none,
-                                    children: [
-                                      Stack(
-                                        alignment: Alignment.topCenter,
-                                        clipBehavior: Clip.none,
-                                        children: emojiWidgets.values.toList(),
-                                      ),
-                                      Container(
-                                        clipBehavior: Clip.hardEdge,
-                                        decoration: const BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(20),
-                                            topRight: Radius.circular(20),
-                                          ),
-                                        ),
-                                      ),
-                                      Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 30.0),
-                                            child: Text(
-                                                "반응을 $countSend 회 보냈어요!",
-                                                style: TextStyle(fontSize: 20)),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            child: Column(
-                                                children: List<Widget>.generate(
-                                              3,
-                                              (index) => Row(
-                                                children: List<Widget>.generate(
-                                                    5, (jndex) {
-                                                  final key = GlobalKey();
-                                                  return Expanded(
-                                                    key: key,
-                                                    flex: 1,
-                                                    child: GestureDetector(
-                                                      onTapDown: (detail) {},
-                                                      onTapUp: (detail) {
-                                                        setState(
-                                                          () {
-                                                            countSend++;
-                                                            sendingEmojis[
-                                                                index * 5 +
-                                                                    jndex] += 1;
-                                                            final animationWidgetKey =
-                                                                UniqueKey();
-                                                            emojiWidgets
-                                                                .addEntries({
-                                                              animationWidgetKey: ShootEmojiWidget(
-                                                                  key:
-                                                                      animationWidgetKey,
-                                                                  emojiIndex:
-                                                                      index * 5 +
-                                                                          jndex,
-                                                                  currentPos: Point(
-                                                                      detail
-                                                                          .globalPosition
-                                                                          .dx,
-                                                                      detail
-                                                                          .globalPosition
-                                                                          .dy),
-                                                                  targetPos: Point(
-                                                                      MediaQuery.of(context)
-                                                                              .size
-                                                                              .width /
-                                                                          2,
-                                                                      MediaQuery.of(context)
-                                                                              .size
-                                                                              .height +
-                                                                          50),
-                                                                  disposeWidgetFromParent:
-                                                                      disposeWidget)
-                                                            }.entries);
-                                                          },
-                                                        );
-                                                        print(emojiWidgets
-                                                            .length);
-                                                      },
-                                                      // },
-                                                      child: Stack(
-                                                        clipBehavior: Clip.none,
-                                                        children: [
-                                                          Image(
-                                                            image: AssetImage(
-                                                              Emojis.emojiList[
-                                                                  index * 5 +
-                                                                      jndex],
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  );
-                                                }),
-                                              ),
-                                            )),
-                                          ),
-                                          SizedBox(
-                                            height: 60,
-                                          )
-                                        ],
-                                      ),
-                                    ],
-                                  );
-                                });
-                              }).whenComplete(() async {
-                            emojiWidgets.clear();
-
-                            print(sendingEmojis);
-                            final Map<String, int> emojiMap = {};
-                            sendingEmojis.asMap().forEach(
-                                  (index, value) => emojiMap.addAll(
-                                    {'t$index': value},
-                                  ),
-                                );
-                            final reactionModel = ReactionModel(
-                              complementerUid:
-                                  FirebaseAuth.instance.currentUser!.uid,
-                              hasRead: false,
-                              instantPhotoUrl: '',
-                              reactionType: ReactionType.emoji.index,
-                              comment: '',
-                              emoji: emojiMap,
-                            );
-
-                            print(emojiMap);
-                            ref
-                                .read(swipeViewProvider.notifier)
-                                .sendReactionToTargetConfirmPost(
-                                  // TODO : ConfirmPostModel의 문서 id 여기 넣어주기
-                                  "JYWKwvxuYzfF3Sq3Lt5z",
-                                  reactionModel,
-                                );
-
-                            sendingEmojis =
-                                List<int>.generate(15, (index) => 0);
-                          }),
-                          child: Container(
-                            width: 50,
-                            height: 50,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              // color: Colors.black,
-                            ),
-                            child: const Center(
-                              child: Text(
-                                "😄",
-                                style: TextStyle(fontSize: 30),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 8),
+                      height: 10,
+                      color: Colors.blueGrey,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: List<Widget>.generate(
+                          modelList.length,
+                          (index) => Expanded(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4.0),
+                              child: Container(
+                                key: ValueKey(index),
+                                // padding: EdgeInsets.symmetric(horizontal: 15),
+                                decoration: BoxDecoration(
+                                  color: _currentCellNumber == index
+                                      ? Colors.amber
+                                      : Colors.grey[400],
+                                ),
+                                height: 8,
                               ),
                             ),
                           ),
                         ),
-                        SizedBox(
-                          width: 10,
+                      ),
+                    ),
+                    Expanded(
+                      child: CarouselSlider(
+                        options: CarouselOptions(
+                            viewportFraction: 1.0,
+                            height: MediaQuery.of(context).size.height,
+                            onPageChanged: (index, reason) {
+                              setState(() {
+                                _currentCellNumber = index;
+                              });
+                            },
+                            enableInfiniteScroll: false),
+                        carouselController: _carouselController,
+                        items: List<Widget>.generate(
+                          modelList.length,
+                          (index) {
+                            return Flex(
+                              direction: Axis.vertical,
+                              children: [
+                                SwipeViewCellWidget(
+                                  model: modelList[index],
+                                ),
+                              ],
+                            );
+                          },
                         ),
-                        ElevatedButton.icon(
-                          onPressed: () {},
-                          icon: Icon(Icons.emoji_emotions),
-                          label: Text(""),
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(child: Container()),
+                            GestureDetector(
+                              onTapUp: (details) async => showModalBottomSheet(
+                                  backgroundColor: Colors.transparent,
+                                  clipBehavior: Clip.none,
+                                  elevation: 0,
+                                  context: context,
+                                  builder: (context) {
+                                    void disposeWidget(UniqueKey key) {
+                                      setState(() {
+                                        emojiWidgets.remove(key);
+                                      });
+                                    }
+
+                                    return StatefulBuilder(builder:
+                                        (BuildContext context,
+                                            StateSetter setState) {
+                                      return Stack(
+                                        alignment: Alignment.center,
+                                        clipBehavior: Clip.none,
+                                        children: [
+                                          Stack(
+                                            alignment: Alignment.topCenter,
+                                            clipBehavior: Clip.none,
+                                            children:
+                                                emojiWidgets.values.toList(),
+                                          ),
+                                          Container(
+                                            clipBehavior: Clip.hardEdge,
+                                            decoration: const BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(20),
+                                                topRight: Radius.circular(20),
+                                              ),
+                                            ),
+                                          ),
+                                          Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical: 30.0),
+                                                child: Text(
+                                                    "반응을 $countSend 회 보냈어요!",
+                                                    style: TextStyle(
+                                                        fontSize: 20)),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 8.0),
+                                                child: Column(
+                                                    children:
+                                                        List<Widget>.generate(
+                                                  3,
+                                                  (index) => Row(
+                                                    children:
+                                                        List<Widget>.generate(5,
+                                                            (jndex) {
+                                                      final key = GlobalKey();
+                                                      return Expanded(
+                                                        key: key,
+                                                        flex: 1,
+                                                        child: GestureDetector(
+                                                          onTapDown:
+                                                              (detail) {},
+                                                          onTapUp: (detail) {
+                                                            setState(
+                                                              () {
+                                                                countSend++;
+                                                                sendingEmojis[
+                                                                    index * 5 +
+                                                                        jndex] += 1;
+                                                                final animationWidgetKey =
+                                                                    UniqueKey();
+                                                                emojiWidgets
+                                                                    .addEntries(
+                                                                        {
+                                                                  animationWidgetKey: ShootEmojiWidget(
+                                                                      key:
+                                                                          animationWidgetKey,
+                                                                      emojiIndex:
+                                                                          index * 5 +
+                                                                              jndex,
+                                                                      currentPos: Point(
+                                                                          detail
+                                                                              .globalPosition
+                                                                              .dx,
+                                                                          detail
+                                                                              .globalPosition
+                                                                              .dy),
+                                                                      targetPos: Point(
+                                                                          MediaQuery.of(context).size.width /
+                                                                              2,
+                                                                          MediaQuery.of(context).size.height +
+                                                                              50),
+                                                                      disposeWidgetFromParent:
+                                                                          disposeWidget)
+                                                                }.entries);
+                                                              },
+                                                            );
+                                                            print(emojiWidgets
+                                                                .length);
+                                                          },
+                                                          // },
+                                                          child: Stack(
+                                                            clipBehavior:
+                                                                Clip.none,
+                                                            children: [
+                                                              Image(
+                                                                image:
+                                                                    AssetImage(
+                                                                  Emojis.emojiList[
+                                                                      index * 5 +
+                                                                          jndex],
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      );
+                                                    }),
+                                                  ),
+                                                )),
+                                              ),
+                                              SizedBox(
+                                                height: 60,
+                                              )
+                                            ],
+                                          ),
+                                        ],
+                                      );
+                                    });
+                                  }).whenComplete(() async {
+                                emojiWidgets.clear();
+
+                                print(sendingEmojis);
+                                if (sendingEmojis
+                                    .any((element) => element > 0)) {
+                                  final Map<String, int> emojiMap = {};
+                                  sendingEmojis.asMap().forEach(
+                                        (index, value) => emojiMap.addAll(
+                                          {'t$index': value},
+                                        ),
+                                      );
+                                  final reactionModel = ReactionModel(
+                                    complementerUid:
+                                        FirebaseAuth.instance.currentUser!.uid,
+                                    hasRead: false,
+                                    instantPhotoUrl: '',
+                                    reactionType: ReactionType.emoji.index,
+                                    comment: '',
+                                    emoji: emojiMap,
+                                  );
+
+                                  print(emojiMap);
+                                  ref
+                                      .read(swipeViewProvider.notifier)
+                                      .sendReactionToTargetConfirmPost(
+                                        // TODO : ConfirmPostModel의 문서 id 여기 넣어주기
+                                        "JYWKwvxuYzfF3Sq3Lt5z",
+                                        reactionModel,
+                                      );
+
+                                  sendingEmojis =
+                                      List<int>.generate(15, (index) => 0);
+                                }
+                              }),
+                              child: Container(
+                                width: 50,
+                                height: 50,
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  // color: Colors.black,
+                                ),
+                                child: const Center(
+                                  child: Text(
+                                    "😄",
+                                    style: TextStyle(fontSize: 30),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 70,
+                            ),
+                          ],
+                        ),
+                        TextFormField(
+                          decoration:
+                              InputDecoration(border: OutlineInputBorder()),
                         ),
                       ],
                     ),
-                    TextFormField(
-                      decoration: InputDecoration(border: OutlineInputBorder()),
-                    ),
                   ],
                 ),
-              ],
+              ),
             ),
           ),
-        ),
+          FutureBuilder(
+            future: initializeCamera(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                if (snapshot.data!) {
+                  print(_cameraController);
+                  return ReactionCameraWidget(
+                    cameraController: _cameraController,
+                  );
+                }
+              }
+              print("else");
+              return Container();
+            },
+          ),
+
+          // ElevatedButton(
+          //     onPressed: () async {
+          //       CameraDescription description = await availableCameras().then(
+          //           (cameras) => cameras.firstWhere((camera) =>
+          //               camera.lensDirection == CameraLensDirection.front));
+          //       CameraController _controller =
+          //           CameraController(description, ResolutionPreset.medium);
+
+          //       await _controller.initialize();
+
+          //       Navigator.of(context).push(MaterialPageRoute(
+          //           builder: (context) =>
+          //               DEBUGCameraView(controller: _controller)));
+          //     },
+          //     child: Text("\n\n\n\n\nCAM")),
+        ],
       ),
     );
+  }
+
+  Future<bool> initializeCamera() async {
+    print("try camera");
+    CameraDescription description = await availableCameras().then((cameras) =>
+        cameras.firstWhere(
+            (camera) => camera.lensDirection == CameraLensDirection.front));
+    _cameraController = CameraController(description, ResolutionPreset.medium);
+
+    await _cameraController.initialize();
+
+    return Future(() => true);
   }
 }
 
