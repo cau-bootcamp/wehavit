@@ -28,3 +28,10 @@ final getAllPostUseCaseProvider = Provider<GetAllPostUseCase>(
     ref.watch(confirmPostRepositoryProvider),
   ),
 );
+
+// provider
+final createPostUseCaseProvider = Provider<CreatePostUseCase>(
+  (ref) => CreatePostUseCase(
+    ref.watch(confirmPostRepositoryProvider),
+  ),
+);

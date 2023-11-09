@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/features/live_writing/domain/domain.dart';
 import 'package:wehavit/features/live_writing/presentation/providers/active_resolution_provider.dart';
 import 'package:wehavit/features/live_writing/presentation/widgets/widgets.dart';
@@ -86,7 +87,14 @@ class LiveWritingBody extends HookConsumerWidget {
               },
             );
 
-            await ref.read(confirmPostRepositoryProvider).createConfirmPost(cf);
+            (await ref.read(createPostUseCaseProvider)(cf)).fold(
+              (l) {
+                debugPrint(Failure(l.message).toString());
+              },
+              (r) => ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('인증 완료!')),
+              ),
+            );
           },
         );
       },

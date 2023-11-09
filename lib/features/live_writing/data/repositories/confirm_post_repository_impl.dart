@@ -30,11 +30,10 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
 
     try {
       _confirmPostRemoteDatasourceImpl.createConfirmPost(confirmPost);
-    } catch (e) {
-      return Future(() => left(const Failure('createConfirmPost failed')));
+      return Future(() => right(true));
+    } on FirebaseException catch (e) {
+      return left(Failure(e.message ?? 'FirebaseException'));
     }
-
-    return Future(() => right(true));
   }
 
   @override
