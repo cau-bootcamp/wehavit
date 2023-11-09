@@ -252,7 +252,6 @@ class _$ConfirmPostModelImpl implements _ConfirmPostModel {
         assert(recentStrike != null, 'recentStrike must not be null'),
         assert(recentStrike! >= 0 && recentStrike! <= 170,
             'recentStrike must be between b0000000 and b1111111'),
-        assert(resolutionId != null, 'resolutionId must not be null'),
         assert(createdAt != null, 'createdAt must not be empty'),
         assert(updatedAt != null, 'createdAt must not be empty'),
         assert(roles != null, 'roles must not be empty'),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:wehavit/features/live_writing/domain/domain.dart';
 import 'package:wehavit/features/live_writing/presentation/providers/active_resolution_provider.dart';
 import 'package:wehavit/features/live_writing/presentation/widgets/widgets.dart';
 
@@ -67,11 +68,25 @@ class LiveWritingBody extends HookConsumerWidget {
                 .toList(),
           ),
           isSubmitted: isSubmitted,
-          onSubmit: (String title, String content) {
+          onSubmit: (String title, String content) async {
             isSubmitted.value = true;
-            // TODO. submit post
-            // print('>>>>>>>>>>>>>>>>>>>title: $title, content: $content, '
-            //     'selectedResolutionGoal: ${selectedResolutionGoal.value}');
+            ConfirmPostModel cf = ConfirmPostModel(
+              title: title,
+              content: content,
+              resolutionGoalStatement: selectedResolutionGoal.value,
+              resolutionId: null,
+              imageUrl: '',
+              recentStrike: 0,
+              createdAt: DateTime.now(),
+              updatedAt: DateTime.now(),
+              roles: {},
+              attributes: {
+                'has_participated_live': true,
+                'has_rested': false,
+              },
+            );
+
+            await ref.read(confirmPostRepositoryProvider).createConfirmPost(cf);
           },
         );
       },

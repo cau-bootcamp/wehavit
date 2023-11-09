@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
+import 'package:wehavit/common/utils/firebase_collection_name.dart';
 import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
 
 class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
@@ -42,23 +43,31 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
   String _getRolePath(uid) => 'roles.$uid';
 
   @override
-  void createConfirmPost() {
-    // TODO: implement createConfirmPost
+  EitherFuture<bool> createConfirmPost(ConfirmPostModel confirmPost) async {
+    await FirebaseFirestore.instance
+        .collection(FirebaseCollectionName.confirmPosts)
+        .add(confirmPost.toJson());
+
+    return Future(() => right(true));
   }
 
   @override
-  void deleteConfirmPost() {
+  EitherFuture<bool> deleteConfirmPost(
+      DocumentReference<ConfirmPostModel> ref) {
     // TODO: implement deleteConfirmPost
+    throw UnimplementedError();
   }
 
   @override
-  void getConfirmPostByUserId() {
+  EitherFuture<bool> getConfirmPostByUserId(String userId) {
     // TODO: implement getConfirmPostByUserId
+    throw UnimplementedError();
   }
 
   @override
-  void updateConfirmPost() {
+  EitherFuture<bool> updateConfirmPost(ConfirmPostModel confirmPost) {
     // TODO: implement updateConfirmPost
+    throw UnimplementedError();
   }
 }
 
@@ -66,13 +75,13 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
 abstract class ConfirmPostDatasource {
   EitherFuture<List<ConfirmPostModel>> getAllConfirmPosts();
 
-  void createConfirmPost();
+  EitherFuture<bool> createConfirmPost(ConfirmPostModel confirmPost);
 
-  void updateConfirmPost();
+  EitherFuture<bool> updateConfirmPost(ConfirmPostModel confirmPost);
 
-  void deleteConfirmPost();
+  EitherFuture<bool> deleteConfirmPost(DocumentReference<ConfirmPostModel> ref);
 
-  void getConfirmPostByUserId();
+  EitherFuture<bool> getConfirmPostByUserId(String userId);
 }
 
 // TODO. move to different file

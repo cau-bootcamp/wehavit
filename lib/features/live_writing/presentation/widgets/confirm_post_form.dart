@@ -21,6 +21,10 @@ class ConfirmPostForm extends HookConsumerWidget {
     var contentController = useTextEditingController();
 
     void onSave() {
+      if (isSubmitted.value) {
+        return;
+      }
+
       if (_confirmPostFormKey.currentState!.validate()) {
         _confirmPostFormKey.currentState!.save();
         onSubmit(titleController.text, contentController.text);

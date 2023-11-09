@@ -12,6 +12,16 @@ class GetAllPostUseCase {
   }
 }
 
+class CreatePostUseCase {
+  CreatePostUseCase(this._repository);
+
+  final ConfirmPostRepository _repository;
+
+  EitherFuture<bool> call(ConfirmPostModel confirmPost) async {
+    return await _repository.createConfirmPost(confirmPost);
+  }
+}
+
 // provider
 final getAllPostUseCaseProvider = Provider<GetAllPostUseCase>(
   (ref) => GetAllPostUseCase(

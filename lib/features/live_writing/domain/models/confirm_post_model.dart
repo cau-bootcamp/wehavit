@@ -20,7 +20,7 @@ class ConfirmPostModel with _$ConfirmPostModel {
     'recentStrike! >= 0 && recentStrike! <= 170',
     'recentStrike must be between b0000000 and b1111111',
   )
-  @Assert('resolutionId != null', 'resolutionId must not be null')
+  // @Assert('resolutionId != null', 'resolutionId must not be null')
   @Assert('createdAt != null', 'createdAt must not be empty')
   @Assert('updatedAt != null', 'createdAt must not be empty')
   @Assert('roles != null', 'roles must not be empty')
