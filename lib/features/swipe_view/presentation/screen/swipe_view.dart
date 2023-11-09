@@ -1,13 +1,12 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:camera/camera.dart';
-import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/utils/emoji_assets.dart';
+import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
 import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';
 import 'package:wehavit/features/swipe_view/presentation/provider/swipe_view_provider.dart';
 import 'package:wehavit/features/swipe_view/presentation/widget/reaction_camera_widget.dart';
@@ -73,15 +72,15 @@ class SwipeViewState extends ConsumerState<SwipeView> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: List<Widget>.generate(
                           modelList.length,
-                          (index) => Expanded(
+                          (modelIndex) => Expanded(
                             child: Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 4.0),
                               child: Container(
-                                key: ValueKey(index),
+                                key: ValueKey(modelIndex),
                                 // padding: EdgeInsets.symmetric(horizontal: 15),
                                 decoration: BoxDecoration(
-                                  color: _currentCellNumber == index
+                                  color: _currentCellNumber == modelIndex
                                       ? Colors.amber
                                       : Colors.grey[400],
                                 ),
@@ -224,8 +223,6 @@ class SwipeViewState extends ConsumerState<SwipeView> {
                                                                 }.entries);
                                                               },
                                                             );
-                                                            print(emojiWidgets
-                                                                .length);
                                                           },
                                                           // },
                                                           child: Stack(
@@ -259,7 +256,10 @@ class SwipeViewState extends ConsumerState<SwipeView> {
                                   }).whenComplete(() async {
                                 emojiWidgets.clear();
 
-                                print(sendingEmojis);
+                                if (modelList.length <= _currentCellNumber) {
+                                  return;
+                                }
+
                                 if (sendingEmojis
                                     .any((element) => element > 0)) {
                                   final Map<String, int> emojiMap = {};
@@ -278,12 +278,12 @@ class SwipeViewState extends ConsumerState<SwipeView> {
                                     emoji: emojiMap,
                                   );
 
-                                  print(emojiMap);
                                   ref
                                       .read(swipeViewProvider.notifier)
                                       .sendReactionToTargetConfirmPost(
-                                        // TODO : ConfirmPostModel의 문서 id 여기 넣어주기
-                                        "JYWKwvxuYzfF3Sq3Lt5z",
+                                        (modelList[_currentCellNumber]
+                                                as ConfirmPostModel)
+                                            .id!,
                                         reactionModel,
                                       );
 
@@ -327,39 +327,20 @@ class SwipeViewState extends ConsumerState<SwipeView> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 if (snapshot.data!) {
-                  print(_cameraController);
                   return ReactionCameraWidget(
                     cameraController: _cameraController,
                   );
                 }
               }
-              print("else");
               return Container();
             },
           ),
-
-          // ElevatedButton(
-          //     onPressed: () async {
-          //       CameraDescription description = await availableCameras().then(
-          //           (cameras) => cameras.firstWhere((camera) =>
-          //               camera.lensDirection == CameraLensDirection.front));
-          //       CameraController _controller =
-          //           CameraController(description, ResolutionPreset.medium);
-
-          //       await _controller.initialize();
-
-          //       Navigator.of(context).push(MaterialPageRoute(
-          //           builder: (context) =>
-          //               DEBUGCameraView(controller: _controller)));
-          //     },
-          //     child: Text("\n\n\n\n\nCAM")),
         ],
       ),
     );
   }
 
   Future<bool> initializeCamera() async {
-    print("try camera");
     CameraDescription description = await availableCameras().then(
       (cameras) => cameras.firstWhere(
           (camera) => camera.lensDirection == CameraLensDirection.front),
