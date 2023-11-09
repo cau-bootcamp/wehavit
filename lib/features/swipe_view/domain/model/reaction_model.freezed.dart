@@ -21,9 +21,9 @@ ReactionModel _$ReactionModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ReactionModel {
   String get complementerUid => throw _privateConstructorUsedError;
+  int get reactionType => throw _privateConstructorUsedError;
   bool get hasRead => throw _privateConstructorUsedError;
   String get instantPhotoUrl => throw _privateConstructorUsedError;
-  int get reactionType => throw _privateConstructorUsedError;
   String get comment => throw _privateConstructorUsedError;
   Map<String, int> get emoji => throw _privateConstructorUsedError;
 
@@ -41,9 +41,9 @@ abstract class $ReactionModelCopyWith<$Res> {
   @useResult
   $Res call(
       {String complementerUid,
+      int reactionType,
       bool hasRead,
       String instantPhotoUrl,
-      int reactionType,
       String comment,
       Map<String, int> emoji});
 }
@@ -62,9 +62,9 @@ class _$ReactionModelCopyWithImpl<$Res, $Val extends ReactionModel>
   @override
   $Res call({
     Object? complementerUid = null,
+    Object? reactionType = null,
     Object? hasRead = null,
     Object? instantPhotoUrl = null,
-    Object? reactionType = null,
     Object? comment = null,
     Object? emoji = null,
   }) {
@@ -73,6 +73,10 @@ class _$ReactionModelCopyWithImpl<$Res, $Val extends ReactionModel>
           ? _value.complementerUid
           : complementerUid // ignore: cast_nullable_to_non_nullable
               as String,
+      reactionType: null == reactionType
+          ? _value.reactionType
+          : reactionType // ignore: cast_nullable_to_non_nullable
+              as int,
       hasRead: null == hasRead
           ? _value.hasRead
           : hasRead // ignore: cast_nullable_to_non_nullable
@@ -81,10 +85,6 @@ class _$ReactionModelCopyWithImpl<$Res, $Val extends ReactionModel>
           ? _value.instantPhotoUrl
           : instantPhotoUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      reactionType: null == reactionType
-          ? _value.reactionType
-          : reactionType // ignore: cast_nullable_to_non_nullable
-              as int,
       comment: null == comment
           ? _value.comment
           : comment // ignore: cast_nullable_to_non_nullable
@@ -107,9 +107,9 @@ abstract class _$$ReactionModelImplCopyWith<$Res>
   @useResult
   $Res call(
       {String complementerUid,
+      int reactionType,
       bool hasRead,
       String instantPhotoUrl,
-      int reactionType,
       String comment,
       Map<String, int> emoji});
 }
@@ -126,9 +126,9 @@ class __$$ReactionModelImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? complementerUid = null,
+    Object? reactionType = null,
     Object? hasRead = null,
     Object? instantPhotoUrl = null,
-    Object? reactionType = null,
     Object? comment = null,
     Object? emoji = null,
   }) {
@@ -137,6 +137,10 @@ class __$$ReactionModelImplCopyWithImpl<$Res>
           ? _value.complementerUid
           : complementerUid // ignore: cast_nullable_to_non_nullable
               as String,
+      reactionType: null == reactionType
+          ? _value.reactionType
+          : reactionType // ignore: cast_nullable_to_non_nullable
+              as int,
       hasRead: null == hasRead
           ? _value.hasRead
           : hasRead // ignore: cast_nullable_to_non_nullable
@@ -145,10 +149,6 @@ class __$$ReactionModelImplCopyWithImpl<$Res>
           ? _value.instantPhotoUrl
           : instantPhotoUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      reactionType: null == reactionType
-          ? _value.reactionType
-          : reactionType // ignore: cast_nullable_to_non_nullable
-              as int,
       comment: null == comment
           ? _value.comment
           : comment // ignore: cast_nullable_to_non_nullable
@@ -166,11 +166,11 @@ class __$$ReactionModelImplCopyWithImpl<$Res>
 class _$ReactionModelImpl implements _ReactionModel {
   _$ReactionModelImpl(
       {required this.complementerUid,
-      required this.hasRead,
-      required this.instantPhotoUrl,
       required this.reactionType,
-      required this.comment,
-      required final Map<String, int> emoji})
+      this.hasRead = false,
+      this.instantPhotoUrl = '',
+      this.comment = '',
+      final Map<String, int> emoji = const {}})
       : _emoji = emoji;
 
   factory _$ReactionModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -179,15 +179,19 @@ class _$ReactionModelImpl implements _ReactionModel {
   @override
   final String complementerUid;
   @override
-  final bool hasRead;
-  @override
-  final String instantPhotoUrl;
-  @override
   final int reactionType;
   @override
+  @JsonKey()
+  final bool hasRead;
+  @override
+  @JsonKey()
+  final String instantPhotoUrl;
+  @override
+  @JsonKey()
   final String comment;
   final Map<String, int> _emoji;
   @override
+  @JsonKey()
   Map<String, int> get emoji {
     if (_emoji is EqualUnmodifiableMapView) return _emoji;
     // ignore: implicit_dynamic_type
@@ -196,7 +200,7 @@ class _$ReactionModelImpl implements _ReactionModel {
 
   @override
   String toString() {
-    return 'ReactionModel(complementerUid: $complementerUid, hasRead: $hasRead, instantPhotoUrl: $instantPhotoUrl, reactionType: $reactionType, comment: $comment, emoji: $emoji)';
+    return 'ReactionModel(complementerUid: $complementerUid, reactionType: $reactionType, hasRead: $hasRead, instantPhotoUrl: $instantPhotoUrl, comment: $comment, emoji: $emoji)';
   }
 
   @override
@@ -206,11 +210,11 @@ class _$ReactionModelImpl implements _ReactionModel {
             other is _$ReactionModelImpl &&
             (identical(other.complementerUid, complementerUid) ||
                 other.complementerUid == complementerUid) &&
+            (identical(other.reactionType, reactionType) ||
+                other.reactionType == reactionType) &&
             (identical(other.hasRead, hasRead) || other.hasRead == hasRead) &&
             (identical(other.instantPhotoUrl, instantPhotoUrl) ||
                 other.instantPhotoUrl == instantPhotoUrl) &&
-            (identical(other.reactionType, reactionType) ||
-                other.reactionType == reactionType) &&
             (identical(other.comment, comment) || other.comment == comment) &&
             const DeepCollectionEquality().equals(other._emoji, _emoji));
   }
@@ -220,9 +224,9 @@ class _$ReactionModelImpl implements _ReactionModel {
   int get hashCode => Object.hash(
       runtimeType,
       complementerUid,
+      reactionType,
       hasRead,
       instantPhotoUrl,
-      reactionType,
       comment,
       const DeepCollectionEquality().hash(_emoji));
 
@@ -243,11 +247,11 @@ class _$ReactionModelImpl implements _ReactionModel {
 abstract class _ReactionModel implements ReactionModel {
   factory _ReactionModel(
       {required final String complementerUid,
-      required final bool hasRead,
-      required final String instantPhotoUrl,
       required final int reactionType,
-      required final String comment,
-      required final Map<String, int> emoji}) = _$ReactionModelImpl;
+      final bool hasRead,
+      final String instantPhotoUrl,
+      final String comment,
+      final Map<String, int> emoji}) = _$ReactionModelImpl;
 
   factory _ReactionModel.fromJson(Map<String, dynamic> json) =
       _$ReactionModelImpl.fromJson;
@@ -255,11 +259,11 @@ abstract class _ReactionModel implements ReactionModel {
   @override
   String get complementerUid;
   @override
+  int get reactionType;
+  @override
   bool get hasRead;
   @override
   String get instantPhotoUrl;
-  @override
-  int get reactionType;
   @override
   String get comment;
   @override

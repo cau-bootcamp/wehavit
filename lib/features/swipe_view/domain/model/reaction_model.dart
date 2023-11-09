@@ -7,11 +7,11 @@ part 'reaction_model.g.dart';
 class ReactionModel with _$ReactionModel {
   factory ReactionModel({
     required String complementerUid,
-    required bool hasRead,
-    required String instantPhotoUrl,
     required int reactionType,
-    required String comment,
-    required Map<String, int> emoji,
+    @Default(false) bool hasRead,
+    @Default('') String instantPhotoUrl,
+    @Default('') String comment,
+    @Default({}) Map<String, int> emoji,
   }) = _ReactionModel;
 
   factory ReactionModel.fromJson(Map<String, dynamic> json) =>

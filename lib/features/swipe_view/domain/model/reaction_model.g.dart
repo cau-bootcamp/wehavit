@@ -9,19 +9,22 @@ part of 'reaction_model.dart';
 _$ReactionModelImpl _$$ReactionModelImplFromJson(Map<String, dynamic> json) =>
     _$ReactionModelImpl(
       complementerUid: json['complementerUid'] as String,
-      hasRead: json['hasRead'] as bool,
-      instantPhotoUrl: json['instantPhotoUrl'] as String,
       reactionType: json['reactionType'] as int,
-      comment: json['comment'] as String,
-      emoji: Map<String, int>.from(json['emoji'] as Map),
+      hasRead: json['hasRead'] as bool? ?? false,
+      instantPhotoUrl: json['instantPhotoUrl'] as String? ?? '',
+      comment: json['comment'] as String? ?? '',
+      emoji: (json['emoji'] as Map<String, dynamic>?)?.map(
+            (k, e) => MapEntry(k, e as int),
+          ) ??
+          const {},
     );
 
 Map<String, dynamic> _$$ReactionModelImplToJson(_$ReactionModelImpl instance) =>
     <String, dynamic>{
       'complementerUid': instance.complementerUid,
+      'reactionType': instance.reactionType,
       'hasRead': instance.hasRead,
       'instantPhotoUrl': instance.instantPhotoUrl,
-      'reactionType': instance.reactionType,
       'comment': instance.comment,
       'emoji': instance.emoji,
     };

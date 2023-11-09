@@ -256,10 +256,6 @@ class SwipeViewState extends ConsumerState<SwipeView> {
                                   }).whenComplete(() async {
                                 emojiWidgets.clear();
 
-                                if (modelList.length <= _currentCellNumber) {
-                                  return;
-                                }
-
                                 if (sendingEmojis
                                     .any((element) => element > 0)) {
                                   final Map<String, int> emojiMap = {};
@@ -268,13 +264,11 @@ class SwipeViewState extends ConsumerState<SwipeView> {
                                           {'t$index': value},
                                         ),
                                       );
+
                                   final reactionModel = ReactionModel(
                                     complementerUid:
                                         FirebaseAuth.instance.currentUser!.uid,
-                                    hasRead: false,
-                                    instantPhotoUrl: '',
                                     reactionType: ReactionType.emoji.index,
-                                    comment: '',
                                     emoji: emojiMap,
                                   );
 
