@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
-import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/models/user_model/user_model.dart';
 import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
-import 'package:wehavit/features/swipe_view/domain/usecase/fetch_user_data_from_id_usecase.dart';
-import 'package:wehavit/features/swipe_view/domain/usecase/fetch_user_data_from_id_usecase_provider.dart';
-import 'package:wehavit/features/swipe_view/presentation/provider/swipe_view_cell_user_model_provider.dart';
+import 'package:wehavit/features/swipe_view/presentation/provider/swipe_view_model_provider.dart';
 
 class SwipeViewCellWidget extends ConsumerStatefulWidget {
-  SwipeViewCellWidget({super.key, required this.model});
+  const SwipeViewCellWidget({super.key, required this.model});
 
-  ConfirmPostModel model;
+  final ConfirmPostModel model;
 
   @override
   ConsumerState<SwipeViewCellWidget> createState() =>
@@ -19,19 +15,21 @@ class SwipeViewCellWidget extends ConsumerStatefulWidget {
 }
 
 class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
-  late FetchUserDataFromIdUsecase _fetchUserDataFromIdUsecase;
+  late final SwipeViewModel swipeViewModel;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context) {
-    _fetchUserDataFromIdUsecase = ref.watch(fetchUserDataFromIdUsecaseProvider);
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    swipeViewModel = ref.watch(swipeViewModelProvider);
+  }
 
-    // TODO : User
+  @override
+  Widget build(BuildContext context) {
     return Expanded(
       child: Center(
         child: Column(
@@ -39,22 +37,24 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
             // 프로필 영역
             Column(
               children: [
-                FutureBuilder(
-                  future: _fetchUserDataFromIdUsecase.call(
-                    widget.model.roles!.keys.firstWhere(
-                      (element) => widget.model.roles![element] == "owner",
-                    ),
-                  ),
+                FutureBuilder<UserModel>(
+                  future: ref
+                      .read(swipeViewModelProvider.notifier)
+                      .getUserModelFromId(
+                        widget.model.roles!.keys.firstWhere(
+                          (element) => widget.model.roles![element] == 'owner',
+                        ),
+                      ),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     //해당 부분은 data를 아직 받아 오지 못했을때 실행되는 부분을 의미한다.
                     if (snapshot.hasData == false) {
-                      return Container(
+                      return const SizedBox(
                         width: 80,
                         height: 100,
                         child: CircularProgressIndicator(),
                       );
                     } else if (snapshot.hasError == true) {
-                      return Container(
+                      return const SizedBox(
                         width: 80,
                         height: 100,
                         child: CircularProgressIndicator(),
@@ -74,7 +74,7 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
                           ),
                           Text(
                             snapshot.data.fold(
-                              (failure) => "NoName",
+                              (failure) => 'NoName',
                               (model) => model.displayName,
                             ),
                             style: const TextStyle(
@@ -86,7 +86,7 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
                       );
                     }
                   },
-                )
+                ),
               ],
             ),
             // 사진 영역
@@ -95,14 +95,17 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Container(
-                  constraints: BoxConstraints.expand(),
+                  constraints: const BoxConstraints.expand(),
                   child: Image.network(
-                    widget.model.imageUrl ?? "",
+                    widget.model.imageUrl ?? '',
                     errorBuilder: (context, error, stackTrace) {
-                      return Placeholder();
+                      return const Placeholder();
                     },
-                    loadingBuilder: (BuildContext context, Widget child,
-                        ImageChunkEvent? loadingProgress) {
+                    loadingBuilder: (
+                      BuildContext context,
+                      Widget child,
+                      ImageChunkEvent? loadingProgress,
+                    ) {
                       if (loadingProgress == null) {
                         return child;
                       }
@@ -134,29 +137,29 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
                 color: Colors.pink.shade200,
                 constraints: const BoxConstraints.expand(height: 120),
                 child: Padding(
-                  padding: EdgeInsets.all(4.0),
+                  padding: const EdgeInsets.all(4.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: EdgeInsets.all(4.0),
-                        child: Text(widget.model.title ?? ""),
+                        padding: const EdgeInsets.all(4.0),
+                        child: Text(widget.model.title ?? ''),
                       ),
-                      Divider(
+                      const Divider(
                         thickness: 2.5,
                         color: Colors.black,
                       ),
                       Padding(
-                        padding: EdgeInsets.all(4.0),
+                        padding: const EdgeInsets.all(4.0),
                         child: Text(
-                          widget.model.content ?? "",
+                          widget.model.content ?? '',
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -165,8 +168,10 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
 }
 
 class SwipeViewCellWidgetModel {
-  SwipeViewCellWidgetModel(
-      {required this.confirmPostModel, required this.owner});
+  SwipeViewCellWidgetModel({
+    required this.confirmPostModel,
+    required this.owner,
+  });
 
   late final ConfirmPostModel confirmPostModel;
   late final UserModel owner;

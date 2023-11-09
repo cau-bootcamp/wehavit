@@ -7,90 +7,57 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:wehavit/features/swipe_view/presentation/provider/reaction_camera_widget_model_provider.dart';
 
-class ReactionCameraWidget extends StatefulWidget {
-  ReactionCameraWidget({super.key, required this.cameraController});
+class ReactionCameraWidget extends ConsumerStatefulWidget {
+  const ReactionCameraWidget({super.key, required this.cameraController});
 
-  CameraController cameraController;
+  final CameraController cameraController;
   @override
-  State<ReactionCameraWidget> createState() => _ReactionCameraWidgetState();
+  ConsumerState<ReactionCameraWidget> createState() =>
+      _ReactionCameraWidgetState();
 }
 
-class _ReactionCameraWidgetState extends State<ReactionCameraWidget> {
+class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
   late GlobalKey repaintBoundaryGlobalKey;
-
-  double cameraButtonOriginXOffset = 20;
-  double cameraButtonOriginYOffset = 100;
-
-  double cameraButtonXOffset = 20;
-  double cameraButtonYOffset = 100;
-
-  bool _isFocusingMode = false;
-
-  bool get isFocusingMode => _isFocusingMode;
-  set isFocusingMode(bool newValue) {
-    if (newValue) {
-      _cameraController.resumePreview();
-    } else {
-      _cameraController.pausePreview();
-    }
-
-    _isFocusingMode = newValue;
-  }
-
-  bool isShowingHelpMessage = false;
-
-  late double screenWidth;
-  late double screenHeight;
-
-  late double cameraWidgetPositionX;
-  late double cameraWidgetPositionY;
-  late double cameraWidgetRadius;
-
-  late CameraController _cameraController;
-
-  bool isFingerInCameraArea(Point offset) {
-    if (offset.distanceTo(Point(
-            screenWidth / 2, cameraWidgetPositionY + cameraWidgetRadius)) <
-        cameraWidgetRadius) {
-      return true;
-    }
-    return false;
-  }
-
-  bool isCameraButtonPanned(Point offset) {
-    if (offset.distanceTo(
-            Point(cameraButtonOriginXOffset, cameraButtonOriginYOffset)) >=
-        30) {
-      return true;
-    }
-    return false;
-  }
+  late final ReactionCameraWidgetModel _reactionCameraWidgetModel;
+  late final ReactionCameraWidgetModelProvider
+      _reactionCameraWidgetModelProvider;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    screenWidth = View.of(context).physicalSize.width / 3;
-    screenHeight = View.of(context).physicalSize.height / 3;
+    _reactionCameraWidgetModel = ref.watch(reactionCameraWidgetModelProvider);
+    _reactionCameraWidgetModelProvider =
+        ref.read(reactionCameraWidgetModelProvider.notifier);
+    _reactionCameraWidgetModel.cameraController = widget.cameraController;
 
-    cameraWidgetPositionX = screenWidth / 2;
-    cameraWidgetPositionY = screenHeight / 3;
-    cameraWidgetRadius = screenWidth / 2.3;
+    _reactionCameraWidgetModel.screenWidth =
+        View.of(context).physicalSize.width / 3;
+    _reactionCameraWidgetModel.screenHeight =
+        View.of(context).physicalSize.height / 3;
+
+    _reactionCameraWidgetModel.cameraWidgetPositionX =
+        _reactionCameraWidgetModel.screenWidth / 2;
+    _reactionCameraWidgetModel.cameraWidgetPositionY =
+        _reactionCameraWidgetModel.screenHeight / 3;
+    _reactionCameraWidgetModel.cameraWidgetRadius =
+        _reactionCameraWidgetModel.screenWidth / 2.3;
   }
 
   @override
   void initState() {
     super.initState();
     repaintBoundaryGlobalKey = GlobalKey();
-    _cameraController = widget.cameraController;
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints.expand(),
+      constraints: const BoxConstraints.expand(),
       child: Stack(
         alignment: Alignment.center,
         children: [
@@ -98,18 +65,22 @@ class _ReactionCameraWidgetState extends State<ReactionCameraWidget> {
             child: IgnorePointer(
               child: Container(
                 decoration: BoxDecoration(
-                    color:
-                        Colors.black45.withOpacity(isFocusingMode ? 0.7 : 0)),
+                  color: Colors.black45.withOpacity(
+                    _reactionCameraWidgetModelProvider.isFocusingMode ? 0.7 : 0,
+                  ),
+                ),
               ),
             ),
           ),
           Positioned(
-            bottom: cameraWidgetPositionY,
-            width: cameraWidgetRadius * 2,
-            height:
-                cameraWidgetRadius * 2 * _cameraController.value.aspectRatio,
+            bottom: _reactionCameraWidgetModel.cameraWidgetPositionY,
+            width: _reactionCameraWidgetModel.cameraWidgetRadius * 2,
+            height: _reactionCameraWidgetModel.cameraWidgetRadius *
+                2 *
+                _reactionCameraWidgetModel.cameraController.value.aspectRatio,
             child: Opacity(
-              opacity: isFocusingMode ? 0.7 : 0,
+              opacity:
+                  _reactionCameraWidgetModelProvider.isFocusingMode ? 0.7 : 0,
               child: RepaintBoundary(
                 key: repaintBoundaryGlobalKey,
                 child: IgnorePointer(
@@ -119,61 +90,76 @@ class _ReactionCameraWidgetState extends State<ReactionCameraWidget> {
                       shape: BoxShape.circle,
                     ),
                     clipBehavior: Clip.hardEdge,
-                    child: CameraPreview(_cameraController),
+                    child: CameraPreview(
+                      _reactionCameraWidgetModel.cameraController,
+                    ),
                   ),
                 ),
               ),
             ),
           ),
           Positioned(
-            right: cameraButtonXOffset,
-            bottom: cameraButtonYOffset,
+            right: _reactionCameraWidgetModel.cameraButtonXOffset,
+            bottom: _reactionCameraWidgetModel.cameraButtonYOffset,
             child: GestureDetector(
               onTap: () {
                 setState(() {
-                  isShowingHelpMessage = true;
-                  Timer(Duration(seconds: 3), () {
-                    isShowingHelpMessage = false;
+                  _reactionCameraWidgetModel.isShowingHelpMessage = true;
+                  Timer(const Duration(seconds: 3), () {
+                    _reactionCameraWidgetModel.isShowingHelpMessage = false;
                   });
                 });
               },
               onTapDown: (details) {
                 setState(() {
-                  isFocusingMode = true;
+                  _reactionCameraWidgetModelProvider.isFocusingMode = true;
                 });
               },
               onTapUp: (details) {
                 setState(() {
-                  isFocusingMode = false;
+                  _reactionCameraWidgetModelProvider.isFocusingMode = false;
                 });
               },
               onLongPressEnd: (details) {
                 setState(() {
-                  isFocusingMode = false;
+                  _reactionCameraWidgetModelProvider.isFocusingMode = false;
                 });
               },
               onPanUpdate: (details) {
                 setState(() {
-                  isFocusingMode = true;
-                  cameraButtonXOffset = cameraButtonXOffset - details.delta.dx;
-                  cameraButtonYOffset = cameraButtonYOffset - details.delta.dy;
+                  _reactionCameraWidgetModelProvider.isFocusingMode = true;
+                  _reactionCameraWidgetModel.cameraButtonXOffset =
+                      _reactionCameraWidgetModel.cameraButtonXOffset -
+                          details.delta.dx;
+                  _reactionCameraWidgetModel.cameraButtonYOffset =
+                      _reactionCameraWidgetModel.cameraButtonYOffset -
+                          details.delta.dy;
                 });
               },
               onPanEnd: (details) async {
-                if (isFingerInCameraArea(
-                    Point(cameraButtonXOffset, cameraButtonYOffset))) {
+                if (_reactionCameraWidgetModelProvider.isFingerInCameraArea(
+                  Point(
+                    _reactionCameraWidgetModel.cameraButtonXOffset,
+                    _reactionCameraWidgetModel.cameraButtonYOffset,
+                  ),
+                )) {
                   // final fileImage = await cropSquare();
                   // final image = await getSquarePhotoImageFromCamera();
                   final fileImage = FileImage(File(await _capture()));
-                  Navigator.of(context).push(MaterialPageRoute(
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
                       builder: (context) =>
-                          ImageSampleView(fileImage: fileImage)));
+                          ImageSampleView(fileImage: fileImage),
+                    ),
+                  );
                 }
 
                 setState(() {
-                  cameraButtonXOffset = cameraButtonOriginXOffset;
-                  cameraButtonYOffset = cameraButtonOriginYOffset;
-                  isFocusingMode = false;
+                  _reactionCameraWidgetModel.cameraButtonXOffset =
+                      _reactionCameraWidgetModel.cameraButtonOriginXOffset;
+                  _reactionCameraWidgetModel.cameraButtonYOffset =
+                      _reactionCameraWidgetModel.cameraButtonOriginYOffset;
+                  _reactionCameraWidgetModelProvider.isFocusingMode = false;
                 });
               },
               child: Container(
@@ -181,10 +167,12 @@ class _ReactionCameraWidgetState extends State<ReactionCameraWidget> {
                 height: 50,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: isFocusingMode ? Colors.amber : Colors.transparent,
+                  color: _reactionCameraWidgetModelProvider.isFocusingMode
+                      ? Colors.amber
+                      : Colors.transparent,
                 ),
                 child: Text(
-                  isFocusingMode ? '' : '📸',
+                  _reactionCameraWidgetModelProvider.isFocusingMode ? '' : '📸',
                   style: const TextStyle(fontSize: 45),
                 ),
               ),
@@ -208,7 +196,12 @@ class _ReactionCameraWidgetState extends State<ReactionCameraWidget> {
     int offsetY = (properties.height! - cropSize) ~/ 2;
 
     final imageFile = await FlutterNativeImage.cropImage(
-        filePath, offsetX, offsetY, cropSize, cropSize);
+      filePath,
+      offsetX,
+      offsetY,
+      cropSize,
+      cropSize,
+    );
 
     return Future(() => FileImage(imageFile));
   }
@@ -230,25 +223,25 @@ class _ReactionCameraWidgetState extends State<ReactionCameraWidget> {
 
       return imgFile.path;
     } else {
-      return "";
+      return '';
     }
   }
 }
 
 class ImageSampleView extends StatelessWidget {
-  ImageSampleView({super.key, required this.fileImage});
+  const ImageSampleView({super.key, required this.fileImage});
 
-  FileImage fileImage;
+  final FileImage fileImage;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Container(
-          child: Center(
-              child: Image(
-        image: fileImage,
-      ))),
+      body: Center(
+        child: Image(
+          image: fileImage,
+        ),
+      ),
     );
   }
 }

@@ -1,24 +1,40 @@
+import 'package:camera/camera.dart';
+import 'package:carousel_slider/carousel_controller.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/models/user_model/user_model.dart';
-import 'package:wehavit/common/utils/utils.dart';
+import 'package:wehavit/common/utils/no_params.dart';
 import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
 import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';
-import 'package:wehavit/features/swipe_view/domain/usecase/fetch_user_data_from_id_usecase.dart';
-import 'package:wehavit/features/swipe_view/domain/usecase/fetch_user_data_from_id_usecase_provider.dart';
-import 'package:wehavit/features/swipe_view/domain/usecase/get_today_confirm_post_list_usecase.dart';
-import 'package:wehavit/features/swipe_view/domain/usecase/get_today_confirm_post_list_usecase_proivder.dart';
-import 'package:wehavit/features/swipe_view/domain/usecase/send_reaction_to_target_confirm_post.dart';
-import 'package:wehavit/features/swipe_view/domain/usecase/send_reaction_to_target_confirm_post_provider.dart';
-import 'package:wehavit/features/swipe_view/presentation/widget/swipe_view_cell.dart';
+import 'package:wehavit/features/swipe_view/domain/usecase/swipe_view_usecase.dart';
+import 'package:wehavit/features/swipe_view/presentation/screen/swipe_view.dart';
 
-final swipeViewProvider = StateNotifierProvider<SwipeViewProvider,
-    Either<Failure, List<ConfirmPostModel>>>((ref) => SwipeViewProvider(ref));
+final swipeViewModelProvider =
+    StateNotifierProvider<SwipeViewModelProvider, SwipeViewModel>(
+  (ref) => SwipeViewModelProvider(ref),
+);
 
-class SwipeViewProvider
-    extends StateNotifier<Either<Failure, List<ConfirmPostModel>>> {
-  SwipeViewProvider(Ref ref) : super(const Right([])) {
+@freezed
+class SwipeViewModel {
+  // Carousel UI Variables
+  CarouselController carouselController = CarouselController();
+  int currentCellNumber = 0;
+  Either<Failure, List<ConfirmPostModel>> confirmPostModelList = right([]);
+
+  // Camera Reaction UI Variables
+  late CameraController cameraController;
+
+  // Emoji Reaction UI Variables
+  Map<Key, ShootEmojiWidget> emojiWidgets = {};
+  int countSend = 0;
+  List<int> sendingEmojis = List<int>.generate(15, (index) => 0);
+}
+
+class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
+  SwipeViewModelProvider(Ref ref) : super(SwipeViewModel()) {
     _getTodayConfirmPostListUsecase =
         ref.watch(getTodayConfirmPostListUsecaseProvider);
     _fetchUserDataFromIdUsecase = ref.watch(fetchUserDataFromIdUsecaseProvider);
@@ -27,16 +43,15 @@ class SwipeViewProvider
   }
 
   late final GetTodayConfirmPostListUsecase _getTodayConfirmPostListUsecase;
-  late final FetchUserDataFromIdUsecase _fetchUserDataFromIdUsecase;
-  late final SendReactionToTargetConfirmPostUsecase
-      _sendReactionToTargetConfirmPostUsecase;
 
   Future<void> getTodayConfirmPostModelList() async {
-    final confirmPostModelFetchResult =
-        await _getTodayConfirmPostListUsecase.call(NoParams());
-
-    state = confirmPostModelFetchResult;
+    state = state
+      ..confirmPostModelList =
+          await _getTodayConfirmPostListUsecase.call(NoParams());
+    return Future(() => null);
   }
+
+  late final FetchUserDataFromIdUsecase _fetchUserDataFromIdUsecase;
 
   Future<UserModel> getUserModelFromId(String targetUserId) async {
     final fetchResult = await _fetchUserDataFromIdUsecase.call(targetUserId);
@@ -62,6 +77,9 @@ class SwipeViewProvider
 
     throw UnimplementedError();
   }
+
+  late final SendReactionToTargetConfirmPostUsecase
+      _sendReactionToTargetConfirmPostUsecase;
 
   Future<void> sendReactionToTargetConfirmPost(
     String targetConfirmPostId,

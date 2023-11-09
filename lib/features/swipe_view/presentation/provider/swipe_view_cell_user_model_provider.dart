@@ -3,10 +3,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/models/user_model/user_model.dart';
 import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';
-import 'package:wehavit/features/swipe_view/domain/usecase/fetch_user_data_from_id_usecase.dart';
-import 'package:wehavit/features/swipe_view/domain/usecase/fetch_user_data_from_id_usecase_provider.dart';
-import 'package:wehavit/features/swipe_view/domain/usecase/send_reaction_to_target_confirm_post.dart';
-import 'package:wehavit/features/swipe_view/domain/usecase/send_reaction_to_target_confirm_post_provider.dart';
+import 'package:wehavit/features/swipe_view/domain/usecase/swipe_view_usecase.dart';
 
 final swipeViewCellUserModelProvider = StateNotifierProvider<
     SwipeViewCellUserModelProvider,
