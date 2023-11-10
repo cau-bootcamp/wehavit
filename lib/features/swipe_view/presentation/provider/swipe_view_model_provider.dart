@@ -11,6 +11,7 @@ import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.d
 import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';
 import 'package:wehavit/features/swipe_view/domain/usecase/swipe_view_usecase.dart';
 import 'package:wehavit/features/swipe_view/presentation/screen/swipe_view.dart';
+import 'package:collection/collection.dart';
 
 final swipeViewModelProvider =
     StateNotifierProvider<SwipeViewModelProvider, SwipeViewModel>(
@@ -23,6 +24,7 @@ class SwipeViewModel {
   CarouselController carouselController = CarouselController();
   int currentCellNumber = 0;
   Either<Failure, List<ConfirmPostModel>> confirmPostModelList = right([]);
+  List<Future<UserModel>> userModelList = [];
 
   // Camera Reaction UI Variables
   late CameraController cameraController;
@@ -45,9 +47,27 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
   late final GetTodayConfirmPostListUsecase _getTodayConfirmPostListUsecase;
 
   Future<void> getTodayConfirmPostModelList() async {
-    state = state
-      ..confirmPostModelList =
-          await _getTodayConfirmPostListUsecase.call(NoParams());
+    state.confirmPostModelList =
+        await _getTodayConfirmPostListUsecase.call(NoParams());
+
+    state.confirmPostModelList.fold((failure) {
+      state.userModelList = [];
+    }, (confirmPostModelList) {
+      state.userModelList = List<Future<UserModel>>.generate(
+        confirmPostModelList.length,
+        (index) => Future(() => UserModel.dummyModel),
+      );
+
+      for (int index = 0; index < confirmPostModelList.length; index++) {
+        final model = confirmPostModelList[index];
+        state.userModelList[index] = getUserModelFromId(
+          model.roles!.keys.firstWhere(
+            (element) => model.roles![element] == 'owner',
+          ),
+        );
+      }
+    });
+
     return Future(() => null);
   }
 
@@ -55,27 +75,17 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
 
   Future<UserModel> getUserModelFromId(String targetUserId) async {
     final fetchResult = await _fetchUserDataFromIdUsecase.call(targetUserId);
-    fetchResult.fold((l) {
-      return Future(
-        () => UserModel(
-          displayName: 'good',
-          email: 'email',
-          imageUrl:
-              'https://media.istockphoto.com/id/961829842/ko/사진/나쁜-고양이-은행-강도.jpg?s=1024x1024&w=is&k=20&c=7mc4cum-tQaOlV0R9xGD0LINLMmho2OpV9FYZigIgfI=',
-        ),
-      );
-    }, (r) {
-      return Future(
-        () => UserModel(
-          displayName: 'good',
-          email: 'email',
-          imageUrl:
-              'https://media.istockphoto.com/id/961829842/ko/사진/나쁜-고양이-은행-강도.jpg?s=1024x1024&w=is&k=20&c=7mc4cum-tQaOlV0R9xGD0LINLMmho2OpV9FYZigIgfI=',
-        ),
-      );
-    });
 
-    throw UnimplementedError();
+    UserModel resultUserModel = fetchResult.fold(
+      (failure) {
+        return UserModel.dummyModel;
+      },
+      (userModel) {
+        return userModel;
+      },
+    );
+
+    return Future(() => resultUserModel);
   }
 
   late final SendReactionToTargetConfirmPostUsecase

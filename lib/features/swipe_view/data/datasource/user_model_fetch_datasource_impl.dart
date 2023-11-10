@@ -12,7 +12,6 @@ class UserModelFetchDatasourceImpl extends UserModelFetchDatasource {
   @override
   EitherFuture<UserModel> fetchUserModelFromId(String targetUserId) async {
     try {
-      print(targetUserId);
       final fetchResult = await FirebaseFirestore.instance
           .collection(FirebaseCollectionName.users)
           .doc(targetUserId)

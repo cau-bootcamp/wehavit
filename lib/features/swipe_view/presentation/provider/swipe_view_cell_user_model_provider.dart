@@ -4,6 +4,7 @@ import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/models/user_model/user_model.dart';
 import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';
 import 'package:wehavit/features/swipe_view/domain/usecase/swipe_view_usecase.dart';
+import 'package:wehavit/features/swipe_view/presentation/widget/swipe_view_cell.dart';
 
 final swipeViewCellUserModelProvider = StateNotifierProvider<
     SwipeViewCellUserModelProvider,

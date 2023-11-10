@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/errors/failure.dart';
@@ -21,9 +22,11 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
           )
           .where(
             _getRolePath(FirebaseAuth.instance.currentUser!.uid),
-            isEqualTo: CONFIRM_POST_ROLES_COMPILIMENTER,
+            isEqualTo: 'owner',
           )
           .get();
+
+      debugPrint(fetchResult.docs.length.toString());
 
       List<ConfirmPostModel> confirmPosts = fetchResult.docs
           .map((doc) => ConfirmPostModel.fromFireStoreDocument(doc))

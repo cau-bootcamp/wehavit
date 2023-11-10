@@ -38,45 +38,34 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
             Column(
               children: [
                 FutureBuilder<UserModel>(
-                  future: ref
-                      .read(swipeViewModelProvider.notifier)
-                      .getUserModelFromId(
-                        widget.model.roles!.keys.firstWhere(
-                          (element) => widget.model.roles![element] == 'owner',
-                        ),
-                      ),
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  future: swipeViewModel
+                      .userModelList[swipeViewModel.currentCellNumber],
+                  builder: (BuildContext context,
+                      AsyncSnapshot<UserModel> snapshot) {
                     //해당 부분은 data를 아직 받아 오지 못했을때 실행되는 부분을 의미한다.
                     if (snapshot.hasData == false) {
                       return const SizedBox(
-                        width: 80,
+                        width: 100,
                         height: 100,
                         child: CircularProgressIndicator(),
                       );
                     } else if (snapshot.hasError == true) {
                       return const SizedBox(
-                        width: 80,
+                        width: 100,
                         height: 100,
-                        child: CircularProgressIndicator(),
+                        child: Placeholder(),
                       );
                     } else {
                       return Column(
                         children: [
                           CircleAvatar(
                             radius: 40,
-                            foregroundImage: snapshot.data.fold(
-                              (failure) => null,
-                              (model) => NetworkImage(
-                                model.imageUrl,
-                              ),
-                            ),
+                            foregroundImage:
+                                NetworkImage(snapshot.data!.imageUrl),
                             backgroundColor: Colors.grey,
                           ),
                           Text(
-                            snapshot.data.fold(
-                              (failure) => 'NoName',
-                              (model) => model.displayName,
-                            ),
+                            snapshot.data!.displayName,
                             style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
