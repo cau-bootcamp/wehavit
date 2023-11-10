@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/models/user_model/user_model.dart';
 import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
+import 'package:wehavit/features/swipe_view/presentation/model/swipe_view_model.dart';
 import 'package:wehavit/features/swipe_view/presentation/provider/swipe_view_model_provider.dart';
 
 class SwipeViewCellWidget extends ConsumerStatefulWidget {
@@ -40,9 +41,11 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
                 FutureBuilder<UserModel>(
                   future: swipeViewModel
                       .userModelList[swipeViewModel.currentCellIndex],
-                  builder: (BuildContext context,
-                      AsyncSnapshot<UserModel> snapshot) {
-                    //해당 부분은 data를 아직 받아 오지 못했을때 실행되는 부분을 의미한다.
+                  builder: (
+                    BuildContext context,
+                    AsyncSnapshot<UserModel> snapshot,
+                  ) {
+                    // 해당 부분은 data를 아직 받아 오지 못했을때 실행되는 코드
                     if (snapshot.hasData == false) {
                       return const SizedBox(
                         width: 100,

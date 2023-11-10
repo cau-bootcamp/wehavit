@@ -1,5 +1,3 @@
-import 'package:fpdart/src/either.dart';
-import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/usecases/usecase.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';

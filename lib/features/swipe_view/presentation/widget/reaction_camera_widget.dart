@@ -11,8 +11,7 @@ import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';
-import 'package:wehavit/features/swipe_view/domain/usecase/send_reaction_to_target_confirm_post.dart';
-import 'package:wehavit/features/swipe_view/domain/usecase/send_reaction_to_target_confirm_post_provider.dart';
+import 'package:wehavit/features/swipe_view/presentation/model/reaction_camera_widget_model.dart';
 import 'package:wehavit/features/swipe_view/presentation/provider/reaction_camera_widget_model_provider.dart';
 import 'package:wehavit/features/swipe_view/presentation/provider/swipe_view_model_provider.dart';
 
@@ -30,8 +29,6 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
   late final ReactionCameraWidgetModel _reactionCameraWidgetModel;
   late final ReactionCameraWidgetModelProvider
       _reactionCameraWidgetModelProvider;
-  late final SendReactionToTargetConfirmPostUsecase
-      _sendReactionToTargetConfirmPostUsecase;
   late final SwipeViewModelProvider _swipeViewModelProvider;
 
   @override
@@ -42,8 +39,6 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
     _reactionCameraWidgetModelProvider =
         ref.read(reactionCameraWidgetModelProvider.notifier);
     _reactionCameraWidgetModel.cameraController = widget.cameraController;
-    _sendReactionToTargetConfirmPostUsecase =
-        ref.watch(sendReactionToTargetConfirmPostUsecaseProvider);
     _swipeViewModelProvider = ref.read(swipeViewModelProvider.notifier);
 
     _reactionCameraWidgetModel.screenWidth =

@@ -61,7 +61,6 @@ class SwipeViewDatasourceImpl implements SwipeViewDatasource {
           ),
         );
       }).toList();
-      print("CAPTURE");
 
       print(modelList.first);
       final temp = modelList.toList();

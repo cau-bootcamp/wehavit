@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -168,8 +167,7 @@ class SwipeViewRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    print(state.extra);
-    return SwipeView();
+    return const SwipeView();
   }
 }
 

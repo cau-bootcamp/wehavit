@@ -1,19 +1,18 @@
 import 'dart:math';
 
-import 'package:camera/camera.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/utils/emoji_assets.dart';
 import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';
+import 'package:wehavit/features/swipe_view/presentation/model/swipe_view_model.dart';
 import 'package:wehavit/features/swipe_view/presentation/provider/swipe_view_model_provider.dart';
 import 'package:wehavit/features/swipe_view/presentation/widget/reaction_camera_widget.dart';
 import 'package:wehavit/features/swipe_view/presentation/widget/swipe_view_cell.dart';
 
 class SwipeView extends ConsumerStatefulWidget {
   const SwipeView({super.key});
-  // CameraController cameraController;
 
   @override
   ConsumerState<SwipeView> createState() {
@@ -22,10 +21,8 @@ class SwipeView extends ConsumerStatefulWidget {
 }
 
 class SwipeViewState extends ConsumerState<SwipeView> {
-  late final SwipeViewModel swipeViewModel;
-
-  // Camera View Properties
-  bool _isCameraInitialized = false;
+  late final SwipeViewModel _swipeViewModel;
+  late final SwipeViewModelProvider _swipeViewModelProvider;
 
   @override
   void initState() {
@@ -35,7 +32,10 @@ class SwipeViewState extends ConsumerState<SwipeView> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    swipeViewModel = ref.watch(swipeViewModelProvider);
+    _swipeViewModel = ref.watch(swipeViewModelProvider);
+    _swipeViewModelProvider = ref.read(swipeViewModelProvider.notifier);
+
+    _swipeViewModelProvider.initializeCamera();
   }
 
   @override
@@ -53,7 +53,7 @@ class SwipeViewState extends ConsumerState<SwipeView> {
       body: Stack(
         children: [
           SafeArea(
-            child: swipeViewModel.confirmPostModelList.fold(
+            child: _swipeViewModel.confirmPostModelList.fold(
               (failure) => Container(
                 color: Colors.cyan,
               ),
@@ -76,7 +76,7 @@ class SwipeViewState extends ConsumerState<SwipeView> {
                               child: Container(
                                 key: ValueKey(modelIndex),
                                 decoration: BoxDecoration(
-                                  color: swipeViewModel.currentCellIndex ==
+                                  color: _swipeViewModel.currentCellIndex ==
                                           modelIndex
                                       ? Colors.amber
                                       : Colors.grey[400],
@@ -95,12 +95,12 @@ class SwipeViewState extends ConsumerState<SwipeView> {
                           height: MediaQuery.of(context).size.height,
                           onPageChanged: (index, reason) {
                             setState(() {
-                              swipeViewModel.currentCellIndex = index;
+                              _swipeViewModel.currentCellIndex = index;
                             });
                           },
                           enableInfiniteScroll: false,
                         ),
-                        carouselController: swipeViewModel.carouselController,
+                        carouselController: _swipeViewModel.carouselController,
                         items: List<Widget>.generate(
                           modelList.length,
                           (index) {
@@ -125,12 +125,12 @@ class SwipeViewState extends ConsumerState<SwipeView> {
                               onTapUp: (details) async =>
                                   emojiSheetWidget(context)
                                       .whenComplete(() async {
-                                swipeViewModel.emojiWidgets.clear();
+                                _swipeViewModel.emojiWidgets.clear();
 
-                                if (swipeViewModel.sendingEmojis
+                                if (_swipeViewModel.sendingEmojis
                                     .any((element) => element > 0)) {
                                   final Map<String, int> emojiMap = {};
-                                  swipeViewModel.sendingEmojis.asMap().forEach(
+                                  _swipeViewModel.sendingEmojis.asMap().forEach(
                                         (index, value) => emojiMap.addAll(
                                           {'t$index': value},
                                         ),
@@ -149,7 +149,7 @@ class SwipeViewState extends ConsumerState<SwipeView> {
                                         reactionModel,
                                       );
 
-                                  swipeViewModel.sendingEmojis =
+                                  _swipeViewModel.sendingEmojis =
                                       List<int>.generate(15, (index) => 0);
                                 }
                               }),
@@ -185,19 +185,10 @@ class SwipeViewState extends ConsumerState<SwipeView> {
               ),
             ),
           ),
-          FutureBuilder(
-            future: initializeCamera(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                if (snapshot.data!) {
-                  return ReactionCameraWidget(
-                    cameraController: swipeViewModel.cameraController,
-                  );
-                }
-              }
-              return Container();
-            },
-          ),
+          if (_swipeViewModel.isCameraInitialized)
+            ReactionCameraWidget(
+              cameraController: _swipeViewModel.cameraController,
+            ),
         ],
       ),
     );
@@ -212,7 +203,7 @@ class SwipeViewState extends ConsumerState<SwipeView> {
       builder: (context) {
         void disposeWidget(UniqueKey key) {
           setState(() {
-            swipeViewModel.emojiWidgets.remove(key);
+            _swipeViewModel.emojiWidgets.remove(key);
           });
         }
 
@@ -225,7 +216,7 @@ class SwipeViewState extends ConsumerState<SwipeView> {
                 Stack(
                   alignment: Alignment.topCenter,
                   clipBehavior: Clip.none,
-                  children: swipeViewModel.emojiWidgets.values.toList(),
+                  children: _swipeViewModel.emojiWidgets.values.toList(),
                 ),
                 Container(
                   clipBehavior: Clip.hardEdge,
@@ -243,7 +234,7 @@ class SwipeViewState extends ConsumerState<SwipeView> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 30.0),
                       child: Text(
-                        '반응을 ${swipeViewModel.countSend}회 보냈어요!',
+                        '반응을 ${_swipeViewModel.countSend}회 보냈어요!',
                         style: const TextStyle(fontSize: 20),
                       ),
                     ),
@@ -309,10 +300,10 @@ class SwipeViewState extends ConsumerState<SwipeView> {
   ) {
     return setState(
       () {
-        swipeViewModel.countSend++;
-        swipeViewModel.sendingEmojis[index * 5 + jndex] += 1;
+        _swipeViewModel.countSend++;
+        _swipeViewModel.sendingEmojis[index * 5 + jndex] += 1;
         final animationWidgetKey = UniqueKey();
-        swipeViewModel.emojiWidgets.addEntries(
+        _swipeViewModel.emojiWidgets.addEntries(
           {
             animationWidgetKey: ShootEmojiWidget(
               key: animationWidgetKey,
@@ -329,25 +320,6 @@ class SwipeViewState extends ConsumerState<SwipeView> {
         );
       },
     );
-  }
-
-  Future<bool> initializeCamera() async {
-    CameraDescription description = await availableCameras().then(
-      (cameras) => cameras.firstWhere(
-        (camera) => camera.lensDirection == CameraLensDirection.front,
-      ),
-    );
-    if (!_isCameraInitialized) {
-      swipeViewModel.cameraController =
-          CameraController(description, ResolutionPreset.medium);
-
-      await swipeViewModel.cameraController.initialize();
-      setState(() {
-        _isCameraInitialized = true;
-      });
-    }
-
-    return Future(() => true);
   }
 }
 

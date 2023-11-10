@@ -4,7 +4,6 @@ import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/models/user_model/user_model.dart';
 import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';
 import 'package:wehavit/features/swipe_view/domain/usecase/swipe_view_usecase.dart';
-import 'package:wehavit/features/swipe_view/presentation/widget/swipe_view_cell.dart';
 
 final swipeViewCellUserModelProvider = StateNotifierProvider<
     SwipeViewCellUserModelProvider,
@@ -27,7 +26,9 @@ class SwipeViewCellUserModelProvider
   }
 
   Future<void> sendReactionToTargetConfirmPost(
-      String targetConfirmPostId, ReactionModel reactionModel) async {
+    String targetConfirmPostId,
+    ReactionModel reactionModel,
+  ) async {
     await _sendReactionToTargetConfirmPostUsecase
         .call((targetConfirmPostId, reactionModel));
   }
