@@ -8,9 +8,6 @@ class FriendEntity {
       : friendID = id,
         friendName = data[FirebaseFieldName.displayName],
         friendImageUrl = data[FirebaseFieldName.imageUrl];
-  FriendEntity.fromFriendModel(AddFriendModel model) {
-    friendID = model.friendID;
-  }
 
   late String friendID;
   late String friendName;
@@ -18,14 +15,6 @@ class FriendEntity {
 }
 
 extension FriendEntityConvertFunctions on FriendEntity {
-  Map<String, dynamic> toFirebaseDocument() {
-    final Map<String, dynamic> doc = {};
-
-    doc[FirebaseFieldName.friendID] = friendID;
-
-    return doc;
-  }
-
   FriendModel toFriendModel() {
     final model = FriendModel(
       friendID: friendID,

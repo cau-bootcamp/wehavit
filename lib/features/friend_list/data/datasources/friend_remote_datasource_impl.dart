@@ -7,7 +7,7 @@ import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/common/utils/firebase_collection_name.dart';
 import 'package:wehavit/features/friend_list/data/datasources/friend_datasource.dart';
 import 'package:wehavit/features/friend_list/data/entities/friend_entity.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:wehavit/features/friend_list/data/entities/add_friend_entity.dart';
 
 class FriendRemoteDatasourceImpl implements FriendDatasource {
   @override
@@ -15,21 +15,19 @@ class FriendRemoteDatasourceImpl implements FriendDatasource {
     List<FriendEntity> friendEntityList;
 
     try {
-      final fetchResult = await FirebaseFirestore.instance
-          .collection(FirebaseCollectionName.users)
+      final friendsSnapshots = await
+          FirebaseFirestore.instance
+          .collection(FirebaseCollectionName.friends)
           .get();
 
-      DocumentReference userDocRef = FirebaseFirestore.instance
-          .collection(FirebaseCollectionName.users)
-          .doc(FirebaseAuth.instance.currentUser?.uid ?? 'anonymous');
-
-      DocumentSnapshot userDocSnapshot = await userDocRef.get();
-
-      List<DocumentReference> friendsRefs = List<DocumentReference>
-          .from(userDocSnapshot.get('friend_docs_ref'));
-
+      final friendsRefs = [];
+      print('Data');
+      friendsSnapshots.docs
+          .map((doc)
+            { friendsRefs.add(doc[FirebaseFieldName.friendDocRef]); });
       friendEntityList = [];
       for (DocumentReference friendRef in friendsRefs) {
+        print('for');
         DocumentSnapshot friendDocSnapshot = await friendRef.get();
         if (friendDocSnapshot.exists) {
           friendEntityList.add(
@@ -54,8 +52,8 @@ class FriendRemoteDatasourceImpl implements FriendDatasource {
   }
 
   @override
-  EitherFuture<bool> uploadFriendEntity(
-      FriendEntity entity,
+  EitherFuture<bool> uploadAddFriendEntity(
+      AddFriendEntity entity,
       ) async {
     try {
       FirebaseFirestore.instance

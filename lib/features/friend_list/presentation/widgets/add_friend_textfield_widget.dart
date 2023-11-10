@@ -1,28 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wehavit/features/friend_list/presentation/providers/add_friend_provider.dart';
+import 'package:wehavit/features/friend_list/presentation/providers/friend_list_provider.dart';
 
-class AddFriendTextFieldWidget extends StatefulWidget {
-  @override
-  State<AddFriendTextFieldWidget> createState() =>
-      _AddFriendTextFieldWidget();
-}
-
-class _AddFriendTextFieldWidget extends State<AddFriendTextFieldWidget> {
+class AddFriendTextFieldWidget extends ConsumerWidget {
   final _textController = TextEditingController();
 
-  void _sendText() {
-    print('Text to send: ${_textController.text}');
-  }
-
   @override
-  void dispose() {
-    // Clean up the controller when the widget is removed from the
-    // widget tree to avoid memory leaks.
-    _textController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: EdgeInsets.all(8.0),
       child: Row(
@@ -39,7 +24,22 @@ class _AddFriendTextFieldWidget extends State<AddFriendTextFieldWidget> {
             ),
           ),
           ElevatedButton(
-            onPressed: _sendText,
+            onPressed: () async{
+              ref
+                  .read(addFriendProvider.notifier)
+                  .uploadFriendModel()
+                  .then(
+                    (result) {
+                      result.fold((failure) {
+                    debugPrint('DEBUG : UPLOAD FAILED - ${failure.message}');
+                  }, (success) {
+                    ref
+                        .read(friendListProvider.notifier)
+                        .getFriendList();
+                  });
+                },
+              );
+            },
             child: const Text('+'),
           ),
         ],
