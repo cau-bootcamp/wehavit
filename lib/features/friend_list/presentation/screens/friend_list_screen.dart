@@ -2,8 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wehavit/features/friend_list/presentation/widgets/friend_element_widget.dart';
 import 'package:wehavit/features/friend_list/presentation/providers/friend_list_provider.dart';
+import 'package:wehavit/features/friend_list/presentation/widgets/friend_element_widget.dart';
+import 'package:wehavit/features/friend_list/presentation/widgets/add_friend_textfield_widget.dart';
 
 class FriendListScreen extends ConsumerWidget {
   const FriendListScreen({super.key});
@@ -26,35 +27,45 @@ class FriendListScreen extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.only(bottom: 16),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  margin: const EdgeInsets.only(right: 16.0),
-                  child: CircleAvatar(
-                    radius: 40,
-                    foregroundImage:
-                    NetworkImage(currentUser?.photoURL ?? 'DEBUG_URL'),
+                  margin: const EdgeInsets.only(left: 8.0),
+                  child : Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 40,
+                        foregroundImage:
+                        NetworkImage(currentUser?.photoURL ?? 'DEBUG_URL'),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(left: 8),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(currentUser?.displayName ?? 'DEBUG_NONAME'),
+                            Text(currentUser?.email ?? 'DEBUG_UserID'),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(currentUser?.displayName ?? 'DEBUG_NONAME'),
-                    Text(currentUser?.email ?? 'DEBUG_UserID'),
-                  ],
-                ),
                 Container(
-                  margin: const EdgeInsets.only(right: 16.0),
-                  child: IconButton(icon: const Icon(Icons.add), color: Colors.black87, onPressed: (){},),
+                  alignment: Alignment.centerRight,
+                  margin: const EdgeInsets.only(right: 8.0),
+                  child: IconButton(icon: const Icon(Icons.link),
+                    color: Colors.black87, onPressed: (){},),
                 ),
               ],
             ),
           ),
-          Row(
+          Column(
             children: [
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.symmetric(vertical: 16),
+              Container(
+                  width: 250,
+                  margin: const EdgeInsets.symmetric(vertical: 1),
                   child: FilledButton(
                     onPressed: () async {
                       await ref
@@ -64,7 +75,7 @@ class FriendListScreen extends ConsumerWidget {
                     child: const Text('친구 목록 보기'),
                   ),
                 ),
-              ),
+              AddFriendTextFieldWidget(),
             ],
           ),
           vFriendListProvider.fold(

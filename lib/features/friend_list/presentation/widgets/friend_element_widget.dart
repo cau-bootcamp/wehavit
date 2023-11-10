@@ -23,7 +23,7 @@ class _FriendElementWidgetState extends State<FriendElementWidget> {
       child: Row(
         children: [
           Container(
-            margin: const EdgeInsets.only(right: 16.0),
+            margin: const EdgeInsets.only(left: 4.0, right: 10.0),
             child: CircleAvatar(
               radius: 30,
               foregroundImage:
