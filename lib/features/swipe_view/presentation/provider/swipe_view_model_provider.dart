@@ -22,9 +22,19 @@ final swipeViewModelProvider =
 class SwipeViewModel {
   // Carousel UI Variables
   CarouselController carouselController = CarouselController();
-  int currentCellNumber = 0;
+  int _currentCellIndex = 0;
+  int get currentCellIndex => _currentCellIndex;
+  set currentCellIndex(int newIndex) {
+    _currentCellIndex = newIndex;
+    _currentCellConfirmPostModel =
+        confirmPostModelList.foldRight(null, (acc, b) => b[_currentCellIndex]);
+  }
+
   Either<Failure, List<ConfirmPostModel>> confirmPostModelList = right([]);
   List<Future<UserModel>> userModelList = [];
+
+  ConfirmPostModel? _currentCellConfirmPostModel;
+  ConfirmPostModel? get currentCellConfirmModel => _currentCellConfirmPostModel;
 
   // Camera Reaction UI Variables
   late CameraController cameraController;
@@ -66,6 +76,8 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
           ),
         );
       }
+
+      state.currentCellIndex = 0;
     });
 
     return Future(() => null);
@@ -92,10 +104,15 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
       _sendReactionToTargetConfirmPostUsecase;
 
   Future<void> sendReactionToTargetConfirmPost(
-    String targetConfirmPostId,
     ReactionModel reactionModel,
   ) async {
-    _sendReactionToTargetConfirmPostUsecase
-        .call((targetConfirmPostId, reactionModel));
+    if (state.currentCellConfirmModel == null) {
+      return Future(() => null);
+    }
+
+    await _sendReactionToTargetConfirmPostUsecase
+        .call((state.currentCellConfirmModel!.id!, reactionModel));
+
+    return Future(() => null);
   }
 }

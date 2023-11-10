@@ -1,7 +1,8 @@
-import 'dart:ffi';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/constants/firebase_field_name.dart';
@@ -16,8 +17,25 @@ class ReactionDatasourceImpl implements ReactionDatasource {
   EitherFuture<bool> sendReactionToTargetConfirmPost(
     String targetConfirmPostId,
     ReactionModel reactionModel,
-  ) {
+  ) async {
     try {
+      if (reactionModel.reactionType == ReactionType.instantPhoto.index) {
+        final savePhotoResult = await _saveImageFileToFirebaseStorage(
+          filePath: reactionModel.instantPhotoUrl,
+          confirmPostid: targetConfirmPostId,
+        );
+        savePhotoResult.fold(
+          (failure) {
+            debugPrint(
+              'DEBUG : Failure on Saving image file to Firebase Storage - ${failure.message}',
+            );
+          },
+          (filePath) {
+            reactionModel = reactionModel.copyWith(instantPhotoUrl: filePath);
+          },
+        );
+      }
+
       FirebaseFirestore.instance
           .collection(
         '${FirebaseCollectionName.confirmPost}/$targetConfirmPostId/encourages',
@@ -43,6 +61,18 @@ class ReactionDatasourceImpl implements ReactionDatasource {
           const Failure('Error on sendReactionToTargetConfirmPost Function'),
         ),
       );
+    }
+  }
+
+  EitherFuture<String> _saveImageFileToFirebaseStorage(
+      {required String confirmPostid, required String filePath}) async {
+    try {
+      String storagePath =
+          '$confirmPostid/${FirebaseAuth.instance.currentUser!.uid}_${DateTime.now().toIso8601String()}';
+      await FirebaseStorage.instance.ref(storagePath).putFile(File(filePath));
+      return Future(() => right(storagePath));
+    } on Exception catch (e) {
+      return Future(() => left(Failure(e.toString())));
     }
   }
 }

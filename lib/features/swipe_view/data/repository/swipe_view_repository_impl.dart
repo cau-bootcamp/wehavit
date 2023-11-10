@@ -42,7 +42,9 @@ class SwipeViewRepositoryImpl implements SwipeViewRepository {
   EitherFuture<bool> addReactionToConfirmPost(
       String targetConfirmPostId, ReactionModel reactionModel) {
     return _reactionDatasource.sendReactionToTargetConfirmPost(
-        targetConfirmPostId, reactionModel);
+      targetConfirmPostId,
+      reactionModel,
+    );
     // TODO: implement addReactionToConfirmPost
   }
 }

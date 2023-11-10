@@ -4,12 +4,17 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:camera/camera.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';
+import 'package:wehavit/features/swipe_view/domain/usecase/send_reaction_to_target_confirm_post.dart';
+import 'package:wehavit/features/swipe_view/domain/usecase/send_reaction_to_target_confirm_post_provider.dart';
 import 'package:wehavit/features/swipe_view/presentation/provider/reaction_camera_widget_model_provider.dart';
+import 'package:wehavit/features/swipe_view/presentation/provider/swipe_view_model_provider.dart';
 
 class ReactionCameraWidget extends ConsumerStatefulWidget {
   const ReactionCameraWidget({super.key, required this.cameraController});
@@ -25,6 +30,9 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
   late final ReactionCameraWidgetModel _reactionCameraWidgetModel;
   late final ReactionCameraWidgetModelProvider
       _reactionCameraWidgetModelProvider;
+  late final SendReactionToTargetConfirmPostUsecase
+      _sendReactionToTargetConfirmPostUsecase;
+  late final SwipeViewModelProvider _swipeViewModelProvider;
 
   @override
   void didChangeDependencies() {
@@ -34,6 +42,9 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
     _reactionCameraWidgetModelProvider =
         ref.read(reactionCameraWidgetModelProvider.notifier);
     _reactionCameraWidgetModel.cameraController = widget.cameraController;
+    _sendReactionToTargetConfirmPostUsecase =
+        ref.watch(sendReactionToTargetConfirmPostUsecaseProvider);
+    _swipeViewModelProvider = ref.read(swipeViewModelProvider.notifier);
 
     _reactionCameraWidgetModel.screenWidth =
         View.of(context).physicalSize.width / 3;
@@ -145,13 +156,8 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
                 )) {
                   // final fileImage = await cropSquare();
                   // final image = await getSquarePhotoImageFromCamera();
-                  final fileImage = FileImage(File(await _capture()));
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          ImageSampleView(fileImage: fileImage),
-                    ),
-                  );
+                  final file = File(await _capture());
+                  sendInstantPhotoReactionToTargetConfirmPost(file.path);
                 }
 
                 setState(() {
@@ -225,6 +231,18 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
     } else {
       return '';
     }
+  }
+
+  Future<void> sendInstantPhotoReactionToTargetConfirmPost(
+    String filePath,
+  ) async {
+    _swipeViewModelProvider.sendReactionToTargetConfirmPost(
+      ReactionModel(
+        complementerUid: FirebaseAuth.instance.currentUser!.uid,
+        reactionType: ReactionType.instantPhoto.index,
+        instantPhotoUrl: filePath,
+      ),
+    );
   }
 }
 

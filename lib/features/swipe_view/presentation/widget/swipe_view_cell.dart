@@ -39,7 +39,7 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
               children: [
                 FutureBuilder<UserModel>(
                   future: swipeViewModel
-                      .userModelList[swipeViewModel.currentCellNumber],
+                      .userModelList[swipeViewModel.currentCellIndex],
                   builder: (BuildContext context,
                       AsyncSnapshot<UserModel> snapshot) {
                     //해당 부분은 data를 아직 받아 오지 못했을때 실행되는 부분을 의미한다.

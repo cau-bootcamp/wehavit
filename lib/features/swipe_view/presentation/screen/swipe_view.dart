@@ -76,7 +76,7 @@ class SwipeViewState extends ConsumerState<SwipeView> {
                               child: Container(
                                 key: ValueKey(modelIndex),
                                 decoration: BoxDecoration(
-                                  color: swipeViewModel.currentCellNumber ==
+                                  color: swipeViewModel.currentCellIndex ==
                                           modelIndex
                                       ? Colors.amber
                                       : Colors.grey[400],
@@ -95,7 +95,7 @@ class SwipeViewState extends ConsumerState<SwipeView> {
                           height: MediaQuery.of(context).size.height,
                           onPageChanged: (index, reason) {
                             setState(() {
-                              swipeViewModel.currentCellNumber = index;
+                              swipeViewModel.currentCellIndex = index;
                             });
                           },
                           enableInfiniteScroll: false,
@@ -146,9 +146,6 @@ class SwipeViewState extends ConsumerState<SwipeView> {
                                   ref
                                       .read(swipeViewModelProvider.notifier)
                                       .sendReactionToTargetConfirmPost(
-                                        modelList[swipeViewModel
-                                                .currentCellNumber]
-                                            .id!,
                                         reactionModel,
                                       );
 
