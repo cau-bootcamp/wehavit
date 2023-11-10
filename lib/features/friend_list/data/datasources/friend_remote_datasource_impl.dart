@@ -16,24 +16,22 @@ class FriendRemoteDatasourceImpl implements FriendDatasource {
 
     try {
       final friendsSnapshots = await
-          FirebaseFirestore.instance
+      FirebaseFirestore.instance
           .collection(FirebaseCollectionName.friends)
           .get();
 
-      final friendsRefs = [];
-      print('Data');
-      friendsSnapshots.docs
-          .map((doc)
-            { friendsRefs.add(doc[FirebaseFieldName.friendDocRef]); });
+      final friendsRefs = friendsSnapshots.docs
+          .map((doc) => doc.data()[FirebaseFieldName.friendDocRef])
+          .toList();
+
       friendEntityList = [];
       for (DocumentReference friendRef in friendsRefs) {
-        print('for');
         DocumentSnapshot friendDocSnapshot = await friendRef.get();
         if (friendDocSnapshot.exists) {
           friendEntityList.add(
-              FriendEntity
-                  .fromFirebaseDocument(friendDocSnapshot.id,
-                  friendDocSnapshot.data() as Map<String, dynamic>,),);
+            FriendEntity
+                .fromFirebaseDocument(friendDocSnapshot.id,
+              friendDocSnapshot.data() as Map<String, dynamic>,),);
         }
         else {
           print('Docs does not exist: ${friendRef.path}');
