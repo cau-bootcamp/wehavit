@@ -18,11 +18,27 @@ class _FriendElementWidgetState extends State<FriendElementWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: CircleAvatar(
-        backgroundImage: AssetImage(friendImageUrl),
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: Row(
+        children: [
+          Container(
+            margin: const EdgeInsets.only(right: 16.0),
+            child: CircleAvatar(
+              radius: 30,
+              foregroundImage:
+              NetworkImage(friendImageUrl),
+            ),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(friendName),
+            ],
+          ),
+        ],
       ),
-      title: Text(friendName),
     );
   }
 }

@@ -75,12 +75,6 @@ class FriendListScreen extends ConsumerWidget {
                 itemBuilder: (context, index) {
                   if (index < right.length) {
                     return FriendElementWidget(model: right[index]);
-                  } else {
-                    return Container(
-                      margin: const EdgeInsets.symmetric(vertical: 8),
-                      decoration: BoxDecoration(border: Border.all()),
-                      height: 100,
-                    );
                   }
                 },
               ),
