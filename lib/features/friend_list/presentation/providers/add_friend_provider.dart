@@ -17,11 +17,18 @@ class AddFriendNotifier extends StateNotifier<AddFriendModel> {
 
   late final UploadFriendUseCase _uploadFriendUsecase;
 
+  void setFriendID(String friendID) {
+    state = state.copyWith(friendID: friendID);
+    print('add_friend_provider : ${state.friendID}');
+  }
+
   EitherFuture<bool> uploadFriendModel() {
+    print('watch state.friendID : ${state.friendID}');
     AddFriendModel newModel = AddFriendModel(
       friendID: state.friendID,
     );
 
+    print('upload newModel : ${newModel.friendID}');
     return _uploadFriendUsecase.call(newModel);
   }
 }

@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:wehavit/common/constants/firebase_field_name.dart';
 import 'package:wehavit/features/friend_list/domain/models/add_friend_model.dart';
 
 class AddFriendEntity {
   AddFriendEntity.fromAddFriendModel(AddFriendModel model) {
+    print('model : ${model.friendID}');
     friendID = model.friendID;
   }
 
@@ -12,14 +14,15 @@ class AddFriendEntity {
 extension AddFriendEntityConvertFunctions on AddFriendEntity {
   Map<String, dynamic> toFirebaseDocument() {
     final Map<String, dynamic> doc = {};
-    doc[FirebaseFieldName.friendDocRef] = friendID;
+    if (!friendID.contains('users/')) {
+      friendID = 'users/$friendID';
+    }
+    try{
+      doc[FirebaseFieldName.friendDocRef] = friendID;
+    } on Exception
+    {
+      print('Error : $friendID');
+    }
     return doc;
-  }
-
-  AddFriendModel toFriendModel() {
-    final model = AddFriendModel(
-      friendID: friendID,
-    );
-    return model;
   }
 }

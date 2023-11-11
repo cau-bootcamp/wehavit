@@ -4,20 +4,23 @@ import 'package:wehavit/features/friend_list/presentation/providers/add_friend_p
 import 'package:wehavit/features/friend_list/presentation/providers/friend_list_provider.dart';
 
 class AddFriendTextFieldWidget extends ConsumerWidget {
-  final _textController = TextEditingController();
+  const AddFriendTextFieldWidget({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    //final provider = ref.watch(addFriendProvider);
     return Padding(
-      padding: EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Container(
             width: 300,
-            margin: EdgeInsets.only(left: 8, right: 8),
+            margin: const EdgeInsets.only(left: 8, right: 8),
             child: TextField(
-              controller: _textController,
+              onChanged: (value){
+                ref.read(addFriendProvider.notifier).setFriendID(value);
+              },
               decoration: const InputDecoration(
                 hintText: 'Enter Friend ID',
               ),

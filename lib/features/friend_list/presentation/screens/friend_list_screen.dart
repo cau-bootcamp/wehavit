@@ -75,7 +75,7 @@ class FriendListScreen extends ConsumerWidget {
                     child: const Text('친구 목록 보기'),
                   ),
                 ),
-              AddFriendTextFieldWidget(),
+              const AddFriendTextFieldWidget(),
             ],
           ),
           vFriendListProvider.fold(
