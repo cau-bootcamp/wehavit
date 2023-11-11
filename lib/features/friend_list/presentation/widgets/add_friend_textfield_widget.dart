@@ -8,7 +8,7 @@ class AddFriendTextFieldWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    //final provider = ref.watch(addFriendProvider);
+    ref.watch(addFriendProvider);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
@@ -18,7 +18,7 @@ class AddFriendTextFieldWidget extends ConsumerWidget {
             width: 300,
             margin: const EdgeInsets.only(left: 8, right: 8),
             child: TextField(
-              onChanged: (value){
+              onChanged: (value) {
                 ref.read(addFriendProvider.notifier).setFriendID(value);
               },
               decoration: const InputDecoration(
@@ -27,18 +27,13 @@ class AddFriendTextFieldWidget extends ConsumerWidget {
             ),
           ),
           ElevatedButton(
-            onPressed: () async{
-              ref
-                  .read(addFriendProvider.notifier)
-                  .uploadFriendModel()
-                  .then(
-                    (result) {
-                      result.fold((failure) {
+            onPressed: () async {
+              ref.read(addFriendProvider.notifier).uploadFriendModel().then(
+                (result) {
+                  result.fold((failure) {
                     debugPrint('DEBUG : UPLOAD FAILED - ${failure.message}');
                   }, (success) {
-                    ref
-                        .read(friendListProvider.notifier)
-                        .getFriendList();
+                    ref.read(friendListProvider.notifier).getFriendList();
                   });
                 },
               );

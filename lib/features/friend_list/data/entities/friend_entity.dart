@@ -1,10 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:wehavit/common/constants/firebase_field_name.dart';
 import 'package:wehavit/features/friend_list/domain/models/friend_model.dart';
-import 'package:wehavit/features/friend_list/domain/models/add_friend_model.dart';
 
 class FriendEntity {
-  FriendEntity.fromFirebaseDocument(String id , Map<String, dynamic> data)
+  FriendEntity.fromFirebaseDocument(String id, Map<String, dynamic> data)
       : friendID = id,
         friendName = data[FirebaseFieldName.displayName],
         friendImageUrl = data[FirebaseFieldName.imageUrl];

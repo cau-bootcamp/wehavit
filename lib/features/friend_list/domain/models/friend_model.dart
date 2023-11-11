@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:wehavit/common/constants/firebase_field_name.dart';
 
 class FriendModel {
@@ -8,8 +7,10 @@ class FriendModel {
     required this.friendImageUrl,
   });
 
-  FriendModel.fromMapData(Map<String, dynamic> data, Map<String, dynamic> usersData)
-      : friendID = data[FirebaseFieldName.friendDocRef],
+  FriendModel.fromMapData(
+    Map<String, dynamic> data,
+    Map<String, dynamic> usersData,
+  )   : friendID = data[FirebaseFieldName.friendDocRef],
         friendName = usersData[FirebaseFieldName.displayName],
         friendImageUrl = usersData[FirebaseFieldName.imageUrl];
 

@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wehavit/features/friend_list/presentation/providers/friend_list_provider.dart';
-import 'package:wehavit/features/friend_list/presentation/widgets/friend_element_widget.dart';
 import 'package:wehavit/features/friend_list/presentation/widgets/add_friend_textfield_widget.dart';
+import 'package:wehavit/features/friend_list/presentation/widgets/friend_element_widget.dart';
 
 class FriendListScreen extends ConsumerWidget {
   const FriendListScreen({super.key});
 
   static FriendListScreen builder(
-      BuildContext context,
-      GoRouterState state,
-      ) =>
+    BuildContext context,
+    GoRouterState state,
+  ) =>
       const FriendListScreen();
 
   @override
@@ -22,7 +22,7 @@ class FriendListScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(),
-      body : Column(
+      body: Column(
         children: [
           Container(
             padding: const EdgeInsets.only(bottom: 16),
@@ -31,12 +31,12 @@ class FriendListScreen extends ConsumerWidget {
               children: [
                 Container(
                   margin: const EdgeInsets.only(left: 8.0),
-                  child : Row(
+                  child: Row(
                     children: [
                       CircleAvatar(
                         radius: 40,
                         foregroundImage:
-                        NetworkImage(currentUser?.photoURL ?? 'DEBUG_URL'),
+                            NetworkImage(currentUser?.photoURL ?? 'DEBUG_URL'),
                       ),
                       Container(
                         margin: const EdgeInsets.only(left: 8),
@@ -55,8 +55,11 @@ class FriendListScreen extends ConsumerWidget {
                 Container(
                   alignment: Alignment.centerRight,
                   margin: const EdgeInsets.only(right: 8.0),
-                  child: IconButton(icon: const Icon(Icons.link),
-                    color: Colors.black87, onPressed: (){},),
+                  child: IconButton(
+                    icon: const Icon(Icons.link),
+                    color: Colors.black87,
+                    onPressed: () {},
+                  ),
                 ),
               ],
             ),
@@ -64,29 +67,27 @@ class FriendListScreen extends ConsumerWidget {
           Column(
             children: [
               Container(
-                  width: 250,
-                  margin: const EdgeInsets.symmetric(vertical: 1),
-                  child: FilledButton(
-                    onPressed: () async {
-                      await ref
-                          .read(friendListProvider.notifier)
-                          .getFriendList();
-                    },
-                    child: const Text('친구 목록 보기'),
-                  ),
+                width: 250,
+                margin: const EdgeInsets.symmetric(vertical: 1),
+                child: FilledButton(
+                  onPressed: () async {
+                    await ref.read(friendListProvider.notifier).getFriendList();
+                  },
+                  child: const Text('친구 목록 보기'),
                 ),
+              ),
               const AddFriendTextFieldWidget(),
             ],
           ),
           vFriendListProvider.fold(
-                (left) => null,
-                (right) => Expanded(
+            (left) => null,
+            (right) => Expanded(
               child: ListView.builder(
                 itemCount: right.length + 1,
                 itemBuilder: (context, index) {
                   if (index < right.length) {
                     return FriendElementWidget(model: right[index]);
-                  }
+                  } else {}
                 },
               ),
             ),
