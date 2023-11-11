@@ -1,11 +1,8 @@
 import 'dart:math';
-
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/utils/emoji_assets.dart';
-import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';
 import 'package:wehavit/features/swipe_view/presentation/model/swipe_view_model.dart';
 import 'package:wehavit/features/swipe_view/presentation/provider/swipe_view_model_provider.dart';
 import 'package:wehavit/features/swipe_view/presentation/widget/reaction_camera_widget.dart';
@@ -24,25 +21,35 @@ class SwipeViewState extends ConsumerState<SwipeView> {
   late final SwipeViewModel _swipeViewModel;
   late final SwipeViewModelProvider _swipeViewModelProvider;
 
+  bool _initOccurred = false;
+
   @override
   void initState() {
     super.initState();
+
+    setState(() {});
   }
 
   @override
-  void didChangeDependencies() {
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
-    _swipeViewModel = ref.watch(swipeViewModelProvider);
-    _swipeViewModelProvider = ref.read(swipeViewModelProvider.notifier);
 
-    _swipeViewModelProvider.initializeCamera();
+    if (!_initOccurred) {
+      _swipeViewModel = ref.watch(swipeViewModelProvider);
+      _swipeViewModelProvider = ref.read(swipeViewModelProvider.notifier);
+      _swipeViewModelProvider.initializeCamera();
+      ref.read(swipeViewModelProvider.notifier).getTodayConfirmPostModelList();
+      _initOccurred = true;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       // appBar: AppBar(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterTop,
       floatingActionButton: FloatingActionButton(
+        mini: true,
         onPressed: () async {
           await ref
               .read(swipeViewModelProvider.notifier)
@@ -125,33 +132,7 @@ class SwipeViewState extends ConsumerState<SwipeView> {
                               onTapUp: (details) async =>
                                   emojiSheetWidget(context)
                                       .whenComplete(() async {
-                                _swipeViewModel.emojiWidgets.clear();
-
-                                if (_swipeViewModel.sendingEmojis
-                                    .any((element) => element > 0)) {
-                                  final Map<String, int> emojiMap = {};
-                                  _swipeViewModel.sendingEmojis.asMap().forEach(
-                                        (index, value) => emojiMap.addAll(
-                                          {'t$index': value},
-                                        ),
-                                      );
-
-                                  final reactionModel = ReactionModel(
-                                    complementerUid:
-                                        FirebaseAuth.instance.currentUser!.uid,
-                                    reactionType: ReactionType.emoji.index,
-                                    emoji: emojiMap,
-                                  );
-
-                                  ref
-                                      .read(swipeViewModelProvider.notifier)
-                                      .sendReactionToTargetConfirmPost(
-                                        reactionModel,
-                                      );
-
-                                  _swipeViewModel.sendingEmojis =
-                                      List<int>.generate(15, (index) => 0);
-                                }
+                                _swipeViewModelProvider.sendEmojiReaction();
                               }),
                               child: Container(
                                 width: 50,
@@ -173,10 +154,26 @@ class SwipeViewState extends ConsumerState<SwipeView> {
                             ),
                           ],
                         ),
-                        TextFormField(
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                          ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                focusNode: _swipeViewModel.commentFieldFocus,
+                                controller:
+                                    _swipeViewModel.textEditingController,
+                                decoration: const InputDecoration(
+                                  labelText: '메시지를 보내 응원하세요!',
+                                  border: OutlineInputBorder(),
+                                ),
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () async {
+                                _swipeViewModelProvider.sendTextReaction();
+                              },
+                              icon: const Icon(Icons.send),
+                            ),
+                          ],
                         ),
                       ],
                     ),

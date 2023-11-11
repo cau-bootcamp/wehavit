@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/models/user_model/user_model.dart';
@@ -32,4 +33,8 @@ class SwipeViewModel {
   Map<Key, ShootEmojiWidget> emojiWidgets = {};
   int countSend = 0;
   List<int> sendingEmojis = List<int>.generate(15, (index) => 0);
+
+  // Text Reaction UI Variables
+  TextEditingController textEditingController = TextEditingController();
+  FocusNode commentFieldFocus = FocusNode();
 }

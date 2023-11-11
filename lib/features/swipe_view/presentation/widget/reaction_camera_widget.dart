@@ -1,16 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
-import 'dart:typed_data';
-import 'dart:ui' as ui;
 import 'package:camera/camera.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';
 import 'package:wehavit/features/swipe_view/presentation/model/reaction_camera_widget_model.dart';
 import 'package:wehavit/features/swipe_view/presentation/provider/reaction_camera_widget_model_provider.dart';
 import 'package:wehavit/features/swipe_view/presentation/provider/swipe_view_model_provider.dart';
@@ -25,7 +18,6 @@ class ReactionCameraWidget extends ConsumerStatefulWidget {
 }
 
 class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
-  late GlobalKey repaintBoundaryGlobalKey;
   late final ReactionCameraWidgetModel _reactionCameraWidgetModel;
   late final ReactionCameraWidgetModelProvider
       _reactionCameraWidgetModelProvider;
@@ -57,7 +49,6 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
   @override
   void initState() {
     super.initState();
-    repaintBoundaryGlobalKey = GlobalKey();
   }
 
   @override
@@ -88,7 +79,7 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
               opacity:
                   _reactionCameraWidgetModelProvider.isFocusingMode ? 0.7 : 0,
               child: RepaintBoundary(
-                key: repaintBoundaryGlobalKey,
+                key: _reactionCameraWidgetModel.repaintBoundaryGlobalKey,
                 child: IgnorePointer(
                   child: Container(
                     decoration: const BoxDecoration(
@@ -149,10 +140,12 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
                     _reactionCameraWidgetModel.cameraButtonYOffset,
                   ),
                 )) {
-                  // final fileImage = await cropSquare();
-                  // final image = await getSquarePhotoImageFromCamera();
-                  final file = File(await _capture());
-                  sendInstantPhotoReactionToTargetConfirmPost(file.path);
+                  final file = File(
+                    await _reactionCameraWidgetModelProvider.capture(),
+                  );
+                  _swipeViewModelProvider.sendImageReaction(
+                    imageFilePath: file.path,
+                  );
                 }
 
                 setState(() {
@@ -180,80 +173,6 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Future<FileImage> cropSquare() async {
-    final filePath = await _capture();
-
-    // XFile? file = await _controller.takePicture();
-
-    ImageProperties properties =
-        await FlutterNativeImage.getImageProperties(filePath);
-
-    var cropSize = min(properties.width!, properties.height!);
-    int offsetX = (properties.width! - cropSize) ~/ 2;
-    int offsetY = (properties.height! - cropSize) ~/ 2;
-
-    final imageFile = await FlutterNativeImage.cropImage(
-      filePath,
-      offsetX,
-      offsetY,
-      cropSize,
-      cropSize,
-    );
-
-    return Future(() => FileImage(imageFile));
-  }
-
-  Future<String> _capture() async {
-    var renderObject =
-        repaintBoundaryGlobalKey.currentContext?.findRenderObject();
-    if (renderObject is RenderRepaintBoundary) {
-      var boundary = renderObject;
-      ui.Image image = await boundary.toImage();
-      final directory = (await getApplicationDocumentsDirectory()).path;
-      ByteData? byteData =
-          await image.toByteData(format: ui.ImageByteFormat.png);
-      Uint8List pngBytes = byteData!.buffer.asUint8List();
-
-      File imgFile =
-          File('$directory/screenshot${DateTime.now().toString()}.png');
-      imgFile.writeAsBytes(pngBytes);
-
-      return imgFile.path;
-    } else {
-      return '';
-    }
-  }
-
-  Future<void> sendInstantPhotoReactionToTargetConfirmPost(
-    String filePath,
-  ) async {
-    _swipeViewModelProvider.sendReactionToTargetConfirmPost(
-      ReactionModel(
-        complementerUid: FirebaseAuth.instance.currentUser!.uid,
-        reactionType: ReactionType.instantPhoto.index,
-        instantPhotoUrl: filePath,
-      ),
-    );
-  }
-}
-
-class ImageSampleView extends StatelessWidget {
-  const ImageSampleView({super.key, required this.fileImage});
-
-  final FileImage fileImage;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Center(
-        child: Image(
-          image: fileImage,
-        ),
       ),
     );
   }

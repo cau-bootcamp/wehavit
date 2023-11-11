@@ -1,6 +1,9 @@
 import 'package:camera/camera.dart';
+import 'package:flutter/cupertino.dart';
 
 class ReactionCameraWidgetModel {
+  GlobalKey repaintBoundaryGlobalKey = GlobalKey();
+
   double cameraButtonOriginXOffset = 20;
   double cameraButtonOriginYOffset = 100;
 

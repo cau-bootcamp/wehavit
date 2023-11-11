@@ -1,6 +1,11 @@
+import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 
+import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:wehavit/features/swipe_view/presentation/model/reaction_camera_widget_model.dart';
 
 final reactionCameraWidgetModelProvider = StateNotifierProvider<
@@ -47,5 +52,26 @@ class ReactionCameraWidgetModelProvider
       return true;
     }
     return false;
+  }
+
+  Future<String> capture() async {
+    var renderObject =
+        state.repaintBoundaryGlobalKey.currentContext?.findRenderObject();
+    if (renderObject is RenderRepaintBoundary) {
+      var boundary = renderObject;
+      ui.Image image = await boundary.toImage();
+      final directory = (await getApplicationDocumentsDirectory()).path;
+      ByteData? byteData =
+          await image.toByteData(format: ui.ImageByteFormat.png);
+      Uint8List pngBytes = byteData!.buffer.asUint8List();
+
+      File imgFile =
+          File('$directory/screenshot${DateTime.now().toString()}.png');
+      imgFile.writeAsBytes(pngBytes);
+
+      return imgFile.path;
+    } else {
+      return '';
+    }
   }
 }

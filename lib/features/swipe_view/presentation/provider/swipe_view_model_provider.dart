@@ -1,4 +1,5 @@
 import 'package:camera/camera.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/models/user_model/user_model.dart';
 import 'package:wehavit/common/utils/no_params.dart';
@@ -24,6 +25,8 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
   late final FetchUserDataFromIdUsecase _fetchUserDataFromIdUsecase;
   late final SendReactionToTargetConfirmPostUsecase
       _sendReactionToTargetConfirmPostUsecase;
+
+  final currentUserUid = FirebaseAuth.instance.currentUser!.uid;
 
   Future<void> getTodayConfirmPostModelList() async {
     state.confirmPostModelList =
@@ -95,5 +98,55 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
     }
 
     return Future(() => true);
+  }
+
+  void unfocusCommentTextForm() {
+    state.commentFieldFocus.unfocus();
+  }
+
+  Future<void> sendEmojiReaction() async {
+    state.emojiWidgets.clear();
+
+    if (state.sendingEmojis.any((element) => element > 0)) {
+      final Map<String, int> emojiMap = {};
+      state.sendingEmojis.asMap().forEach(
+            (index, value) => emojiMap.addAll(
+              {'t$index': value},
+            ),
+          );
+
+      final reactionModel = ReactionModel(
+        complementerUid: currentUserUid,
+        reactionType: ReactionType.emoji.index,
+        emoji: emojiMap,
+      );
+
+      sendReactionToTargetConfirmPost(reactionModel);
+
+      state.sendingEmojis = List<int>.generate(15, (index) => 0);
+    }
+  }
+
+  Future<void> sendImageReaction({required String imageFilePath}) async {
+    final reactionModel = ReactionModel(
+      complementerUid: FirebaseAuth.instance.currentUser!.uid,
+      reactionType: ReactionType.instantPhoto.index,
+      instantPhotoUrl: imageFilePath,
+    );
+    sendReactionToTargetConfirmPost(reactionModel);
+  }
+
+  Future<void> sendTextReaction() async {
+    unfocusCommentTextForm();
+
+    final reactionModel = ReactionModel(
+      complementerUid: FirebaseAuth.instance.currentUser!.uid,
+      reactionType: ReactionType.comment.index,
+      comment: state.textEditingController.text,
+    );
+    sendReactionToTargetConfirmPost(
+      reactionModel,
+    );
+    state.textEditingController.clear();
   }
 }

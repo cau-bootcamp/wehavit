@@ -36,95 +36,101 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
         child: Column(
           children: [
             // 프로필 영역
-            Column(
-              children: [
-                FutureBuilder<UserModel>(
-                  future: swipeViewModel
-                      .userModelList[swipeViewModel.currentCellIndex],
-                  builder: (
-                    BuildContext context,
-                    AsyncSnapshot<UserModel> snapshot,
-                  ) {
-                    // 해당 부분은 data를 아직 받아 오지 못했을때 실행되는 코드
-                    if (snapshot.hasData == false) {
-                      return const SizedBox(
-                        width: 100,
-                        height: 100,
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (snapshot.hasError == true) {
-                      return const SizedBox(
-                        width: 100,
-                        height: 100,
-                        child: Placeholder(),
-                      );
-                    } else {
-                      return Column(
-                        children: [
-                          CircleAvatar(
-                            radius: 40,
-                            foregroundImage:
-                                NetworkImage(snapshot.data!.imageUrl),
-                            backgroundColor: Colors.grey,
-                          ),
-                          Text(
-                            snapshot.data!.displayName,
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+            Container(
+              child: Column(
+                children: [
+                  FutureBuilder<UserModel>(
+                    future: swipeViewModel
+                        .userModelList[swipeViewModel.currentCellIndex],
+                    builder: (
+                      BuildContext context,
+                      AsyncSnapshot<UserModel> snapshot,
+                    ) {
+                      // 해당 부분은 data를 아직 받아 오지 못했을때 실행되는 코드
+                      if (snapshot.hasData == false) {
+                        return const SizedBox(
+                          width: 100,
+                          height: 100,
+                          child: CircularProgressIndicator(),
+                        );
+                      } else if (snapshot.hasError == true) {
+                        return const SizedBox(
+                          width: 100,
+                          height: 100,
+                          child: Placeholder(),
+                        );
+                      } else {
+                        return Column(
+                          children: [
+                            CircleAvatar(
+                              radius: 40,
+                              foregroundImage:
+                                  NetworkImage(snapshot.data!.imageUrl),
+                              backgroundColor: Colors.grey,
                             ),
-                          ),
-                        ],
-                      );
-                    }
-                  },
-                ),
-              ],
+                            Text(
+                              snapshot.data!.displayName,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+                    },
+                  ),
+                ],
+              ),
             ),
             // 사진 영역
-            // padding: const EdgeInsets.symmetric(vertical: 8.0),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
                 child: Container(
                   constraints: const BoxConstraints.expand(),
-                  child: Image.network(
-                    widget.model.imageUrl ?? '',
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Placeholder();
-                    },
-                    loadingBuilder: (
-                      BuildContext context,
-                      Widget child,
-                      ImageChunkEvent? loadingProgress,
-                    ) {
-                      if (loadingProgress == null) {
-                        return child;
-                      }
-                      return Center(
-                        child: CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes!
-                              : null,
-                        ),
-                      );
-                    },
+                  child: AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: Image.network(
+                      widget.model.imageUrl ?? '',
+                      fit: BoxFit.fitWidth,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Placeholder();
+                      },
+                      loadingBuilder: (
+                        BuildContext context,
+                        Widget child,
+                        ImageChunkEvent? loadingProgress,
+                      ) {
+                        if (loadingProgress == null) {
+                          return child;
+                        }
+                        return Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                                : null,
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
             ),
             // 통계치 영역
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: SizedBox(
-                height: 120,
-                child: Container(color: Colors.amber),
-              ),
-            ),
+            // Expanded(
+            //   child: Padding(
+            //     padding: const EdgeInsets.symmetric(vertical: 4.0),
+            //     child: Container(
+            //       color: Colors.amber,
+            //     ),
+            //   ),
+            // ),
             // 인증글 영역
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
               child: Container(
                 color: Colors.pink.shade200,
                 constraints: const BoxConstraints.expand(height: 120),
