@@ -2,26 +2,25 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/features/live_writing/data/datasources/datasources.dart';
+import 'package:wehavit/features/live_writing/data/data.dart';
 import 'package:wehavit/features/live_writing/domain/domain.dart';
 
 class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
   // TODO. move to constants
   static const CONFIRM_POST_COLLECTION = 'confirm_posts';
-  static const CONFIRM_POST_ROLES_COMPILIMENTER = 'complimenter';
-  static const CONFIRM_POST_ROLES_OWNER = 'owner';
+  static const CONFIRM_POST_FIELD_FAN = 'fan';
+  static const CONFIRM_POST_FIELD_OWNER = 'owner';
 
   @override
-  EitherFuture<List<ConfirmPostModel>> getAllConfirmPosts() async {
+  EitherFuture<List<ConfirmPostModel>> getAllFanMarkedConfirmPosts() async {
     try {
-      // print(FirebaseAuth.instance.currentUser!.uid);
       final fetchResult = await FirebaseFirestore.instance
           .collection(
             CONFIRM_POST_COLLECTION,
           )
           .where(
-            _getRolePath(FirebaseAuth.instance.currentUser!.uid),
-            isEqualTo: CONFIRM_POST_ROLES_COMPILIMENTER,
+            CONFIRM_POST_FIELD_FAN,
+            arrayContains: FirebaseAuth.instance.currentUser!.uid,
           )
           .get();
 
@@ -38,8 +37,6 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
       );
     }
   }
-
-  String _getRolePath(uid) => 'roles.$uid';
 
   @override
   EitherFuture<bool> createConfirmPost(ConfirmPostModel confirmPost) async {

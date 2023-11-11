@@ -15,7 +15,7 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
 
   @override
   EitherFuture<List<ConfirmPostModel>> getAllConfirmPosts() async {
-    return await _confirmPostRemoteDatasourceImpl.getAllConfirmPosts();
+    return await _confirmPostRemoteDatasourceImpl.getAllFanMarkedConfirmPosts();
   }
 
   @override

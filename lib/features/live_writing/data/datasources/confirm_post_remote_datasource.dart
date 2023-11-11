@@ -3,7 +3,7 @@ import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/features/live_writing/domain/domain.dart';
 
 abstract class ConfirmPostDatasource {
-  EitherFuture<List<ConfirmPostModel>> getAllConfirmPosts();
+  EitherFuture<List<ConfirmPostModel>> getAllFanMarkedConfirmPosts();
 
   EitherFuture<bool> createConfirmPost(ConfirmPostModel confirmPost);
 
