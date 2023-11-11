@@ -20,10 +20,9 @@ class ConfirmPostModel with _$ConfirmPostModel {
     'recentStrike! >= 0 && recentStrike! <= 170',
     'recentStrike must be between b0000000 and b1111111',
   )
-  // @Assert('resolutionId != null', 'resolutionId must not be null')
   @Assert('createdAt != null', 'createdAt must not be empty')
   @Assert('updatedAt != null', 'createdAt must not be empty')
-  @Assert('roles != null', 'roles must not be empty')
+  @Assert('fan != null', 'roles must not be empty')
   @Assert('attributes != null', 'roles must not be empty')
   @TimestampConverter()
   @DocumentReferenceJsonConverter()
@@ -36,10 +35,11 @@ class ConfirmPostModel with _$ConfirmPostModel {
     required String? title,
     required String? content,
     required String? imageUrl,
+    required String? owner,
+    required List<String>? fan,
     required int? recentStrike,
     required DateTime? createdAt,
     required DateTime? updatedAt,
-    required Map<String, String>? roles,
     required Map<String, bool>? attributes,
   }) = _ConfirmPostModel;
 

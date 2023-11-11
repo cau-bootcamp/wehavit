@@ -21,11 +21,8 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
   @override
   EitherFuture<bool> createConfirmPost(ConfirmPostModel confirmPost) async {
     confirmPost = confirmPost.copyWith(
-      roles: {
-        FirebaseAuth.instance.currentUser!.uid: 'owner',
-      },
+      owner: FirebaseAuth.instance.currentUser!.uid,
     );
-
     try {
       _confirmPostRemoteDatasourceImpl.createConfirmPost(confirmPost);
       return Future(() => right(true));
