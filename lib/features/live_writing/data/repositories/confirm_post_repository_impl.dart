@@ -2,11 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:wehavit/common/errors/failure.dart';
-import 'package:wehavit/common/utils/custom_types.dart';
-import 'package:wehavit/features/live_writing/data/datasources/confirm_post_remote_datasource_impl.dart';
-import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
-import 'package:wehavit/features/live_writing/domain/repositories/confirm_post_repository.dart';
+import 'package:wehavit/common/common.dart';
+import 'package:wehavit/features/live_writing/data/data.dart';
+import 'package:wehavit/features/live_writing/domain/domain.dart';
 
 class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
   ConfirmPostRepositoryImpl(Ref ref) {

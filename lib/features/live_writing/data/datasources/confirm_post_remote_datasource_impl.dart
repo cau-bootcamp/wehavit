@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:wehavit/common/errors/failure.dart';
-import 'package:wehavit/common/utils/custom_types.dart';
-import 'package:wehavit/common/utils/firebase_collection_name.dart';
-import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
+import 'package:wehavit/common/common.dart';
+import 'package:wehavit/features/live_writing/data/datasources/datasources.dart';
+import 'package:wehavit/features/live_writing/domain/domain.dart';
 
 class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
   // TODO. move to constants
@@ -16,6 +14,7 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
   @override
   EitherFuture<List<ConfirmPostModel>> getAllConfirmPosts() async {
     try {
+      // print(FirebaseAuth.instance.currentUser!.uid);
       final fetchResult = await FirebaseFirestore.instance
           .collection(
             CONFIRM_POST_COLLECTION,
@@ -53,7 +52,8 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
 
   @override
   EitherFuture<bool> deleteConfirmPost(
-      DocumentReference<ConfirmPostModel> ref) {
+    DocumentReference<ConfirmPostModel> ref,
+  ) {
     // TODO: implement deleteConfirmPost
     throw UnimplementedError();
   }
@@ -70,21 +70,3 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
     throw UnimplementedError();
   }
 }
-
-// TODO. move to different file
-abstract class ConfirmPostDatasource {
-  EitherFuture<List<ConfirmPostModel>> getAllConfirmPosts();
-
-  EitherFuture<bool> createConfirmPost(ConfirmPostModel confirmPost);
-
-  EitherFuture<bool> updateConfirmPost(ConfirmPostModel confirmPost);
-
-  EitherFuture<bool> deleteConfirmPost(DocumentReference<ConfirmPostModel> ref);
-
-  EitherFuture<bool> getConfirmPostByUserId(String userId);
-}
-
-// TODO. move to different file
-final confirmPostDatasourceProvider = Provider<ConfirmPostDatasource>((ref) {
-  return ConfirmPostRemoteDatasourceImpl();
-});
