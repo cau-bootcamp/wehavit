@@ -90,7 +90,7 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
                 child: Container(
                   constraints: const BoxConstraints.expand(),
                   child: AspectRatio(
-                    aspectRatio: 16 / 9,
+                    aspectRatio: 1,
                     child: Image.network(
                       widget.model.imageUrl ?? '',
                       fit: BoxFit.fitWidth,

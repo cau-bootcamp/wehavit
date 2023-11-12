@@ -6,7 +6,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/models/user_model/user_model.dart';
 import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
-import 'package:wehavit/features/swipe_view/presentation/screen/swipe_view.dart';
+import 'package:wehavit/features/swipe_view/presentation/screen/widget/emoji_sheet_widget.dart';
 
 class SwipeViewModel {
   // Carousel UI Variables

@@ -137,6 +137,7 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
   }
 
   Future<void> sendTextReaction() async {
+    print("DEBUG");
     unfocusCommentTextForm();
 
     final reactionModel = ReactionModel(
