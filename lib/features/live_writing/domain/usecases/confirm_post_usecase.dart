@@ -1,5 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wehavit/common/utils/custom_types.dart';
+import 'package:wehavit/common/utils/utils.dart';
 import 'package:wehavit/features/live_writing/domain/domain.dart';
 
 class GetAllPostUseCase {
@@ -12,9 +11,12 @@ class GetAllPostUseCase {
   }
 }
 
-// provider
-final getAllPostUseCaseProvider = Provider<GetAllPostUseCase>(
-  (ref) => GetAllPostUseCase(
-    ref.watch(confirmPostRepositoryProvider),
-  ),
-);
+class CreatePostUseCase {
+  CreatePostUseCase(this._repository);
+
+  final ConfirmPostRepository _repository;
+
+  EitherFuture<bool> call(ConfirmPostModel confirmPost) async {
+    return await _repository.createConfirmPost(confirmPost);
+  }
+}

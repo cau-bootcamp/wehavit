@@ -39,11 +39,7 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
 
       for (int index = 0; index < confirmPostModelList.length; index++) {
         final model = confirmPostModelList[index];
-        state.userModelList[index] = getUserModelFromId(
-          model.roles!.keys.firstWhere(
-            (element) => model.roles![element] == 'owner',
-          ),
-        );
+        state.userModelList[index] = getUserModelFromId(model.owner!);
       }
 
       state.currentCellIndex = 0;
