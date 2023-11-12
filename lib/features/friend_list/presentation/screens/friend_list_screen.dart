@@ -44,7 +44,7 @@ class FriendListScreen extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(currentUser?.displayName ?? 'DEBUG_NONAME'),
+                            Text(currentUser?.displayName ?? 'DEBUG_NO_NAME'),
                             Text(currentUser?.email ?? 'DEBUG_UserID'),
                           ],
                         ),

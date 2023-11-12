@@ -4,20 +4,18 @@ import 'package:wehavit/features/friend_list/domain/models/add_friend_model.dart
 class AddFriendEntity {
   AddFriendEntity.fromAddFriendModel(AddFriendModel model) {
     //print('model : ${model.friendID}');
-    friendID = model.friendID;
+    friendEmail = model.friendEmail;
   }
 
-  late String friendID;
+  late String friendEmail;
 }
 
 extension AddFriendEntityConvertFunctions on AddFriendEntity {
   Map<String, dynamic> toFirebaseDocument() {
     final Map<String, dynamic> doc = {};
-    if (!friendID.contains('users/')) {
-      friendID = 'users/$friendID';
-    }
     try {
-      doc[FirebaseFieldName.friendDocRef] = friendID;
+      doc[FirebaseFieldName.friendEmail] = friendEmail;
+      doc[FirebaseFieldName.friendState] = 0;
     } on Exception {
       //print('Error : $friendID');
     }

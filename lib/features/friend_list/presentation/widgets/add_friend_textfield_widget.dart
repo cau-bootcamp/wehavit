@@ -19,7 +19,7 @@ class AddFriendTextFieldWidget extends ConsumerWidget {
             margin: const EdgeInsets.only(left: 8, right: 8),
             child: TextField(
               onChanged: (value) {
-                ref.read(addFriendProvider.notifier).setFriendID(value);
+                ref.read(addFriendProvider.notifier).setFriendEmail(value);
               },
               decoration: const InputDecoration(
                 hintText: 'Enter Friend ID',

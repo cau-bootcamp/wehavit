@@ -10,7 +10,8 @@ class FirebaseFieldName {
   static const imageUrl = 'imageUrl';
 
   //friend
-  static const friendDocRef = 'friendDocRef';
+  static const friendEmail = 'friendEmail';
+  static const friendState = 'friendState';
 
   // resolutions
   static const resolutionGoalStatement = 'goalStatement';

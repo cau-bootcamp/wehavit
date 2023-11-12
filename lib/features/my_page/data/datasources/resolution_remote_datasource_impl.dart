@@ -33,10 +33,9 @@ class ResolutionRemoteDatasourceImpl implements ResolutionDatasource {
       return Future(() => right(resolutionEntityList));
     } on Exception {
       return Future(
-            () =>
-            left(
-              const Failure('catch error on getActiveResolutionEntityList'),
-            ),
+        () => left(
+          const Failure('catch error on getActiveResolutionEntityList'),
+        ),
       );
     }
   }
@@ -65,10 +64,9 @@ class ResolutionRemoteDatasourceImpl implements ResolutionDatasource {
       return Future(() => right(resolutionEntityList));
     } on Exception {
       return Future(
-            () =>
-            left(
-              const Failure('catch error on getAllResolutionEntityList'),
-            ),
+        () => left(
+          const Failure('catch error on getAllResolutionEntityList'),
+        ),
       );
     }
   }
@@ -79,7 +77,9 @@ class ResolutionRemoteDatasourceImpl implements ResolutionDatasource {
   /// 이를 사용자의 도전 목표 컬렉션에 저장해주고,
   /// 업로드에 성공하였음을 Future<bool>을 통해 전달한다.
   @override
-  EitherFuture<bool> uploadResolutionEntity(ResolutionEntity entity,) async {
+  EitherFuture<bool> uploadResolutionEntity(
+    ResolutionEntity entity,
+  ) async {
     try {
       FirebaseFirestore.instance
           .collection(FirebaseCollectionName.resolutions)
@@ -88,10 +88,9 @@ class ResolutionRemoteDatasourceImpl implements ResolutionDatasource {
       return Future(() => right(true));
     } on Exception {
       return Future(
-            () =>
-            left(
-              const Failure('catch error on uploadResolutionEntity'),
-            ),
+        () => left(
+          const Failure('catch error on uploadResolutionEntity'),
+        ),
       );
     }
   }

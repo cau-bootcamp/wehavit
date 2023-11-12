@@ -18,23 +18,33 @@ class FriendRemoteDatasourceImpl implements FriendDatasource {
           .collection(FirebaseCollectionName.friends)
           .get();
 
-      final friendsRefs = friendsSnapshots.docs
-          .map((doc) => doc.data()[FirebaseFieldName.friendDocRef])
+      //friend state가 1인 경우에만 해당 email을 friendsEmail에 추가
+      //state가 1인 것은 친구인 상태, 0인 것은 친구를 신청한 상태이다.
+      final friendEmails = friendsSnapshots.docs
+          .map((doc) {
+//            if (doc.data()[FirebaseFieldName.friendState] == 1 &&
+//                doc.data()[FirebaseFieldName.friendEmail] != null) {
+            if (doc.data()[FirebaseFieldName.friendEmail] != null) {
+              return doc.data()[FirebaseFieldName.friendEmail] as String;
+            }
+            return null;
+          })
+          .where((email) => email != null)
+          .cast<String>()
           .toList();
 
       friendEntityList = [];
-      for (DocumentReference friendRef in friendsRefs) {
-        DocumentSnapshot friendDocSnapshot = await friendRef.get();
-        if (friendDocSnapshot.exists) {
-          friendEntityList.add(
-            FriendEntity.fromFirebaseDocument(
-              friendDocSnapshot.id,
-              friendDocSnapshot.data() as Map<String, dynamic>,
-            ),
-          );
-        } else {}
-      }
+      if (friendEmails.isNotEmpty) {
+        //email을 기반으로 users collection에서 where로 검색하여 친구의 문서를 가지고 온다.
+        final friendDocSnapshots = await FirebaseFirestore.instance
+            .collection(FirebaseCollectionName.users)
+            .where(FirebaseFieldName.email, whereIn: friendEmails)
+            .get();
 
+        friendEntityList = friendDocSnapshots.docs
+            .map((doc) => FriendEntity.fromFirebaseDocument(doc.data()))
+            .toList();
+      }
       return Future(() => right(friendEntityList));
     } on Exception {
       return Future(
@@ -49,15 +59,47 @@ class FriendRemoteDatasourceImpl implements FriendDatasource {
   EitherFuture<bool> uploadAddFriendEntity(
     AddFriendEntity entity,
   ) async {
-    try {
-      FirebaseFirestore.instance
-          .collection(FirebaseCollectionName.friends)
-          .add(entity.toFirebaseDocument());
-      return Future(() => right(true));
-    } on Exception {
+    final friendsDocsSnapshot = await FirebaseFirestore.instance
+        .collection(FirebaseCollectionName.friends)
+        .where(FirebaseFieldName.friendEmail, isEqualTo: entity.friendEmail)
+        .get();
+    if (friendsDocsSnapshot.docs.isNotEmpty) {
       return Future(
         () => left(
-          const Failure('catch error on uploadFriendEntity'),
+          const Failure('There is same user in friends list'),
+        ),
+      );
+    }
+
+    final friendSnapshot = await FirebaseFirestore.instance
+        .collection(FirebaseCollectionName.users)
+        .where(
+          FirebaseFieldName.email,
+          isEqualTo: entity.friendEmail,
+        )
+        .get();
+
+    final friendRef = friendSnapshot.docs
+        .map((doc) => doc.data()[FirebaseFieldName.friendEmail])
+        .toList();
+
+    if (friendRef.isNotEmpty) {
+      try {
+        FirebaseFirestore.instance
+            .collection(FirebaseCollectionName.friends)
+            .add(entity.toFirebaseDocument());
+        return Future(() => right(true));
+      } on Exception {
+        return Future(
+          () => left(
+            const Failure('catch error on uploadFriendEntity'),
+          ),
+        );
+      }
+    } else {
+      return Future(
+        () => left(
+          const Failure('There is no friend Email'),
         ),
       );
     }
