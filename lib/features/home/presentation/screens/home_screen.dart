@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:wehavit/common/common.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -24,16 +25,21 @@ class HomeScreen extends ConsumerWidget {
               backgroundColor: Colors.black87,
               title: Text(
                 DateFormat('yyyy년 MM월 dd일').format(DateTime.now()),
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold),
               ),
               actions: [
                 IconButton(
-                    icon: Icon(Icons.group, color: Colors.white),
-                    onPressed: () {}),
+                  icon: const Icon(Icons.group, color: Colors.white),
+                  onPressed: () async {
+                    context.go(RouteLocation.friendList);
+                  },
+                ),
                 IconButton(
                   icon: const Icon(Icons.notifications, color: Colors.white),
-                  onPressed: () {},
+                  onPressed: () async {
+                    // 알림 센터 뷰
+                  },
                 ),
               ],
             ),
