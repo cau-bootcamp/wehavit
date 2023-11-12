@@ -39,7 +39,7 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
   }
 
   @override
-  EitherFuture<bool> createConfirmPost(ConfirmPostModel confirmPost) async {
+  EitherFuture<bool> uploadConfirmPost(ConfirmPostModel confirmPost) async {
     await FirebaseFirestore.instance
         .collection(FirebaseCollectionName.confirmPosts)
         .add(confirmPost.toJson());

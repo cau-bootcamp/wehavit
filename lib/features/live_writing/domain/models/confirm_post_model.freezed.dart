@@ -266,10 +266,11 @@ class _$ConfirmPostModelImpl implements _ConfirmPostModel {
         assert(recentStrike != null, 'recentStrike must not be null'),
         assert(recentStrike! >= 0 && recentStrike! <= 170,
             'recentStrike must be between b0000000 and b1111111'),
-        assert(createdAt != null, 'createdAt must not be empty'),
-        assert(updatedAt != null, 'createdAt must not be empty'),
-        assert(fan != null, 'roles must not be empty'),
-        assert(attributes != null, 'roles must not be empty'),
+        assert(createdAt != null, 'createdAt must not be null'),
+        assert(updatedAt != null, 'createdAt must not be null'),
+        assert(fan != null, 'roles(fan) must not be null'),
+        assert(owner != null, 'roles(owner) must not be null'),
+        assert(attributes != null, 'attribute must not be null'),
         _fan = fan,
         _attributes = attributes;
 

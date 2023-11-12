@@ -24,7 +24,7 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
       owner: FirebaseAuth.instance.currentUser!.uid,
     );
     try {
-      _confirmPostRemoteDatasourceImpl.createConfirmPost(confirmPost);
+      _confirmPostRemoteDatasourceImpl.uploadConfirmPost(confirmPost);
       return Future(() => right(true));
     } on FirebaseException catch (e) {
       return left(Failure(e.message ?? 'FirebaseException'));

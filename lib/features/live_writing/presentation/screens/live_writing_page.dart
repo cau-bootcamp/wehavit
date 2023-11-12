@@ -80,7 +80,7 @@ class LiveWritingBody extends HookConsumerWidget {
               recentStrike: 0,
               createdAt: DateTime.now(),
               updatedAt: DateTime.now(),
-              owner: null,
+              owner: '',
               fan: [],
               attributes: {
                 'has_participated_live': true,

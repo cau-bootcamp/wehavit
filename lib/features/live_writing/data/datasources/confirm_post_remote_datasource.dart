@@ -5,7 +5,7 @@ import 'package:wehavit/features/live_writing/domain/domain.dart';
 abstract class ConfirmPostDatasource {
   EitherFuture<List<ConfirmPostModel>> getAllFanMarkedConfirmPosts();
 
-  EitherFuture<bool> createConfirmPost(ConfirmPostModel confirmPost);
+  EitherFuture<bool> uploadConfirmPost(ConfirmPostModel confirmPost);
 
   EitherFuture<bool> updateConfirmPost(ConfirmPostModel confirmPost);
 

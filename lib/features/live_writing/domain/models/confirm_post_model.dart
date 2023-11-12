@@ -20,10 +20,11 @@ class ConfirmPostModel with _$ConfirmPostModel {
     'recentStrike! >= 0 && recentStrike! <= 170',
     'recentStrike must be between b0000000 and b1111111',
   )
-  @Assert('createdAt != null', 'createdAt must not be empty')
-  @Assert('updatedAt != null', 'createdAt must not be empty')
-  @Assert('fan != null', 'roles must not be empty')
-  @Assert('attributes != null', 'roles must not be empty')
+  @Assert('createdAt != null', 'createdAt must not be null')
+  @Assert('updatedAt != null', 'createdAt must not be null')
+  @Assert('fan != null', 'roles(fan) must not be null')
+  @Assert('owner != null', 'roles(owner) must not be null')
+  @Assert('attributes != null', 'attribute must not be null')
   @TimestampConverter()
   @DocumentReferenceJsonConverter()
   factory ConfirmPostModel({
