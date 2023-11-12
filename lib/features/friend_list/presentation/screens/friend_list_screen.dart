@@ -26,6 +26,7 @@ class FriendListScreen extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.home, color: Colors.black54),
+            // 일단 임시로 검은색과 홈 아이콘으로 처리하였음.
             onPressed: () async {
               context.go(RouteLocation.home);
             },
