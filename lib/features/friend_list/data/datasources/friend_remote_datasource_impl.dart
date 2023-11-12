@@ -22,8 +22,9 @@ class FriendRemoteDatasourceImpl implements FriendDatasource {
       //state가 1인 것은 친구인 상태, 0인 것은 친구를 신청한 상태이다.
       final friendEmails = friendsSnapshots.docs
           .map((doc) {
-//            if (doc.data()[FirebaseFieldName.friendState] == 1 &&
-//                doc.data()[FirebaseFieldName.friendEmail] != null) {
+            //   주석 아래 if문을 바로 두 문장으로 변경하면 friend state가 1인 경우의 친구의 정보만 가져옵니다.
+            //  if (doc.data()[FirebaseFieldName.friendState] == 1 &&
+            //      doc.data()[FirebaseFieldName.friendEmail] != null) {
             if (doc.data()[FirebaseFieldName.friendEmail] != null) {
               return doc.data()[FirebaseFieldName.friendEmail] as String;
             }
