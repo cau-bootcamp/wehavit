@@ -5,8 +5,10 @@ import 'package:go_router/go_router.dart';
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
-  static HomeScreen builder(BuildContext context,
-      GoRouterState state,) =>
+  static HomeScreen builder(
+    BuildContext context,
+    GoRouterState state,
+  ) =>
       const HomeScreen();
 
   @override
@@ -22,7 +24,7 @@ class HomeScreen extends ConsumerWidget {
               title: const Text(
                 '2023년 10월 2일',
                 style:
-                TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
               actions: [
 //                IconButton(
@@ -52,7 +54,7 @@ class HomeScreen extends ConsumerWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: CircleAvatar(
                       backgroundColor:
-                      (index == 6) ? Colors.purple : Colors.grey,
+                          (index == 6) ? Colors.purple : Colors.grey,
                       child: Text(
                         '${25 + index}',
                         style: const TextStyle(color: Colors.white),
@@ -123,11 +125,14 @@ class HomeScreen extends ConsumerWidget {
   }
 }
 
-Widget _feedBlock(String name,
-    String badge,
-    String title,
-    String message,
-    String imageUrl,) {
+// 파일 분리 예정. model도 짜야 함.
+Widget _feedBlock(
+  String name,
+  String badge,
+  String title,
+  String message,
+  String imageUrl,
+) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 4.0),
     child: Container(
