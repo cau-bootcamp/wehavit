@@ -18,7 +18,7 @@ class AddFriendTextFieldWidget extends ConsumerWidget {
             width: 300,
             margin: const EdgeInsets.only(left: 8, right: 8),
             child: TextField(
-              //추후에 onChanged가 아닌 것으로 바꿀 예정
+              // 추후에 onChanged가 아닌 것으로 바꿀 예정
               onChanged: (value) {
                 ref.read(addFriendProvider.notifier).setFriendEmail(value);
               },

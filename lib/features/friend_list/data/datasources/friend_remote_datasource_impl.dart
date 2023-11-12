@@ -18,11 +18,11 @@ class FriendRemoteDatasourceImpl implements FriendDatasource {
           .collection(FirebaseCollectionName.friends)
           .get();
 
-      //friend state가 1인 경우에만 해당 email을 friendsEmail에 추가
-      //state가 1인 것은 친구인 상태, 0인 것은 친구를 신청한 상태이다.
+      // friend state가 1인 경우에만 해당 email을 friendsEmail에 추가
+      // state가 1인 것은 친구인 상태, 0인 것은 친구를 신청한 상태이다.
       final friendEmails = friendsSnapshots.docs
           .map((doc) {
-            //   주석 아래 if문을 바로 두 문장으로 변경하면 friend state가 1인 경우의 친구의 정보만 가져옵니다.
+            // 주석 아래 if문을 바로 두 문장으로 변경하면 friend state가 1인 경우의 친구의 정보만 가져옵니다.
             //  if (doc.data()[FirebaseFieldName.friendState] == 1 &&
             //      doc.data()[FirebaseFieldName.friendEmail] != null) {
             if (doc.data()[FirebaseFieldName.friendEmail] != null) {
@@ -36,7 +36,7 @@ class FriendRemoteDatasourceImpl implements FriendDatasource {
 
       friendEntityList = [];
       if (friendEmails.isNotEmpty) {
-        //email을 기반으로 users collection에서 where로 검색하여 친구의 문서를 가지고 온다.
+        // email을 기반으로 users collection에서 where로 검색하여 친구의 문서를 가지고 온다.
         final friendDocSnapshots = await FirebaseFirestore.instance
             .collection(FirebaseCollectionName.users)
             .where(FirebaseFieldName.email, whereIn: friendEmails)
