@@ -4,12 +4,13 @@ import 'package:wehavit/features/my_page/domain/models/resolution_model.dart';
 
 class ResolutionEntity {
   ResolutionEntity.fromFirebaseDocument(Map<String, dynamic> data)
-      : goal = data[FirebaseFieldName.resolutionGoalStatement],
-        action = data[FirebaseFieldName.resolutionActionStatement],
-        period = data[FirebaseFieldName.resolutionPeriod],
+      : goal = data[FirebaseResolutionFieldName.resolutionGoalStatement],
+        action = data[FirebaseResolutionFieldName.resolutionActionStatement],
+        period = data[FirebaseResolutionFieldName.resolutionPeriod],
         startDate =
-            (data[FirebaseFieldName.resolutionStartDate] as Timestamp).toDate(),
-        isActive = data[FirebaseFieldName.resolutionIsActive];
+            (data[FirebaseResolutionFieldName.resolutionStartDate] as Timestamp)
+                .toDate(),
+        isActive = data[FirebaseResolutionFieldName.resolutionIsActive];
 
   ResolutionEntity.fromResolutionModel(ResolutionModel model) {
     goal = model.goalStatement;
@@ -31,11 +32,11 @@ extension ResolutionEntityConvertFunctions on ResolutionEntity {
   Map<String, dynamic> toFirebaseDocument() {
     final Map<String, dynamic> doc = {};
 
-    doc[FirebaseFieldName.resolutionGoalStatement] = goal;
-    doc[FirebaseFieldName.resolutionActionStatement] = action;
-    doc[FirebaseFieldName.resolutionPeriod] = period;
-    doc[FirebaseFieldName.resolutionStartDate] = startDate;
-    doc[FirebaseFieldName.resolutionIsActive] = isActive;
+    doc[FirebaseResolutionFieldName.resolutionGoalStatement] = goal;
+    doc[FirebaseResolutionFieldName.resolutionActionStatement] = action;
+    doc[FirebaseResolutionFieldName.resolutionPeriod] = period;
+    doc[FirebaseResolutionFieldName.resolutionStartDate] = startDate;
+    doc[FirebaseResolutionFieldName.resolutionIsActive] = isActive;
 
     return doc;
   }

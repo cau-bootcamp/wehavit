@@ -52,6 +52,12 @@ dependencies:
   uuid: ^4.1.0
   syncfusion_flutter_charts: ^23.1.40
   syncfusion_flutter_gauges: ^23.1.40
+  carousel_slider: ^4.2.1
+  camera: ^0.10.5+5
+  flutter_native_image: ^0.0.6+1
+  path: ^1.8.3
+  path_provider: ^2.1.1
+  firebase_storage: ^11.5.0
 
 
 dev_dependencies:
@@ -76,9 +82,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/images/emoji_3d/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

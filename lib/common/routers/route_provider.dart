@@ -8,6 +8,7 @@ import 'package:wehavit/features/features.dart';
 import 'package:wehavit/features/live_writing/presentation/screens/live_writing_page.dart';
 import 'package:wehavit/features/my_page/presentation/screens/add_resolution_screen.dart';
 import 'package:wehavit/features/my_page/presentation/screens/my_page_screen.dart';
+import 'package:wehavit/features/swipe_view/presentation/screen/swipe_view.dart';
 
 part 'route_provider.g.dart';
 
@@ -167,6 +168,18 @@ class LiveWritingRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const LiveWritingPage();
+  }
+}
+
+@TypedGoRoute<SwipeViewRoute>(path: SwipeViewRoute.path)
+class SwipeViewRoute extends GoRouteData {
+  const SwipeViewRoute();
+
+  static const path = RouteLocation.swipeView;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const SwipeView();
   }
 }
 

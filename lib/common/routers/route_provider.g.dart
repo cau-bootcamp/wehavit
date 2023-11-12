@@ -15,6 +15,7 @@ List<RouteBase> get $appRoutes => [
       $addResolutionRoute,
       $friendListRoute,
       $liveWritingRoute,
+      $swipeViewRoute,
     ];
 
 RouteBase get $splashRoute => GoRouteData.$route(
@@ -161,7 +162,7 @@ extension $FriendListRouteExtension on FriendListRoute {
 
   String get location => GoRouteData.$location(
         '/friendList',
-    );
+      );
 
   void go(BuildContext context) => context.go(location);
 
@@ -196,17 +197,17 @@ extension $LiveWritingRouteExtension on LiveWritingRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-RouteBase get $liveWritingRoute => GoRouteData.$route(
-      path: '/waitingRoom/liveWriting',
-      factory: $LiveWritingRouteExtension._fromState,
+RouteBase get $swipeViewRoute => GoRouteData.$route(
+      path: '/swipeView',
+      factory: $SwipeViewRouteExtension._fromState,
     );
 
-extension $LiveWritingRouteExtension on LiveWritingRoute {
-  static LiveWritingRoute _fromState(GoRouterState state) =>
-      const LiveWritingRoute();
+extension $SwipeViewRouteExtension on SwipeViewRoute {
+  static SwipeViewRoute _fromState(GoRouterState state) =>
+      const SwipeViewRoute();
 
   String get location => GoRouteData.$location(
-        '/waitingRoom/liveWriting',
+        '/swipeView',
       );
 
   void go(BuildContext context) => context.go(location);

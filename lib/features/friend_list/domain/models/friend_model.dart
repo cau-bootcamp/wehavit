@@ -8,10 +8,11 @@ class FriendModel {
     required this.friendImageUrl,
   });
 
-  FriendModel.fromMapData(Map<String, dynamic> data, Map<String, dynamic> usersData)
-      : friendID = data[FirebaseFieldName.friendID],
-        friendName = usersData[FirebaseFieldName.displayName],
-        friendImageUrl = usersData[FirebaseFieldName.imageUrl];
+  FriendModel.fromMapData(
+      Map<String, dynamic> data, Map<String, dynamic> usersData)
+      : friendID = data[FirebaseFriendFieldName.friendID],
+        friendName = usersData[FirebaseUserFieldName.displayName],
+        friendImageUrl = usersData[FirebaseUserFieldName.imageUrl];
 
   String friendID;
   String friendName;

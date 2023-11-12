@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/features/live_writing/data/data.dart';
@@ -23,6 +25,8 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
             arrayContains: FirebaseAuth.instance.currentUser!.uid,
           )
           .get();
+
+      debugPrint(fetchResult.docs.length.toString());
 
       List<ConfirmPostModel> confirmPosts = fetchResult.docs
           .map((doc) => ConfirmPostModel.fromFireStoreDocument(doc))

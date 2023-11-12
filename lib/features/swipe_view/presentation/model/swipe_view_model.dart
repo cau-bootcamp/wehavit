@@ -1,0 +1,35 @@
+import 'package:camera/camera.dart';
+import 'package:carousel_slider/carousel_controller.dart';
+import 'package:flutter/foundation.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:wehavit/common/errors/failure.dart';
+import 'package:wehavit/common/models/user_model/user_model.dart';
+import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
+import 'package:wehavit/features/swipe_view/presentation/screen/swipe_view.dart';
+
+class SwipeViewModel {
+  // Carousel UI Variables
+  CarouselController carouselController = CarouselController();
+  int _currentCellIndex = 0;
+  int get currentCellIndex => _currentCellIndex;
+  set currentCellIndex(int newIndex) {
+    _currentCellIndex = newIndex;
+    _currentCellConfirmPostModel =
+        confirmPostModelList.foldRight(null, (acc, b) => b[_currentCellIndex]);
+  }
+
+  Either<Failure, List<ConfirmPostModel>> confirmPostModelList = right([]);
+  List<Future<UserModel>> userModelList = [];
+
+  ConfirmPostModel? _currentCellConfirmPostModel;
+  ConfirmPostModel? get currentCellConfirmModel => _currentCellConfirmPostModel;
+
+  // Camera Reaction UI Variables
+  late CameraController cameraController;
+  bool isCameraInitialized = false;
+
+  // Emoji Reaction UI Variables
+  Map<Key, ShootEmojiWidget> emojiWidgets = {};
+  int countSend = 0;
+  List<int> sendingEmojis = List<int>.generate(15, (index) => 0);
+}
