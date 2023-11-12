@@ -5,8 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/utils/emoji_assets.dart';
 import 'package:wehavit/features/swipe_view/presentation/model/swipe_view_model.dart';
 import 'package:wehavit/features/swipe_view/presentation/provider/swipe_view_model_provider.dart';
-import 'package:wehavit/features/swipe_view/presentation/widget/reaction_camera_widget.dart';
-import 'package:wehavit/features/swipe_view/presentation/widget/swipe_view_cell.dart';
+import 'package:wehavit/features/swipe_view/presentation/screen/widget/reaction_camera_widget.dart';
+import 'package:wehavit/features/swipe_view/presentation/screen/widget/swipe_view_cell.dart';
 
 class SwipeView extends ConsumerStatefulWidget {
   const SwipeView({super.key});
@@ -47,6 +47,7 @@ class SwipeViewState extends ConsumerState<SwipeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       // appBar: AppBar(),
+      resizeToAvoidBottomInset: false,
       floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterTop,
       floatingActionButton: FloatingActionButton(
         mini: true,

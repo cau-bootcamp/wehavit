@@ -120,14 +120,14 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
               ),
             ),
             // 통계치 영역
-            // Expanded(
-            //   child: Padding(
-            //     padding: const EdgeInsets.symmetric(vertical: 4.0),
-            //     child: Container(
-            //       color: Colors.amber,
-            //     ),
-            //   ),
-            // ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: Container(
+                  color: Colors.amber,
+                ),
+              ),
+            ),
             // 인증글 영역
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 4.0),
