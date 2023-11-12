@@ -85,42 +85,42 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
             ),
             // 사진 영역
             Expanded(
+              flex: 3,
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4.0),
                 child: Container(
                   constraints: const BoxConstraints.expand(),
-                  child: AspectRatio(
-                    aspectRatio: 1,
-                    child: Image.network(
-                      widget.model.imageUrl ?? '',
-                      fit: BoxFit.fitWidth,
-                      errorBuilder: (context, error, stackTrace) {
-                        return const Placeholder();
-                      },
-                      loadingBuilder: (
-                        BuildContext context,
-                        Widget child,
-                        ImageChunkEvent? loadingProgress,
-                      ) {
-                        if (loadingProgress == null) {
-                          return child;
-                        }
-                        return Center(
-                          child: CircularProgressIndicator(
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                                : null,
-                          ),
-                        );
-                      },
-                    ),
+                  child: Image.network(
+                    widget.model.imageUrl ?? '',
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Placeholder();
+                    },
+                    loadingBuilder: (
+                      BuildContext context,
+                      Widget child,
+                      ImageChunkEvent? loadingProgress,
+                    ) {
+                      if (loadingProgress == null) {
+                        return child;
+                      }
+                      return Center(
+                        child: CircularProgressIndicator(
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded /
+                                  loadingProgress.expectedTotalBytes!
+                              : null,
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),
             ),
             // 통계치 영역
-            Expanded(
+            SizedBox(
+              height:
+                  swipeViewModel.commentFieldFocus.hasFocus == true ? 0 : 100,
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4.0),
                 child: Container(
@@ -128,6 +128,8 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
                 ),
               ),
             ),
+
+            // ),
             // 인증글 영역
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 4.0),

@@ -77,7 +77,7 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
                 _reactionCameraWidgetModel.cameraController.value.aspectRatio,
             child: Opacity(
               opacity:
-                  _reactionCameraWidgetModelProvider.isFocusingMode ? 0.7 : 0,
+                  _reactionCameraWidgetModelProvider.isFocusingMode ? 1 : 0,
               child: RepaintBoundary(
                 key: _reactionCameraWidgetModel.repaintBoundaryGlobalKey,
                 child: IgnorePointer(

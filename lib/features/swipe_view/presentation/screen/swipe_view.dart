@@ -23,7 +23,6 @@ class SwipeViewState extends ConsumerState<SwipeView> {
   late final SwipeViewModelProvider _swipeViewModelProvider;
 
   bool _initOccurred = false;
-  bool _draw = false;
 
   @override
   void initState() {
@@ -51,12 +50,9 @@ class SwipeViewState extends ConsumerState<SwipeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       // appBar: AppBar(),
-      // resizeToAvoidBottomInset: false,
-
       body: Stack(
         children: [
           SafeArea(
-            // child: Container(color: Colors.blue),
             child: _swipeViewModel.confirmPostModelList.fold(
               (failure) => Container(
                 color: Colors.cyan,
@@ -151,31 +147,53 @@ class SwipeViewState extends ConsumerState<SwipeView> {
                             ),
                           ],
                         ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: TextFormField(
-                                focusNode: _swipeViewModel.commentFieldFocus,
-                                controller:
-                                    _swipeViewModel.textEditingController,
-                                decoration: const InputDecoration(
-                                  labelText: '메시지를 보내 응원하세요!',
-                                  border: OutlineInputBorder(),
-                                ),
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () async {
-                                _swipeViewModelProvider.sendTextReaction();
-                              },
-                              icon: const Icon(Icons.send),
-                            ),
-                          ],
+                        const SizedBox(
+                          height: 70,
                         ),
                       ],
                     ),
                   ],
                 ),
+              ),
+            ),
+          ),
+          SafeArea(
+            child: Container(
+              constraints: const BoxConstraints.expand(),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTapDown: (details) =>
+                          _swipeViewModelProvider.unfocusCommentTextForm(),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            focusNode: _swipeViewModel.commentFieldFocus,
+                            controller: _swipeViewModel.textEditingController,
+                            decoration: const InputDecoration(
+                              fillColor: Colors.white,
+                              filled: true,
+                              labelText: '메시지를 보내 응원하세요!',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () async {
+                            _swipeViewModelProvider.sendTextReaction();
+                          },
+                          icon: const Icon(Icons.send),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
