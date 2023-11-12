@@ -15,14 +15,13 @@ _$ConfirmPostModelImpl _$$ConfirmPostModelImplFromJson(
       title: json['title'] as String?,
       content: json['content'] as String?,
       imageUrl: json['imageUrl'] as String?,
+      owner: json['owner'] as String?,
+      fan: (json['fan'] as List<dynamic>?)?.map((e) => e as String).toList(),
       recentStrike: json['recentStrike'] as int?,
       createdAt: _$JsonConverterFromJson<Timestamp, DateTime>(
           json['createdAt'], const TimestampConverter().fromJson),
       updatedAt: _$JsonConverterFromJson<Timestamp, DateTime>(
           json['updatedAt'], const TimestampConverter().fromJson),
-      roles: (json['roles'] as Map<String, dynamic>?)?.map(
-        (k, e) => MapEntry(k, e as String),
-      ),
       attributes: (json['attributes'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(k, e as bool),
       ),
@@ -37,16 +36,13 @@ Map<String, dynamic> _$$ConfirmPostModelImplToJson(
       'title': instance.title,
       'content': instance.content,
       'imageUrl': instance.imageUrl,
+      'owner': instance.owner,
+      'fan': instance.fan,
       'recentStrike': instance.recentStrike,
       'createdAt': _$JsonConverterToJson<Timestamp, DateTime>(
-        instance.createdAt,
-        const TimestampConverter().toJson,
-      ),
+          instance.createdAt, const TimestampConverter().toJson),
       'updatedAt': _$JsonConverterToJson<Timestamp, DateTime>(
-        instance.updatedAt,
-        const TimestampConverter().toJson,
-      ),
-      'roles': instance.roles,
+          instance.updatedAt, const TimestampConverter().toJson),
       'attributes': instance.attributes,
     };
 

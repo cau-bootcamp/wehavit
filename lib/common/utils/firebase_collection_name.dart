@@ -12,4 +12,7 @@ class FirebaseCollectionName {
   static final friends = FirebaseAuth.instance.currentUser != null
       ? 'users/${FirebaseAuth.instance.currentUser?.uid}/friends'
       : 'invalid_address';
+  static final confirmPosts = FirebaseAuth.instance.currentUser != null
+      ? 'confirm_posts'
+      : 'invalid_address';
 }
