@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -21,19 +22,15 @@ class HomeScreen extends ConsumerWidget {
           children: [
             AppBar(
               backgroundColor: Colors.black87,
-              title: const Text(
-                '2023년 10월 2일',
+              title: Text(
+                DateFormat('yyyy년 MM월 dd일').format(DateTime.now()),
                 style:
                     TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
               actions: [
-//                IconButton(
-//                    icon: Icon(Icons.group, color: Colors.white),
-//                    onPressed: () {
-//                      Navigator.push(
-//                          context, MaterialPageRoute(builder: (context) =>
-//                          FriendsList()));
-//                    }),
+                IconButton(
+                    icon: Icon(Icons.group, color: Colors.white),
+                    onPressed: () {}),
                 IconButton(
                   icon: const Icon(Icons.notifications, color: Colors.white),
                   onPressed: () {},

@@ -50,7 +50,7 @@ dependencies:
   uuid: ^4.1.0
   syncfusion_flutter_charts: ^23.1.40
   syncfusion_flutter_gauges: ^23.1.40
-
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:
