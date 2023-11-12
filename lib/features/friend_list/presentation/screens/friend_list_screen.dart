@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wehavit/common/common.dart';
 import 'package:wehavit/features/friend_list/presentation/providers/friend_list_provider.dart';
 import 'package:wehavit/features/friend_list/presentation/widgets/add_friend_textfield_widget.dart';
 import 'package:wehavit/features/friend_list/presentation/widgets/friend_element_widget.dart';
@@ -21,7 +22,16 @@ class FriendListScreen extends ConsumerWidget {
     var vFriendListProvider = ref.watch(friendListProvider);
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.home, color: Colors.black54),
+            onPressed: () async {
+              context.go(RouteLocation.home);
+            },
+          ),
+        ],
+      ),
       body: Column(
         children: [
           Container(
