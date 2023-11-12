@@ -1,3 +1,4 @@
+// ignore_for_file: invalid_annotation_target
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -19,28 +20,39 @@ class ConfirmPostModel with _$ConfirmPostModel {
     'recentStrike! >= 0 && recentStrike! <= 170',
     'recentStrike must be between b0000000 and b1111111',
   )
-  @Assert('resolutionId != null', 'resolutionId must not be null')
-  @Assert('createdAt != null', 'createdAt must not be empty')
-  @Assert('updatedAt != null', 'createdAt must not be empty')
-  @Assert('roles != null', 'roles must not be empty')
-  @Assert('attributes != null', 'roles must not be empty')
+  @Assert('createdAt != null', 'createdAt must not be null')
+  @Assert('updatedAt != null', 'createdAt must not be null')
+  @Assert('fan != null', 'roles(fan) must not be null')
+  @Assert('owner != null', 'roles(owner) must not be null')
+  @Assert('attributes != null', 'attribute must not be null')
   @TimestampConverter()
   @DocumentReferenceJsonConverter()
   factory ConfirmPostModel({
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default('')
+    String? id,
     required String? resolutionGoalStatement,
     required DocumentReference<Map<String, dynamic>>? resolutionId,
     required String? title,
     required String? content,
     required String? imageUrl,
+    required String? owner,
+    required List<String>? fan,
     required int? recentStrike,
     required DateTime? createdAt,
     required DateTime? updatedAt,
-    required Map<String, String>? roles,
     required Map<String, bool>? attributes,
   }) = _ConfirmPostModel;
 
   factory ConfirmPostModel.fromJson(Map<String, dynamic> json) =>
       _$ConfirmPostModelFromJson(json);
+
+  factory ConfirmPostModel.fromFireStoreDocument(DocumentSnapshot doc) {
+    if (doc.data() == null) throw Exception('Document data was null');
+
+    return ConfirmPostModel.fromJson(doc.data() as Map<String, Object?>)
+        .copyWith(id: doc.id);
+  }
 }
 
 T? tryCast<T>(value) {

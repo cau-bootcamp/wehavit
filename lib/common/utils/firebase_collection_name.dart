@@ -9,4 +9,7 @@ class FirebaseCollectionName {
   static final resolutions = FirebaseAuth.instance.currentUser != null
       ? 'users/${FirebaseAuth.instance.currentUser?.uid}/resolutions'
       : 'invalid_address';
+  static final confirmPosts = FirebaseAuth.instance.currentUser != null
+      ? 'confirm_posts'
+      : 'invalid_address';
 }
