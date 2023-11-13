@@ -18,7 +18,8 @@ class SwipeView extends ConsumerStatefulWidget {
   }
 }
 
-class SwipeViewState extends ConsumerState<SwipeView> {
+class SwipeViewState extends ConsumerState<SwipeView>
+    with SingleTickerProviderStateMixin {
   late final SwipeViewModel _swipeViewModel;
   late final SwipeViewModelProvider _swipeViewModelProvider;
 
@@ -36,10 +37,14 @@ class SwipeViewState extends ConsumerState<SwipeView> {
     if (!_initOccurred) {
       _swipeViewModel = ref.watch(swipeViewModelProvider);
       _swipeViewModelProvider = ref.read(swipeViewModelProvider.notifier);
-      _swipeViewModelProvider.initializeCamera();
+
+      // _swipeViewModelProvider.initializeCamera();
+
       await ref
           .read(swipeViewModelProvider.notifier)
           .getTodayConfirmPostModelList();
+
+      setAnimationVariables();
 
       setState(() {});
       _initOccurred = true;
@@ -163,10 +168,9 @@ class SwipeViewState extends ConsumerState<SwipeView> {
               child: Column(
                 children: [
                   Expanded(
-                    child: GestureDetector(
-                      onTapDown: (details) =>
-                          _swipeViewModelProvider.unfocusCommentTextForm(),
-                    ),
+                    child: GestureDetector(onTapDown: (details) {
+                      _swipeViewModelProvider.unfocusCommentTextForm();
+                    }),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -182,6 +186,9 @@ class SwipeViewState extends ConsumerState<SwipeView> {
                               labelText: '메시지를 보내 응원하세요!',
                               border: OutlineInputBorder(),
                             ),
+                            onTap: () {
+                              _swipeViewModelProvider.startShrinkingLayout();
+                            },
                           ),
                         ),
                         IconButton(
@@ -300,6 +307,20 @@ class SwipeViewState extends ConsumerState<SwipeView> {
         );
       },
     );
+  }
+
+  void setAnimationVariables() {
+    _swipeViewModel.animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
+    _swipeViewModel.animation = Tween<double>(begin: 0, end: 100).animate(
+      CurvedAnimation(
+        parent: _swipeViewModel.animationController,
+        curve: Curves.linear,
+      ),
+    );
+    _swipeViewModel.animationController.value = 1;
   }
 
   void shootEmoji(

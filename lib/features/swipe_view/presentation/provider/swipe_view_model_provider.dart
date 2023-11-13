@@ -98,6 +98,7 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
 
   void unfocusCommentTextForm() {
     state.commentFieldFocus.unfocus();
+    startGrowingLayout();
   }
 
   Future<void> sendEmojiReaction() async {
@@ -145,5 +146,13 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
       reactionModel,
     );
     state.textEditingController.clear();
+  }
+
+  void startGrowingLayout() {
+    state.animationController.forward();
+  }
+
+  void startShrinkingLayout() {
+    state.animationController.reverse();
   }
 }

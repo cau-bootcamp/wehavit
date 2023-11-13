@@ -26,43 +26,45 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
           )
           .get();
 
-      debugPrint(fetchResult.docs.length.toString());
+      // debugPrint(fetchResult.docs.length.toString());
 
-      List<ConfirmPostModel> confirmPosts = fetchResult.docs
-          .map((doc) => ConfirmPostModel.fromFireStoreDocument(doc))
-          .toList();
+      // List<ConfirmPostModel> confirmPosts = fetchResult.docs
+      //     .map((doc) => ConfirmPostModel.fromFireStoreDocument(doc))
+      //     .toList();
 
       // DUMMY DATA
-      // final confirmPosts = [
-      //   ConfirmPostModel(
-      //     resolutionGoalStatement: '맛있는걸 많이 먹자',
-      //     resolutionId: FirebaseFirestore.instance.doc(
-      //         "users/g3TQoeVVc9VWMrD4uW7O2UzxdbG3/resolutions/7f91sVOSwUu9c7hlWan0"),
-      //     title: '커피를 마시자',
-      //     content:
-      //         '커피는 맛있어 와인도 맛있어 커피는 맛있어 와인도 맛있어 커피는 맛있어 와인도 맛있어 커피는 맛있어 와인도 맛있어 커피는 맛있어 와인도 맛있어 ',
-      //     imageUrl: "https://i2.ruliweb.com/cmt/21/08/24/17b7623fa15508040.jpg",
-      //     recentStrike: 65,
-      //     createdAt: DateTime.now(),
-      //     updatedAt: DateTime.now(),
-      //     roles: {"69dlXoGSBKhzrySuhb8t9MvqzdD3": "owner"},
-      //     attributes: {},
-      //   ),
-      //   ConfirmPostModel(
-      //     resolutionGoalStatement: '맛있는걸 많이 먹자2',
-      //     resolutionId: FirebaseFirestore.instance.doc(
-      //         "users/g3TQoeVVc9VWMrD4uW7O2UzxdbG3/resolutions/7f91sVOSwUu9c7hlWan0"),
-      //     title: '커피를 마시자2',
-      //     content:
-      //         '222커피는 맛있어 와인도 맛있어 커피는 맛있어 와인도 맛있어 커피는 맛있어 와인도 맛있어 커피는 맛있어 와인도 맛있어 커피는 맛있어 와인도 맛있어',
-      //     imageUrl: "https://i2.ruliweb.com/cmt/21/08/24/17b7623fa15508040.jpg",
-      //     recentStrike: 65,
-      //     createdAt: DateTime.now(),
-      //     updatedAt: DateTime.now(),
-      //     roles: {"69dlXoGSBKhzrySuhb8t9MvqzdD3": "owner"},
-      //     attributes: {},
-      //   ),
-      // ];
+      final confirmPosts = [
+        ConfirmPostModel(
+          resolutionGoalStatement: '맛있는걸 많이 먹자',
+          resolutionId: FirebaseFirestore.instance.doc(
+              "users/g3TQoeVVc9VWMrD4uW7O2UzxdbG3/resolutions/7f91sVOSwUu9c7hlWan0"),
+          title: '커피를 마시자',
+          content:
+              '커피는 맛있어 와인도 맛있어 커피는 맛있어 와인도 맛있어 커피는 맛있어 와인도 맛있어 커피는 맛있어 와인도 맛있어 커피는 맛있어 와인도 맛있어 ',
+          imageUrl: "https://i2.ruliweb.com/cmt/21/08/24/17b7623fa15508040.jpg",
+          recentStrike: 65,
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+          attributes: {},
+          owner: '69dlXoGSBKhzrySuhb8t9MvqzdD3',
+          fan: [],
+        ),
+        ConfirmPostModel(
+          resolutionGoalStatement: '맛있는걸 많이 먹자2',
+          resolutionId: FirebaseFirestore.instance.doc(
+              "users/g3TQoeVVc9VWMrD4uW7O2UzxdbG3/resolutions/7f91sVOSwUu9c7hlWan0"),
+          title: '커피를 마시자2',
+          content:
+              '222커피는 맛있어 와인도 맛있어 커피는 맛있어 와인도 맛있어 커피는 맛있어 와인도 맛있어 커피는 맛있어 와인도 맛있어 커피는 맛있어 와인도 맛있어',
+          imageUrl: "https://i2.ruliweb.com/cmt/21/08/24/17b7623fa15508040.jpg",
+          recentStrike: 65,
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+          owner: '69dlXoGSBKhzrySuhb8t9MvqzdD3',
+          fan: [],
+          attributes: {},
+        ),
+      ];
 
       return Future(() => right(confirmPosts));
     } on Exception {

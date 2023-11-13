@@ -16,7 +16,8 @@ class SwipeViewCellWidget extends ConsumerStatefulWidget {
 }
 
 class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
-  late final SwipeViewModel swipeViewModel;
+  late final SwipeViewModel _swipeViewModel;
+  late final SwipeViewModelProvider _swipeViewModelProvider;
 
   @override
   void initState() {
@@ -26,7 +27,8 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    swipeViewModel = ref.watch(swipeViewModelProvider);
+    _swipeViewModel = ref.watch(swipeViewModelProvider);
+    _swipeViewModelProvider = ref.read(swipeViewModelProvider.notifier);
   }
 
   @override
@@ -36,52 +38,50 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
         child: Column(
           children: [
             // 프로필 영역
-            Container(
-              child: Column(
-                children: [
-                  FutureBuilder<UserModel>(
-                    future: swipeViewModel
-                        .userModelList[swipeViewModel.currentCellIndex],
-                    builder: (
-                      BuildContext context,
-                      AsyncSnapshot<UserModel> snapshot,
-                    ) {
-                      // 해당 부분은 data를 아직 받아 오지 못했을때 실행되는 코드
-                      if (snapshot.hasData == false) {
-                        return const SizedBox(
-                          width: 100,
-                          height: 100,
-                          child: CircularProgressIndicator(),
-                        );
-                      } else if (snapshot.hasError == true) {
-                        return const SizedBox(
-                          width: 100,
-                          height: 100,
-                          child: Placeholder(),
-                        );
-                      } else {
-                        return Column(
-                          children: [
-                            CircleAvatar(
-                              radius: 40,
-                              foregroundImage:
-                                  NetworkImage(snapshot.data!.imageUrl),
-                              backgroundColor: Colors.grey,
+            Column(
+              children: [
+                FutureBuilder<UserModel>(
+                  future: _swipeViewModel
+                      .userModelList[_swipeViewModel.currentCellIndex],
+                  builder: (
+                    BuildContext context,
+                    AsyncSnapshot<UserModel> snapshot,
+                  ) {
+                    // 해당 부분은 data를 아직 받아 오지 못했을때 실행되는 코드
+                    if (snapshot.hasData == false) {
+                      return const SizedBox(
+                        width: 100,
+                        height: 100,
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (snapshot.hasError == true) {
+                      return const SizedBox(
+                        width: 100,
+                        height: 100,
+                        child: Placeholder(),
+                      );
+                    } else {
+                      return Column(
+                        children: [
+                          CircleAvatar(
+                            radius: 40,
+                            foregroundImage:
+                                NetworkImage(snapshot.data!.imageUrl),
+                            backgroundColor: Colors.grey,
+                          ),
+                          Text(
+                            snapshot.data!.displayName,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
                             ),
-                            Text(
-                              snapshot.data!.displayName,
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        );
-                      }
-                    },
-                  ),
-                ],
-              ),
+                          ),
+                        ],
+                      );
+                    }
+                  },
+                ),
+              ],
             ),
             // 사진 영역
             Expanded(
@@ -119,8 +119,7 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
             ),
             // 통계치 영역
             SizedBox(
-              height:
-                  swipeViewModel.commentFieldFocus.hasFocus == true ? 0 : 100,
+              height: _swipeViewModel.animation.value,
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4.0),
                 child: Container(

@@ -37,4 +37,9 @@ class SwipeViewModel {
   // Text Reaction UI Variables
   TextEditingController textEditingController = TextEditingController();
   FocusNode commentFieldFocus = FocusNode();
+
+  // Variables For View Layout Animation
+  bool isLayoutGrowed = true;
+  late AnimationController animationController;
+  late Animation animation;
 }
