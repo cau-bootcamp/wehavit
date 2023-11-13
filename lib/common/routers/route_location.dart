@@ -11,4 +11,7 @@ class RouteLocation {
   static const String friendList = '/friendList';
   static const String addResolution = '/addResolution';
   static const String testPage = '/testPage';
+  static const String waitingRoom = '/waitingRoom';
+  static const String liveWriting = '$waitingRoom/liveWriting';
+  static const String swipeView = '/swipeView';
 }

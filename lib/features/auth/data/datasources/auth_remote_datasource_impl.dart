@@ -37,9 +37,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       );
 
       await _usersCollectionRef().doc(result.user?.uid).set({
-        FirebaseFieldName.displayName: result.user?.displayName,
-        FirebaseFieldName.email: result.user?.email,
-        FirebaseFieldName.imageUrl: result.user?.photoURL,
+        FirebaseUserFieldName.displayName: result.user?.displayName,
+        FirebaseUserFieldName.email: result.user?.email,
+        FirebaseUserFieldName.imageUrl: result.user?.photoURL,
       });
 
       return AuthResult.success;

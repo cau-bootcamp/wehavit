@@ -1,17 +1,17 @@
 import 'package:flutter/foundation.dart' show immutable;
 
 @immutable
-class FirebaseFieldName {
-  const FirebaseFieldName._();
+class FirebaseUserFieldName {
+  const FirebaseUserFieldName._();
 
   //users
   static const displayName = 'displayName';
   static const email = 'email';
   static const imageUrl = 'imageUrl';
+}
 
-  //friend
-  static const friendEmail = 'friendEmail';
-  static const friendState = 'friendState';
+@immutable
+class FirebaseResolutionFieldName {
 
   // resolutions
   static const resolutionGoalStatement = 'goalStatement';
@@ -20,4 +20,20 @@ class FirebaseFieldName {
   static const resolutionStartDate = 'startDate';
   static const resolutionPeriod = 'period';
   static const resolutionIsActive = 'isActive';
+}
+
+@immutable
+class FirebaseReactionFieldName {
+  static const complementerUid = 'complementerUid';
+  static const comment = 'comment';
+  static const emoji = 'emoji';
+  static const hasRead = 'hasRead';
+  static const instantPhotoUrl = 'instantPhotoUrl';
+  static const reactionType = 'reactionType';
+}
+
+@immutable
+class FirebaseFriendFieldName {
+  static const friendEmail = 'friendEmail';
+  static const friendState = 'friendState';
 }
