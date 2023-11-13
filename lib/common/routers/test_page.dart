@@ -36,6 +36,12 @@ class TestPage extends ConsumerWidget {
             ),
             MoveButton(
               onPressCallback: () async {
+                context.push(RouteLocation.home);
+              },
+              buttonText: 'Go to Main View',
+            ),
+            MoveButton(
+              onPressCallback: () async {
                 context.push(RouteLocation.friendList);
               },
               buttonText: 'Go to Friends List View',
@@ -104,17 +110,3 @@ class MoveButton extends StatelessWidget {
     );
   }
 }
-
-//
-//
-//        Flexible(
-//          child: ElevatedButton(
-//            onPressed: () async {
-//              context.go(RouteLocation.myPage);
-//            },
-//            child: Text(
-//              'Go to myPage',
-//              style: textTheme.bodyMedium,
-//            ),
-//          ),
-//        ),

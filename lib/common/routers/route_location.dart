@@ -5,7 +5,7 @@ class RouteLocation {
   static const String splash = '/splash';
   static const String settings = '/settings';
 
-  // static const String home = '/';
+  static const String home = '/';
   static const String auth = '/auth';
   static const String profile = '/profile';
   static const String myPage = '/myPage';

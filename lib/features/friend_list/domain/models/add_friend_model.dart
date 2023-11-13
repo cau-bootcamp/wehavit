@@ -1,15 +1,15 @@
 class AddFriendModel {
   AddFriendModel({
-    this.friendID = '',
+    this.friendEmail = '',
   });
 
-  String friendID;
+  String friendEmail;
 
   AddFriendModel copyWith({
-    String? friendID,
+    required String friendEmail,
   }) {
     return AddFriendModel(
-      friendID: friendID ?? this.friendID,
+      friendEmail: friendEmail,
     );
   }
 }
