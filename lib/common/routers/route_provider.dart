@@ -99,18 +99,6 @@ class AuthRoute extends GoRouteData {
   }
 }
 
-@TypedGoRoute<HomeRoute>(path: HomeRoute.path)
-class HomeRoute extends GoRouteData {
-  const HomeRoute();
-
-  static const path = RouteLocation.home;
-
-  @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return const HomeScreen();
-  }
-}
-
 @TypedGoRoute<MyPageRoute>(path: MyPageRoute.path)
 class MyPageRoute extends GoRouteData {
   const MyPageRoute();
