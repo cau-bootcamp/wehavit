@@ -5,9 +5,11 @@ import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/features/friend_list/data/datasources/friend_datasource.dart';
 import 'package:wehavit/features/friend_list/data/datasources/friend_datasource_provider.dart';
 import 'package:wehavit/features/friend_list/data/entities/friend_entity.dart';
-import 'package:wehavit/features/friend_list/domain/models/friend_model.dart';
 import 'package:wehavit/features/friend_list/domain/models/add_friend_model.dart';
+import 'package:wehavit/features/friend_list/domain/models/friend_model.dart';
 import 'package:wehavit/features/friend_list/domain/repositories/friend_repository.dart';
+
+import '../entities/add_friend_entity.dart';
 
 class FriendRepositoryImpl implements FriendRepository {
   FriendRepositoryImpl(Ref ref) {
@@ -19,12 +21,11 @@ class FriendRepositoryImpl implements FriendRepository {
   @override
   EitherFuture<List<FriendModel>> getFriendModelList() async {
     try {
-      final getResult =
-      await _friendDatasource.getFriendEntityList();
+      final getResult = await _friendDatasource.getFriendEntityList();
 
       return getResult.fold((failure) => left(failure), (entityList) {
         final modelList =
-        entityList.map((entity) => entity.toFriendModel()).toList();
+            entityList.map((entity) => entity.toFriendModel()).toList();
 
         return Future(() => right(modelList));
       });
@@ -35,9 +36,9 @@ class FriendRepositoryImpl implements FriendRepository {
 
   @override
   EitherFuture<bool> uploadFriendModel(
-      AddFriendModel model,
-      ) async {
-    final entity = FriendEntity.fromFriendModel(model);
-    return _friendDatasource.uploadFriendEntity(entity);
+    AddFriendModel model,
+  ) async {
+    final entity = AddFriendEntity.fromAddFriendModel(model);
+    return _friendDatasource.uploadAddFriendEntity(entity);
   }
 }

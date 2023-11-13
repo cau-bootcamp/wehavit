@@ -17,50 +17,55 @@ class AddResolutionScreen extends ConsumerWidget {
       appBar: AppBar(
         shadowColor: Colors.transparent,
       ),
-      body: Column(children: [
-        Text("나의 목표"),
-        TextField(
-          onChanged: (value) {
-            ref.read(addResolutionProvider.notifier).changeGoalStatement(value);
-          },
-        ),
-        Text("실천할 행동"),
-        TextField(
-          onChanged: (value) {
-            ref
-                .read(addResolutionProvider.notifier)
-                .changeActionStatement(value);
-          },
-        ),
-        Text("실천 주기"),
-        Row(
-          children: Iterable<int>.generate(7).map((idx) {
-            return Expanded(
-              child: TextButton(
-                onPressed: () {
-                  ref
-                      .read(addResolutionProvider.notifier)
-                      .changePeriodState(idx);
-                },
-                child: Text(
-                  dayList[idx],
-                  style: TextStyle(
-                    color: provider.isDaySelectedList[idx]
-                        ? Colors.red
-                        : Colors.cyan,
+      body: Column(
+        children: [
+          const Text('나의 목표'),
+          TextField(
+            onChanged: (value) {
+              ref
+                  .read(addResolutionProvider.notifier)
+                  .changeGoalStatement(value);
+            },
+          ),
+          const Text('실천할 행동'),
+          TextField(
+            onChanged: (value) {
+              ref
+                  .read(addResolutionProvider.notifier)
+                  .changeActionStatement(value);
+            },
+          ),
+          const Text('실천 주기'),
+          Row(
+            children: Iterable<int>.generate(7).map((idx) {
+              return Expanded(
+                child: TextButton(
+                  onPressed: () {
+                    ref
+                        .read(addResolutionProvider.notifier)
+                        .changePeriodState(idx);
+                  },
+                  child: Text(
+                    dayList[idx],
+                    style: TextStyle(
+                      color: provider.isDaySelectedList[idx]
+                          ? Colors.red
+                          : Colors.cyan,
+                    ),
                   ),
                 ),
-              ),
-            );
-          }).toList(),
-        ),
-        Text("나의 다짐"),
-        TextField(
-          onChanged: (value) {
-            ref.read(addResolutionProvider.notifier).changeOathStatement(value);
-          },
-        ),
-        ElevatedButton(
+              );
+            }).toList(),
+          ),
+          const Text('나의 다짐'),
+          TextField(
+            onChanged: (value) {
+              ref
+                  .read(addResolutionProvider.notifier)
+                  .changeOathStatement(value);
+            },
+          ),
+          ElevatedButton(
             onPressed: () async {
               ref
                   .read(addResolutionProvider.notifier)
@@ -78,8 +83,10 @@ class AddResolutionScreen extends ConsumerWidget {
                 },
               );
             },
-            child: Text("UPLOAD Button"))
-      ]),
+            child: const Text('UPLOAD Button'),
+          ),
+        ],
+      ),
     );
   }
 }

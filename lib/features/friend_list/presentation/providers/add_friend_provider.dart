@@ -1,12 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/features/friend_list/domain/models/add_friend_model.dart';
-import 'package:wehavit/features/friend_list/domain/models/friend_model.dart';
 import 'package:wehavit/features/friend_list/domain/usecases/upload_friend_usecase.dart';
 import 'package:wehavit/features/friend_list/domain/usecases/upload_friend_usecase_provider.dart';
 
-final addFriendProvider = StateNotifierProvider.autoDispose<
-    AddFriendNotifier, AddFriendModel>((ref) {
+final addFriendProvider =
+    StateNotifierProvider.autoDispose<AddFriendNotifier, AddFriendModel>((ref) {
   return AddFriendNotifier(ref);
 });
 
@@ -17,11 +16,16 @@ class AddFriendNotifier extends StateNotifier<AddFriendModel> {
 
   late final UploadFriendUseCase _uploadFriendUsecase;
 
-  EitherFuture<bool> uploadFriendModel() {
-    AddFriendModel newModel = AddFriendModel(
-      friendID: state.friendID,
-    );
+  void setFriendEmail(String friendEmail) {
+    state = state.copyWith(friendEmail: friendEmail);
+    //print('add_friend_provider : ${state.friendEmail}');
+  }
 
+  EitherFuture<bool> uploadFriendModel() {
+    //print('watch state.friendEmail : ${state.friendEmail}');
+    AddFriendModel newModel = AddFriendModel(
+      friendEmail: state.friendEmail,
+    );
     return _uploadFriendUsecase.call(newModel);
   }
 }
