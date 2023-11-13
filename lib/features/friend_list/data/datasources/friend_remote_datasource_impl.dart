@@ -25,8 +25,8 @@ class FriendRemoteDatasourceImpl implements FriendDatasource {
             // 주석 아래 if문을 바로 두 문장으로 변경하면 friend state가 1인 경우의 친구의 정보만 가져옵니다.
             //  if (doc.data()[FirebaseFieldName.friendState] == 1 &&
             //      doc.data()[FirebaseFieldName.friendEmail] != null) {
-            if (doc.data()[FirebaseFieldName.friendEmail] != null) {
-              return doc.data()[FirebaseFieldName.friendEmail] as String;
+            if (doc.data()[FirebaseFriendFieldName.friendEmail] != null) {
+              return doc.data()[FirebaseFriendFieldName.friendEmail] as String;
             }
             return null;
           })
@@ -39,7 +39,7 @@ class FriendRemoteDatasourceImpl implements FriendDatasource {
         // email을 기반으로 users collection에서 where로 검색하여 친구의 문서를 가지고 온다.
         final friendDocSnapshots = await FirebaseFirestore.instance
             .collection(FirebaseCollectionName.users)
-            .where(FirebaseFieldName.email, whereIn: friendEmails)
+            .where(FirebaseUserFieldName.email, whereIn: friendEmails)
             .get();
 
         friendEntityList = friendDocSnapshots.docs
@@ -62,7 +62,10 @@ class FriendRemoteDatasourceImpl implements FriendDatasource {
   ) async {
     final friendsDocsSnapshot = await FirebaseFirestore.instance
         .collection(FirebaseCollectionName.friends)
-        .where(FirebaseFieldName.friendEmail, isEqualTo: entity.friendEmail)
+        .where(
+          FirebaseFriendFieldName.friendEmail,
+          isEqualTo: entity.friendEmail,
+        )
         .get();
     if (friendsDocsSnapshot.docs.isNotEmpty) {
       return Future(
@@ -75,13 +78,13 @@ class FriendRemoteDatasourceImpl implements FriendDatasource {
     final friendSnapshot = await FirebaseFirestore.instance
         .collection(FirebaseCollectionName.users)
         .where(
-          FirebaseFieldName.email,
+          FirebaseUserFieldName.email,
           isEqualTo: entity.friendEmail,
         )
         .get();
 
     final friendRef = friendSnapshot.docs
-        .map((doc) => doc.data()[FirebaseFieldName.friendEmail])
+        .map((doc) => doc.data()[FirebaseFriendFieldName.friendEmail])
         .toList();
 
     if (friendRef.isNotEmpty) {

@@ -14,8 +14,8 @@ extension AddFriendEntityConvertFunctions on AddFriendEntity {
   Map<String, dynamic> toFirebaseDocument() {
     final Map<String, dynamic> doc = {};
     try {
-      doc[FirebaseFieldName.friendEmail] = friendEmail;
-      doc[FirebaseFieldName.friendState] = 0;
+      doc[FirebaseFriendFieldName.friendEmail] = friendEmail;
+      doc[FirebaseFriendFieldName.friendState] = 0;
     } on Exception {
       //print('Error : $friendID');
     }

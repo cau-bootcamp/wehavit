@@ -23,7 +23,8 @@ class ResolutionRemoteDatasourceImpl implements ResolutionDatasource {
     try {
       final fetchResult = await FirebaseFirestore.instance
           .collection(FirebaseCollectionName.resolutions)
-          .where(FirebaseFieldName.resolutionIsActive, isEqualTo: true)
+          .where(FirebaseResolutionFieldName.resolutionIsActive,
+              isEqualTo: true)
           .get();
 
       resolutionEntityList = fetchResult.docs

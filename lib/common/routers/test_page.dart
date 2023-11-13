@@ -54,6 +54,12 @@ class TestPage extends ConsumerWidget {
             ),
             MoveButton(
               onPressCallback: () async {
+                context.go(RouteLocation.liveWriting);
+              },
+              buttonText: 'Go to LiveWriting Page',
+            ),
+            MoveButton(
+              onPressCallback: () async {
                 context.go(RouteLocation.auth);
               },
               buttonText: 'Go to Login Page',
@@ -63,6 +69,12 @@ class TestPage extends ConsumerWidget {
                 ref.read(authProvider.notifier).logOut();
               },
               buttonText: 'Log out',
+            ),
+            MoveButton(
+              onPressCallback: () async {
+                context.go(RouteLocation.swipeView);
+              },
+              buttonText: 'Swipe View',
             ),
           ],
         ),
