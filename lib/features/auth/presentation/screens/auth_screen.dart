@@ -7,7 +7,7 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/features/features.dart';
 
 class AuthScreen extends ConsumerWidget {
-  const AuthScreen({Key? key}) : super(key: key);
+  const AuthScreen({super.key});
 
   static AuthScreen builder(
     BuildContext context,

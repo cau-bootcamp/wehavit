@@ -76,6 +76,12 @@ class TestPage extends ConsumerWidget {
               },
               buttonText: 'Swipe View',
             ),
+            MoveButton(
+              onPressCallback: () async {
+                context.push('/route/to/nowhere');
+              },
+              buttonText: 'Go to Error View',
+            ),
           ],
         ),
       ),
