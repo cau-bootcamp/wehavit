@@ -4,6 +4,6 @@ import 'package:wehavit/features/swipe_view/domain/usecase/fetch_user_data_from_
 
 final fetchUserDataFromIdUsecaseProvider =
     Provider<FetchUserDataFromIdUsecase>((ref) {
-  final _repository = ref.watch(userModelFetchRepositoryProvider);
-  return FetchUserDataFromIdUsecase(_repository);
+  final repository = ref.watch(userModelFetchRepositoryProvider);
+  return FetchUserDataFromIdUsecase(repository);
 });
