@@ -24,43 +24,37 @@ class TestPage extends ConsumerWidget {
           children: [
             MoveButton(
               onPressCallback: () async {
-                context.go(RouteLocation.myPage);
+                context.push(RouteLocation.myPage);
               },
               buttonText: 'Go to My Page',
             ),
             MoveButton(
               onPressCallback: () async {
-                context.go(RouteLocation.addResolution);
+                context.push(RouteLocation.addResolution);
               },
               buttonText: 'Go to Add Resolution Page',
             ),
             MoveButton(
               onPressCallback: () async {
-                context.go(RouteLocation.home);
-              },
-              buttonText: 'Go to Main View',
-            ),
-            MoveButton(
-              onPressCallback: () async {
-                context.go(RouteLocation.friendList);
+                context.push(RouteLocation.friendList);
               },
               buttonText: 'Go to Friends List View',
             ),
             MoveButton(
               onPressCallback: () async {
-                context.go(RouteLocation.profile);
+                context.push(RouteLocation.profile);
               },
               buttonText: 'Go to Profile Page',
             ),
             MoveButton(
               onPressCallback: () async {
-                context.go(RouteLocation.liveWriting);
+                context.push(RouteLocation.liveWriting);
               },
               buttonText: 'Go to LiveWriting Page',
             ),
             MoveButton(
               onPressCallback: () async {
-                context.go(RouteLocation.auth);
+                context.push(RouteLocation.auth);
               },
               buttonText: 'Go to Login Page',
             ),
@@ -72,9 +66,15 @@ class TestPage extends ConsumerWidget {
             ),
             MoveButton(
               onPressCallback: () async {
-                context.go(RouteLocation.swipeView);
+                context.push(RouteLocation.swipeView);
               },
               buttonText: 'Swipe View',
+            ),
+            MoveButton(
+              onPressCallback: () async {
+                context.push('/route/to/nowhere');
+              },
+              buttonText: 'Go to Error View',
             ),
           ],
         ),
