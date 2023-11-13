@@ -37,12 +37,15 @@ class SwipeViewState extends ConsumerState<SwipeView>
     if (!_initOccurred) {
       _swipeViewModel = ref.watch(swipeViewModelProvider);
       _swipeViewModelProvider = ref.read(swipeViewModelProvider.notifier);
-
-      // _swipeViewModelProvider.initializeCamera();
-
       await ref
           .read(swipeViewModelProvider.notifier)
           .getTodayConfirmPostModelList();
+
+      await _swipeViewModelProvider.initializeCamera();
+
+      _swipeViewModel.cameraButtonPosition =
+          _swipeViewModelProvider.getCameraButtonPosition() ??
+              const Offset(0, 0);
 
       setAnimationVariables();
 
@@ -54,9 +57,47 @@ class SwipeViewState extends ConsumerState<SwipeView>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       // appBar: AppBar(),
       body: Stack(
         children: [
+          SafeArea(
+            child: Container(
+              constraints: const BoxConstraints.expand(),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Container(),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            focusNode: _swipeViewModel.commentFieldFocus,
+                            controller: _swipeViewModel.textEditingController,
+                            decoration: const InputDecoration(
+                              fillColor: Colors.white,
+                              filled: true,
+                              labelText: '메시지를 보내 응원하세요!',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () async {
+                            _swipeViewModelProvider.sendTextReaction();
+                          },
+                          icon: const Icon(Icons.send),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
           SafeArea(
             child: _swipeViewModel.confirmPostModelList.fold(
               (failure) => Container(
@@ -94,63 +135,86 @@ class SwipeViewState extends ConsumerState<SwipeView>
                       ),
                     ),
                     Expanded(
-                      child: CarouselSlider(
-                        options: CarouselOptions(
-                          viewportFraction: 1.0,
-                          height: MediaQuery.of(context).size.height,
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              _swipeViewModel.currentCellIndex = index;
-                            });
-                          },
-                          enableInfiniteScroll: false,
-                        ),
-                        carouselController: _swipeViewModel.carouselController,
-                        items: List<Widget>.generate(
-                          modelList.length,
-                          (index) {
-                            return Flex(
-                              direction: Axis.vertical,
-                              children: [
-                                SwipeViewCellWidget(
-                                  model: modelList[index],
-                                ),
-                              ],
-                            );
-                          },
+                      child: GestureDetector(
+                        onTap: () =>
+                            _swipeViewModelProvider.unfocusCommentTextForm(),
+                        child: CarouselSlider(
+                          options: CarouselOptions(
+                            viewportFraction: 1.0,
+                            height: MediaQuery.of(context).size.height,
+                            onPageChanged: (index, reason) {
+                              setState(() {
+                                _swipeViewModel.currentCellIndex = index;
+                              });
+                            },
+                            enableInfiniteScroll: false,
+                          ),
+                          carouselController:
+                              _swipeViewModel.carouselController,
+                          items: List<Widget>.generate(
+                            modelList.length,
+                            (index) {
+                              return Flex(
+                                direction: Axis.vertical,
+                                children: [
+                                  SwipeViewCellWidget(
+                                    model: modelList[index],
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ),
                     Column(
                       children: [
-                        Row(
-                          children: [
-                            Expanded(child: Container()),
-                            GestureDetector(
-                              onTapUp: (details) async =>
-                                  emojiSheetWidget(context)
-                                      .whenComplete(() async {
-                                _swipeViewModelProvider.sendEmojiReaction();
-                              }),
-                              child: Container(
+                        SizedBox(
+                          height: _swipeViewModel.commentFieldFocus.hasFocus
+                              ? 0
+                              : 50,
+                          child: Row(
+                            children: [
+                              Expanded(child: Container()),
+                              GestureDetector(
+                                onTapUp: (details) async =>
+                                    emojiSheetWidget(context)
+                                        .whenComplete(() async {
+                                  _swipeViewModelProvider.sendEmojiReaction();
+                                }),
+                                child: Container(
+                                  width: 50,
+                                  height: 50,
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Center(
+                                    child: Text(
+                                      '😄',
+                                      style: TextStyle(fontSize: 30),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                key: _swipeViewModel.cameraButtonPlaceholderKey,
                                 width: 50,
                                 height: 50,
                                 decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
                                   // color: Colors.black,
                                 ),
-                                child: const Center(
+                                child: Center(
                                   child: Text(
-                                    '😄',
-                                    style: TextStyle(fontSize: 30),
+                                    _swipeViewModel.isCameraInitialized == true
+                                        ? '📸'
+                                        : '❌',
+                                    style: const TextStyle(fontSize: 30),
                                   ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(
-                              width: 70,
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                         const SizedBox(
                           height: 70,
@@ -168,9 +232,7 @@ class SwipeViewState extends ConsumerState<SwipeView>
               child: Column(
                 children: [
                   Expanded(
-                    child: GestureDetector(onTapDown: (details) {
-                      _swipeViewModelProvider.unfocusCommentTextForm();
-                    }),
+                    child: Container(),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -206,6 +268,7 @@ class SwipeViewState extends ConsumerState<SwipeView>
           ),
           if (_swipeViewModel.isCameraInitialized)
             ReactionCameraWidget(
+              originPosition: _swipeViewModel.cameraButtonPosition,
               cameraController: _swipeViewModel.cameraController,
             ),
         ],

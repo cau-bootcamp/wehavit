@@ -9,8 +9,13 @@ import 'package:wehavit/features/swipe_view/presentation/provider/reaction_camer
 import 'package:wehavit/features/swipe_view/presentation/provider/swipe_view_model_provider.dart';
 
 class ReactionCameraWidget extends ConsumerStatefulWidget {
-  const ReactionCameraWidget({super.key, required this.cameraController});
+  const ReactionCameraWidget({
+    super.key,
+    required this.originPosition,
+    required this.cameraController,
+  });
 
+  final Offset originPosition;
   final CameraController cameraController;
   @override
   ConsumerState<ReactionCameraWidget> createState() =>
@@ -44,6 +49,18 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
         _reactionCameraWidgetModel.screenHeight / 3;
     _reactionCameraWidgetModel.cameraWidgetRadius =
         _reactionCameraWidgetModel.screenWidth / 2.3;
+
+    _reactionCameraWidgetModel.cameraButtonOriginXOffset =
+        widget.originPosition.dx;
+    _reactionCameraWidgetModel.cameraButtonOriginYOffset =
+        widget.originPosition.dy;
+
+    _reactionCameraWidgetModel.cameraButtonXOffset =
+        _reactionCameraWidgetModel.cameraButtonOriginXOffset;
+    _reactionCameraWidgetModel.cameraButtonYOffset =
+        _reactionCameraWidgetModel.cameraButtonOriginYOffset;
+
+    setState(() {});
   }
 
   @override
@@ -96,8 +113,8 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
             ),
           ),
           Positioned(
-            right: _reactionCameraWidgetModel.cameraButtonXOffset,
-            bottom: _reactionCameraWidgetModel.cameraButtonYOffset,
+            left: _reactionCameraWidgetModel.cameraButtonXOffset,
+            top: _reactionCameraWidgetModel.cameraButtonYOffset,
             child: GestureDetector(
               onTap: () {
                 setState(() {
@@ -126,10 +143,10 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
                 setState(() {
                   _reactionCameraWidgetModelProvider.isFocusingMode = true;
                   _reactionCameraWidgetModel.cameraButtonXOffset =
-                      _reactionCameraWidgetModel.cameraButtonXOffset -
+                      _reactionCameraWidgetModel.cameraButtonXOffset +
                           details.delta.dx;
                   _reactionCameraWidgetModel.cameraButtonYOffset =
-                      _reactionCameraWidgetModel.cameraButtonYOffset -
+                      _reactionCameraWidgetModel.cameraButtonYOffset +
                           details.delta.dy;
                 });
               },
@@ -157,17 +174,13 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
                 });
               },
               child: Container(
-                width: 50,
-                height: 50,
+                width: _reactionCameraWidgetModel.cameraButtonRadius * 2,
+                height: _reactionCameraWidgetModel.cameraButtonRadius * 2,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: _reactionCameraWidgetModelProvider.isFocusingMode
                       ? Colors.amber
                       : Colors.transparent,
-                ),
-                child: Text(
-                  _reactionCameraWidgetModelProvider.isFocusingMode ? '' : '📸',
-                  style: const TextStyle(fontSize: 45),
                 ),
               ),
             ),

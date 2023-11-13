@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/models/user_model/user_model.dart';
 import 'package:wehavit/common/utils/no_params.dart';
@@ -80,17 +83,28 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
   }
 
   Future<bool> initializeCamera() async {
-    CameraDescription description = await availableCameras().then(
-      (cameras) => cameras.firstWhere(
-        (camera) => camera.lensDirection == CameraLensDirection.front,
-      ),
+    CameraDescription? description = await availableCameras().then(
+      (cameras) {
+        if (cameras.isEmpty) {
+          return null;
+        }
+
+        return cameras.firstWhere(
+          (camera) => camera.lensDirection == CameraLensDirection.front,
+        );
+      },
+      onError: (onError) {
+        return Future(() => false);
+      },
     );
-    if (!state.isCameraInitialized) {
+
+    if (!state.isCameraInitialized && description != null) {
       state.cameraController =
           CameraController(description, ResolutionPreset.medium);
 
       await state.cameraController.initialize();
       state.isCameraInitialized = true;
+      return Future(() => true);
     }
 
     return Future(() => true);
@@ -134,7 +148,6 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
   }
 
   Future<void> sendTextReaction() async {
-    print("DEBUG");
     unfocusCommentTextForm();
 
     final reactionModel = ReactionModel(
@@ -154,5 +167,16 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
 
   void startShrinkingLayout() {
     state.animationController.reverse();
+  }
+
+  Offset? getCameraButtonPosition() {
+    if (state.cameraButtonPlaceholderKey.currentContext != null) {
+      final RenderBox renderBox =
+          state.cameraButtonPlaceholderKey.currentContext!.findRenderObject()
+              as RenderBox;
+      Offset offset = renderBox.localToGlobal(Offset.zero);
+      return offset;
+    }
+    return null;
   }
 }

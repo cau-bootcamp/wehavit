@@ -128,7 +128,6 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
               ),
             ),
 
-            // ),
             // 인증글 영역
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 4.0),
