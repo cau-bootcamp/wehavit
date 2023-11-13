@@ -147,6 +147,18 @@ class AddResolutionRoute extends GoRouteData {
   }
 }
 
+@TypedGoRoute<FriendListRoute>(path: FriendListRoute.path)
+class FriendListRoute extends GoRouteData {
+  const FriendListRoute();
+
+  static const path = RouteLocation.friendList;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const FriendListScreen();
+  }
+}
+
 @TypedGoRoute<LiveWritingRoute>(path: LiveWritingRoute.path)
 class LiveWritingRoute extends GoRouteData {
   const LiveWritingRoute();

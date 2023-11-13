@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:wehavit/features/live_writing/data/data.dart';
 import 'package:wehavit/features/live_writing/presentation/widgets/confirm_post_content_input.dart';
 import 'package:wehavit/features/live_writing/presentation/widgets/confirm_post_title_input.dart';
 
@@ -20,7 +21,13 @@ class ConfirmPostForm extends HookConsumerWidget {
     var titleController = useTextEditingController();
     var contentController = useTextEditingController();
 
-    void onSave() {
+    Future<void> onSave() async {
+      //getAllFanMarkedConfirmPosts();
+      ref.read(confirmPostDatasourceProvider).getAllFanMarkedConfirmPosts();
+      if (isSubmitted.value) {
+        return;
+      }
+
       if (_confirmPostFormKey.currentState!.validate()) {
         _confirmPostFormKey.currentState!.save();
         onSubmit(titleController.text, contentController.text);

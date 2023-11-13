@@ -30,3 +30,10 @@ class FirebaseReactionFieldName {
   static const instantPhotoUrl = 'instantPhotoUrl';
   static const reactionType = 'reactionType';
 }
+
+@immutable
+class FirebaseFriendFieldName {
+  static const friendID = 'friendID';
+  static const friendName = 'friendName';
+  static const friendImageUrl = 'friendImageUrl';
+}

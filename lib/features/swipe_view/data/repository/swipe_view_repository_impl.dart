@@ -12,7 +12,6 @@ import 'package:wehavit/features/swipe_view/domain/repository/swipe_view_reposit
 
 class SwipeViewRepositoryImpl implements SwipeViewRepository {
   SwipeViewRepositoryImpl(Ref ref) {
-    _swipeViewDatasource = ref.watch(swipeViewDatasourceProvider);
     _reactionDatasource = ref.watch(reactionDatasourceProvider);
   }
 

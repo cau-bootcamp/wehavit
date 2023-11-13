@@ -38,7 +38,7 @@ class ReactionDatasourceImpl implements ReactionDatasource {
 
       FirebaseFirestore.instance
           .collection(
-        '${FirebaseCollectionName.confirmPost}/$targetConfirmPostId/encourages',
+        '${FirebaseCollectionName.confirmPosts}/$targetConfirmPostId/encourages',
       )
           .add(
         {

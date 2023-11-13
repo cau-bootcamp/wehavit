@@ -8,6 +8,7 @@ class RouteLocation {
   static const String auth = '/auth';
   static const String profile = '/profile';
   static const String myPage = '/myPage';
+  static const String friendList = '/friendList';
   static const String addResolution = '/addResolution';
   static const String testPage = '/testPage';
   static const String waitingRoom = '/waitingRoom';
