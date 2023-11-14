@@ -32,7 +32,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<void> logOut() async {
-    return await _authRemoteDataSource.googleLogOut();
+    return await _authRemoteDataSource.logOut();
   }
 
   @override

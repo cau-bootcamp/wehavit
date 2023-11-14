@@ -46,7 +46,7 @@ class AuthScreen extends HookConsumerWidget {
               ).animate().fade(duration: 1500.ms).fadeIn(),
               Dimensions.kVerticalSpaceLarge,
               AuthField(
-                hintText: 'Username',
+                hintText: 'Email',
                 controller: emailTextFieldController,
               ),
               Dimensions.kVerticalSpaceSmall,
@@ -60,63 +60,105 @@ class AuthScreen extends HookConsumerWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ElevatedButton(
-                    onPressed: () async {
-                      final result = await ref
-                          .read(emailAndPasswordAuthProvider)
-                          .logInWithEmailAndPassword(
-                            emailTextFieldController.text,
-                            passwordTextFieldController.text,
-                          );
-                      result.isRight() ? debugPrint('Failed to login') : null;
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        FaIcon(
-                          FontAwesomeIcons.arrowRightToBracket,
-                          color: context.colorScheme.error,
-                        ),
-                        Dimensions.kHorizontalSpaceSmall,
-                        Text(
-                          '로그인',
-                          style: textTheme.bodyMedium,
-                        ),
-                      ],
-                    ),
+                  EmailLogInButton(
+                    emailTextFieldController: emailTextFieldController,
+                    passwordTextFieldController: passwordTextFieldController,
+                    textTheme: textTheme,
                   ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      final result = await ref
-                          .read(emailAndPasswordAuthProvider)
-                          .registerWithEmailAndPassword(
-                            emailTextFieldController.text,
-                            passwordTextFieldController.text,
-                          );
-                      result.isRight()
-                          ? debugPrint('Failed to Register')
-                          : null;
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        FaIcon(
-                          FontAwesomeIcons.arrowRightFromBracket,
-                          color: context.colorScheme.error,
-                        ),
-                        Dimensions.kHorizontalSpaceSmall,
-                        Text(
-                          '회원가입',
-                          style: textTheme.bodyMedium,
-                        ),
-                      ],
-                    ),
+                  EmailRegisterButton(
+                    emailTextFieldController: emailTextFieldController,
+                    passwordTextFieldController: passwordTextFieldController,
+                    textTheme: textTheme,
                   ),
                 ],
               )
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class EmailRegisterButton extends HookConsumerWidget {
+  const EmailRegisterButton({
+    super.key,
+    required this.emailTextFieldController,
+    required this.passwordTextFieldController,
+    required this.textTheme,
+  });
+
+  final TextEditingController emailTextFieldController;
+  final TextEditingController passwordTextFieldController;
+  final TextTheme textTheme;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ElevatedButton(
+      onPressed: () async {
+        final result = await ref
+            .read(emailAndPasswordAuthProvider)
+            .registerWithEmailAndPassword(
+              emailTextFieldController.text,
+              passwordTextFieldController.text,
+            );
+        result.isRight() ? debugPrint('Failed to Register') : null;
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          FaIcon(
+            Icons.app_registration,
+            color: context.colorScheme.error,
+          ),
+          Dimensions.kHorizontalSpaceSmall,
+          Text(
+            '회원가입',
+            style: textTheme.bodyMedium,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class EmailLogInButton extends HookConsumerWidget {
+  const EmailLogInButton({
+    super.key,
+    required this.emailTextFieldController,
+    required this.passwordTextFieldController,
+    required this.textTheme,
+  });
+
+  final TextEditingController emailTextFieldController;
+  final TextEditingController passwordTextFieldController;
+  final TextTheme textTheme;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ElevatedButton(
+      onPressed: () async {
+        final result = await ref
+            .read(emailAndPasswordAuthProvider)
+            .logInWithEmailAndPassword(
+              emailTextFieldController.text,
+              passwordTextFieldController.text,
+            );
+        result.isRight() ? debugPrint('Failed to login') : null;
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          FaIcon(
+            Icons.login,
+            color: context.colorScheme.error,
+          ),
+          Dimensions.kHorizontalSpaceSmall,
+          Text(
+            '로그인',
+            style: textTheme.bodyMedium,
+          ),
+        ],
       ),
     );
   }

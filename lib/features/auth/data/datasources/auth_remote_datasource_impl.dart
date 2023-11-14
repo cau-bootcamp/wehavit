@@ -49,7 +49,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<void> googleLogOut() async {
+  Future<void> logOut() async {
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
   }

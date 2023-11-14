@@ -11,7 +11,7 @@ abstract class AuthRemoteDataSource {
 
   Future<AuthResult> logInWithEmailAndPassword(String email, String password);
 
-  Future<void> googleLogOut();
+  Future<void> logOut();
 
   Stream<User?> authStateChanges();
 }
