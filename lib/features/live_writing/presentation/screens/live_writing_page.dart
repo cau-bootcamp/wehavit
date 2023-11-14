@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wehavit/common/errors/failure.dart';
+import 'package:wehavit/common/routers/route_location.dart';
 import 'package:wehavit/features/live_writing/domain/domain.dart';
 import 'package:wehavit/features/live_writing/presentation/providers/active_resolution_provider.dart';
 import 'package:wehavit/features/live_writing/presentation/widgets/widgets.dart';
@@ -47,14 +48,25 @@ class LiveWritingBody extends HookConsumerWidget {
         fetchedActiveResolutionList.fold(
           (error) =>
               debugPrint('Error, when fetching active resolution list: $error'),
-          (resolutionList) {
+          (resolutionList) async {
             if (resolutionList.isNotEmpty) {
               selectedResolutionGoal.value = resolutionList.first.goalStatement;
             } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('주의! 활성화된 목표가 없습니다.')),
-              );
               debugPrint('Empty active resolution list');
+              // pop up alert dialog
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('활성화된 목표가 없습니다.'),
+                  content: const Text('활성화된 목표가 없습니다.'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => context.go(RouteLocation.home),
+                      child: const Text('확인'),
+                    ),
+                  ],
+                ),
+              );
             }
           },
         );
@@ -99,7 +111,7 @@ class LiveWritingBody extends HookConsumerWidget {
           },
         );
       },
-      loading: () => const Center(child: Text('Loading')),
+      loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, stackTrace) => Center(child: Text(error.toString())),
     );
   }
