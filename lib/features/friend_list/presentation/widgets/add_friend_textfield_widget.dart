@@ -15,7 +15,7 @@ class AddFriendTextFieldWidget extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Container(
-            width: 300,
+            width: 250,
             margin: const EdgeInsets.only(left: 8, right: 8),
             child: TextField(
               // 추후에 onChanged가 아닌 것으로 바꿀 예정
