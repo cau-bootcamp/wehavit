@@ -21,14 +21,66 @@ class LiveWritingPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final friends = useState(
+        ['69dlXoGSBKhzrySuhb8t9MvqzdD3', 'zZaP501Kc8ccUvR9ogPOsjSeD1s2']);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(liveWritingPageTitle),
       ),
-      body: Container(
-        padding: const EdgeInsets.all(16),
-        child: const LiveWritingBody(),
+      body: Stack(
+        children: [
+          Column(
+            children:
+                friends.value.map((uid) => FriendWriting(uid: uid)).toList(),
+          ),
+          Container(
+            padding: const EdgeInsets.all(16),
+            height: double.infinity,
+            width: double.infinity,
+            child: const LiveWritingBody(),
+          ),
+        ],
       ),
+    );
+  }
+}
+
+class FriendWriting extends HookConsumerWidget {
+  const FriendWriting({
+    super.key,
+    required this.uid,
+  });
+
+  final String uid;
+
+  Stream<String> userMessageStream(String uid) {
+    // await Future.delayed(const Duration(microseconds: 2500));
+    // return 'fetched message from $uid';
+    return Stream<String>.periodic(
+      const Duration(seconds: 1),
+      (count) => 'fetched message from $uid: ${count + 1}',
+    ).take(10);
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    var futureMessage = useMemoized(() => userMessageStream(uid));
+    var snapshot = useStream<String>(futureMessage);
+    print('build');
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: snapshot.hasError
+          ? Text('Error: ${snapshot.error}')
+          : snapshot.hasData
+              ? Column(
+                  children: [
+                    const Text('Title: ', style: TextStyle(fontSize: 20)),
+                    Text('body: ${snapshot.data}',
+                        style: const TextStyle(fontSize: 15)),
+                  ],
+                )
+              : const CircularProgressIndicator(),
     );
   }
 }
