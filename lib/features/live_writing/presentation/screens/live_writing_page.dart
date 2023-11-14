@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/routers/route_location.dart';
 import 'package:wehavit/features/live_writing/domain/domain.dart';
+import 'package:wehavit/features/live_writing/domain/repositories/friend_repository_provider.dart';
 import 'package:wehavit/features/live_writing/presentation/providers/active_resolution_provider.dart';
 import 'package:wehavit/features/live_writing/presentation/widgets/widgets.dart';
 
@@ -54,30 +55,51 @@ class FriendWriting extends HookConsumerWidget {
 
   final String uid;
 
-  Stream<String> userMessageStream(String uid) {
-    // await Future.delayed(const Duration(microseconds: 2500));
-    // return 'fetched message from $uid';
-    return Stream<String>.periodic(
-      const Duration(seconds: 1),
-      (count) => 'fetched message from $uid: ${count + 1}',
-    ).take(10);
+  Stream<String> friendMessageStream(String uid, WidgetRef ref) {
+    return ref.watch(getFriendRepositoryProvider).getFriendMessageByUid(uid);
+  }
+
+  Stream<String> friendTitleStream(String uid, WidgetRef ref) {
+    return ref.watch(getFriendRepositoryProvider).getFriendTitleByUid(uid);
+  }
+
+  Future<String> friendNameFuture(String uid, WidgetRef ref) {
+    return ref
+        .watch(getFriendRepositoryProvider)
+        .getFriendNameByUid(uid)
+        .then((value) => value);
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var futureMessage = useMemoized(() => userMessageStream(uid));
-    var snapshot = useStream<String>(futureMessage);
-    print('build');
+    var nameFuture = useMemoized(() => friendNameFuture(uid, ref));
+    var messageStream = useMemoized(() => friendMessageStream(uid, ref));
+    var titleStream = useMemoized(() => friendTitleStream(uid, ref));
+
+    var nameSnapshot = useFuture<String>(nameFuture);
+    var messageSnapshot = useStream<String>(messageStream);
+    var titleSnapshot = useStream<String>(titleStream);
     return Container(
       padding: const EdgeInsets.all(16),
-      child: snapshot.hasError
-          ? Text('Error: ${snapshot.error}')
-          : snapshot.hasData
+      child: messageSnapshot.hasError
+          ? Text(
+              '${nameSnapshot.hasData ? nameSnapshot.data : ''}님은 아직 참여하지 않았습니다',
+              style:
+                  const TextStyle(fontSize: 20).copyWith(color: Colors.brown),
+            )
+          : messageSnapshot.hasData
               ? Column(
                   children: [
-                    const Text('Title: ', style: TextStyle(fontSize: 20)),
-                    Text('body: ${snapshot.data}',
-                        style: const TextStyle(fontSize: 15)),
+                    Text(
+                      '[참여자] ${nameSnapshot.data}',
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                    Text(titleSnapshot.data ?? '',
+                        style: const TextStyle(fontSize: 20)),
+                    Text(
+                      messageSnapshot.data ?? '',
+                      style: const TextStyle(fontSize: 15),
+                    ),
                   ],
                 )
               : const CircularProgressIndicator(),
