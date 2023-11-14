@@ -16,7 +16,8 @@ class SwipeViewCellWidget extends ConsumerStatefulWidget {
 }
 
 class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
-  late final SwipeViewModel swipeViewModel;
+  late final SwipeViewModel _swipeViewModel;
+  late final SwipeViewModelProvider _swipeViewModelProvider;
 
   @override
   void initState() {
@@ -26,7 +27,8 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    swipeViewModel = ref.watch(swipeViewModelProvider);
+    _swipeViewModel = ref.watch(swipeViewModelProvider);
+    _swipeViewModelProvider = ref.read(swipeViewModelProvider.notifier);
   }
 
   @override
@@ -39,8 +41,8 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
             Column(
               children: [
                 FutureBuilder<UserModel>(
-                  future: swipeViewModel
-                      .userModelList[swipeViewModel.currentCellIndex],
+                  future: _swipeViewModel
+                      .userModelList[_swipeViewModel.currentCellIndex],
                   builder: (
                     BuildContext context,
                     AsyncSnapshot<UserModel> snapshot,
@@ -82,14 +84,15 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
               ],
             ),
             // 사진 영역
-            // padding: const EdgeInsets.symmetric(vertical: 8.0),
             Expanded(
+              flex: 3,
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
                 child: Container(
                   constraints: const BoxConstraints.expand(),
                   child: Image.network(
                     widget.model.imageUrl ?? '',
+                    fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       return const Placeholder();
                     },
@@ -115,16 +118,19 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
               ),
             ),
             // 통계치 영역
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: SizedBox(
-                height: 120,
-                child: Container(color: Colors.amber),
+            SizedBox(
+              height: _swipeViewModel.animation.value,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: Container(
+                  color: Colors.amber,
+                ),
               ),
             ),
+
             // 인증글 영역
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
               child: Container(
                 color: Colors.pink.shade200,
                 constraints: const BoxConstraints.expand(height: 120),

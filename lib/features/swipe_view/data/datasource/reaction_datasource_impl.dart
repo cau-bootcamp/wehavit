@@ -38,7 +38,7 @@ class ReactionDatasourceImpl implements ReactionDatasource {
 
       FirebaseFirestore.instance
           .collection(
-        '${FirebaseCollectionName.confirmPosts}/$targetConfirmPostId/encourages',
+        '${FirebaseCollectionName.confirmPosts}/_$targetConfirmPostId/${FirebaseCollectionName.encourages}',
       )
           .add(
         {
@@ -68,7 +68,7 @@ class ReactionDatasourceImpl implements ReactionDatasource {
       {required String confirmPostid, required String filePath}) async {
     try {
       String storagePath =
-          '$confirmPostid/${FirebaseAuth.instance.currentUser!.uid}_${DateTime.now().toIso8601String()}';
+          '$confirmPostid/_${FirebaseAuth.instance.currentUser!.uid}_${DateTime.now().toIso8601String()}';
       await FirebaseStorage.instance.ref(storagePath).putFile(File(filePath));
       return Future(() => right(storagePath));
     } on Exception catch (e) {
