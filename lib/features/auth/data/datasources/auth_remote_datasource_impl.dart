@@ -75,10 +75,18 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         return AuthResult.failure;
       }
 
+      // Email 가입 시에는 displayName과 photoUrl이 없기 때문에 추가해준다.
+      final String name = email.split('@').first;
+      final String photoUrl =
+          result.user!.photoURL ?? 'https://picsum.photos/80';
+      await result.user!.updateDisplayName(name);
+      await result.user!.updatePhotoURL(photoUrl);
+
+      // Firebase에 사용자 정보 저장
       await _usersCollectionRef().doc(result.user?.uid).set({
-        FirebaseUserFieldName.displayName: result.user?.displayName,
-        FirebaseUserFieldName.email: result.user?.email,
-        FirebaseUserFieldName.imageUrl: result.user?.photoURL,
+        FirebaseUserFieldName.displayName: name,
+        FirebaseUserFieldName.email: email,
+        FirebaseUserFieldName.imageUrl: photoUrl,
       });
 
       return AuthResult.success;
@@ -101,6 +109,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       if (result.user == null) {
         return AuthResult.failure;
       }
+
       return AuthResult.success;
     } on FirebaseAuthException {
       return AuthResult.failure;

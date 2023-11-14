@@ -45,6 +45,8 @@ class AuthRepositoryImpl implements AuthRepository {
         email,
         password,
       );
+
+      print(result);
       return Right(result);
     } catch (e) {
       return const Left(Failure('something went wrong'));
@@ -52,7 +54,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, AuthResult>> logInWithEmailAndPassword(
+  EitherFuture<AuthResult> logInWithEmailAndPassword(
     String email,
     String password,
   ) async {
@@ -61,6 +63,8 @@ class AuthRepositoryImpl implements AuthRepository {
         email,
         password,
       );
+      print(result);
+
       return Right(result);
     } catch (e) {
       return const Left(Failure('something went wrong'));
