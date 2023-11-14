@@ -82,7 +82,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       await result.user!.updateDisplayName(name);
       await result.user!.updatePhotoURL(photoUrl);
 
-      // Firebase에 사용자 정보 저장
+      // Firestore에 사용자 정보 저장
       await _usersCollectionRef().doc(result.user?.uid).set({
         FirebaseUserFieldName.displayName: name,
         FirebaseUserFieldName.email: email,
@@ -109,6 +109,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       if (result.user == null) {
         return AuthResult.failure;
       }
+
+      // 혹시라도 없는 경우, 로그인 시 Firestore에 사용자 정보 저장
+      await _usersCollectionRef().doc(result.user?.uid).set({
+        FirebaseUserFieldName.displayName: email.split('@').first,
+        FirebaseUserFieldName.email: email,
+        FirebaseUserFieldName.imageUrl:
+            result.user!.photoURL ?? 'https://picsum.photos/80',
+      }, SetOptions(merge: true));
 
       return AuthResult.success;
     } on FirebaseAuthException {
