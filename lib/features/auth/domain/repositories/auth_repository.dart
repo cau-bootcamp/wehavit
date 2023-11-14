@@ -1,10 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fpdart/fpdart.dart';
-import 'package:wehavit/common/errors/failure.dart';
+import 'package:wehavit/common/common.dart';
 import 'package:wehavit/features/auth/data/entities/auth_result.dart';
 
 abstract class AuthRepository {
-  Future<Either<Failure, AuthResult>> logIn();
+  EitherFuture<AuthResult> logInWithGoogle();
+
+  EitherFuture<AuthResult> registerWithEmailAndPassword(
+    String email,
+    String password,
+  );
+
+  EitherFuture<AuthResult> logInWithEmailAndPassword(
+    String email,
+    String password,
+  );
 
   Future<void> logOut();
 

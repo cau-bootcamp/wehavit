@@ -2,7 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:wehavit/common/errors/failure.dart';
+import 'package:wehavit/common/common.dart';
 import 'package:wehavit/features/features.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
@@ -21,7 +21,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, AuthResult>> logIn() async {
+  EitherFuture<AuthResult> logInWithGoogle() async {
     try {
       final result = await _authRemoteDataSource.googleLogIn();
       return Right(result);
@@ -33,5 +33,37 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<void> logOut() async {
     return await _authRemoteDataSource.googleLogOut();
+  }
+
+  @override
+  EitherFuture<AuthResult> registerWithEmailAndPassword(
+    String email,
+    String password,
+  ) async {
+    try {
+      final result = await _authRemoteDataSource.registerWithEmailAndPassword(
+        email,
+        password,
+      );
+      return Right(result);
+    } catch (e) {
+      return const Left(Failure('something went wrong'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, AuthResult>> logInWithEmailAndPassword(
+    String email,
+    String password,
+  ) async {
+    try {
+      final result = await _authRemoteDataSource.logInWithEmailAndPassword(
+        email,
+        password,
+      );
+      return Right(result);
+    } catch (e) {
+      return const Left(Failure('something went wrong'));
+    }
   }
 }
