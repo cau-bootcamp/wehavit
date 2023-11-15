@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:riverpod/riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final balloonManagerProvider =
     StateNotifierProvider<BalloonManager, Map<Key, BalloonWidget>>(

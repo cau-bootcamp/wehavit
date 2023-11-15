@@ -22,8 +22,8 @@ import 'package:flutter/material.dart';
 /// 2. `Stack(children: emojiFireWork.fireworkWidgets.values.toList())` 을 builder 내 필요한 위치에 배치
 /// 3. `emojiFireWork.addFireworkWidget(offset)` 으로 offset 위치에 이모지 이펙트를 생성 (top-left 기준 offset)
 ///
-class EmojiFireWork {
-  EmojiFireWork({
+class EmojiFireWorkManager {
+  EmojiFireWorkManager({
     required this.emojiAsset,
     this.emojiAmount = 30,
     this.emojiLifetimeDurationSec = 5,
