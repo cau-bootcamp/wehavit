@@ -11,7 +11,7 @@ class LiveWritingFriendRepositoryImpl extends LiveWritingFriendRepository {
   final livePostDocumentPrefix = 'LIVE-';
 
   @override
-  Future<List<String>> getVisibleFriendEmails() async {
+  Future<List<String>> getVisibleFriendEmailList() async {
     final friendsSnapshots = await FirebaseFirestore.instance
         .collection(FirebaseCollectionName.friends)
         .get();
@@ -29,7 +29,7 @@ class LiveWritingFriendRepositoryImpl extends LiveWritingFriendRepository {
   }
 
   @override
-  Stream<String> getFriendMessageLiveByUid(String uid) {
+  Stream<String> getFriendMessageLiveByEmail(String uid) {
     final stream = FirebaseFirestore.instance
         .collection(FirebaseCollectionName.liveConfirmPosts)
         .doc('$livePostDocumentPrefix$uid')
@@ -40,7 +40,7 @@ class LiveWritingFriendRepositoryImpl extends LiveWritingFriendRepository {
   }
 
   @override
-  Stream<String> getFriendTitleLiveByUid(String uid) {
+  Stream<String> getFriendTitleLiveByEmail(String uid) {
     final stream = FirebaseFirestore.instance
         .collection(FirebaseCollectionName.liveConfirmPosts)
         .doc('$livePostDocumentPrefix$uid')
@@ -51,7 +51,7 @@ class LiveWritingFriendRepositoryImpl extends LiveWritingFriendRepository {
   }
 
   @override
-  Future<String> getFriendMessageOnceByUid(String uid) async {
+  Future<String> getFriendMessageOnceByEmail(String uid) async {
     return FirebaseFirestore.instance
         .collection(FirebaseCollectionName.liveConfirmPosts)
         .doc('$livePostDocumentPrefix$uid')
@@ -65,7 +65,7 @@ class LiveWritingFriendRepositoryImpl extends LiveWritingFriendRepository {
   }
 
   @override
-  Future<String> getFriendNameOnceByUid(String email) {
+  Future<String> getFriendNameOnceByEmail(String email) {
     final res = FirebaseFirestore.instance
         .collection(FirebaseCollectionName.users)
         .where(FirebaseUserFieldName.email, isEqualTo: email)

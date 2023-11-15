@@ -23,7 +23,7 @@ class LiveWritingPage extends HookConsumerWidget {
   Future<List<String>> getVisibleFriends(WidgetRef ref) {
     return ref
         .read(liveWritingFriendRepositoryProvider)
-        .getVisibleFriendEmails();
+        .getVisibleFriendEmailList();
   }
 
   @override
@@ -40,7 +40,7 @@ class LiveWritingPage extends HookConsumerWidget {
           Column(
             children: friendEmailsSnapshot.hasData
                 ? friendEmailsSnapshot.data!
-                    .map((uid) => FriendWriting(uid: uid))
+                    .map((email) => FriendWriting(email: email))
                     .toList()
                 : [],
           ),
@@ -59,34 +59,35 @@ class LiveWritingPage extends HookConsumerWidget {
 class FriendWriting extends HookConsumerWidget {
   const FriendWriting({
     super.key,
-    required this.uid,
+    required this.email,
   });
 
-  final String uid;
+  final String email;
 
-  Future<String> friendNameFuture(String uid, WidgetRef ref) {
+  Future<String> friendNameFuture(String email, WidgetRef ref) {
     return ref
         .read(liveWritingFriendRepositoryProvider)
-        .getFriendNameOnceByUid(uid);
+        .getFriendNameOnceByEmail(email);
   }
 
-  Stream<String> friendMessageStream(String uid, WidgetRef ref) {
+  Stream<String> friendMessageStream(String email, WidgetRef ref) {
     return ref
         .watch(liveWritingFriendRepositoryProvider)
-        .getFriendMessageLiveByUid(uid);
+        .getFriendMessageLiveByEmail(email);
   }
 
-  Stream<String> friendTitleStream(String uid, WidgetRef ref) {
+  Stream<String> friendTitleStream(String email, WidgetRef ref) {
     return ref
         .watch(liveWritingFriendRepositoryProvider)
-        .getFriendTitleLiveByUid(uid);
+        .getFriendTitleLiveByEmail(email);
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var nameFuture = useMemoized(() async => await friendNameFuture(uid, ref));
-    var messageStream = useMemoized(() => friendMessageStream(uid, ref));
-    var titleStream = useMemoized(() => friendTitleStream(uid, ref));
+    var nameFuture =
+        useMemoized(() async => await friendNameFuture(email, ref));
+    var messageStream = useMemoized(() => friendMessageStream(email, ref));
+    var titleStream = useMemoized(() => friendTitleStream(email, ref));
 
     var nameSnapshot = useFuture<String>(nameFuture);
     var messageSnapshot = useStream<String>(messageStream);

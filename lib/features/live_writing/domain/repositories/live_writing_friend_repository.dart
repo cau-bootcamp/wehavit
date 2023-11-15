@@ -1,13 +1,13 @@
 abstract class LiveWritingFriendRepository {
   LiveWritingFriendRepository();
 
-  Future<List<String>> getVisibleFriendEmails();
+  Future<List<String>> getVisibleFriendEmailList();
 
-  Stream<String> getFriendMessageLiveByUid(String uid);
+  Stream<String> getFriendMessageLiveByEmail(String email);
 
-  Stream<String> getFriendTitleLiveByUid(String uid);
+  Stream<String> getFriendTitleLiveByEmail(String email);
 
-  Future<String> getFriendMessageOnceByUid(String uid);
+  Future<String> getFriendMessageOnceByEmail(String email);
 
-  Future<String> getFriendNameOnceByUid(String uid);
+  Future<String> getFriendNameOnceByEmail(String email);
 }
