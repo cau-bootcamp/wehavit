@@ -24,7 +24,8 @@ class LiveConfirmPostRepository {
           },
           SetOptions(merge: true),
         )
-        .then((value) => debugPrint('New live confirm document created'))
+        .then((value) =>
+            debugPrint('New live confirm document with message created'))
         .catchError((error) => debugPrint('Failed to add document: $error'));
   }
 
@@ -41,7 +42,8 @@ class LiveConfirmPostRepository {
           },
           SetOptions(merge: true),
         )
-        .then((value) => debugPrint('New live confirm document created'))
+        .then((value) =>
+            debugPrint('New live confirm document with title created'))
         .catchError((error) => debugPrint('Failed to add document: $error'));
   }
 }

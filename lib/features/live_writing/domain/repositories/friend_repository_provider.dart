@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:wehavit/common/utils/firebase_collection_name.dart';
 
 part 'friend_repository_provider.g.dart';
 
@@ -7,6 +8,18 @@ class FriendRepository {
   FriendRepository();
 
   Future<List<String>> getVisibleFriends() async {
+    final friendsSnapshots = await FirebaseFirestore.instance
+        .collection(FirebaseCollectionName.friends)
+        .get();
+    final friendsAccepted = friendsSnapshots.docs.where((data) {
+      // print('>>>>>>>>>>>>>> ${data.data()['friendState']}');
+      return data.data()['friendState'] == 1;
+    });
+
+    // 나중에 친구 기능이 만들어지면 사용할 것
+
+    // return friendsAccepted.map((data) => data.reference.id).toList();
+
     return ['69dlXoGSBKhzrySuhb8t9MvqzdD3', 'zZaP501Kc8ccUvR9ogPOsjSeD1s2'];
   }
 

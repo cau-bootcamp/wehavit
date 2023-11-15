@@ -20,10 +20,14 @@ class LiveWritingPage extends HookConsumerWidget {
   ) =>
       const LiveWritingPage();
 
+  Future<List<String>> getVisibleFriends(WidgetRef ref) {
+    return ref.watch(getFriendRepositoryProvider).getVisibleFriends();
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final friends = useState(
-        ['69dlXoGSBKhzrySuhb8t9MvqzdD3', 'zZaP501Kc8ccUvR9ogPOsjSeD1s2']);
+    var friendsFuture = useMemoized(() => getVisibleFriends(ref));
+    var friendsSnapshot = useFuture<List<String>>(friendsFuture);
 
     return Scaffold(
       appBar: AppBar(
@@ -32,8 +36,11 @@ class LiveWritingPage extends HookConsumerWidget {
       body: Stack(
         children: [
           Column(
-            children:
-                friends.value.map((uid) => FriendWriting(uid: uid)).toList(),
+            children: friendsSnapshot.hasData
+                ? friendsSnapshot.data!
+                    .map((uid) => FriendWriting(uid: uid))
+                    .toList()
+                : [],
           ),
           Container(
             padding: const EdgeInsets.all(16),
