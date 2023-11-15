@@ -2,12 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:wehavit/common/errors/failure.dart';
-import 'package:wehavit/common/routers/route_location.dart';
-import 'package:wehavit/features/live_writing/domain/domain.dart';
-import 'package:wehavit/features/live_writing/domain/repositories/live_writing_friend_repository_provider.dart';
-import 'package:wehavit/features/live_writing/presentation/providers/active_resolution_provider.dart';
-import 'package:wehavit/features/live_writing/presentation/widgets/widgets.dart';
+import 'package:wehavit/common/common.dart';
+import 'package:wehavit/features/live_writing/live_writing.dart';
 
 const liveWritingPageTitle = '실시간 인증 글쓰기';
 
@@ -40,7 +36,7 @@ class LiveWritingPage extends HookConsumerWidget {
           Column(
             children: friendEmailsSnapshot.hasData
                 ? friendEmailsSnapshot.data!
-                    .map((email) => FriendWriting(email: email))
+                    .map((email) => FriendLiveWriting(email: email))
                     .toList()
                 : [],
           ),
@@ -48,7 +44,7 @@ class LiveWritingPage extends HookConsumerWidget {
             padding: const EdgeInsets.all(16),
             height: double.infinity,
             width: double.infinity,
-            child: const LiveWritingBody(),
+            child: const MyLiveWritingBody(),
           ),
         ],
       ),
@@ -56,75 +52,12 @@ class LiveWritingPage extends HookConsumerWidget {
   }
 }
 
-class FriendWriting extends HookConsumerWidget {
-  const FriendWriting({
-    super.key,
-    required this.email,
-  });
-
-  final String email;
-
-  Future<String> friendNameFuture(String email, WidgetRef ref) {
-    return ref
-        .read(liveWritingFriendRepositoryProvider)
-        .getFriendNameOnceByEmail(email);
-  }
-
-  Stream<String> friendMessageStream(String email, WidgetRef ref) {
-    return ref
-        .watch(liveWritingFriendRepositoryProvider)
-        .getFriendMessageLiveByEmail(email);
-  }
-
-  Stream<String> friendTitleStream(String email, WidgetRef ref) {
-    return ref
-        .watch(liveWritingFriendRepositoryProvider)
-        .getFriendTitleLiveByEmail(email);
-  }
+class MyLiveWritingBody extends HookConsumerWidget {
+  const MyLiveWritingBody({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var nameFuture =
-        useMemoized(() async => await friendNameFuture(email, ref));
-    var messageStream = useMemoized(() => friendMessageStream(email, ref));
-    var titleStream = useMemoized(() => friendTitleStream(email, ref));
-
-    var nameSnapshot = useFuture<String>(nameFuture);
-    var messageSnapshot = useStream<String>(messageStream);
-    var titleSnapshot = useStream<String>(titleStream);
-    return Container(
-      padding: const EdgeInsets.all(16),
-      child: messageSnapshot.hasError
-          ? Text(
-              '${nameSnapshot.hasData ? nameSnapshot.data : ''}님은 아직 참여하지 않았습니다',
-              style:
-                  const TextStyle(fontSize: 20).copyWith(color: Colors.brown),
-            )
-          : messageSnapshot.hasData
-              ? Column(
-                  children: [
-                    Text(
-                      '[참여자] ${nameSnapshot.data}',
-                      style: const TextStyle(fontSize: 20),
-                    ),
-                    Text(titleSnapshot.data ?? '',
-                        style: const TextStyle(fontSize: 20)),
-                    Text(
-                      messageSnapshot.data ?? '',
-                      style: const TextStyle(fontSize: 15),
-                    ),
-                  ],
-                )
-              : const CircularProgressIndicator(),
-    );
-  }
-}
-
-class LiveWritingBody extends HookConsumerWidget {
-  const LiveWritingBody({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
+    // TODO. useState 대신 riverpod의 stateProvider 사용하도록 통일하기
     final isSubmitted = useState(false);
     final selectedResolutionGoal = useState('');
     final activeResolutionList = ref.watch(activeResolutionListProvider);
@@ -139,27 +72,13 @@ class LiveWritingBody extends HookConsumerWidget {
             if (resolutionList.isNotEmpty) {
               selectedResolutionGoal.value = resolutionList.first.goalStatement;
             } else {
-              debugPrint('Empty active resolution list');
-              // pop up alert dialog
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text('활성화된 목표가 없습니다.'),
-                  content: const Text('활성화된 목표가 없습니다.'),
-                  actions: [
-                    TextButton(
-                      onPressed: () => context.go(RouteLocation.home),
-                      child: const Text('확인'),
-                    ),
-                  ],
-                ),
-              );
+              showNoResolutionDiagram(context, '활성화된 목표가 없습니다. 목표를 추가해주세요.');
             }
           },
         );
 
-        // return loaded page
-        return LoadedLiveWritingPage(
+        // 로딩 완료되면 표시될 위젯
+        return MyLiveWriting(
           selectedResolutionGoal: selectedResolutionGoal,
           activeResolutionList: fetchedActiveResolutionList.fold(
             (error) => [],
@@ -191,9 +110,7 @@ class LiveWritingBody extends HookConsumerWidget {
               (l) {
                 debugPrint(Failure(l.message).toString());
               },
-              (r) => ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('인증 완료!')),
-              ),
+              (r) => showSimpleSnackBar(context, '인증글이 등록되었습니다'),
             );
           },
         );
@@ -202,49 +119,29 @@ class LiveWritingBody extends HookConsumerWidget {
       error: (error, stackTrace) => Center(child: Text(error.toString())),
     );
   }
-}
 
-class LoadedLiveWritingPage extends StatelessWidget {
-  const LoadedLiveWritingPage({
-    super.key,
-    required this.selectedResolutionGoal,
-    required this.activeResolutionList,
-    required this.isSubmitted,
-    required this.onSubmit,
-  });
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSimpleSnackBar(
+    BuildContext context,
+    String message,
+  ) {
+    return ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
 
-  final ValueNotifier<String> selectedResolutionGoal;
-  final List<String> activeResolutionList;
-  final ValueNotifier<bool> isSubmitted;
-  final void Function(String title, String content) onSubmit;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: double.infinity,
-      width: double.infinity,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          SizedBox(
-            height: 250,
-            // color: Colors.grey,
-            child: Column(
-              children: [
-                /// Active Goal Dropdown
-                ActiveGoalDropdown(
-                  isSubmitted: isSubmitted,
-                  selectedResolutionGoal: selectedResolutionGoal,
-                  activeResolutionList: activeResolutionList,
-                ),
-
-                /// Confirm Post Forms
-                ConfirmPostForm(
-                  isSubmitted: isSubmitted,
-                  onSubmit: onSubmit,
-                ),
-              ],
-            ),
+  Future<void> showNoResolutionDiagram(
+    BuildContext context,
+    String alertMessage,
+  ) async {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(alertMessage),
+        content: Text(alertMessage),
+        actions: [
+          TextButton(
+            onPressed: () => context.go(RouteLocation.addResolution),
+            child: const Text('목표 추가하러 가기'),
           ),
         ],
       ),
