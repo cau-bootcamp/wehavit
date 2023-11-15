@@ -36,7 +36,7 @@ class _BalloonPageState extends ConsumerState<AnimationSampleView> {
     _balloonWidgets = ref.watch(balloonManagerProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Balloon and Emoji Firework")),
+      appBar: AppBar(title: const Text('Balloon and Emoji Firework')),
       body: Container(
         constraints: const BoxConstraints.expand(),
         child: Stack(
@@ -55,7 +55,6 @@ class _BalloonPageState extends ConsumerState<AnimationSampleView> {
                 children: [
                   IgnorePointer(
                     child: Stack(
-                      clipBehavior: Clip.hardEdge,
                       children: emojiFireWork.fireworkWidgets.values.toList(),
                     ),
                   ),
@@ -71,11 +70,12 @@ class _BalloonPageState extends ConsumerState<AnimationSampleView> {
                 onPressed: () {
                   setState(() {
                     _balloonManager.addBalloon(
-                        imageUrl:
-                            "https://avatars.githubusercontent.com/u/39216546?s=40&v=4");
+                      imageUrl:
+                          'https://avatars.githubusercontent.com/u/39216546?v=4',
+                    );
                   });
                 },
-                child: const Text("Tap Button"),
+                child: const Text('Tap Button'),
               ),
             ),
             Positioned(
