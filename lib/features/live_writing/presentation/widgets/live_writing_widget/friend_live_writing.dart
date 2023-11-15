@@ -42,7 +42,13 @@ class FriendLiveWriting extends HookConsumerWidget {
     var messageSnapshot = useStream<String>(messageStream);
     var titleSnapshot = useStream<String>(titleStream);
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.all(2),
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey),
+        borderRadius: const BorderRadius.all(Radius.circular(0)),
+      ),
       child: messageSnapshot.hasError
           ? Text(
               '${nameSnapshot.hasData ? nameSnapshot.data : ''}님은 아직 참여하지 않았습니다',
