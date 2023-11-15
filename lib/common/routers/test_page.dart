@@ -82,6 +82,12 @@ class TestPage extends ConsumerWidget {
               },
               buttonText: 'Go to Error View',
             ),
+            MoveButton(
+              onPressCallback: () async {
+                context.push('/animationSampleView');
+              },
+              buttonText: 'Animation Sample View',
+            ),
           ],
         ),
       ),
