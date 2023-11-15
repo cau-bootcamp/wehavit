@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/features/live_writing/live_writing.dart';
+import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';
 
 const liveWritingPageTitle = '실시간 인증 글쓰기';
 
@@ -22,10 +23,19 @@ class LiveWritingPage extends HookConsumerWidget {
         .getVisibleFriendEmailList();
   }
 
+  Stream<List<ReactionModel>> reactionNotificationStream(
+    WidgetRef ref,
+  ) {
+    return ref.watch(liveWritingPostRepositoryProvider).getReactionListStream();
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var friendEmailsFuture = useMemoized(() => getVisibleFriends(ref));
-    var friendEmailsSnapshot = useFuture<List<String>>(friendEmailsFuture);
+    final friendEmailsFuture = useMemoized(() => getVisibleFriends(ref));
+    final friendEmailsSnapshot = useFuture<List<String>>(friendEmailsFuture);
+
+    final reactionStream = useMemoized(() => reactionNotificationStream(ref));
+    final reactionSnapshot = useStream<List<ReactionModel>>(reactionStream);
 
     return Scaffold(
       appBar: AppBar(
@@ -40,6 +50,7 @@ class LiveWritingPage extends HookConsumerWidget {
                     .toList()
                 : [],
           ),
+          reactionNotificationExample(reactionSnapshot, ref),
           Container(
             padding: const EdgeInsets.all(16),
             height: double.infinity,
@@ -48,6 +59,52 @@ class LiveWritingPage extends HookConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Row reactionNotificationExample(
+    AsyncSnapshot<List<ReactionModel>> reactionSnapshot,
+    WidgetRef ref,
+  ) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: reactionSnapshot.hasData
+              ? reactionSnapshot.data!
+                  .map(
+                    (reaction) => TextButton(
+                      onPressed: () async {
+                        // Consume reaction notification
+                        await ref
+                            .read(liveWritingPostRepositoryProvider)
+                            .consumeReaction(reaction.id!);
+                        debugPrint('Consume reaction: ${reaction.id}');
+                      },
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.amber.withAlpha(60),
+                      ),
+                      child: Text(
+                        reaction.reactionType == ReactionType.instantPhoto.index
+                            ? '사진'
+                            : reaction.reactionType == ReactionType.emoji.index
+                                ? '이모지 ${reaction.emoji}'
+                                : reaction.reactionType ==
+                                        ReactionType.comment.index
+                                    ? '댓글 ${reaction.comment}'
+                                    : '기타',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  )
+                  .toList()
+              : [],
+        ),
+      ],
     );
   }
 }

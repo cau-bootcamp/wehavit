@@ -4,7 +4,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wehavit/features/live_writing/domain/repositories/live_writing_friend_repository_provider.dart';
 import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';
 
-// TODO. 이 파일을 수정하여 친구들의 실시간 글쓰기를 보여주는 위젯을 완성하면 됩니다.
 class FriendLiveWriting extends HookConsumerWidget {
   const FriendLiveWriting({
     super.key,
@@ -33,14 +32,15 @@ class FriendLiveWriting extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var nameFuture =
+    final nameFuture =
         useMemoized(() async => await friendNameFuture(email, ref));
-    var messageStream = useMemoized(() => friendMessageStream(email, ref));
-    var titleStream = useMemoized(() => friendTitleStream(email, ref));
+    final messageStream = useMemoized(() => friendMessageStream(email, ref));
+    final titleStream = useMemoized(() => friendTitleStream(email, ref));
 
-    var nameSnapshot = useFuture<String>(nameFuture);
-    var messageSnapshot = useStream<String>(messageStream);
-    var titleSnapshot = useStream<String>(titleStream);
+    final nameSnapshot = useFuture<String>(nameFuture);
+    final messageSnapshot = useStream<String>(messageStream);
+    final titleSnapshot = useStream<String>(titleStream);
+
     return Container(
       padding: const EdgeInsets.all(10),
       margin: const EdgeInsets.all(2),
