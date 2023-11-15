@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/routers/route_location.dart';
 import 'package:wehavit/features/live_writing/domain/domain.dart';
-import 'package:wehavit/features/live_writing/domain/repositories/friend_repository_provider.dart';
+import 'package:wehavit/features/live_writing/domain/repositories/live_writing_friend_repository_provider.dart';
 import 'package:wehavit/features/live_writing/presentation/providers/active_resolution_provider.dart';
 import 'package:wehavit/features/live_writing/presentation/widgets/widgets.dart';
 
@@ -21,13 +21,15 @@ class LiveWritingPage extends HookConsumerWidget {
       const LiveWritingPage();
 
   Future<List<String>> getVisibleFriends(WidgetRef ref) {
-    return ref.watch(getFriendRepositoryProvider).getVisibleFriends();
+    return ref
+        .read(liveWritingFriendRepositoryProvider)
+        .getVisibleFriendEmails();
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var friendsFuture = useMemoized(() => getVisibleFriends(ref));
-    var friendsSnapshot = useFuture<List<String>>(friendsFuture);
+    var friendEmailsFuture = useMemoized(() => getVisibleFriends(ref));
+    var friendEmailsSnapshot = useFuture<List<String>>(friendEmailsFuture);
 
     return Scaffold(
       appBar: AppBar(
@@ -36,8 +38,8 @@ class LiveWritingPage extends HookConsumerWidget {
       body: Stack(
         children: [
           Column(
-            children: friendsSnapshot.hasData
-                ? friendsSnapshot.data!
+            children: friendEmailsSnapshot.hasData
+                ? friendEmailsSnapshot.data!
                     .map((uid) => FriendWriting(uid: uid))
                     .toList()
                 : [],
@@ -62,24 +64,27 @@ class FriendWriting extends HookConsumerWidget {
 
   final String uid;
 
+  Future<String> friendNameFuture(String uid, WidgetRef ref) {
+    return ref
+        .read(liveWritingFriendRepositoryProvider)
+        .getFriendNameOnceByUid(uid);
+  }
+
   Stream<String> friendMessageStream(String uid, WidgetRef ref) {
-    return ref.watch(getFriendRepositoryProvider).getFriendMessageByUid(uid);
+    return ref
+        .watch(liveWritingFriendRepositoryProvider)
+        .getFriendMessageLiveByUid(uid);
   }
 
   Stream<String> friendTitleStream(String uid, WidgetRef ref) {
-    return ref.watch(getFriendRepositoryProvider).getFriendTitleByUid(uid);
-  }
-
-  Future<String> friendNameFuture(String uid, WidgetRef ref) {
     return ref
-        .watch(getFriendRepositoryProvider)
-        .getFriendNameByUid(uid)
-        .then((value) => value);
+        .watch(liveWritingFriendRepositoryProvider)
+        .getFriendTitleLiveByUid(uid);
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var nameFuture = useMemoized(() => friendNameFuture(uid, ref));
+    var nameFuture = useMemoized(() async => await friendNameFuture(uid, ref));
     var messageStream = useMemoized(() => friendMessageStream(uid, ref));
     var titleStream = useMemoized(() => friendTitleStream(uid, ref));
 

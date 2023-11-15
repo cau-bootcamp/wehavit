@@ -5,7 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'live_confirm_post_repository_provider.g.dart';
 
-const documentPrefix = 'LIVE-';
+const livePostDocumentPrefix = 'LIVE-';
 
 class LiveConfirmPostRepository {
   LiveConfirmPostRepository();
@@ -16,7 +16,7 @@ class LiveConfirmPostRepository {
   ) async {
     await FirebaseFirestore.instance
         .collection('live_confirm_posts')
-        .doc('$documentPrefix${FirebaseAuth.instance.currentUser!.uid}')
+        .doc('$livePostDocumentPrefix${FirebaseAuth.instance.currentUser!.uid}')
         .set(
           {
             'userId': FirebaseAuth.instance.currentUser!.uid,
@@ -34,7 +34,7 @@ class LiveConfirmPostRepository {
   ) async {
     await FirebaseFirestore.instance
         .collection('live_confirm_posts')
-        .doc('$documentPrefix${FirebaseAuth.instance.currentUser!.uid}')
+        .doc('$livePostDocumentPrefix${FirebaseAuth.instance.currentUser!.uid}')
         .set(
           {
             'userId': FirebaseAuth.instance.currentUser!.uid,
