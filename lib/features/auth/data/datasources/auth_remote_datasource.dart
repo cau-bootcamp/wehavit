@@ -13,5 +13,7 @@ abstract class AuthRemoteDataSource {
 
   Future<void> logOut();
 
+  Future<void> googleLogOut();
+
   Stream<User?> authStateChanges();
 }

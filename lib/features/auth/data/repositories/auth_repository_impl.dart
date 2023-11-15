@@ -36,6 +36,11 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<void> googleLogOut() async {
+    return await _authRemoteDataSource.googleLogOut();
+  }
+
+  @override
   EitherFuture<AuthResult> registerWithEmailAndPassword(
     String email,
     String password,
@@ -46,7 +51,6 @@ class AuthRepositoryImpl implements AuthRepository {
         password,
       );
 
-      print(result);
       return Right(result);
     } catch (e) {
       return const Left(Failure('something went wrong'));
@@ -63,7 +67,6 @@ class AuthRepositoryImpl implements AuthRepository {
         email,
         password,
       );
-      print(result);
 
       return Right(result);
     } catch (e) {

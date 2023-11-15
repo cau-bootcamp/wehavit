@@ -96,13 +96,11 @@ class EmailRegisterButton extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ElevatedButton(
       onPressed: () async {
-        final result = await ref
-            .read(emailAndPasswordAuthProvider)
-            .registerWithEmailAndPassword(
-              emailTextFieldController.text,
-              passwordTextFieldController.text,
-            );
-        result.isRight() ? debugPrint('Failed to Register') : null;
+        final result =
+            await ref.read(authProvider.notifier).emailAndPasswordRegister(
+                  emailTextFieldController.text,
+                  passwordTextFieldController.text,
+                );
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -138,13 +136,10 @@ class EmailLogInButton extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ElevatedButton(
       onPressed: () async {
-        final result = await ref
-            .read(emailAndPasswordAuthProvider)
-            .logInWithEmailAndPassword(
+        await ref.read(authProvider.notifier).emailAndPasswordLogIn(
               emailTextFieldController.text,
               passwordTextFieldController.text,
             );
-        result.isRight() ? debugPrint('Failed to login') : null;
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
