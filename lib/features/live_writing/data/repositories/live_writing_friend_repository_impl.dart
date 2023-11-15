@@ -3,12 +3,11 @@ import 'package:wehavit/common/constants/firebase_field_name.dart';
 import 'package:wehavit/common/utils/firebase_collection_name.dart';
 import 'package:wehavit/features/live_writing/domain/repositories/live_writing_friend_repository.dart';
 
-const int friendStateAccepted = 1;
-
 class LiveWritingFriendRepositoryImpl extends LiveWritingFriendRepository {
   LiveWritingFriendRepositoryImpl();
 
   final livePostDocumentPrefix = 'LIVE-';
+  final int friendStateAccepted = 1;
 
   @override
   Future<List<String>> getVisibleFriendEmailList() async {
@@ -25,14 +24,14 @@ class LiveWritingFriendRepositoryImpl extends LiveWritingFriendRepository {
     }).toList();
 
     // TEST. 임시로 실시간 공유할 친구 두 명 반환
-    return ['69dlXoGSBKhzrySuhb8t9MvqzdD3', 'zZaP501Kc8ccUvR9ogPOsjSeD1s2'];
+    // return ['69dlXoGSBKhzrySuhb8t9MvqzdD3', 'zZaP501Kc8ccUvR9ogPOsjSeD1s2'];
   }
 
   @override
-  Stream<String> getFriendMessageLiveByEmail(String uid) {
+  Stream<String> getFriendMessageLiveByEmail(String email) {
     final stream = FirebaseFirestore.instance
         .collection(FirebaseCollectionName.liveConfirmPosts)
-        .doc('$livePostDocumentPrefix$uid')
+        .doc('$livePostDocumentPrefix$email')
         .snapshots()
         .map((event) => event.data()!['message'] as String);
 
@@ -40,10 +39,10 @@ class LiveWritingFriendRepositoryImpl extends LiveWritingFriendRepository {
   }
 
   @override
-  Stream<String> getFriendTitleLiveByEmail(String uid) {
+  Stream<String> getFriendTitleLiveByEmail(String email) {
     final stream = FirebaseFirestore.instance
         .collection(FirebaseCollectionName.liveConfirmPosts)
-        .doc('$livePostDocumentPrefix$uid')
+        .doc('$livePostDocumentPrefix$email')
         .snapshots()
         .map((event) => event.data()!['title'] as String);
 
@@ -51,10 +50,10 @@ class LiveWritingFriendRepositoryImpl extends LiveWritingFriendRepository {
   }
 
   @override
-  Future<String> getFriendMessageOnceByEmail(String uid) async {
+  Future<String> getFriendMessageOnceByEmail(String email) async {
     return FirebaseFirestore.instance
         .collection(FirebaseCollectionName.liveConfirmPosts)
-        .doc('$livePostDocumentPrefix$uid')
+        .doc('$livePostDocumentPrefix$email')
         .get()
         .then(
       (value) {
