@@ -40,3 +40,10 @@ class FirebaseFriendFieldName {
   static const friendEmail = 'friendEmail';
   static const friendState = 'friendState';
 }
+
+@immutable
+class FirebaseLiveConfirmPostFieldName {
+  static const title = 'title';
+  static const message = 'message';
+  static const userId = 'userId';
+}

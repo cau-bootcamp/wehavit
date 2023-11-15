@@ -96,11 +96,10 @@ class EmailRegisterButton extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ElevatedButton(
       onPressed: () async {
-        final result =
-            await ref.read(authProvider.notifier).emailAndPasswordRegister(
-                  emailTextFieldController.text,
-                  passwordTextFieldController.text,
-                );
+        await ref.read(authProvider.notifier).emailAndPasswordRegister(
+              emailTextFieldController.text,
+              passwordTextFieldController.text,
+            );
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
