@@ -1,4 +1,5 @@
 export 'constants.dart';
+export 'constants/constants.dart';
 export 'errors/errors.dart';
 export 'routers/routers.dart';
 export 'theme/theme.dart';
