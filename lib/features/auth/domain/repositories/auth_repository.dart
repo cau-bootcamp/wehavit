@@ -17,5 +17,7 @@ abstract class AuthRepository {
 
   Future<void> logOut();
 
+  Future<void> googleLogOut();
+
   Stream<User?> authStateChanges();
 }

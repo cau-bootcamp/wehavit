@@ -5,3 +5,8 @@ final logOutUseCaseProvider = Provider<LogOutUseCase>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
   return LogOutUseCase(authRepository);
 });
+
+final googleLogOutUseCaseProvider = Provider<GoogleLogOutUseCase>((ref) {
+  final authRepository = ref.watch(authRepositoryProvider);
+  return GoogleLogOutUseCase(authRepository);
+});
