@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/features/effects/balloon_animation/balloon_manager.dart';
 import 'package:wehavit/features/effects/emoji_firework_animation/emoji_firework_manager.dart';
+import 'package:wehavit/features/effects/text_animation/text_bubble_widget.dart';
 
 class AnimationSampleView extends ConsumerStatefulWidget {
   const AnimationSampleView({super.key});
@@ -85,6 +86,17 @@ class _BalloonPageState extends ConsumerState<AnimationSampleView> {
                   setState(() {});
                 },
                 child: Text(_balloonWidgets.length.toString()),
+              ),
+            ),
+            SafeArea(
+              child: Container(
+                constraints: BoxConstraints.expand(),
+                child: Stack(
+                  alignment: Alignment.bottomLeft,
+                  children: [
+                    TextBubbleFrameWidget(),
+                  ],
+                ),
               ),
             ),
           ],
