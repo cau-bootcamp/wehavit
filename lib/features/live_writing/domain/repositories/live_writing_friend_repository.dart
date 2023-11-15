@@ -1,3 +1,6 @@
+import 'package:wehavit/common/utils/custom_types.dart';
+import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';
+
 abstract class LiveWritingFriendRepository {
   LiveWritingFriendRepository();
 
@@ -10,4 +13,9 @@ abstract class LiveWritingFriendRepository {
   Future<String> getFriendMessageOnceByEmail(String email);
 
   Future<String> getFriendNameOnceByEmail(String email);
+
+  EitherFuture<bool> sendReactionToTargetFriend(
+    String targetEmail,
+    ReactionModel reactionModel,
+  );
 }

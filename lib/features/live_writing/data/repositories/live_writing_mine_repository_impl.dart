@@ -3,11 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:wehavit/common/constants/firebase_field_name.dart';
 import 'package:wehavit/common/utils/firebase_collection_name.dart';
-import 'package:wehavit/features/live_writing/domain/repositories/live_writing_post_repository.dart';
+import 'package:wehavit/features/live_writing/domain/domain.dart';
+import 'package:wehavit/features/live_writing/domain/repositories/live_writing_mine_repository.dart';
 
 const livePostDocumentPrefix = 'LIVE-';
 
-class LiveWritingPostRepositoryImpl extends LiveWritingPostRepository {
+class LiveWritingPostRepositoryImpl extends MyLiveWritingRepository {
   LiveWritingPostRepositoryImpl();
 
   @override

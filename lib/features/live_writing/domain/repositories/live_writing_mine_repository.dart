@@ -1,5 +1,5 @@
-abstract class LiveWritingPostRepository {
-  LiveWritingPostRepository();
+abstract class MyLiveWritingRepository {
+  MyLiveWritingRepository();
 
   // update message on live_confirm_posts
   Future<void> updateMessage(
