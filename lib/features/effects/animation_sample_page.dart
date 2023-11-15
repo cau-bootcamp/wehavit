@@ -94,7 +94,12 @@ class _BalloonPageState extends ConsumerState<AnimationSampleView> {
                 child: Stack(
                   alignment: Alignment.bottomLeft,
                   children: [
-                    TextBubbleFrameWidget(),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextBubbleFrameWidget(),
+                      ],
+                    ),
                   ],
                 ),
               ),

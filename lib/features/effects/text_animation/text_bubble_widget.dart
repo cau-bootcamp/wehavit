@@ -23,7 +23,7 @@ class TextBubbleFrameWidget extends StatelessWidget {
   }
 }
 
-class TextBubbleWidget extends StatelessWidget {
+class TextBubbleWidget extends StatefulWidget {
   const TextBubbleWidget({
     super.key,
     required this.message,
@@ -34,6 +34,58 @@ class TextBubbleWidget extends StatelessWidget {
   final String userImageUrl;
 
   @override
+  State<TextBubbleWidget> createState() => _TextBubbleWidgetState();
+}
+
+class _TextBubbleWidgetState extends State<TextBubbleWidget>
+    with TickerProviderStateMixin {
+  late final AnimationController _lifetimeAnimationController;
+  late final AnimationController _avatarAnimationController;
+  late final AnimationController _textBubbleController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _lifetimeAnimationController = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 5),
+    );
+    _lifetimeAnimationController.addListener(() {
+      setState(() {});
+    });
+    _avatarAnimationController = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 1),
+    );
+    _avatarAnimationController.addListener(() {
+      setState(() {});
+    });
+    _textBubbleController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 500),
+    );
+    _textBubbleController.addListener(() {
+      setState(() {});
+    });
+
+    _avatarAnimationController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _textBubbleController.forward();
+      }
+    });
+
+    _lifetimeAnimationController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        dispose();
+      }
+    });
+
+    _lifetimeAnimationController.forward();
+    _avatarAnimationController.forward();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -42,19 +94,22 @@ class TextBubbleWidget extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 16.0),
-                child: Container(
-                  decoration: const BoxDecoration(
-                      color: Colors.amber,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(16.0),
-                        topRight: Radius.circular(16.0),
-                        bottomLeft: Radius.circular(16.0),
-                      )),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      message,
-                      style: TextStyle(fontSize: 16.0),
+                child: Opacity(
+                  opacity: _textBubbleController.value,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                        color: Colors.amber,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(16.0),
+                          topRight: Radius.circular(16.0),
+                          bottomLeft: Radius.circular(16.0),
+                        )),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        widget.message,
+                        style: TextStyle(fontSize: 16.0),
+                      ),
                     ),
                   ),
                 ),
@@ -70,12 +125,15 @@ class TextBubbleWidget extends StatelessWidget {
             Expanded(
               child: Container(),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: CircleAvatar(
-                radius: 30,
-                backgroundColor: Colors.grey,
-                foregroundImage: NetworkImage(userImageUrl),
+            Opacity(
+              opacity: _avatarAnimationController.value,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: CircleAvatar(
+                  radius: 30,
+                  backgroundColor: Colors.grey,
+                  foregroundImage: NetworkImage(widget.userImageUrl),
+                ),
               ),
             ),
           ],
