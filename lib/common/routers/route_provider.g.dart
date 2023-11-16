@@ -15,6 +15,7 @@ List<RouteBase> get $appRoutes => [
       $friendListRoute,
       $liveWritingRoute,
       $swipeViewRoute,
+      $animationSampleViewRoute,
     ];
 
 RouteBase get $splashRoute => GoRouteData.$route(
@@ -185,6 +186,29 @@ extension $SwipeViewRouteExtension on SwipeViewRoute {
 
   String get location => GoRouteData.$location(
         '/swipeView',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $animationSampleViewRoute => GoRouteData.$route(
+      path: '/animationSampleView',
+      factory: $AnimationSampleViewRouteExtension._fromState,
+    );
+
+extension $AnimationSampleViewRouteExtension on AnimationSampleViewRoute {
+  static AnimationSampleViewRoute _fromState(GoRouterState state) =>
+      const AnimationSampleViewRoute();
+
+  String get location => GoRouteData.$location(
+        '/animationSampleView',
       );
 
   void go(BuildContext context) => context.go(location);
