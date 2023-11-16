@@ -89,9 +89,6 @@ class ReactionDatasourceImpl implements ReactionDatasource {
 
     // final myLastConfirmPostId = confirmPostFetchResult.docs.first.reference.id;
 
-    print('debug');
-    print(confirmPostFetchResult.docs);
-
     final temp = confirmPostFetchResult.docs.toList();
 
     final myLatestConfirmPostId = temp.first.reference.id;
@@ -108,9 +105,6 @@ class ReactionDatasourceImpl implements ReactionDatasource {
     //     )
     //     .reference
     //     .id;
-
-    print("HERE");
-    print(myLatestConfirmPostId);
 
     final encourages = await FirebaseFirestore.instance
         .collection(

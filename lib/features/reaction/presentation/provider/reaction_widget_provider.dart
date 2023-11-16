@@ -4,6 +4,8 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/features/effects/effects.dart';
 import 'package:wehavit/features/reaction/domain/usecase/get_reaction_not_read_from_last_confirm_post_usecase.dart';
 import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';
+import 'package:wehavit/features/swipe_view/domain/usecase/fetch_user_data_from_id_usecase.dart';
+import 'package:wehavit/features/swipe_view/domain/usecase/fetch_user_data_from_id_usecase_provider.dart';
 
 final reactionWidgetManagerProvider =
     StateNotifierProvider<ReactionWidgetManager, ReactionWidgetModel>(
@@ -24,10 +26,12 @@ class ReactionWidgetManager extends StateNotifier<ReactionWidgetModel> {
 
     getReactionNotReadFromLastConfirmPostUsecase =
         ref.watch(getReactionNotReadFromLastConfirmPostUsecaseProvider);
+    fetchUserDataFromIdUsecase = ref.watch(fetchUserDataFromIdUsecaseProvider);
   }
 
   late final GetReactionNotReadFromLastConfirmPostUsecase
       getReactionNotReadFromLastConfirmPostUsecase;
+  late final FetchUserDataFromIdUsecase fetchUserDataFromIdUsecase;
 
   void addTextMessageBubble(String message, String imageUrl) {
     state.textBubbleAnimationManager.addTextBubble(
@@ -40,12 +44,96 @@ class ReactionWidgetManager extends StateNotifier<ReactionWidgetModel> {
     state.emojiFireWork.addFireworkWidget(offset);
   }
 
-  EitherFuture<List<ReactionModel>> getReactionsNotReadFromLastConfirmPost() {
-    return getReactionNotReadFromLastConfirmPostUsecase.call(NoParams());
+  Future<void> drawReactionWidgets() async {
+    await getUnreadReactionModelGroupListFromLastConfirmPost();
+
+    print(state.reactionModelGroupList.length);
+    print(state.reactionModelGroupList.first.complimenterUid);
+
+    // state.reactionModelGroupList.map((reactionModelGroup) async {
+    //   print("WHY?3");
+    //   final complimenterUserModelFetchResult = await fetchUserDataFromIdUsecase
+    //       .call(reactionModelGroup.complimenterUid);
+    //   print("WHY?");
+    //   final userImageUrl = complimenterUserModelFetchResult.fold(
+    //     (failure) {
+    //       return 'https://thepets.cafe24.com/data/editor/1601/thumb-bc7f97593a2e6ecbe24b8eb79f4e357f_1453230382_494_600x483.jpg';
+    //     },
+    //     (userModel) {
+    //       return userModel.imageUrl;
+    //     },
+    //   );
+    //   print("DEBUG HERE");
+    //   state.balloonManager.addBalloon(imageUrl: userImageUrl);
+    // });
+
+    state.reactionModelGroupList.forEach((reactionModelGroup) async {
+      print("WHY?3");
+      final complimenterUserModelFetchResult =
+          await fetchUserDataFromIdUsecase(reactionModelGroup.complimenterUid);
+      print("WHY?");
+      final userImageUrl = complimenterUserModelFetchResult.fold(
+        (failure) {
+          return 'https://thepets.cafe24.com/data/editor/1601/thumb-bc7f97593a2e6ecbe24b8eb79f4e357f_1453230382_494_600x483.jpg';
+        },
+        (userModel) {
+          return userModel.imageUrl;
+        },
+      );
+      print("DEBUG HERE");
+      state.balloonManager.addBalloon(imageUrl: userImageUrl);
+    });
+  }
+
+  Future<void> getUnreadReactionModelGroupListFromLastConfirmPost() async {
+    final fetchResult =
+        await getReactionNotReadFromLastConfirmPostUsecase.call(NoParams());
+    fetchResult.fold(
+      (failure) {
+        debugPrint(failure.toString());
+        state.reactionModelList = [];
+      },
+      (result) {
+        result.sort((a, b) => a.complementerUid.compareTo(b.complementerUid));
+        state.reactionModelList = result;
+      },
+    );
+
+    final complementerList =
+        state.reactionModelList.map((e) => e.complementerUid).toSet().toList();
+
+    state.reactionModelGroupList = complementerList
+        .map(
+          (complimenterUid) =>
+              ReactionModelGroup(complimenterUid: complimenterUid),
+        )
+        .toList();
+
+    state.reactionModelList.map((reaction) {
+      final index = state.reactionModelGroupList.indexWhere((modelGroup) =>
+          modelGroup.complimenterUid == reaction.complementerUid);
+      switch (ReactionType.values[reaction.reactionType]) {
+        case ReactionType.comment:
+          state.reactionModelGroupList[index].textReactionModel = reaction;
+          break;
+        case ReactionType.emoji:
+          state.reactionModelGroupList[index].emojiReacionModelList
+              .add(reaction);
+          break;
+        case ReactionType.instantPhoto:
+          state.reactionModelGroupList[index].imageReacionModel = reaction;
+          break;
+      }
+    });
   }
 }
 
 class ReactionWidgetModel {
+  // reaction variables
+  List<ReactionModel> reactionModelList = [];
+  late List<ReactionModelGroup> reactionModelGroupList;
+
+  // animation variables
   late Map<Key, BalloonWidget> balloonWidgets;
   late Map<Key, TextBubbleFrameWidget> textBubbleWidgets;
 
@@ -55,4 +143,15 @@ class ReactionWidgetModel {
   EmojiFireWorkManager emojiFireWork = EmojiFireWorkManager(
     emojiAsset: const AssetImage('assets/images/emoji_3d/heart_suit_3d.png'),
   );
+}
+
+class ReactionModelGroup {
+  ReactionModelGroup({
+    required this.complimenterUid,
+  });
+
+  String complimenterUid;
+  List<ReactionModel> emojiReacionModelList = [];
+  ReactionModel? imageReacionModel;
+  ReactionModel? textReactionModel;
 }

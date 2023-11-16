@@ -28,44 +28,54 @@ class _ReactionWidgetState extends ConsumerState<ReactionWidget> {
     _reactionWidgetModel = ref.watch(reactionWidgetManagerProvider);
     _reactionWidgetManager = ref.watch(reactionWidgetManagerProvider.notifier);
 
-    return Container(
-      constraints: const BoxConstraints.expand(),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          ElevatedButton(
-              onPressed: () {
-                _reactionWidgetManager.getReactionsNotReadFromLastConfirmPost();
-              },
-              child: Text("Get Last Confirm Post's Encourage Data")),
-          Positioned(
-            top: 100,
-            child: Container(
-              color: Colors.black26,
+    return Scaffold(
+      appBar: AppBar(),
+      body: Container(
+        constraints: const BoxConstraints.expand(),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            ElevatedButton(
+                onPressed: () async {
+                  setState(() {
+                    _reactionWidgetManager.drawReactionWidgets();
+                    // _reactionWidgetModel.balloonManager.addBalloon(
+                    //   imageUrl:
+                    //       "https://tse3.mm.bing.net/th?id=OIP.1URkBljbPM0AEUD0HuaxoQHaEe&pid=Api&P=0&h=220",
+                    // );
+                  });
+                },
+                child: Text("Get Last Confirm Post's Encourage Data")),
+            Positioned(
+              top: 100,
+              child: Container(
+                color: Colors.black26,
+              ),
             ),
-          ),
-          Container(
-            constraints: const BoxConstraints.expand(),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                IgnorePointer(
-                  child: Stack(
-                    children: _reactionWidgetModel
-                        .emojiFireWork.fireworkWidgets.values
-                        .toList(),
+            Container(
+              constraints: const BoxConstraints.expand(),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  IgnorePointer(
+                    child: Stack(
+                      children: _reactionWidgetModel
+                          .emojiFireWork.fireworkWidgets.values
+                          .toList(),
+                    ),
                   ),
-                ),
-                Stack(
-                  children: _reactionWidgetModel.balloonWidgets.values.toList(),
-                ),
-              ],
+                  Stack(
+                    children:
+                        _reactionWidgetModel.balloonWidgets.values.toList(),
+                  ),
+                ],
+              ),
             ),
-          ),
-          Stack(
-            children: _reactionWidgetModel.textBubbleWidgets.values.toList(),
-          ),
-        ],
+            Stack(
+              children: _reactionWidgetModel.textBubbleWidgets.values.toList(),
+            ),
+          ],
+        ),
       ),
     );
   }
