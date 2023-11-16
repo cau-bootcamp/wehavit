@@ -38,7 +38,7 @@ class ReactionDatasourceImpl implements ReactionDatasource {
 
       FirebaseFirestore.instance
           .collection(
-        '${FirebaseCollectionName.confirmPosts}/_$targetConfirmPostId/${FirebaseCollectionName.encourages}',
+        '${FirebaseCollectionName.confirmPosts}/$targetConfirmPostId/${FirebaseCollectionName.encourages}',
       )
           .add(
         {
@@ -74,5 +74,57 @@ class ReactionDatasourceImpl implements ReactionDatasource {
     } on Exception catch (e) {
       return Future(() => left(Failure(e.toString())));
     }
+  }
+
+  @override
+  EitherFuture<List<ReactionModel>>
+      getReactionNotReadFromLastConfirmPost() async {
+    // TODO: 오늘 내 ConfirmPost의 ID를 찾아오는 로직을 간단하게 추가할 필요 있음!!
+    final confirmPostFetchResult = await FirebaseFirestore.instance
+        .collection('${FirebaseCollectionName.confirmPosts}')
+        .where('owner', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        // .orderBy('createdAt', descending: true)
+        // .limit(1)
+        .get();
+
+    // final myLastConfirmPostId = confirmPostFetchResult.docs.first.reference.id;
+
+    print('debug');
+    print(confirmPostFetchResult.docs);
+
+    final temp = confirmPostFetchResult.docs.toList();
+
+    final myLatestConfirmPostId = temp.first.reference.id;
+    // final myLastConfirmPostId = temp
+    //     .reduce((value, element) =>
+    //         value.data()['createdAt'] < element.data()['createdAt']
+    //             ? value
+    //             : element)
+    //     .reference
+    //     .id;
+    //       (value, doc) => ((value.data()['createdAt'] < doc.data()['createdAt']
+    //           ? value
+    //           : doc)),
+    //     )
+    //     .reference
+    //     .id;
+
+    print("HERE");
+    print(myLatestConfirmPostId);
+
+    final encourages = await FirebaseFirestore.instance
+        .collection(
+          '${FirebaseCollectionName.confirmPosts}/$myLatestConfirmPostId/${FirebaseCollectionName.encourages}',
+        )
+        .where('hasRead', isEqualTo: false)
+        .get();
+
+    final result = encourages.docs
+        .map((doc) => ReactionModel.fromJson(doc.data()))
+        .toList();
+
+    return Future(
+      () => right(result),
+    );
   }
 }
