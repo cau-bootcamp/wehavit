@@ -18,7 +18,7 @@ class TextBubbleFrameWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints.expand(),
+      constraints: const BoxConstraints.expand(),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -77,28 +77,28 @@ class _TextBubbleWidgetState extends State<TextBubbleWidget>
 
     _lifetimeAnimationController = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 8),
+      duration: const Duration(seconds: 8),
     );
     _lifetimeAnimationController.addListener(() {
       setState(() {});
     });
     _avatarAnimationController = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 1),
+      duration: const Duration(seconds: 1),
     );
     _avatarAnimationController.addListener(() {
       setState(() {});
     });
     _textBubbleAnimationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 500),
     );
     _textBubbleAnimationController.addListener(() {
       setState(() {});
     });
     _disappearAnimationController = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 1),
+      duration: const Duration(seconds: 1),
     );
     _disappearAnimationController.addListener(() {
       setState(() {});
@@ -153,7 +153,7 @@ class _TextBubbleWidgetState extends State<TextBubbleWidget>
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints.expand(height: 500),
+      constraints: const BoxConstraints.expand(height: 500),
       height: 500,
       child: Stack(
         alignment: Alignment.bottomCenter,
@@ -191,14 +191,14 @@ class _TextBubbleWidgetState extends State<TextBubbleWidget>
                               padding: const EdgeInsets.all(16.0),
                               child: Text(
                                 widget.message,
-                                style: TextStyle(fontSize: 16.0),
+                                style: const TextStyle(fontSize: 16.0),
                               ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 40,
                     ),
                   ],
