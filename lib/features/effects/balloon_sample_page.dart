@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wehavit/features/effects/balloon_animation/balloon_manager.dart';
-import 'package:wehavit/features/effects/emoji_firework_animation/emoji_firework_manager.dart';
+import 'package:wehavit/features/effects/effects.dart';
 
 class AnimationSampleView extends ConsumerStatefulWidget {
   const AnimationSampleView({super.key});
