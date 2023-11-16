@@ -40,7 +40,7 @@ class EmojiFireWorkManager {
   // properties
   final AssetImage emojiAsset;
   final int emojiAmount;
-  late Map<Key, _FireworkWidget> fireworkWidgets = {};
+  late Map<Key, FireworkWidget> fireworkWidgets = {};
 
   final int emojiLifetimeDurationSec;
   final int emojiShootDurationSec;
@@ -57,31 +57,33 @@ class EmojiFireWorkManager {
   void addFireworkWidget(Offset offset) {
     final fireworkWidgetKey = UniqueKey();
 
-    fireworkWidgets.addEntries(<Key, _FireworkWidget>{
-      fireworkWidgetKey: _FireworkWidget(
-        key: fireworkWidgetKey,
-        notifyWidgetIsDisposed: (UniqueKey widgetKey) {
-          fireworkWidgets.remove(widgetKey);
-        },
-        offset: offset,
-        emojiAsset: emojiAsset,
-        emojiAmount: emojiAmount,
-        emojiLifetimeDurationSec: emojiLifetimeDurationSec,
-        emojiShootDurationSec: emojiShootDurationSec,
-        emojiShootingXScale: emojiShootingXScale,
-        emojiShootingYScale: emojiShootingYScale,
-        emojiFloatingXScale: emojiFloatingXScale,
-        emojiFloatingYScale: emojiFloatingYScale,
-        emojiSizeDeltaScale: emojiSizeDeltaScale,
-        emojiTransparentThreshold: emojiTransparentThreshold,
-        emojiSize: emojiSize,
-      )
-    }.entries);
+    fireworkWidgets.addEntries(
+      <Key, FireworkWidget>{
+        fireworkWidgetKey: FireworkWidget(
+          key: fireworkWidgetKey,
+          notifyWidgetIsDisposed: (UniqueKey widgetKey) {
+            fireworkWidgets.remove(widgetKey);
+          },
+          offset: offset,
+          emojiAsset: emojiAsset,
+          emojiAmount: emojiAmount,
+          emojiLifetimeDurationSec: emojiLifetimeDurationSec,
+          emojiShootDurationSec: emojiShootDurationSec,
+          emojiShootingXScale: emojiShootingXScale,
+          emojiShootingYScale: emojiShootingYScale,
+          emojiFloatingXScale: emojiFloatingXScale,
+          emojiFloatingYScale: emojiFloatingYScale,
+          emojiSizeDeltaScale: emojiSizeDeltaScale,
+          emojiTransparentThreshold: emojiTransparentThreshold,
+          emojiSize: emojiSize,
+        ),
+      }.entries,
+    );
   }
 }
 
-class _FireworkWidget extends StatefulWidget {
-  const _FireworkWidget({
+class FireworkWidget extends StatefulWidget {
+  const FireworkWidget({
     super.key,
     required this.notifyWidgetIsDisposed,
     required this.offset,
@@ -112,10 +114,10 @@ class _FireworkWidget extends StatefulWidget {
   final double emojiSize;
 
   @override
-  State<_FireworkWidget> createState() => _FireworkWidgetState();
+  State<FireworkWidget> createState() => _FireworkWidgetState();
 }
 
-class _FireworkWidgetState extends State<_FireworkWidget>
+class _FireworkWidgetState extends State<FireworkWidget>
     with TickerProviderStateMixin {
   // 불꽃놀이에서 움직이는 각각의 위젯들을 담아두는 리스트
   late List<EmojiWidget> emojiWidgetList;
@@ -226,14 +228,21 @@ extension _FireworkWidgetStateAnimations on _FireworkWidgetState {
     emojiAnimationLifeTimeController =
         AnimationController(vsync: this, duration: _emojiLifetimeDuration);
     emojiLifeTimeAnimation = Tween(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(
-            parent: emojiAnimationLifeTimeController, curve: Curves.linear));
+      CurvedAnimation(
+        parent: emojiAnimationLifeTimeController,
+        curve: Curves.linear,
+      ),
+    );
     emojiLifeTimeAnimation.addListener(() {
       // ignore: invalid_use_of_protected_member
       setState(() {});
     });
     emojiLifeTimeAnimation.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
+        emojiAnimationShootController.dispose();
+        emojiAnimationFloatController.dispose();
+        emojiAnimationLifeTimeController.dispose();
+
         widget.notifyWidgetIsDisposed(widget.key);
       }
     });
