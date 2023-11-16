@@ -43,7 +43,7 @@ class ReactionDatasourceImpl implements ReactionDatasource {
           .add(
         {
           FirebaseReactionFieldName.complementerUid:
-              '/users/${FirebaseAuth.instance.currentUser!.uid}',
+              FirebaseAuth.instance.currentUser!.uid,
           FirebaseReactionFieldName.reactionType: reactionModel.reactionType,
           FirebaseReactionFieldName.emoji: reactionModel.emoji,
           FirebaseReactionFieldName.instantPhotoUrl:
@@ -81,7 +81,7 @@ class ReactionDatasourceImpl implements ReactionDatasource {
       getReactionNotReadFromLastConfirmPost() async {
     // TODO: 오늘 내 ConfirmPost의 ID를 찾아오는 로직을 간단하게 추가할 필요 있음!!
     final confirmPostFetchResult = await FirebaseFirestore.instance
-        .collection('${FirebaseCollectionName.confirmPosts}')
+        .collection(FirebaseCollectionName.confirmPosts)
         .where('owner', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
         // .orderBy('createdAt', descending: true)
         // .limit(1)

@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wehavit/features/effects/effects.dart';
-import 'package:wehavit/features/effects/text_animation/text_bubble_manager.dart';
 import 'package:wehavit/features/reaction/presentation/provider/reaction_widget_provider.dart';
-
-import '../../../effects/text_animation/text_bubble_widget.dart';
 
 class ReactionWidget extends ConsumerStatefulWidget {
   const ReactionWidget({super.key});
@@ -24,9 +20,15 @@ class _ReactionWidgetState extends ConsumerState<ReactionWidget> {
   }
 
   @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     _reactionWidgetModel = ref.watch(reactionWidgetManagerProvider);
-    _reactionWidgetManager = ref.watch(reactionWidgetManagerProvider.notifier);
+    _reactionWidgetManager = ref.read(reactionWidgetManagerProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(),
@@ -39,10 +41,6 @@ class _ReactionWidgetState extends ConsumerState<ReactionWidget> {
                 onPressed: () async {
                   setState(() {
                     _reactionWidgetManager.drawReactionWidgets();
-                    // _reactionWidgetModel.balloonManager.addBalloon(
-                    //   imageUrl:
-                    //       "https://tse3.mm.bing.net/th?id=OIP.1URkBljbPM0AEUD0HuaxoQHaEe&pid=Api&P=0&h=220",
-                    // );
                   });
                 },
                 child: Text("Get Last Confirm Post's Encourage Data")),

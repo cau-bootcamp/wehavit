@@ -30,7 +30,20 @@ class BalloonManager extends StateNotifier<Map<Key, BalloonWidget>> {
   void addBalloon({required String imageUrl}) {
     final balloonWidgetKey = UniqueKey();
 
-    state.addEntries(<Key, BalloonWidget>{
+    // state.addEntries(
+    //   <Key, BalloonWidget>{
+    //     balloonWidgetKey: BalloonWidget(
+    //       key: balloonWidgetKey,
+    //       imageUrl: imageUrl,
+    //       notifyWidgetIsDisposed: (Key widgetKey) {
+    //         state = Map.of(state..remove(widgetKey));
+    //       },
+    //       onTapWithOffset: onTapCallbackWithTappedPositionOffset ?? (_) {},
+    //       radius: radius,
+    //     ),
+    //   }.entries,
+    // );
+    final newBalloon = {
       balloonWidgetKey: BalloonWidget(
         key: balloonWidgetKey,
         imageUrl: imageUrl,
@@ -40,7 +53,12 @@ class BalloonManager extends StateNotifier<Map<Key, BalloonWidget>> {
         onTapWithOffset: onTapCallbackWithTappedPositionOffset ?? (_) {},
         radius: radius,
       ),
-    }.entries);
+    };
+
+    // state = {
+    //   ...state,
+    //   ...newBalloon,
+    // };
   }
 }
 
@@ -112,7 +130,7 @@ class _BalloonWidgetState extends State<BalloonWidget>
     _startAnimation();
   }
 
-  _startAnimation() {
+  void _startAnimation() {
     _animationController.forward();
   }
 
@@ -129,12 +147,14 @@ class _BalloonWidgetState extends State<BalloonWidget>
 
   void notifyWidgetIsDisposed() {
     _animationController.dispose();
+    print("TAP2");
     widget.onTapWithOffset(
       Offset(
         balloonModel.x + 50 * sin(_animation.value) + 65, // radius of photo
         balloonModel.y + 25 * cos(_animation.value) + 65, // radius of photo
       ),
     );
+    print("TAP");
     widget.notifyWidgetIsDisposed(widget.key);
   }
 }

@@ -9,7 +9,14 @@ import 'package:wehavit/features/swipe_view/domain/usecase/fetch_user_data_from_
 
 final reactionWidgetManagerProvider =
     StateNotifierProvider<ReactionWidgetManager, ReactionWidgetModel>(
-  (ref) => ReactionWidgetManager(ref),
+  (ref) {
+    ref.onDispose(
+      () {
+        print("DEBUG ___");
+      },
+    );
+    return ReactionWidgetManager(ref);
+  },
 );
 
 class ReactionWidgetManager extends StateNotifier<ReactionWidgetModel> {
@@ -41,37 +48,20 @@ class ReactionWidgetManager extends StateNotifier<ReactionWidgetModel> {
   }
 
   void callBackFunction(Offset offset) {
+    print("STATE");
+    print(offset);
+    print(state.emojiFireWork);
+
     state.emojiFireWork.addFireworkWidget(offset);
   }
 
   Future<void> drawReactionWidgets() async {
     await getUnreadReactionModelGroupListFromLastConfirmPost();
 
-    print(state.reactionModelGroupList.length);
-    print(state.reactionModelGroupList.first.complimenterUid);
-
-    // state.reactionModelGroupList.map((reactionModelGroup) async {
-    //   print("WHY?3");
-    //   final complimenterUserModelFetchResult = await fetchUserDataFromIdUsecase
-    //       .call(reactionModelGroup.complimenterUid);
-    //   print("WHY?");
-    //   final userImageUrl = complimenterUserModelFetchResult.fold(
-    //     (failure) {
-    //       return 'https://thepets.cafe24.com/data/editor/1601/thumb-bc7f97593a2e6ecbe24b8eb79f4e357f_1453230382_494_600x483.jpg';
-    //     },
-    //     (userModel) {
-    //       return userModel.imageUrl;
-    //     },
-    //   );
-    //   print("DEBUG HERE");
-    //   state.balloonManager.addBalloon(imageUrl: userImageUrl);
-    // });
-
-    state.reactionModelGroupList.forEach((reactionModelGroup) async {
-      print("WHY?3");
+    for (var reactionModelGroup in state.reactionModelGroupList) {
       final complimenterUserModelFetchResult =
           await fetchUserDataFromIdUsecase(reactionModelGroup.complimenterUid);
-      print("WHY?");
+
       final userImageUrl = complimenterUserModelFetchResult.fold(
         (failure) {
           return 'https://thepets.cafe24.com/data/editor/1601/thumb-bc7f97593a2e6ecbe24b8eb79f4e357f_1453230382_494_600x483.jpg';
@@ -80,9 +70,9 @@ class ReactionWidgetManager extends StateNotifier<ReactionWidgetModel> {
           return userModel.imageUrl;
         },
       );
-      print("DEBUG HERE");
+
       state.balloonManager.addBalloon(imageUrl: userImageUrl);
-    });
+    }
   }
 
   Future<void> getUnreadReactionModelGroupListFromLastConfirmPost() async {
@@ -125,6 +115,9 @@ class ReactionWidgetManager extends StateNotifier<ReactionWidgetModel> {
           break;
       }
     });
+    print("HERE2");
+    print(state.emojiFireWork);
+    ;
   }
 }
 
