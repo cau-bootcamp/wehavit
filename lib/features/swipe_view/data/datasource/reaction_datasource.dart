@@ -6,6 +6,4 @@ abstract class ReactionDatasource {
     String targetConfirmPostId,
     ReactionModel reactionModel,
   );
-
-  EitherFuture<List<ReactionModel>> getReactionNotReadFromLastConfirmPost();
 }

@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wehavit/common/common.dart';
+import 'package:wehavit/features/effects/animation_sample_page.dart';
 import 'package:wehavit/features/features.dart';
 import 'package:wehavit/features/live_writing/presentation/screens/live_writing_page.dart';
 import 'package:wehavit/features/my_page/presentation/screens/add_resolution_screen.dart';
 import 'package:wehavit/features/my_page/presentation/screens/my_page_screen.dart';
-import 'package:wehavit/features/reaction/presentation/widget/reaction_widget.dart';
 import 'package:wehavit/features/swipe_view/presentation/screen/swipe_view.dart';
 
 part 'route_provider.g.dart';
@@ -180,7 +180,7 @@ class AnimationSampleViewRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const ReactionWidget();
+    return const AnimationSampleView();
   }
 }
 
