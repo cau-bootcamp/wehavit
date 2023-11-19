@@ -18,9 +18,6 @@ class UserModelFetchDatasourceImpl extends UserModelFetchDatasource {
           .doc(targetUserId)
           .get();
 
-      print("THIS IS DEBUG");
-      print(fetchResult);
-
       return Future(
         () => right(UserModel.fromJson(fetchResult.data()!)),
       );
@@ -28,7 +25,7 @@ class UserModelFetchDatasourceImpl extends UserModelFetchDatasource {
       debugPrint('DEBUG : fetchLiveWrittenConfirmPostList error $e');
       return Future(
         () => left(
-          const Failure("catch error on fetchLiveWrittenConfirmPostList"),
+          const Failure('catch error on fetchLiveWrittenConfirmPostList'),
         ),
       );
     }

@@ -24,12 +24,14 @@ final balloonManagerProvider =
 class BalloonManager extends StateNotifier<Map<Key, BalloonWidget>> {
   BalloonManager() : super({});
 
-  late Function(Offset, List<int>)? onTapCallbackWithTappedPositionOffset;
+  late Function(Offset, List<int>, String, String)?
+      onTapCallbackWithTappedPositionOffset;
   double radius = 130;
 
   void addBalloon({
     required String imageUrl,
     required List<int> emojiReactionCountList,
+    required String message,
   }) {
     final balloonWidgetKey = UniqueKey();
     final newBalloon = {
@@ -43,6 +45,8 @@ class BalloonManager extends StateNotifier<Map<Key, BalloonWidget>> {
           onTapCallbackWithTappedPositionOffset!(
             offset,
             emojiReactionCountList,
+            message,
+            imageUrl,
           );
         },
         radius: radius,
@@ -196,11 +200,10 @@ class BalloonParticleWidget extends StatelessWidget {
 }
 
 class BalloonModel {
-  double x;
-  double y;
-
   BalloonModel({
     required this.x,
     required this.y,
   });
+  double x;
+  double y;
 }

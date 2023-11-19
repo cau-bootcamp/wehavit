@@ -42,10 +42,12 @@ class _ReactionAnimationWidgetState
   void addBalloonAnimation({
     required String imageUrl,
     required List<int> emojiCountList,
+    required String message,
   }) {
     _balloonManager.addBalloon(
       imageUrl: imageUrl,
       emojiReactionCountList: emojiCountList,
+      message: message,
     );
   }
 
@@ -103,6 +105,12 @@ class _ReactionAnimationWidgetState
               ],
             ),
           ),
+          Container(
+            constraints: const BoxConstraints.expand(),
+            child: Stack(
+              children: _textBubbleWidgets.values.toList(),
+            ),
+          ),
           ElevatedButton(
             onPressed: () async {
               final fetchResult = await _reactionAnimationWidgetManager
@@ -136,6 +144,8 @@ class _ReactionAnimationWidgetState
                   addBalloonAnimation(
                     imageUrl: userImageUrl,
                     emojiCountList: emojiCountList,
+                    message:
+                        reactionGroupModel.textReactionModel?.comment ?? '',
                   );
                 });
               }
@@ -147,12 +157,20 @@ class _ReactionAnimationWidgetState
     );
   }
 
-  void _callBackFunction(Offset offset, List<int> emojiReactionCountList) {
-    print("DEBUG HERE");
-    print(emojiReactionCountList);
+  void _callBackFunction(
+    Offset offset,
+    List<int> emojiReactionCountList,
+    String message,
+    String userImageUrl,
+  ) {
     emojiFireWorkManager.addFireworkWidget(
       offset: offset,
       emojiReactionCountList: emojiReactionCountList,
+    );
+
+    _textBubbleAnimationManager.addTextBubble(
+      message: message,
+      imageUrl: userImageUrl,
     );
   }
 }
