@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/features/effects/effects.dart';
+import 'package:wehavit/features/reaction/presentation/provider/reaction_animation_widget_state_provider.dart';
+import 'package:wehavit/features/swipe_view/domain/usecase/swipe_view_usecase.dart';
 
 class ReactionAnimationWidget extends ConsumerStatefulWidget {
   const ReactionAnimationWidget({super.key});
@@ -16,6 +18,11 @@ class _ReactionAnimationWidgetState
   late BalloonManager _balloonManager;
   late Map<Key, TextBubbleFrameWidget> _textBubbleWidgets;
   late TextBubbleAnimationManager _textBubbleAnimationManager;
+
+  late List<ReactionGroupModel> _reactionGroupModelList;
+  late ReactionAnimationWidgetManager _reactionAnimationWidgetManager;
+
+  late FetchUserDataFromIdUsecase _fetchUserDataFromIdUsecase;
 
   EmojiFireWorkManager emojiFireWork = EmojiFireWorkManager(
     emojiAsset: const AssetImage('assets/images/emoji_3d/heart_suit_3d.png'),
@@ -55,6 +62,10 @@ class _ReactionAnimationWidgetState
     _textBubbleWidgets = ref.watch(textBubbleAnimationManagerProvider);
     _textBubbleAnimationManager =
         ref.read(textBubbleAnimationManagerProvider.notifier);
+
+    _reactionAnimationWidgetManager =
+        ref.read(reactionAnimationWidgetManagerProvider.notifier);
+    _fetchUserDataFromIdUsecase = ref.watch(fetchUserDataFromIdUsecaseProvider);
   }
 
   @override
@@ -88,36 +99,32 @@ class _ReactionAnimationWidgetState
               ],
             ),
           ),
-          Positioned(
-            bottom: 30,
-            child: ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  addBalloonAnimation(
-                    imageUrl:
-                        'https://avatars.githubusercontent.com/u/39216546?v=4',
-                  );
-                });
-              },
-              child: const Text('Tap Button'),
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            child: ElevatedButton(
-              onPressed: () {
-                addTextBubbleAnimation(
-                  message: 'HELLO',
-                  imageUrl:
-                      'https://avatars.githubusercontent.com/u/39216546?v=4',
+          ElevatedButton(
+            onPressed: () async {
+              final fetchResult = await _reactionAnimationWidgetManager
+                  .getUnreadReactionModelGroupListFromLastConfirmPost();
+
+              for (var reactionGroupModel in fetchResult) {
+                final fetchUserModelResult =
+                    await _fetchUserDataFromIdUsecase.call(
+                  reactionGroupModel.complimenterUid,
                 );
-              },
-              child: const Text('showTextBubble'),
-            ),
-          ),
-          Stack(
-            children: _textBubbleWidgets.values.toList(),
-          ),
+
+                setState(() {
+                  final userImageUrl = fetchUserModelResult.fold(
+                    (failure) {
+                      return 'https://png.pngtree.com/thumb_back/fh260/background/20210409/pngtree-rules-of-biotex-cat-image_600076.jpg';
+                    },
+                    (userModel) {
+                      return userModel.imageUrl;
+                    },
+                  );
+                  addBalloonAnimation(imageUrl: userImageUrl);
+                });
+              }
+            },
+            child: const Text('Get Reaction Data'),
+          )
         ],
       ),
     );

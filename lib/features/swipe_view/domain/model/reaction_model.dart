@@ -6,7 +6,7 @@ part 'reaction_model.g.dart';
 @freezed
 class ReactionModel with _$ReactionModel {
   factory ReactionModel({
-    required String complementerUid,
+    required String complimenterUid,
     required int reactionType,
     @Default(false) bool hasRead,
     @Default('') String instantPhotoUrl,

@@ -20,7 +20,7 @@ ReactionModel _$ReactionModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ReactionModel {
-  String get complementerUid => throw _privateConstructorUsedError;
+  String get complimenterUid => throw _privateConstructorUsedError;
   int get reactionType => throw _privateConstructorUsedError;
   bool get hasRead => throw _privateConstructorUsedError;
   String get instantPhotoUrl => throw _privateConstructorUsedError;
@@ -40,7 +40,7 @@ abstract class $ReactionModelCopyWith<$Res> {
       _$ReactionModelCopyWithImpl<$Res, ReactionModel>;
   @useResult
   $Res call(
-      {String complementerUid,
+      {String complimenterUid,
       int reactionType,
       bool hasRead,
       String instantPhotoUrl,
@@ -61,7 +61,7 @@ class _$ReactionModelCopyWithImpl<$Res, $Val extends ReactionModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? complementerUid = null,
+    Object? complimenterUid = null,
     Object? reactionType = null,
     Object? hasRead = null,
     Object? instantPhotoUrl = null,
@@ -69,9 +69,9 @@ class _$ReactionModelCopyWithImpl<$Res, $Val extends ReactionModel>
     Object? emoji = null,
   }) {
     return _then(_value.copyWith(
-      complementerUid: null == complementerUid
-          ? _value.complementerUid
-          : complementerUid // ignore: cast_nullable_to_non_nullable
+      complimenterUid: null == complimenterUid
+          ? _value.complimenterUid
+          : complimenterUid // ignore: cast_nullable_to_non_nullable
               as String,
       reactionType: null == reactionType
           ? _value.reactionType
@@ -106,7 +106,7 @@ abstract class _$$ReactionModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String complementerUid,
+      {String complimenterUid,
       int reactionType,
       bool hasRead,
       String instantPhotoUrl,
@@ -125,7 +125,7 @@ class __$$ReactionModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? complementerUid = null,
+    Object? complimenterUid = null,
     Object? reactionType = null,
     Object? hasRead = null,
     Object? instantPhotoUrl = null,
@@ -133,9 +133,9 @@ class __$$ReactionModelImplCopyWithImpl<$Res>
     Object? emoji = null,
   }) {
     return _then(_$ReactionModelImpl(
-      complementerUid: null == complementerUid
-          ? _value.complementerUid
-          : complementerUid // ignore: cast_nullable_to_non_nullable
+      complimenterUid: null == complimenterUid
+          ? _value.complimenterUid
+          : complimenterUid // ignore: cast_nullable_to_non_nullable
               as String,
       reactionType: null == reactionType
           ? _value.reactionType
@@ -165,7 +165,7 @@ class __$$ReactionModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ReactionModelImpl implements _ReactionModel {
   _$ReactionModelImpl(
-      {required this.complementerUid,
+      {required this.complimenterUid,
       required this.reactionType,
       this.hasRead = false,
       this.instantPhotoUrl = '',
@@ -177,7 +177,7 @@ class _$ReactionModelImpl implements _ReactionModel {
       _$$ReactionModelImplFromJson(json);
 
   @override
-  final String complementerUid;
+  final String complimenterUid;
   @override
   final int reactionType;
   @override
@@ -200,7 +200,7 @@ class _$ReactionModelImpl implements _ReactionModel {
 
   @override
   String toString() {
-    return 'ReactionModel(complementerUid: $complementerUid, reactionType: $reactionType, hasRead: $hasRead, instantPhotoUrl: $instantPhotoUrl, comment: $comment, emoji: $emoji)';
+    return 'ReactionModel(complimenterUid: $complimenterUid, reactionType: $reactionType, hasRead: $hasRead, instantPhotoUrl: $instantPhotoUrl, comment: $comment, emoji: $emoji)';
   }
 
   @override
@@ -208,8 +208,8 @@ class _$ReactionModelImpl implements _ReactionModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ReactionModelImpl &&
-            (identical(other.complementerUid, complementerUid) ||
-                other.complementerUid == complementerUid) &&
+            (identical(other.complimenterUid, complimenterUid) ||
+                other.complimenterUid == complimenterUid) &&
             (identical(other.reactionType, reactionType) ||
                 other.reactionType == reactionType) &&
             (identical(other.hasRead, hasRead) || other.hasRead == hasRead) &&
@@ -223,7 +223,7 @@ class _$ReactionModelImpl implements _ReactionModel {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      complementerUid,
+      complimenterUid,
       reactionType,
       hasRead,
       instantPhotoUrl,
@@ -246,7 +246,7 @@ class _$ReactionModelImpl implements _ReactionModel {
 
 abstract class _ReactionModel implements ReactionModel {
   factory _ReactionModel(
-      {required final String complementerUid,
+      {required final String complimenterUid,
       required final int reactionType,
       final bool hasRead,
       final String instantPhotoUrl,
@@ -257,7 +257,7 @@ abstract class _ReactionModel implements ReactionModel {
       _$ReactionModelImpl.fromJson;
 
   @override
-  String get complementerUid;
+  String get complimenterUid;
   @override
   int get reactionType;
   @override
