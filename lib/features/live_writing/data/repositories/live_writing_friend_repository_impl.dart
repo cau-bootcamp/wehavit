@@ -1,7 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/constants/firebase_field_name.dart';
+import 'package:wehavit/common/errors/failure.dart';
+import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/common/utils/firebase_collection_name.dart';
 import 'package:wehavit/features/live_writing/domain/repositories/live_writing_friend_repository.dart';
+import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';
 
 class LiveWritingFriendRepositoryImpl extends LiveWritingFriendRepository {
   LiveWritingFriendRepositoryImpl();
@@ -75,5 +81,36 @@ class LiveWritingFriendRepositoryImpl extends LiveWritingFriendRepository {
       },
     );
     return res;
+  }
+
+  @override
+  EitherFuture<bool> sendReactionToTargetFriend(
+    String targetEmail,
+    ReactionModel reactionModel,
+  ) async {
+    const errorMessage = 'Error on sendReactionToTargetFriend Function';
+    reactionModel = reactionModel.copyWith(
+      complimenterUid: '/users/${FirebaseAuth.instance.currentUser!.uid}',
+      hasRead: false,
+    );
+
+    try {
+      await FirebaseFirestore.instance
+          .collection(
+            '${FirebaseCollectionName.liveConfirmPosts}/LIVE-$targetEmail/${FirebaseCollectionName.encourages}',
+          )
+          .add(
+            reactionModel.toJson(),
+          );
+
+      return Future(() => right(true));
+    } on Exception {
+      debugPrint(errorMessage);
+      return Future(
+        () => left(
+          const Failure(errorMessage),
+        ),
+      );
+    }
   }
 }
