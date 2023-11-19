@@ -16,10 +16,10 @@ class ReactionAnimationWidget extends ConsumerStatefulWidget {
 class _ReactionAnimationWidgetState
     extends ConsumerState<ReactionAnimationWidget> {
   late Map<Key, BalloonWidget> _balloonWidgets;
-  late BalloonManager _balloonManager;
   late Map<Key, TextBubbleFrameWidget> _textBubbleWidgets;
-  late TextBubbleAnimationManager _textBubbleAnimationManager;
 
+  late BalloonManager _balloonManager;
+  late TextBubbleAnimationManager _textBubbleAnimationManager;
   late ReactionAnimationWidgetManager _reactionAnimationWidgetManager;
 
   late FetchUserDataFromIdUsecase _fetchUserDataFromIdUsecase;

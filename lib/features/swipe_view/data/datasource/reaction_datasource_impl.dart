@@ -113,6 +113,11 @@ class ReactionDatasourceImpl implements ReactionDatasource {
         .where('hasRead', isEqualTo: false)
         .get();
 
+    // 이 로직으로 응원 데이터는 한 번만 가져올 수 있음
+    for (var doc in encourages.docs) {
+      FirebaseFirestore.instance.doc(doc.reference.path).set({'hasRead': true});
+    }
+
     final result = encourages.docs
         .map((doc) => ReactionModel.fromJson(doc.data()))
         .toList();
