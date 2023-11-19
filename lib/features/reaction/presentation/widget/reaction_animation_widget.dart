@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/features/effects/effects.dart';
 import 'package:wehavit/features/reaction/presentation/provider/reaction_animation_widget_state_provider.dart';
 import 'package:wehavit/features/swipe_view/domain/usecase/swipe_view_usecase.dart';
@@ -24,9 +25,7 @@ class _ReactionAnimationWidgetState
 
   late FetchUserDataFromIdUsecase _fetchUserDataFromIdUsecase;
 
-  EmojiFireWorkManager emojiFireWork = EmojiFireWorkManager(
-    emojiAsset: const AssetImage('assets/images/emoji_3d/heart_suit_3d.png'),
-  );
+  EmojiFireWorkManager emojiFireWorkManager = EmojiFireWorkManager();
 
   void addTextBubbleAnimation({
     required String message,
@@ -40,9 +39,13 @@ class _ReactionAnimationWidgetState
     });
   }
 
-  void addBalloonAnimation({required String imageUrl}) {
+  void addBalloonAnimation({
+    required String imageUrl,
+    required List<int> emojiCountList,
+  }) {
     _balloonManager.addBalloon(
       imageUrl: imageUrl,
+      emojiReactionCountList: emojiCountList,
     );
   }
 
@@ -90,7 +93,8 @@ class _ReactionAnimationWidgetState
               children: [
                 IgnorePointer(
                   child: Stack(
-                    children: emojiFireWork.fireworkWidgets.values.toList(),
+                    children:
+                        emojiFireWorkManager.fireworkWidgets.values.toList(),
                   ),
                 ),
                 Stack(
@@ -110,6 +114,16 @@ class _ReactionAnimationWidgetState
                   reactionGroupModel.complimenterUid,
                 );
 
+                List<int> emojiCountList = List.generate(
+                    reactionGroupModel.emojiReacionModelList.first.emoji.length,
+                    (index) => 0);
+                for (var emojiReaction
+                    in reactionGroupModel.emojiReacionModelList) {
+                  emojiReaction.emoji.mapWithIndex((value, index) {
+                    emojiCountList[index] += value;
+                  });
+                }
+
                 setState(() {
                   final userImageUrl = fetchUserModelResult.fold(
                     (failure) {
@@ -119,7 +133,10 @@ class _ReactionAnimationWidgetState
                       return userModel.imageUrl;
                     },
                   );
-                  addBalloonAnimation(imageUrl: userImageUrl);
+                  addBalloonAnimation(
+                    imageUrl: userImageUrl,
+                    emojiCountList: emojiCountList,
+                  );
                 });
               }
             },
@@ -130,7 +147,12 @@ class _ReactionAnimationWidgetState
     );
   }
 
-  void _callBackFunction(Offset offset) {
-    emojiFireWork.addFireworkWidget(offset);
+  void _callBackFunction(Offset offset, List<int> emojiReactionCountList) {
+    print("DEBUG HERE");
+    print(emojiReactionCountList);
+    emojiFireWorkManager.addFireworkWidget(
+      offset: offset,
+      emojiReactionCountList: emojiReactionCountList,
+    );
   }
 }

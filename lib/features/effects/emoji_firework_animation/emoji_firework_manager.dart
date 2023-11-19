@@ -1,11 +1,14 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:fpdart/fpdart.dart' as fpdart;
+import 'package:wehavit/common/utils/emoji_assets.dart';
 
 /// EmojiFireWork 를 통해 예쁜 이모지 폭죽을 쏠 수 있습니다!
 ///
 /// ## 변수 리스트
 /// - emojiAsset: 불꽃놀이 이펙트로 사용할 에셋을 `AssetImage` 타입으로 전달
+/// - emojiAmount: 총 이모지 개수의 최소값 - default는 30
 /// - emojiLifetimeDurationSec: 이모지가 화면을 날아다니는 전체 시간 (생명시간) - default는 5
 /// - emojiShootDurationSec: 이모지가 처음에 터지면서 퍼지는 시간 - default는 2
 /// - emojiShootingXScale: 이모지가 처음에 퍼질 때 X축 방향으로 퍼지는 정도 - default는 3
@@ -24,7 +27,6 @@ import 'package:flutter/material.dart';
 ///
 class EmojiFireWorkManager {
   EmojiFireWorkManager({
-    required this.emojiAsset,
     this.emojiAmount = 30,
     this.emojiLifetimeDurationSec = 5,
     this.emojiShootDurationSec = 2,
@@ -38,7 +40,6 @@ class EmojiFireWorkManager {
   });
 
   // properties
-  final AssetImage emojiAsset;
   final int emojiAmount;
   late Map<Key, FireworkWidget> fireworkWidgets = {};
 
@@ -54,7 +55,8 @@ class EmojiFireWorkManager {
   final double emojiSize;
 
   // methods
-  void addFireworkWidget(Offset offset) {
+  void addFireworkWidget(
+      {required Offset offset, required List<int> emojiReactionCountList}) {
     final fireworkWidgetKey = UniqueKey();
 
     fireworkWidgets.addEntries(
@@ -65,7 +67,7 @@ class EmojiFireWorkManager {
             fireworkWidgets.remove(widgetKey);
           },
           offset: offset,
-          emojiAsset: emojiAsset,
+          emojiReactionCountList: emojiReactionCountList,
           emojiAmount: emojiAmount,
           emojiLifetimeDurationSec: emojiLifetimeDurationSec,
           emojiShootDurationSec: emojiShootDurationSec,
@@ -87,7 +89,7 @@ class FireworkWidget extends StatefulWidget {
     super.key,
     required this.notifyWidgetIsDisposed,
     required this.offset,
-    required this.emojiAsset,
+    required this.emojiReactionCountList,
     required this.emojiAmount,
     required this.emojiLifetimeDurationSec,
     required this.emojiShootDurationSec,
@@ -100,7 +102,7 @@ class FireworkWidget extends StatefulWidget {
     required this.emojiSize,
   });
   final Function notifyWidgetIsDisposed;
-  final AssetImage emojiAsset;
+  final List<int> emojiReactionCountList;
   final Offset offset;
   final int emojiAmount;
   final int emojiLifetimeDurationSec;
@@ -121,6 +123,7 @@ class _FireworkWidgetState extends State<FireworkWidget>
     with TickerProviderStateMixin {
   // 불꽃놀이에서 움직이는 각각의 위젯들을 담아두는 리스트
   late List<EmojiWidget> emojiWidgetList;
+  late List<(String, int)> emojiCountList;
 
   // 3가지 움직임을 위해, 3가지 AnimationController를 선언
   late final AnimationController emojiAnimationShootController,
@@ -139,13 +142,17 @@ class _FireworkWidgetState extends State<FireworkWidget>
   late final Duration _emojiShootDuration =
       Duration(seconds: widget.emojiShootDurationSec);
 
-  // 이펙트로 한 번에 나오는 이모지의 개수
-  late final int emojiAmount = widget.emojiAmount;
+  // 이펙트로 한 번에 나오는 최소 이모지의 개수
+  late int emojiAmount = widget.emojiAmount;
 
   @override
   void initState() {
     super.initState();
     setAnimationController();
+
+    emojiCountList = setEmojiList(from: widget.emojiReactionCountList);
+    // emojiWidgetList = setEmojis();
+
     startAnimation();
   }
 
@@ -157,27 +164,47 @@ class _FireworkWidgetState extends State<FireworkWidget>
         child: Stack(
           clipBehavior: Clip.none,
           alignment: Alignment.center,
-          children: List.generate(
-            emojiAmount,
-            (index) => EmojiWidget(
-              offset: widget.offset,
-              emojiAsset: widget.emojiAsset,
-              emojiFloatXAnimation: emojiFloatXAnimation,
-              emojiFloatYAnimation: emojiFloatYAnimation,
-              emojiShootAnimation: emojiShootAnimation,
-              emojiLifeTimeAnimation: emojiLifeTimeAnimation,
-              emojiShootingXScale: widget.emojiShootingXScale,
-              emojiShootingYScale: widget.emojiShootingYScale,
-              emojiFloatingXScale: widget.emojiFloatingXScale,
-              emojiFloatingYScale: widget.emojiFloatingYScale,
-              emojiSizeDeltaScale: widget.emojiSizeDeltaScale,
-              emojiTransparentThreshold: widget.emojiTransparentThreshold,
-              emojiSize: widget.emojiSize,
-            ),
-          ),
+          children: setEmojis(),
         ),
       ),
     );
+  }
+
+  List<(String, int)> setEmojiList({required List<int> from}) {
+    final totalNumber = from.reduce((value, element) => value + element);
+    final minUnitNumber = 1 + emojiAmount ~/ totalNumber;
+    final result = from.mapWithIndex((value, index) {
+      return (Emojis.emojiList[index], value * minUnitNumber);
+    }).toList();
+
+    return result;
+  }
+
+  List<EmojiWidget> setEmojis() {
+    List<EmojiWidget> emojis = [];
+    emojiCountList.asMap().forEach((index, obj) {
+      emojis.addAll(
+        List<EmojiWidget>.generate(
+          obj.$2,
+          (_) => EmojiWidget(
+            offset: widget.offset,
+            emojiAsset: AssetImage(obj.$1),
+            emojiFloatXAnimation: emojiFloatXAnimation,
+            emojiFloatYAnimation: emojiFloatYAnimation,
+            emojiShootAnimation: emojiShootAnimation,
+            emojiLifeTimeAnimation: emojiLifeTimeAnimation,
+            emojiShootingXScale: widget.emojiShootingXScale,
+            emojiShootingYScale: widget.emojiShootingYScale,
+            emojiFloatingXScale: widget.emojiFloatingXScale,
+            emojiFloatingYScale: widget.emojiFloatingYScale,
+            emojiSizeDeltaScale: widget.emojiSizeDeltaScale,
+            emojiTransparentThreshold: widget.emojiTransparentThreshold,
+            emojiSize: widget.emojiSize,
+          ),
+        ),
+      );
+    });
+    return emojis;
   }
 }
 
