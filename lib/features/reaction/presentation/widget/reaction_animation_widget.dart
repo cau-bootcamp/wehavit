@@ -20,7 +20,6 @@ class _ReactionAnimationWidgetState
   late Map<Key, TextBubbleFrameWidget> _textBubbleWidgets;
   late TextBubbleAnimationManager _textBubbleAnimationManager;
 
-  late List<ReactionGroupModel> _reactionGroupModelList;
   late ReactionAnimationWidgetManager _reactionAnimationWidgetManager;
 
   late FetchUserDataFromIdUsecase _fetchUserDataFromIdUsecase;
@@ -111,44 +110,10 @@ class _ReactionAnimationWidgetState
               children: _textBubbleWidgets.values.toList(),
             ),
           ),
+          // TODO: 테스트용 ElevatedButton은 이후에 제거해주면 됨.
           ElevatedButton(
             onPressed: () async {
-              final fetchResult = await _reactionAnimationWidgetManager
-                  .getUnreadReactionModelGroupListFromLastConfirmPost();
-
-              for (var reactionGroupModel in fetchResult) {
-                final fetchUserModelResult =
-                    await _fetchUserDataFromIdUsecase.call(
-                  reactionGroupModel.complimenterUid,
-                );
-
-                List<int> emojiCountList = List.generate(
-                    reactionGroupModel.emojiReacionModelList.first.emoji.length,
-                    (index) => 0);
-                for (var emojiReaction
-                    in reactionGroupModel.emojiReacionModelList) {
-                  emojiReaction.emoji.mapWithIndex((value, index) {
-                    emojiCountList[index] += value;
-                  });
-                }
-
-                setState(() {
-                  final userImageUrl = fetchUserModelResult.fold(
-                    (failure) {
-                      return 'https://png.pngtree.com/thumb_back/fh260/background/20210409/pngtree-rules-of-biotex-cat-image_600076.jpg';
-                    },
-                    (userModel) {
-                      return userModel.imageUrl;
-                    },
-                  );
-                  addBalloonAnimation(
-                    imageUrl: userImageUrl,
-                    emojiCountList: emojiCountList,
-                    message:
-                        reactionGroupModel.textReactionModel?.comment ?? '',
-                  );
-                });
-              }
+              await showReactionFromLastConfrimPost();
             },
             child: const Text('Get Reaction Data'),
           )
@@ -172,5 +137,42 @@ class _ReactionAnimationWidgetState
       message: message,
       imageUrl: userImageUrl,
     );
+  }
+
+  // TODO: 이 함수를 화면이 켜졌을 때 호출하도록 로직 구현하기
+  Future<void> showReactionFromLastConfrimPost() async {
+    final fetchResult = await _reactionAnimationWidgetManager
+        .getUnreadReactionModelGroupListFromLastConfirmPost();
+
+    for (var reactionGroupModel in fetchResult) {
+      final fetchUserModelResult = await _fetchUserDataFromIdUsecase.call(
+        reactionGroupModel.complimenterUid,
+      );
+
+      List<int> emojiCountList = List.generate(
+          reactionGroupModel.emojiReacionModelList.first.emoji.length,
+          (index) => 0);
+      for (var emojiReaction in reactionGroupModel.emojiReacionModelList) {
+        emojiReaction.emoji.mapWithIndex((value, index) {
+          emojiCountList[index] += value;
+        });
+      }
+
+      setState(() {
+        final userImageUrl = fetchUserModelResult.fold(
+          (failure) {
+            return 'https://png.pngtree.com/thumb_back/fh260/background/20210409/pngtree-rules-of-biotex-cat-image_600076.jpg';
+          },
+          (userModel) {
+            return userModel.imageUrl;
+          },
+        );
+        addBalloonAnimation(
+          imageUrl: userImageUrl,
+          emojiCountList: emojiCountList,
+          message: reactionGroupModel.textReactionModel?.comment ?? '',
+        );
+      });
+    }
   }
 }
