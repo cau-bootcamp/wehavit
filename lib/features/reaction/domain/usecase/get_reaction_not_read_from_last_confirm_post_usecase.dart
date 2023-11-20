@@ -3,15 +3,15 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/features/reaction/domain/repository/get_reaction_repository.dart';
 import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';
 
-final getReactionNotReadFromLastConfirmPostUsecaseProvider =
-    Provider<GetReactionNotReadFromLastConfirmPostUsecase>((ref) {
+final getReactionUnreadFromLastConfirmPostUsecaseProvider =
+    Provider<GetReactionUnreadFromLastConfirmPostUsecase>((ref) {
   final repository = ref.watch(confirmPostReactionRepositoryProvider);
-  return GetReactionNotReadFromLastConfirmPostUsecase(repository);
+  return GetReactionUnreadFromLastConfirmPostUsecase(repository);
 });
 
-class GetReactionNotReadFromLastConfirmPostUsecase
+class GetReactionUnreadFromLastConfirmPostUsecase
     extends UseCase<List<ReactionModel>, NoParams> {
-  GetReactionNotReadFromLastConfirmPostUsecase(
+  GetReactionUnreadFromLastConfirmPostUsecase(
     this._confirmPostReactionRepository,
   );
 
@@ -20,6 +20,6 @@ class GetReactionNotReadFromLastConfirmPostUsecase
   @override
   EitherFuture<List<ReactionModel>> call(NoParams params) {
     return _confirmPostReactionRepository
-        .getReactionNotReadFromLastConfirmPost();
+        .getReactionUnreadFromLastConfirmPost();
   }
 }

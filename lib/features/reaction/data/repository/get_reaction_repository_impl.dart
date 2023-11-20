@@ -13,7 +13,7 @@ class ConfirmPostReactionRepositoryImpl extends ConfirmPostReactionRepository {
   late final ReactionDatasource _reactionDatasource;
 
   @override
-  EitherFuture<List<ReactionModel>> getReactionNotReadFromLastConfirmPost() {
-    return _reactionDatasource.getReactionNotReadFromLastConfirmPost();
+  EitherFuture<List<ReactionModel>> getReactionUnreadFromLastConfirmPost() {
+    return _reactionDatasource.getReactionUnreadFromLastConfirmPost();
   }
 }

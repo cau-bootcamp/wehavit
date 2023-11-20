@@ -78,7 +78,7 @@ class ReactionDatasourceImpl implements ReactionDatasource {
 
   @override
   EitherFuture<List<ReactionModel>>
-      getReactionNotReadFromLastConfirmPost() async {
+      getReactionUnreadFromLastConfirmPost() async {
     final confirmPostFetchResult = await FirebaseFirestore.instance
         .collection(FirebaseCollectionName.confirmPosts)
         .where('owner', isEqualTo: FirebaseAuth.instance.currentUser!.uid)

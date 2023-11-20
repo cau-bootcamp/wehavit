@@ -10,16 +10,16 @@ final reactionAnimationWidgetManagerProvider =
 
 class ReactionAnimationWidgetManager extends StateNotifier<void> {
   ReactionAnimationWidgetManager(Ref ref) : super([]) {
-    _getReactionNotReadFromLastConfirmPostUsecase =
-        ref.watch(getReactionNotReadFromLastConfirmPostUsecaseProvider);
+    _getReactionUnreadFromLastConfirmPostUsecase =
+        ref.watch(getReactionUnreadFromLastConfirmPostUsecaseProvider);
   }
 
-  late GetReactionNotReadFromLastConfirmPostUsecase
-      _getReactionNotReadFromLastConfirmPostUsecase;
+  late GetReactionUnreadFromLastConfirmPostUsecase
+      _getReactionUnreadFromLastConfirmPostUsecase;
 
   Future<List<ReactionGroupModel>>
       getUnreadReactionModelGroupListFromLastConfirmPost() async {
-    final fetchResult = await _getReactionNotReadFromLastConfirmPostUsecase(
+    final fetchResult = await _getReactionUnreadFromLastConfirmPostUsecase(
       NoParams(),
     );
 

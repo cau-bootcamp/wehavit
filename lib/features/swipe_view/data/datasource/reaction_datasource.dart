@@ -7,5 +7,5 @@ abstract class ReactionDatasource {
     ReactionModel reactionModel,
   );
 
-  EitherFuture<List<ReactionModel>> getReactionNotReadFromLastConfirmPost();
+  EitherFuture<List<ReactionModel>> getReactionUnreadFromLastConfirmPost();
 }

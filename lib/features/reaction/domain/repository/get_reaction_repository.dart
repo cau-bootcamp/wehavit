@@ -9,5 +9,5 @@ final confirmPostReactionRepositoryProvider =
 });
 
 abstract class ConfirmPostReactionRepository {
-  EitherFuture<List<ReactionModel>> getReactionNotReadFromLastConfirmPost();
+  EitherFuture<List<ReactionModel>> getReactionUnreadFromLastConfirmPost();
 }
