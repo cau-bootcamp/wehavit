@@ -8,7 +8,7 @@ class FetchUserDataFromIdUsecase extends UseCase<UserModel, String> {
 
   final UserModelFetchRepository _userModelFetchRepository;
   @override
-  EitherFuture<UserModel> call(params) {
+  EitherFuture<UserModel> call(String params) {
     return _userModelFetchRepository.fetchUserModelFromId(params);
   }
 }

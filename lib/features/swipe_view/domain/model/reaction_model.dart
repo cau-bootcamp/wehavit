@@ -10,7 +10,7 @@ class ReactionModel with _$ReactionModel {
     @JsonKey(includeFromJson: false, includeToJson: false)
     @Default('')
     String? id,
-    required String complementerUid,
+    required String complimenterUid,
     required int reactionType,
     @Default(false) bool hasRead,
     @Default('') String instantPhotoUrl,

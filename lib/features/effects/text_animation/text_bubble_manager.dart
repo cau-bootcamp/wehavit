@@ -31,6 +31,8 @@ class TextBubbleAnimationManager
     required String message,
     required String imageUrl,
   }) {
+    if (message == '') return;
+
     final widgetKey = UniqueKey();
     state.addEntries(
       {

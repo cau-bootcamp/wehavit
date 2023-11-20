@@ -90,7 +90,7 @@ class LiveWritingFriendRepositoryImpl extends LiveWritingFriendRepository {
   ) async {
     const errorMessage = 'Error on sendReactionToTargetFriend Function';
     reactionModel = reactionModel.copyWith(
-      complementerUid: '/users/${FirebaseAuth.instance.currentUser!.uid}',
+      complimenterUid: '/users/${FirebaseAuth.instance.currentUser!.uid}',
       hasRead: false,
     );
 

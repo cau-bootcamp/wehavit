@@ -180,7 +180,7 @@ class AnimationSampleViewRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const AnimationSampleView();
+    return const AnimationSamplePage();
   }
 }
 
