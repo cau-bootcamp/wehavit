@@ -79,32 +79,15 @@ class ReactionDatasourceImpl implements ReactionDatasource {
   @override
   EitherFuture<List<ReactionModel>>
       getReactionNotReadFromLastConfirmPost() async {
-    // TODO: 오늘 내 ConfirmPost의 ID를 찾아오는 로직을 간단하게 추가할 필요 있음!!
     final confirmPostFetchResult = await FirebaseFirestore.instance
         .collection(FirebaseCollectionName.confirmPosts)
         .where('owner', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-        // .orderBy('createdAt', descending: true)
-        // .limit(1)
+        .orderBy('createdAt', descending: true)
+        .limit(1)
         .get();
 
-    // final myLastConfirmPostId = confirmPostFetchResult.docs.first.reference.id;
-
     final temp = confirmPostFetchResult.docs.toList();
-
     final myLatestConfirmPostId = temp.first.reference.id;
-    // final myLastConfirmPostId = temp
-    //     .reduce((value, element) =>
-    //         value.data()['createdAt'] < element.data()['createdAt']
-    //             ? value
-    //             : element)
-    //     .reference
-    //     .id;
-    //       (value, doc) => ((value.data()['createdAt'] < doc.data()['createdAt']
-    //           ? value
-    //           : doc)),
-    //     )
-    //     .reference
-    //     .id;
 
     final encourages = await FirebaseFirestore.instance
         .collection(
