@@ -1,11 +1,3 @@
----
-name: Pull Request Template
-about: Pull Request Template
-title: "[#IssueNumber] "
-labels: Task
-assignees: ''
----
-
 # 설명
 
 작업 내역을 설명하고 어떤 이슈와 관련되어 있는지 명시합니다.
