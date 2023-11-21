@@ -1,9 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:wehavit/common/models/user_model/user_model.dart';
 
 class LiveWaitingAvatarAnimatingWidget extends StatefulWidget {
-  const LiveWaitingAvatarAnimatingWidget({super.key});
+  LiveWaitingAvatarAnimatingWidget({super.key, required this.userImageUrl});
+
+  String userImageUrl;
 
   @override
   State<LiveWaitingAvatarAnimatingWidget> createState() =>
@@ -44,7 +47,8 @@ class _LiveWaitingAvatarAnimatingWidgetState
       }
     });
 
-    _positionXAnimation = Tween<double>(begin: 0, end: 10).animate(
+    _positionXAnimation =
+        Tween<double>(begin: 0, end: Random().nextDouble() * 10).animate(
       CurvedAnimation(
         parent: _lifeTimeAnimationController,
         curve: Curves.linear,
@@ -72,10 +76,22 @@ class _LiveWaitingAvatarAnimatingWidgetState
       bottom: _positionYAnimation.value,
       child: Opacity(
         opacity: 0.6 + (1 - _lifeTimeAnimation.value).toDouble() * 0.4,
-        child: CircleAvatar(
-          radius: 50 + sin(randomOffset) * 10,
-          foregroundImage: const NetworkImage(
-            'https://www.pumpkin.care/wp-content/uploads/2021/01/Ragdoll-Hero-jpg.webp',
+        child: Container(
+          width: 100 + sin(randomOffset) * 20,
+          height: 100 + sin(randomOffset) * 20,
+          decoration: BoxDecoration(
+            color: const Color(0xff7c94b6),
+            image: DecorationImage(
+              image: NetworkImage(
+                widget.userImageUrl,
+              ),
+              fit: BoxFit.cover,
+            ),
+            borderRadius: BorderRadius.all(Radius.circular(100.0)),
+            border: Border.all(
+              color: Colors.white,
+              width: 4.0,
+            ),
           ),
         ),
       ),

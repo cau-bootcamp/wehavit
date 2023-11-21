@@ -7,9 +7,26 @@ class LiveWaitingSampleView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: Container(
         constraints: BoxConstraints.expand(),
-        child: LiveWritingView(),
+        child: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.black,
+                    Colors.amber,
+                  ],
+                ),
+              ),
+            ),
+            LiveWritingView(),
+          ],
+        ),
       ),
     );
   }
