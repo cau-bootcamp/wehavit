@@ -20,16 +20,13 @@ class LiveWritingPostRepositoryImpl extends MyLiveWritingRepository {
           '$livePostDocumentPrefix${FirebaseAuth.instance.currentUser!.email}',
         )
         .set(
-          {
-            FirebaseLiveConfirmPostFieldName.userId:
-                FirebaseAuth.instance.currentUser!.uid,
-            FirebaseLiveConfirmPostFieldName.message: message,
-          },
-          SetOptions(merge: true),
-        )
-        .then((value) =>
-            debugPrint('New live confirm document with message created'))
-        .catchError((error) => debugPrint('Failed to add document: $error'));
+      {
+        FirebaseLiveConfirmPostFieldName.userId:
+            FirebaseAuth.instance.currentUser!.uid,
+        FirebaseLiveConfirmPostFieldName.message: message,
+      },
+      SetOptions(merge: true),
+    ).catchError((error) => debugPrint('Failed to add document: $error'));
   }
 
   @override
@@ -42,16 +39,13 @@ class LiveWritingPostRepositoryImpl extends MyLiveWritingRepository {
           '$livePostDocumentPrefix${FirebaseAuth.instance.currentUser!.email}',
         )
         .set(
-          {
-            FirebaseLiveConfirmPostFieldName.userId:
-                FirebaseAuth.instance.currentUser!.uid,
-            FirebaseLiveConfirmPostFieldName.title: title,
-          },
-          SetOptions(merge: true),
-        )
-        .then((value) =>
-            debugPrint('New live confirm document with title created'))
-        .catchError((error) => debugPrint('Failed to add document: $error'));
+      {
+        FirebaseLiveConfirmPostFieldName.userId:
+            FirebaseAuth.instance.currentUser!.uid,
+        FirebaseLiveConfirmPostFieldName.title: title,
+      },
+      SetOptions(merge: true),
+    ).catchError((error) => debugPrint('Failed to add document: $error'));
   }
 
   @override
