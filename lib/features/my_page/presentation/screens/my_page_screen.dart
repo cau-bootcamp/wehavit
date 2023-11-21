@@ -13,9 +13,6 @@ class MyPageScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     var resolutionListProvider = ref.watch(myPageResolutionListProvider);
     var currentUser = FirebaseAuth.instance.currentUser;
-    late GetConfirmPostListForResolutionIdUsecase
-        getConfirmPostListForResolutionIdUsecase =
-        ref.read(getConfirmPostListForResolutionIdUsecaseProvider);
 
     return Scaffold(
       appBar: AppBar(

@@ -62,7 +62,8 @@ class _ResolutionDashboardWidgetState
                               decoration:
                                   const BoxDecoration(color: Colors.white),
                               child: ResolutionLinearGaugeGraphWidget(
-                                data: snapshot.data!,
+                                sourceData: snapshot.data!,
+                                lastPeriod: false,
                               ),
                             ),
                             Container(
@@ -70,7 +71,8 @@ class _ResolutionDashboardWidgetState
                               decoration:
                                   const BoxDecoration(color: Colors.white),
                               child: ResolutionLinearGaugeGraphWidget(
-                                data: snapshot.data!,
+                                sourceData: snapshot.data!,
+                                lastPeriod: true,
                               ),
                               // width: 200,
                               // height: 50,
@@ -88,16 +90,12 @@ class _ResolutionDashboardWidgetState
               ),
             ),
           ),
-          Expanded(
+          const Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(right: 16.0),
+              padding: EdgeInsets.only(right: 16.0),
               child: AspectRatio(
                 aspectRatio: 1,
-                child: Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: const BoxDecoration(color: Colors.amber),
-                  child: const ResolutionDoughnutGraphWidget(),
-                ),
+                child: ResolutionDoughnutGraphWidget(),
               ),
             ),
           ),
