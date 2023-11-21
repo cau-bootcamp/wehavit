@@ -90,12 +90,25 @@ class _ResolutionDashboardWidgetState
               ),
             ),
           ),
-          const Expanded(
+          Expanded(
             child: Padding(
-              padding: EdgeInsets.only(right: 16.0),
+              padding: const EdgeInsets.only(right: 16.0),
               child: AspectRatio(
                 aspectRatio: 1,
-                child: ResolutionDoughnutGraphWidget(),
+                child: FutureBuilder<List<ConfirmPostModel>>(
+                  future: widget.confirmPostList,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return ResolutionDoughnutGraphWidget(
+                        sourceData: snapshot.data!,
+                      );
+                    } else if (snapshot.hasError) {
+                      return const Placeholder();
+                    } else {
+                      return Container();
+                    }
+                  },
+                ),
               ),
             ),
           ),
