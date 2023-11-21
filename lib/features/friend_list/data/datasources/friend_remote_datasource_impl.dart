@@ -62,8 +62,10 @@ class FriendRemoteDatasourceImpl implements FriendDatasource {
   ) async {
     final friendsDocsSnapshot = await FirebaseFirestore.instance
         .collection(FirebaseCollectionName.friends)
-        .where(FirebaseFriendFieldName.friendEmail,
-            isEqualTo: entity.friendEmail)
+        .where(
+          FirebaseFriendFieldName.friendEmail,
+          isEqualTo: entity.friendEmail,
+        )
         .get();
     if (friendsDocsSnapshot.docs.isNotEmpty) {
       return Future(

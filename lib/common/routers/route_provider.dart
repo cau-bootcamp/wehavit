@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wehavit/common/common.dart';
+import 'package:wehavit/features/effects/animation_sample_page.dart';
 import 'package:wehavit/features/features.dart';
 import 'package:wehavit/features/live_writing/presentation/screens/live_writing_page.dart';
 import 'package:wehavit/features/my_page/presentation/screens/add_resolution_screen.dart';
@@ -99,18 +100,6 @@ class AuthRoute extends GoRouteData {
   }
 }
 
-@TypedGoRoute<HomeRoute>(path: HomeRoute.path)
-class HomeRoute extends GoRouteData {
-  const HomeRoute();
-
-  static const path = RouteLocation.home;
-
-  @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return const HomeScreen();
-  }
-}
-
 @TypedGoRoute<MyPageRoute>(path: MyPageRoute.path)
 class MyPageRoute extends GoRouteData {
   const MyPageRoute();
@@ -180,6 +169,18 @@ class SwipeViewRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const SwipeView();
+  }
+}
+
+@TypedGoRoute<AnimationSampleViewRoute>(path: AnimationSampleViewRoute.path)
+class AnimationSampleViewRoute extends GoRouteData {
+  const AnimationSampleViewRoute();
+
+  static const path = RouteLocation.animationSampleView;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const AnimationSampleView();
   }
 }
 

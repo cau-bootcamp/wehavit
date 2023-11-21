@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/models/user_model/user_model.dart';
@@ -21,7 +22,7 @@ class UserModelFetchDatasourceImpl extends UserModelFetchDatasource {
         () => right(UserModel.fromJson(fetchResult.data()!)),
       );
     } on Exception catch (e) {
-      print("DEBUG : fetchLiveWrittenConfirmPostList error $e");
+      debugPrint('DEBUG : fetchLiveWrittenConfirmPostList error $e');
       return Future(
         () => left(
           const Failure("catch error on fetchLiveWrittenConfirmPostList"),

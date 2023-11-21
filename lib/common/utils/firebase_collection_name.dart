@@ -15,4 +15,8 @@ class FirebaseCollectionName {
   static final confirmPosts = FirebaseAuth.instance.currentUser != null
       ? 'confirm_posts'
       : 'invalid_address';
+  static final encourages = FirebaseAuth.instance.currentUser != null
+      ? 'encourages'
+      : 'invalid_address';
+  static const liveConfirmPosts = 'live_confirm_posts';
 }

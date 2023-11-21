@@ -99,6 +99,7 @@ class FriendListScreen extends ConsumerWidget {
                   if (index < right.length) {
                     return FriendElementWidget(model: right[index]);
                   } else {}
+                  return null;
                 },
               ),
             ),

@@ -1,5 +1,4 @@
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
 import 'package:wehavit/features/live_writing/domain/repositories/confirm_post_repository.dart';
 

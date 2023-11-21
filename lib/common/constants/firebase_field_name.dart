@@ -12,7 +12,6 @@ class FirebaseUserFieldName {
 
 @immutable
 class FirebaseResolutionFieldName {
-
   // resolutions
   static const resolutionGoalStatement = 'goalStatement';
   static const resolutionActionStatement = 'actionStatement';
@@ -34,6 +33,17 @@ class FirebaseReactionFieldName {
 
 @immutable
 class FirebaseFriendFieldName {
+  //friend
+  static const friendID = 'friendID';
+  static const friendName = 'friendName';
+  static const friendImageUrl = 'friendImageUrl';
   static const friendEmail = 'friendEmail';
   static const friendState = 'friendState';
+}
+
+@immutable
+class FirebaseLiveConfirmPostFieldName {
+  static const title = 'title';
+  static const message = 'message';
+  static const userId = 'userId';
 }

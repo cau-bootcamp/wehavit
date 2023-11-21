@@ -4,6 +4,6 @@ import 'package:wehavit/features/swipe_view/domain/usecase/send_reaction_to_targ
 
 final sendReactionToTargetConfirmPostUsecaseProvider =
     Provider<SendReactionToTargetConfirmPostUsecase>((ref) {
-  final _swipeViewRepository = ref.watch(swipeViewRepositoryProvider);
-  return SendReactionToTargetConfirmPostUsecase(_swipeViewRepository);
+  final swipeViewRepository = ref.watch(swipeViewRepositoryProvider);
+  return SendReactionToTargetConfirmPostUsecase(swipeViewRepository);
 });

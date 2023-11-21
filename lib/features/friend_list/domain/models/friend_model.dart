@@ -10,7 +10,7 @@ class FriendModel {
   FriendModel.fromMapData(
     Map<String, dynamic> data,
     Map<String, dynamic> usersData,
-  )   : friendID = data[FirebaseFriendFieldName.friendEmail],
+  )   : friendID = data[FirebaseFriendFieldName.friendID],
         friendName = usersData[FirebaseUserFieldName.displayName],
         friendImageUrl = usersData[FirebaseUserFieldName.imageUrl];
 
