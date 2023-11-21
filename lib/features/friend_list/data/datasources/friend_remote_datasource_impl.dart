@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/constants/firebase_field_name.dart';
 import 'package:wehavit/common/errors/failure.dart';
@@ -67,7 +68,8 @@ class FriendRemoteDatasourceImpl implements FriendDatasource {
           isEqualTo: entity.friendEmail,
         )
         .get();
-    if (friendsDocsSnapshot.docs.isNotEmpty) {
+    if (friendsDocsSnapshot.docs.isNotEmpty ||
+        FirebaseAuth.instance.currentUser?.email == entity.friendEmail) {
       return Future(
         () => left(
           const Failure('There is same user in friends list'),
