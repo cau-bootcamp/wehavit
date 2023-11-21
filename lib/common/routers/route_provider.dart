@@ -7,6 +7,7 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/features/effects/animation_sample_page.dart';
 import 'package:wehavit/features/features.dart';
 import 'package:wehavit/features/live_writing/presentation/screens/live_writing_page.dart';
+import 'package:wehavit/features/live_writing_waiting/live_waiting_sample_view.dart';
 import 'package:wehavit/features/my_page/presentation/screens/add_resolution_screen.dart';
 import 'package:wehavit/features/my_page/presentation/screens/my_page_screen.dart';
 import 'package:wehavit/features/swipe_view/presentation/screen/swipe_view.dart';
@@ -181,6 +182,18 @@ class AnimationSampleViewRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const AnimationSamplePage();
+  }
+}
+
+@TypedGoRoute<LiveWaitingSampleViewRoute>(path: LiveWaitingSampleViewRoute.path)
+class LiveWaitingSampleViewRoute extends GoRouteData {
+  const LiveWaitingSampleViewRoute();
+
+  static const path = RouteLocation.liveWaitingSampleView;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const LiveWaitingSampleView();
   }
 }
 

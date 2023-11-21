@@ -16,4 +16,5 @@ class RouteLocation {
   static const String liveWriting = '$waitingRoom/liveWriting';
   static const String swipeView = '/swipeView';
   static const String animationSampleView = '/animationSampleView';
+  static const String liveWaitingSampleView = '/liveWaitingSampleView';
 }
