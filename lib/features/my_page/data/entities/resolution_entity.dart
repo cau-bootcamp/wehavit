@@ -3,8 +3,10 @@ import 'package:wehavit/common/constants/firebase_field_name.dart';
 import 'package:wehavit/features/my_page/domain/models/resolution_model.dart';
 
 class ResolutionEntity {
-  ResolutionEntity.fromFirebaseDocument(Map<String, dynamic> data)
-      : goal = data[FirebaseResolutionFieldName.resolutionGoalStatement],
+  ResolutionEntity.fromFirebaseDocument(
+    Map<String, dynamic> data,
+    this.resolutionId,
+  )   : goal = data[FirebaseResolutionFieldName.resolutionGoalStatement],
         action = data[FirebaseResolutionFieldName.resolutionActionStatement],
         period = data[FirebaseResolutionFieldName.resolutionPeriod],
         startDate =
@@ -18,6 +20,7 @@ class ResolutionEntity {
     startDate = DateTime.now();
     isActive = true;
     period = model.isDaySelectedList.toIntPeriod();
+    resolutionId = model.resolutionId;
   }
 
   late String goal;
@@ -25,6 +28,7 @@ class ResolutionEntity {
   late int period;
   late DateTime startDate;
   late bool isActive;
+  late String resolutionId;
 }
 
 extension ResolutionEntityConvertFunctions on ResolutionEntity {
@@ -49,6 +53,7 @@ extension ResolutionEntityConvertFunctions on ResolutionEntity {
       isDaySelectedList: period.toBoolListPeriod(),
       startDate: startDate,
       oathStatement: '',
+      resolutionId: resolutionId,
     );
     return model;
   }

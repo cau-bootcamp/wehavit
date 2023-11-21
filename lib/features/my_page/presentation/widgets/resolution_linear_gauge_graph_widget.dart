@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
+import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
 
 class ResolutionLinearGaugeGraphWidget extends StatelessWidget {
-  const ResolutionLinearGaugeGraphWidget({super.key});
+  const ResolutionLinearGaugeGraphWidget({super.key, required this.data});
+
+  final List<ConfirmPostModel> data;
 
   @override
   Widget build(BuildContext context) {

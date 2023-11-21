@@ -47,3 +47,17 @@ class FirebaseLiveConfirmPostFieldName {
   static const message = 'message';
   static const userId = 'userId';
 }
+
+@immutable
+class FirebaseConfirmPostFieldName {
+  static const content = 'content';
+  static const createdAt = 'createdAt';
+  static const fan = 'fan';
+  static const imageUrl = 'imageUrl';
+  static const owner = 'owner';
+  static const recentStrike = 'recentStrike';
+  static const resolutionGoalStatement = 'resolutionGoalStatement';
+  static const resolutionId = 'resolutionId';
+  static const title = 'title';
+  static const updatedAt = 'updatedAt';
+}

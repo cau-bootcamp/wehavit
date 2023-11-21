@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wehavit/features/my_page/domain/usecases/get_confirm_post_list_for_resolution_id.dart';
 import 'package:wehavit/features/my_page/presentation/providers/my_page_resolution_list_provider.dart';
 import 'package:wehavit/features/my_page/presentation/widgets/resolution_dashboard_widget.dart';
 
@@ -12,6 +13,9 @@ class MyPageScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     var resolutionListProvider = ref.watch(myPageResolutionListProvider);
     var currentUser = FirebaseAuth.instance.currentUser;
+    late GetConfirmPostListForResolutionIdUsecase
+        getConfirmPostListForResolutionIdUsecase =
+        ref.read(getConfirmPostListForResolutionIdUsecaseProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -67,10 +71,13 @@ class MyPageScreen extends ConsumerWidget {
               (left) => null,
               (right) => Expanded(
                 child: ListView.builder(
-                  itemCount: right.length + 1,
+                  itemCount: right.$1.length + 1,
                   itemBuilder: (context, index) {
-                    if (index < right.length) {
-                      return ResolutionDashboardWidget(model: right[index]);
+                    if (index < right.$1.length) {
+                      return ResolutionDashboardWidget(
+                        model: right.$1[index],
+                        confirmPostList: right.$2[index],
+                      );
                     } else {
                       return Container(
                         margin: const EdgeInsets.symmetric(vertical: 8),

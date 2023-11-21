@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
+import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
 import 'package:wehavit/features/my_page/data/datasources/resolution_datasource.dart';
 import 'package:wehavit/features/my_page/data/datasources/resolution_datasource_provider.dart';
 import 'package:wehavit/features/my_page/data/entities/resolution_entity.dart';
@@ -38,5 +39,14 @@ class ResolutionRepositoryImpl implements ResolutionRepository {
   ) async {
     final entity = ResolutionEntity.fromResolutionModel(model);
     return _resolutionDatasource.uploadResolutionEntity(entity);
+  }
+
+  @override
+  EitherFuture<List<ConfirmPostModel>> getConfirmPostListForResolutionId({
+    required String resolutionId,
+  }) {
+    return _resolutionDatasource.getConfirmPostListForResolutionId(
+      resolutionId: resolutionId,
+    );
   }
 }

@@ -43,6 +43,7 @@ class AddResolutionNotifier extends StateNotifier<AddResolutionModel> {
       isDaySelectedList: state.isDaySelectedList,
       isActive: true,
       startDate: DateTime.now(),
+      resolutionId: '',
     );
 
     return _uploadResolutionUsecase.call(newModel);
