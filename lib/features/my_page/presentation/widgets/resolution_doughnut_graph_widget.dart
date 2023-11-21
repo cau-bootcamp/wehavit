@@ -13,12 +13,12 @@ class ResolutionDoughnutGraphWidget extends StatelessWidget {
       return todaysDate.difference(element.createdAt!).inDays < 14;
     }).toList();
 
-    rationOfDoneDays = (data.length / 14) * 100;
+    ratioOfDoneDays = (data.length / 14) * 100;
   }
 
   late final List<ConfirmPostModel> data;
   final todaysDate = DateTime.now();
-  late final double rationOfDoneDays;
+  late final double ratioOfDoneDays;
 
   List<DoughnutSeries<ResolutionAccomplishmentDonutGraphDataModel, String>>
       _getDefaultDoughnutSeries() {
@@ -28,11 +28,11 @@ class ResolutionDoughnutGraphWidget extends StatelessWidget {
         dataSource: <ResolutionAccomplishmentDonutGraphDataModel>[
           ResolutionAccomplishmentDonutGraphDataModel(
             x: 'do',
-            y: rationOfDoneDays,
+            y: ratioOfDoneDays,
           ),
           ResolutionAccomplishmentDonutGraphDataModel(
             x: 'skip',
-            y: 100 - rationOfDoneDays,
+            y: 100 - ratioOfDoneDays,
           ),
         ],
         xValueMapper:
