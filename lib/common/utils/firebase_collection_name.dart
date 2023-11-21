@@ -13,11 +13,11 @@ class FirebaseCollectionName {
       ? 'users/${FirebaseAuth.instance.currentUser?.uid}/friends'
       : 'invalid_address';
 
-  static String getOpponentFriendsCollection(String fId) {
-    final opponentFriend = FirebaseAuth.instance.currentUser != null
+  static String getTargetFriendsCollection(String fId) {
+    final targetFriends = FirebaseAuth.instance.currentUser != null
         ? 'users/$fId/friends'
         : 'invalid_address';
-    return opponentFriend;
+    return targetFriends;
   }
 
   static final confirmPosts = FirebaseAuth.instance.currentUser != null
