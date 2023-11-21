@@ -23,7 +23,7 @@ class FirebaseResolutionFieldName {
 
 @immutable
 class FirebaseReactionFieldName {
-  static const complementerUid = 'complementerUid';
+  static const complimenterUid = 'complimenterUid';
   static const comment = 'comment';
   static const emoji = 'emoji';
   static const hasRead = 'hasRead';
@@ -34,7 +34,6 @@ class FirebaseReactionFieldName {
 @immutable
 class FirebaseFriendFieldName {
   //friend
-  static const friendID = 'friendID';
   static const friendName = 'friendName';
   static const friendImageUrl = 'friendImageUrl';
   static const friendEmail = 'friendEmail';

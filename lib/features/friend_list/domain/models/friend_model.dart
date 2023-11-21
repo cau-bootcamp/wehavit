@@ -2,7 +2,7 @@ import 'package:wehavit/common/constants/firebase_field_name.dart';
 
 class FriendModel {
   FriendModel({
-    required this.friendID,
+    required this.friendEmail,
     required this.friendName,
     required this.friendImageUrl,
   });
@@ -10,11 +10,11 @@ class FriendModel {
   FriendModel.fromMapData(
     Map<String, dynamic> data,
     Map<String, dynamic> usersData,
-  )   : friendID = data[FirebaseFriendFieldName.friendID],
+  )   : friendEmail = data[FirebaseFriendFieldName.friendEmail],
         friendName = usersData[FirebaseUserFieldName.displayName],
         friendImageUrl = usersData[FirebaseUserFieldName.imageUrl];
 
-  String friendID;
+  String friendEmail;
   String friendName;
   String friendImageUrl;
 
@@ -24,7 +24,7 @@ class FriendModel {
     String? friendImageUrl,
   }) {
     return FriendModel(
-      friendID: friendID ?? this.friendID,
+      friendEmail: friendID ?? this.friendEmail,
       friendName: friendName ?? this.friendName,
       friendImageUrl: friendImageUrl ?? this.friendImageUrl,
     );

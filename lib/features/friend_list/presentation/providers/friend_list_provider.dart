@@ -5,8 +5,7 @@ import 'package:wehavit/features/friend_list/domain/models/friend_model.dart';
 import 'package:wehavit/features/friend_list/domain/usecases/get_friend_list_usecase.dart';
 import 'package:wehavit/features/friend_list/domain/usecases/get_friend_list_usecase_provider.dart';
 
-final friendListProvider = StateNotifierProvider<
-    FriendListProvider,
+final friendListProvider = StateNotifierProvider<FriendListProvider,
     Either<Failure, List<FriendModel>>>((ref) {
   return FriendListProvider(ref);
 });
@@ -20,6 +19,6 @@ class FriendListProvider
   late final GetFriendListUsecase getFriendListUsecase;
 
   Future<void> getFriendList() async {
-    state = await getFriendListUsecase.call(NoParams());
+    state = await getFriendListUsecase(NoParams());
   }
 }

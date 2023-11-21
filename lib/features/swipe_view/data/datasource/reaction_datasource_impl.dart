@@ -42,7 +42,7 @@ class ReactionDatasourceImpl implements ReactionDatasource {
       )
           .add(
         {
-          FirebaseReactionFieldName.complementerUid:
+          FirebaseReactionFieldName.complimenterUid:
               FirebaseAuth.instance.currentUser!.uid,
           FirebaseReactionFieldName.reactionType: reactionModel.reactionType,
           FirebaseReactionFieldName.emoji: reactionModel.emoji,
