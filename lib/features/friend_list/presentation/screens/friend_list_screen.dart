@@ -100,7 +100,10 @@ class FriendListScreen extends ConsumerWidget {
                   itemCount: right.length + 1,
                   itemBuilder: (context, index) {
                     if (index < right.length) {
-                      return FriendElementWidget(model: right[index]);
+                      return FriendElementWidget(
+                        key: ValueKey(right[index].friendEmail),
+                        model: right[index],
+                      );
                     } else {}
                     return null;
                   },
