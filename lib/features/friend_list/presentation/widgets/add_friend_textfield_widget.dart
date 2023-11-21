@@ -15,8 +15,11 @@ class AddFriendTextFieldWidget extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Container(
-            width: 250,
-            margin: const EdgeInsets.only(left: 8, right: 8),
+            padding: const EdgeInsets.only(
+              left: 8.0,
+            ),
+          ),
+          Expanded(
             child: TextField(
               // 추후에 onChanged가 아닌 것으로 바꿀 예정
               onChanged: (value) {
@@ -25,6 +28,11 @@ class AddFriendTextFieldWidget extends ConsumerWidget {
               decoration: const InputDecoration(
                 hintText: 'Enter Friend ID',
               ),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.only(
+              left: 16.0,
             ),
           ),
           ElevatedButton(
@@ -40,6 +48,11 @@ class AddFriendTextFieldWidget extends ConsumerWidget {
               );
             },
             child: const Text('+'),
+          ),
+          Container(
+            padding: const EdgeInsets.only(
+              left: 8.0,
+            ),
           ),
         ],
       ),

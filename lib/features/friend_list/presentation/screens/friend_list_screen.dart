@@ -33,78 +33,81 @@ class FriendListScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.only(bottom: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(left: 8.0),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 40,
-                        foregroundImage:
-                            NetworkImage(currentUser?.photoURL ?? 'DEBUG_URL'),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(left: 8),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(currentUser?.displayName ?? 'DEBUG_NO_NAME'),
-                            Text(currentUser?.email ?? 'DEBUG_UserID'),
-                          ],
+      body: SafeArea(
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(left: 8.0),
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 40,
+                          foregroundImage: NetworkImage(
+                              currentUser?.photoURL ?? 'DEBUG_URL'),
                         ),
-                      ),
-                    ],
+                        Container(
+                          margin: const EdgeInsets.only(left: 8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(currentUser?.displayName ?? 'DEBUG_NO_NAME'),
+                              Text(currentUser?.email ?? 'DEBUG_UserID'),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.centerRight,
+                    margin: const EdgeInsets.only(right: 8.0),
+                    child: IconButton(
+                      icon: const Icon(Icons.link),
+                      color: Colors.black87,
+                      onPressed: () {},
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Column(
+              children: [
+                SizedBox(
+                  width: 200,
+                  child: FilledButton(
+                    onPressed: () async {
+                      await ref
+                          .read(friendListProvider.notifier)
+                          .getFriendList();
+                    },
+                    child: const Text('친구 목록 보기'),
                   ),
                 ),
-                Container(
-                  alignment: Alignment.centerRight,
-                  margin: const EdgeInsets.only(right: 8.0),
-                  child: IconButton(
-                    icon: const Icon(Icons.link),
-                    color: Colors.black87,
-                    onPressed: () {},
-                  ),
-                ),
+                const AddFriendTextFieldWidget(),
               ],
             ),
-          ),
-          Column(
-            children: [
-              Container(
-                width: 250,
-                margin: const EdgeInsets.symmetric(vertical: 1),
-                child: FilledButton(
-                  onPressed: () async {
-                    await ref.read(friendListProvider.notifier).getFriendList();
+            vFriendListProvider.fold(
+              (left) => null,
+              (right) => Expanded(
+                child: ListView.builder(
+                  itemCount: right.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index < right.length) {
+                      return FriendElementWidget(model: right[index]);
+                    } else {}
+                    return null;
                   },
-                  child: const Text('친구 목록 보기'),
                 ),
               ),
-              const AddFriendTextFieldWidget(),
-            ],
-          ),
-          vFriendListProvider.fold(
-            (left) => null,
-            (right) => Expanded(
-              child: ListView.builder(
-                itemCount: right.length + 1,
-                itemBuilder: (context, index) {
-                  if (index < right.length) {
-                    return FriendElementWidget(model: right[index]);
-                  } else {}
-                  return null;
-                },
-              ),
-            ),
-          ) as Widget,
-        ],
+            ) as Widget,
+          ],
+        ),
       ),
     );
   }
