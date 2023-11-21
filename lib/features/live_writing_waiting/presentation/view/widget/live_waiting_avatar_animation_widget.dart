@@ -1,12 +1,14 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:wehavit/common/models/user_model/user_model.dart';
 
 class LiveWaitingAvatarAnimatingWidget extends StatefulWidget {
-  LiveWaitingAvatarAnimatingWidget({super.key, required this.userImageUrl});
+  const LiveWaitingAvatarAnimatingWidget({
+    super.key,
+    required this.userImageUrl,
+  });
 
-  String userImageUrl;
+  final String userImageUrl;
 
   @override
   State<LiveWaitingAvatarAnimatingWidget> createState() =>
@@ -87,7 +89,7 @@ class _LiveWaitingAvatarAnimatingWidgetState
               ),
               fit: BoxFit.cover,
             ),
-            borderRadius: BorderRadius.all(Radius.circular(100.0)),
+            borderRadius: const BorderRadius.all(Radius.circular(100.0)),
             border: Border.all(
               color: Colors.white,
               width: 4.0,

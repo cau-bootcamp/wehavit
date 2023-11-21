@@ -9,11 +9,11 @@ class LiveWaitingSampleView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.black,
       body: Container(
-        constraints: BoxConstraints.expand(),
+        constraints: const BoxConstraints.expand(),
         child: Stack(
           children: [
             Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
@@ -24,7 +24,7 @@ class LiveWaitingSampleView extends StatelessWidget {
                 ),
               ),
             ),
-            LiveWritingView(),
+            const LiveWritingView(),
           ],
         ),
       ),

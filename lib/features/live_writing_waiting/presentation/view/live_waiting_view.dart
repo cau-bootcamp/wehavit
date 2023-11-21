@@ -19,35 +19,37 @@ class _LiveWritingViewState extends State<LiveWritingView> {
             clipBehavior: Clip.none,
             children: List.generate(
               5,
-              (_) => LiveWaitingAvatarAnimatingWidget(
+              (_) => const LiveWaitingAvatarAnimatingWidget(
                 userImageUrl:
-                    "https://mblogthumb-phinf.pstatic.net/MjAyMDA0MDlfMzgg/MDAxNTg2NDEyNjMwNTU2.tj79WwOeb17w8C0PQWXqebTyUyTT6pfCNVOoCSzBOaIg.8vfG4lXr0u-LZdHOoWGUSIKzsXwoa5zGuYkdrwqu1vcg.PNG.klipk2/먼지1.png?type=w800",
+                    'https://mblogthumb-phinf.pstatic.net/MjAyMDA0MDlfMzgg/MDAxNTg2NDEyNjMwNTU2.tj79WwOeb17w8C0PQWXqebTyUyTT6pfCNVOoCSzBOaIg.8vfG4lXr0u-LZdHOoWGUSIKzsXwoa5zGuYkdrwqu1vcg.PNG.klipk2/먼지1.png?type=w800',
               ),
             ),
           ),
-          Positioned(
+          const Positioned(
             top: 100,
             child: Column(
               children: [
                 Text(
-                  "곧 뭐시기를 시작합니다",
+                  '곧 뭐시기를 시작합니다',
                   style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
                 SizedBox(
                   height: 20,
                 ),
                 Text(
-                  "입장 중",
+                  '입장 중',
                   style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white),
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
                 ),
                 Text(
-                  "00:00",
+                  '00:00',
                   style: TextStyle(
                     fontSize: 44,
                     fontWeight: FontWeight.bold,
@@ -56,7 +58,7 @@ class _LiveWritingViewState extends State<LiveWritingView> {
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
