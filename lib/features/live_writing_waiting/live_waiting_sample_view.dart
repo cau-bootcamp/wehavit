@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wehavit/features/live_writing_waiting/presentation/view/live_waiting_view.dart';
 
-class LiveWaitingSampleView extends StatelessWidget {
+final timeProvider = StateProvider<DateTime>((ref) => DateTime.now());
+
+class LiveWaitingSampleView extends HookConsumerWidget {
   const LiveWaitingSampleView({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       backgroundColor: Colors.black,
       body: Container(

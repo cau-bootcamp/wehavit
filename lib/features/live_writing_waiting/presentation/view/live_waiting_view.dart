@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wehavit/features/live_writing_waiting/presentation/view/widget/live_waiting_avatar_animation_widget.dart';
 
-class LiveWritingView extends StatefulWidget {
+Stream<int> counterStream() {
+  return Stream.periodic(const Duration(seconds: 1), (i) => i + 1);
+}
+
+class LiveWritingView extends HookConsumerWidget {
   const LiveWritingView({super.key});
 
   @override
-  State<LiveWritingView> createState() => _LiveWritingViewState();
-}
-
-class _LiveWritingViewState extends State<LiveWritingView> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final stream = useMemoized(() => counterStream());
+    final snapshot = useStream<int>(stream, initialData: 0);
     return SafeArea(
       child: Stack(
         alignment: Alignment.center,
@@ -25,22 +28,22 @@ class _LiveWritingViewState extends State<LiveWritingView> {
               ),
             ),
           ),
-          const Positioned(
+          Positioned(
             top: 100,
             child: Column(
               children: [
-                Text(
-                  '곧 뭐시기를 시작합니다',
+                const Text(
+                  '곧 입장을 시작합니다',
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-                Text(
+                const Text(
                   '입장 중',
                   style: TextStyle(
                     fontSize: 20,
@@ -49,8 +52,12 @@ class _LiveWritingViewState extends State<LiveWritingView> {
                   ),
                 ),
                 Text(
-                  '00:00',
-                  style: TextStyle(
+                  '${snapshot.hasError || snapshot.hasData ? snapshot.data! ~/ 60 : 00}'
+                          .padLeft(2, '0') +
+                      ':' +
+                      '${snapshot.hasError || snapshot.hasData ? snapshot.data! % 60 : 00}'
+                          .padLeft(2, '0'),
+                  style: const TextStyle(
                     fontSize: 44,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
