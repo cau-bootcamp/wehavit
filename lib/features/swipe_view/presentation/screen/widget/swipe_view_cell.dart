@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/models/user_model/user_model.dart';
+import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
 import 'package:wehavit/features/swipe_view/presentation/model/swipe_view_model.dart';
+import 'package:wehavit/features/swipe_view/presentation/provider/swipe_view_confirm_post_list_provider.dart';
 import 'package:wehavit/features/swipe_view/presentation/provider/swipe_view_model_provider.dart';
+import 'package:wehavit/features/swipe_view/presentation/screen/widget/swipe_dashboard_widget.dart';
 
 class SwipeViewCellWidget extends ConsumerStatefulWidget {
   const SwipeViewCellWidget({super.key, required this.model});
@@ -17,6 +20,7 @@ class SwipeViewCellWidget extends ConsumerStatefulWidget {
 
 class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
   late final SwipeViewModel _swipeViewModel;
+  late final Future<List<ConfirmPostModel>> _confirmPostList;
 
   @override
   void initState() {
@@ -24,9 +28,14 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
   }
 
   @override
-  void didChangeDependencies() {
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
     _swipeViewModel = ref.watch(swipeViewModelProvider);
+    _confirmPostList = ref.watch(swipeViewConfirmPostListProvider);
+
+    ref.read(swipeViewConfirmPostListProvider.notifier).getConfirmPostListFor(
+          resolutionId: widget.model.resolutionId!.id,
+        );
   }
 
   @override
@@ -120,8 +129,8 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
               height: _swipeViewModel.animation.value,
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4.0),
-                child: Container(
-                  color: Colors.amber,
+                child: SwipeDashboardWidget(
+                  confirmPostList: _confirmPostList,
                 ),
               ),
             ),
