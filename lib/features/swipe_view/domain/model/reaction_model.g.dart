@@ -8,7 +8,7 @@ part of 'reaction_model.dart';
 
 _$ReactionModelImpl _$$ReactionModelImplFromJson(Map<String, dynamic> json) =>
     _$ReactionModelImpl(
-      complementerUid: json['complementerUid'] as String,
+      complimenterUid: json['complimenterUid'] as String,
       reactionType: json['reactionType'] as int,
       hasRead: json['hasRead'] as bool? ?? false,
       instantPhotoUrl: json['instantPhotoUrl'] as String? ?? '',
@@ -21,7 +21,7 @@ _$ReactionModelImpl _$$ReactionModelImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$ReactionModelImplToJson(_$ReactionModelImpl instance) =>
     <String, dynamic>{
-      'complementerUid': instance.complementerUid,
+      'complimenterUid': instance.complimenterUid,
       'reactionType': instance.reactionType,
       'hasRead': instance.hasRead,
       'instantPhotoUrl': instance.instantPhotoUrl,

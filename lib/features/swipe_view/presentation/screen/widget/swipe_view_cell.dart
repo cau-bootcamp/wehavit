@@ -17,7 +17,6 @@ class SwipeViewCellWidget extends ConsumerStatefulWidget {
 
 class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
   late final SwipeViewModel _swipeViewModel;
-  late final SwipeViewModelProvider _swipeViewModelProvider;
 
   @override
   void initState() {
@@ -28,7 +27,6 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _swipeViewModel = ref.watch(swipeViewModelProvider);
-    _swipeViewModelProvider = ref.read(swipeViewModelProvider.notifier);
   }
 
   @override

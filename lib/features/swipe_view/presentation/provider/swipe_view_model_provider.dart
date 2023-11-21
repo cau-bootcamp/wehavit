@@ -127,7 +127,7 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
           );
 
       final reactionModel = ReactionModel(
-        complementerUid: currentUserUid,
+        complimenterUid: currentUserUid,
         reactionType: ReactionType.emoji.index,
         emoji: emojiMap,
       );
@@ -140,7 +140,7 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
 
   Future<void> sendImageReaction({required String imageFilePath}) async {
     final reactionModel = ReactionModel(
-      complementerUid: FirebaseAuth.instance.currentUser!.uid,
+      complimenterUid: FirebaseAuth.instance.currentUser!.uid,
       reactionType: ReactionType.instantPhoto.index,
       instantPhotoUrl: imageFilePath,
     );
@@ -151,7 +151,7 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
     unfocusCommentTextForm();
 
     final reactionModel = ReactionModel(
-      complementerUid: FirebaseAuth.instance.currentUser!.uid,
+      complimenterUid: FirebaseAuth.instance.currentUser!.uid,
       reactionType: ReactionType.comment.index,
       comment: state.textEditingController.text,
     );

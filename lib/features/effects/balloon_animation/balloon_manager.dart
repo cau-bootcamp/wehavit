@@ -24,23 +24,39 @@ final balloonManagerProvider =
 class BalloonManager extends StateNotifier<Map<Key, BalloonWidget>> {
   BalloonManager() : super({});
 
-  late Function(Offset)? onTapCallbackWithTappedPositionOffset;
+  late Function(Offset, List<int>, String, String)?
+      onTapCallbackWithTappedPositionOffset;
   double radius = 130;
 
-  void addBalloon({required String imageUrl}) {
+  void addBalloon({
+    required String imageUrl,
+    required List<int> emojiReactionCountList,
+    required String message,
+  }) {
     final balloonWidgetKey = UniqueKey();
-
-    state.addEntries(<Key, BalloonWidget>{
+    final newBalloon = {
       balloonWidgetKey: BalloonWidget(
         key: balloonWidgetKey,
         imageUrl: imageUrl,
         notifyWidgetIsDisposed: (Key widgetKey) {
           state = Map.of(state..remove(widgetKey));
         },
-        onTapWithOffset: onTapCallbackWithTappedPositionOffset ?? (_) {},
+        onTapWithOffset: (Offset offset) {
+          onTapCallbackWithTappedPositionOffset!(
+            offset,
+            emojiReactionCountList,
+            message,
+            imageUrl,
+          );
+        },
         radius: radius,
       ),
-    }.entries);
+    };
+
+    state = {
+      ...state,
+      ...newBalloon,
+    };
   }
 }
 
@@ -112,7 +128,7 @@ class _BalloonWidgetState extends State<BalloonWidget>
     _startAnimation();
   }
 
-  _startAnimation() {
+  void _startAnimation() {
     _animationController.forward();
   }
 
@@ -184,11 +200,10 @@ class BalloonParticleWidget extends StatelessWidget {
 }
 
 class BalloonModel {
-  double x;
-  double y;
-
   BalloonModel({
     required this.x,
     required this.y,
   });
+  double x;
+  double y;
 }

@@ -13,7 +13,6 @@ class LiveWritingFriendRepositoryImpl extends LiveWritingFriendRepository {
   LiveWritingFriendRepositoryImpl();
 
   final livePostDocumentPrefix = 'LIVE-';
-  final int friendStateAccepted = 1;
 
   @override
   Future<List<String>> getVisibleFriendEmailList() async {
@@ -21,16 +20,17 @@ class LiveWritingFriendRepositoryImpl extends LiveWritingFriendRepository {
         .collection(FirebaseCollectionName.friends)
         .get();
 
-    final friendsAccepted = friendsSnapshots.docs.where((data) {
-      return data.data()['friendState'] == friendStateAccepted;
-    });
+    final friendsAccepted = friendsSnapshots.docs;
+
+    // TODO. 친구 수락이 구현될 경우 사용
+    // final int friendStateAccepted = 1;
+    // friendsAccepted.where((data) {
+    //   return data.data()['friendState'] == friendStateAccepted;
+    // });
 
     return friendsAccepted.map<String>((data) {
       return data.data()[FirebaseFriendFieldName.friendEmail];
     }).toList();
-
-    // TEST. 임시로 실시간 공유할 친구 두 명 반환
-    // return ['69dlXoGSBKhzrySuhb8t9MvqzdD3', 'zZaP501Kc8ccUvR9ogPOsjSeD1s2'];
   }
 
   @override
@@ -90,14 +90,14 @@ class LiveWritingFriendRepositoryImpl extends LiveWritingFriendRepository {
   ) async {
     const errorMessage = 'Error on sendReactionToTargetFriend Function';
     reactionModel = reactionModel.copyWith(
-      complementerUid: '/users/${FirebaseAuth.instance.currentUser!.uid}',
+      complimenterUid: '/users/${FirebaseAuth.instance.currentUser!.uid}',
       hasRead: false,
     );
 
     try {
       await FirebaseFirestore.instance
           .collection(
-            '${FirebaseCollectionName.liveConfirmPosts}/LIVE-$targetEmail/${FirebaseCollectionName.encourages}',
+            '${FirebaseCollectionName.liveConfirmPosts}/$livePostDocumentPrefix$targetEmail/${FirebaseCollectionName.encourages}',
           )
           .add(
             reactionModel.toJson(),

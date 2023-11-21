@@ -117,7 +117,7 @@ class SendInstantPhotoButton extends HookConsumerWidget {
             .sendReactionToTargetFriend(
               email,
               ReactionModel(
-                complementerUid: '',
+                complimenterUid: '',
                 reactionType: ReactionType.instantPhoto.index,
                 instantPhotoUrl: 'https://picsum.photos/200/300',
               ),
@@ -150,7 +150,7 @@ class SendEmojiButton extends HookConsumerWidget {
             .sendReactionToTargetFriend(
               email,
               ReactionModel(
-                complementerUid: '',
+                complimenterUid: '',
                 reactionType: ReactionType.emoji.index,
                 emoji: {'👍': 1, '👎': 2},
               ),
@@ -220,7 +220,7 @@ class SendTextButton extends HookConsumerWidget {
                         .sendReactionToTargetFriend(
                           email,
                           ReactionModel(
-                            complementerUid: '',
+                            complimenterUid: '',
                             reactionType: ReactionType.comment.index,
                             comment: dialogTextController.text,
                           ),

@@ -25,7 +25,7 @@ class UserModelFetchDatasourceImpl extends UserModelFetchDatasource {
       debugPrint('DEBUG : fetchLiveWrittenConfirmPostList error $e');
       return Future(
         () => left(
-          const Failure("catch error on fetchLiveWrittenConfirmPostList"),
+          const Failure('catch error on fetchLiveWrittenConfirmPostList'),
         ),
       );
     }

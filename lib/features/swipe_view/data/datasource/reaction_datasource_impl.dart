@@ -42,8 +42,8 @@ class ReactionDatasourceImpl implements ReactionDatasource {
       )
           .add(
         {
-          FirebaseReactionFieldName.complementerUid:
-              '/users/${FirebaseAuth.instance.currentUser!.uid}',
+          FirebaseReactionFieldName.complimenterUid:
+              FirebaseAuth.instance.currentUser!.uid,
           FirebaseReactionFieldName.reactionType: reactionModel.reactionType,
           FirebaseReactionFieldName.emoji: reactionModel.emoji,
           FirebaseReactionFieldName.instantPhotoUrl:
@@ -74,5 +74,41 @@ class ReactionDatasourceImpl implements ReactionDatasource {
     } on Exception catch (e) {
       return Future(() => left(Failure(e.toString())));
     }
+  }
+
+  @override
+  EitherFuture<List<ReactionModel>>
+      getReactionUnreadFromLastConfirmPost() async {
+    final confirmPostFetchResult = await FirebaseFirestore.instance
+        .collection(FirebaseCollectionName.confirmPosts)
+        .where('owner', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .orderBy('createdAt', descending: true)
+        .limit(1)
+        .get();
+
+    final temp = confirmPostFetchResult.docs.toList();
+    final myLatestConfirmPostId = temp.first.reference.id;
+
+    final encourages = await FirebaseFirestore.instance
+        .collection(
+          '${FirebaseCollectionName.confirmPosts}/$myLatestConfirmPostId/${FirebaseCollectionName.encourages}',
+        )
+        .where('hasRead', isEqualTo: false)
+        .get();
+
+    // 이 로직으로 응원 데이터는 한 번만 가져올 수 있음
+    for (var doc in encourages.docs) {
+      FirebaseFirestore.instance.doc(doc.reference.path).update(
+        {'hasRead': true},
+      );
+    }
+
+    final result = encourages.docs
+        .map((doc) => ReactionModel.fromJson(doc.data()))
+        .toList();
+
+    return Future(
+      () => right(result),
+    );
   }
 }
