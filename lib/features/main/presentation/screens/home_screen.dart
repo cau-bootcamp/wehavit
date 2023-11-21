@@ -14,21 +14,25 @@ class HomeScreen extends ConsumerWidget {
       const HomeScreen();
 
   @override
+  void initState() {}
+
+  @override
   Widget build(BuildContext context, WidgetRef ref) {
     const String dateFormat = 'yyyy년 MM월 dd일';
-    List<String> generateDatesList() {
+    List<(String, String)> generateDatesList() {
       var today = DateTime.now();
-      var datesList = List<String>.generate(30, (i) {
+      var datesList = List<(String, String)>.generate(30, (i) {
         var date = today.subtract(Duration(days: i));
-        // Format the date as 'mm-dd'
-        return "${date.month.toString().padLeft(2, '0')}/"
-            "${date.day.toString().padLeft(2, '0')}";
+        return (date.month.toString(), date.day.toString().padLeft(2, '0'));
       });
 
-      return datesList.reversed.toList(); // To have the list in ascending order
+      return datesList.reversed.toList();
     }
 
-    final List<String> dates = generateDatesList();
+    final List<(String, String)> dates = generateDatesList();
+    final ScrollController scrollController = ScrollController();
+    int selectedIndex = 29;
+
     return Scaffold(
       backgroundColor: Colors.grey,
       appBar: PreferredSize(
@@ -66,12 +70,32 @@ class HomeScreen extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               height: 70,
               child: ListView.builder(
+                controller: scrollController,
                 scrollDirection: Axis.horizontal,
                 itemCount: dates.length,
                 itemBuilder: (context, index) {
-                  return TextButton(
-                    onPressed: () {},
-                    child: Text(dates[index]),
+                  return Container(
+                    padding: const EdgeInsets.all(4.0),
+                    child: TextButton(
+                      onPressed: () {},
+                      style: TextButton.styleFrom(
+                        // Change the background color to indicate selection
+                        backgroundColor: selectedIndex == index
+                            ? Colors.orange
+                            : Colors.grey,
+                      ),
+                      child: Align(
+                        child: Text(
+                          '${dates[index].$1}\n${dates[index].$2}',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: selectedIndex == index
+                                ? Colors.black
+                                : Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
                   );
                 },
               ),
