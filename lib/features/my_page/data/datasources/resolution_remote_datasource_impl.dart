@@ -4,6 +4,7 @@ import 'package:wehavit/common/constants/firebase_field_name.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/common/utils/firebase_collection_name.dart';
+import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
 import 'package:wehavit/features/my_page/data/datasources/resolution_datasource.dart';
 import 'package:wehavit/features/my_page/data/entities/resolution_entity.dart';
 
@@ -23,12 +24,19 @@ class ResolutionRemoteDatasourceImpl implements ResolutionDatasource {
     try {
       final fetchResult = await FirebaseFirestore.instance
           .collection(FirebaseCollectionName.resolutions)
-          .where(FirebaseResolutionFieldName.resolutionIsActive,
-              isEqualTo: true)
+          .where(
+            FirebaseResolutionFieldName.resolutionIsActive,
+            isEqualTo: true,
+          )
           .get();
 
       resolutionEntityList = fetchResult.docs
-          .map((doc) => ResolutionEntity.fromFirebaseDocument(doc.data()))
+          .map(
+            (doc) => ResolutionEntity.fromFirebaseDocument(
+              doc.data(),
+              doc.reference.path,
+            ),
+          )
           .toList();
 
       return Future(() => right(resolutionEntityList));
@@ -59,7 +67,12 @@ class ResolutionRemoteDatasourceImpl implements ResolutionDatasource {
           .get();
 
       resolutionEntityList = fetchResult.docs
-          .map((doc) => ResolutionEntity.fromFirebaseDocument(doc.data()))
+          .map(
+            (doc) => ResolutionEntity.fromFirebaseDocument(
+              doc.data(),
+              doc.reference.path,
+            ),
+          )
           .toList();
 
       return Future(() => right(resolutionEntityList));
@@ -91,6 +104,33 @@ class ResolutionRemoteDatasourceImpl implements ResolutionDatasource {
       return Future(
         () => left(
           const Failure('catch error on uploadResolutionEntity'),
+        ),
+      );
+    }
+  }
+
+  @override
+  EitherFuture<List<ConfirmPostModel>> getConfirmPostListForResolutionId({
+    required String resolutionId,
+  }) async {
+    try {
+      final fetchResult = await FirebaseFirestore.instance
+          .collection(FirebaseCollectionName.confirmPosts)
+          .where(
+            FirebaseConfirmPostFieldName.resolutionId,
+            isEqualTo: FirebaseFirestore.instance.doc('/$resolutionId'),
+          )
+          .get();
+
+      final confirmPostModelList = fetchResult.docs.map((doc) {
+        return ConfirmPostModel.fromFireStoreDocument(doc);
+      }).toList();
+
+      return Future(() => right(confirmPostModelList));
+    } on Exception {
+      return Future(
+        () => left(
+          const Failure('catch error on getConfirmPostListForResolutionId'),
         ),
       );
     }

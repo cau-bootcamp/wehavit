@@ -1,22 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
 import 'package:wehavit/features/my_page/domain/models/resolution_model.dart';
 import 'package:wehavit/features/my_page/presentation/widgets/resolution_doughnut_graph_widget.dart';
 import 'package:wehavit/features/my_page/presentation/widgets/resolution_linear_gauge_graph_widget.dart';
 
-class ResolutionDashboardWidget extends StatefulWidget {
-  const ResolutionDashboardWidget({Key? key, required this.model})
-      : super(key: key);
+class ResolutionDashboardWidget extends ConsumerStatefulWidget {
+  const ResolutionDashboardWidget({
+    super.key,
+    required this.model,
+    required this.confirmPostList,
+  });
 
   final ResolutionModel model;
+  final Future<List<ConfirmPostModel>> confirmPostList;
 
   @override
-  State<ResolutionDashboardWidget> createState() =>
+  ConsumerState<ResolutionDashboardWidget> createState() =>
       _ResolutionDashboardWidgetState();
 }
 
-class _ResolutionDashboardWidgetState extends State<ResolutionDashboardWidget> {
+class _ResolutionDashboardWidgetState
+    extends ConsumerState<ResolutionDashboardWidget> {
   late String goalStatement = widget.model.goalStatement;
   late String actionStatement = widget.model.actionStatement;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,18 +50,41 @@ class _ResolutionDashboardWidgetState extends State<ResolutionDashboardWidget> {
                 children: [
                   Text(goalStatement),
                   Text(actionStatement),
-                  const SizedBox(height: 20),
-                  Container(
-                    padding: const EdgeInsets.all(2),
-                    decoration: const BoxDecoration(color: Colors.white),
-                    child: const ResolutionLinearGaugeGraphWidget(),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(2),
-                    decoration: const BoxDecoration(color: Colors.white),
-                    child: const ResolutionLinearGaugeGraphWidget(),
-                    // width: 200,
-                    // height: 50,
+                  FutureBuilder<List<ConfirmPostModel>>(
+                    future: widget.confirmPostList,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Column(
+                          children: [
+                            const SizedBox(height: 20),
+                            Container(
+                              padding: const EdgeInsets.all(2),
+                              decoration:
+                                  const BoxDecoration(color: Colors.white),
+                              child: ResolutionLinearGaugeGraphWidget(
+                                sourceData: snapshot.data!,
+                                lastPeriod: false,
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(2),
+                              decoration:
+                                  const BoxDecoration(color: Colors.white),
+                              child: ResolutionLinearGaugeGraphWidget(
+                                sourceData: snapshot.data!,
+                                lastPeriod: true,
+                              ),
+                              // width: 200,
+                              // height: 50,
+                            ),
+                          ],
+                        );
+                      } else if (snapshot.hasError) {
+                        return const Placeholder();
+                      } else {
+                        return Container();
+                      }
+                    },
                   ),
                 ],
               ),
@@ -60,10 +95,19 @@ class _ResolutionDashboardWidgetState extends State<ResolutionDashboardWidget> {
               padding: const EdgeInsets.only(right: 16.0),
               child: AspectRatio(
                 aspectRatio: 1,
-                child: Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: const BoxDecoration(color: Colors.amber),
-                  child: const ResolutionDoughnutGraphWidget(),
+                child: FutureBuilder<List<ConfirmPostModel>>(
+                  future: widget.confirmPostList,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return ResolutionDoughnutGraphWidget(
+                        sourceData: snapshot.data!,
+                      );
+                    } else if (snapshot.hasError) {
+                      return const Placeholder();
+                    } else {
+                      return Container();
+                    }
+                  },
                 ),
               ),
             ),

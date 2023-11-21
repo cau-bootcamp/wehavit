@@ -1,8 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
+import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
 
 class ResolutionLinearGaugeGraphWidget extends StatelessWidget {
-  const ResolutionLinearGaugeGraphWidget({super.key});
+  ResolutionLinearGaugeGraphWidget({
+    super.key,
+    required List<ConfirmPostModel> sourceData,
+    required this.lastPeriod,
+  }) {
+    sourceData.sort((a, b) => a.toString().compareTo(b.toString()));
+    data = sourceData.where((element) {
+      if (lastPeriod) {
+        return todaysDate.difference(element.createdAt!).inDays < 28 &&
+            todaysDate.difference(element.createdAt!).inDays >= 14;
+      } else {
+        return todaysDate.difference(element.createdAt!).inDays < 14;
+      }
+    }).toList();
+  }
+
+  late final List<ConfirmPostModel> data;
+  final bool lastPeriod;
+  final todaysDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -13,10 +32,17 @@ class ResolutionLinearGaugeGraphWidget extends StatelessWidget {
       maximum: 13,
       markerPointers: List<LinearWidgetPointer>.generate(
         14,
-        (int index) => _buildLinearWidgetPointer(
-          index.toDouble(),
-          index % 4 == 1 ? Colors.black : Colors.white,
-        ),
+        (int index) {
+          return _buildLinearWidgetPointer(
+            index.toDouble(),
+            data.any(
+              (element) =>
+                  todaysDate.difference(element.createdAt!).inDays == index,
+            )
+                ? Colors.black
+                : Colors.white,
+          );
+        },
       ),
     );
   }
