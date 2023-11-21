@@ -7,6 +7,7 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/features/effects/animation_sample_page.dart';
 import 'package:wehavit/features/features.dart';
 import 'package:wehavit/features/live_writing/presentation/screens/live_writing_page.dart';
+import 'package:wehavit/features/main/presentation/screens/home_screen.dart';
 import 'package:wehavit/features/my_page/presentation/screens/add_resolution_screen.dart';
 import 'package:wehavit/features/my_page/presentation/screens/my_page_screen.dart';
 import 'package:wehavit/features/swipe_view/presentation/screen/swipe_view.dart';
@@ -47,6 +48,18 @@ final routerProvider = Provider<GoRouter>(
     );
   },
 );
+
+@TypedGoRoute<HomeRoute>(path: HomeRoute.path)
+class HomeRoute extends GoRouteData {
+  const HomeRoute();
+
+  static const path = RouteLocation.home;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const HomeScreen();
+  }
+}
 
 @TypedGoRoute<SplashRoute>(path: SplashRoute.path)
 class SplashRoute extends GoRouteData {

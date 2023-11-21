@@ -15,6 +15,20 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    const String dateFormat = 'yyyy년 MM월 dd일';
+    List<String> generateDatesList() {
+      var today = DateTime.now();
+      var datesList = List<String>.generate(30, (i) {
+        var date = today.subtract(Duration(days: i));
+        // Format the date as 'mm-dd'
+        return "${date.month.toString().padLeft(2, '0')}/"
+            "${date.day.toString().padLeft(2, '0')}";
+      });
+
+      return datesList.reversed.toList(); // To have the list in ascending order
+    }
+
+    final List<String> dates = generateDatesList();
     return Scaffold(
       backgroundColor: Colors.grey,
       appBar: PreferredSize(
@@ -24,9 +38,11 @@ class HomeScreen extends ConsumerWidget {
             AppBar(
               backgroundColor: Colors.black87,
               title: Text(
-                DateFormat('yyyy년 MM월 dd일').format(DateTime.now()),
+                DateFormat(dateFormat).format(DateTime.now()),
                 style: const TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.bold),
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               actions: [
                 IconButton(
@@ -51,18 +67,11 @@ class HomeScreen extends ConsumerWidget {
               height: 70,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: 7,
+                itemCount: dates.length,
                 itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: CircleAvatar(
-                      backgroundColor:
-                          (index == 6) ? Colors.purple : Colors.grey,
-                      child: Text(
-                        '${25 + index}',
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    ),
+                  return TextButton(
+                    onPressed: () {},
+                    child: Text(dates[index]),
                   );
                 },
               ),

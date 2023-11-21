@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wehavit/common/common.dart';
 import 'package:wehavit/features/my_page/presentation/providers/my_page_resolution_list_provider.dart';
 import 'package:wehavit/features/my_page/presentation/widgets/resolution_dashboard_widget.dart';
 
@@ -17,6 +18,15 @@ class MyPageScreen extends ConsumerWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         shadowColor: Colors.transparent,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.home, color: Colors.black54),
+            // 일단 임시로 검은색과 홈 아이콘으로 처리하였음.
+            onPressed: () async {
+              context.go(RouteLocation.home);
+            },
+          ),
+        ],
       ),
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16),
