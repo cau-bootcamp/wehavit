@@ -15,8 +15,11 @@ class AddFriendTextFieldWidget extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Container(
-            width: 300,
-            margin: const EdgeInsets.only(left: 8, right: 8),
+            padding: const EdgeInsets.only(
+              left: 8.0,
+            ),
+          ),
+          Expanded(
             child: TextField(
               // 추후에 onChanged가 아닌 것으로 바꿀 예정
               onChanged: (value) {
@@ -27,6 +30,11 @@ class AddFriendTextFieldWidget extends ConsumerWidget {
               ),
             ),
           ),
+          Container(
+            padding: const EdgeInsets.only(
+              left: 16.0,
+            ),
+          ),
           ElevatedButton(
             onPressed: () async {
               ref.read(addFriendProvider.notifier).uploadFriendModel().then(
@@ -35,11 +43,17 @@ class AddFriendTextFieldWidget extends ConsumerWidget {
                     debugPrint('DEBUG : UPLOAD FAILED - ${failure.message}');
                   }, (success) {
                     ref.read(friendListProvider.notifier).getFriendList();
+                    //ref.refresh(friendListProvider.notifier).getFriendList();
                   });
                 },
               );
             },
             child: const Text('+'),
+          ),
+          Container(
+            padding: const EdgeInsets.only(
+              left: 8.0,
+            ),
           ),
         ],
       ),

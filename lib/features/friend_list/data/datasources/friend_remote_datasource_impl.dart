@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/constants/firebase_field_name.dart';
 import 'package:wehavit/common/errors/failure.dart';
@@ -67,7 +68,8 @@ class FriendRemoteDatasourceImpl implements FriendDatasource {
           isEqualTo: entity.friendEmail,
         )
         .get();
-    if (friendsDocsSnapshot.docs.isNotEmpty) {
+    if (friendsDocsSnapshot.docs.isNotEmpty ||
+        FirebaseAuth.instance.currentUser?.email == entity.friendEmail) {
       return Future(
         () => left(
           const Failure('There is same user in friends list'),
@@ -81,17 +83,29 @@ class FriendRemoteDatasourceImpl implements FriendDatasource {
           FirebaseUserFieldName.email,
           isEqualTo: entity.friendEmail,
         )
+        .limit(1)
         .get();
-
-    final friendRef = friendSnapshot.docs
-        .map((doc) => doc.data()[FirebaseFriendFieldName.friendEmail])
-        .toList();
+    final friendRef = friendSnapshot.docs.map((doc) => doc.id).toList();
 
     if (friendRef.isNotEmpty) {
       try {
+        final Map<String, dynamic> doc = {};
+        doc[FirebaseFriendFieldName.friendEmail] =
+            FirebaseAuth.instance.currentUser?.email;
+        doc[FirebaseFriendFieldName.friendState] = 0;
+
+        // 친구 추가
         FirebaseFirestore.instance
             .collection(FirebaseCollectionName.friends)
             .add(entity.toFirebaseDocument());
+        // 친구에게 내 정보 추가
+        FirebaseFirestore.instance
+            .collection(
+              FirebaseCollectionName.getTargetFriendsCollection(
+                friendRef[0],
+              ),
+            )
+            .add(doc);
         return Future(() => right(true));
       } on Exception {
         return Future(

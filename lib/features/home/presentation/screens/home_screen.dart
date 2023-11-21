@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
+import 'package:wehavit/common/common.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
-  static HomeScreen builder(BuildContext context,
-      GoRouterState state,) =>
+  static HomeScreen builder(
+    BuildContext context,
+    GoRouterState state,
+  ) =>
       const HomeScreen();
 
   @override
@@ -19,22 +23,23 @@ class HomeScreen extends ConsumerWidget {
           children: [
             AppBar(
               backgroundColor: Colors.black87,
-              title: const Text(
-                '2023년 10월 2일',
-                style:
-                TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              title: Text(
+                DateFormat('yyyy년 MM월 dd일').format(DateTime.now()),
+                style: const TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold),
               ),
               actions: [
-//                IconButton(
-//                    icon: Icon(Icons.group, color: Colors.white),
-//                    onPressed: () {
-//                      Navigator.push(
-//                          context, MaterialPageRoute(builder: (context) =>
-//                          FriendsList()));
-//                    }),
+                IconButton(
+                  icon: const Icon(Icons.group, color: Colors.white),
+                  onPressed: () async {
+                    context.go(RouteLocation.friendList);
+                  },
+                ),
                 IconButton(
                   icon: const Icon(Icons.notifications, color: Colors.white),
-                  onPressed: () {},
+                  onPressed: () async {
+                    // 알림 센터 뷰
+                  },
                 ),
               ],
             ),
@@ -52,7 +57,7 @@ class HomeScreen extends ConsumerWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: CircleAvatar(
                       backgroundColor:
-                      (index == 6) ? Colors.purple : Colors.grey,
+                          (index == 6) ? Colors.purple : Colors.grey,
                       child: Text(
                         '${25 + index}',
                         style: const TextStyle(color: Colors.white),
@@ -123,11 +128,14 @@ class HomeScreen extends ConsumerWidget {
   }
 }
 
-Widget _feedBlock(String name,
-    String badge,
-    String title,
-    String message,
-    String imageUrl,) {
+// 파일 분리 예정. model도 짜야 함.
+Widget _feedBlock(
+  String name,
+  String badge,
+  String title,
+  String message,
+  String imageUrl,
+) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 4.0),
     child: Container(
@@ -195,7 +203,7 @@ Widget _feedBlock(String name,
               children: [
                 SizedBox(
                   height: 150,
-                  width: 250,
+                  width: 200,
                   child: Padding(
                     padding: const EdgeInsets.all(3.0),
                     child: Flexible(
@@ -211,8 +219,8 @@ Widget _feedBlock(String name,
                   ),
                 ),
                 Container(
-                  height: 150,
-                  width: 150,
+                  height: 130,
+                  width: 130,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     image: DecorationImage(

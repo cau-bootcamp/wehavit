@@ -26,6 +26,6 @@ class AddFriendNotifier extends StateNotifier<AddFriendModel> {
     AddFriendModel newModel = AddFriendModel(
       friendEmail: state.friendEmail,
     );
-    return _uploadFriendUsecase.call(newModel);
+    return _uploadFriendUsecase(newModel);
   }
 }
