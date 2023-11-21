@@ -54,6 +54,12 @@ $ flutter test test/{file_name}
 flutter analyze
 ```
 
+#### Pub run build
+
+```bash
+flutter pub run build_runner watch
+```
+
 ### Versions and Dependencies
 
 #### Flutter Version
