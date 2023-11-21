@@ -64,15 +64,16 @@ class FriendListScreen extends ConsumerWidget {
                       ],
                     ),
                   ),
-                  Container(
-                    alignment: Alignment.centerRight,
-                    margin: const EdgeInsets.only(right: 8.0),
-                    child: IconButton(
-                      icon: const Icon(Icons.link),
-                      color: Colors.black87,
-                      onPressed: () {},
-                    ),
-                  ),
+// TODO: 링크로 친구 추가하기 추후에.
+//                  Container(
+//                    alignment: Alignment.centerRight,
+//                    margin: const EdgeInsets.only(right: 8.0),
+//                    child: IconButton(
+//                      icon: const Icon(Icons.link),
+//                      color: Colors.black87,
+//                      onPressed: () {},
+//                    ),
+//                  ),
                 ],
               ),
             ),
@@ -86,7 +87,7 @@ class FriendListScreen extends ConsumerWidget {
                           .read(friendListProvider.notifier)
                           .getFriendList();
                     },
-                    child: const Text('친구 목록 보기'),
+                    child: const Text('친구 목록 새로고침'),
                   ),
                 ),
                 const AddFriendTextFieldWidget(),

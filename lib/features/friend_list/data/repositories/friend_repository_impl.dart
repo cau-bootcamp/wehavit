@@ -27,7 +27,7 @@ class FriendRepositoryImpl implements FriendRepository {
         final modelList =
             entityList.map((entity) => entity.toFriendModel()).toList();
 
-        return Future(() => right(modelList));
+        return Future(() => right(List.from(modelList.reversed)));
       });
     } on Exception catch (e) {
       return Future(() => left(Failure(e.toString())));

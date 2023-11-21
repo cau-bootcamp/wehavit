@@ -23,14 +23,14 @@ class FriendRemoteDatasourceImpl implements FriendDatasource {
       // state가 1인 것은 친구인 상태, 0인 것은 친구를 신청한 상태이다.
       final friendEmails = friendsSnapshots.docs
           .map((doc) {
-            // 주석 아래 if문을 바로 두 문장으로 변경하면 friend state가 1인 경우의 친구의 정보만 가져옵니다.
-            //  if (doc.data()[FirebaseFieldName.friendState] == 1 &&
-            //      doc.data()[FirebaseFieldName.friendEmail] != null) {
-            if (doc.data()[FirebaseFriendFieldName.friendEmail] != null) {
-              return doc.data()[FirebaseFriendFieldName.friendEmail] as String;
-            }
-            return null;
-          })
+        // 주석 아래 if문을 바로 두 문장으로 변경하면 friend state가 1인 경우의 친구의 정보만 가져옵니다.
+        //  if (doc.data()[FirebaseFieldName.friendState] == 1 &&
+        //      doc.data()[FirebaseFieldName.friendEmail] != null) {
+        if (doc.data()[FirebaseFriendFieldName.friendEmail] != null) {
+          return doc.data()[FirebaseFriendFieldName.friendEmail] as String;
+        }
+        return null;
+      })
           .where((email) => email != null)
           .cast<String>()
           .toList();
@@ -50,63 +50,77 @@ class FriendRemoteDatasourceImpl implements FriendDatasource {
       return Future(() => right(friendEntityList));
     } on Exception {
       return Future(
-        () => left(
-          const Failure('catch error on getActiveFriendEntityList'),
-        ),
+            () =>
+            left(
+              const Failure('catch error on getActiveFriendEntityList'),
+            ),
       );
     }
   }
 
   @override
-  EitherFuture<bool> uploadAddFriendEntity(
-    AddFriendEntity entity,
-  ) async {
+  EitherFuture<bool> uploadAddFriendEntity(AddFriendEntity entity,) async {
     final friendsDocsSnapshot = await FirebaseFirestore.instance
         .collection(FirebaseCollectionName.friends)
         .where(
-          FirebaseFriendFieldName.friendEmail,
-          isEqualTo: entity.friendEmail,
-        )
+      FirebaseFriendFieldName.friendEmail,
+      isEqualTo: entity.friendEmail,
+    )
         .get();
     if (friendsDocsSnapshot.docs.isNotEmpty ||
         FirebaseAuth.instance.currentUser?.email == entity.friendEmail) {
       return Future(
-        () => left(
-          const Failure('There is same user in friends list'),
-        ),
+            () =>
+            left(
+              const Failure('There is same user in friends list'),
+            ),
       );
     }
 
     final friendSnapshot = await FirebaseFirestore.instance
         .collection(FirebaseCollectionName.users)
         .where(
-          FirebaseUserFieldName.email,
-          isEqualTo: entity.friendEmail,
-        )
+      FirebaseUserFieldName.email,
+      isEqualTo: entity.friendEmail,
+    )
+        .limit(1)
         .get();
-
-    final friendRef = friendSnapshot.docs
-        .map((doc) => doc.data()[FirebaseFriendFieldName.friendEmail])
-        .toList();
+    final friendRef = friendSnapshot.docs.map((doc) => doc.id).toList();
 
     if (friendRef.isNotEmpty) {
       try {
+        final Map<String, dynamic> doc = {};
+        doc[FirebaseFriendFieldName.friendEmail] =
+            FirebaseAuth.instance.currentUser?.email;
+        doc[FirebaseFriendFieldName.friendState] = 0;
+
+        // 친구 추가
         FirebaseFirestore.instance
             .collection(FirebaseCollectionName.friends)
             .add(entity.toFirebaseDocument());
+        // 친구에게 내 정보 추가
+        FirebaseFirestore.instance
+            .collection(
+          FirebaseCollectionName.getOpponentFriendsCollection(
+            friendRef[0],
+          ),
+        )
+            .add(doc);
         return Future(() => right(true));
       } on Exception {
         return Future(
-          () => left(
-            const Failure('catch error on uploadFriendEntity'),
-          ),
+              () =>
+              left(
+                const Failure('catch error on uploadFriendEntity'),
+              ),
         );
       }
     } else {
       return Future(
-        () => left(
-          const Failure('There is no friend Email'),
-        ),
+            () =>
+            left(
+              const Failure('There is no friend Email'),
+            ),
       );
     }
   }

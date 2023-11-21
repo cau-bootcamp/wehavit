@@ -43,6 +43,7 @@ class AddFriendTextFieldWidget extends ConsumerWidget {
                     debugPrint('DEBUG : UPLOAD FAILED - ${failure.message}');
                   }, (success) {
                     ref.read(friendListProvider.notifier).getFriendList();
+                    //ref.refresh(friendListProvider.notifier).getFriendList();
                   });
                 },
               );
