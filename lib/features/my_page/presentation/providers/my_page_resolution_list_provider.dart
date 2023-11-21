@@ -6,7 +6,6 @@ import 'package:wehavit/features/my_page/domain/models/resolution_model.dart';
 import 'package:wehavit/features/my_page/domain/usecases/get_confirm_post_list_for_resolution_id.dart';
 import 'package:wehavit/features/my_page/domain/usecases/get_resolution_list_usecase.dart';
 import 'package:wehavit/features/my_page/domain/usecases/get_resolution_list_usecase_provider.dart';
-import 'package:wehavit/features/reaction/domain/usecase/get_reaction_not_read_from_last_confirm_post_usecase.dart';
 
 final myPageResolutionListProvider = StateNotifierProvider<
     MyPageResolutionListProvider,

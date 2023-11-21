@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wehavit/features/my_page/domain/usecases/get_confirm_post_list_for_resolution_id.dart';
 import 'package:wehavit/features/my_page/presentation/providers/my_page_resolution_list_provider.dart';
 import 'package:wehavit/features/my_page/presentation/widgets/resolution_dashboard_widget.dart';
 
