@@ -1,12 +1,14 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:wehavit/common/models/user_model/user_model.dart';
 
 class LiveWaitingAvatarAnimatingWidget extends StatefulWidget {
-  LiveWaitingAvatarAnimatingWidget({super.key, required this.userImageUrl});
+  const LiveWaitingAvatarAnimatingWidget({
+    super.key,
+    required this.userImageUrl,
+  });
 
-  String userImageUrl;
+  final String userImageUrl;
 
   @override
   State<LiveWaitingAvatarAnimatingWidget> createState() =>
