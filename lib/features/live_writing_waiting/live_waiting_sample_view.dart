@@ -1,8 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/features/live_writing_waiting/presentation/view/live_waiting_view.dart';
 
-class LiveWaitingSampleView extends StatelessWidget {
+class LiveWaitingSampleView extends ConsumerStatefulWidget {
   const LiveWaitingSampleView({super.key});
+
+  @override
+  ConsumerState<LiveWaitingSampleView> createState() =>
+      _LiveWaitingSampleViewState();
+}
+
+class _LiveWaitingSampleViewState extends ConsumerState<LiveWaitingSampleView> {
+  late LiveWaitingViewUserImageUrlList _imageUrlListProvider;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _imageUrlListProvider =
+        ref.read(liveWaitingViewUserImageUrlListProvider.notifier);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -11,6 +27,7 @@ class LiveWaitingSampleView extends StatelessWidget {
       body: Container(
         constraints: BoxConstraints.expand(),
         child: Stack(
+          alignment: Alignment.center,
           children: [
             Container(
               decoration: BoxDecoration(
@@ -24,6 +41,14 @@ class LiveWaitingSampleView extends StatelessWidget {
                 ),
               ),
             ),
+            ElevatedButton(
+                onPressed: () {
+                  _imageUrlListProvider.addUserImageUrl(
+                    imageUrl:
+                        'https://avatars.githubusercontent.com/u/63251068?v=4',
+                  );
+                },
+                child: Text("Add User")),
             LiveWritingView(),
           ],
         ),

@@ -1,16 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/features/live_writing_waiting/presentation/view/widget/live_waiting_avatar_animation_widget.dart';
 
-class LiveWritingView extends StatefulWidget {
+/// ## 사용 방법
+/// 1. Provider를 ref로 read 해준 뒤
+/// ```
+///   late LiveWaitingViewUserImageUrlList _imageUrlListProvider;
+///   _imageUrlListProvider = ref.read(liveWaitingViewUserImageUrlListProvider.notifier);
+/// ```
+/// 2. LiveWritingView를 Stack에 담아주고
+/// ```
+/// Stack(
+///   children: [ ... ,
+///     LiveWritingView()
+///   ...
+///   ]
+/// )
+///
+/// ```
+/// 3. 아래처럼 urlString을 추가하는 함수를 호출해 화면에 버블을 그리거나 제거할 수 있음
+/// ```
+///   // 추가
+///   _imageUrlListProvider.addUserImageUrl(imageUrl: 'urlString');
+///   // 제거
+///   _imageUrlListProvider.removeUserImageUrl(imageUrl: 'urlString');
+/// ```
+class LiveWritingView extends ConsumerStatefulWidget {
   const LiveWritingView({super.key});
 
   @override
-  State<LiveWritingView> createState() => _LiveWritingViewState();
+  ConsumerState<LiveWritingView> createState() => _LiveWritingViewState();
 }
 
-class _LiveWritingViewState extends State<LiveWritingView> {
+class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
+  late List<String> _liveWaitingViewUserImageUrlList;
+
+  final String enteringTitle = '곧 뭐시기를 시작합니다!';
+  final String enteringDescription = '입장중...';
+
   @override
   Widget build(BuildContext context) {
+    _liveWaitingViewUserImageUrlList =
+        ref.watch(liveWaitingViewUserImageUrlListProvider);
+
     return SafeArea(
       child: Stack(
         alignment: Alignment.center,
@@ -18,10 +50,9 @@ class _LiveWritingViewState extends State<LiveWritingView> {
           Stack(
             clipBehavior: Clip.none,
             children: List.generate(
-              5,
-              (_) => LiveWaitingAvatarAnimatingWidget(
-                userImageUrl:
-                    "https://mblogthumb-phinf.pstatic.net/MjAyMDA0MDlfMzgg/MDAxNTg2NDEyNjMwNTU2.tj79WwOeb17w8C0PQWXqebTyUyTT6pfCNVOoCSzBOaIg.8vfG4lXr0u-LZdHOoWGUSIKzsXwoa5zGuYkdrwqu1vcg.PNG.klipk2/먼지1.png?type=w800",
+              _liveWaitingViewUserImageUrlList.length,
+              (idx) => LiveWaitingAvatarAnimatingWidget(
+                userImageUrl: _liveWaitingViewUserImageUrlList[idx],
               ),
             ),
           ),
@@ -30,7 +61,7 @@ class _LiveWritingViewState extends State<LiveWritingView> {
             child: Column(
               children: [
                 Text(
-                  "곧 뭐시기를 시작합니다",
+                  enteringTitle,
                   style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
@@ -40,7 +71,7 @@ class _LiveWritingViewState extends State<LiveWritingView> {
                   height: 20,
                 ),
                 Text(
-                  "입장 중",
+                  enteringDescription,
                   style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w600,
@@ -56,9 +87,27 @@ class _LiveWritingViewState extends State<LiveWritingView> {
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
+  }
+}
+
+final liveWaitingViewUserImageUrlListProvider =
+    StateNotifierProvider<LiveWaitingViewUserImageUrlList, List<String>>(
+  (ref) => LiveWaitingViewUserImageUrlList(),
+);
+
+class LiveWaitingViewUserImageUrlList extends StateNotifier<List<String>> {
+  LiveWaitingViewUserImageUrlList() : super([]);
+
+  void addUserImageUrl({required String imageUrl}) {
+    state = List.from(state..add(imageUrl));
+    // state = state..append(imageUrl);
+  }
+
+  void removeUserImageUrl({required String imageUrl}) {
+    state = state..remove(imageUrl);
   }
 }
