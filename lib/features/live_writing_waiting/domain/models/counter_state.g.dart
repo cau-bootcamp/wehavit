@@ -18,7 +18,7 @@ Map<String, dynamic> _$$CounterStateImplToJson(_$CounterStateImpl instance) =>
     };
 
 const _$CounterStateEnumEnumMap = {
-  CounterStateEnum.isTimeForWaiting: 'isTimeForWaiting',
-  CounterStateEnum.isTimeForWriting: 'isTimeForWriting',
-  CounterStateEnum.isTimeOver: 'isTimeOver',
+  CounterStateEnum.timeForWaiting: 'timeForWaiting',
+  CounterStateEnum.timeForWriting: 'timeForWriting',
+  CounterStateEnum.timeOver: 'timeOver',
 };
