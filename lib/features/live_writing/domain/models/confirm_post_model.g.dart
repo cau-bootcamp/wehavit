@@ -10,8 +10,7 @@ _$ConfirmPostModelImpl _$$ConfirmPostModelImplFromJson(
         Map<String, dynamic> json) =>
     _$ConfirmPostModelImpl(
       resolutionGoalStatement: json['resolutionGoalStatement'] as String?,
-      resolutionId:
-          const DocumentReferenceJsonConverter().fromJson(json['resolutionId']),
+      resolutionId: json['resolutionId'] as String?,
       title: json['title'] as String?,
       content: json['content'] as String?,
       imageUrl: json['imageUrl'] as String?,
@@ -31,8 +30,7 @@ Map<String, dynamic> _$$ConfirmPostModelImplToJson(
         _$ConfirmPostModelImpl instance) =>
     <String, dynamic>{
       'resolutionGoalStatement': instance.resolutionGoalStatement,
-      'resolutionId':
-          const DocumentReferenceJsonConverter().toJson(instance.resolutionId),
+      'resolutionId': instance.resolutionId,
       'title': instance.title,
       'content': instance.content,
       'imageUrl': instance.imageUrl,

@@ -1,11 +1,11 @@
-import 'dart:ui';
-
 import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/models/user_model/user_model.dart';
 import 'package:wehavit/common/utils/no_params.dart';
+import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
+import 'package:wehavit/features/my_page/domain/usecases/get_confirm_post_list_for_resolution_id.dart';
 import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';
 import 'package:wehavit/features/swipe_view/domain/usecase/swipe_view_usecase.dart';
 import 'package:wehavit/features/swipe_view/presentation/model/swipe_view_model.dart';
@@ -22,13 +22,17 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
     _fetchUserDataFromIdUsecase = ref.watch(fetchUserDataFromIdUsecaseProvider);
     _sendReactionToTargetConfirmPostUsecase =
         ref.watch(sendReactionToTargetConfirmPostUsecaseProvider);
+
+    getConfirmPostListForResolutionIdUsecase =
+        ref.watch(getConfirmPostListForResolutionIdUsecaseProvider);
   }
 
   late final GetTodayConfirmPostListUsecase _getTodayConfirmPostListUsecase;
   late final FetchUserDataFromIdUsecase _fetchUserDataFromIdUsecase;
   late final SendReactionToTargetConfirmPostUsecase
       _sendReactionToTargetConfirmPostUsecase;
-
+  late final GetConfirmPostListForResolutionIdUsecase
+      getConfirmPostListForResolutionIdUsecase;
   final currentUserUid = FirebaseAuth.instance.currentUser!.uid;
 
   Future<void> getTodayConfirmPostModelList() async {
@@ -40,12 +44,18 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
     }, (confirmPostModelList) {
       state.userModelList = List<Future<UserModel>>.generate(
         confirmPostModelList.length,
-        (index) => Future(() => UserModel.dummyModel),
+        (_) => Future(() => UserModel.dummyModel),
+      );
+      state.confirmPostList = List<Future<List<ConfirmPostModel>>>.generate(
+        confirmPostModelList.length,
+        (_) => Future(() => []),
       );
 
       for (int index = 0; index < confirmPostModelList.length; index++) {
         final model = confirmPostModelList[index];
         state.userModelList[index] = getUserModelFromId(model.owner!);
+        state.confirmPostList[index] =
+            getConfirmPostListFor(resolutionId: model.resolutionId ?? 'NO_ID');
       }
 
       state.currentCellIndex = 0;
@@ -178,5 +188,19 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
       return offset;
     }
     return null;
+  }
+
+  Future<List<ConfirmPostModel>> getConfirmPostListFor({
+    required String resolutionId,
+  }) async {
+    final confirmListFetchResult =
+        await getConfirmPostListForResolutionIdUsecase(resolutionId);
+
+    return Future<List<ConfirmPostModel>>(
+      () => confirmListFetchResult.fold(
+        (failure) => [],
+        (modelList) => modelList,
+      ),
+    );
   }
 }
