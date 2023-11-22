@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:wehavit/common/routers/route_location.dart';
+import 'package:wehavit/features/live_writing_waiting/domain/models/counter_state.dart';
+import 'package:wehavit/features/live_writing_waiting/domain/models/waiting_model.dart';
 import 'package:wehavit/features/live_writing_waiting/presentation/view/widget/live_waiting_avatar_animation_widget.dart';
 
 /// ## 사용 방법
@@ -36,15 +40,21 @@ class LiveWritingView extends StatefulHookConsumerWidget {
 class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
   late List<String> _liveWaitingViewUserImageUrlList;
 
-  final String enteringTitle = '곧 뭐시기를 시작합니다!';
+  final String enteringTitle = '곧 입장을 시작합니다!';
   final String enteringDescription = '입장중...';
 
   @override
   Widget build(BuildContext context) {
-    final stream = useMemoized(() => counterStream());
-    final snapshot = useStream<int>(stream, initialData: 0);
+    final waitingState = ref.watch(waitingProvider);
+    final stream =
+        useMemoized(() => ref.read(waitingProvider.notifier).getTimerStream());
+    final snapshot = useStream<String>(stream);
     _liveWaitingViewUserImageUrlList =
         ref.watch(liveWaitingViewUserImageUrlListProvider);
+
+    if (waitingState.counterStateEnum == CounterStateEnum.isTimeForWriting) {
+      context.go(RouteLocation.liveWriting);
+    }
 
     return SafeArea(
       child: Stack(
@@ -65,7 +75,7 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
               children: [
                 Text(
                   enteringTitle,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -76,18 +86,14 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
                 ),
                 Text(
                   enteringDescription,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
                   ),
                 ),
                 Text(
-                  '${snapshot.hasError || snapshot.hasData ? snapshot.data! ~/ 60 : 00}'
-                          .padLeft(2, '0') +
-                      ':' +
-                      '${snapshot.hasError || snapshot.hasData ? snapshot.data! % 60 : 00}'
-                          .padLeft(2, '0'),
+                  '${snapshot.data}',
                   style: const TextStyle(
                     fontSize: 44,
                     fontWeight: FontWeight.bold,
@@ -120,9 +126,3 @@ class LiveWaitingViewUserImageUrlList extends StateNotifier<List<String>> {
     state = state..remove(imageUrl);
   }
 }
-
-Stream<int> counterStream() {
-  return Stream.periodic(const Duration(seconds: 1), (i) => i + 1);
-}
-
-

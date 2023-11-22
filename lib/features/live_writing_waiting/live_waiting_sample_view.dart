@@ -51,8 +51,8 @@ class _LiveWaitingSampleViewState extends ConsumerState<LiveWaitingSampleView> {
                         'https://avatars.githubusercontent.com/u/63251068?v=4',
                   );
                 },
-                child: Text("Add User")),
-            LiveWritingView(),
+                child: const Text('Add User')),
+            const LiveWritingView(),
           ],
         ),
       ),
