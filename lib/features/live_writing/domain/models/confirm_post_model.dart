@@ -32,7 +32,7 @@ class ConfirmPostModel with _$ConfirmPostModel {
     @Default('')
     String? id,
     required String? resolutionGoalStatement,
-    required DocumentReference<Map<String, dynamic>>? resolutionId,
+    required String? resolutionId,
     required String? title,
     required String? content,
     required String? imageUrl,

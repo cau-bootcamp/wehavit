@@ -89,7 +89,7 @@ class _LiveWaitingAvatarAnimatingWidgetState
               ),
               fit: BoxFit.cover,
             ),
-            borderRadius: BorderRadius.all(Radius.circular(100.0)),
+            borderRadius: const BorderRadius.all(Radius.circular(100.0)),
             border: Border.all(
               color: Colors.white,
               width: 4.0,

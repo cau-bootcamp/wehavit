@@ -44,4 +44,7 @@ class SwipeViewModel {
   bool isLayoutGrowed = true;
   late AnimationController animationController;
   late Animation animation;
+
+  // Varaibles For Graph
+  List<Future<List<ConfirmPostModel>>> confirmPostList = [];
 }

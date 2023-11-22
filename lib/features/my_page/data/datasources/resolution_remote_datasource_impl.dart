@@ -118,7 +118,7 @@ class ResolutionRemoteDatasourceImpl implements ResolutionDatasource {
           .collection(FirebaseCollectionName.confirmPosts)
           .where(
             FirebaseConfirmPostFieldName.resolutionId,
-            isEqualTo: FirebaseFirestore.instance.doc('/$resolutionId'),
+            isEqualTo: resolutionId,
           )
           .get();
 
