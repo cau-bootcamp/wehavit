@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wehavit/features/live_writing_waiting/presentation/view/widget/live_waiting_avatar_animation_widget.dart';
 
 /// ## 사용 방법
@@ -25,7 +26,7 @@ import 'package:wehavit/features/live_writing_waiting/presentation/view/widget/l
 ///   // 제거
 ///   _imageUrlListProvider.removeUserImageUrl(imageUrl: 'urlString');
 /// ```
-class LiveWritingView extends ConsumerStatefulWidget {
+class LiveWritingView extends StatefulHookConsumerWidget {
   const LiveWritingView({super.key});
 
   @override
@@ -40,6 +41,8 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
 
   @override
   Widget build(BuildContext context) {
+    final stream = useMemoized(() => counterStream());
+    final snapshot = useStream<int>(stream, initialData: 0);
     _liveWaitingViewUserImageUrlList =
         ref.watch(liveWaitingViewUserImageUrlListProvider);
 
@@ -117,3 +120,9 @@ class LiveWaitingViewUserImageUrlList extends StateNotifier<List<String>> {
     state = state..remove(imageUrl);
   }
 }
+
+Stream<int> counterStream() {
+  return Stream.periodic(const Duration(seconds: 1), (i) => i + 1);
+}
+
+
