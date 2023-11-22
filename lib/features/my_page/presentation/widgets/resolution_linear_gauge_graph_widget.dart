@@ -52,7 +52,7 @@ class ResolutionLinearGaugeGraphWidget extends StatelessWidget {
       value: value,
       enableAnimation: false,
       child: Container(
-        constraints: BoxConstraints(maxHeight: 30),
+        constraints: const BoxConstraints(maxHeight: 30),
         width: 13,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(4),

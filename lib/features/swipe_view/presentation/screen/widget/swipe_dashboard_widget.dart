@@ -45,21 +45,26 @@ class _ResolutionDashboardWidgetState
                   if (snapshot.hasData) {
                     return Column(
                       children: [
-                        // const SizedBox(height: 20),
-                        Container(
-                          padding: const EdgeInsets.all(2),
-                          decoration: const BoxDecoration(color: Colors.white),
-                          child: ResolutionLinearGaugeGraphWidget(
-                            sourceData: snapshot.data!,
-                            lastPeriod: false,
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.all(2),
+                            decoration:
+                                const BoxDecoration(color: Colors.white),
+                            child: ResolutionLinearGaugeGraphWidget(
+                              sourceData: snapshot.data!,
+                              lastPeriod: false,
+                            ),
                           ),
                         ),
-                        Container(
-                          padding: const EdgeInsets.all(2),
-                          decoration: const BoxDecoration(color: Colors.white),
-                          child: ResolutionLinearGaugeGraphWidget(
-                            sourceData: snapshot.data!,
-                            lastPeriod: true,
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.all(2),
+                            decoration:
+                                const BoxDecoration(color: Colors.white),
+                            child: ResolutionLinearGaugeGraphWidget(
+                              sourceData: snapshot.data!,
+                              lastPeriod: true,
+                            ),
                           ),
                         ),
                       ],
