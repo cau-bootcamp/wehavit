@@ -6,7 +6,7 @@ part of 'waiting_model.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$waitingHash() => r'6871ab7e0cc2dd55dc3d149c1ea4987ca66be895';
+String _$waitingHash() => r'03c1b49d1f2e0a3f02c04f7d1327f04dc45f258a';
 
 /// See also [Waiting].
 @ProviderFor(Waiting)
