@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wehavit/features/live_writing_waiting/presentation/view/live_waiting_view.dart';
+
+final timeProvider = StateProvider<DateTime>((ref) => DateTime.now());
 
 class LiveWaitingSampleView extends ConsumerStatefulWidget {
   const LiveWaitingSampleView({super.key});
@@ -25,12 +28,12 @@ class _LiveWaitingSampleViewState extends ConsumerState<LiveWaitingSampleView> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: Container(
-        constraints: BoxConstraints.expand(),
+        constraints: const BoxConstraints.expand(),
         child: Stack(
           alignment: Alignment.center,
           children: [
             Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
@@ -48,8 +51,8 @@ class _LiveWaitingSampleViewState extends ConsumerState<LiveWaitingSampleView> {
                         'https://avatars.githubusercontent.com/u/63251068?v=4',
                   );
                 },
-                child: Text("Add User")),
-            LiveWritingView(),
+                child: const Text('Add User')),
+            const LiveWritingView(),
           ],
         ),
       ),

@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:wehavit/common/routers/route_location.dart';
+import 'package:wehavit/features/live_writing_waiting/domain/models/counter_state.dart';
+import 'package:wehavit/features/live_writing_waiting/domain/models/waiting_model.dart';
 import 'package:wehavit/features/live_writing_waiting/presentation/view/widget/live_waiting_avatar_animation_widget.dart';
 
 /// ## 사용 방법
@@ -25,7 +30,7 @@ import 'package:wehavit/features/live_writing_waiting/presentation/view/widget/l
 ///   // 제거
 ///   _imageUrlListProvider.removeUserImageUrl(imageUrl: 'urlString');
 /// ```
-class LiveWritingView extends ConsumerStatefulWidget {
+class LiveWritingView extends StatefulHookConsumerWidget {
   const LiveWritingView({super.key});
 
   @override
@@ -35,13 +40,21 @@ class LiveWritingView extends ConsumerStatefulWidget {
 class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
   late List<String> _liveWaitingViewUserImageUrlList;
 
-  final String enteringTitle = '곧 뭐시기를 시작합니다!';
+  final String enteringTitle = '곧 입장을 시작합니다!';
   final String enteringDescription = '입장중...';
 
   @override
   Widget build(BuildContext context) {
+    final waitingState = ref.watch(waitingProvider);
+    final stream =
+        useMemoized(() => ref.read(waitingProvider.notifier).getTimerStream());
+    final snapshot = useStream<String>(stream);
     _liveWaitingViewUserImageUrlList =
         ref.watch(liveWaitingViewUserImageUrlListProvider);
+
+    if (waitingState.counterStateEnum == CounterStateEnum.timeForWriting) {
+      context.go(RouteLocation.liveWriting);
+    }
 
     return SafeArea(
       child: Stack(
@@ -62,24 +75,26 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
               children: [
                 Text(
                   enteringTitle,
-                  style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
+                  style: const TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Text(
                   enteringDescription,
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white),
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
                 ),
                 Text(
-                  "00:00",
-                  style: TextStyle(
+                  '${snapshot.data}',
+                  style: const TextStyle(
                     fontSize: 44,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,

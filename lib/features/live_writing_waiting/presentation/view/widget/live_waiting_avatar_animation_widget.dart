@@ -72,6 +72,12 @@ class _LiveWaitingAvatarAnimatingWidgetState
   }
 
   @override
+  void dispose() {
+    _lifeTimeAnimationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Positioned(
       left: 100 + randomOffset * 150 + sin(_positionXAnimation.value) * 30,
