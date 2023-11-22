@@ -377,7 +377,7 @@ class SwipeViewState extends ConsumerState<SwipeView>
       vsync: this,
       duration: const Duration(milliseconds: 200),
     );
-    _swipeViewModel.animation = Tween<double>(begin: 0, end: 100).animate(
+    _swipeViewModel.animation = Tween<double>(begin: 0, end: 130).animate(
       CurvedAnimation(
         parent: _swipeViewModel.animationController,
         curve: Curves.linear,

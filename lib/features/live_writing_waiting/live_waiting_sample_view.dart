@@ -1,19 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/features/live_writing_waiting/presentation/view/live_waiting_view.dart';
 
 final timeProvider = StateProvider<DateTime>((ref) => DateTime.now());
 
 class LiveWaitingSampleView extends HookConsumerWidget {
+class LiveWaitingSampleView extends ConsumerStatefulWidget {
   const LiveWaitingSampleView({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<LiveWaitingSampleView> createState() =>
+      _LiveWaitingSampleViewState();
+}
+
+class _LiveWaitingSampleViewState extends ConsumerState<LiveWaitingSampleView> {
+  late LiveWaitingViewUserImageUrlList _imageUrlListProvider;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _imageUrlListProvider =
+        ref.read(liveWaitingViewUserImageUrlListProvider.notifier);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
       body: Container(
         constraints: const BoxConstraints.expand(),
         child: Stack(
+          alignment: Alignment.center,
           children: [
             Container(
               decoration: const BoxDecoration(
@@ -27,7 +44,15 @@ class LiveWaitingSampleView extends HookConsumerWidget {
                 ),
               ),
             ),
-            const LiveWritingView(),
+            ElevatedButton(
+                onPressed: () {
+                  _imageUrlListProvider.addUserImageUrl(
+                    imageUrl:
+                        'https://avatars.githubusercontent.com/u/63251068?v=4',
+                  );
+                },
+                child: Text("Add User")),
+            LiveWritingView(),
           ],
         ),
       ),
