@@ -52,7 +52,7 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
     _liveWaitingViewUserImageUrlList =
         ref.watch(liveWaitingViewUserImageUrlListProvider);
 
-    if (waitingState.counterStateEnum == CounterStateEnum.isTimeForWriting) {
+    if (waitingState.counterStateEnum == CounterStateEnum.timeForWriting) {
       context.go(RouteLocation.liveWriting);
     }
 

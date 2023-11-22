@@ -14,7 +14,7 @@ class CounterState with _$CounterState {
 }
 
 enum CounterStateEnum {
-  isTimeForWaiting,
-  isTimeForWriting,
-  isTimeOver,
+  timeForWaiting,
+  timeForWriting,
+  timeOver,
 }

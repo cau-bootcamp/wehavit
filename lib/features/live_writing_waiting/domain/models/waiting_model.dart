@@ -18,7 +18,7 @@ class Waiting extends _$Waiting {
     // 0 < _timeLeft.inSeconds <= 60*3
     if (0 < _timeLeft.inSeconds && _timeLeft.inSeconds <= availableWaitingTimeMinute*60) {
       return const CounterState(
-        counterStateEnum: CounterStateEnum.isTimeForWaiting,
+        counterStateEnum: CounterStateEnum.timeForWaiting,
       );
     }
 
@@ -26,27 +26,27 @@ class Waiting extends _$Waiting {
     // -60*10 <= _timeLeft.inSeconds <= 0
     if (-availableWritingLimitMinute*60 <= _timeLeft.inSeconds && _timeLeft.inSeconds <= 0) {
       return const CounterState(
-        counterStateEnum: CounterStateEnum.isTimeForWriting,
+        counterStateEnum: CounterStateEnum.timeForWriting,
       );
     }
 
     return const CounterState(
-      counterStateEnum: CounterStateEnum.isTimeOver,
+      counterStateEnum: CounterStateEnum.timeOver,
     );
   }
 
   Stream<String> getTimerStream() async* {
-    if (build().counterStateEnum == CounterStateEnum.isTimeForWaiting) {
+    if (build().counterStateEnum == CounterStateEnum.timeForWaiting) {
       while (true) {
         if (_timeLeft.inSeconds <= 0) {
-          setCounterState(CounterStateEnum.isTimeForWriting);
+          setCounterState(CounterStateEnum.timeForWriting);
           break;
         }
         yield getTimerString();
         await Future.delayed(const Duration(seconds: 1));
       }
     }
-    if (build().counterStateEnum == CounterStateEnum.isTimeForWriting) {
+    if (build().counterStateEnum == CounterStateEnum.timeForWriting) {
       yield '준비하세요!';
     } else {
       yield '종료되었습니다.';
