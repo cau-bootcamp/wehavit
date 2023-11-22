@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/models/user_model/user_model.dart';
-import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
 import 'package:wehavit/features/swipe_view/presentation/model/swipe_view_model.dart';
 import 'package:wehavit/features/swipe_view/presentation/provider/swipe_view_confirm_post_list_provider.dart';

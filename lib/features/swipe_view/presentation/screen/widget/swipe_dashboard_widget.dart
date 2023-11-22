@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
-import 'package:wehavit/features/my_page/domain/models/resolution_model.dart';
 import 'package:wehavit/features/my_page/presentation/widgets/resolution_doughnut_graph_widget.dart';
 import 'package:wehavit/features/my_page/presentation/widgets/resolution_linear_gauge_graph_widget.dart';
 
