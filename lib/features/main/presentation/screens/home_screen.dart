@@ -7,10 +7,8 @@ import 'package:wehavit/common/common.dart';
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
-  static HomeScreen builder(
-    BuildContext context,
-    GoRouterState state,
-  ) =>
+  static HomeScreen builder(BuildContext context,
+      GoRouterState state,) =>
       const HomeScreen();
 
   @override
@@ -18,25 +16,41 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  final ScrollController _scrollController = ScrollController();
+  int _selectedIndex = -1;
+  static const String dateFormat = 'yyyy년 MM월 dd일';
+
   @override
-  void initState() {}
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      }
+      setState(() {
+        _selectedIndex = 27;
+      });
+    });
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  List<(String, String)> generateDatesList() {
+    var today = DateTime.now();
+    var datesList = List<(String, String)>.generate(28, (i) {
+      var date = today.subtract(Duration(days: i));
+      return (date.month.toString(), date.day.toString().padLeft(2, '0'));
+    });
+
+    return datesList.reversed.toList();
+  }
 
   @override
   Widget build(BuildContext context) {
-    const String dateFormat = 'yyyy년 MM월 dd일';
-    List<(String, String)> generateDatesList() {
-      var today = DateTime.now();
-      var datesList = List<(String, String)>.generate(30, (i) {
-        var date = today.subtract(Duration(days: i));
-        return (date.month.toString(), date.day.toString().padLeft(2, '0'));
-      });
-
-      return datesList.reversed.toList();
-    }
-
     final List<(String, String)> dates = generateDatesList();
-    final ScrollController scrollController = ScrollController();
-    int selectedIndex = 29;
 
     return Scaffold(
       backgroundColor: Colors.grey,
@@ -75,17 +89,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               height: 70,
               child: ListView.builder(
-                controller: scrollController,
+                controller: _scrollController,
                 scrollDirection: Axis.horizontal,
                 itemCount: dates.length,
                 itemBuilder: (context, index) {
                   return Container(
                     padding: const EdgeInsets.all(4.0),
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        setState(() {
+                          _selectedIndex = index;
+                        });
+                      },
                       style: TextButton.styleFrom(
                         // Change the background color to indicate selection
-                        backgroundColor: selectedIndex == index
+                        backgroundColor: _selectedIndex == index
                             ? Colors.orange
                             : Colors.grey,
                       ),
@@ -94,7 +112,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           '${dates[index].$1}\n${dates[index].$2}',
                           style: TextStyle(
                             fontSize: 12,
-                            color: selectedIndex == index
+                            color: _selectedIndex == index
                                 ? Colors.black
                                 : Colors.black,
                           ),
@@ -167,13 +185,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 }
 
 // 파일 분리 예정. model도 짜야 함.
-Widget _feedBlock(
-  String name,
-  String badge,
-  String title,
-  String message,
-  String imageUrl,
-) {
+Widget _feedBlock(String name,
+    String badge,
+    String title,
+    String message,
+    String imageUrl,) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 4.0),
     child: Container(
@@ -244,14 +260,12 @@ Widget _feedBlock(
                   width: 200,
                   child: Padding(
                     padding: const EdgeInsets.all(3.0),
-                    child: Flexible(
-                      child: RichText(
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 5,
-                        strutStyle: const StrutStyle(fontSize: 16.0),
-                        text: TextSpan(
-                          text: message,
-                        ),
+                    child: RichText(
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 5,
+                      strutStyle: const StrutStyle(fontSize: 16.0),
+                      text: TextSpan(
+                        text: message,
                       ),
                     ),
                   ),
