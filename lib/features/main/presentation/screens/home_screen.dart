@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:wehavit/common/common.dart';
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   static HomeScreen builder(
@@ -14,10 +14,15 @@ class HomeScreen extends ConsumerWidget {
       const HomeScreen();
 
   @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  @override
   void initState() {}
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     const String dateFormat = 'yyyy년 MM월 dd일';
     List<(String, String)> generateDatesList() {
       var today = DateTime.now();

@@ -7,7 +7,7 @@ import 'package:wehavit/features/friend_list/presentation/providers/friend_list_
 import 'package:wehavit/features/friend_list/presentation/widgets/add_friend_textfield_widget.dart';
 import 'package:wehavit/features/friend_list/presentation/widgets/friend_element_widget.dart';
 
-class FriendListScreen extends ConsumerWidget {
+class FriendListScreen extends ConsumerStatefulWidget {
   const FriendListScreen({super.key});
 
   static FriendListScreen builder(
@@ -17,7 +17,19 @@ class FriendListScreen extends ConsumerWidget {
       const FriendListScreen();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _FriendListScreenState();
+}
+
+class _FriendListScreenState extends ConsumerState<FriendListScreen> {
+  @override
+  Future<void> didChangeDependencies() async {
+    ref.read(friendListProvider.notifier).getFriendList();
+    super.didChangeDependencies();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     var currentUser = FirebaseAuth.instance.currentUser;
     var vFriendListProvider = ref.watch(friendListProvider);
 
