@@ -109,15 +109,11 @@ class _FriendListScreenState extends ConsumerState<FriendListScreen> {
               (left) => null,
               (right) => Expanded(
                 child: ListView.builder(
-                  itemCount: right.length + 1,
+                  itemCount: right.length,
                   itemBuilder: (context, index) {
-                    if (index < right.length) {
-                      return FriendElementWidget(
+                    return FriendElementWidget(
                         key: ValueKey(right[index].friendEmail),
-                        model: right[index],
-                      );
-                    } else {}
-                    return null;
+                        model: right[index]);
                   },
                 ),
               ),

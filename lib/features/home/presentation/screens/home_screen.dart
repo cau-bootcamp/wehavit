@@ -7,8 +7,10 @@ import 'package:wehavit/common/common.dart';
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
-  static HomeScreen builder(BuildContext context,
-      GoRouterState state,) =>
+  static HomeScreen builder(
+    BuildContext context,
+    GoRouterState state,
+  ) =>
       const HomeScreen();
 
   @override
@@ -17,20 +19,30 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
+
   int _selectedIndex = -1;
+
+  int get selectedIndex => _selectedIndex;
+
+  set selectedIndex(int selectedIndex) {
+    _selectedIndex = selectedIndex;
+    setState(() {});
+    // ref.read(confirmPostProvider).getFeedList(_selectedIndex);
+  }
+
   static const String dateFormat = 'yyyy년 MM월 dd일';
 
   @override
   void initState() {
+    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollController.hasClients) {
         _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
       }
       setState(() {
-        _selectedIndex = 27;
+        selectedIndex = 27;
       });
     });
-    super.initState();
   }
 
   @override
@@ -51,6 +63,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final List<(String, String)> dates = generateDatesList();
+    // var vConfirmPostProvider = ref.watch(confirmPostProvider);
 
     return Scaffold(
       backgroundColor: Colors.grey,
@@ -97,13 +110,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     padding: const EdgeInsets.all(4.0),
                     child: TextButton(
                       onPressed: () {
-                        setState(() {
-                          _selectedIndex = index;
-                        });
+                        selectedIndex = index;
                       },
                       style: TextButton.styleFrom(
                         // Change the background color to indicate selection
-                        backgroundColor: _selectedIndex == index
+                        backgroundColor: selectedIndex == index
                             ? Colors.orange
                             : Colors.grey,
                       ),
@@ -112,7 +123,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           '${dates[index].$1}\n${dates[index].$2}',
                           style: TextStyle(
                             fontSize: 12,
-                            color: _selectedIndex == index
+                            color: selectedIndex == index
                                 ? Colors.black
                                 : Colors.black,
                           ),
@@ -139,38 +150,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
               child: Column(
                 children: [
+//                  vConfirmPostProvider.fold(
+//                    (left) => null,
+//                    (right) => Expanded(
+//                      child: ListView.builder(
+//                        itemCount: right.length,
+//                        itemBuilder: (context, index) {
+//                            return _feedBlock(
+//                              model: right[index],
+//                            );
+//                          return null;
+//                        },
+//                      ),
+//                    ),
+//                  ) as Widget,
                   _feedBlock(
                     '이규성',
                     '캡스톤 열심히 하기',
                     '31번째!',
                     '오늘은 개발 시작하는 날!!😄 뷰 깎는거 꽤나 재밌네, 문명의 이기를 이용하여 '
                         '열심히 만들어 보겠어.... ',
-                    'https://my-media.apjonlinecdn.com/magefan_blog/'
-                        '5_Components_Of_A_Computer_And_Their_Benefits.jpg',
-                  ),
-                  _feedBlock(
-                    '이규성',
-                    '캡스톤 열심히 하기',
-                    '31번째!',
-                    '오늘은 개발 시작하는 날!!😄 뷰 깎는거 꽤나 재밌네, 문명의 이기를 '
-                        '이용하여 열심히 만들어 보겠어.... ',
-                    'https://my-media.apjonlinecdn.com/magefan_blog/'
-                        '5_Components_Of_A_Computer_And_Their_Benefits.jpg',
-                  ),
-                  _feedBlock(
-                    '이규성',
-                    '캡스톤 열심히 하기',
-                    '31번째!',
-                    '오늘은 개발 시작하는 날!!😄 뷰 깎는거 꽤나 재밌네, 문명의 이기를 이용하여 '
-                        '열심히 만들어 보겠어.... ',
-                    'https://my-media.apjonlinecdn.com/magefan_blog/'
-                        '5_Components_Of_A_Computer_And_Their_Benefits.jpg',
-                  ),
-                  _feedBlock(
-                    '고주형',
-                    '클린 아키텍쳐 공부',
-                    '열심히 공부중',
-                    '화이팅,,, 화이팅,,,,',
                     'https://my-media.apjonlinecdn.com/magefan_blog/'
                         '5_Components_Of_A_Computer_And_Their_Benefits.jpg',
                   ),
@@ -185,11 +184,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 }
 
 // 파일 분리 예정. model도 짜야 함.
-Widget _feedBlock(String name,
-    String badge,
-    String title,
-    String message,
-    String imageUrl,) {
+Widget _feedBlock(
+  String name,
+  String badge,
+  String title,
+  String message,
+  String imageUrl,
+) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 4.0),
     child: Container(
