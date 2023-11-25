@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:wehavit/features/home/domain/models/confirm_post_model.dart';
 
@@ -17,7 +18,7 @@ class _ConfirmPostWidgetState extends State<ConfirmPostWidget> {
   late String title = widget.model.title;
   late String content = widget.model.content;
   late String contentImageUrl = widget.model.contentImageUrl;
-  late DateTime postAt = widget.model.postAt;
+  late Timestamp postAt = widget.model.postAt;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +50,10 @@ class _ConfirmPostWidgetState extends State<ConfirmPostWidget> {
                       CircleAvatar(
                         backgroundColor: Colors.grey,
                         // TODO : change text to image
-                        child: Text(userName),
+                        child: CircleAvatar(
+                          radius: 30,
+                          foregroundImage: NetworkImage(userImageUrl),
+                        ),
                       ),
                       const SizedBox(width: 10),
                       Text(

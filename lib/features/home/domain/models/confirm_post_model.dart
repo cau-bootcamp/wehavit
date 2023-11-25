@@ -18,7 +18,7 @@ class ConfirmPostModel {
   String title;
   String content;
   String contentImageUrl;
-  DateTime postAt;
+  Timestamp postAt;
 
   ConfirmPostModel copyWith({
     String? userImageUrl,
@@ -27,7 +27,7 @@ class ConfirmPostModel {
     String? title,
     String? content,
     String? contentImageUrl,
-    DateTime? postAt,
+    Timestamp? postAt,
   }) {
     return ConfirmPostModel(
       userImageUrl: userImageUrl ?? this.userImageUrl,

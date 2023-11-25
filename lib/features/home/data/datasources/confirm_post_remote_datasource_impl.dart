@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:wehavit/common/common.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/features/home/data/datasources/confirm_post_datasource.dart';
@@ -19,19 +20,39 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
   ) async {
     try {
       final fetchResult = await FirebaseFirestore.instance
-          .collection(
-            CONFIRM_POST_COLLECTION,
-          )
+          .collection(CONFIRM_POST_COLLECTION)
           .where(
             CONFIRM_POST_FIELD_FAN,
             arrayContains: FirebaseAuth.instance.currentUser!.uid,
           )
           .get();
 
+      final userDocsList = fetchResult.docs
+          .map((doc) => doc.data()[FirebaseConfirmPostFieldName.owner])
+          .toList();
+
+      Map<String, (String, String)> userDataMap = {};
+      for (var userDoc in userDocsList) {
+        if (userDataMap[userDoc] == null) {
+          final fetchUserResult = await FirebaseFirestore.instance
+              .collection(FirebaseCollectionName.users)
+              .doc(userDoc)
+              .get();
+          userDataMap[userDoc] = (
+            fetchUserResult.data()?[FirebaseUserFieldName.imageUrl],
+            fetchUserResult.data()?[FirebaseUserFieldName.displayName]
+          );
+        }
+      }
+
       debugPrint(fetchResult.docs.length.toString());
 
       List<ConfirmPostEntity> confirmPosts = fetchResult.docs
-          .map((doc) => ConfirmPostEntity.fromFirebaseDocument(doc.data()))
+          .map(
+            (doc) => ConfirmPostEntity.fromFirebaseDocument(
+                userDataMap[doc.data()[FirebaseConfirmPostFieldName.owner]]!,
+                doc.data()),
+          )
           .toList();
 
       return Future(() => right(confirmPosts));

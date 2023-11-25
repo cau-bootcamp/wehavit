@@ -33,6 +33,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       if (_scrollController.hasClients) {
         _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
       }
+      ref
+          .read(confirmPostListProvider.notifier)
+          .getConfirmPostList(selectedIndex);
       setState(() {
         selectedIndex = 27;
       });
