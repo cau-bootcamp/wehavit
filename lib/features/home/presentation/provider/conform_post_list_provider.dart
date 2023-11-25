@@ -18,7 +18,7 @@ class ConfirmPostListProvider
 
   late final GetConfirmPostListUsecase getConfirmPostListUsecase;
 
-  Future<void> getConfirmPostList() async {
+  Future<void> getConfirmPostList(int selectedDate) async {
     state = await getConfirmPostListUsecase(NoParams());
   }
 }

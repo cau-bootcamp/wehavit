@@ -16,9 +16,13 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
   late final ConfirmPostDatasource _confirmPostDatasource;
 
   @override
-  EitherFuture<List<ConfirmPostModel>> getConfirmPostModelList() async {
+  EitherFuture<List<ConfirmPostModel>> getConfirmPostModelList(
+    int selectedIndex,
+  ) async {
     try {
-      final getResult = await _confirmPostDatasource.getConfirmPostEntityList();
+      final getResult = await _confirmPostDatasource.getConfirmPostEntityList(
+        selectedIndex,
+      );
 
       return getResult.fold((failure) => left(failure), (entityList) {
         final modelList =

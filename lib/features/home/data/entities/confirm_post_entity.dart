@@ -3,9 +3,14 @@ import 'package:wehavit/features/home/domain/models/confirm_post_model.dart';
 
 class ConfirmPostEntity {
   ConfirmPostEntity.fromFirebaseDocument(Map<String, dynamic> data)
-      : userImageUrl = data[FirebaseUserFieldName.email],
-        userName = data[FirebaseUserFieldName.displayName],
-        resolutionGoalStatement = data[FirebaseUserFieldName.imageUrl];
+      : userImageUrl = data[FirebaseFriendFieldName.friendImageUrl],
+        userName = data[FirebaseFriendFieldName.friendName],
+        resolutionGoalStatement =
+            data[FirebaseConfirmPostFieldName.resolutionGoalStatement],
+        title = data[FirebaseConfirmPostFieldName.title],
+        content = data[FirebaseConfirmPostFieldName.content],
+        contentImageUrl = data[FirebaseConfirmPostFieldName.imageUrl],
+        postAt = data[FirebaseConfirmPostFieldName.updatedAt];
 
   late String userImageUrl;
   late String userName;

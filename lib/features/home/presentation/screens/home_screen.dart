@@ -27,8 +27,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   set selectedIndex(int selectedIndex) {
     _selectedIndex = selectedIndex;
-    setState(() {});
-//    ref.read(confirmPostListProvider).getConfirmPostList(_selectedIndex);
   }
 
   static const String dateFormat = 'yyyy년 MM월 dd일';
@@ -111,7 +109,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     padding: const EdgeInsets.all(4.0),
                     child: TextButton(
                       onPressed: () async {
+                        // 버튼을 누르면 selectedIndex 가 변경되고, provider를 통해 해당
+                        // 날짜의 데이터를 불러온다.
                         selectedIndex = index;
+                        await ref
+                            .read(confirmPostListProvider.notifier)
+                            .getConfirmPostList(selectedIndex);
                       },
                       style: TextButton.styleFrom(
                         // Change the background color to indicate selection
