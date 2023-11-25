@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:wehavit/common/common.dart';
-
 import '../provider/conform_post_list_provider.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -29,7 +28,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   set selectedIndex(int selectedIndex) {
     _selectedIndex = selectedIndex;
     setState(() {});
-    // ref.read(confirmPostProvider).getFeedList(_selectedIndex);
+//    ref.read(confirmPostListProvider).getConfirmPostList(_selectedIndex);
   }
 
   static const String dateFormat = 'yyyy년 MM월 dd일';
@@ -65,7 +64,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final List<(String, String)> dates = generateDatesList();
-    var vConfirmPostListProvider = ref.watch(confirmPostListProvider);
+    var confirmPostList = ref.watch(confirmPostListProvider);
 
     return Scaffold(
       backgroundColor: Colors.grey,
@@ -111,7 +110,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   return Container(
                     padding: const EdgeInsets.all(4.0),
                     child: TextButton(
-                      onPressed: () {
+                      onPressed: () async {
                         selectedIndex = index;
                       },
                       style: TextButton.styleFrom(
@@ -152,7 +151,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
               child: Column(
                 children: [
-                  vConfirmPostListProvider.fold(
+                  confirmPostList.fold(
                     (left) => null,
                     (right) => Expanded(
                       child: ListView.builder(

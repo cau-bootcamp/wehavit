@@ -31,7 +31,7 @@ class _FriendListScreenState extends ConsumerState<FriendListScreen> {
   @override
   Widget build(BuildContext context) {
     var currentUser = FirebaseAuth.instance.currentUser;
-    var vFriendListProvider = ref.watch(friendListProvider);
+    var friendList = ref.watch(friendListProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -105,7 +105,7 @@ class _FriendListScreenState extends ConsumerState<FriendListScreen> {
                 const AddFriendTextFieldWidget(),
               ],
             ),
-            vFriendListProvider.fold(
+            friendList.fold(
               (left) => null,
               (right) => Expanded(
                 child: ListView.builder(
