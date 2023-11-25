@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:wehavit/common/common.dart';
 
+import '../provider/conform_post_list_provider.dart';
+
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
@@ -63,7 +65,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final List<(String, String)> dates = generateDatesList();
-    // var vConfirmPostProvider = ref.watch(confirmPostProvider);
+    var vConfirmPostListProvider = ref.watch(confirmPostListProvider);
 
     return Scaffold(
       backgroundColor: Colors.grey,
@@ -150,29 +152,33 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
               child: Column(
                 children: [
-//                  vConfirmPostProvider.fold(
-//                    (left) => null,
-//                    (right) => Expanded(
-//                      child: ListView.builder(
-//                        itemCount: right.length,
-//                        itemBuilder: (context, index) {
-//                            return _feedBlock(
-//                              model: right[index],
-//                            );
-//                          return null;
-//                        },
-//                      ),
-//                    ),
-//                  ) as Widget,
-                  _feedBlock(
-                    '이규성',
-                    '캡스톤 열심히 하기',
-                    '31번째!',
-                    '오늘은 개발 시작하는 날!!😄 뷰 깎는거 꽤나 재밌네, 문명의 이기를 이용하여 '
-                        '열심히 만들어 보겠어.... ',
-                    'https://my-media.apjonlinecdn.com/magefan_blog/'
-                        '5_Components_Of_A_Computer_And_Their_Benefits.jpg',
-                  ),
+                  vConfirmPostListProvider.fold(
+                    (left) => null,
+                    (right) => Expanded(
+                      child: ListView.builder(
+                        itemCount: right.length,
+                        itemBuilder: (context, index) {
+                          return _feedBlock(
+                            right[index].userName,
+                            right[index].resolutionGoalStatement,
+                            right[index].title,
+                            right[index].content,
+                            right[index].contentImageUrl,
+                          );
+                          return null;
+                        },
+                      ),
+                    ),
+                  ) as Widget,
+//                  _feedBlock(
+//                    '이규성',
+//                    '캡스톤 열심히 하기',
+//                    '31번째!',
+//                    '오늘은 개발 시작하는 날!!😄 뷰 깎는거 꽤나 재밌네, 문명의 이기를 이용하여 '
+//                        '열심히 만들어 보겠어.... ',
+//                    'https://my-media.apjonlinecdn.com/magefan_blog/'
+//                        '5_Components_Of_A_Computer_And_Their_Benefits.jpg',
+//                  ),
                 ],
               ),
             ), //
