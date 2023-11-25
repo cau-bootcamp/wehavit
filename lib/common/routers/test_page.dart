@@ -88,6 +88,12 @@ class TestPage extends ConsumerWidget {
               },
               buttonText: 'Animation Sample View',
             ),
+            MoveButton(
+              onPressCallback: () async {
+                context.push('/liveWaitingSampleView');
+              },
+              buttonText: 'Live Waiting Sample View',
+            ),
           ],
         ),
       ),

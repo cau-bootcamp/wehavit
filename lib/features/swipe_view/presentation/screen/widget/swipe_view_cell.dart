@@ -4,6 +4,7 @@ import 'package:wehavit/common/models/user_model/user_model.dart';
 import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
 import 'package:wehavit/features/swipe_view/presentation/model/swipe_view_model.dart';
 import 'package:wehavit/features/swipe_view/presentation/provider/swipe_view_model_provider.dart';
+import 'package:wehavit/features/swipe_view/presentation/screen/widget/swipe_dashboard_widget.dart';
 
 class SwipeViewCellWidget extends ConsumerStatefulWidget {
   const SwipeViewCellWidget({super.key, required this.model});
@@ -24,7 +25,7 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
   }
 
   @override
-  void didChangeDependencies() {
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
     _swipeViewModel = ref.watch(swipeViewModelProvider);
   }
@@ -120,8 +121,9 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
               height: _swipeViewModel.animation.value,
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4.0),
-                child: Container(
-                  color: Colors.amber,
+                child: SwipeDashboardWidget(
+                  confirmPostList: _swipeViewModel
+                      .confirmPostList[_swipeViewModel.currentCellIndex],
                 ),
               ),
             ),

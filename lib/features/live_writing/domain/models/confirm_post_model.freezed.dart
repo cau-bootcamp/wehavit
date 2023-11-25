@@ -23,8 +23,7 @@ mixin _$ConfirmPostModel {
   @JsonKey(includeFromJson: false, includeToJson: false)
   String? get id => throw _privateConstructorUsedError;
   String? get resolutionGoalStatement => throw _privateConstructorUsedError;
-  DocumentReference<Map<String, dynamic>>? get resolutionId =>
-      throw _privateConstructorUsedError;
+  String? get resolutionId => throw _privateConstructorUsedError;
   String? get title => throw _privateConstructorUsedError;
   String? get content => throw _privateConstructorUsedError;
   String? get imageUrl => throw _privateConstructorUsedError;
@@ -50,7 +49,7 @@ abstract class $ConfirmPostModelCopyWith<$Res> {
   $Res call(
       {@JsonKey(includeFromJson: false, includeToJson: false) String? id,
       String? resolutionGoalStatement,
-      DocumentReference<Map<String, dynamic>>? resolutionId,
+      String? resolutionId,
       String? title,
       String? content,
       String? imageUrl,
@@ -100,7 +99,7 @@ class _$ConfirmPostModelCopyWithImpl<$Res, $Val extends ConfirmPostModel>
       resolutionId: freezed == resolutionId
           ? _value.resolutionId
           : resolutionId // ignore: cast_nullable_to_non_nullable
-              as DocumentReference<Map<String, dynamic>>?,
+              as String?,
       title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -152,7 +151,7 @@ abstract class _$$ConfirmPostModelImplCopyWith<$Res>
   $Res call(
       {@JsonKey(includeFromJson: false, includeToJson: false) String? id,
       String? resolutionGoalStatement,
-      DocumentReference<Map<String, dynamic>>? resolutionId,
+      String? resolutionId,
       String? title,
       String? content,
       String? imageUrl,
@@ -200,7 +199,7 @@ class __$$ConfirmPostModelImplCopyWithImpl<$Res>
       resolutionId: freezed == resolutionId
           ? _value.resolutionId
           : resolutionId // ignore: cast_nullable_to_non_nullable
-              as DocumentReference<Map<String, dynamic>>?,
+              as String?,
       title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -283,7 +282,7 @@ class _$ConfirmPostModelImpl implements _ConfirmPostModel {
   @override
   final String? resolutionGoalStatement;
   @override
-  final DocumentReference<Map<String, dynamic>>? resolutionId;
+  final String? resolutionId;
   @override
   final String? title;
   @override
@@ -386,7 +385,7 @@ abstract class _ConfirmPostModel implements ConfirmPostModel {
   factory _ConfirmPostModel(
       {@JsonKey(includeFromJson: false, includeToJson: false) final String? id,
       required final String? resolutionGoalStatement,
-      required final DocumentReference<Map<String, dynamic>>? resolutionId,
+      required final String? resolutionId,
       required final String? title,
       required final String? content,
       required final String? imageUrl,
@@ -406,7 +405,7 @@ abstract class _ConfirmPostModel implements ConfirmPostModel {
   @override
   String? get resolutionGoalStatement;
   @override
-  DocumentReference<Map<String, dynamic>>? get resolutionId;
+  String? get resolutionId;
   @override
   String? get title;
   @override

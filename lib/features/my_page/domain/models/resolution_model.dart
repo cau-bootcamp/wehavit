@@ -3,6 +3,7 @@ import 'package:wehavit/common/constants/firebase_field_name.dart';
 
 class ResolutionModel {
   ResolutionModel({
+    required this.resolutionId,
     required this.isActive,
     required this.goalStatement,
     required this.actionStatement,
@@ -11,8 +12,10 @@ class ResolutionModel {
     required this.startDate,
   });
 
-  ResolutionModel.fromMapData(Map<String, dynamic> data)
-      : goalStatement =
+  ResolutionModel.fromMapData(
+    Map<String, dynamic> data,
+    this.resolutionId,
+  )   : goalStatement =
             data[FirebaseResolutionFieldName.resolutionGoalStatement],
         actionStatement =
             data[FirebaseResolutionFieldName.resolutionActionStatement],
@@ -21,8 +24,10 @@ class ResolutionModel {
             (data[FirebaseResolutionFieldName.resolutionStartDate] as Timestamp)
                 .toDate(),
         isActive = data[FirebaseResolutionFieldName.resolutionIsActive],
-        oathStatement = data[FirebaseResolutionFieldName];
+        oathStatement =
+            data[FirebaseResolutionFieldName.resolutionOathStatement];
 
+  String resolutionId;
   String goalStatement;
   String actionStatement;
   String oathStatement;
@@ -37,6 +42,7 @@ class ResolutionModel {
     String? oathStatement,
     bool? isActive,
     DateTime? startDate,
+    String? resolutionId,
   }) {
     return ResolutionModel(
       goalStatement: goalStatement ?? this.goalStatement,
@@ -45,6 +51,7 @@ class ResolutionModel {
       isDaySelectedList: isDaySelectedList ?? this.isDaySelectedList,
       isActive: isActive ?? this.isActive,
       startDate: startDate ?? this.startDate,
+      resolutionId: resolutionId ?? this.resolutionId,
     );
   }
 }

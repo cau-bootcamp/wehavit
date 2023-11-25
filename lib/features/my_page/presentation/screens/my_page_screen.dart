@@ -77,10 +77,13 @@ class MyPageScreen extends ConsumerWidget {
               (left) => null,
               (right) => Expanded(
                 child: ListView.builder(
-                  itemCount: right.length + 1,
+                  itemCount: right.$1.length + 1,
                   itemBuilder: (context, index) {
-                    if (index < right.length) {
-                      return ResolutionDashboardWidget(model: right[index]);
+                    if (index < right.$1.length) {
+                      return ResolutionDashboardWidget(
+                        model: right.$1[index],
+                        confirmPostList: right.$2[index],
+                      );
                     } else {
                       return Container(
                         margin: const EdgeInsets.symmetric(vertical: 8),
