@@ -3,22 +3,22 @@ import 'package:wehavit/features/home/domain/models/confirm_post_model.dart';
 
 class ConfirmPostEntity {
   ConfirmPostEntity.fromFirebaseDocument(Map<String, dynamic> data)
-      : userImageUrl = data[FirebaseFriendFieldName.friendImageUrl],
-        userName = data[FirebaseFriendFieldName.friendName],
+      : //userImageUrl = data[FirebaseFriendFieldName.friendImageUrl],
+        //userName = data[FirebaseFriendFieldName.friendName],
         resolutionGoalStatement =
             data[FirebaseConfirmPostFieldName.resolutionGoalStatement],
         title = data[FirebaseConfirmPostFieldName.title],
-        content = data[FirebaseConfirmPostFieldName.content],
-        contentImageUrl = data[FirebaseConfirmPostFieldName.imageUrl],
-        postAt = data[FirebaseConfirmPostFieldName.updatedAt];
+        //postAt = data[FirebaseConfirmPostFieldName.updatedAt];
+        //contentImageUrl = data[FirebaseConfirmPostFieldName.imageUrl];
+        content = data[FirebaseConfirmPostFieldName.content];
 
-  late String userImageUrl;
-  late String userName;
-  late String resolutionGoalStatement;
-  late String title;
-  late String content;
-  late String contentImageUrl;
-  late DateTime postAt;
+  late String userImageUrl = 'userImageUrl';
+  late String userName = 'userName';
+  late String resolutionGoalStatement = 'resolutionGoalStatement';
+  late String title = 'title';
+  late String content = 'content';
+  late String contentImageUrl = 'imageUrl';
+  late DateTime postAt = DateTime(2023, 11, 25, 14);
 }
 
 extension ConfirmPostEntityConvertFunctions on ConfirmPostEntity {
