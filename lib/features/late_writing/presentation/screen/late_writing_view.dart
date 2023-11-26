@@ -14,11 +14,14 @@ class LateWritingView extends ConsumerStatefulWidget {
 }
 
 class _LateWritingViewState extends ConsumerState<LateWritingView> {
-  late final viewModel = ref.watch(lateWritingViewModelProvider);
-  late final viewModelProvider =
-      ref.read(lateWritingViewModelProvider.notifier);
+  late LateWritingViewModel viewModel;
+  late LateWritingViewModelProvider viewModelProvider;
+
   @override
   Widget build(BuildContext context) {
+    viewModel = ref.watch(lateWritingViewModelProvider);
+    viewModelProvider = ref.read(lateWritingViewModelProvider.notifier);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -94,10 +97,49 @@ class _LateWritingViewState extends ConsumerState<LateWritingView> {
                               ),
                               TitleAndContentFormWidget(viewModel: viewModel),
                               // 사진
-                              PhotoSelectWidget(
-                                viewModel: viewModel,
-                                viewModelProvider: viewModelProvider,
-                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16.0),
+                                child: Container(
+                                  width: double.infinity,
+                                  height: 250,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(10.0),
+                                    ),
+                                  ),
+                                  child: GestureDetector(
+                                    behavior: HitTestBehavior.opaque,
+                                    onTapUp: (details) async {
+                                      viewModel.imageFileUrl =
+                                          await viewModelProvider
+                                              .getPhotoLibraryImage();
+                                      setState(() {});
+                                    },
+                                    child: Visibility(
+                                      visible: viewModel.imageFileUrl != null,
+                                      replacement: const Center(
+                                        child: Text('사진 추가하기'),
+                                      ),
+                                      child: Container(
+                                        decoration: const BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(10.0),
+                                          ),
+                                        ),
+                                        clipBehavior: Clip.hardEdge,
+                                        child: Image(
+                                          image: FileImage(
+                                            File(viewModel.imageFileUrl ?? ''),
+                                          ),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
                             ],
                           ),
                           // Expanded(
@@ -218,65 +260,6 @@ class TitleAndContentFormWidget extends StatelessWidget {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class PhotoSelectWidget extends StatelessWidget {
-  const PhotoSelectWidget({
-    super.key,
-    required this.viewModel,
-    required this.viewModelProvider,
-  });
-
-  final LateWritingViewModel viewModel;
-  final LateWritingViewModelProvider viewModelProvider;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
-      child: Container(
-        width: double.infinity,
-        height: 250,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
-          borderRadius: const BorderRadius.all(
-            Radius.circular(10.0),
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 8.0,
-          ),
-          child: Visibility(
-            visible: viewModel.imageFileUrl != null,
-            replacement: GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTapUp: (details) {
-                viewModelProvider.getPhotoLibraryImage();
-              },
-              child: const Center(
-                child: Text('사진 추가하기'),
-              ),
-            ),
-            child: Container(
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10.0),
-                ),
-              ),
-              clipBehavior: Clip.hardEdge,
-              child: Image(
-                image: FileImage(
-                  File(viewModel.imageFileUrl ?? ''),
-                ),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
         ),
       ),
     );

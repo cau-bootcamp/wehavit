@@ -59,13 +59,14 @@ class LateWritingViewModelProvider extends StateNotifier<LateWritingViewModel> {
     );
   }
 
-  void getPhotoLibraryImage() async {
+  Future<String?> getPhotoLibraryImage() async {
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
-      state.imageFileUrl = pickedFile.path;
+      return pickedFile.path;
     } else {
       debugPrint('이미지 선택안함');
+      return null;
     }
   }
 }
