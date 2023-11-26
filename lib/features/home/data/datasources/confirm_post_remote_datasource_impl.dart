@@ -7,20 +7,31 @@ import 'package:wehavit/features/home/data/datasources/confirm_post_datasource.d
 import 'package:wehavit/features/home/data/entities/confirm_post_entity.dart';
 
 class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
-  static const CONFIRM_POST_COLLECTION = 'confirm_posts';
-  static const CONFIRM_POST_FIELD_FAN = 'fan';
-  static const CONFIRM_POST_FIELD_OWNER = 'owner';
+  static const int maxDay = 27;
 
   @override
   EitherFuture<List<ConfirmPostEntity>> getConfirmPostEntityList(
     int selectedIndex,
   ) async {
     try {
+      int nDaysAgo = maxDay - selectedIndex;
+      DateTime today = DateTime.now();
+      DateTime startDate = DateTime(today.year, today.month, today.day)
+          .subtract(Duration(days: nDaysAgo));
+      DateTime endDate =
+          DateTime(startDate.year, startDate.month, startDate.day)
+              .add(const Duration(days: 1));
+
       final fetchResult = await FirebaseFirestore.instance
-          .collection(CONFIRM_POST_COLLECTION)
+          .collection(FirebaseCollectionName.confirmPosts)
           .where(
-            CONFIRM_POST_FIELD_FAN,
+            FirebaseConfirmPostFieldName.fan,
             arrayContains: FirebaseAuth.instance.currentUser!.uid,
+          )
+          .where(
+            FirebaseConfirmPostFieldName.updatedAt,
+            isGreaterThanOrEqualTo: Timestamp.fromDate(startDate),
+            isLessThan: Timestamp.fromDate(endDate),
           )
           .get();
 

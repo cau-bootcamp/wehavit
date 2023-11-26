@@ -49,7 +49,6 @@ class _ConfirmPostWidgetState extends State<ConfirmPostWidget> {
                     children: [
                       CircleAvatar(
                         backgroundColor: Colors.grey,
-                        // TODO : change text to image
                         child: CircleAvatar(
                           radius: 30,
                           foregroundImage: NetworkImage(userImageUrl),
@@ -121,7 +120,7 @@ class _ConfirmPostWidgetState extends State<ConfirmPostWidget> {
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: NetworkImage(contentImageUrl),
+                        image: NetworkImage(contentImageUrl!),
                       ),
                     ),
                   ),
