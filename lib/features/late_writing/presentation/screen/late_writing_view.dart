@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:path/path.dart';
 import 'package:wehavit/features/late_writing/presentation/model/late_writing_view_model.dart';
 import 'package:wehavit/features/late_writing/presentation/provider/late_writing_view_provider.dart';
 import 'package:wehavit/features/my_page/domain/models/resolution_model.dart';
@@ -23,15 +22,13 @@ class _LateWritingViewState extends ConsumerState<LateWritingView> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text("title"),
+        title: const Text('title'),
       ),
       body: Padding(
         padding:
             EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         child: SafeArea(
-          left: true,
-          right: true,
-          minimum: EdgeInsets.all(8),
+          minimum: const EdgeInsets.all(8),
           child: FutureBuilder(
             future: viewModel.resolutionList,
             builder: (context, snapshot) {
@@ -42,107 +39,99 @@ class _LateWritingViewState extends ConsumerState<LateWritingView> {
                 return Stack(
                   children: [
                     SingleChildScrollView(
-                      padding: EdgeInsets.only(bottom: 40),
-                      child: Container(
-                        child: Column(
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Padding(
-                                        padding:
-                                            EdgeInsets.symmetric(vertical: 8.0),
-                                        child: Text(
-                                          '작성할 목표',
-                                          style: TextStyle(fontSize: 24.0),
-                                        ),
+                      padding: const EdgeInsets.only(bottom: 40),
+                      child: Column(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(vertical: 8.0),
+                                    child: Text(
+                                      '작성할 목표',
+                                      style: TextStyle(fontSize: 24.0),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTapUp: (details) async {
+                                      showResolutionSelectionList(
+                                        context,
+                                        resolutionList,
+                                      );
+                                    },
+                                    child: Container(
+                                      height: 50,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(),
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
                                       ),
-                                      GestureDetector(
-                                        onTapUp: (details) async {
-                                          showResolutionSelectionList(
-                                            context,
-                                            resolutionList,
-                                          );
-                                        },
-                                        child: Container(
-                                          height: 50,
-                                          width: double.infinity,
-                                          decoration: BoxDecoration(
-                                            border: Border.all(),
-                                            borderRadius:
-                                                BorderRadius.circular(10.0),
-                                          ),
-                                          child: Center(
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: SizedBox(
-                                                width: double.infinity,
-                                                child: Text(
-                                                  resolutionList[viewModel
-                                                          .resolutionIndex]
-                                                      .goalStatement,
-                                                  textAlign: TextAlign.left,
-                                                ),
-                                              ),
+                                      child: Center(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: SizedBox(
+                                            width: double.infinity,
+                                            child: Text(
+                                              resolutionList[
+                                                      viewModel.resolutionIndex]
+                                                  .goalStatement,
+                                              textAlign: TextAlign.left,
                                             ),
                                           ),
                                         ),
                                       ),
-                                    ],
+                                    ),
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 16.0,
-                                ),
-                                TitleAndContentFormWidget(viewModel: viewModel),
-                                // 사진
-                                photoSelectWidget(
-                                  viewModel: viewModel,
-                                  viewModelProvider: viewModelProvider,
-                                ),
-                              ],
-                            ),
-                            // Expanded(
-                            //   child: Container(),
-                            // ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      child: Column(
-                        children: [
-                          Expanded(
-                            child: Container(),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 16.0,
+                              ),
+                              TitleAndContentFormWidget(viewModel: viewModel),
+                              // 사진
+                              PhotoSelectWidget(
+                                viewModel: viewModel,
+                                viewModelProvider: viewModelProvider,
+                              ),
+                            ],
                           ),
-                          Container(
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                viewModelProvider.postCurrentConfirmPost();
-                              },
-                              child: Text("Save"),
-                            ),
-                          ),
+                          // Expanded(
+                          //   child: Container(),
+                          // ),
                         ],
                       ),
-                    )
+                    ),
+                    Column(
+                      children: [
+                        Expanded(
+                          child: Container(),
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              viewModelProvider.postCurrentConfirmPost();
+                            },
+                            child: const Text('Save'),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 );
               } else if (!snapshot.hasData) {
-                return CircularProgressIndicator();
+                return const CircularProgressIndicator();
               } else if (snapshot.hasError || snapshot.data!.isLeft()) {
                 return const Center(
                   child: Text('DEBUG - SOMETHING WENT WRONG'),
                 );
               } else {
-                return Placeholder();
+                return const Placeholder();
               }
             },
           ),
@@ -152,7 +141,9 @@ class _LateWritingViewState extends ConsumerState<LateWritingView> {
   }
 
   Future<dynamic> showResolutionSelectionList(
-      BuildContext context, List<ResolutionModel> resolutionList) {
+    BuildContext context,
+    List<ResolutionModel> resolutionList,
+  ) {
     return showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -165,7 +156,7 @@ class _LateWritingViewState extends ConsumerState<LateWritingView> {
             child: Column(
               children: List<Widget>.generate(
                 resolutionList.length,
-                (index) => Container(
+                (index) => SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
@@ -210,22 +201,22 @@ class TitleAndContentFormWidget extends StatelessWidget {
           children: [
             TextFormField(
               controller: viewModel.titleTextEditingController,
-              decoration: InputDecoration(
-                hintText: "제목을 입력해주세요",
+              decoration: const InputDecoration(
+                hintText: '제목을 입력해주세요',
                 border: InputBorder.none,
               ),
             ),
-            Divider(
+            const Divider(
               thickness: 2.0,
             ),
             TextFormField(
               controller: viewModel.contentTextEditingController,
               maxLines: 5,
-              decoration: InputDecoration(
-                hintText: "오늘의 실천에 대해 한마디!",
+              decoration: const InputDecoration(
+                hintText: '오늘의 실천에 대해 한마디!',
                 border: InputBorder.none,
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -233,8 +224,8 @@ class TitleAndContentFormWidget extends StatelessWidget {
   }
 }
 
-class photoSelectWidget extends StatelessWidget {
-  const photoSelectWidget({
+class PhotoSelectWidget extends StatelessWidget {
+  const PhotoSelectWidget({
     super.key,
     required this.viewModel,
     required this.viewModelProvider,
@@ -263,16 +254,20 @@ class photoSelectWidget extends StatelessWidget {
           child: Visibility(
             visible: viewModel.imageFileUrl != null,
             replacement: GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTapUp: (details) {
-                  viewModelProvider.getPhotoLibraryImage();
-                },
-                child: const Center(
-                  child: Text('사진 추가하기'),
-                )),
+              behavior: HitTestBehavior.opaque,
+              onTapUp: (details) {
+                viewModelProvider.getPhotoLibraryImage();
+              },
+              child: const Center(
+                child: Text('사진 추가하기'),
+              ),
+            ),
             child: Container(
               decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10.0),
+                ),
+              ),
               clipBehavior: Clip.hardEdge,
               child: Image(
                 image: FileImage(

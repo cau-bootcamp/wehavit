@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
-import 'package:wehavit/features/live_writing/live_writing.dart';
 import 'package:wehavit/features/my_page/domain/models/resolution_model.dart';
 
 class LateWritingViewModel {
