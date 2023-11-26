@@ -121,7 +121,7 @@ class _ConfirmPostWidgetState extends State<ConfirmPostWidget> {
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: NetworkImage(contentImageUrl!),
+                        image: NetworkImage(contentImageUrl),
                       ),
                     ),
                   ),

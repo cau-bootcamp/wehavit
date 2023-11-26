@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:wehavit/common/constants/firebase_field_name.dart';
 
 class ConfirmPostModel {
   ConfirmPostModel({

@@ -17,7 +17,8 @@ class GetConfirmPostListUsecase
   }
 
   Future<Either<Failure, List<ConfirmPostModel>>> getConfirmPostModelListByDate(
-      int selectedIndex) async {
+    int selectedIndex,
+  ) async {
     return _confirmPostRepository.getConfirmPostModelList(selectedIndex);
   }
 }

@@ -60,7 +60,8 @@ class _FriendListScreenState extends ConsumerState<FriendListScreen> {
                         CircleAvatar(
                           radius: 40,
                           foregroundImage: NetworkImage(
-                              currentUser?.photoURL ?? 'DEBUG_URL'),
+                            currentUser?.photoURL ?? 'DEBUG_URL',
+                          ),
                         ),
                         Container(
                           margin: const EdgeInsets.only(left: 8.0),

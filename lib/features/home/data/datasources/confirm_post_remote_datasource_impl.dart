@@ -3,11 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/common/errors/failure.dart';
-import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/features/home/data/datasources/confirm_post_datasource.dart';
 import 'package:wehavit/features/home/data/entities/confirm_post_entity.dart';
-import 'package:wehavit/features/home/domain/models/confirm_post_model.dart';
 
 class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
   static const CONFIRM_POST_COLLECTION = 'confirm_posts';
@@ -50,8 +47,9 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
       List<ConfirmPostEntity> confirmPosts = fetchResult.docs
           .map(
             (doc) => ConfirmPostEntity.fromFirebaseDocument(
-                userDataMap[doc.data()[FirebaseConfirmPostFieldName.owner]]!,
-                doc.data()),
+              userDataMap[doc.data()[FirebaseConfirmPostFieldName.owner]]!,
+              doc.data(),
+            ),
           )
           .toList();
 
