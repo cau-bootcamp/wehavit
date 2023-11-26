@@ -51,7 +51,6 @@ class AddResolutionNotifier extends StateNotifier<AddResolutionModel> {
       fanList: state.fanList.map((e) => e.friendEmail).toList(),
       resolutionId: '',
     );
-
     return _uploadResolutionUsecase.call(newModel);
   }
 }

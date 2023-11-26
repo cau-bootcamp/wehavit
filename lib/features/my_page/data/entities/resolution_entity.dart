@@ -13,7 +13,9 @@ class ResolutionEntity {
             (data[FirebaseResolutionFieldName.resolutionStartDate] as Timestamp)
                 .toDate(),
         isActive = data[FirebaseResolutionFieldName.resolutionIsActive],
-        fanList = data[FirebaseResolutionFieldName.resolutionFanList];
+        fanList = (data[FirebaseResolutionFieldName.resolutionFanList] ?? [])
+            .cast<String>()
+            .toList();
 
   ResolutionEntity.fromResolutionModel(ResolutionModel model) {
     goal = model.goalStatement;
@@ -22,6 +24,7 @@ class ResolutionEntity {
     isActive = true;
     period = model.isDaySelectedList.toIntPeriod();
     resolutionId = model.resolutionId;
+    fanList = model.fanList;
   }
 
   late String goal;

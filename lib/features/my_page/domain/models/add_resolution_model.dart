@@ -24,14 +24,13 @@ class AddResolutionModel {
     String? oathStatement,
     List<FriendModel>? fanList,
   }) {
-    final ad = AddResolutionModel(
+    return AddResolutionModel(
       goalStatement: goalStatement ?? this.goalStatement,
       actionStatement: actionStatement ?? this.actionStatement,
       oathStatement: oathStatement ?? this.oathStatement,
       isDaySelectedList: isDaySelectedList ?? this.isDaySelectedList,
       fanList: fanList ?? this.fanList,
     );
-    return ad;
   }
 
   List<bool> getToggledDaySelectedList(int indexToToggle) {

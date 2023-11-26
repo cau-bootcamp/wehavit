@@ -38,7 +38,7 @@ class AddResolutionScreen extends HookConsumerWidget {
               },
             ),
             const Text('내 목표를 공유할 친구들'),
-            SelectFans(),
+            const SelectFans(),
             const Text('실천할 행동'),
             TextField(
               onChanged: (value) {
@@ -135,10 +135,8 @@ Future<List<FriendModel>> getFriendList(WidgetRef ref) {
   return ref.read(friendRepositoryProvider).getFriendModelList().then(
     (result) {
       return result.fold((failure) {
-        debugPrint('DEBUG : ${failure.message}');
         return [];
       }, (success) {
-        debugPrint('DEBUG : $success');
         return success;
       });
     },

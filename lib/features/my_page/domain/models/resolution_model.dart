@@ -10,7 +10,7 @@ class ResolutionModel {
     required this.oathStatement,
     required this.isDaySelectedList,
     required this.startDate,
-    required List<String> fanList,
+    required this.fanList,
   });
 
   ResolutionModel.fromMapData(
