@@ -24,7 +24,7 @@ class FriendModel {
     String? friendImageUrl,
   }) {
     return FriendModel(
-      friendEmail: friendID ?? this.friendEmail,
+      friendEmail: friendID ?? friendEmail,
       friendName: friendName ?? this.friendName,
       friendImageUrl: friendImageUrl ?? this.friendImageUrl,
     );
