@@ -22,13 +22,13 @@ class _ConfirmPostWidgetState extends State<ConfirmPostWidget> {
 
   @override
   Widget build(BuildContext context) {
-    print(userName);
-    print(userImageUrl);
-    print(resolutionGoalStatement);
-    print(title);
-    print(content);
-    print(contentImageUrl);
-    print(postAt);
+//    print(userName);
+//    print(userImageUrl);
+//    print(resolutionGoalStatement);
+//    print(title);
+//    print(content);
+//    print(contentImageUrl);
+//    print(postAt);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -120,7 +120,7 @@ class _ConfirmPostWidgetState extends State<ConfirmPostWidget> {
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: NetworkImage(contentImageUrl!),
+                        image: NetworkImage(contentImageUrl),
                       ),
                     ),
                   ),

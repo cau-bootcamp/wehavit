@@ -13,13 +13,14 @@ class ConfirmPostEntity {
         title = data[FirebaseConfirmPostFieldName.title],
         content = data[FirebaseConfirmPostFieldName.content],
         contentImageUrl = data[FirebaseConfirmPostFieldName.imageUrl],
-        postAt = data[FirebaseConfirmPostFieldName.updatedAt];
+        postAt = data[FirebaseConfirmPostFieldName.createdAt];
 
+  // 초기화
   late String userImageUrl = '';
-  late String userName = 'userName';
-  late String resolutionGoalStatement = 'resolutionGoalStatement';
-  late String title = 'title';
-  late String content = 'content';
+  late String userName = '';
+  late String resolutionGoalStatement = '';
+  late String title = '';
+  late String content = '';
   late String contentImageUrl = '';
   late Timestamp postAt = Timestamp.now();
 }

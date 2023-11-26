@@ -18,23 +18,31 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
       DateTime today = DateTime.now();
       DateTime startDate = DateTime(today.year, today.month, today.day)
           .subtract(Duration(days: nDaysAgo));
+      //print('nDaysAgo : $nDaysAgo');
+      //print('selectedIndex : $selectedIndex');
       DateTime endDate =
           DateTime(startDate.year, startDate.month, startDate.day)
               .add(const Duration(days: 1));
 
+      print('\n'
+          'isGreaterThanOrEqualTo: ${Timestamp.fromDate(startDate)}\n'
+          'isLessThan: ${Timestamp.fromDate(endDate)}');
       final fetchResult = await FirebaseFirestore.instance
           .collection(FirebaseCollectionName.confirmPosts)
           .where(
             FirebaseConfirmPostFieldName.fan,
             arrayContains: FirebaseAuth.instance.currentUser!.uid,
           )
-          .where(
-            FirebaseConfirmPostFieldName.updatedAt,
-            isGreaterThanOrEqualTo: Timestamp.fromDate(startDate),
-            isLessThan: Timestamp.fromDate(endDate),
-          )
+//          .where(
+//            FirebaseConfirmPostFieldName.createdAt,
+//            isGreaterThan: Timestamp.fromDate(startDate),
+//            isLessThan: Timestamp.fromDate(endDate),
+//          )
           .get();
 
+      debugPrint(fetchResult.docs.length.toString());
+      print(
+          'createdAt : ${fetchResult.docs.map((doc) => doc.data()[FirebaseConfirmPostFieldName.createdAt])}');
       final userDocsList = fetchResult.docs
           .map((doc) => doc.data()[FirebaseConfirmPostFieldName.owner])
           .toList();
@@ -53,8 +61,6 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
         }
       }
 
-      debugPrint(fetchResult.docs.length.toString());
-
       List<ConfirmPostEntity> confirmPosts = fetchResult.docs
           .map(
             (doc) => ConfirmPostEntity.fromFirebaseDocument(
@@ -68,7 +74,7 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
     } on Exception {
       return Future(
         () => left(
-          const Failure('catch error on getActiveResolutionEntityList'),
+          const Failure('catch error on getConfirmPostEntityList'),
         ),
       );
     }

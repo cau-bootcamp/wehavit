@@ -21,7 +21,6 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
-
   int selectedIndex = -1;
 
   static const String dateFormat = 'yyyy년 MM월 dd일';
@@ -29,22 +28,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (_scrollController.hasClients) {
         _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
       }
       ref
           .read(confirmPostListProvider.notifier)
           .getConfirmPostList(selectedIndex);
-      setState(() {
-        selectedIndex = 27;
-      });
+    });
+    setState(() {
+      selectedIndex = 27;
     });
   }
 
   @override
-  void didChangeDependencies() {
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
+    ref
+        .read(confirmPostListProvider.notifier)
+        .getConfirmPostList(selectedIndex);
   }
 
   List<(String, String)> generateDatesList() {
@@ -109,7 +111,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       onPressed: () async {
                         // 버튼을 누르면 selectedIndex 가 변경되고, provider를 통해 해당
                         // 날짜의 데이터를 불러온다.
-                        selectedIndex = index;
+                        setState(() {
+                          selectedIndex = index; // 상태 변경
+                        });
                         await ref
                             .read(confirmPostListProvider.notifier)
                             .getConfirmPostList(selectedIndex);
@@ -146,7 +150,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         child: Column(
           children: [
             confirmPostList.fold(
-              (left) => null,
+              (left) => Container(),
               (right) => Expanded(
                 child: ListView.builder(
                   itemCount: right.length,
@@ -158,7 +162,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   },
                 ),
               ),
-            ) as Widget,
+            ),
           ],
         ),
       ), //
