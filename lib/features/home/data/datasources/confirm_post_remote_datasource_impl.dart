@@ -18,33 +18,59 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
       DateTime today = DateTime.now();
       DateTime startDate = DateTime(today.year, today.month, today.day)
           .subtract(Duration(days: nDaysAgo));
-      //print('nDaysAgo : $nDaysAgo');
-      //print('selectedIndex : $selectedIndex');
       DateTime endDate =
           DateTime(startDate.year, startDate.month, startDate.day)
               .add(const Duration(days: 1));
 
-      print('\n'
-          'isGreaterThanOrEqualTo: ${Timestamp.fromDate(startDate)}\n'
-          'isLessThan: ${Timestamp.fromDate(endDate)}');
-      final fetchResult = await FirebaseFirestore.instance
+//      print('\n'
+//          'isGreaterThan: ${Timestamp.fromDate(startDate)}\n'
+//          'isLessThan: ${Timestamp.fromDate(endDate)}');
+      // 첫 번째 쿼리 결과
+      QuerySnapshot firstQueryResult = await FirebaseFirestore.instance
+          .collection(FirebaseCollectionName.confirmPosts)
+          .where(
+            FirebaseConfirmPostFieldName.createdAt,
+            isGreaterThanOrEqualTo: Timestamp.fromDate(startDate),
+          )
+          .where(
+            FirebaseConfirmPostFieldName.createdAt,
+            isLessThan: Timestamp.fromDate(endDate),
+          )
+          .get();
+
+      // 두 번째 쿼리 결과
+      QuerySnapshot secondQueryResult = await FirebaseFirestore.instance
           .collection(FirebaseCollectionName.confirmPosts)
           .where(
             FirebaseConfirmPostFieldName.fan,
             arrayContains: FirebaseAuth.instance.currentUser!.uid,
           )
-//          .where(
-//            FirebaseConfirmPostFieldName.createdAt,
-//            isGreaterThan: Timestamp.fromDate(startDate),
-//            isLessThan: Timestamp.fromDate(endDate),
-//          )
           .get();
 
-      debugPrint(fetchResult.docs.length.toString());
-      print(
-          'createdAt : ${fetchResult.docs.map((doc) => doc.data()[FirebaseConfirmPostFieldName.createdAt])}');
-      final userDocsList = fetchResult.docs
-          .map((doc) => doc.data()[FirebaseConfirmPostFieldName.owner])
+// 첫 번째 쿼리 결과에서 문서 ID 추출
+      Set<String> firstQueryDocIds =
+          firstQueryResult.docs.map((doc) => doc.id).toSet();
+
+// 두 번째 쿼리 결과에서 문서 ID 추출
+      Set<String> secondQueryDocIds =
+          secondQueryResult.docs.map((doc) => doc.id).toSet();
+
+// 교집합 찾기
+      Set<String> intersection =
+          firstQueryDocIds.intersection(secondQueryDocIds);
+
+// 최종 결과: 교집합에 해당하는 문서들
+      List<QueryDocumentSnapshot> resultDocs = firstQueryResult.docs
+          .where((doc) => intersection.contains(doc.id))
+          .toList();
+
+      debugPrint(resultDocs.length.toString());
+
+      final userDocsList = resultDocs
+          .map(
+            (doc) =>
+                (doc.data() as dynamic)[FirebaseConfirmPostFieldName.owner],
+          )
           .toList();
 
       Map<String, (String, String)> userDataMap = {};
@@ -61,11 +87,12 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
         }
       }
 
-      List<ConfirmPostEntity> confirmPosts = fetchResult.docs
+      List<ConfirmPostEntity> confirmPosts = resultDocs
           .map(
             (doc) => ConfirmPostEntity.fromFirebaseDocument(
-              userDataMap[doc.data()[FirebaseConfirmPostFieldName.owner]]!,
-              doc.data(),
+              userDataMap[
+                  (doc.data() as dynamic)[FirebaseConfirmPostFieldName.owner]]!,
+              doc.data() as dynamic,
             ),
           )
           .toList();
