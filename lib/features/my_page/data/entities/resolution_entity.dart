@@ -12,7 +12,8 @@ class ResolutionEntity {
         startDate =
             (data[FirebaseResolutionFieldName.resolutionStartDate] as Timestamp)
                 .toDate(),
-        isActive = data[FirebaseResolutionFieldName.resolutionIsActive];
+        isActive = data[FirebaseResolutionFieldName.resolutionIsActive],
+        fanList = data[FirebaseResolutionFieldName.resolutionFanList];
 
   ResolutionEntity.fromResolutionModel(ResolutionModel model) {
     goal = model.goalStatement;
@@ -29,6 +30,7 @@ class ResolutionEntity {
   late DateTime startDate;
   late bool isActive;
   late String resolutionId;
+  late List<String> fanList;
 }
 
 extension ResolutionEntityConvertFunctions on ResolutionEntity {
@@ -41,6 +43,7 @@ extension ResolutionEntityConvertFunctions on ResolutionEntity {
     doc[FirebaseResolutionFieldName.resolutionPeriod] = period;
     doc[FirebaseResolutionFieldName.resolutionStartDate] = startDate;
     doc[FirebaseResolutionFieldName.resolutionIsActive] = isActive;
+    doc[FirebaseResolutionFieldName.resolutionFanList] = fanList;
 
     return doc;
   }
@@ -54,6 +57,7 @@ extension ResolutionEntityConvertFunctions on ResolutionEntity {
       startDate: startDate,
       oathStatement: '',
       resolutionId: resolutionId,
+      fanList: fanList,
     );
     return model;
   }

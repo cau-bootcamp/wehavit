@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:multiselect/multiselect.dart';
+import 'package:wehavit/features/friend_list/domain/models/friend_model.dart';
+import 'package:wehavit/features/friend_list/domain/repositories/friend_repository_provider.dart';
 import 'package:wehavit/features/my_page/presentation/providers/add_resolution_provider.dart';
 import 'package:wehavit/features/my_page/presentation/providers/my_page_resolution_list_provider.dart';
 
 // 여기에 뷰가 적용되면 수정할 예정임.
-class AddResolutionScreen extends ConsumerWidget {
+class AddResolutionScreen extends HookConsumerWidget {
   const AddResolutionScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final resolutionProvider = ref.watch(addResolutionProvider);
     final dayList = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+    // ignore: discarded_futures
+    final friendListFuture = useMemoized(() => getFriendList(ref));
+    final friendListSnapshot = useFuture(friendListFuture);
 
     return Scaffold(
       appBar: AppBar(
@@ -97,20 +104,43 @@ class AddResolutionScreen extends ConsumerWidget {
   }
 }
 
-class SelectFans extends StatelessWidget {
-  SelectFans({super.key});
-
-  final List<String> selected = [];
+class SelectFans extends HookConsumerWidget {
+  const SelectFans({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return DropDownMultiSelect(
-      onChanged: (List<String> x) {
-        debugPrint('DEBUG : $x');
+  Widget build(BuildContext context, WidgetRef ref) {
+    final resolutionState = ref.watch(addResolutionProvider);
+    // ignore: discarded_futures
+    final friendListFuture = useMemoized(() => getFriendList(ref));
+    final friendListSnapshot = useFuture(friendListFuture);
+
+    return DropDownMultiSelect<String>(
+      onChanged: (currentSelected) {
+        final friendList = friendListSnapshot.data
+            ?.where((element) => currentSelected.contains(element.friendName))
+            .toList();
+        ref
+            .read(addResolutionProvider.notifier)
+            .changeFanList(friendList ?? []);
       },
-      options: const ['a', 'b', 'c', 'd'],
-      selectedValues: selected,
-      whenEmpty: 'Select Something',
+      options: friendListSnapshot.data?.map((e) => e.friendName).toList() ??
+          ['친구를 불러오는 중입니다.'],
+      selectedValues: resolutionState.fanList.map((e) => e.friendName).toList(),
+      whenEmpty: '친구를 선택해주세요.',
     );
   }
+}
+
+Future<List<FriendModel>> getFriendList(WidgetRef ref) {
+  return ref.read(friendRepositoryProvider).getFriendModelList().then(
+    (result) {
+      return result.fold((failure) {
+        debugPrint('DEBUG : ${failure.message}');
+        return [];
+      }, (success) {
+        debugPrint('DEBUG : $success');
+        return success;
+      });
+    },
+  );
 }
