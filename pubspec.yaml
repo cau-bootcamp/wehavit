@@ -39,6 +39,7 @@ dependencies:
   path_provider: ^2.1.1
   firebase_storage: ^11.5.2
   intl: ^0.18.1
+  multiselect: ^0.1.0
 
 dev_dependencies:
   flutter_test:
