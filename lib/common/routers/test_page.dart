@@ -94,6 +94,12 @@ class TestPage extends ConsumerWidget {
               },
               buttonText: 'Live Waiting Sample View',
             ),
+            MoveButton(
+              onPressCallback: () async {
+                context.push('/lateWritingView');
+              },
+              buttonText: 'Late Writing View',
+            ),
           ],
         ),
       ),
