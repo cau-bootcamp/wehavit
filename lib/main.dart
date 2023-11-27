@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wehavit/common/notification/fcm_setting.dart';
 import 'package:wehavit/common/utils/shared_prefs.dart';
 
 import 'common/observers.dart';
@@ -15,6 +16,7 @@ Future<void> main() async {
       options: DefaultFirebaseOptions.currentPlatform,
     ),
   ]);
+  print(fcmSetting());
 
   runApp(
     ProviderScope(
