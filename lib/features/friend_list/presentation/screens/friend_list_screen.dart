@@ -36,6 +36,7 @@ class FriendListScreen extends ConsumerWidget {
       body: SafeArea(
         child: Column(
           children: [
+            const AddFriendTextFieldWidget(),
             Container(
               padding: const EdgeInsets.only(bottom: 16),
               child: Row(
@@ -90,7 +91,6 @@ class FriendListScreen extends ConsumerWidget {
                     child: const Text('친구 목록 새로고침'),
                   ),
                 ),
-                const AddFriendTextFieldWidget(),
               ],
             ),
             vFriendListProvider.fold(

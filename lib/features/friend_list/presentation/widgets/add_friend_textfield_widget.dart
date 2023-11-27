@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wehavit/common/common.dart';
 import 'package:wehavit/features/friend_list/presentation/providers/add_friend_provider.dart';
 import 'package:wehavit/features/friend_list/presentation/providers/friend_list_provider.dart';
 
@@ -11,51 +12,61 @@ class AddFriendTextFieldWidget extends ConsumerWidget {
     ref.watch(addFriendProvider);
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Container(
-            padding: const EdgeInsets.only(
-              left: 8.0,
-            ),
-          ),
-          Expanded(
-            child: TextField(
-              // 추후에 onChanged가 아닌 것으로 바꿀 예정
-              onChanged: (value) {
-                ref.read(addFriendProvider.notifier).setFriendEmail(value);
-              },
-              decoration: const InputDecoration(
-                hintText: 'Enter Friend ID',
+      child: Container(
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(36)),
+          color: CustomColors.whYellowDark,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(
+                padding: const EdgeInsets.only(
+                  left: 8.0,
+                ),
               ),
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.only(
-              left: 16.0,
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              ref.read(addFriendProvider.notifier).uploadFriendModel().then(
-                (result) {
-                  result.fold((failure) {
-                    debugPrint('DEBUG : UPLOAD FAILED - ${failure.message}');
-                  }, (success) {
-                    ref.read(friendListProvider.notifier).getFriendList();
-                    //ref.refresh(friendListProvider.notifier).getFriendList();
-                  });
+              Expanded(
+                child: TextField(
+                  // 추후에 onChanged가 아닌 것으로 바꿀 예정
+                  onChanged: (value) {
+                    ref.read(addFriendProvider.notifier).setFriendEmail(value);
+                  },
+                  decoration: const InputDecoration(
+                    hintText: 'Enter Friend ID',
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.only(
+                  left: 16.0,
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  ref.read(addFriendProvider.notifier).uploadFriendModel().then(
+                    (result) {
+                      result.fold((failure) {
+                        debugPrint(
+                            'DEBUG : UPLOAD FAILED - ${failure.message}');
+                      }, (success) {
+                        ref.read(friendListProvider.notifier).getFriendList();
+                        //ref.refresh(friendListProvider.notifier).getFriendList();
+                      });
+                    },
+                  );
                 },
-              );
-            },
-            child: const Text('+'),
+                child: const Text('+'),
+              ),
+              Container(
+                padding: const EdgeInsets.only(
+                  left: 8.0,
+                ),
+              ),
+            ],
           ),
-          Container(
-            padding: const EdgeInsets.only(
-              left: 8.0,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
