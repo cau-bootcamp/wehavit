@@ -1,6 +1,6 @@
 name: wehavit
 description: A new Havit tracking app without the comparing others.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: 'none'
 
 version: 1.0.0+1
 
@@ -40,6 +40,8 @@ dependencies:
   firebase_storage: ^11.5.2
   intl: ^0.18.1
   multiselect: ^0.1.0
+  image_picker: ^1.0.4
+
 
 dev_dependencies:
   flutter_test:

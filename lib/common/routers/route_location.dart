@@ -17,4 +17,5 @@ class RouteLocation {
   static const String swipeView = '/swipeView';
   static const String animationSampleView = '/animationSampleView';
   static const String liveWaitingSampleView = '/liveWaitingSampleView';
+  static const String lateWritingView = '/lateWritingView';
 }
