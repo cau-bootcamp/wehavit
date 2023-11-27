@@ -6,7 +6,7 @@ class FirebaseCollectionName {
   const FirebaseCollectionName._();
 
   static const users = 'users';
-  static final resolutions = FirebaseAuth.instance.currentUser != null
+  static final myResolutions = FirebaseAuth.instance.currentUser != null
       ? 'users/${FirebaseAuth.instance.currentUser?.uid}/resolutions'
       : 'invalid_address';
   static final friends = FirebaseAuth.instance.currentUser != null

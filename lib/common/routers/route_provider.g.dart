@@ -18,6 +18,7 @@ List<RouteBase> get $appRoutes => [
       $swipeViewRoute,
       $animationSampleViewRoute,
       $liveWaitingSampleViewRoute,
+      $lateWritingViewRoute,
     ];
 
 RouteBase get $homeRoute => GoRouteData.$route(
@@ -256,6 +257,29 @@ extension $LiveWaitingSampleViewRouteExtension on LiveWaitingSampleViewRoute {
 
   String get location => GoRouteData.$location(
         '/liveWaitingSampleView',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $lateWritingViewRoute => GoRouteData.$route(
+      path: '/lateWritingView',
+      factory: $LateWritingViewRouteExtension._fromState,
+    );
+
+extension $LateWritingViewRouteExtension on LateWritingViewRoute {
+  static LateWritingViewRoute _fromState(GoRouterState state) =>
+      const LateWritingViewRoute();
+
+  String get location => GoRouteData.$location(
+        '/lateWritingView',
       );
 
   void go(BuildContext context) => context.go(location);

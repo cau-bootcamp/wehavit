@@ -23,7 +23,7 @@ class ResolutionRemoteDatasourceImpl implements ResolutionDatasource {
 
     try {
       final fetchResult = await FirebaseFirestore.instance
-          .collection(FirebaseCollectionName.resolutions)
+          .collection(FirebaseCollectionName.myResolutions)
           .where(
             FirebaseResolutionFieldName.resolutionIsActive,
             isEqualTo: true,
@@ -63,7 +63,7 @@ class ResolutionRemoteDatasourceImpl implements ResolutionDatasource {
 
     try {
       final fetchResult = await FirebaseFirestore.instance
-          .collection(FirebaseCollectionName.resolutions)
+          .collection(FirebaseCollectionName.myResolutions)
           .get();
 
       resolutionEntityList = fetchResult.docs
@@ -96,7 +96,7 @@ class ResolutionRemoteDatasourceImpl implements ResolutionDatasource {
   ) async {
     try {
       FirebaseFirestore.instance
-          .collection(FirebaseCollectionName.resolutions)
+          .collection(FirebaseCollectionName.myResolutions)
           .add(entity.toFirebaseDocument());
 
       return Future(() => right(true));

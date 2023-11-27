@@ -28,8 +28,7 @@ class MyPageResolutionListProvider extends StateNotifier<
       getConfirmPostListForResolutionIdUsecase;
 
   Future<void> getActiveResolutionList() async {
-    final resolutionFetchResult =
-        await getResolutionListUsecase.call(NoParams());
+    final resolutionFetchResult = await getResolutionListUsecase(NoParams());
 
     final List<ResolutionModel> resolutionList = resolutionFetchResult.fold(
       (failure) => [],
