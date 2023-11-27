@@ -6,6 +6,8 @@ import 'package:go_router/go_router.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/features/effects/animation_sample_page.dart';
 import 'package:wehavit/features/features.dart';
+import 'package:wehavit/features/home/presentation/screens/home_screen.dart';
+import 'package:wehavit/features/late_writing/presentation/screen/late_writing_view.dart';
 import 'package:wehavit/features/live_writing/presentation/screens/live_writing_page.dart';
 import 'package:wehavit/features/live_writing_waiting/live_waiting_sample_view.dart';
 import 'package:wehavit/features/my_page/presentation/screens/add_resolution_screen.dart';
@@ -48,6 +50,18 @@ final routerProvider = Provider<GoRouter>(
     );
   },
 );
+
+@TypedGoRoute<HomeRoute>(path: HomeRoute.path)
+class HomeRoute extends GoRouteData {
+  const HomeRoute();
+
+  static const path = RouteLocation.home;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const HomeScreen();
+  }
+}
 
 @TypedGoRoute<SplashRoute>(path: SplashRoute.path)
 class SplashRoute extends GoRouteData {
@@ -194,6 +208,18 @@ class LiveWaitingSampleViewRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const LiveWaitingSampleView();
+  }
+}
+
+@TypedGoRoute<LateWritingViewRoute>(path: LateWritingViewRoute.path)
+class LateWritingViewRoute extends GoRouteData {
+  const LateWritingViewRoute();
+
+  static const path = RouteLocation.lateWritingView;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const LateWritingView();
   }
 }
 

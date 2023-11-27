@@ -7,7 +7,7 @@ import 'package:wehavit/features/friend_list/presentation/providers/friend_list_
 import 'package:wehavit/features/friend_list/presentation/widgets/add_friend_textfield_widget.dart';
 import 'package:wehavit/features/friend_list/presentation/widgets/friend_element_widget.dart';
 
-class FriendListScreen extends ConsumerWidget {
+class FriendListScreen extends ConsumerStatefulWidget {
   const FriendListScreen({super.key});
 
   static FriendListScreen builder(
@@ -17,9 +17,21 @@ class FriendListScreen extends ConsumerWidget {
       const FriendListScreen();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _FriendListScreenState();
+}
+
+class _FriendListScreenState extends ConsumerState<FriendListScreen> {
+  @override
+  Future<void> didChangeDependencies() async {
+    ref.read(friendListProvider.notifier).getFriendList();
+    super.didChangeDependencies();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     var currentUser = FirebaseAuth.instance.currentUser;
-    var vFriendListProvider = ref.watch(friendListProvider);
+    var friendList = ref.watch(friendListProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -49,7 +61,8 @@ class FriendListScreen extends ConsumerWidget {
                         CircleAvatar(
                           radius: 40,
                           foregroundImage: NetworkImage(
-                              currentUser?.photoURL ?? 'DEBUG_URL'),
+                            currentUser?.photoURL ?? 'DEBUG_URL',
+                          ),
                         ),
                         Container(
                           margin: const EdgeInsets.only(left: 8.0),
@@ -93,19 +106,16 @@ class FriendListScreen extends ConsumerWidget {
                 ),
               ],
             ),
-            vFriendListProvider.fold(
+            friendList.fold(
               (left) => null,
               (right) => Expanded(
                 child: ListView.builder(
-                  itemCount: right.length + 1,
+                  itemCount: right.length,
                   itemBuilder: (context, index) {
-                    if (index < right.length) {
-                      return FriendElementWidget(
-                        key: ValueKey(right[index].friendEmail),
-                        model: right[index],
-                      );
-                    } else {}
-                    return null;
+                    return FriendElementWidget(
+                      key: ValueKey(right[index].friendEmail),
+                      model: right[index],
+                    );
                   },
                 ),
               ),
