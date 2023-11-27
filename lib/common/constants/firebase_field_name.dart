@@ -19,6 +19,7 @@ class FirebaseResolutionFieldName {
   static const resolutionStartDate = 'startDate';
   static const resolutionPeriod = 'period';
   static const resolutionIsActive = 'isActive';
+  static const resolutionFanList = 'fan';
 }
 
 @immutable
