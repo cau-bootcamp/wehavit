@@ -16,7 +16,7 @@ Future<void> main() async {
       options: DefaultFirebaseOptions.currentPlatform,
     ),
   ]);
-  print(fcmSetting());
+  print(await fcmSetting());
 
   runApp(
     ProviderScope(
