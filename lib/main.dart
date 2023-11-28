@@ -15,9 +15,8 @@ Future<void> main() async {
     Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     ),
+    fcmSetting(),
   ]);
-  print(await fcmSetting());
-
   runApp(
     ProviderScope(
       observers: [Observers()],
