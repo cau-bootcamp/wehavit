@@ -10,6 +10,7 @@ class ResolutionModel {
     required this.oathStatement,
     required this.isDaySelectedList,
     required this.startDate,
+    required this.fanList,
   });
 
   ResolutionModel.fromMapData(
@@ -25,7 +26,8 @@ class ResolutionModel {
                 .toDate(),
         isActive = data[FirebaseResolutionFieldName.resolutionIsActive],
         oathStatement =
-            data[FirebaseResolutionFieldName.resolutionOathStatement];
+            data[FirebaseResolutionFieldName.resolutionOathStatement],
+        fanList = data[FirebaseResolutionFieldName.resolutionFanList];
 
   String resolutionId;
   String goalStatement;
@@ -34,6 +36,7 @@ class ResolutionModel {
   List<bool> isDaySelectedList;
   DateTime startDate;
   bool isActive;
+  List<String> fanList = [];
 
   ResolutionModel copyWith({
     List<bool>? isDaySelectedList,
@@ -43,6 +46,7 @@ class ResolutionModel {
     bool? isActive,
     DateTime? startDate,
     String? resolutionId,
+    List<String>? fanList,
   }) {
     return ResolutionModel(
       goalStatement: goalStatement ?? this.goalStatement,
@@ -52,6 +56,7 @@ class ResolutionModel {
       isActive: isActive ?? this.isActive,
       startDate: startDate ?? this.startDate,
       resolutionId: resolutionId ?? this.resolutionId,
+      fanList: fanList ?? this.fanList,
     );
   }
 }

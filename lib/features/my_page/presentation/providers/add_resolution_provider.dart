@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
+import 'package:wehavit/features/friend_list/domain/models/friend_model.dart';
 import 'package:wehavit/features/my_page/domain/models/add_resolution_model.dart';
 import 'package:wehavit/features/my_page/domain/models/resolution_model.dart';
 import 'package:wehavit/features/my_page/domain/usecases/upload_resolution_usecase.dart';
@@ -16,6 +17,10 @@ class AddResolutionNotifier extends StateNotifier<AddResolutionModel> {
   }
 
   late final UploadResolutionUseCase _uploadResolutionUsecase;
+
+  void changeFanList(List<FriendModel> newFanList) {
+    state = state.copyWith(fanList: newFanList);
+  }
 
   void changePeriodState(int day) {
     state = state.copyWith(
@@ -43,9 +48,9 @@ class AddResolutionNotifier extends StateNotifier<AddResolutionModel> {
       isDaySelectedList: state.isDaySelectedList,
       isActive: true,
       startDate: DateTime.now(),
+      fanList: state.fanList.map((e) => e.friendEmail).toList(),
       resolutionId: '',
     );
-
     return _uploadResolutionUsecase.call(newModel);
   }
 }
