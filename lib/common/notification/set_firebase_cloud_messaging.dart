@@ -92,7 +92,7 @@ Future<String?> setFirebaseCloudMessaging(BuildContext context) async {
     });
   } else if (DefaultFirebaseOptions.currentPlatform ==
       DefaultFirebaseOptions.ios) {
-    // TODO: 안드로이드에서의 알림 처리 방식 여기에 구현하기
+    // TODO: 안드로이드에서의 알림 처리 여기에 구현하기
 
     throw UnimplementedError();
   }
@@ -118,6 +118,7 @@ Future<void> setTerminatedStateMessageHandler(WidgetRef ref) async {
     }
   } else if (DefaultFirebaseOptions.currentPlatform ==
       DefaultFirebaseOptions.android) {
+    // TODO: 안드로이드에서의 앱 종료 시점의 알림 처리 여기에 구현하기
     // iOS의 코드가 안드로이드에서도 동일하게 적용 가능한 지 확인해봐야함!
   }
 }
