@@ -9,6 +9,7 @@ import 'package:wehavit/features/features.dart';
 import 'package:wehavit/features/home/presentation/screens/home_screen.dart';
 import 'package:wehavit/features/late_writing/presentation/screen/late_writing_view.dart';
 import 'package:wehavit/features/live_writing/presentation/screens/live_writing_page.dart';
+import 'package:wehavit/features/live_writing/presentation/screens/live_writing_view.dart';
 import 'package:wehavit/features/live_writing_waiting/live_waiting_sample_view.dart';
 import 'package:wehavit/features/my_page/presentation/screens/add_resolution_screen.dart';
 import 'package:wehavit/features/my_page/presentation/screens/my_page_screen.dart';
@@ -171,7 +172,7 @@ class LiveWritingRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const LiveWritingPage();
+    return const LiveWritingView();
   }
 }
 
