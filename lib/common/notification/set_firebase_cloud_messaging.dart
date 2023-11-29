@@ -66,8 +66,14 @@ Future<String?> setFirebaseCloudMessaging(BuildContext context) async {
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification?.android;
 
+      // 여기 부분에 코드를 작성하면
+      // 알림을 탭하지 않더라도, 알림을 받기만 하면 앱이 알림을 읽고 로직을 처리할 수 있음
+
+      // 아래 코드는 안드로이드의 로직으로 생각됨!
+      // 안드로이드 구현 시 참고하고, 필요없다면 삭제하기
+      // iOS 환경에서는 디버깅 테스트를 하며 한 번도 호출되지 않았음.
+      AndroidNotification? android = message.notification?.android;
       if (message.notification != null && android != null) {
         flutterLocalNotificationsPlugin.show(
           notification.hashCode,
@@ -84,27 +90,35 @@ Future<String?> setFirebaseCloudMessaging(BuildContext context) async {
         );
       }
     });
+  } else if (DefaultFirebaseOptions.currentPlatform ==
+      DefaultFirebaseOptions.ios) {
+    // TODO: 안드로이드에서의 알림 처리 방식 여기에 구현하기
 
-    // 실기기 테스트 시에 이 토큰 값을 활용해주면 됨.
-    String? firebaseToken = await messaging.getToken();
-    debugPrint('firebase token : $firebaseToken');
-
-    return firebaseToken;
+    throw UnimplementedError();
   }
 
-  throw UnimplementedError();
+  // 실기기 테스트 시에 이 토큰 값을 활용해주면 됨
+  String? firebaseToken = await FirebaseMessaging.instance.getToken();
+  debugPrint('firebase token : $firebaseToken');
+
+  return firebaseToken;
 }
 
 /// 앱이 종료상태일 때 알림을 눌러 앱에 진입한 경우에 대해 처리하는 로직
 ///
 Future<void> setTerminatedStateMessageHandler(WidgetRef ref) async {
-  RemoteMessage? initialMessage =
-      await FirebaseMessaging.instance.getInitialMessage();
-  if (initialMessage != null) {
-    if (initialMessage.data['goto'] == 'LiveWaitingView') {
-      final routerConfig = ref.watch(routerProvider);
-      routerConfig.push(RouteLocation.liveWaitingSampleView);
+  if (DefaultFirebaseOptions.currentPlatform == DefaultFirebaseOptions.ios) {
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+    if (initialMessage != null) {
+      if (initialMessage.data['goto'] == 'LiveWaitingView') {
+        final routerConfig = ref.watch(routerProvider);
+        routerConfig.push(RouteLocation.liveWaitingSampleView);
+      }
     }
+  } else if (DefaultFirebaseOptions.currentPlatform ==
+      DefaultFirebaseOptions.android) {
+    // iOS의 코드가 안드로이드에서도 동일하게 적용 가능한 지 확인해봐야함!
   }
 }
 
