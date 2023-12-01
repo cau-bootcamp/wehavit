@@ -20,8 +20,9 @@ class AppColors {
 
 class CustomColors {
   static const Color whBlack = Color(0xff2b2b2b);
-  static const Color whWhite = Color(0xffffffff);
-  static const Color whYellow = Color(0xffffb800);
+  static const Color whWhite = Color(0xffFFFFFF);
+  static const Color whSemiWhite = Color(0xffEEEEEE);
+  static const Color whYellow = Color(0xffFFB800);
   static const Color whYellowBright = Color(0xfffadf92);
   static const Color whYellowDark = Color(0xff8C6500);
 }

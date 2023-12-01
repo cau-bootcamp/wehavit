@@ -39,8 +39,8 @@ class _FriendListScreenState extends ConsumerState<FriendListScreen> {
         backgroundColor: CustomColors.whBlack,
         actions: [
           IconButton(
-            color: CustomColors.whBlack,
-            icon: const Icon(Icons.home, color: Colors.black54),
+            color: CustomColors.whWhite,
+            icon: const Icon(Icons.home, color: CustomColors.whSemiWhite),
             // 일단 임시로 검은색과 홈 아이콘으로 처리하였음.
             onPressed: () async {
               context.go(RouteLocation.home);
