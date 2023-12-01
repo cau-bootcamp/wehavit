@@ -1,8 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:wehavit/features/live_writing/presentation/widgets/live_writing_widget/friend_live_bubble_widget.dart';
 
-class LiveWritingView extends StatelessWidget {
+class LiveWritingView extends StatefulWidget {
   const LiveWritingView({super.key});
+
+  @override
+  State<LiveWritingView> createState() => _LiveWritingViewState();
+}
+
+class _LiveWritingViewState extends State<LiveWritingView> {
+  XFile? imageFile;
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +79,7 @@ class LiveWritingView extends StatelessWidget {
                     return Container(
                       color: Colors.grey.shade800,
                       width: constraints.maxWidth,
-                      height: constraints.maxWidth * 0.84,
+                      height: constraints.maxWidth * 0.90,
                       child: Container(
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -90,57 +100,108 @@ class LiveWritingView extends StatelessWidget {
                                   Text("도전 목표"),
                                 ],
                               ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10.0),
-                                child: Text("제목"),
+                              TextFormField(
+                                maxLines: 1,
+                                style: TextStyle(color: Colors.white),
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: "제목",
+                                  hintStyle: TextStyle(color: Colors.white),
+                                ),
                               ),
                               Divider(
                                 color: Colors.amber,
                                 thickness: 2.0,
                               ),
                               Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Expanded(
                                       child: TextFormField(
-                                    maxLines: 5,
+                                    maxLines: 6,
                                     style: TextStyle(color: Colors.white),
                                     decoration: InputDecoration(
                                       border: InputBorder.none,
+                                      hintText: '본문',
+                                      hintStyle: TextStyle(color: Colors.white),
                                     ),
                                   )),
                                   SizedBox(
                                     width: 8,
                                   ),
-                                  Visibility(
-                                      child: Container(
+                                  Container(
                                     width: 151,
-                                    height: 104,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                      Radius.circular(10.0),
-                                    )),
-                                    child: Image(
-                                        fit: BoxFit.cover,
-                                        image: NetworkImage(
-                                            'https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202306/25/488f9638-800c-4bac-ad65-82877fbff79b.jpg')),
-                                  )),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                            top: 14.0,
+                                            bottom: 8.0,
+                                          ),
+                                          child: Container(
+                                            width: 151,
+                                            height: 104,
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                              Radius.circular(10.0),
+                                            )),
+                                            child: Visibility(
+                                              visible: imageFile != null,
+                                              child: Image(
+                                                fit: BoxFit.cover,
+                                                image: FileImage(
+                                                  File(imageFile?.path ?? ""),
+                                                ),
+                                              ),
+                                              replacement: GestureDetector(
+                                                onTapUp: (details) async {
+                                                  final pickedFile =
+                                                      await ImagePicker()
+                                                          .pickImage(
+                                                              source:
+                                                                  ImageSource
+                                                                      .gallery);
+                                                  if (pickedFile != null) {
+                                                    setState(() {
+                                                      imageFile = pickedFile;
+                                                    });
+                                                  } else {
+                                                    debugPrint('이미지 선택안함');
+                                                  }
+                                                },
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                  child: Center(
+                                                    child: Text(
+                                                        "Tap To Add Image"),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            ElevatedButton(
+                                                onPressed: () {},
+                                                child: Text("휴식")),
+                                            ElevatedButton(
+                                                onPressed: () {},
+                                                child: Text("완료")),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Container(),
-                                  ),
-                                  ElevatedButton(
-                                      onPressed: () {}, child: Text("휴식")),
-                                  SizedBox(
-                                    width: 12,
-                                  ),
-                                  ElevatedButton(
-                                      onPressed: () {}, child: Text("완료")),
-                                ],
-                              )
                             ],
                           ),
                         ),
