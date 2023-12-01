@@ -11,10 +11,11 @@ class AddFriendTextFieldWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(addFriendProvider);
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16),
       child: Container(
+        height: 48,
         decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(36)),
+          borderRadius: BorderRadius.all(Radius.circular(12)),
           color: CustomColors.whYellowDark,
         ),
         child: Padding(
@@ -28,19 +29,26 @@ class AddFriendTextFieldWidget extends ConsumerWidget {
                 ),
               ),
               Expanded(
-                child: TextField(
+                child: TextFormField(
                   // 추후에 onChanged가 아닌 것으로 바꿀 예정
                   onChanged: (value) {
                     ref.read(addFriendProvider.notifier).setFriendEmail(value);
                   },
                   decoration: const InputDecoration(
-                    hintText: 'Enter Friend ID',
+                    icon: Icon(Icons.search),
+                    iconColor: CustomColors.whWhite,
+                    hintText: '친구 이메일 검색',
+                    hintStyle: TextStyle(
+                      color: CustomColors.whWhite,
+                      fontSize: 16,
+                    ),
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 8, horizontal: -8),
+                    border: InputBorder.none,
                   ),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.only(
-                  left: 16.0,
+                  style: const TextStyle(
+                    color: CustomColors.whWhite,
+                  ),
                 ),
               ),
               ElevatedButton(
@@ -52,17 +60,19 @@ class AddFriendTextFieldWidget extends ConsumerWidget {
                             'DEBUG : UPLOAD FAILED - ${failure.message}');
                       }, (success) {
                         ref.read(friendListProvider.notifier).getFriendList();
-                        //ref.refresh(friendListProvider.notifier).getFriendList();
                       });
                     },
                   );
                 },
-                child: const Text('+'),
-              ),
-              Container(
-                padding: const EdgeInsets.only(
-                  left: 8.0,
+                style: const ButtonStyle(
+                  foregroundColor:
+                      MaterialStatePropertyAll<Color>(CustomColors.whWhite),
+                  backgroundColor: MaterialStatePropertyAll<Color>(
+                    CustomColors.whYellowDark,
+                  ),
+                  shape: MaterialStatePropertyAll<CircleBorder>(CircleBorder()),
                 ),
+                child: const Text('+'),
               ),
             ],
           ),

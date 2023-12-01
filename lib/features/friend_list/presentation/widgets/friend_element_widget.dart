@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wehavit/common/common.dart';
 import 'package:wehavit/features/friend_list/domain/models/friend_model.dart';
 
 class FriendElementWidget extends StatefulWidget {
@@ -17,11 +18,11 @@ class _FriendElementWidgetState extends State<FriendElementWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(4.0),
+      padding: const EdgeInsets.only(left: 12.0, top: 8.0, bottom: 8.0),
       child: Row(
         children: [
           Container(
-            margin: const EdgeInsets.only(left: 4.0, right: 10.0),
+            margin: const EdgeInsets.only(left: 4.0, right: 16.0),
             child: CircleAvatar(
               radius: 30,
               foregroundImage: NetworkImage(friendImageUrl),
@@ -31,7 +32,13 @@ class _FriendElementWidgetState extends State<FriendElementWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(friendName),
+              Text(
+                friendName,
+                style: const TextStyle(
+                  color: CustomColors.whWhite,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ],
           ),
         ],
