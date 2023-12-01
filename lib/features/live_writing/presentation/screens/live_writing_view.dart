@@ -2,7 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:wehavit/features/live_writing/presentation/widgets/live_writing_widget/friend_live_bubble_widget.dart';
+import 'package:wehavit/features/live_writing/presentation/widgets/live_writing_widget/friend_live_post_widget.dart';
+import 'package:wehavit/features/live_writing/presentation/widgets/live_writing_widget/friend_live_writing.dart';
 
 class LiveWritingView extends StatefulWidget {
   const LiveWritingView({super.key});
@@ -18,60 +19,52 @@ class _LiveWritingViewState extends State<LiveWritingView> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      // appBar: AppBar(
-      //   backgroundColor: Colors.transparent,
-      //   foregroundColor: Colors.black,
-      //   leading: IconButton(
-      //     onPressed: () {
-      //       Navigator.of(context).pop();
-      //     },
-      //     icon: Icon(Icons.abc),
-      //   ),
-      //   elevation: 0,
-      // ),
       body: SafeArea(
         minimum: const EdgeInsets.all(16.0),
         child: Container(
           child: Stack(
             children: [
-              IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back_ios)),
-              LayoutBuilder(builder: (context, constraints) {
-                return Column(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.only(top: 34, bottom: 34),
-                      width: double.infinity,
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              "남은 시간",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.w400),
-                            ),
-                            Text(
-                              "00:07",
-                              style: TextStyle(
-                                  fontSize: 30, fontWeight: FontWeight.bold),
-                            ),
-                          ]),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  return SingleChildScrollView(
+                    keyboardDismissBehavior:
+                        ScrollViewKeyboardDismissBehavior.onDrag,
+                    padding: EdgeInsets.only(
+                      bottom: constraints.maxWidth * 0.84,
+                      top: 120,
                     ),
-                    SingleChildScrollView(
-                      padding:
-                          EdgeInsets.only(bottom: constraints.maxWidth * 0.84),
-                      child: Column(
-                        children: List<Widget>.generate(
-                          4,
-                          (index) => Padding(
-                            padding: EdgeInsets.symmetric(vertical: 12.0),
-                            child: FriendLivePostWidget(),
+                    child: Column(
+                      children: List<Widget>.generate(
+                        4,
+                        (index) => Padding(
+                          padding: EdgeInsets.symmetric(vertical: 12.0),
+                          child: FriendLivePostWidget(
+                            userEmail: 'moktak072@gmail.com',
                           ),
                         ),
                       ),
                     ),
-                  ],
-                );
-              }),
+                  );
+                },
+              ),
+              Container(
+                padding: EdgeInsets.only(top: 34, bottom: 34),
+                width: double.infinity,
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "남은 시간",
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w400),
+                      ),
+                      Text(
+                        "00:07",
+                        style: TextStyle(
+                            fontSize: 30, fontWeight: FontWeight.bold),
+                      ),
+                    ]),
+              ),
               Align(
                 alignment: const Alignment(1, 1),
                 child: LayoutBuilder(
@@ -210,6 +203,7 @@ class _LiveWritingViewState extends State<LiveWritingView> {
                   },
                 ),
               ),
+              IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back_ios)),
             ],
           ),
         ),

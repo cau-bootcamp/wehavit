@@ -1,75 +1,96 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wehavit/features/live_writing/presentation/model/live_writing_state.dart';
-import 'package:wehavit/features/live_writing/presentation/widgets/live_writing_widget/friend_live_post_widget.dart';
-import 'package:wehavit/features/live_writing/presentation/widgets/live_writing_widget/friend_waiting_bubble_widget.dart';
+import 'package:wehavit/features/live_writing/presentation/widgets/live_writing_widget/friend_live_bubble_components.dart';
 
-class FriendLivePostWidget extends StatefulWidget {
-  const FriendLivePostWidget({super.key});
+class FriendLiveBubbleWidget extends StatefulHookConsumerWidget {
+  const FriendLiveBubbleWidget({
+    super.key,
+    required this.userName,
+    required this.postTitle,
+    required this.bubbleState,
+    required this.postContent,
+    required this.postImage,
+  });
+
+  final String userName;
+  final String postTitle;
+  final LiveBubbleState bubbleState;
+  final String postContent;
+  final ImageProvider<Object> postImage;
 
   @override
-  State<FriendLivePostWidget> createState() => _FriendLivePostWidgetState();
+  ConsumerState<FriendLiveBubbleWidget> createState() =>
+      _FriendLivePostBubbleState();
 }
 
-class _FriendLivePostWidgetState extends State<FriendLivePostWidget> {
-  LiveWritingState writingState = LiveWritingState.ready;
-  LiveBubbleState bubbleState = LiveBubbleState.showingDefault;
-
-  final double profileImageRadius = 23;
-  final String userName = 'real_buddah';
-  final String postTitle = '하루에 한 번 웃기 2일차';
-  final String postContent =
-      '사리자여... 몇번을 말해야 알아듣느냐... 오늘도 무사히 세번을 참아 냈다. 아재아재 바라아제 바라승아제 모지사바하';
-  final ImageProvider userImage = const NetworkImage(
-    'https://health.chosun.com/site/data/img_dir/2023/07/17/2023071701753_0.jpg',
-  );
-  final ImageProvider postImage = const NetworkImage(
-    'https://health.chosun.com/site/data/img_dir/2023/07/17/2023071701753_0.jpg',
-  );
-
+class _FriendLivePostBubbleState extends ConsumerState<FriendLiveBubbleWidget> {
   @override
   Widget build(BuildContext context) {
-    return Visibility(
-      visible: writingState != LiveWritingState.writing,
-      replacement: WaitingStateUserBubble(userImage: userImage),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: CircleAvatar(
-              radius: profileImageRadius,
-              foregroundImage: userImage,
+    return Stack(
+      children: [
+        Container(
+          decoration: const BoxDecoration(
+            color: Colors.blue,
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.0),
             ),
           ),
-          Expanded(
-            child: SizedBox(
-              height: bubbleState == LiveBubbleState.showingDefault ? 47 : null,
-              child: LayoutBuilder(
-                builder: (BuildContext context, BoxConstraints constraints) {
-                  return GestureDetector(
-                    onTapUp: (details) {
-                      setState(() {
-                        bubbleState =
-                            bubbleState == LiveBubbleState.showingDefault
-                                ? LiveBubbleState.showingDetail
-                                : LiveBubbleState.showingDefault;
-                      });
-                    },
-                    child: FriendLivePostBubble(
-                      userName: userName,
-                      postTitle: postTitle,
-                      bubbleState: bubbleState,
-                      postContent: postContent,
-                      postImage: postImage,
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: Container(
+                        constraints: const BoxConstraints(minWidth: 120),
+                        child: Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              PostTitleWidget(userName: widget.userName),
+                              PostContentWidget(postTitle: widget.postTitle),
+                              PostImageWidgetForDefault(
+                                bubbleState: widget.bubbleState,
+                                postContent: widget.postContent,
+                                postImage: widget.postImage,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
-                  );
-                },
-              ),
+                    PostWidgetImageForDetail(
+                      bubbleState: widget.bubbleState,
+                      postImage: widget.postImage,
+                    ),
+                  ],
+                ),
+                // TODO : 반응 남기기 기능 개발
+                Visibility(
+                  visible: widget.bubbleState == LiveBubbleState.showingDetail,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: List<Widget>.generate(
+                      6,
+                      (index) => const Placeholder(
+                        fallbackWidth: 40,
+                        fallbackHeight: 40,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
