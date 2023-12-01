@@ -56,7 +56,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCE5n-Nv6H8SFri1wJBMOeLZ_AXEFq_-Y4',
-    appId: '1:764897522660:android:8591da5b662a75acb1cdf1',
+    appId: '1:764897522660:android:39b6b251ac1924feb1cdf1',
     messagingSenderId: '764897522660',
     projectId: 'we-havit-be',
     databaseURL: 'https://we-havit-be-default-rtdb.asia-southeast1.firebasedatabase.app',
@@ -65,25 +65,25 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyCpEgnUEQs27KjI8pJaypqaTlYzmRkhIa4',
-    appId: '1:764897522660:ios:538d4f2955a97d8bb1cdf1',
+    appId: '1:764897522660:ios:b0a95f48091a963db1cdf1',
     messagingSenderId: '764897522660',
     projectId: 'we-havit-be',
     databaseURL: 'https://we-havit-be-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'we-havit-be.appspot.com',
     androidClientId: '764897522660-88jtfk0rhihjcduu4dfjqm0a0nuqdlei.apps.googleusercontent.com',
-    iosClientId: '764897522660-sjvso167hu6518he4g11332qng3ajc3f.apps.googleusercontent.com',
-    iosBundleId: 'com.example.wehavit',
+    iosClientId: '764897522660-njq584kfil0otf92p4ujml8b6b5pegj9.apps.googleusercontent.com',
+    iosBundleId: 'com.bootcamp.wehavit',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyCpEgnUEQs27KjI8pJaypqaTlYzmRkhIa4',
-    appId: '1:764897522660:ios:3f699b0d7e039c91b1cdf1',
+    appId: '1:764897522660:ios:48a083e63cc55893b1cdf1',
     messagingSenderId: '764897522660',
     projectId: 'we-havit-be',
     databaseURL: 'https://we-havit-be-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'we-havit-be.appspot.com',
     androidClientId: '764897522660-88jtfk0rhihjcduu4dfjqm0a0nuqdlei.apps.googleusercontent.com',
-    iosClientId: '764897522660-24o2k5p5lcbjldg5t57r7jt6djh4tvhc.apps.googleusercontent.com',
-    iosBundleId: 'com.example.wehavit.RunnerTests',
+    iosClientId: '764897522660-ollgi4mmng0b687sussgeu9hpjd4891d.apps.googleusercontent.com',
+    iosBundleId: 'com.bootcamp.wehavit.RunnerTests',
   );
 }

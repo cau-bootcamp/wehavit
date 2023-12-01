@@ -13,7 +13,7 @@ class RouteLocation {
   static const String addResolution = '/addResolution';
   static const String testPage = '/testPage';
   static const String waitingRoom = '/waitingRoom';
-  static const String liveWriting = '$waitingRoom/liveWriting';
+  static const String liveWriting = '/liveWriting';
   static const String swipeView = '/swipeView';
   static const String animationSampleView = '/animationSampleView';
   static const String liveWaitingSampleView = '/liveWaitingSampleView';

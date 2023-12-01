@@ -1,4 +1,4 @@
-package com.example.wehavit
+package com.bootcamp.wehavit
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -2,8 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>LSApplicationCategoryType</key>
-	<string></string>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -22,10 +22,36 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.764897522660-njq584kfil0otf92p4ujml8b6b5pegj9</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>위해빗에서 사진으로 반응을 주고받기 위해 카메라를 사용하려 합니다.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>위해빗에서 사진으로 반응을 주고받기 위해 마이크를 사용하려 합니다.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>위해빗에서 사진첩에 접근해 인증에 사용할 사진들을 가져오려고 합니다.</string>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -43,26 +69,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>com.googleusercontent.apps.764897522660-sjvso167hu6518he4g11332qng3ajc3f</string>
-			</array>
-		</dict>
-	</array>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>위해빗에서 사진첩에 접근해 인증에 사용할 사진들을 가져오려고 합니다.</string>
-	<key>NSCameraUsageDescription</key>
-	<string>위해빗에서 사진으로 반응을 주고받기 위해 카메라를 사용하려 합니다.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>위해빗에서 사진으로 반응을 주고받기 위해 마이크를 사용하려 합니다.</string>
 </dict>
 </plist>

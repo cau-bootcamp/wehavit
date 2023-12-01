@@ -178,7 +178,7 @@ extension $FriendListRouteExtension on FriendListRoute {
 }
 
 RouteBase get $liveWritingRoute => GoRouteData.$route(
-      path: '/waitingRoom/liveWriting',
+      path: '/liveWriting',
       factory: $LiveWritingRouteExtension._fromState,
     );
 
@@ -187,7 +187,7 @@ extension $LiveWritingRouteExtension on LiveWritingRoute {
       const LiveWritingRoute();
 
   String get location => GoRouteData.$location(
-        '/waitingRoom/liveWriting',
+        '/liveWriting',
       );
 
   void go(BuildContext context) => context.go(location);
