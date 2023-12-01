@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:wehavit/common/common.dart';
 import 'package:wehavit/features/home/domain/models/confirm_post_model.dart';
 
 class ConfirmPostWidget extends StatefulWidget {
@@ -31,11 +32,12 @@ class _ConfirmPostWidgetState extends State<ConfirmPostWidget> {
 //    print(postAt);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      padding: const EdgeInsets.all(4),
       child: Container(
+        padding: const EdgeInsets.only(top: 8),
         decoration: BoxDecoration(
-          color: Colors.black87,
-          borderRadius: BorderRadius.circular(25),
+          color: CustomColors.whDarkBlack,
+          borderRadius: BorderRadius.circular(24),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
@@ -48,7 +50,7 @@ class _ConfirmPostWidgetState extends State<ConfirmPostWidget> {
                   Row(
                     children: [
                       CircleAvatar(
-                        backgroundColor: Colors.grey,
+                        backgroundColor: CustomColors.whSemiBlack,
                         child: CircleAvatar(
                           radius: 30,
                           foregroundImage: NetworkImage(userImageUrl),
@@ -58,7 +60,7 @@ class _ConfirmPostWidgetState extends State<ConfirmPostWidget> {
                       Text(
                         userName,
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: CustomColors.whSemiWhite,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -74,12 +76,12 @@ class _ConfirmPostWidgetState extends State<ConfirmPostWidget> {
                           vertical: 2,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.purple,
+                          color: CustomColors.whYellowDark,
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
                           resolutionGoalStatement,
-                          style: const TextStyle(color: Colors.white),
+                          style: const TextStyle(color: CustomColors.whWhite),
                         ),
                       ),
                     ],
@@ -90,7 +92,7 @@ class _ConfirmPostWidgetState extends State<ConfirmPostWidget> {
               Text(
                 title,
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: CustomColors.whSemiWhite,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -131,20 +133,24 @@ class _ConfirmPostWidgetState extends State<ConfirmPostWidget> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.message, color: Colors.grey),
+                    icon: const Icon(
+                      Icons.message,
+                      color: CustomColors.whSemiWhite,
+                    ),
                     onPressed: () {},
                   ),
                   IconButton(
-                    icon: const Icon(Icons.send, color: Colors.grey),
+                    icon:
+                        const Icon(Icons.send, color: CustomColors.whSemiWhite),
                     onPressed: () {},
                   ),
                   IconButton(
-                    icon: const Icon(Icons.flash_on, color: Colors.yellow),
+                    icon: const Icon(Icons.flash_on,
+                        color: CustomColors.whYellow),
                     onPressed: () {},
                   ),
                 ],
               ),
-              Divider(color: Colors.grey[700]),
             ],
           ),
         ),

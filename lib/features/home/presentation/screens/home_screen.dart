@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/features/home/presentation/widget/confirm_post_widget.dart';
+
 import '../provider/conform_post_list_provider.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -65,29 +66,36 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     var confirmPostList = ref.watch(confirmPostListProvider);
 
     return Scaffold(
-      backgroundColor: Colors.grey,
+      backgroundColor: CustomColors.whBlack,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(128),
         child: Column(
           children: [
             AppBar(
-              backgroundColor: Colors.black87,
+              foregroundColor: CustomColors.whBlack,
+              backgroundColor: CustomColors.whBlack,
               title: Text(
                 DateFormat(dateFormat).format(DateTime.now()),
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: CustomColors.whSemiWhite,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               actions: [
                 IconButton(
-                  icon: const Icon(Icons.group, color: Colors.white),
+                  icon: const Icon(
+                    Icons.group,
+                    color: CustomColors.whSemiWhite,
+                  ),
                   onPressed: () async {
                     context.go(RouteLocation.friendList);
                   },
                 ),
                 IconButton(
-                  icon: const Icon(Icons.notifications, color: Colors.white),
+                  icon: const Icon(
+                    Icons.notifications,
+                    color: CustomColors.whSemiWhite,
+                  ),
                   onPressed: () async {
                     // 알림 센터 뷰
                   },
@@ -96,17 +104,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
             Container(
               decoration: const BoxDecoration(
-                color: Colors.black87,
+                color: CustomColors.whBlack,
               ),
               padding: const EdgeInsets.symmetric(horizontal: 10),
               height: 70,
               child: ListView.builder(
+                padding: const EdgeInsets.only(left: 4, right: 4),
                 controller: _scrollController,
                 scrollDirection: Axis.horizontal,
                 itemCount: dates.length,
                 itemBuilder: (context, index) {
                   return Container(
-                    padding: const EdgeInsets.all(4.0),
+                    padding: const EdgeInsets.all(2),
                     child: TextButton(
                       onPressed: () async {
                         // 버튼을 누르면 selectedIndex 가 변경되고, provider를 통해 해당
@@ -119,19 +128,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             .getConfirmPostList(selectedIndex);
                       },
                       style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 18), // 패딩 조절
+                        minimumSize: const Size(0, 0), // 최소 크기 설정
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(40), // 모서리 둥글게
+                        ),
                         // Change the background color to indicate selection
                         backgroundColor: selectedIndex == index
-                            ? Colors.orange
-                            : Colors.grey,
+                            ? CustomColors.whYellow
+                            : CustomColors.whSemiBlack,
                       ),
                       child: Align(
                         child: Text(
                           '${dates[index].$1}\n${dates[index].$2}',
                           style: TextStyle(
                             fontSize: 12,
+                            fontWeight: FontWeight.bold,
                             color: selectedIndex == index
-                                ? Colors.black
-                                : Colors.black,
+                                ? CustomColors.whSemiBlack
+                                : CustomColors.whSemiWhite,
                           ),
                         ),
                       ),
@@ -144,8 +160,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
       ),
       body: Container(
+        padding: const EdgeInsets.only(top: 4),
         decoration: const BoxDecoration(
-          color: Colors.black87,
+          color: CustomColors.whBlack,
         ),
         child: Column(
           children: [
