@@ -81,7 +81,10 @@ class _ConfirmPostWidgetState extends State<ConfirmPostWidget> {
                         ),
                         child: Text(
                           resolutionGoalStatement,
-                          style: const TextStyle(color: CustomColors.whWhite),
+                          style: const TextStyle(
+                            color: CustomColors.whWhite,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ],
@@ -132,20 +135,29 @@ class _ConfirmPostWidgetState extends State<ConfirmPostWidget> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  Expanded(
+                    child: TextFormField(
+                      decoration: const InputDecoration(
+                        fillColor: Colors.white,
+                        filled: true,
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () async {},
+                    icon: const Icon(Icons.send),
+                  ),
                   IconButton(
                     icon: const Icon(
-                      Icons.message,
-                      color: CustomColors.whSemiWhite,
+                      Icons.emoji_emotions,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      // 기능 연결
+                    },
                   ),
                   IconButton(
-                    icon:
-                        const Icon(Icons.send, color: CustomColors.whSemiWhite),
-                    onPressed: () {},
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.flash_on,
+                    icon: const Icon(Icons.camera_alt,
                         color: CustomColors.whYellow),
                     onPressed: () {},
                   ),
