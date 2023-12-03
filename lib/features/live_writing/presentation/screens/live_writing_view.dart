@@ -1,15 +1,21 @@
 import 'dart:io';
 
+import 'package:carousel_slider/carousel_controller.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wehavit/common/errors/failure.dart';
+import 'package:wehavit/common/models/user_model/user_model.dart';
+import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/features/effects/emoji_firework_animation/emoji_firework_manager.dart';
 import 'package:wehavit/features/live_writing/live_writing.dart';
 import 'package:wehavit/features/live_writing/presentation/widgets/live_writing_widget/friend_live_post_widget.dart';
 import 'package:wehavit/features/my_page/domain/models/resolution_model.dart';
 import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';
+import 'package:wehavit/features/swipe_view/domain/repository/user_model_fetch_repository_provider.dart';
 
 class LiveWritingView extends StatefulHookConsumerWidget {
   const LiveWritingView({super.key});
@@ -22,6 +28,9 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
   XFile? imageFile;
   ValueNotifier<bool> isSubmitted = ValueNotifier(false);
   late List<ResolutionModel> resolutionModelList;
+
+  int _current = 0;
+  final CarouselController _controller = CarouselController();
 
   Future<List<String>> getVisibleFriends(WidgetRef ref) {
     return ref
@@ -84,7 +93,7 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
                         keyboardDismissBehavior:
                             ScrollViewKeyboardDismissBehavior.onDrag,
                         padding: EdgeInsets.only(
-                          bottom: constraints.maxWidth * 0.90,
+                          bottom: 350,
                           top: 120,
                         ),
                         child: Column(
@@ -108,12 +117,12 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            "남은 시간",
+                            '남은 시간',
                             style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.w400),
                           ),
                           Text(
-                            "00:07",
+                            '00:07',
                             style: TextStyle(
                                 fontSize: 30, fontWeight: FontWeight.bold),
                           ),
@@ -123,7 +132,6 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
                     alignment: Alignment.bottomCenter,
                     child: IgnorePointer(
                       child: Container(
-                        color: Colors.blue,
                         width: 10,
                         height: 10,
                         child: Stack(
@@ -132,32 +140,6 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
                         ),
                       ),
                     ),
-                  ),
-                  activeResolutionList.when(
-                    data: (fetchedActiveResolutionList) {
-                      // load first goal statement
-                      fetchedActiveResolutionList.fold(
-                        (error) => debugPrint(
-                            'Error, when fetching active resolution list: $error'),
-                        (resolutionList) async {
-                          if (resolutionList.isNotEmpty) {
-                            // selectedResolutionGoal.value =
-                            //     resolutionList.first.goalStatement;
-                            resolutionModelList = resolutionList;
-                          } else {
-                            //
-                          }
-                        },
-                      );
-
-                      return MyLiveWritingWidget(
-                        resolutionModel: resolutionModelList.first,
-                      );
-                    },
-                    loading: () =>
-                        const Center(child: CircularProgressIndicator()),
-                    error: (error, stackTrace) =>
-                        Center(child: Text(error.toString())),
                   ),
                   IconButton(
                     onPressed: () {
@@ -170,6 +152,83 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
                 ],
               ),
             ),
+          ),
+          activeResolutionList.when(
+            data: (fetchedActiveResolutionList) {
+              // load first goal statement
+              fetchedActiveResolutionList.fold(
+                (error) => debugPrint(
+                    'Error, when fetching active resolution list: $error'),
+                (resolutionList) async {
+                  if (resolutionList.isNotEmpty) {
+                    // selectedResolutionGoal.value =
+                    //     resolutionList.first.goalStatement;
+                    resolutionModelList = resolutionList;
+                  } else {
+                    //
+                  }
+                },
+              );
+
+              List<Widget> writingCellList = resolutionModelList.map(
+                (model) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: MyLiveWritingWidget(
+                      resolutionModel: model,
+                    ),
+                  );
+                },
+              ).toList();
+
+              return Align(
+                alignment: Alignment.bottomCenter,
+                child: Column(children: [
+                  Expanded(
+                    child: Container(),
+                  ),
+                  CarouselSlider(
+                    items: writingCellList,
+                    carouselController: _controller,
+                    options: CarouselOptions(
+                        height: 330,
+                        viewportFraction: 0.9,
+                        // enlargeCenterPage: true,
+                        onPageChanged: (index, reason) {
+                          setState(() {
+                            _current = index;
+                          });
+                        }),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: writingCellList.asMap().entries.map((entry) {
+                      return GestureDetector(
+                        onTap: () => _controller.animateToPage(entry.key),
+                        child: Container(
+                          width: 12.0,
+                          height: 12.0,
+                          margin: EdgeInsets.symmetric(
+                              vertical: 8.0, horizontal: 4.0),
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: (Theme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? Colors.white
+                                      : Colors.black)
+                                  .withOpacity(
+                                _current == entry.key ? 0.9 : 0.4,
+                              )),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ]),
+              );
+              // return
+            },
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (error, stackTrace) => Center(child: Text(error.toString())),
           ),
         ],
       ),
@@ -193,7 +252,16 @@ class MyLiveWritingWidget extends StatefulHookConsumerWidget {
 class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
   final _confirmPostFormKey = GlobalKey<FormState>();
   bool isSubmitted = false;
+  late EitherFuture<UserModel> myUserModel;
   XFile? imageFile;
+
+  @override
+  Future<void> didChangeDependencies() async {
+    super.didChangeDependencies();
+    myUserModel = ref
+        .read(userModelFetchRepositoryProvider)
+        .fetchUserModelFromId(FirebaseAuth.instance.currentUser!.uid);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -225,7 +293,7 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
           return Container(
             color: Colors.grey.shade800,
             width: constraints.maxWidth,
-            height: constraints.maxWidth * 0.90,
+            height: 320,
             child: Container(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -234,12 +302,31 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
                   children: [
                     Row(
                       children: [
-                        CircleAvatar(
-                          radius: 32,
-                        ),
+                        FutureBuilder(
+                            future: myUserModel,
+                            builder: (context, snapshot) {
+                              Widget subwidget;
+                              if (snapshot.hasData) {
+                                subwidget = snapshot.data!.fold(
+                                  (l) => Container(),
+                                  (r) => CircleAvatar(
+                                    // radius: 32,
+                                    foregroundImage: NetworkImage(r.imageUrl),
+                                  ),
+                                );
+                              } else if (snapshot.hasError) {
+                                subwidget = Placeholder();
+                              } else {
+                                subwidget = CircularProgressIndicator();
+                              }
+                              return Container(
+                                  width: 64, height: 64, child: subwidget);
+                            }),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Text("Name"),
+                          child: Text(
+                            FirebaseAuth.instance.currentUser!.displayName!,
+                          ),
                         ),
                         Expanded(child: Container()),
                         Text(widget.resolutionModel.goalStatement),
@@ -251,7 +338,7 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
                       style: TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: "제목",
+                        hintText: '제목',
                         hintStyle: TextStyle(color: Colors.white),
                       ),
                     ),
@@ -307,12 +394,6 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
                                     },
                                     child: Visibility(
                                       visible: imageFile != null,
-                                      child: Image(
-                                        fit: BoxFit.cover,
-                                        image: FileImage(
-                                          File(imageFile?.path ?? ""),
-                                        ),
-                                      ),
                                       replacement: Container(
                                         decoration: BoxDecoration(
                                           border: Border.all(
@@ -320,7 +401,13 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
                                           ),
                                         ),
                                         child: Center(
-                                          child: Text("Tap To Add Image"),
+                                          child: Text('Tap To Add Image'),
+                                        ),
+                                      ),
+                                      child: Image(
+                                        fit: BoxFit.cover,
+                                        image: FileImage(
+                                          File(imageFile?.path ?? ''),
                                         ),
                                       ),
                                     ),
@@ -332,7 +419,7 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   ElevatedButton(
-                                      onPressed: () {}, child: Text("휴식")),
+                                      onPressed: () {}, child: Text('휴식')),
                                   ElevatedButton(
                                     onPressed: () async {
                                       isSubmitted = true;
