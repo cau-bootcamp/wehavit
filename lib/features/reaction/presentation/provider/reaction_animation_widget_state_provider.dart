@@ -52,7 +52,10 @@ class ReactionAnimationWidgetManager extends StateNotifier<void> {
           reactionGroupModelList[index].textReactionModel = reaction;
           break;
         case ReactionType.emoji:
-          reactionGroupModelList[index].emojiReacionModelList.add(reaction);
+          if (reactionGroupModelList[index].emojiReacionModelList == null) {
+            reactionGroupModelList[index].emojiReacionModelList = [];
+          }
+          reactionGroupModelList[index].emojiReacionModelList!.add(reaction);
           break;
         case ReactionType.instantPhoto:
           reactionGroupModelList[index].imageReacionModel = reaction;
@@ -70,7 +73,7 @@ class ReactionGroupModel {
   });
 
   String complimenterUid;
-  List<ReactionModel> emojiReacionModelList = [];
+  List<ReactionModel>? emojiReacionModelList;
   ReactionModel? imageReacionModel;
   ReactionModel? textReactionModel;
 }

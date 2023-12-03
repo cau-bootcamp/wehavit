@@ -38,7 +38,7 @@ class ReactionDatasourceImpl implements ReactionDatasource {
 
       FirebaseFirestore.instance
           .collection(
-        '${FirebaseCollectionName.confirmPosts}/_$targetConfirmPostId/${FirebaseCollectionName.encourages}',
+        '${FirebaseCollectionName.confirmPosts}/$targetConfirmPostId/${FirebaseCollectionName.encourages}',
       )
           .add(
         {
@@ -52,7 +52,6 @@ class ReactionDatasourceImpl implements ReactionDatasource {
           FirebaseReactionFieldName.hasRead: false,
         },
       );
-
       return Future(() => right(true));
     } on Exception {
       debugPrint('DEBUG : Error on sendReactionToTargetConfirmPost Function');
@@ -69,8 +68,10 @@ class ReactionDatasourceImpl implements ReactionDatasource {
     try {
       String storagePath =
           '$confirmPostid/_${FirebaseAuth.instance.currentUser!.uid}_${DateTime.now().toIso8601String()}';
-      await FirebaseStorage.instance.ref(storagePath).putFile(File(filePath));
-      return Future(() => right(storagePath));
+      final ref = FirebaseStorage.instance.ref(storagePath);
+
+      await ref.putFile(File(filePath));
+      return Future(() async => right(await ref.getDownloadURL()));
     } on Exception catch (e) {
       return Future(() => left(Failure(e.toString())));
     }
