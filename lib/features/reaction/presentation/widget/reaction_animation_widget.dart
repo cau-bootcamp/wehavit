@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/features/effects/effects.dart';
 import 'package:wehavit/features/reaction/presentation/provider/reaction_animation_widget_state_provider.dart';
 import 'package:wehavit/features/swipe_view/domain/usecase/swipe_view_usecase.dart';
@@ -128,10 +127,12 @@ class _ReactionAnimationWidgetState
     String message,
     String userImageUrl,
   ) {
-    emojiFireWorkManager.addFireworkWidget(
-      offset: offset,
-      emojiReactionCountList: emojiReactionCountList,
-    );
+    if (emojiReactionCountList.isNotEmpty) {
+      emojiFireWorkManager.addFireworkWidget(
+        offset: offset,
+        emojiReactionCountList: emojiReactionCountList,
+      );
+    }
 
     _textBubbleAnimationManager.addTextBubble(
       message: message,
@@ -149,24 +150,37 @@ class _ReactionAnimationWidgetState
         reactionGroupModel.complimenterUid,
       );
 
-      List<int> emojiCountList = List.generate(
-          reactionGroupModel.emojiReacionModelList.first.emoji.length,
-          (index) => 0);
-      for (var emojiReaction in reactionGroupModel.emojiReacionModelList) {
-        emojiReaction.emoji.mapWithIndex((value, index) {
-          emojiCountList[index] += value;
-        });
+      List<int> emojiCountList;
+      if (reactionGroupModel.emojiReacionModelList != null) {
+        emojiCountList = List.generate(
+          reactionGroupModel.emojiReacionModelList!.first.emoji.length,
+          (index) => 0,
+        );
+
+        for (var emojiReaction in reactionGroupModel.emojiReacionModelList!) {
+          emojiReaction.emoji.forEach((key, value) {
+            emojiCountList[int.parse(key.substring(1, 3))] += value;
+          });
+        }
+      } else {
+        emojiCountList = [];
       }
 
       setState(() {
-        final userImageUrl = fetchUserModelResult.fold(
-          (failure) {
-            return 'https://png.pngtree.com/thumb_back/fh260/background/20210409/pngtree-rules-of-biotex-cat-image_600076.jpg';
-          },
-          (userModel) {
-            return userModel.imageUrl;
-          },
-        );
+        String userImageUrl;
+        if (reactionGroupModel.imageReacionModel != null) {
+          userImageUrl = reactionGroupModel.imageReacionModel!.instantPhotoUrl;
+        } else {
+          userImageUrl = fetchUserModelResult.fold(
+            (failure) {
+              return 'https://png.pngtree.com/thumb_back/fh260/background/20210409/pngtree-rules-of-biotex-cat-image_600076.jpg';
+            },
+            (userModel) {
+              return userModel.imageUrl;
+            },
+          );
+        }
+
         addBalloonAnimation(
           imageUrl: userImageUrl,
           emojiCountList: emojiCountList,

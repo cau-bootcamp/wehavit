@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:wehavit/common/utils/emoji_assets.dart';
 import 'package:wehavit/features/live_writing/presentation/model/live_writing_state.dart';
 import 'package:wehavit/features/live_writing/presentation/widgets/live_writing_widget/friend_live_bubble_components.dart';
+import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';
 
 class FriendLiveBubbleWidget extends StatefulHookConsumerWidget {
   const FriendLiveBubbleWidget({
@@ -12,6 +14,7 @@ class FriendLiveBubbleWidget extends StatefulHookConsumerWidget {
     required this.bubbleState,
     required this.postContent,
     required this.postImageFirestoreURL,
+    required this.emojiSendCallback,
   });
 
   final String userName;
@@ -19,6 +22,7 @@ class FriendLiveBubbleWidget extends StatefulHookConsumerWidget {
   final LiveBubbleState bubbleState;
   final String postContent;
   final String postImageFirestoreURL;
+  final Function emojiSendCallback;
 
   @override
   ConsumerState<FriendLiveBubbleWidget> createState() =>
@@ -82,9 +86,19 @@ class _FriendLivePostBubbleState extends ConsumerState<FriendLiveBubbleWidget> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: List<Widget>.generate(
                         6,
-                        (index) => const Placeholder(
-                          fallbackWidth: 40,
-                          fallbackHeight: 40,
+                        (index) => InkWell(
+                          child: SizedBox(
+                            width: 40,
+                            height: 40,
+                            child: Image(
+                              image: AssetImage(
+                                Emojis.emojiList[index],
+                              ),
+                            ),
+                          ),
+                          onTap: () async {
+                            widget.emojiSendCallback(index);
+                          },
                         ),
                       ),
                     ),
