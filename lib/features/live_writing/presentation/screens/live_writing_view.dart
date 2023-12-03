@@ -36,7 +36,7 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
   }
 
   EmojiFireWorkManager emojiFireWorkManager =
-      EmojiFireWorkManager(emojiAmount: 1);
+      EmojiFireWorkManager(emojiAmount: 10);
 
   @override
   Widget build(BuildContext context) {
@@ -45,22 +45,29 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
     final reactionStream = useMemoized(() => reactionNotificationStream(ref));
     final reactionSnapshot = useStream<List<ReactionModel>>(reactionStream);
 
-    reactionStream.listen((event) async {
-      if (event.isNotEmpty) {
-        List<int> sampledEmojiList = List<int>.generate(15, (index) => 0);
-        event.first.emoji.forEach((key, value) {
-          sampledEmojiList[int.parse(key.substring(1, 3))] = value;
+    useEffect(
+      () {
+        reactionStream.listen((event) async {
+          if (event.isNotEmpty) {
+            List<int> sampledEmojiList = List<int>.generate(15, (index) => 0);
+            event.first.emoji.forEach((key, value) {
+              sampledEmojiList[int.parse(key.substring(1, 3))] = value;
+            });
+            emojiFireWorkManager.addFireworkWidget(
+              offset: const Offset(0, 0),
+              emojiReactionCountList: sampledEmojiList,
+            );
+            await ref
+                .read(liveWritingPostRepositoryProvider)
+                .consumeReaction(event.first.id!);
+            event.removeAt(0);
+          }
         });
-        emojiFireWorkManager.addFireworkWidget(
-          offset: Offset(0, 0),
-          emojiReactionCountList: sampledEmojiList,
-        );
-        await ref
-            .read(liveWritingPostRepositoryProvider)
-            .consumeReaction(event.first.id!);
-        event.removeAt(0);
-      }
-    });
+
+        return;
+      },
+      [],
+    );
 
     return Scaffold(
       extendBodyBehindAppBar: true,
