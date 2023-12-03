@@ -43,6 +43,12 @@ class _FriendLivePostWidgetState extends ConsumerState<FriendLivePostWidget> {
         .getFriendTitleLiveByEmail(email);
   }
 
+  Stream<String> friendPostImageStream(String email, WidgetRef ref) {
+    return ref
+        .watch(liveWritingFriendRepositoryProvider)
+        .getFriendPostImageLiveByEmail(email);
+  }
+
   final double profileImageRadius = 23;
   final String userName = 'real_buddah';
   final String postTitle = '하루에 한 번 웃기 2일차';
@@ -68,11 +74,14 @@ class _FriendLivePostWidgetState extends ConsumerState<FriendLivePostWidget> {
         useMemoized(() => friendMessageStream(widget.userEmail, ref));
     final titleStream =
         useMemoized(() => friendTitleStream(widget.userEmail, ref));
+    final postImageStream =
+        useMemoized(() => friendPostImageStream(widget.userEmail, ref));
 
     final nameSnapshot = useFuture<String>(nameFuture);
     final profileImageUrlSnapshot = useFuture<String>(profileImageUrlFuture);
-    final messageSnapshot = useStream<String>(messageStream);
     final titleSnapshot = useStream<String>(titleStream);
+    final messageSnapshot = useStream<String>(messageStream);
+    final postImageSnapshot = useStream<String>(postImageStream);
 
     return Visibility(
       visible: writingState != LiveWritingState.writing,
@@ -109,7 +118,9 @@ class _FriendLivePostWidgetState extends ConsumerState<FriendLivePostWidget> {
                       userName: nameSnapshot.data ?? '누구세요?',
                       postTitle: titleSnapshot.data ?? '제목을 못불러왔어요!',
                       postContent: messageSnapshot.data ?? '내용을 못불러왔어요!',
-                      postImage: postImage,
+                      postImageFirestoreURL: postImageSnapshot.data == ''
+                          ? 'https://mblogthumb-phinf.pstatic.net/MjAyMjAxMjVfNTgg/MDAxNjQzMTAyOTg1MTk1.kvD7eFVnAbMS2LREsFqsYfsw4hnJDFuGUfBUX2kUKikg.jr9qYJbmDH9AmJPHbJcM9FrhpOnOaYp5qAVk8nF9vR4g.JPEG.minziminzi128/IMG_7365.JPG?type=w800'
+                          : postImageSnapshot.data!,
                       bubbleState: bubbleState,
                     ),
                   );

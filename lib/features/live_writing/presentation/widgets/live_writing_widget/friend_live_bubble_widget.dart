@@ -11,14 +11,14 @@ class FriendLiveBubbleWidget extends StatefulHookConsumerWidget {
     required this.postTitle,
     required this.bubbleState,
     required this.postContent,
-    required this.postImage,
+    required this.postImageFirestoreURL,
   });
 
   final String userName;
   final String postTitle;
   final LiveBubbleState bubbleState;
   final String postContent;
-  final ImageProvider<Object> postImage;
+  final String postImageFirestoreURL;
 
   @override
   ConsumerState<FriendLiveBubbleWidget> createState() =>
@@ -59,7 +59,8 @@ class _FriendLivePostBubbleState extends ConsumerState<FriendLiveBubbleWidget> {
                               PostImageWidgetForDefault(
                                 bubbleState: widget.bubbleState,
                                 postContent: widget.postContent,
-                                postImage: widget.postImage,
+                                postImage:
+                                    NetworkImage(widget.postImageFirestoreURL),
                               ),
                             ],
                           ),
@@ -68,20 +69,23 @@ class _FriendLivePostBubbleState extends ConsumerState<FriendLiveBubbleWidget> {
                     ),
                     PostWidgetImageForDetail(
                       bubbleState: widget.bubbleState,
-                      postImage: widget.postImage,
+                      postImage: NetworkImage(widget.postImageFirestoreURL),
                     ),
                   ],
                 ),
                 // TODO : 반응 남기기 기능 개발
                 Visibility(
                   visible: widget.bubbleState == LiveBubbleState.showingDetail,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: List<Widget>.generate(
-                      6,
-                      (index) => const Placeholder(
-                        fallbackWidth: 40,
-                        fallbackHeight: 40,
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: List<Widget>.generate(
+                        6,
+                        (index) => const Placeholder(
+                          fallbackWidth: 40,
+                          fallbackHeight: 40,
+                        ),
                       ),
                     ),
                   ),

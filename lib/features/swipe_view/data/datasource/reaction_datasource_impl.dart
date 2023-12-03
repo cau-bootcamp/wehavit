@@ -38,7 +38,7 @@ class ReactionDatasourceImpl implements ReactionDatasource {
 
       FirebaseFirestore.instance
           .collection(
-        '${FirebaseCollectionName.confirmPosts}/_$targetConfirmPostId/${FirebaseCollectionName.encourages}',
+        '${FirebaseCollectionName.confirmPosts}/$targetConfirmPostId/${FirebaseCollectionName.encourages}',
       )
           .add(
         {
@@ -52,7 +52,7 @@ class ReactionDatasourceImpl implements ReactionDatasource {
           FirebaseReactionFieldName.hasRead: false,
         },
       );
-
+      print("send done");
       return Future(() => right(true));
     } on Exception {
       debugPrint('DEBUG : Error on sendReactionToTargetConfirmPost Function');
@@ -98,8 +98,9 @@ class ReactionDatasourceImpl implements ReactionDatasource {
 
     // 이 로직으로 응원 데이터는 한 번만 가져올 수 있음
     for (var doc in encourages.docs) {
-      FirebaseFirestore.instance.doc(doc.reference.path).update(
+      FirebaseFirestore.instance.doc(doc.reference.path).set(
         {'hasRead': true},
+        SetOptions(merge: true),
       );
     }
 

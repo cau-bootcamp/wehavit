@@ -54,23 +54,33 @@ class PostWidgetImageForDetail extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 4.0),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(
-              Radius.circular(10.0),
-            ),
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black26,
-                  spreadRadius: 2,
-                  blurRadius: 2,
-                  offset: Offset(0, 2))
-            ]),
+          borderRadius: BorderRadius.all(
+            Radius.circular(10.0),
+          ),
+          // boxShadow: [
+          //   BoxShadow(
+          //       color: Colors.black26,
+          //       spreadRadius: 2,
+          //       blurRadius: 2,
+          //       offset: Offset(0, 2))
+          // ],
+        ),
         clipBehavior: Clip.hardEdge,
         child: Image(
-          width: 50,
-          height: 37,
-          fit: BoxFit.fill,
-          image: postImage,
-        ),
+            width: 50,
+            height: 37,
+            fit: BoxFit.fill,
+            image: postImage,
+            errorBuilder: (context, error, stackTrace) {
+              // TODO: 이미지가 유효하지 않은 경우에 넣어줄 placeholder 지정해주기
+              return Image(
+                width: 50,
+                height: 37,
+                fit: BoxFit.cover,
+                image: NetworkImage(
+                    'https://i2.ruliweb.com/img/19/08/30/16cde8040044c8ac6.png'),
+              );
+            }),
       ),
     );
   }
@@ -108,7 +118,20 @@ class PostImageWidgetForDefault extends StatelessWidget {
           Visibility(
             visible: bubbleState != LiveBubbleState.showingDefault,
             child: Image(
-                width: 113, height: 84, fit: BoxFit.fill, image: postImage),
+                width: 113,
+                height: 84,
+                fit: BoxFit.cover,
+                image: postImage,
+                errorBuilder: (context, error, stackTrace) {
+                  // TODO: 이미지가 유효하지 않은 경우에 넣어줄 placeholder 지정해주기
+                  return Image(
+                    width: 113,
+                    height: 84,
+                    fit: BoxFit.cover,
+                    image: NetworkImage(
+                        'https://i2.ruliweb.com/img/19/08/30/16cde8040044c8ac6.png'),
+                  );
+                }),
           ),
         ],
       ),
