@@ -132,7 +132,7 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
       final Map<String, int> emojiMap = {};
       state.sendingEmojis.asMap().forEach(
             (index, value) => emojiMap.addAll(
-              {'t$index': value},
+              {'t${index.toString().padLeft(2, '0')}': value},
             ),
           );
 
