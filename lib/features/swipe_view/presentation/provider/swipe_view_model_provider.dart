@@ -135,7 +135,7 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
               {'t${index.toString().padLeft(2, '0')}': value},
             ),
           );
-      print(emojiMap);
+
       final reactionModel = ReactionModel(
         complimenterUid: currentUserUid,
         reactionType: ReactionType.emoji.index,

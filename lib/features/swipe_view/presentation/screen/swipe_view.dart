@@ -180,7 +180,6 @@ class SwipeViewState extends ConsumerState<SwipeView>
                                 onTapUp: (details) async =>
                                     emojiSheetWidget(context)
                                         .whenComplete(() async {
-                                  print("DEBUG_SEND EMOJI REACTION");
                                   _swipeViewModelProvider.sendEmojiReaction();
                                 }),
                                 child: Container(
