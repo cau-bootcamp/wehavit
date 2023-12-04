@@ -1,9 +1,13 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/models/user_model/user_model.dart';
+import 'package:wehavit/common/utils/emoji_assets.dart';
 import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
 import 'package:wehavit/features/swipe_view/presentation/model/swipe_view_model.dart';
 import 'package:wehavit/features/swipe_view/presentation/provider/swipe_view_model_provider.dart';
+import 'package:wehavit/features/swipe_view/presentation/screen/widget/emoji_sheet_widget.dart';
 import 'package:wehavit/features/swipe_view/presentation/screen/widget/swipe_dashboard_widget.dart';
 
 class SwipeViewCellWidget extends ConsumerStatefulWidget {
@@ -80,7 +84,7 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
                                     NetworkImage(snapshot.data!.imageUrl),
                                 backgroundColor: Colors.grey,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 16,
                               ),
                               Text(
@@ -93,7 +97,6 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
                               Expanded(
                                 child: Container(),
                               ),
-                              // ignore: lines_longer_than_80_chars
                               Text(
                                 '· ${widget.model.resolutionGoalStatement ?? '목표를 불러오지 못했습니다'}',
                                 style: const TextStyle(
@@ -108,7 +111,7 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 16,
                 ),
                 Text(
@@ -130,7 +133,7 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
                   flex: 3,
                   child: Container(
                     constraints: const BoxConstraints.expand(),
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(20.0)),
                     ),
                     clipBehavior: Clip.hardEdge,
@@ -183,6 +186,8 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
                 Container(
                   constraints: const BoxConstraints.expand(height: 120),
                   child: Text(
+                    maxLines: 5,
+                    overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
@@ -190,36 +195,182 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
                     widget.model.content ?? '',
                   ),
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        focusNode: _swipeViewModel.commentFieldFocus,
-                        controller: _swipeViewModel.textEditingController,
-                        decoration: const InputDecoration(
-                          fillColor: Colors.white,
-                          filled: true,
-                          labelText: '응원 메시지 남기기',
-                          border: OutlineInputBorder(),
+
+                Container(
+                  height: 30,
+                  decoration: const BoxDecoration(
+                    color: Colors.amber,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          focusNode: _swipeViewModel.commentFieldFocus,
+                          controller: _swipeViewModel.textEditingController,
+                          // maxLines: 1,
+                          textAlignVertical: TextAlignVertical.center,
+                          style: const TextStyle(
+                            fontSize: 12.0,
+                          ),
+                          decoration: const InputDecoration(
+                            filled: true,
+                            hintText: '응원 메시지 남기기',
+                            border: InputBorder.none,
+                            // contentPadding: EdgeInsets.zero,
+                          ),
+                          onTap: () {
+                            _swipeViewModelProvider.startShrinkingLayout();
+                          },
                         ),
-                        onTap: () {
-                          _swipeViewModelProvider.startShrinkingLayout();
-                        },
                       ),
-                    ),
-                    IconButton(
-                      onPressed: () async {
-                        _swipeViewModelProvider.sendTextReaction();
-                      },
-                      icon: const Icon(Icons.send),
-                    ),
-                  ],
+                      IconButton(
+                        onPressed: () async {
+                          _swipeViewModelProvider.sendTextReaction();
+                        },
+                        icon: const Icon(
+                          Icons.send,
+                          size: 16,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Future<dynamic> emojiSheetWidget(BuildContext context) {
+    return showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      clipBehavior: Clip.none,
+      elevation: 0,
+      context: context,
+      builder: (context) {
+        void disposeWidget(UniqueKey key) {
+          setState(() {
+            _swipeViewModel.emojiWidgets.remove(key);
+          });
+        }
+
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Stack(
+              alignment: Alignment.center,
+              clipBehavior: Clip.none,
+              children: [
+                Stack(
+                  alignment: Alignment.topCenter,
+                  clipBehavior: Clip.none,
+                  children: _swipeViewModel.emojiWidgets.values.toList(),
+                ),
+                Container(
+                  clipBehavior: Clip.hardEdge,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                  ),
+                ),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 30.0),
+                      child: Text(
+                        '반응을 ${_swipeViewModel.countSend}회 보냈어요!',
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Column(
+                        children: List<Widget>.generate(
+                          3,
+                          (index) => Row(
+                            children: List<Widget>.generate(5, (jndex) {
+                              final key = GlobalKey();
+                              return Expanded(
+                                key: key,
+                                child: GestureDetector(
+                                  onTapDown: (detail) {},
+                                  onTapUp: (detail) {
+                                    shootEmoji(
+                                      setState,
+                                      index,
+                                      jndex,
+                                      detail,
+                                      context,
+                                      disposeWidget,
+                                    );
+                                  },
+                                  child: Stack(
+                                    clipBehavior: Clip.none,
+                                    children: [
+                                      Image(
+                                        image: AssetImage(
+                                          Emojis.emojiList[index * 5 + jndex],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 60,
+                    ),
+                  ],
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void shootEmoji(
+    StateSetter setState,
+    int index,
+    int jndex,
+    TapUpDetails detail,
+    BuildContext context,
+    void Function(UniqueKey key) disposeWidget,
+  ) {
+    return setState(
+      () {
+        _swipeViewModel.countSend++;
+        _swipeViewModel.sendingEmojis[index * 5 + jndex] += 1;
+        final animationWidgetKey = UniqueKey();
+        _swipeViewModel.emojiWidgets.addEntries(
+          {
+            animationWidgetKey: ShootEmojiWidget(
+              key: animationWidgetKey,
+              emojiIndex: index * 5 + jndex,
+              currentPos:
+                  Point(detail.globalPosition.dx, detail.globalPosition.dy),
+              targetPos: Point(
+                MediaQuery.of(context).size.width / 2,
+                MediaQuery.of(context).size.height + 50,
+              ),
+              disposeWidgetFromParent: disposeWidget,
+            ),
+          }.entries,
+        );
+      },
     );
   }
 }
