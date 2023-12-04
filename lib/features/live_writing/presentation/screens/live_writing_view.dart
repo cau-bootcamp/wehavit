@@ -286,6 +286,12 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
       [],
     );
 
+    bool isSubmittable() {
+      return !(titleController.text != '' ||
+          contentController.text != '' ||
+          imageFile != null);
+    }
+
     return Align(
       alignment: const Alignment(1, 1),
       child: LayoutBuilder(
@@ -419,48 +425,87 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   ElevatedButton(
-                                      onPressed: () {}, child: Text('휴식')),
+                                    onPressed: () async {
+                                      if (isSubmittable()) {
+                                        isSubmitted = true;
+                                        ConfirmPostModel cf = ConfirmPostModel(
+                                          title: titleController.text,
+                                          content: contentController.text,
+                                          resolutionGoalStatement: widget
+                                              .resolutionModel.goalStatement,
+                                          resolutionId: widget
+                                              .resolutionModel.resolutionId,
+                                          imageUrl: imageFile!.path,
+                                          recentStrike: 0,
+                                          createdAt: DateTime.now(),
+                                          updatedAt: DateTime.now(),
+                                          owner: '',
+                                          fan: [],
+                                          attributes: {
+                                            'has_participated_live': true,
+                                            'has_rested': true,
+                                          },
+                                        );
+
+                                        (await ref.read(
+                                          createPostUseCaseProvider,
+                                        )(cf))
+                                            .fold(
+                                          (l) {
+                                            debugPrint(
+                                              Failure(l.message).toString(),
+                                            );
+                                          },
+                                          (r) => () {},
+                                        );
+                                      } else {
+                                        // 제출할 수 없음
+                                      }
+                                    },
+                                    child: const Text('휴식'),
+                                  ),
                                   ElevatedButton(
                                     onPressed: () async {
-                                      isSubmitted = true;
-                                      ConfirmPostModel cf = ConfirmPostModel(
-                                        title: titleController.text,
-                                        content: contentController.text,
-                                        resolutionGoalStatement: widget
-                                            .resolutionModel.goalStatement,
-                                        resolutionId:
-                                            widget.resolutionModel.resolutionId,
-                                        imageUrl: '',
-                                        recentStrike: 0,
-                                        createdAt: DateTime.now(),
-                                        updatedAt: DateTime.now(),
-                                        owner: '',
-                                        fan: [],
-                                        attributes: {
-                                          'has_participated_live': true,
-                                          'has_rested': false,
-                                        },
-                                      );
+                                      if (isSubmittable()) {
+                                        isSubmitted = true;
+                                        ConfirmPostModel cf = ConfirmPostModel(
+                                          title: titleController.text,
+                                          content: contentController.text,
+                                          resolutionGoalStatement: widget
+                                              .resolutionModel.goalStatement,
+                                          resolutionId: widget
+                                              .resolutionModel.resolutionId,
+                                          imageUrl: '',
+                                          recentStrike: 0,
+                                          createdAt: DateTime.now(),
+                                          updatedAt: DateTime.now(),
+                                          owner: '',
+                                          fan: [],
+                                          attributes: {
+                                            'has_participated_live': true,
+                                            'has_rested': false,
+                                          },
+                                        );
 
-                                      (await ref.read(
-                                        createPostUseCaseProvider,
-                                      )(cf))
-                                          .fold(
-                                        (l) {
-                                          debugPrint(
-                                            Failure(l.message).toString(),
-                                          );
-                                        },
-                                        (r) => () {},
-                                        // showSimpleSnackBar(
-                                        //     context,
-                                        //     '인증글이 등록되었습니다'),
-                                      );
+                                        (await ref.read(
+                                          createPostUseCaseProvider,
+                                        )(cf))
+                                            .fold(
+                                          (l) {
+                                            debugPrint(
+                                              Failure(l.message).toString(),
+                                            );
+                                          },
+                                          (r) => () {},
+                                        );
+                                      } else {
+                                        // 제출할 수 없음
+                                      }
                                     },
                                     child: const Text('완료'),
                                   ),
                                 ],
-                              )
+                              ),
                             ],
                           ),
                         ),
