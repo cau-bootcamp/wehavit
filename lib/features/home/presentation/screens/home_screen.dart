@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -99,6 +100,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   onPressed: () async {
                     // 알림 센터 뷰
                   },
+                ),
+                TextButton(
+                  onPressed: () async {
+                    context.go(RouteLocation.myPage);
+                  },
+                  child: CircleAvatar(
+                    backgroundColor: Colors.transparent,
+                    radius: 20,
+                    backgroundImage: FirebaseAuth
+                                .instance.currentUser?.photoURL !=
+                            null
+                        ? NetworkImage(
+                            FirebaseAuth.instance.currentUser!.photoURL!)
+                        : const AssetImage('path_to_default_image')
+                            as ImageProvider<Object>, // Provide a default image
+                  ),
                 ),
               ],
             ),
