@@ -73,7 +73,7 @@ class LiveWritingPostRepositoryImpl extends MyLiveWritingRepository {
         },
         SetOptions(merge: true),
       ).catchError((error) => debugPrint('Failed to add document: $error'));
-      print(storageUrl);
+
       return Future(() => storageUrl);
     } on Exception catch (e) {
       debugPrint(e.toString());
