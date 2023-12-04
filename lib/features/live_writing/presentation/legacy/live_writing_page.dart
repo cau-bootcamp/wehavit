@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/features/live_writing/live_writing.dart';
+import 'package:wehavit/features/live_writing/presentation/legacy/friend_live_writing.dart';
+import 'package:wehavit/features/live_writing/presentation/legacy/my_live_writing.dart';
 import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';
 
 const liveWritingPageTitle = '실시간 인증 글쓰기';

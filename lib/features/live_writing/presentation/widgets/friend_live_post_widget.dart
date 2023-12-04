@@ -3,8 +3,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wehavit/features/live_writing/domain/domain.dart';
 import 'package:wehavit/features/live_writing/presentation/model/live_writing_state.dart';
-import 'package:wehavit/features/live_writing/presentation/widgets/live_writing_widget/friend_live_bubble_widget.dart';
-import 'package:wehavit/features/live_writing/presentation/widgets/live_writing_widget/friend_waiting_bubble_widget.dart';
+import 'package:wehavit/features/live_writing/presentation/widgets/friend_live_bubble_widget.dart';
+import 'package:wehavit/features/live_writing/presentation/widgets/friend_waiting_bubble_widget.dart';
+
 import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';
 
 class FriendLivePostWidget extends StatefulHookConsumerWidget {

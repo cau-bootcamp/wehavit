@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wehavit/common/utils/emoji_assets.dart';
 import 'package:wehavit/features/live_writing/presentation/model/live_writing_state.dart';
-import 'package:wehavit/features/live_writing/presentation/widgets/live_writing_widget/friend_live_bubble_components.dart';
-import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';
+import 'package:wehavit/features/live_writing/presentation/widgets/friend_live_bubble_components.dart';
 
 class FriendLiveBubbleWidget extends StatefulHookConsumerWidget {
   const FriendLiveBubbleWidget({
@@ -81,7 +79,7 @@ class _FriendLivePostBubbleState extends ConsumerState<FriendLiveBubbleWidget> {
                 Visibility(
                   visible: widget.bubbleState == LiveBubbleState.showingDetail,
                   child: Padding(
-                    padding: EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: List<Widget>.generate(
