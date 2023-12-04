@@ -110,7 +110,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                       ),
                       const SizedBox(width: 10),
                     ],
-                  ), //icon, name
+                  ), // icon, name
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [

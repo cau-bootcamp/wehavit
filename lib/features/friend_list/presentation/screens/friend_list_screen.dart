@@ -87,13 +87,16 @@ class _FriendListScreenState extends ConsumerState<FriendListScreen> {
                               children: [
                                 Text(
                                   currentUser?.displayName ?? 'DEBUG_NO_NAME',
-                                  style: TextStyle(
-                                      color: CustomColors.whWhite,
-                                      fontWeight: FontWeight.bold),
+                                  style: const TextStyle(
+                                    color: CustomColors.whWhite,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                                 Text(
                                   currentUser?.email ?? 'DEBUG_UserID',
-                                  style: TextStyle(color: CustomColors.whWhite),
+                                  style: const TextStyle(
+                                    color: CustomColors.whWhite,
+                                  ),
                                 ),
                               ],
                             ),
@@ -130,6 +133,15 @@ class _FriendListScreenState extends ConsumerState<FriendListScreen> {
 //                ),
 //              ],
 //            ),
+            Container(
+              alignment: Alignment.centerLeft,
+              margin: const EdgeInsets.only(left: 16, bottom: 4),
+              child: Text(
+                '내 친구들(${friendList.length()})',
+                textAlign: TextAlign.left,
+                style: const TextStyle(color: CustomColors.whWhite),
+              ),
+            ),
             friendList.fold(
               (left) => null,
               (right) => Expanded(
