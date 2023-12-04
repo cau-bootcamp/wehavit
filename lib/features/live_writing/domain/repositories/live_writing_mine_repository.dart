@@ -12,7 +12,7 @@ abstract class MyLiveWritingRepository {
     String title,
   );
 
-  Future<void> updatePostImage(
+  Future<String> updatePostImage(
     String imageFileUrl,
   );
 

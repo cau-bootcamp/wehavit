@@ -52,7 +52,7 @@ class LiveWritingPostRepositoryImpl extends MyLiveWritingRepository {
   }
 
   @override
-  Future<void> updatePostImage(String imageFileUrl) async {
+  Future<String> updatePostImage(String imageFileUrl) async {
     try {
       String storagePath =
           'live/_${FirebaseAuth.instance.currentUser!.uid}_${DateTime.now().toIso8601String()}';
@@ -73,9 +73,11 @@ class LiveWritingPostRepositoryImpl extends MyLiveWritingRepository {
         },
         SetOptions(merge: true),
       ).catchError((error) => debugPrint('Failed to add document: $error'));
+      print(storageUrl);
+      return Future(() => storageUrl);
     } on Exception catch (e) {
       debugPrint(e.toString());
-      return;
+      return '';
     }
   }
 

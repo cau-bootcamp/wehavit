@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -254,6 +253,8 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
   bool isSubmitted = false;
   late EitherFuture<UserModel> myUserModel;
   XFile? imageFile;
+  String imageUrl = '';
+  bool isLoadingImage = false;
 
   @override
   Future<void> didChangeDependencies() async {
@@ -287,9 +288,10 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
     );
 
     bool isSubmittable() {
-      return !(titleController.text != '' ||
-          contentController.text != '' ||
-          imageFile != null);
+      return !(titleController.text == '' ||
+          contentController.text == '' ||
+          imageFile == null ||
+          isLoadingImage == true);
     }
 
     return Align(
@@ -388,14 +390,18 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
                                   )),
                                   child: GestureDetector(
                                     onTapUp: (details) async {
-                                      final pickedFile =
-                                          await ImagePicker().pickImage(
-                                        source: ImageSource.gallery,
-                                      );
-                                      if (pickedFile != null) {
-                                        setImage(pickedFile);
-                                      } else {
-                                        debugPrint('이미지 선택안함');
+                                      if (!isSubmitted) {
+                                        final pickedFile =
+                                            await ImagePicker().pickImage(
+                                          source: ImageSource.gallery,
+                                        );
+                                        if (pickedFile != null) {
+                                          isLoadingImage = true;
+                                          imageUrl = await setImage(pickedFile);
+                                          isLoadingImage = false;
+                                        } else {
+                                          debugPrint('이미지 선택안함');
+                                        }
                                       }
                                     },
                                     child: Visibility(
@@ -420,91 +426,118 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
                                   ),
                                 ),
                               ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  ElevatedButton(
-                                    onPressed: () async {
-                                      if (isSubmittable()) {
-                                        isSubmitted = true;
-                                        ConfirmPostModel cf = ConfirmPostModel(
-                                          title: titleController.text,
-                                          content: contentController.text,
-                                          resolutionGoalStatement: widget
-                                              .resolutionModel.goalStatement,
-                                          resolutionId: widget
-                                              .resolutionModel.resolutionId,
-                                          imageUrl: imageFile!.path,
-                                          recentStrike: 0,
-                                          createdAt: DateTime.now(),
-                                          updatedAt: DateTime.now(),
-                                          owner: '',
-                                          fan: [],
-                                          attributes: {
-                                            'has_participated_live': true,
-                                            'has_rested': true,
-                                          },
-                                        );
+                              Visibility(
+                                visible: !isSubmitted,
+                                replacement: ElevatedButton(
+                                  onPressed: () async {
+                                    setState(() {
+                                      isSubmitted = false;
+                                    });
+                                    // 다시 편집 상태로 돌아가기
+                                  },
+                                  child: const Text('수정'),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    ElevatedButton(
+                                      onPressed: () async {
+                                        if (isSubmittable()) {
+                                          setState(() {
+                                            isSubmitted = true;
+                                          });
 
-                                        (await ref.read(
-                                          createPostUseCaseProvider,
-                                        )(cf))
-                                            .fold(
-                                          (l) {
-                                            debugPrint(
-                                              Failure(l.message).toString(),
-                                            );
-                                          },
-                                          (r) => () {},
-                                        );
-                                      } else {
-                                        // 제출할 수 없음
-                                      }
-                                    },
-                                    child: const Text('휴식'),
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () async {
-                                      if (isSubmittable()) {
-                                        isSubmitted = true;
-                                        ConfirmPostModel cf = ConfirmPostModel(
-                                          title: titleController.text,
-                                          content: contentController.text,
-                                          resolutionGoalStatement: widget
-                                              .resolutionModel.goalStatement,
-                                          resolutionId: widget
-                                              .resolutionModel.resolutionId,
-                                          imageUrl: '',
-                                          recentStrike: 0,
-                                          createdAt: DateTime.now(),
-                                          updatedAt: DateTime.now(),
-                                          owner: '',
-                                          fan: [],
-                                          attributes: {
-                                            'has_participated_live': true,
-                                            'has_rested': false,
-                                          },
-                                        );
+                                          ConfirmPostModel cf =
+                                              ConfirmPostModel(
+                                            title: titleController.text,
+                                            content: contentController.text,
+                                            resolutionGoalStatement: widget
+                                                .resolutionModel.goalStatement,
+                                            resolutionId: widget
+                                                .resolutionModel.resolutionId,
+                                            imageUrl: imageUrl,
+                                            recentStrike: 0,
+                                            createdAt: DateTime.now(),
+                                            updatedAt: DateTime.now(),
+                                            owner: '',
+                                            fan: [],
+                                            attributes: {
+                                              'has_participated_live': true,
+                                              'has_rested': true,
+                                            },
+                                          );
 
-                                        (await ref.read(
-                                          createPostUseCaseProvider,
-                                        )(cf))
-                                            .fold(
-                                          (l) {
-                                            debugPrint(
-                                              Failure(l.message).toString(),
-                                            );
-                                          },
-                                          (r) => () {},
-                                        );
-                                      } else {
-                                        // 제출할 수 없음
-                                      }
-                                    },
-                                    child: const Text('완료'),
-                                  ),
-                                ],
+                                          (await ref.read(
+                                            createPostUseCaseProvider,
+                                          )(cf))
+                                              .fold(
+                                            (l) {
+                                              debugPrint(
+                                                Failure(l.message).toString(),
+                                              );
+                                            },
+                                            (r) => () {},
+                                          );
+                                        } else {
+                                          // 제출할 수 없음
+                                          debugPrint(
+                                              '제목, 내용, 사진이 모두 입력되지 않아 저장하지 않음');
+                                        }
+                                      },
+                                      child:
+                                          Text(isLoadingImage ? '처리중' : '휴식'),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () async {
+                                        if (isSubmittable()) {
+                                          setState(() {
+                                            isSubmitted = true;
+                                          });
+                                          print("debug");
+                                          print(imageUrl);
+                                          ConfirmPostModel cf =
+                                              ConfirmPostModel(
+                                            title: titleController.text,
+                                            content: contentController.text,
+                                            resolutionGoalStatement: widget
+                                                .resolutionModel.goalStatement,
+                                            resolutionId: widget
+                                                .resolutionModel.resolutionId,
+                                            imageUrl: imageUrl,
+                                            recentStrike: 0,
+                                            createdAt: DateTime.now(),
+                                            updatedAt: DateTime.now(),
+                                            owner: '',
+                                            fan: [],
+                                            attributes: {
+                                              'has_participated_live': true,
+                                              'has_rested': false,
+                                            },
+                                          );
+
+                                          (await ref.read(
+                                            createPostUseCaseProvider,
+                                          )(cf))
+                                              .fold(
+                                            (l) {
+                                              debugPrint(
+                                                Failure(l.message).toString(),
+                                              );
+                                            },
+                                            (r) => () {},
+                                          );
+                                        } else {
+                                          // 제출할 수 없음
+                                          debugPrint(
+                                              '제목, 내용, 사진이 모두 입력되지 않아 저장하지 않음');
+                                        }
+                                      },
+                                      child:
+                                          Text(isLoadingImage ? '처리중' : '완료'),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -535,11 +568,11 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
     }
   }
 
-  Future<void> setImage(XFile pickedFile) async {
+  Future<String> setImage(XFile pickedFile) async {
     setState(() {
       imageFile = pickedFile;
     });
-    ref
+    return ref
         .read(
           liveWritingPostRepositoryProvider,
         )
