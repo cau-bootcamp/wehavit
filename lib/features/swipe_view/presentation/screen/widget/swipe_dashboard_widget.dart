@@ -26,140 +26,149 @@ class _ResolutionDashboardWidgetState
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Wrap(
+      clipBehavior: Clip.hardEdge,
       children: [
-        Expanded(
-          child: Column(
-            children: [
-              Text(
-                "최근 한 달 달성률",
-                textAlign: TextAlign.start,
-              ),
-              Stack(
-                alignment: Alignment.center,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Column(
                 children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.black38,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(
-                          20,
+                  Text(
+                    "최근 한 달 달성률",
+                    textAlign: TextAlign.start,
+                  ),
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.black38,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(
+                              20,
+                            ),
+                          ),
+                        ),
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: FutureBuilder<List<ConfirmPostModel>>(
+                            future: widget.confirmPostList,
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return ResolutionDoughnutGraphWidget(
+                                  sourceData: snapshot.data!,
+                                );
+                              } else if (snapshot.hasError) {
+                                return const Placeholder();
+                              } else {
+                                return Container();
+                              }
+                            },
+                          ),
                         ),
                       ),
-                    ),
-                    child: AspectRatio(
-                      aspectRatio: 1,
-                      child: FutureBuilder<List<ConfirmPostModel>>(
-                        future: widget.confirmPostList,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return ResolutionDoughnutGraphWidget(
-                              sourceData: snapshot.data!,
-                            );
-                          } else if (snapshot.hasError) {
-                            return const Placeholder();
-                          } else {
-                            return Container();
-                          }
-                        },
+                      AspectRatio(
+                        aspectRatio: 2,
+                        child: Container(
+                          // width: 45,
+                          // height: 45,
+                          decoration: const BoxDecoration(
+                              shape: BoxShape.circle, color: Colors.black87),
+                        ),
                       ),
-                    ),
-                  ),
-                  AspectRatio(
-                    aspectRatio: 2,
-                    child: Container(
-                      // width: 45,
-                      // height: 45,
-                      decoration: const BoxDecoration(
-                          shape: BoxShape.circle, color: Colors.black87),
-                    ),
-                  ),
-                  const Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        '90%',
-                        style: TextStyle(color: Colors.white),
+                      const Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            '90%',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          Text(
+                            '9/10',
+                            style: TextStyle(color: Colors.white),
+                          )
+                        ],
                       ),
-                      Text(
-                        '9/10',
-                        style: TextStyle(color: Colors.white),
-                      )
                     ],
                   ),
                 ],
               ),
-            ],
-          ),
-        ),
-        SizedBox(
-          width: 10,
-        ),
-        Expanded(
-          flex: 2,
-          child: FutureBuilder<List<ConfirmPostModel>>(
-            future: widget.confirmPostList,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              flex: 2,
+              child: FutureBuilder<List<ConfirmPostModel>>(
+                future: widget.confirmPostList,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return AspectRatio(
+                      aspectRatio: 2,
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text('최근 7일 달성률'),
-                          Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: const BoxDecoration(
-                              color: Colors.black38,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(
-                                  10.0,
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text('최근 7일 달성률'),
+                                Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.black38,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(
+                                        10.0,
+                                      ),
+                                    ),
+                                  ),
+                                  child: ResolutionLinearGaugeGraphWidget(
+                                    sourceData: snapshot.data!,
+                                    lastPeriod: false,
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
-                            child: ResolutionLinearGaugeGraphWidget(
-                              sourceData: snapshot.data!,
-                              lastPeriod: false,
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text('지난 7일 달성률'),
+                                Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.black38,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(
+                                        10.0,
+                                      ),
+                                    ),
+                                  ),
+                                  child: ResolutionLinearGaugeGraphWidget(
+                                    sourceData: snapshot.data!,
+                                    lastPeriod: true,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
-                    ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text('지난 7일 달성률'),
-                          Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: const BoxDecoration(
-                              color: Colors.black38,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(
-                                  10.0,
-                                ),
-                              ),
-                            ),
-                            child: ResolutionLinearGaugeGraphWidget(
-                              sourceData: snapshot.data!,
-                              lastPeriod: true,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                );
-              } else if (snapshot.hasError) {
-                return const Placeholder();
-              } else {
-                return Container();
-              }
-            },
-          ),
+                    );
+                  } else if (snapshot.hasError) {
+                    return const Placeholder();
+                  } else {
+                    return Container();
+                  }
+                },
+              ),
+            ),
+          ],
         ),
       ],
     );
