@@ -122,7 +122,7 @@ class _FriendListScreenState extends ConsumerState<FriendListScreen> {
               alignment: Alignment.centerLeft,
               margin: const EdgeInsets.only(left: 16, bottom: 4),
               child: Text(
-                '내 친구들(${friendList.length()})',
+                '내 친구들(${friendList.fold((l) => 0, (r) => r.length)})',
                 textAlign: TextAlign.left,
                 style: const TextStyle(color: CustomColors.whWhite),
               ),
