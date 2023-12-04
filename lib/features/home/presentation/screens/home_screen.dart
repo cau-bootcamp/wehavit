@@ -92,6 +92,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     // 알림 센터 뷰
                   },
                 ),
+                TextButton(
+                  onPressed: () async {
+                    context.go(RouteLocation.myPage);
+                  },
+                  child: CircleAvatar(
+                    backgroundColor: Colors.transparent,
+                    radius: 20,
+                    backgroundImage:
+                        FirebaseAuth.instance.currentUser?.photoURL != null
+                            ? NetworkImage(
+                                FirebaseAuth.instance.currentUser!.photoURL!,
+                              ) as ImageProvider<Object>?
+                            : const AssetImage(
+                                'path_to_default_image',
+                              ), // AssetImage 사용시 타입 캐스팅 제거
+                  ),
+                ),
               ],
             ),
             Container(
@@ -106,35 +123,63 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 itemCount: dates.length,
                 itemBuilder: (context, index) {
                   return Container(
-                    padding: const EdgeInsets.all(4.0),
-                    child: TextButton(
-                      onPressed: () async {
-                        // 버튼을 누르면 selectedIndex 가 변경되고, provider를 통해 해당
-                        // 날짜의 데이터를 불러온다.
-                        setState(() {
-                          selectedIndex = index; // 상태 변경
-                        });
-                        await ref
-                            .read(confirmPostListProvider.notifier)
-                            .getConfirmPostList(selectedIndex);
-                      },
-                      style: TextButton.styleFrom(
-                        // Change the background color to indicate selection
-                        backgroundColor: selectedIndex == index
-                            ? Colors.orange
-                            : Colors.grey,
-                      ),
-                      child: Align(
-                        child: Text(
-                          '${dates[index].$1}\n${dates[index].$2}',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: selectedIndex == index
-                                ? Colors.black
-                                : Colors.black,
+                    padding: const EdgeInsets.all(4),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () async {
+                            // 버튼을 누르면 selectedIndex 가 변경되고, provider를 통해 해당
+                            // 날짜의 데이터를 불러온다.
+                            setState(() {
+                              selectedIndex = index; // 상태 변경
+                            });
+                            await ref
+                                .read(confirmPostListProvider.notifier)
+                                .getConfirmPostList(selectedIndex);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: const Size(0, 0),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 12,
+                              horizontal: 16,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            backgroundColor: selectedIndex == index
+                                ? CustomColors
+                                    .whYellow // Color for selected button
+                                : CustomColors.whYellowDark,
+                            elevation: 2,
+                            shadowColor: CustomColors.whDarkBlack,
+                          ),
+                          child: Text(
+                            '${dates[index].$1}\n${dates[index].$2}',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: selectedIndex == index
+                                  ? CustomColors.whSelectedTextColor
+                                  : CustomColors.whUnSelectedTextColor,
+                            ),
                           ),
                         ),
-                      ),
+                        Container(
+//                          width: 30,
+//                          height: 40,
+                          decoration: const BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: CustomColors.whDarkBlack,
+                                // blurRadius: 30,
+                                blurStyle: BlurStyle.inner,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   );
                 },
