@@ -1,9 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/features/home/presentation/widget/confirm_post_widget.dart';
+
 import '../provider/conform_post_list_provider.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -65,29 +67,36 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     var confirmPostList = ref.watch(confirmPostListProvider);
 
     return Scaffold(
-      backgroundColor: Colors.grey,
+      backgroundColor: CustomColors.whBlack,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(128),
         child: Column(
           children: [
             AppBar(
-              backgroundColor: Colors.black87,
+              foregroundColor: CustomColors.whBlack,
+              backgroundColor: CustomColors.whBlack,
               title: Text(
                 DateFormat(dateFormat).format(DateTime.now()),
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: CustomColors.whSemiWhite,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               actions: [
                 IconButton(
-                  icon: const Icon(Icons.group, color: Colors.white),
+                  icon: const Icon(
+                    Icons.group,
+                    color: CustomColors.whSemiWhite,
+                  ),
                   onPressed: () async {
                     context.go(RouteLocation.friendList);
                   },
                 ),
                 IconButton(
-                  icon: const Icon(Icons.notifications, color: Colors.white),
+                  icon: const Icon(
+                    Icons.notifications,
+                    color: CustomColors.whSemiWhite,
+                  ),
                   onPressed: () async {
                     // 알림 센터 뷰
                   },
@@ -113,11 +122,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
             Container(
               decoration: const BoxDecoration(
-                color: Colors.black87,
+                color: CustomColors.whBlack,
               ),
               padding: const EdgeInsets.symmetric(horizontal: 10),
               height: 70,
               child: ListView.builder(
+                padding: const EdgeInsets.only(left: 4, right: 4),
                 controller: _scrollController,
                 scrollDirection: Axis.horizontal,
                 itemCount: dates.length,
@@ -189,8 +199,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
       ),
       body: Container(
+        padding: const EdgeInsets.only(top: 4),
         decoration: const BoxDecoration(
-          color: Colors.black87,
+          color: CustomColors.whBlack,
         ),
         child: Column(
           children: [
