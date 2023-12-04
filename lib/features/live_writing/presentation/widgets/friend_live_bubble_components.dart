@@ -52,8 +52,8 @@ class PostWidgetImageForDetail extends StatelessWidget {
     return Visibility(
       visible: bubbleState == LiveBubbleState.showingDefault,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 4.0),
-        decoration: BoxDecoration(
+        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+        decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(
             Radius.circular(10.0),
           ),
@@ -73,12 +73,14 @@ class PostWidgetImageForDetail extends StatelessWidget {
             image: postImage,
             errorBuilder: (context, error, stackTrace) {
               // TODO: 이미지가 유효하지 않은 경우에 넣어줄 placeholder 지정해주기
-              return Image(
+              return const Image(
                 width: 50,
                 height: 37,
                 fit: BoxFit.cover,
                 image: NetworkImage(
-                    'https://i2.ruliweb.com/img/19/08/30/16cde8040044c8ac6.png'),
+                  // TODO: dummy image
+                  'https://i2.ruliweb.com/img/19/08/30/16cde8040044c8ac6.png',
+                ),
               );
             }),
       ),
@@ -112,7 +114,7 @@ class PostImageWidgetForDefault extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 4,
           ),
           Visibility(
@@ -124,11 +126,12 @@ class PostImageWidgetForDefault extends StatelessWidget {
                 image: postImage,
                 errorBuilder: (context, error, stackTrace) {
                   // TODO: 이미지가 유효하지 않은 경우에 넣어줄 placeholder 지정해주기
-                  return Image(
+                  return const Image(
                     width: 113,
                     height: 84,
                     fit: BoxFit.cover,
                     image: NetworkImage(
+                        // TODO: dummy Image
                         'https://i2.ruliweb.com/img/19/08/30/16cde8040044c8ac6.png'),
                   );
                 }),
