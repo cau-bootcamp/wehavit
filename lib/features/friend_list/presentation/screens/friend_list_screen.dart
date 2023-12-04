@@ -41,7 +41,6 @@ class _FriendListScreenState extends ConsumerState<FriendListScreen> {
           IconButton(
             color: CustomColors.whWhite,
             icon: const Icon(Icons.home, color: CustomColors.whSemiWhite),
-            // 일단 임시로 검은색과 홈 아이콘으로 처리하였음.
             onPressed: () async {
               context.go(RouteLocation.home);
             },
@@ -52,81 +51,19 @@ class _FriendListScreenState extends ConsumerState<FriendListScreen> {
         child: Column(
           children: [
             const AddFriendTextFieldWidget(),
-            Container(
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(36)),
-                color: CustomColors.whBlack,
-              ),
-              padding: const EdgeInsets.only(bottom: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Container(
-                      margin: const EdgeInsets.only(left: 16, right: 16),
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
-                        color: CustomColors.whYellow,
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.all(12),
-                            child: CircleAvatar(
-                              radius: 32,
-                              foregroundImage: NetworkImage(
-                                currentUser?.photoURL ?? 'DEBUG_URL',
-                              ),
-                            ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.only(right: 12),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  currentUser?.displayName ?? 'DEBUG_NO_NAME',
-                                  style: const TextStyle(
-                                    color: CustomColors.whWhite,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  currentUser?.email ?? 'DEBUG_UserID',
-                                  style: const TextStyle(
-                                    color: CustomColors.whWhite,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-// TODO: 링크로 친구 추가하기 추후에.
-//                  Container(
-//                    alignment: Alignment.centerRight,
-//                    margin: const EdgeInsets.only(right: 8.0),
-//                    child: IconButton(
-//                      icon: const Icon(Icons.link),
-//                      color: Colors.black87,
-//                      onPressed: () {},
-//                    ),
-//                  ),
-                ],
-              ),
-            ),
+            // 내 프로필
+            MyProfile(currentUser: currentUser),
+            // 친구 수 표시
             Container(
               alignment: Alignment.centerLeft,
-              margin: const EdgeInsets.only(left: 16, bottom: 4),
+              margin: const EdgeInsets.only(top: 16, left: 16, bottom: 4),
               child: Text(
                 '내 친구들(${friendList.fold((l) => 0, (r) => r.length)})',
                 textAlign: TextAlign.left,
                 style: const TextStyle(color: CustomColors.whWhite),
               ),
             ),
+            // 친구 리스트
             friendList.fold(
               (left) => null,
               (right) => Expanded(
