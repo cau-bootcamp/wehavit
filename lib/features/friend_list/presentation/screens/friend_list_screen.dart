@@ -118,21 +118,6 @@ class _FriendListScreenState extends ConsumerState<FriendListScreen> {
                 ],
               ),
             ),
-//            Column(
-//              children: [
-//                SizedBox(
-//                  width: 200,
-//                  child: FilledButton(
-//                    onPressed: () async {
-//                      await ref
-//                          .read(friendListProvider.notifier)
-//                          .getFriendList();
-//                    },
-//                    child: const Text('친구 목록 새로고침'),
-//                  ),
-//                ),
-//              ],
-//            ),
             Container(
               alignment: Alignment.centerLeft,
               margin: const EdgeInsets.only(left: 16, bottom: 4),
