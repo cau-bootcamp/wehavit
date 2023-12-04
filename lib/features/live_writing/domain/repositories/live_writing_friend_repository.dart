@@ -6,9 +6,13 @@ abstract class LiveWritingFriendRepository {
 
   Future<List<String>> getVisibleFriendEmailList();
 
+  Future<String> getFriendProfileImageUrlByEmail(String email);
+
   Stream<String> getFriendMessageLiveByEmail(String email);
 
   Stream<String> getFriendTitleLiveByEmail(String email);
+
+  Stream<String> getFriendPostImageLiveByEmail(String email);
 
   Future<String> getFriendMessageOnceByEmail(String email);
 

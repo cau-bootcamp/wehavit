@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/features/live_writing/domain/domain.dart';
@@ -46,6 +49,36 @@ class LiveWritingPostRepositoryImpl extends MyLiveWritingRepository {
       },
       SetOptions(merge: true),
     ).catchError((error) => debugPrint('Failed to add document: $error'));
+  }
+
+  @override
+  Future<String> updatePostImage(String imageFileUrl) async {
+    try {
+      String storagePath =
+          'live/_${FirebaseAuth.instance.currentUser!.uid}_${DateTime.now().toIso8601String()}';
+      final ref = FirebaseStorage.instance.ref(storagePath);
+      await ref.putFile(File(imageFileUrl));
+      final storageUrl = await ref.getDownloadURL();
+
+      await FirebaseFirestore.instance
+          .collection(FirebaseCollectionName.liveConfirmPosts)
+          .doc(
+            '$livePostDocumentPrefix${FirebaseAuth.instance.currentUser!.email}',
+          )
+          .set(
+        {
+          FirebaseLiveConfirmPostFieldName.userId:
+              FirebaseAuth.instance.currentUser!.uid,
+          FirebaseLiveConfirmPostFieldName.imageUrl: storageUrl,
+        },
+        SetOptions(merge: true),
+      ).catchError((error) => debugPrint('Failed to add document: $error'));
+      print(storageUrl);
+      return Future(() => storageUrl);
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+      return '';
+    }
   }
 
   @override
