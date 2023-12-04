@@ -115,7 +115,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               ) as ImageProvider<Object>?
                             : const AssetImage(
                                 'path_to_default_image',
-                              ), // AssetImage 사용시 타입 캐스팅 제거
+                              ),
                   ),
                 ),
               ],
@@ -124,7 +124,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               decoration: const BoxDecoration(
                 color: CustomColors.whBlack,
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 0),
               height: 70,
               child: ListView.builder(
                 padding: const EdgeInsets.only(left: 4, right: 4),
@@ -165,6 +165,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             shadowColor: CustomColors.whDarkBlack,
                           ),
                           child: Text(
+                            // TODO: 요일 표시
                             '${dates[index].$1}\n${dates[index].$2}',
                             textAlign: TextAlign.center,
                             style: TextStyle(
