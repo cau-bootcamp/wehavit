@@ -46,6 +46,7 @@ class FirebaseLiveConfirmPostFieldName {
   static const title = 'title';
   static const message = 'message';
   static const userId = 'userId';
+  static const imageUrl = 'imageUrl';
 }
 
 @immutable

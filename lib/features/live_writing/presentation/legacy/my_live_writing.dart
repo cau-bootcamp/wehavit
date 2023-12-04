@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:wehavit/features/live_writing/presentation/widgets/widgets.dart';
+import 'package:wehavit/features/live_writing/presentation/legacy/confirm_post_form.dart';
+import 'package:wehavit/features/live_writing/presentation/legacy/user_active_goal_dropdown.dart';
 
 // TODO. 이 파일을 수정하여 내가 실시간 글쓰기를 하는 위젯을 완성하면 됩니다.
 class MyLiveWriting extends HookConsumerWidget {

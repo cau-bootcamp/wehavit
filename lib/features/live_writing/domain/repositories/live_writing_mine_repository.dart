@@ -12,6 +12,10 @@ abstract class MyLiveWritingRepository {
     String title,
   );
 
+  Future<String> updatePostImage(
+    String imageFileUrl,
+  );
+
   Stream<List<ReactionModel>> getReactionListStream();
 
   Future<bool> consumeReaction(

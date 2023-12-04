@@ -39,7 +39,10 @@ class LiveWritingFriendRepositoryImpl extends LiveWritingFriendRepository {
         .collection(FirebaseCollectionName.liveConfirmPosts)
         .doc('$livePostDocumentPrefix$email')
         .snapshots()
-        .map((event) => event.data()!['message'] as String);
+        .map(
+          (event) =>
+              event.data()![FirebaseLiveConfirmPostFieldName.message] as String,
+        );
 
     return stream;
   }
@@ -50,9 +53,40 @@ class LiveWritingFriendRepositoryImpl extends LiveWritingFriendRepository {
         .collection(FirebaseCollectionName.liveConfirmPosts)
         .doc('$livePostDocumentPrefix$email')
         .snapshots()
-        .map((event) => event.data()!['title'] as String);
+        .map(
+          (event) =>
+              event.data()![FirebaseLiveConfirmPostFieldName.title] as String,
+        );
 
     return stream;
+  }
+
+  @override
+  Stream<String> getFriendPostImageLiveByEmail(String email) {
+    final stream = FirebaseFirestore.instance
+        .collection(FirebaseCollectionName.liveConfirmPosts)
+        .doc('$livePostDocumentPrefix$email')
+        .snapshots()
+        .map(
+          (event) => event.data()![FirebaseLiveConfirmPostFieldName.imageUrl]
+              as String,
+        );
+
+    return stream;
+  }
+
+  @override
+  Future<String> getFriendProfileImageUrlByEmail(String email) {
+    final res = FirebaseFirestore.instance
+        .collection(FirebaseCollectionName.users)
+        .where(FirebaseUserFieldName.email, isEqualTo: email)
+        .get()
+        .then<String>(
+      (value) {
+        return value.docs.first.data()[FirebaseUserFieldName.imageUrl];
+      },
+    );
+    return res;
   }
 
   @override

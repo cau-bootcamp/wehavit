@@ -58,7 +58,6 @@ class EmojiFireWorkManager {
   void addFireworkWidget(
       {required Offset offset, required List<int> emojiReactionCountList}) {
     final fireworkWidgetKey = UniqueKey();
-
     fireworkWidgets.addEntries(
       <Key, FireworkWidget>{
         fireworkWidgetKey: FireworkWidget(

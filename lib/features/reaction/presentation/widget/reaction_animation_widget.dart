@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/features/effects/effects.dart';
 import 'package:wehavit/features/reaction/presentation/provider/reaction_animation_widget_state_provider.dart';
 import 'package:wehavit/features/swipe_view/domain/usecase/swipe_view_usecase.dart';
@@ -116,7 +115,7 @@ class _ReactionAnimationWidgetState
               await showReactionFromLastConfrimPost();
             },
             child: const Text('Get Reaction Data'),
-          )
+          ),
         ],
       ),
     );
