@@ -5,6 +5,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wehavit/common/routers/route_location.dart';
 import 'package:wehavit/features/live_writing_waiting/domain/models/counter_state.dart';
 import 'package:wehavit/features/live_writing_waiting/domain/models/waiting_model.dart';
+import 'package:wehavit/features/live_writing_waiting/domain/models/waiting_user_model.dart';
+import 'package:wehavit/features/live_writing_waiting/domain/repositories/live_waiting_repository_provider.dart';
 import 'package:wehavit/features/live_writing_waiting/presentation/view/widget/live_waiting_avatar_animation_widget.dart';
 
 /// ## 사용 방법
@@ -30,6 +32,27 @@ import 'package:wehavit/features/live_writing_waiting/presentation/view/widget/l
 ///   // 제거
 ///   _imageUrlListProvider.removeUserImageUrl(imageUrl: 'urlString');
 /// ```
+
+// stream that loops every 10 seconds
+Stream<String> getSyncLiveStream(WidgetRef ref) {
+  final syncLiveStream = Stream.periodic(
+    const Duration(seconds: 10),
+    (count) {
+      debugPrint('syncLiveStream $count');
+      ref
+          .read(liveWaitingRepositoryProvider)
+          .syncLiveWaitingUserStatus(
+            DateTime.now(),
+          )
+          .whenComplete(() => debugPrint('syncLiveStream complete'));
+
+      return count.toString();
+    },
+  );
+
+  return syncLiveStream;
+}
+
 class LiveWritingView extends StatefulHookConsumerWidget {
   const LiveWritingView({super.key});
 
@@ -46,15 +69,37 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
   @override
   Widget build(BuildContext context) {
     final waitingState = ref.watch(waitingProvider);
-    final stream =
+    final timerStream =
         useMemoized(() => ref.read(waitingProvider.notifier).getTimerStream());
-    final snapshot = useStream<String>(stream);
+    final snapshot = useStream<String>(timerStream);
     _liveWaitingViewUserImageUrlList =
         ref.watch(liveWaitingViewUserImageUrlListProvider);
+    final liveWaitingUsersStream = useMemoized(() =>
+        ref.read(liveWaitingRepositoryProvider).getLiveWaitingUsersStream());
+    final liveWaitingUsers = useStream<List<WaitingUser>>(
+      liveWaitingUsersStream,
+    );
+
+    final liveStream = useMemoized(
+      () => getSyncLiveStream(ref),
+    );
+    final liveStreamSnapshot = useStream<String>(liveStream, initialData: '0');
 
     if (waitingState.counterStateEnum == CounterStateEnum.timeForWriting) {
       context.go(RouteLocation.liveWriting);
     }
+
+    useEffect(
+      () {
+        debugPrint('timer ${liveStreamSnapshot.data}');
+        debugPrint(liveWaitingUsers.data.toString());
+
+        return () {
+          debugPrint('useEffect');
+        };
+      },
+      [liveWaitingUsers, liveStreamSnapshot],
+    );
 
     return SafeArea(
       child: Stack(

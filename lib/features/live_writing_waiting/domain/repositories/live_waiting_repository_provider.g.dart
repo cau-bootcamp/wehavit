@@ -7,7 +7,7 @@ part of 'live_waiting_repository_provider.dart';
 // **************************************************************************
 
 String _$liveWaitingRepositoryHash() =>
-    r'd38bf44c1129d7163705aea74150f04382bd01f8';
+    r'4d1612838ae6fb3c518442360aea8fc4b063ef3f';
 
 /// See also [liveWaitingRepository].
 @ProviderFor(liveWaitingRepository)
