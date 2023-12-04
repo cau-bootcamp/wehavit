@@ -1,3 +1,5 @@
+// ignore_for_file: discarded_futures
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -34,17 +36,17 @@ import 'package:wehavit/features/live_writing_waiting/presentation/view/widget/l
 /// ```
 
 // stream that loops every 10 seconds
-Stream<String> getSyncLiveStream(WidgetRef ref) {
+Stream<Future<String>> getSyncLiveStream(WidgetRef ref) {
   final syncLiveStream = Stream.periodic(
-    const Duration(seconds: 10),
-    (count) {
-      debugPrint('syncLiveStream $count');
-      ref
+    const Duration(seconds: 5),
+    (count) async {
+      final result = await ref
           .read(liveWaitingRepositoryProvider)
           .syncLiveWaitingUserStatus(
             DateTime.now(),
-          )
-          .whenComplete(() => debugPrint('syncLiveStream complete'));
+          );
+
+      debugPrint('syncLiveStream($count): $result');
 
       return count.toString();
     },
@@ -68,22 +70,34 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
 
   @override
   Widget build(BuildContext context) {
-    final waitingState = ref.watch(waitingProvider);
-    final timerStream =
-        useMemoized(() => ref.read(waitingProvider.notifier).getTimerStream());
-    final snapshot = useStream<String>(timerStream);
     _liveWaitingViewUserImageUrlList =
         ref.watch(liveWaitingViewUserImageUrlListProvider);
-    final liveWaitingUsersStream = useMemoized(() =>
-        ref.read(liveWaitingRepositoryProvider).getLiveWaitingUsersStream());
-    final liveWaitingUsers = useStream<List<WaitingUser>>(
-      liveWaitingUsersStream,
-    );
+    final waitingState = ref.watch(waitingProvider);
 
+    // Timer Countdown Stream
+    final timerStream =
+        useMemoized(() => ref.read(waitingProvider.notifier).getTimerStream());
+    final timerStreamSnapshot = useStream<String>(timerStream);
+
+    // Friend List
+    final friendListFuture = useMemoized(
+      () => ref.read(liveWaitingRepositoryProvider).getFriendList(),
+    );
+    final friendListSnapshot = useFuture(friendListFuture);
+
+    // Syncing Online Status
     final liveStream = useMemoized(
       () => getSyncLiveStream(ref),
     );
-    final liveStreamSnapshot = useStream<String>(liveStream, initialData: '0');
+    final liveStreamSnapshot = useStream<Future<String>>(liveStream);
+
+    // Waiting Users Stream
+    final liveWaitingUsersStream = useMemoized(
+      () => ref.read(liveWaitingRepositoryProvider).getLiveWaitingUsersStream(),
+    );
+    final liveWaitingUsersStreamSnapshot = useStream<List<WaitingUser>>(
+      liveWaitingUsersStream,
+    );
 
     if (waitingState.counterStateEnum == CounterStateEnum.timeForWriting) {
       context.go(RouteLocation.liveWriting);
@@ -91,14 +105,14 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
 
     useEffect(
       () {
-        debugPrint('timer ${liveStreamSnapshot.data}');
-        debugPrint(liveWaitingUsers.data.toString());
+        debugPrint('friendListSnapshot: ${friendListSnapshot.data}');
+        // debugPrint('timer ${liveStreamSnapshot.data}');
+        debugPrint(
+            'UseEffect LIVE_USERS: ${liveWaitingUsersStreamSnapshot.data.toString()}');
 
-        return () {
-          debugPrint('useEffect');
-        };
+        return () {};
       },
-      [liveWaitingUsers, liveStreamSnapshot],
+      [liveWaitingUsersStreamSnapshot, liveStreamSnapshot, friendListSnapshot],
     );
 
     return SafeArea(
@@ -138,7 +152,7 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
                   ),
                 ),
                 Text(
-                  '${snapshot.data}',
+                  '${timerStreamSnapshot.data}',
                   style: const TextStyle(
                     fontSize: 44,
                     fontWeight: FontWeight.bold,

@@ -9,6 +9,8 @@ class WaitingUser with _$WaitingUser {
   @TimestampConverter()
   const factory WaitingUser({
     DateTime? updatedAt,
+    String? userId,
+    String? email,
   }) = _WaitingUser;
 
   factory WaitingUser.fromJson(Map<String, dynamic> json) =>
