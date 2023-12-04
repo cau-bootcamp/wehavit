@@ -215,7 +215,8 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                     ),
                   IconButton(
                     onPressed: () async {
-                      if (_isTextFieldActive == true) {
+                      if (_isTextFieldActive == true &&
+                          _swipeViewModel.textEditingController.text != '') {
                         await _swipeViewModelProvider.sendTextReaction();
                       }
                       setState(() {
@@ -264,21 +265,6 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                       ),
                     ),
                   ),
-//                  IconButton(
-//                    icon: const Icon(
-//                      Icons.emoji_emotions,
-//                    ),
-//                    onPressed: () {
-//                      // 기능 연결
-//                    },
-//                  ),
-//                  IconButton(
-//                    icon: const Icon(Icons.camera_alt,
-//                        color: CustomColors.whYellow),
-//                    onPressed: () {
-//                      // 기능 연결
-//                    },
-//                  ),
                 ],
               ),
             ],
