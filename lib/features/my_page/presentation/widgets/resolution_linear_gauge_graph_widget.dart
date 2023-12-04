@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
 
 class ResolutionLinearGaugeGraphWidget extends StatelessWidget {
@@ -25,38 +24,31 @@ class ResolutionLinearGaugeGraphWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SfLinearGauge(
-      showTicks: false,
-      showAxisTrack: false,
-      showLabels: false,
-      maximum: 13,
-      markerPointers: List<LinearWidgetPointer>.generate(
-        14,
-        (int index) {
-          return _buildLinearWidgetPointer(
-            index.toDouble(),
-            data.any(
-              (element) =>
-                  todaysDate.difference(element.createdAt!).inDays == index,
-            )
-                ? Colors.black
-                : Colors.white,
-          );
-        },
-      ),
-    );
-  }
-
-  LinearWidgetPointer _buildLinearWidgetPointer(double value, Color color) {
-    return LinearWidgetPointer(
-      value: value,
-      enableAnimation: false,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
       child: Container(
-        constraints: const BoxConstraints(maxHeight: 30),
-        width: 13,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(4),
-          color: color,
+        child: Row(
+          children: List<Widget>.generate(7, (index) {
+            return Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Container(
+                  height: 22,
+                  transform: Matrix4.skewX(-.5),
+                  decoration: BoxDecoration(
+                    color: data.any(
+                      (element) =>
+                          todaysDate.difference(element.createdAt!).inDays ==
+                          index,
+                    )
+                        // TODO: 여기에 색깔 넣기
+                        ? Colors.amber
+                        : Colors.brown,
+                  ),
+                ),
+              ),
+            );
+          }),
         ),
       ),
     );

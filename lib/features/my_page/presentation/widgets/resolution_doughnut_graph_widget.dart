@@ -27,12 +27,12 @@ class ResolutionDoughnutGraphWidget extends StatelessWidget {
       DoughnutSeries<ResolutionAccomplishmentDonutGraphDataModel, String>(
         dataSource: <ResolutionAccomplishmentDonutGraphDataModel>[
           ResolutionAccomplishmentDonutGraphDataModel(
-            x: 'do',
-            y: ratioOfDoneDays,
-          ),
-          ResolutionAccomplishmentDonutGraphDataModel(
             x: 'skip',
             y: 100 - ratioOfDoneDays,
+          ),
+          ResolutionAccomplishmentDonutGraphDataModel(
+            x: 'do',
+            y: ratioOfDoneDays,
           ),
         ],
         xValueMapper:
@@ -47,6 +47,9 @@ class ResolutionDoughnutGraphWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SfCircularChart(series: _getDefaultDoughnutSeries());
+    return SfCircularChart(
+      series: _getDefaultDoughnutSeries(),
+      margin: EdgeInsets.zero,
+    );
   }
 }
