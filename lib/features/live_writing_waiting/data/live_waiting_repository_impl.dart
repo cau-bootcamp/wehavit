@@ -34,12 +34,13 @@ class LiveWaitingRepositoryImpl implements LiveWaitingRepository {
   }
 
   @override
-  Stream<List<WaitingUser>> getLiveWaitingUsersStream({
+  Future<Stream<List<WaitingUser>>> getLiveWaitingUsersStream({
     List<FriendModel> friendList = const [],
-  }) {
+  }) async {
+    friendList = await _getFriendList();
+
     final friendEmails = friendList.map((e) => e.friendEmail);
-    debugPrint(
-        'FriendList:${friendList.map((e) => e.friendEmail).toList().toString()}');
+    // debugPrint('FriendList: $friendEmails');
 
     if (friendEmails.isEmpty) {
       return Stream.value([]);
@@ -74,8 +75,7 @@ class LiveWaitingRepositoryImpl implements LiveWaitingRepository {
     }
   }
 
-  @override
-  Future<List<FriendModel>> getFriendList() async {
+  Future<List<FriendModel>> _getFriendList() async {
     final friendList =
         (await _friendRepository.getFriendModelList()).fold<List<FriendModel>>(
       (l) => [],

@@ -35,26 +35,6 @@ import 'package:wehavit/features/live_writing_waiting/presentation/view/widget/l
 ///   _imageUrlListProvider.removeUserImageUrl(imageUrl: 'urlString');
 /// ```
 
-// stream that loops every 10 seconds
-Stream<Future<String>> getSyncLiveStream(WidgetRef ref) {
-  final syncLiveStream = Stream.periodic(
-    const Duration(seconds: 5),
-    (count) async {
-      final result = await ref
-          .read(liveWaitingRepositoryProvider)
-          .syncLiveWaitingUserStatus(
-            DateTime.now(),
-          );
-
-      debugPrint('syncLiveStream($count): $result');
-
-      return count.toString();
-    },
-  );
-
-  return syncLiveStream;
-}
-
 class LiveWritingView extends StatefulHookConsumerWidget {
   const LiveWritingView({super.key});
 
@@ -79,40 +59,72 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
         useMemoized(() => ref.read(waitingProvider.notifier).getTimerStream());
     final timerStreamSnapshot = useStream<String>(timerStream);
 
-    // Friend List
-    final friendListFuture = useMemoized(
-      () => ref.read(liveWaitingRepositoryProvider).getFriendList(),
-    );
-    final friendListSnapshot = useFuture(friendListFuture);
-
     // Syncing Online Status
     final liveStream = useMemoized(
       () => getSyncLiveStream(ref),
     );
     final liveStreamSnapshot = useStream<Future<String>>(liveStream);
 
-    // Waiting Users Stream
-    final liveWaitingUsersStream = useMemoized(
+    // Get Waiting User Stream Future
+    final liveWaitingUserStreamFuture = useMemoized(
       () => ref.read(liveWaitingRepositoryProvider).getLiveWaitingUsersStream(),
     );
-    final liveWaitingUsersStreamSnapshot = useStream<List<WaitingUser>>(
-      liveWaitingUsersStream,
-    );
+    final liveWaitingUserStreamSnapshot =
+        useFuture(liveWaitingUserStreamFuture);
 
     if (waitingState.counterStateEnum == CounterStateEnum.timeForWriting) {
       context.go(RouteLocation.liveWriting);
     }
 
+    return liveWaitingUserStreamSnapshot.hasData
+        ? LoadedWaitingView(
+            liveWaitingViewUserImageUrlList: _liveWaitingViewUserImageUrlList,
+            enteringTitle: enteringTitle,
+            enteringDescription: enteringDescription,
+            timerStreamSnapshot: timerStreamSnapshot,
+            liveWaitingUserStreamSnapshotData:
+                liveWaitingUserStreamSnapshot.data!,
+          )
+        : const Center(
+            child: CircularProgressIndicator(),
+          );
+  }
+}
+
+class LoadedWaitingView extends HookConsumerWidget {
+  const LoadedWaitingView({
+    super.key,
+    required List<String> liveWaitingViewUserImageUrlList,
+    required this.enteringTitle,
+    required this.enteringDescription,
+    required this.timerStreamSnapshot,
+    required this.liveWaitingUserStreamSnapshotData,
+  }) : _liveWaitingViewUserImageUrlList = liveWaitingViewUserImageUrlList;
+
+  final List<String> _liveWaitingViewUserImageUrlList;
+  final String enteringTitle;
+  final String enteringDescription;
+  final AsyncSnapshot<String> timerStreamSnapshot;
+  final Stream<List<WaitingUser>> liveWaitingUserStreamSnapshotData;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Waiting Users Stream
+    final liveWaitingUsersStream = useMemoized(
+      () => liveWaitingUserStreamSnapshotData,
+    );
+    final liveWaitingUsersStreamSnapshot = useStream<List<WaitingUser>>(
+      liveWaitingUsersStream,
+    );
+
     useEffect(
       () {
-        debugPrint('friendListSnapshot: ${friendListSnapshot.data}');
-        // debugPrint('timer ${liveStreamSnapshot.data}');
-        debugPrint(
-            'UseEffect LIVE_USERS: ${liveWaitingUsersStreamSnapshot.data.toString()}');
+        // debugPrint(
+        //     'UseEffect LIVE_USERS: ${liveWaitingUsersStreamSnapshot.data.toString()}');
 
         return () {};
       },
-      [liveWaitingUsersStreamSnapshot, liveStreamSnapshot, friendListSnapshot],
+      [liveWaitingUsersStreamSnapshot],
     );
 
     return SafeArea(
@@ -159,6 +171,24 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
                     color: Colors.white,
                   ),
                 ),
+                liveWaitingUsersStreamSnapshot.hasData
+                    ? liveWaitingUsersStreamSnapshot.data!.isEmpty
+                        ? const Text('누구도 기다리고 있지 않습니다.')
+                        : Column(
+                            children: liveWaitingUsersStreamSnapshot.data!
+                                .map(
+                                  (e) => Text(
+                                    '${e.email}님이 기다리고 있습니다.',
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                )
+                                .toList(),
+                          )
+                    : const SizedBox(),
               ],
             ),
           ),
@@ -184,4 +214,24 @@ class LiveWaitingViewUserImageUrlList extends StateNotifier<List<String>> {
   void removeUserImageUrl({required String imageUrl}) {
     state = state..remove(imageUrl);
   }
+}
+
+// stream that loops every 10 seconds
+Stream<Future<String>> getSyncLiveStream(WidgetRef ref) {
+  final syncLiveStream = Stream.periodic(
+    const Duration(seconds: 5),
+    (count) async {
+      final result = await ref
+          .read(liveWaitingRepositoryProvider)
+          .syncLiveWaitingUserStatus(
+            DateTime.now(),
+          );
+
+      // debugPrint('syncLiveStream($count): $result');
+
+      return count.toString();
+    },
+  );
+
+  return syncLiveStream;
 }

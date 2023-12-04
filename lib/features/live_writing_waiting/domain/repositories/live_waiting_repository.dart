@@ -4,9 +4,7 @@ import 'package:wehavit/features/live_writing_waiting/domain/models/waiting_user
 abstract class LiveWaitingRepository {
   Future<bool> syncLiveWaitingUserStatus(DateTime nowTime);
 
-  Stream<List<WaitingUser>> getLiveWaitingUsersStream({
+  Future<Stream<List<WaitingUser>>> getLiveWaitingUsersStream({
     List<FriendModel> friendList = const [],
   });
-
-  Future<List<FriendModel>> getFriendList();
 }
