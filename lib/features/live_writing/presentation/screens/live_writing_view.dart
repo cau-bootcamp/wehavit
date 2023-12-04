@@ -50,6 +50,9 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
   Widget build(BuildContext context) {
     final activeResolutionList = ref.watch(activeResolutionListProvider);
 
+    final friendEmailsFuture = useMemoized(() => getVisibleFriends(ref));
+    final friendEmailsSnapshot = useFuture<List<String>>(friendEmailsFuture);
+
     final reactionStream = useMemoized(() => reactionNotificationStream(ref));
     final reactionSnapshot = useStream<List<ReactionModel>>(reactionStream);
 
@@ -97,11 +100,11 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
                         ),
                         child: Column(
                           children: List<Widget>.generate(
-                            4,
+                            friendEmailsSnapshot.data?.length ?? 0,
                             (index) => Padding(
                               padding: EdgeInsets.symmetric(vertical: 12.0),
                               child: FriendLivePostWidget(
-                                userEmail: 'moktak072@gmail.com',
+                                userEmail: friendEmailsSnapshot.data![index],
                               ),
                             ),
                           ),
@@ -190,6 +193,7 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
                     items: writingCellList,
                     carouselController: _controller,
                     options: CarouselOptions(
+                        enableInfiniteScroll: false,
                         height: 330,
                         viewportFraction: 0.9,
                         // enlargeCenterPage: true,
