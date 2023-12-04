@@ -115,7 +115,7 @@ class _ReactionAnimationWidgetState
               await showReactionFromLastConfrimPost();
             },
             child: const Text('Get Reaction Data'),
-          )
+          ),
         ],
       ),
     );
