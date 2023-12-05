@@ -34,11 +34,13 @@ class _FriendListScreenState extends ConsumerState<FriendListScreen> {
     var friendList = ref.watch(friendListProvider);
 
     return Scaffold(
+      backgroundColor: CustomColors.whBlack,
       appBar: AppBar(
+        backgroundColor: CustomColors.whBlack,
         actions: [
           IconButton(
-            icon: const Icon(Icons.home, color: Colors.black54),
-            // 일단 임시로 검은색과 홈 아이콘으로 처리하였음.
+            color: CustomColors.whWhite,
+            icon: const Icon(Icons.home, color: CustomColors.whSemiWhite),
             onPressed: () async {
               context.go(RouteLocation.home);
             },
@@ -48,64 +50,20 @@ class _FriendListScreenState extends ConsumerState<FriendListScreen> {
       body: SafeArea(
         child: Column(
           children: [
+            const AddFriendTextFieldWidget(),
+            // 내 프로필
+            MyProfile(currentUser: currentUser),
+            // 친구 수 표시
             Container(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(left: 8.0),
-                    child: Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 40,
-                          foregroundImage: NetworkImage(
-                            currentUser?.photoURL ?? 'DEBUG_URL',
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(left: 8.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(currentUser?.displayName ?? 'DEBUG_NO_NAME'),
-                              Text(currentUser?.email ?? 'DEBUG_UserID'),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-// TODO: 링크로 친구 추가하기 추후에.
-//                  Container(
-//                    alignment: Alignment.centerRight,
-//                    margin: const EdgeInsets.only(right: 8.0),
-//                    child: IconButton(
-//                      icon: const Icon(Icons.link),
-//                      color: Colors.black87,
-//                      onPressed: () {},
-//                    ),
-//                  ),
-                ],
+              alignment: Alignment.centerLeft,
+              margin: const EdgeInsets.only(top: 16, left: 16, bottom: 4),
+              child: Text(
+                '내 친구들(${friendList.fold((l) => 0, (r) => r.length)})',
+                textAlign: TextAlign.left,
+                style: const TextStyle(color: CustomColors.whWhite),
               ),
             ),
-            Column(
-              children: [
-                SizedBox(
-                  width: 200,
-                  child: FilledButton(
-                    onPressed: () async {
-                      await ref
-                          .read(friendListProvider.notifier)
-                          .getFriendList();
-                    },
-                    child: const Text('친구 목록 새로고침'),
-                  ),
-                ),
-                const AddFriendTextFieldWidget(),
-              ],
-            ),
+            // 친구 리스트
             friendList.fold(
               (left) => null,
               (right) => Expanded(
