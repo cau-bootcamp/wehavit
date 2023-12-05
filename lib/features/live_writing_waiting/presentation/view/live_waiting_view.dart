@@ -176,9 +176,16 @@ class LoadedWaitingView extends HookConsumerWidget {
                         ? const Text('누구도 기다리고 있지 않습니다.')
                         : Column(
                             children: liveWaitingUsersStreamSnapshot.data!
+                                .where(
+                                  (e) => e.updatedAt!.isAfter(
+                                    DateTime.now().subtract(
+                                      const Duration(seconds: 5),
+                                    ),
+                                  ),
+                                )
                                 .map(
                                   (e) => Text(
-                                    '${e.email}님이 기다리고 있습니다.',
+                                    '${e.email}님이\n 기다리고 있습니다.\n ${e.updatedAt}}',
                                     style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w600,
