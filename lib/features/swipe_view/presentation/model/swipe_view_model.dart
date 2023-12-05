@@ -1,6 +1,5 @@
 import 'package:camera/camera.dart';
 import 'package:carousel_slider/carousel_controller.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/errors/failure.dart';

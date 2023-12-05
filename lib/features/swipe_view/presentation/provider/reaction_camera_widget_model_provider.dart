@@ -70,8 +70,6 @@ class ReactionCameraWidgetModelProvider
           File('$directory/screenshot${DateTime.now().toString()}.png');
       imgFile.writeAsBytes(pngBytes);
 
-      print(imgFile.path);
-
       return imgFile.path;
     } else {
       return '';

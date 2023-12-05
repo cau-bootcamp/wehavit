@@ -30,7 +30,6 @@ class SwipeViewState extends ConsumerState<SwipeView>
 
   bool _initOccurred = false;
 
-  bool _isCameraActivated = false;
   double fromLeft = 0;
   double fromTop = 0;
 
@@ -266,7 +265,7 @@ class SwipeViewState extends ConsumerState<SwipeView>
               child: ReactionCameraWidget(
                 cameraController: _swipeViewModel.cameraController,
               ),
-            )
+            ),
         ],
       ),
     );
@@ -294,6 +293,8 @@ class SwipeViewState extends ConsumerState<SwipeView>
           if (_reactionCameraWidgetModelProvider.isFingerInCameraArea()) {
             final imageFilePath =
                 await _reactionCameraWidgetModelProvider.capture();
+
+            // 반응 전송 로직 아래에 삽입
             _swipeViewModelProvider.sendImageReaction(
               imageFilePath: imageFilePath,
             );
