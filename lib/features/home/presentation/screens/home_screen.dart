@@ -108,13 +108,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   child: CircleAvatar(
                     backgroundColor: Colors.transparent,
                     radius: 20,
-                    backgroundImage: FirebaseAuth
-                                .instance.currentUser?.photoURL !=
-                            null
-                        ? NetworkImage(
-                            FirebaseAuth.instance.currentUser!.photoURL!)
-                        : const AssetImage('path_to_default_image')
-                            as ImageProvider<Object>, // Provide a default image
+                    backgroundImage:
+                        FirebaseAuth.instance.currentUser?.photoURL != null
+                            ? NetworkImage(
+                                FirebaseAuth.instance.currentUser!.photoURL!,
+                              ) as ImageProvider<Object>?
+                            : const AssetImage(
+                                'path_to_default_image',
+                              ),
                   ),
                 ),
               ],
@@ -123,7 +124,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               decoration: const BoxDecoration(
                 color: CustomColors.whBlack,
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 0),
               height: 70,
               child: ListView.builder(
                 padding: const EdgeInsets.only(left: 4, right: 4),
@@ -132,42 +133,64 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 itemCount: dates.length,
                 itemBuilder: (context, index) {
                   return Container(
-                    padding: const EdgeInsets.all(2),
-                    child: TextButton(
-                      onPressed: () async {
-                        // 버튼을 누르면 selectedIndex 가 변경되고, provider를 통해 해당
-                        // 날짜의 데이터를 불러온다.
-                        setState(() {
-                          selectedIndex = index; // 상태 변경
-                        });
-                        await ref
-                            .read(confirmPostListProvider.notifier)
-                            .getConfirmPostList(selectedIndex);
-                      },
-                      style: TextButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 12, horizontal: 18), // 패딩 조절
-                        minimumSize: const Size(0, 0), // 최소 크기 설정
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(40), // 모서리 둥글게
-                        ),
-                        // Change the background color to indicate selection
-                        backgroundColor: selectedIndex == index
-                            ? CustomColors.whYellow
-                            : CustomColors.whSemiBlack,
-                      ),
-                      child: Align(
-                        child: Text(
-                          '${dates[index].$1}\n${dates[index].$2}',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: selectedIndex == index
-                                ? CustomColors.whSemiBlack
-                                : CustomColors.whSemiWhite,
+                    padding: const EdgeInsets.all(4),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () async {
+                            // 버튼을 누르면 selectedIndex 가 변경되고, provider를 통해 해당
+                            // 날짜의 데이터를 불러온다.
+                            setState(() {
+                              selectedIndex = index; // 상태 변경
+                            });
+                            await ref
+                                .read(confirmPostListProvider.notifier)
+                                .getConfirmPostList(selectedIndex);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: const Size(0, 0),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 12,
+                              horizontal: 16,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            backgroundColor: selectedIndex == index
+                                ? CustomColors
+                                    .whYellow // Color for selected button
+                                : CustomColors.whYellowDark,
+                            elevation: 2,
+                            shadowColor: CustomColors.whDarkBlack,
+                          ),
+                          child: Text(
+                            // TODO: 요일 표시
+                            '${dates[index].$1}\n${dates[index].$2}',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: selectedIndex == index
+                                  ? CustomColors.whSelectedTextColor
+                                  : CustomColors.whUnSelectedTextColor,
+                            ),
                           ),
                         ),
-                      ),
+                        Container(
+//                          width: 30,
+//                          height: 40,
+                          decoration: const BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: CustomColors.whDarkBlack,
+                                // blurRadius: 30,
+                                blurStyle: BlurStyle.inner,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   );
                 },

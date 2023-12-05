@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
+import 'package:wehavit/common/common.dart';
 import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
 
 class ResolutionLinearGaugeGraphWidget extends StatelessWidget {
@@ -39,8 +40,8 @@ class ResolutionLinearGaugeGraphWidget extends StatelessWidget {
               (element) =>
                   todaysDate.difference(element.createdAt!).inDays == index,
             )
-                ? Colors.black
-                : Colors.white,
+                ? CustomColors.whBlack
+                : CustomColors.whWhite,
           );
         },
       ),
