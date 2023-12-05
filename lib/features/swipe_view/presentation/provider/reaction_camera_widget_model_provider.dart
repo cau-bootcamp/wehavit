@@ -17,19 +17,20 @@ class ReactionCameraWidgetModelProvider
   ReactionCameraWidgetModelProvider(Ref ref)
       : super(ReactionCameraWidgetModel());
 
-  bool get isFocusingMode => state.isFocusingMode;
-
-  set isFocusingMode(bool newValue) {
+  void setFocusingModeTo(bool newValue) {
     if (newValue) {
       state.cameraController.resumePreview();
     } else {
+      // 사용하지 않을 때는 멀리 치워놓기
+      state.cameraButtonOriginXOffset = -100;
+      state.cameraButtonOriginYOffset = -100;
       state.cameraController.pausePreview();
     }
     state.isFocusingMode = newValue;
   }
 
-  bool isFingerInCameraArea(Point offset) {
-    if (offset.distanceTo(
+  bool isFingerInCameraArea() {
+    if (Point(state.cameraButtonXOffset, state.cameraButtonYOffset).distanceTo(
           Point(
             state.screenWidth / 2,
             state.cameraWidgetPositionY + state.cameraWidgetRadius,
@@ -68,6 +69,8 @@ class ReactionCameraWidgetModelProvider
       File imgFile =
           File('$directory/screenshot${DateTime.now().toString()}.png');
       imgFile.writeAsBytes(pngBytes);
+
+      print(imgFile.path);
 
       return imgFile.path;
     } else {

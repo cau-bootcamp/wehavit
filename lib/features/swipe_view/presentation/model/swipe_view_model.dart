@@ -28,7 +28,7 @@ class SwipeViewModel {
   // Camera Reaction UI Variables
   late CameraController cameraController;
   bool isCameraInitialized = false;
-  GlobalKey cameraButtonPlaceholderKey = GlobalKey();
+  bool isCameraActivated = false;
   Offset cameraButtonPosition = const Offset(0, 0);
 
   // Emoji Reaction UI Variables

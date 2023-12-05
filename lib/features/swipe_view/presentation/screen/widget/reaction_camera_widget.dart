@@ -1,6 +1,3 @@
-import 'dart:async';
-import 'dart:io';
-import 'dart:math';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,12 +8,11 @@ import 'package:wehavit/features/swipe_view/presentation/provider/swipe_view_mod
 class ReactionCameraWidget extends ConsumerStatefulWidget {
   const ReactionCameraWidget({
     super.key,
-    required this.originPosition,
     required this.cameraController,
   });
 
-  final Offset originPosition;
   final CameraController cameraController;
+
   @override
   ConsumerState<ReactionCameraWidget> createState() =>
       _ReactionCameraWidgetState();
@@ -50,11 +46,6 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
     _reactionCameraWidgetModel.cameraWidgetRadius =
         _reactionCameraWidgetModel.screenWidth / 2.3;
 
-    _reactionCameraWidgetModel.cameraButtonOriginXOffset =
-        widget.originPosition.dx;
-    _reactionCameraWidgetModel.cameraButtonOriginYOffset =
-        widget.originPosition.dy;
-
     _reactionCameraWidgetModel.cameraButtonXOffset =
         _reactionCameraWidgetModel.cameraButtonOriginXOffset;
     _reactionCameraWidgetModel.cameraButtonYOffset =
@@ -80,7 +71,7 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.black45.withOpacity(
-                    _reactionCameraWidgetModelProvider.isFocusingMode ? 0.7 : 0,
+                    _reactionCameraWidgetModel.isFocusingMode ? 0.7 : 0,
                   ),
                 ),
               ),
@@ -93,8 +84,7 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
                 2 *
                 _reactionCameraWidgetModel.cameraController.value.aspectRatio,
             child: Opacity(
-              opacity:
-                  _reactionCameraWidgetModelProvider.isFocusingMode ? 1 : 0,
+              opacity: _reactionCameraWidgetModel.isFocusingMode ? 1 : 0,
               child: RepaintBoundary(
                 key: _reactionCameraWidgetModel.repaintBoundaryGlobalKey,
                 child: IgnorePointer(
@@ -113,75 +103,18 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
             ),
           ),
           Positioned(
-            left: _reactionCameraWidgetModel.cameraButtonXOffset,
-            top: _reactionCameraWidgetModel.cameraButtonYOffset,
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  _reactionCameraWidgetModel.isShowingHelpMessage = true;
-                  Timer(const Duration(seconds: 3), () {
-                    _reactionCameraWidgetModel.isShowingHelpMessage = false;
-                  });
-                });
-              },
-              onTapDown: (details) {
-                setState(() {
-                  _reactionCameraWidgetModelProvider.isFocusingMode = true;
-                });
-              },
-              onTapUp: (details) {
-                setState(() {
-                  _reactionCameraWidgetModelProvider.isFocusingMode = false;
-                });
-              },
-              onLongPressEnd: (details) {
-                setState(() {
-                  _reactionCameraWidgetModelProvider.isFocusingMode = false;
-                });
-              },
-              onPanUpdate: (details) {
-                setState(() {
-                  _reactionCameraWidgetModelProvider.isFocusingMode = true;
-                  _reactionCameraWidgetModel.cameraButtonXOffset =
-                      _reactionCameraWidgetModel.cameraButtonXOffset +
-                          details.delta.dx;
-                  _reactionCameraWidgetModel.cameraButtonYOffset =
-                      _reactionCameraWidgetModel.cameraButtonYOffset +
-                          details.delta.dy;
-                });
-              },
-              onPanEnd: (details) async {
-                if (_reactionCameraWidgetModelProvider.isFingerInCameraArea(
-                  Point(
-                    _reactionCameraWidgetModel.cameraButtonXOffset,
-                    _reactionCameraWidgetModel.cameraButtonYOffset,
-                  ),
-                )) {
-                  final file = File(
-                    await _reactionCameraWidgetModelProvider.capture(),
-                  );
-                  _swipeViewModelProvider.sendImageReaction(
-                    imageFilePath: file.path,
-                  );
-                }
-
-                setState(() {
-                  _reactionCameraWidgetModel.cameraButtonXOffset =
-                      _reactionCameraWidgetModel.cameraButtonOriginXOffset;
-                  _reactionCameraWidgetModel.cameraButtonYOffset =
-                      _reactionCameraWidgetModel.cameraButtonOriginYOffset;
-                  _reactionCameraWidgetModelProvider.isFocusingMode = false;
-                });
-              },
-              child: Container(
-                width: _reactionCameraWidgetModel.cameraButtonRadius * 2,
-                height: _reactionCameraWidgetModel.cameraButtonRadius * 2,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: _reactionCameraWidgetModelProvider.isFocusingMode
-                      ? Colors.amber
-                      : Colors.transparent,
-                ),
+            left: _reactionCameraWidgetModel.cameraButtonXOffset -
+                _reactionCameraWidgetModel.cameraButtonRadius,
+            top: _reactionCameraWidgetModel.cameraButtonYOffset -
+                _reactionCameraWidgetModel.cameraButtonRadius,
+            child: Container(
+              width: _reactionCameraWidgetModel.cameraButtonRadius * 2,
+              height: _reactionCameraWidgetModel.cameraButtonRadius * 2,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: _reactionCameraWidgetModel.isFocusingMode
+                    ? Colors.amber
+                    : Colors.transparent,
               ),
             ),
           ),
