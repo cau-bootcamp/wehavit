@@ -11,59 +11,37 @@ import 'package:wehavit/features/live_writing_waiting/domain/models/waiting_user
 import 'package:wehavit/features/live_writing_waiting/domain/repositories/live_waiting_repository_provider.dart';
 import 'package:wehavit/features/live_writing_waiting/presentation/view/widget/live_waiting_avatar_animation_widget.dart';
 
-/// ## 사용 방법
-/// 1. Provider를 ref로 read 해준 뒤
-/// ```
-///   late LiveWaitingViewUserImageUrlList _imageUrlListProvider;
-///   _imageUrlListProvider = ref.read(liveWaitingViewUserImageUrlListProvider.notifier);
-/// ```
-/// 2. LiveWritingView를 Stack에 담아주고
-/// ```
-/// Stack(
-///   children: [ ... ,
-///     LiveWritingView()
-///   ...
-///   ]
-/// )
-///
-/// ```
-/// 3. 아래처럼 urlString을 추가하는 함수를 호출해 화면에 버블을 그리거나 제거할 수 있음
-/// ```
-///   // 추가
-///   _imageUrlListProvider.addUserImageUrl(imageUrl: 'urlString');
-///   // 제거
-///   _imageUrlListProvider.removeUserImageUrl(imageUrl: 'urlString');
-/// ```
+// 다른 유저들이 기다리고 있는지 polling하는 주기
+const syncDelay = Duration(seconds: 5);
+// stream that loops on every {sycnDelay} duration
+Stream getSyncLiveStream(WidgetRef ref) {
+  final syncLiveStream = Stream.periodic(syncDelay, (_) {
+    return ref.read(liveWaitingRepositoryProvider).syncLiveWaitingUserStatus(
+          DateTime.now(),
+        );
+  }).asyncMap((event) async => await event);
 
-class LiveWritingView extends StatefulHookConsumerWidget {
-  const LiveWritingView({super.key});
-
-  @override
-  ConsumerState<LiveWritingView> createState() => _LiveWritingViewState();
+  return syncLiveStream;
 }
 
-class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
-  late List<String> _liveWaitingViewUserImageUrlList;
+class LiveWritingView extends HookConsumerWidget {
+  const LiveWritingView({super.key});
 
   final String enteringTitle = '곧 입장을 시작합니다!';
   final String enteringDescription = '입장중...';
 
   @override
-  Widget build(BuildContext context) {
-    _liveWaitingViewUserImageUrlList =
-        ref.watch(liveWaitingViewUserImageUrlListProvider);
-    final waitingState = ref.watch(waitingProvider);
-
+  Widget build(BuildContext context, WidgetRef ref) {
     // Timer Countdown Stream
     final timerStream =
         useMemoized(() => ref.read(waitingProvider.notifier).getTimerStream());
-    final timerStreamSnapshot = useStream<String>(timerStream);
+    final timerStreamSnapshot = useStream(timerStream);
 
     // Syncing Online Status
     final liveStream = useMemoized(
       () => getSyncLiveStream(ref),
     );
-    final liveStreamSnapshot = useStream<Future<String>>(liveStream);
+    useStream(liveStream);
 
     // Get Waiting User Stream Future
     final liveWaitingUserStreamFuture = useMemoized(
@@ -72,13 +50,14 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
     final liveWaitingUserStreamSnapshot =
         useFuture(liveWaitingUserStreamFuture);
 
+    // Waiting or Writing State
+    final waitingState = ref.watch(waitingProvider);
     if (waitingState.counterStateEnum == CounterStateEnum.timeForWriting) {
       context.go(RouteLocation.liveWriting);
     }
 
     return liveWaitingUserStreamSnapshot.hasData
         ? LoadedWaitingView(
-            liveWaitingViewUserImageUrlList: _liveWaitingViewUserImageUrlList,
             enteringTitle: enteringTitle,
             enteringDescription: enteringDescription,
             timerStreamSnapshot: timerStreamSnapshot,
@@ -94,14 +73,12 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
 class LoadedWaitingView extends HookConsumerWidget {
   const LoadedWaitingView({
     super.key,
-    required List<String> liveWaitingViewUserImageUrlList,
     required this.enteringTitle,
     required this.enteringDescription,
     required this.timerStreamSnapshot,
     required this.liveWaitingUserStreamSnapshotData,
-  }) : _liveWaitingViewUserImageUrlList = liveWaitingViewUserImageUrlList;
+  });
 
-  final List<String> _liveWaitingViewUserImageUrlList;
   final String enteringTitle;
   final String enteringDescription;
   final AsyncSnapshot<String> timerStreamSnapshot;
@@ -117,10 +94,20 @@ class LoadedWaitingView extends HookConsumerWidget {
       liveWaitingUsersStream,
     );
 
+    // 5초 이내에 업데이트 된 유저들만 필터링
+    final liveWaitingUsers = (liveWaitingUsersStreamSnapshot.data ?? [])
+        .where(
+          (e) => e.updatedAt!.isAfter(
+            DateTime.now().subtract(
+              const Duration(seconds: 5),
+            ),
+          ),
+        )
+        .toList();
+
     useEffect(
       () {
-        // debugPrint(
-        //     'UseEffect LIVE_USERS: ${liveWaitingUsersStreamSnapshot.data.toString()}');
+        // debugPrint('UseEffect LIVE_USERS: $liveWaitingUsers');
 
         return () {};
       },
@@ -134,9 +121,9 @@ class LoadedWaitingView extends HookConsumerWidget {
           Stack(
             clipBehavior: Clip.none,
             children: List.generate(
-              _liveWaitingViewUserImageUrlList.length,
+              liveWaitingUsers.length,
               (idx) => LiveWaitingAvatarAnimatingWidget(
-                userImageUrl: _liveWaitingViewUserImageUrlList[idx],
+                userImageUrl: liveWaitingUsers[idx].imageUrl!,
               ),
             ),
           ),
@@ -203,42 +190,4 @@ class LoadedWaitingView extends HookConsumerWidget {
       ),
     );
   }
-}
-
-final liveWaitingViewUserImageUrlListProvider =
-    StateNotifierProvider<LiveWaitingViewUserImageUrlList, List<String>>(
-  (ref) => LiveWaitingViewUserImageUrlList(),
-);
-
-class LiveWaitingViewUserImageUrlList extends StateNotifier<List<String>> {
-  LiveWaitingViewUserImageUrlList() : super([]);
-
-  void addUserImageUrl({required String imageUrl}) {
-    state = List.from(state..add(imageUrl));
-    // state = state..append(imageUrl);
-  }
-
-  void removeUserImageUrl({required String imageUrl}) {
-    state = state..remove(imageUrl);
-  }
-}
-
-// stream that loops every 10 seconds
-Stream<Future<String>> getSyncLiveStream(WidgetRef ref) {
-  final syncLiveStream = Stream.periodic(
-    const Duration(seconds: 5),
-    (count) async {
-      final result = await ref
-          .read(liveWaitingRepositoryProvider)
-          .syncLiveWaitingUserStatus(
-            DateTime.now(),
-          );
-
-      // debugPrint('syncLiveStream($count): $result');
-
-      return count.toString();
-    },
-  );
-
-  return syncLiveStream;
 }

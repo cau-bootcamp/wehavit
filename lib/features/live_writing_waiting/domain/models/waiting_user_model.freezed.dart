@@ -23,6 +23,7 @@ mixin _$WaitingUser {
   DateTime? get updatedAt => throw _privateConstructorUsedError;
   String? get userId => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
+  String? get imageUrl => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -36,7 +37,8 @@ abstract class $WaitingUserCopyWith<$Res> {
           WaitingUser value, $Res Function(WaitingUser) then) =
       _$WaitingUserCopyWithImpl<$Res, WaitingUser>;
   @useResult
-  $Res call({DateTime? updatedAt, String? userId, String? email});
+  $Res call(
+      {DateTime? updatedAt, String? userId, String? email, String? imageUrl});
 }
 
 /// @nodoc
@@ -55,6 +57,7 @@ class _$WaitingUserCopyWithImpl<$Res, $Val extends WaitingUser>
     Object? updatedAt = freezed,
     Object? userId = freezed,
     Object? email = freezed,
+    Object? imageUrl = freezed,
   }) {
     return _then(_value.copyWith(
       updatedAt: freezed == updatedAt
@@ -69,6 +72,10 @@ class _$WaitingUserCopyWithImpl<$Res, $Val extends WaitingUser>
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String?,
+      imageUrl: freezed == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -81,7 +88,8 @@ abstract class _$$WaitingUserImplCopyWith<$Res>
       __$$WaitingUserImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({DateTime? updatedAt, String? userId, String? email});
+  $Res call(
+      {DateTime? updatedAt, String? userId, String? email, String? imageUrl});
 }
 
 /// @nodoc
@@ -98,6 +106,7 @@ class __$$WaitingUserImplCopyWithImpl<$Res>
     Object? updatedAt = freezed,
     Object? userId = freezed,
     Object? email = freezed,
+    Object? imageUrl = freezed,
   }) {
     return _then(_$WaitingUserImpl(
       updatedAt: freezed == updatedAt
@@ -112,6 +121,10 @@ class __$$WaitingUserImplCopyWithImpl<$Res>
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String?,
+      imageUrl: freezed == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -120,7 +133,8 @@ class __$$WaitingUserImplCopyWithImpl<$Res>
 @JsonSerializable()
 @TimestampConverter()
 class _$WaitingUserImpl implements _WaitingUser {
-  const _$WaitingUserImpl({this.updatedAt, this.userId, this.email});
+  const _$WaitingUserImpl(
+      {this.updatedAt, this.userId, this.email, this.imageUrl});
 
   factory _$WaitingUserImpl.fromJson(Map<String, dynamic> json) =>
       _$$WaitingUserImplFromJson(json);
@@ -131,10 +145,12 @@ class _$WaitingUserImpl implements _WaitingUser {
   final String? userId;
   @override
   final String? email;
+  @override
+  final String? imageUrl;
 
   @override
   String toString() {
-    return 'WaitingUser(updatedAt: $updatedAt, userId: $userId, email: $email)';
+    return 'WaitingUser(updatedAt: $updatedAt, userId: $userId, email: $email, imageUrl: $imageUrl)';
   }
 
   @override
@@ -145,12 +161,15 @@ class _$WaitingUserImpl implements _WaitingUser {
             (identical(other.updatedAt, updatedAt) ||
                 other.updatedAt == updatedAt) &&
             (identical(other.userId, userId) || other.userId == userId) &&
-            (identical(other.email, email) || other.email == email));
+            (identical(other.email, email) || other.email == email) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, updatedAt, userId, email);
+  int get hashCode =>
+      Object.hash(runtimeType, updatedAt, userId, email, imageUrl);
 
   @JsonKey(ignore: true)
   @override
@@ -170,7 +189,8 @@ abstract class _WaitingUser implements WaitingUser {
   const factory _WaitingUser(
       {final DateTime? updatedAt,
       final String? userId,
-      final String? email}) = _$WaitingUserImpl;
+      final String? email,
+      final String? imageUrl}) = _$WaitingUserImpl;
 
   factory _WaitingUser.fromJson(Map<String, dynamic> json) =
       _$WaitingUserImpl.fromJson;
@@ -181,6 +201,8 @@ abstract class _WaitingUser implements WaitingUser {
   String? get userId;
   @override
   String? get email;
+  @override
+  String? get imageUrl;
   @override
   @JsonKey(ignore: true)
   _$$WaitingUserImplCopyWith<_$WaitingUserImpl> get copyWith =>

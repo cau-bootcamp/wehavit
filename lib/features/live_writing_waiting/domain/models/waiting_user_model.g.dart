@@ -12,6 +12,7 @@ _$WaitingUserImpl _$$WaitingUserImplFromJson(Map<String, dynamic> json) =>
           json['updatedAt'], const TimestampConverter().fromJson),
       userId: json['userId'] as String?,
       email: json['email'] as String?,
+      imageUrl: json['imageUrl'] as String?,
     );
 
 Map<String, dynamic> _$$WaitingUserImplToJson(_$WaitingUserImpl instance) =>
@@ -20,6 +21,7 @@ Map<String, dynamic> _$$WaitingUserImplToJson(_$WaitingUserImpl instance) =>
           instance.updatedAt, const TimestampConverter().toJson),
       'userId': instance.userId,
       'email': instance.email,
+      'imageUrl': instance.imageUrl,
     };
 
 Value? _$JsonConverterFromJson<Json, Value>(

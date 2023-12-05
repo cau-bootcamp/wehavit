@@ -11,6 +11,7 @@ class WaitingUser with _$WaitingUser {
     DateTime? updatedAt,
     String? userId,
     String? email,
+    String? imageUrl,
   }) = _WaitingUser;
 
   factory WaitingUser.fromJson(Map<String, dynamic> json) =>

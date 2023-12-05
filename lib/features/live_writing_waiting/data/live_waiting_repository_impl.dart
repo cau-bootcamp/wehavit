@@ -12,6 +12,7 @@ class LiveWaitingRepositoryImpl implements LiveWaitingRepository {
     user = WaitingUser(
       userId: FirebaseAuth.instance.currentUser!.uid,
       email: FirebaseAuth.instance.currentUser!.email!,
+      imageUrl: FirebaseAuth.instance.currentUser!.photoURL,
     );
   }
 
