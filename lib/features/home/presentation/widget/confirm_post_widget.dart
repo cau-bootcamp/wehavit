@@ -25,16 +25,17 @@ class ConfirmPostWidget extends ConsumerStatefulWidget {
 class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
     with SingleTickerProviderStateMixin {
   late String userName = widget.model.userName;
-  late String userImageUrl = widget.model.userImageUrl;
+  late String? userImageUrl = widget.model.userImageUrl;
   late String resolutionGoalStatement = widget.model.resolutionGoalStatement;
   late String title = widget.model.title;
   late String content = widget.model.content;
-  late String contentImageUrl = widget.model.contentImageUrl;
+  late String? contentImageUrl = widget.model.contentImageUrl;
   late Timestamp postAt = widget.model.postAt;
   late final SwipeViewModel _swipeViewModel;
   late final SwipeViewModelProvider _swipeViewModelProvider;
 
   bool _initOccurred = false;
+  bool _isTextFieldActive = false;
 
   @override
   void initState() {
@@ -54,9 +55,9 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
 
       await _swipeViewModelProvider.initializeCamera();
 
-      _swipeViewModel.cameraButtonPosition =
-          _swipeViewModelProvider.getCameraButtonPosition() ??
-              const Offset(0, 0);
+      // _swipeViewModel.cameraButtonPosition =
+      //     _swipeViewModelProvider.getCameraButtonPosition() ??
+      //         const Offset(0, 0);
 
       setAnimationVariables();
 
@@ -67,21 +68,13 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
 
   @override
   Widget build(BuildContext context) {
-//    print(userName);
-//    print(userImageUrl);
-//    print(resolutionGoalStatement);
-//    print(title);
-//    print(content);
-//    print(contentImageUrl);
-//    print(postAt);
-
     return Padding(
-      padding: const EdgeInsets.all(4),
+      padding: const EdgeInsets.all(8),
       child: Container(
         padding: const EdgeInsets.only(top: 8),
         decoration: BoxDecoration(
           color: CustomColors.whDarkBlack,
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(20),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
@@ -94,11 +87,10 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                   Row(
                     children: [
                       CircleAvatar(
-                        backgroundColor: CustomColors.whSemiBlack,
-                        child: CircleAvatar(
-                          radius: 30,
-                          foregroundImage: NetworkImage(userImageUrl),
-                        ),
+                        backgroundImage: userImageUrl != null
+                            ? NetworkImage(userImageUrl!)
+                                as ImageProvider<Object>
+                            : const AssetImage('DEBUG_IMAGE'),
                       ),
                       const SizedBox(width: 10),
                       Text(
@@ -135,7 +127,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                   ), //goal name
                 ],
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 8),
               Text(
                 title,
                 style: const TextStyle(
@@ -143,54 +135,99 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              //title
+              const SizedBox(height: 8),
+              Container(
+                height: 2,
+                width: 345,
+                color: CustomColors.whYellow,
+              ),
+              const SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(
-                    height: 150,
-                    width: 200,
-                    child: Padding(
-                      padding: const EdgeInsets.all(3.0),
-                      child: RichText(
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 5,
-                        strutStyle: const StrutStyle(fontSize: 16.0),
-                        text: TextSpan(
-                          text: content,
-                        ),
+                    height: 120,
+                    width: 180,
+                    child: RichText(
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 5,
+                      strutStyle: const StrutStyle(fontSize: 16.0),
+                      text: TextSpan(
+                        text: content,
                       ),
                     ),
                   ),
-                  Container(
-                    height: 130,
-                    width: 130,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: NetworkImage(contentImageUrl),
+                  //title
+                  Expanded(
+                    child: AspectRatio(
+                      aspectRatio: 4 / 3, // 4:3 비율 설정
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: contentImageUrl != null
+                                ? NetworkImage(contentImageUrl!)
+                                    as ImageProvider<Object>
+                                : const AssetImage('DEBUG_IMAGE'),
+                          ),
+                        ),
                       ),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
+              // 게시물 하단 격려 남기기 기능들
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      decoration: const InputDecoration(
-                        fillColor: Colors.white,
-                        filled: true,
-                        border: OutlineInputBorder(),
+                children: <Widget>[
+                  if (_isTextFieldActive)
+                    Expanded(
+                      child: SizedBox(
+                        height: 36,
+                        child: TextFormField(
+                          controller: _swipeViewModel.textEditingController,
+                          textAlign: TextAlign.left,
+                          style: const TextStyle(
+                            fontSize: 10,
+                          ),
+                          cursorColor: CustomColors.whYellow,
+                          // 여기에 적절한 커스텀 색상을 사용하세요
+                          decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
+                            fillColor: CustomColors.whYellowDark,
+                            // 여기에 적절한 커스텀 색상을 사용하세요
+                            filled: true,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
                   IconButton(
-                    onPressed: () async {},
-                    icon: const Icon(Icons.send),
+                    onPressed: () async {
+                      if (_isTextFieldActive == true &&
+                          _swipeViewModel.textEditingController.text != '') {
+                        await _swipeViewModelProvider.sendTextReaction();
+                      }
+                      setState(() {
+                        _isTextFieldActive =
+                            !_isTextFieldActive; // 버튼이 눌릴 때마다 텍스트 필드의 보임/숨김 상태를 토글합니다
+                      });
+                    },
+                    icon: const Icon(
+                      Icons.send,
+                      size: 24,
+                    ),
                   ),
                   GestureDetector(
                     onTapUp: (details) async =>
@@ -198,21 +235,21 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                       _swipeViewModelProvider.sendEmojiReaction();
                     }),
                     child: Container(
-                      width: 50,
-                      height: 50,
+                      width: 40,
+                      height: 40,
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                       ),
                       child: const Center(
                         child: Text(
                           '😄',
-                          style: TextStyle(fontSize: 30),
+                          style: TextStyle(fontSize: 24),
                         ),
                       ),
                     ),
                   ),
                   Container(
-                    key: _swipeViewModel.cameraButtonPlaceholderKey,
+                    // key: _swipeViewModel.cameraButtonPlaceholderKey,
                     width: 50,
                     height: 50,
                     decoration: const BoxDecoration(
@@ -224,25 +261,10 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                         _swipeViewModel.isCameraInitialized == true
                             ? '📸'
                             : '❌',
-                        style: const TextStyle(fontSize: 30),
+                        style: const TextStyle(fontSize: 24),
                       ),
                     ),
                   ),
-//                  IconButton(
-//                    icon: const Icon(
-//                      Icons.emoji_emotions,
-//                    ),
-//                    onPressed: () {
-//                      // 기능 연결
-//                    },
-//                  ),
-//                  IconButton(
-//                    icon: const Icon(Icons.camera_alt,
-//                        color: CustomColors.whYellow),
-//                    onPressed: () {
-//                      // 기능 연결
-//                    },
-//                  ),
                 ],
               ),
             ],

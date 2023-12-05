@@ -1,6 +1,5 @@
 import 'package:camera/camera.dart';
 import 'package:carousel_slider/carousel_controller.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/errors/failure.dart';
@@ -28,7 +27,7 @@ class SwipeViewModel {
   // Camera Reaction UI Variables
   late CameraController cameraController;
   bool isCameraInitialized = false;
-  GlobalKey cameraButtonPlaceholderKey = GlobalKey();
+  bool isCameraActivated = false;
   Offset cameraButtonPosition = const Offset(0, 0);
 
   // Emoji Reaction UI Variables

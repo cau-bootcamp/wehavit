@@ -5,7 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/models/user_model/user_model.dart';
 import 'package:wehavit/common/utils/emoji_assets.dart';
 import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
+import 'package:wehavit/features/swipe_view/presentation/model/reaction_camera_widget_model.dart';
 import 'package:wehavit/features/swipe_view/presentation/model/swipe_view_model.dart';
+import 'package:wehavit/features/swipe_view/presentation/provider/reaction_camera_widget_model_provider.dart';
 import 'package:wehavit/features/swipe_view/presentation/provider/swipe_view_model_provider.dart';
 import 'package:wehavit/features/swipe_view/presentation/screen/widget/emoji_sheet_widget.dart';
 import 'package:wehavit/features/swipe_view/presentation/screen/widget/swipe_dashboard_widget.dart';
@@ -24,6 +26,10 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
   late final SwipeViewModel _swipeViewModel;
   late final SwipeViewModelProvider _swipeViewModelProvider;
 
+  late final ReactionCameraWidgetModel _reactionCameraWidgetModel;
+  late final ReactionCameraWidgetModelProvider
+      _reactionCameraWidgetModelProvider;
+
   @override
   void initState() {
     super.initState();
@@ -34,6 +40,10 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
     super.didChangeDependencies();
     _swipeViewModel = ref.watch(swipeViewModelProvider);
     _swipeViewModelProvider = ref.read(swipeViewModelProvider.notifier);
+
+    _reactionCameraWidgetModel = ref.watch(reactionCameraWidgetModelProvider);
+    _reactionCameraWidgetModelProvider =
+        ref.read(reactionCameraWidgetModelProvider.notifier);
   }
 
   @override
@@ -195,7 +205,40 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
                     widget.model.content ?? '',
                   ),
                 ),
-
+                Column(
+                  children: [
+                    SizedBox(
+                      height:
+                          _swipeViewModel.commentFieldFocus.hasFocus ? 0 : 50,
+                      child: Row(
+                        children: [
+                          Expanded(child: Container()),
+                          GestureDetector(
+                            onTapUp: (details) async =>
+                                emojiSheetWidget(context)
+                                    .whenComplete(() async {
+                              _swipeViewModelProvider.sendEmojiReaction();
+                            }),
+                            child: Container(
+                              width: 50,
+                              height: 50,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  '😄',
+                                  style: TextStyle(fontSize: 30),
+                                ),
+                              ),
+                            ),
+                          ),
+                          photoReactionButtonWidget(),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
                 Container(
                   height: 30,
                   decoration: const BoxDecoration(
@@ -240,6 +283,53 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
                 ),
               ],
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Container photoReactionButtonWidget() {
+    return Container(
+      width: 50,
+      height: 50,
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        // color: Colors.black,
+      ),
+      child: GestureDetector(
+        onPanStart: (details) {
+          setState(() {
+            _reactionCameraWidgetModelProvider.setFocusingModeTo(true);
+          });
+        },
+        onPanEnd: (details) async {
+          setState(() {
+            _reactionCameraWidgetModelProvider.setFocusingModeTo(false);
+          });
+
+          if (_reactionCameraWidgetModelProvider.isFingerInCameraArea()) {
+            final imageFilePath =
+                await _reactionCameraWidgetModelProvider.capture();
+
+            // 반응 전송 로직 아래에 삽입
+            _swipeViewModelProvider.sendImageReaction(
+              imageFilePath: imageFilePath,
+            );
+          }
+        },
+        onPanUpdate: (details) {
+          setState(() {
+            _reactionCameraWidgetModel.cameraButtonXOffset =
+                details.globalPosition.dx;
+            _reactionCameraWidgetModel.cameraButtonYOffset =
+                details.globalPosition.dy;
+          });
+        },
+        child: Center(
+          child: Text(
+            _swipeViewModel.isCameraInitialized == true ? '📸' : '❌',
+            style: const TextStyle(fontSize: 30),
           ),
         ),
       ),

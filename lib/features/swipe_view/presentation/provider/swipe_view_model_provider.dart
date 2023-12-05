@@ -1,6 +1,5 @@
 import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/models/user_model/user_model.dart';
 import 'package:wehavit/common/utils/no_params.dart';
@@ -177,17 +176,6 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
 
   void startShrinkingLayout() {
     state.animationController.reverse();
-  }
-
-  Offset? getCameraButtonPosition() {
-    if (state.cameraButtonPlaceholderKey.currentContext != null) {
-      final RenderBox renderBox =
-          state.cameraButtonPlaceholderKey.currentContext!.findRenderObject()
-              as RenderBox;
-      Offset offset = renderBox.localToGlobal(Offset.zero);
-      return offset;
-    }
-    return null;
   }
 
   Future<List<ConfirmPostModel>> getConfirmPostListFor({

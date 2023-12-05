@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wehavit/common/common.dart';
 import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
 import 'package:wehavit/features/my_page/domain/models/resolution_model.dart';
 import 'package:wehavit/features/my_page/presentation/widgets/resolution_doughnut_graph_widget.dart';
@@ -33,9 +34,9 @@ class _ResolutionDashboardWidgetState
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       decoration: const BoxDecoration(
-        color: Colors.green,
+        color: CustomColors.whSemiBlack,
         borderRadius: BorderRadius.all(Radius.circular(15)),
       ),
       child: Row(
@@ -59,8 +60,8 @@ class _ResolutionDashboardWidgetState
                             const SizedBox(height: 20),
                             Container(
                               padding: const EdgeInsets.all(2),
-                              decoration:
-                                  const BoxDecoration(color: Colors.white),
+                              decoration: const BoxDecoration(
+                                  color: CustomColors.whYellow),
                               child: ResolutionLinearGaugeGraphWidget(
                                 sourceData: snapshot.data!,
                                 lastPeriod: false,
@@ -68,8 +69,8 @@ class _ResolutionDashboardWidgetState
                             ),
                             Container(
                               padding: const EdgeInsets.all(2),
-                              decoration:
-                                  const BoxDecoration(color: Colors.white),
+                              decoration: const BoxDecoration(
+                                  color: CustomColors.whYellowDark),
                               child: ResolutionLinearGaugeGraphWidget(
                                 sourceData: snapshot.data!,
                                 lastPeriod: true,
