@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/common/utils/emoji_assets.dart';
 import 'package:wehavit/features/swipe_view/presentation/model/reaction_camera_widget_model.dart';
 import 'package:wehavit/features/swipe_view/presentation/model/swipe_view_model.dart';
@@ -68,187 +69,133 @@ class SwipeViewState extends ConsumerState<SwipeView>
     return Scaffold(
       extendBodyBehindAppBar: true,
       // appBar: AppBar(),
-      body: Stack(
-        children: [
-          SafeArea(
-            child: _swipeViewModel.confirmPostModelList.fold(
-              (failure) => Container(
-                color: Colors.cyan,
-              ),
-              (modelList) => Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              CustomColors.whDarkBlack,
+              CustomColors.whYellow,
+            ],
+            stops: [0.5, 1.0],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Expanded(
+          child: Stack(
+            children: [
+              SafeArea(
+                left: false,
+                right: false,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 8),
-                      height: 10,
-                      color: Colors.blueGrey,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: List<Widget>.generate(
-                          modelList.length,
-                          (modelIndex) => Expanded(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 4.0),
-                              child: Container(
-                                key: ValueKey(modelIndex),
-                                decoration: BoxDecoration(
-                                  color: _swipeViewModel.currentCellIndex ==
-                                          modelIndex
-                                      ? Colors.amber
-                                      : Colors.grey[400],
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              // icon: Icon(Icons.arrow_back_ios),
+                              icon: Icon(Icons.arrow_back_ios),
+                              color: CustomColors.whWhite,
+                            ),
+                            Expanded(child: Container()),
+                          ],
+                        ),
+                        Expanded(
+                          child: _swipeViewModel.confirmPostModelList.fold(
+                            (failure) => Container(
+                              color: const Color.fromRGBO(0, 188, 212, 1),
+                            ),
+                            (modelList) => Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: modelList.asMap().entries.map((entry) {
+                                return GestureDetector(
+                                  onTap: () => _swipeViewModel
+                                      .carouselController
+                                      .animateToPage(entry.key),
+                                  child: Container(
+                                    width: 12.0,
+                                    height: 12.0,
+                                    margin: EdgeInsets.symmetric(
+                                        vertical: 8.0, horizontal: 4.0),
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color:
+                                            _swipeViewModel.currentCellIndex ==
+                                                    entry.key
+                                                ? CustomColors.whYellow
+                                                : CustomColors.whSemiWhite),
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Expanded(
+                      child: _swipeViewModel.confirmPostModelList.fold(
+                        (failure) => Container(
+                          color: const Color.fromRGBO(0, 188, 212, 1),
+                        ),
+                        (modelList) => Container(
+                          constraints: BoxConstraints.expand(),
+                          child: Expanded(
+                            child: GestureDetector(
+                              onTap: () => _swipeViewModelProvider
+                                  .unfocusCommentTextForm(),
+                              child: CarouselSlider(
+                                options: CarouselOptions(
+                                  viewportFraction: 1.0,
+                                  height: MediaQuery.of(context).size.height,
+                                  onPageChanged: (index, reason) {
+                                    setState(() {
+                                      _swipeViewModel.currentCellIndex = index;
+                                    });
+                                  },
+                                  enableInfiniteScroll: false,
                                 ),
-                                height: 8,
+                                carouselController:
+                                    _swipeViewModel.carouselController,
+                                items: List<Widget>.generate(
+                                  modelList.length,
+                                  (index) {
+                                    return Flex(
+                                      direction: Axis.vertical,
+                                      children: [
+                                        SwipeViewCellWidget(
+                                          model: modelList[index],
+                                          panUpdateCallback: updatePanPosition,
+                                          panEndCallback:
+                                              endOnCapturingPosition,
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
                               ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () =>
-                            _swipeViewModelProvider.unfocusCommentTextForm(),
-                        child: CarouselSlider(
-                          options: CarouselOptions(
-                            viewportFraction: 1.0,
-                            height: MediaQuery.of(context).size.height,
-                            onPageChanged: (index, reason) {
-                              setState(() {
-                                _swipeViewModel.currentCellIndex = index;
-                              });
-                            },
-                            enableInfiniteScroll: false,
-                          ),
-                          carouselController:
-                              _swipeViewModel.carouselController,
-                          items: List<Widget>.generate(
-                            modelList.length,
-                            (index) {
-                              return Flex(
-                                direction: Axis.vertical,
-                                children: [
-                                  SwipeViewCellWidget(
-                                    model: modelList[index],
-                                    panUpdateCallback: updatePanPosition,
-                                    panEndCallback: endOnCapturingPosition,
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),
-            ),
+              if (_swipeViewModel.isCameraInitialized)
+                ReactionCameraWidget(
+                  cameraController: _swipeViewModel.cameraController,
+                  panPosition: panPosition,
+                ),
+            ],
           ),
-          if (_swipeViewModel.isCameraInitialized)
-            ReactionCameraWidget(
-              cameraController: _swipeViewModel.cameraController,
-              panPosition: panPosition,
-            ),
-        ],
+        ),
       ),
-    );
-  }
-
-  Future<dynamic> emojiSheetWidget(BuildContext context) {
-    return showModalBottomSheet(
-      backgroundColor: Colors.transparent,
-      clipBehavior: Clip.none,
-      elevation: 0,
-      context: context,
-      builder: (context) {
-        void disposeWidget(UniqueKey key) {
-          setState(() {
-            _swipeViewModel.emojiWidgets.remove(key);
-          });
-        }
-
-        return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-            return Stack(
-              alignment: Alignment.center,
-              clipBehavior: Clip.none,
-              children: [
-                Stack(
-                  alignment: Alignment.topCenter,
-                  clipBehavior: Clip.none,
-                  children: _swipeViewModel.emojiWidgets.values.toList(),
-                ),
-                Container(
-                  clipBehavior: Clip.hardEdge,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                    ),
-                  ),
-                ),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 30.0),
-                      child: Text(
-                        '반응을 ${_swipeViewModel.countSend}회 보냈어요!',
-                        style: const TextStyle(fontSize: 20),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Column(
-                        children: List<Widget>.generate(
-                          3,
-                          (index) => Row(
-                            children: List<Widget>.generate(5, (jndex) {
-                              final key = UniqueKey();
-                              return Expanded(
-                                key: key,
-                                child: GestureDetector(
-                                  onTapDown: (detail) {},
-                                  onTapUp: (detail) {
-                                    shootEmoji(
-                                      setState,
-                                      index,
-                                      jndex,
-                                      detail,
-                                      context,
-                                      disposeWidget,
-                                    );
-                                  },
-                                  child: Stack(
-                                    clipBehavior: Clip.none,
-                                    children: [
-                                      Image(
-                                        image: AssetImage(
-                                          Emojis.emojiList[index * 5 + jndex],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            }),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 60,
-                    ),
-                  ],
-                ),
-              ],
-            );
-          },
-        );
-      },
     );
   }
 
