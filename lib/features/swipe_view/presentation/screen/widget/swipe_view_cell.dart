@@ -394,7 +394,7 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
               clipBehavior: Clip.none,
               children: [
                 Stack(
-                  alignment: Alignment.topCenter,
+                  alignment: Alignment.bottomCenter,
                   clipBehavior: Clip.none,
                   children: _swipeViewModel.emojiWidgets.values.toList(),
                 ),
@@ -413,7 +413,6 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
                   ],
                 ),
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     const Padding(
@@ -426,60 +425,81 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
                         ),
                       ),
                     ),
-                    Expanded(flex: 1, child: Container()),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 30.0),
-                      child: Text(
-                        '반응을 ${_swipeViewModel.countSend}회 보냈어요!',
-                        style: const TextStyle(
-                          fontSize: 22,
-                          color: CustomColors.whWhite,
+                    Expanded(
+                      flex: 2,
+                      // padding: const EdgeInsets.only(bottom: 30.0),
+                      child: Center(
+                        child: Column(
+                          children: [
+                            Text(
+                              _swipeViewModel.countSend.toString(),
+                              style: const TextStyle(
+                                fontSize: 64,
+                                color: CustomColors.whYellow,
+                                fontWeight: FontWeight.w700,
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
+                            const Text(
+                              '반응을 보내주세요!',
+                              style: TextStyle(
+                                fontSize: 24,
+                                color: CustomColors.whYellow,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Column(
-                        children: List<Widget>.generate(
-                          3,
-                          (index) => Row(
-                            children: List<Widget>.generate(5, (jndex) {
-                              final key = UniqueKey();
-                              return Expanded(
-                                key: key,
-                                child: GestureDetector(
-                                  onTapDown: (detail) {},
-                                  onTapUp: (detail) {
-                                    shootEmoji(
-                                      setState,
-                                      index,
-                                      jndex,
-                                      detail,
-                                      context,
-                                      disposeWidget,
-                                    );
-                                  },
-                                  child: Stack(
-                                    clipBehavior: Clip.none,
-                                    children: [
-                                      Image(
-                                        image: AssetImage(
-                                          Emojis.emojiList[index * 5 + jndex],
-                                        ),
+                    Builder(
+                      builder: (context) {
+                        return SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          child: Column(
+                            children: List<Widget>.generate(
+                              3,
+                              (index) => Row(
+                                children: List<Widget>.generate(5, (jndex) {
+                                  final key = UniqueKey();
+                                  return Expanded(
+                                    key: key,
+                                    child: GestureDetector(
+                                      onTapDown: (detail) {},
+                                      onTapUp: (detail) {
+                                        shootEmoji(
+                                          setState,
+                                          index,
+                                          jndex,
+                                          detail,
+                                          context,
+                                          disposeWidget,
+                                        );
+                                      },
+                                      child: Stack(
+                                        clipBehavior: Clip.none,
+                                        children: [
+                                          Image(
+                                            image: AssetImage(
+                                              Emojis
+                                                  .emojiList[index * 5 + jndex],
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            }),
+                                    ),
+                                  );
+                                }),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
+                        );
+                      },
                     ),
-                    Expanded(flex: 2, child: Container()),
-                    const SizedBox(
-                      height: 60,
-                    ),
+                    Expanded(child: Container()),
+                    // const SizedBox(
+                    //   height: 60,
+                    // ),
                   ],
                 ),
               ],
@@ -508,8 +528,7 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
             animationWidgetKey: ShootEmojiWidget(
               key: animationWidgetKey,
               emojiIndex: index * 5 + jndex,
-              currentPos:
-                  Point(detail.globalPosition.dx, detail.globalPosition.dy),
+              currentPos: Point(detail.globalPosition.dx, 100),
               targetPos: Point(
                 MediaQuery.of(context).size.width / 2,
                 MediaQuery.of(context).size.height + 50,
