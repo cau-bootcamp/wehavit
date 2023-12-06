@@ -62,3 +62,12 @@ class FirebaseConfirmPostFieldName {
   static const title = 'title';
   static const updatedAt = 'updatedAt';
 }
+
+@immutable
+class FirebaseLiveWaitingFieldName {
+  static const String updatedAt = 'updatedAt';
+  static const String userId = 'userId';
+  static const String name = 'name';
+  static const String email = 'email';
+  static const String imageUrl = 'imageUrl';
+}

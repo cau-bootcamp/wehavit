@@ -27,4 +27,8 @@ class FirebaseCollectionName {
       ? 'encourages'
       : 'invalid_address';
   static const liveConfirmPosts = 'live_confirm_posts';
+
+  static final liveWaitingUsers = FirebaseAuth.instance.currentUser != null
+      ? 'live_waiting_users'
+      : 'invalid_address';
 }

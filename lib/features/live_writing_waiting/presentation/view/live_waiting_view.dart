@@ -1,3 +1,5 @@
+// ignore_for_file: discarded_futures
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -5,56 +7,106 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wehavit/common/routers/route_location.dart';
 import 'package:wehavit/features/live_writing_waiting/domain/models/counter_state.dart';
 import 'package:wehavit/features/live_writing_waiting/domain/models/waiting_model.dart';
+import 'package:wehavit/features/live_writing_waiting/domain/models/waiting_user_model.dart';
+import 'package:wehavit/features/live_writing_waiting/domain/repositories/live_waiting_repository_provider.dart';
 import 'package:wehavit/features/live_writing_waiting/presentation/view/widget/live_waiting_avatar_animation_widget.dart';
 
-/// ## 사용 방법
-/// 1. Provider를 ref로 read 해준 뒤
-/// ```
-///   late LiveWaitingViewUserImageUrlList _imageUrlListProvider;
-///   _imageUrlListProvider = ref.read(liveWaitingViewUserImageUrlListProvider.notifier);
-/// ```
-/// 2. LiveWritingView를 Stack에 담아주고
-/// ```
-/// Stack(
-///   children: [ ... ,
-///     LiveWritingView()
-///   ...
-///   ]
-/// )
-///
-/// ```
-/// 3. 아래처럼 urlString을 추가하는 함수를 호출해 화면에 버블을 그리거나 제거할 수 있음
-/// ```
-///   // 추가
-///   _imageUrlListProvider.addUserImageUrl(imageUrl: 'urlString');
-///   // 제거
-///   _imageUrlListProvider.removeUserImageUrl(imageUrl: 'urlString');
-/// ```
-class LiveWritingView extends StatefulHookConsumerWidget {
-  const LiveWritingView({super.key});
+// 다른 유저들이 기다리고 있는지 polling하는 주기
+const syncDelay = Duration(seconds: 5);
+// stream that loops on every {sycnDelay} duration
+Stream getSyncLiveStream(WidgetRef ref) {
+  final syncLiveStream = Stream.periodic(syncDelay, (_) {
+    return ref.read(liveWaitingRepositoryProvider).syncLiveWaitingUserStatus(
+          DateTime.now(),
+        );
+  }).asyncMap((event) async => await event);
 
-  @override
-  ConsumerState<LiveWritingView> createState() => _LiveWritingViewState();
+  return syncLiveStream;
 }
 
-class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
-  late List<String> _liveWaitingViewUserImageUrlList;
+class LiveWritingView extends HookConsumerWidget {
+  const LiveWritingView({super.key});
 
   final String enteringTitle = '곧 입장을 시작합니다!';
   final String enteringDescription = '입장중...';
 
   @override
-  Widget build(BuildContext context) {
-    final waitingState = ref.watch(waitingProvider);
-    final stream =
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Timer Countdown Stream
+    final timerStream =
         useMemoized(() => ref.read(waitingProvider.notifier).getTimerStream());
-    final snapshot = useStream<String>(stream);
-    _liveWaitingViewUserImageUrlList =
-        ref.watch(liveWaitingViewUserImageUrlListProvider);
+    final timerStreamSnapshot = useStream(timerStream);
 
+    // Syncing Online Status
+    final liveStream = useMemoized(
+      () => getSyncLiveStream(ref),
+    );
+    useStream(liveStream);
+
+    // Get Waiting User Stream Future
+    final liveWaitingUserStreamFuture = useMemoized(
+      () => ref.read(liveWaitingRepositoryProvider).getLiveWaitingUsersStream(),
+    );
+    final liveWaitingUserStreamSnapshot =
+        useFuture(liveWaitingUserStreamFuture);
+
+    // Waiting or Writing State
+    final waitingState = ref.watch(waitingProvider);
     if (waitingState.counterStateEnum == CounterStateEnum.timeForWriting) {
       context.go(RouteLocation.liveWriting);
     }
+
+    return liveWaitingUserStreamSnapshot.hasData
+        ? LoadedWaitingView(
+            enteringTitle: enteringTitle,
+            enteringDescription: enteringDescription,
+            timerStreamSnapshot: timerStreamSnapshot,
+            liveWaitingUserStreamSnapshotData:
+                liveWaitingUserStreamSnapshot.data!,
+          )
+        : const Center(
+            child: CircularProgressIndicator(),
+          );
+  }
+}
+
+class LoadedWaitingView extends HookConsumerWidget {
+  const LoadedWaitingView({
+    super.key,
+    required this.enteringTitle,
+    required this.enteringDescription,
+    required this.timerStreamSnapshot,
+    required this.liveWaitingUserStreamSnapshotData,
+  });
+
+  final String enteringTitle;
+  final String enteringDescription;
+  final AsyncSnapshot<String> timerStreamSnapshot;
+  final Stream<List<WaitingUser>> liveWaitingUserStreamSnapshotData;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Waiting Users Stream
+    final liveWaitingUsersStream = useMemoized(
+      () => liveWaitingUserStreamSnapshotData,
+    );
+    final liveWaitingUsersStreamSnapshot = useStream<List<WaitingUser>>(
+      liveWaitingUsersStream,
+    );
+
+    // 30초 이내에 업데이트 된 유저들만 필터링
+    final liveWaitingUsers = (liveWaitingUsersStreamSnapshot.data ?? [])
+        .where(
+          (e) => e.updatedAt!.isAfter(
+            DateTime.now().subtract(
+              const Duration(seconds: 30),
+            ),
+          ),
+        )
+        .toList()
+      ..sort(
+        (a, b) => a.name!.compareTo(b.name!),
+      );
 
     return SafeArea(
       child: Stack(
@@ -63,9 +115,9 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
           Stack(
             clipBehavior: Clip.none,
             children: List.generate(
-              _liveWaitingViewUserImageUrlList.length,
+              liveWaitingUsers.length,
               (idx) => LiveWaitingAvatarAnimatingWidget(
-                userImageUrl: _liveWaitingViewUserImageUrlList[idx],
+                userImageUrl: liveWaitingUsers[idx].imageUrl!,
               ),
             ),
           ),
@@ -93,36 +145,37 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
                   ),
                 ),
                 Text(
-                  '${snapshot.data}',
+                  '${timerStreamSnapshot.data}',
                   style: const TextStyle(
                     fontSize: 44,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
                 ),
+                liveWaitingUsersStreamSnapshot.hasData
+                    ? liveWaitingUsersStreamSnapshot.data!.isEmpty
+                        ? const Text('🥵누구도 기다리고 있지 않습니다.')
+                        : Column(
+                            children: liveWaitingUsers
+                                .map(
+                                  (e) => Text(
+                                    '😃${e.name}(${e.email})님이 기다리고 있습니다.'
+                                    '\n ${e.updatedAt}',
+                                    style: const TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                )
+                                .toList(),
+                          )
+                    : const SizedBox(),
               ],
             ),
           ),
         ],
       ),
     );
-  }
-}
-
-final liveWaitingViewUserImageUrlListProvider =
-    StateNotifierProvider<LiveWaitingViewUserImageUrlList, List<String>>(
-  (ref) => LiveWaitingViewUserImageUrlList(),
-);
-
-class LiveWaitingViewUserImageUrlList extends StateNotifier<List<String>> {
-  LiveWaitingViewUserImageUrlList() : super([]);
-
-  void addUserImageUrl({required String imageUrl}) {
-    state = List.from(state..add(imageUrl));
-    // state = state..append(imageUrl);
-  }
-
-  void removeUserImageUrl({required String imageUrl}) {
-    state = state..remove(imageUrl);
   }
 }
