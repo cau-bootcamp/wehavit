@@ -24,18 +24,18 @@ class ReactionCameraWidgetModelProvider
 
   void setFocusingModeTo(bool newValue) {
     if (newValue) {
-      // state.cameraController.resumePreview();
+      state.cameraController!.resumePreview();
     } else {
       // 사용하지 않을 때는 멀리 치워놓기
       state.cameraButtonOriginXOffset = -100;
       state.cameraButtonOriginYOffset = -100;
-      // state.cameraController.pausePreview();
+      state.cameraController!.pausePreview();
     }
     state = state.copyWith(isFocusingMode: newValue);
   }
 
-  bool isFingerInCameraArea() {
-    if (Point(state.cameraButtonXOffset, state.cameraButtonYOffset).distanceTo(
+  bool isPosInCameraAreaOf(Point<double> pos) {
+    if (Point(pos.x, pos.y).distanceTo(
           Point(
             state.screenWidth / 2,
             state.cameraWidgetPositionY + state.cameraWidgetRadius,
@@ -61,6 +61,8 @@ class ReactionCameraWidgetModelProvider
   }
 
   Future<String> capture() async {
+    print('capture');
+
     var renderObject =
         state.repaintBoundaryGlobalKey.currentContext?.findRenderObject();
     if (renderObject is RenderRepaintBoundary) {
@@ -74,6 +76,8 @@ class ReactionCameraWidgetModelProvider
       File imgFile =
           File('$directory/screenshot${DateTime.now().toString()}.png');
       imgFile.writeAsBytes(pngBytes);
+
+      print(imgFile.path);
 
       return imgFile.path;
     } else {

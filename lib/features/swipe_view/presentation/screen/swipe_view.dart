@@ -31,8 +31,7 @@ class SwipeViewState extends ConsumerState<SwipeView>
 
   bool _initOccurred = false;
 
-  double fromLeft = 0;
-  double fromTop = 0;
+  Point<double> panPosition = const Point(0, 0);
 
   @override
   void initState() {
@@ -132,6 +131,8 @@ class SwipeViewState extends ConsumerState<SwipeView>
                                 children: [
                                   SwipeViewCellWidget(
                                     model: modelList[index],
+                                    panUpdateCallback: updatePanPosition,
+                                    panEndCallback: endOnCapturingPosition,
                                   ),
                                 ],
                               );
@@ -148,6 +149,7 @@ class SwipeViewState extends ConsumerState<SwipeView>
           if (_swipeViewModel.isCameraInitialized)
             ReactionCameraWidget(
               cameraController: _swipeViewModel.cameraController,
+              panPosition: panPosition,
             ),
         ],
       ),
@@ -293,6 +295,20 @@ class SwipeViewState extends ConsumerState<SwipeView>
           }.entries,
         );
       },
+    );
+  }
+
+  void updatePanPosition(Point<double> position) {
+    setState(() {
+      panPosition = position;
+    });
+  }
+
+  Future<void> endOnCapturingPosition(Point<double> position) async {
+    final imageFilePath = await _reactionCameraWidgetModelProvider.capture();
+    // 반응 전송 로직 아래에 삽입
+    _swipeViewModelProvider.sendImageReaction(
+      imageFilePath: imageFilePath,
     );
   }
 }

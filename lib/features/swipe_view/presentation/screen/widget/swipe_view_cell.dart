@@ -13,9 +13,16 @@ import 'package:wehavit/features/swipe_view/presentation/screen/widget/emoji_she
 import 'package:wehavit/features/swipe_view/presentation/screen/widget/swipe_dashboard_widget.dart';
 
 class SwipeViewCellWidget extends ConsumerStatefulWidget {
-  const SwipeViewCellWidget({super.key, required this.model});
+  const SwipeViewCellWidget({
+    super.key,
+    required this.panUpdateCallback,
+    required this.panEndCallback,
+    required this.model,
+  });
 
   final ConfirmPostModel model;
+  final Function panUpdateCallback;
+  final Function panEndCallback;
 
   @override
   ConsumerState<SwipeViewCellWidget> createState() =>
@@ -23,12 +30,13 @@ class SwipeViewCellWidget extends ConsumerStatefulWidget {
 }
 
 class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
-  late final SwipeViewModel _swipeViewModel;
-  late final SwipeViewModelProvider _swipeViewModelProvider;
+  late SwipeViewModel _swipeViewModel;
+  late SwipeViewModelProvider _swipeViewModelProvider;
 
-  late final ReactionCameraWidgetModel _reactionCameraWidgetModel;
-  late final ReactionCameraWidgetModelProvider
-      _reactionCameraWidgetModelProvider;
+  late ReactionCameraWidgetModel _reactionCameraWidgetModel;
+  late ReactionCameraWidgetModelProvider _reactionCameraWidgetModelProvider;
+
+  Point<double> panningPosition = const Point(0, 0);
 
   @override
   void initState() {
@@ -300,36 +308,29 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
       child: GestureDetector(
         onPanStart: (details) {
           setState(() {
-            print("DEBUG_pan start");
             _reactionCameraWidgetModelProvider.setFocusingModeTo(true);
-            // _reactionCameraWidgetModel.isFocusingMode = true;
-            // ref.read(reactionCameraWidgetModelProvider).isFocusingMode = true;
           });
         },
         onPanEnd: (details) async {
-          print("DEBUG_pan end");
-          setState(() {
-            _reactionCameraWidgetModelProvider.setFocusingModeTo(false);
-            // ref.read(reactionCameraWidgetModelProvider).isFocusingMode = false;
-          });
-
-          if (_reactionCameraWidgetModelProvider.isFingerInCameraArea()) {
-            final imageFilePath =
-                await _reactionCameraWidgetModelProvider.capture();
-
-            // 반응 전송 로직 아래에 삽입
-            _swipeViewModelProvider.sendImageReaction(
-              imageFilePath: imageFilePath,
-            );
+          if (_reactionCameraWidgetModelProvider
+              .isPosInCameraAreaOf(panningPosition)) {
+            widget.panEndCallback(panningPosition);
           }
+
+          _reactionCameraWidgetModelProvider.setFocusingModeTo(false);
         },
         onPanUpdate: (details) {
-          setState(() {
-            _reactionCameraWidgetModel.cameraButtonXOffset =
-                details.globalPosition.dx;
-            _reactionCameraWidgetModel.cameraButtonYOffset =
-                details.globalPosition.dy;
-          });
+          panningPosition =
+              Point(details.globalPosition.dx, details.globalPosition.dy);
+
+          widget.panUpdateCallback(panningPosition);
+
+          _reactionCameraWidgetModel = _reactionCameraWidgetModel.copyWith(
+            currentButtonPosition: Point(
+              details.globalPosition.dx,
+              details.globalPosition.dy,
+            ),
+          );
         },
         child: Center(
           child: Text(

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -27,10 +29,16 @@ class ReactionCameraWidgetModel {
   ReactionCameraWidgetModel copyWith({
     bool? isFocusingMode,
     CameraController? cameraController,
+    Point<double>? currentButtonPosition,
   }) {
     final newModel = ReactionCameraWidgetModel();
     newModel.isFocusingMode = isFocusingMode ?? newModel.isFocusingMode;
     newModel.cameraController = cameraController ?? newModel.cameraController;
+    newModel.cameraButtonXOffset =
+        currentButtonPosition?.x ?? newModel.cameraButtonXOffset;
+    newModel.cameraButtonYOffset =
+        currentButtonPosition?.y ?? newModel.cameraButtonYOffset;
+
     return newModel;
   }
 }
