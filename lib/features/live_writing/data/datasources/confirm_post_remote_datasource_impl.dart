@@ -7,20 +7,15 @@ import 'package:wehavit/features/live_writing/data/data.dart';
 import 'package:wehavit/features/live_writing/domain/domain.dart';
 
 class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
-  // TODO. move to constants
-  static const CONFIRM_POST_COLLECTION = 'confirm_posts';
-  static const CONFIRM_POST_FIELD_FAN = 'fan';
-  static const CONFIRM_POST_FIELD_OWNER = 'owner';
-
   @override
   EitherFuture<List<ConfirmPostModel>> getAllFanMarkedConfirmPosts() async {
     try {
       final fetchResult = await FirebaseFirestore.instance
           .collection(
-            CONFIRM_POST_COLLECTION,
+            FirebaseCollectionName.confirmPosts,
           )
           .where(
-            CONFIRM_POST_FIELD_FAN,
+            FirebaseConfirmPostFieldName.fan,
             arrayContains: FirebaseAuth.instance.currentUser!.uid,
           )
           .get();
@@ -35,7 +30,7 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
     } on Exception {
       return Future(
         () => left(
-          const Failure('catch error on getActiveResolutionEntityList'),
+          const Failure('catch error on getAllFanMarkedConfirmPosts'),
         ),
       );
     }
@@ -66,7 +61,58 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
 
   @override
   EitherFuture<bool> updateConfirmPost(ConfirmPostModel confirmPost) {
-    // TODO: implement updateConfirmPost
-    throw UnimplementedError();
+    FirebaseFirestore.instance
+        .collection(FirebaseCollectionName.confirmPosts)
+        .doc(confirmPost.id)
+        .update(confirmPost.toJson());
+
+    return Future(() => right(true));
+  }
+
+  @override
+  EitherFuture<ConfirmPostModel> getConfirmPostOfTodayByResolutionGoalId(
+    String resolutionId,
+  ) async {
+    DateTime today = DateTime.now();
+    DateTime recentPostTime = today.hour >= 22
+        ? DateTime(
+            today.year,
+            today.month,
+            today.day,
+            22,
+          ) // today 10pm
+        : DateTime(
+            today.year,
+            today.month,
+            today.day - 1,
+            22,
+          ); // yesterday 10pm
+
+    // check existing confirm post
+    final existingConfirmPost = await FirebaseFirestore.instance
+        .collection(FirebaseCollectionName.confirmPosts)
+        .where(
+          FirebaseConfirmPostFieldName.owner,
+          isEqualTo: FirebaseAuth.instance.currentUser!.uid,
+        )
+        .where(
+          FirebaseConfirmPostFieldName.resolutionId,
+          isEqualTo: resolutionId,
+        )
+        .where(
+          FirebaseConfirmPostFieldName.createdAt,
+          isGreaterThan: Timestamp.fromDate(recentPostTime),
+        )
+        .get()
+        .then((value) => value.docs.firstOrNull);
+
+    if (existingConfirmPost != null) {
+      return Future(
+        () =>
+            right(ConfirmPostModel.fromFireStoreDocument(existingConfirmPost)),
+      );
+    } else {
+      return Future(() => left(const Failure('no existing post')));
+    }
   }
 }

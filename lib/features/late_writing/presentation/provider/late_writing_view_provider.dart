@@ -34,7 +34,7 @@ class LateWritingViewModelProvider extends StateNotifier<LateWritingViewModel> {
 
   Future<void> postCurrentConfirmPost() async {
     final fetchResult = await state.resolutionList;
-    final currentWritingResolutionModel = fetchResult
+    final ResolutionModel currentWritingResolutionModel = fetchResult
         .getRight()
         .fold(() => [], (t) => t)[state.resolutionIndex] as ResolutionModel;
 
@@ -45,9 +45,9 @@ class LateWritingViewModelProvider extends StateNotifier<LateWritingViewModel> {
         title: state.titleTextEditingController.text,
         content: state.contentTextEditingController.text,
         imageUrl: state.imageFileUrl ?? '',
-        // TODO: OWNER, FAN, ResentStrike 넣어주는 로직 작성 필요함
+        // will be set in repository impl
         owner: '',
-        fan: [],
+        fan: currentWritingResolutionModel.fanList,
         recentStrike: 0,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
