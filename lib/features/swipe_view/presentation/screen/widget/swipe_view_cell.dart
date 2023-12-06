@@ -191,73 +191,85 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  // 통계치 영역
-                  SizedBox(
-                    height: _swipeViewModel.animation.value,
-                    child: SwipeDashboardWidget(
-                      confirmPostList: _swipeViewModel
-                          .confirmPostList[_swipeViewModel.currentCellIndex],
-                    ),
-                  ),
-
-                  const Divider(
-                    thickness: 2.5,
-                    color: CustomColors.whYellow,
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  // 인증글 영역
-                  Container(
-                    constraints: const BoxConstraints.expand(height: 120),
-                    child: Text(
-                      maxLines: 5,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.w400,
-                        color: CustomColors.whWhite,
-                      ),
-                      widget.model.content ?? '',
-                    ),
-                  ),
-                  Column(
+                  Wrap(
+                    clipBehavior: Clip.hardEdge,
                     children: [
+                      Container(
+                        constraints: BoxConstraints.loose(Size(5, 16)),
+                      ),
+                      // 통계치 영역
                       SizedBox(
-                        height:
-                            _swipeViewModel.commentFieldFocus.hasFocus ? 0 : 50,
-                        child: Row(
-                          children: [
-                            Expanded(child: Container()),
-                            GestureDetector(
-                              onTapUp: (details) async =>
-                                  emojiSheetWidget(context)
-                                      .whenComplete(() async {
-                                _swipeViewModelProvider.sendEmojiReaction();
-                              }),
-                              child: Container(
-                                width: 50,
-                                height: 50,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Center(
-                                  child: Text(
-                                    '😄',
-                                    style: TextStyle(fontSize: 30),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            photoReactionButtonWidget(),
-                          ],
+                        height: _swipeViewModel.animation.value,
+                        child: SwipeDashboardWidget(
+                          confirmPostList: _swipeViewModel.confirmPostList[
+                              _swipeViewModel.currentCellIndex],
                         ),
+                      ),
+
+                      const Divider(
+                        thickness: 2.5,
+                        color: CustomColors.whYellow,
+                      ),
+                      const SizedBox(
+                        height: 16,
                       ),
                     ],
                   ),
+                  // 인증글 영역
+                  Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: [
+                      Container(
+                        constraints: const BoxConstraints.expand(height: 120),
+                        child: Text(
+                          maxLines: 5,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w400,
+                            color: CustomColors.whWhite,
+                          ),
+                          widget.model.content ?? '',
+                        ),
+                      ),
+                      Column(
+                        children: [
+                          SizedBox(
+                            height: _swipeViewModel.commentFieldFocus.hasFocus
+                                ? 0
+                                : 50,
+                            child: Row(
+                              children: [
+                                Expanded(child: Container()),
+                                GestureDetector(
+                                  onTapUp: (details) async =>
+                                      emojiSheetWidget(context)
+                                          .whenComplete(() async {
+                                    _swipeViewModelProvider.sendEmojiReaction();
+                                  }),
+                                  child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const Center(
+                                      child: Text(
+                                        '😄',
+                                        style: TextStyle(fontSize: 30),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                photoReactionButtonWidget(),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+
                   Container(
                     height: 30,
                     decoration: const BoxDecoration(

@@ -108,31 +108,46 @@ class SwipeViewState extends ConsumerState<SwipeView>
                         (failure) => Container(
                           color: const Color.fromRGBO(0, 188, 212, 1),
                         ),
-                        (modelList) => Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: modelList.asMap().entries.map((entry) {
-                            return GestureDetector(
-                              onTap: () async => _swipeViewModel
-                                  .carouselController
-                                  .animateToPage(entry.key),
-                              child: Container(
-                                width: 12.0,
-                                height: 12.0,
-                                margin: const EdgeInsets.symmetric(
-                                  vertical: 8.0,
-                                  horizontal: 4.0,
-                                ),
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: _swipeViewModel.currentCellIndex ==
-                                          entry.key
-                                      ? CustomColors.whYellow
-                                      : CustomColors.whSemiWhite,
+                        (modelList) {
+                          if (modelList.isEmpty) {
+                            return const Center(
+                              child: Text(
+                                '인증글을 불러오는 중입니다',
+                                style: TextStyle(
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.w600,
+                                  color: CustomColors.whWhite,
                                 ),
                               ),
                             );
-                          }).toList(),
-                        ),
+                          } else {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: modelList.asMap().entries.map((entry) {
+                                return GestureDetector(
+                                  onTap: () async => _swipeViewModel
+                                      .carouselController
+                                      .animateToPage(entry.key),
+                                  child: Container(
+                                    width: 12.0,
+                                    height: 12.0,
+                                    margin: const EdgeInsets.symmetric(
+                                      vertical: 8.0,
+                                      horizontal: 4.0,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: _swipeViewModel.currentCellIndex ==
+                                              entry.key
+                                          ? CustomColors.whYellow
+                                          : CustomColors.whSemiWhite,
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                            );
+                          }
+                        },
                       ),
                     ],
                   ),
