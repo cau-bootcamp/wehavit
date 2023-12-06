@@ -25,7 +25,7 @@ class _LateWritingViewState extends ConsumerState<LateWritingView> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('title'),
+        title: const Text('늦은 인증글 작성'),
       ),
       body: Padding(
         padding:
@@ -158,6 +158,10 @@ class _LateWritingViewState extends ConsumerState<LateWritingView> {
                           child: ElevatedButton(
                             onPressed: () async {
                               viewModelProvider.postCurrentConfirmPost();
+                              // 인증글 작성 완료 다이얼로그(임시)
+                              await showLatePostCompleteDialog(context);
+                              viewModel.contentTextEditingController.clear();
+                              viewModel.titleTextEditingController.clear();
                             },
                             child: const Text('Save'),
                           ),
@@ -179,6 +183,25 @@ class _LateWritingViewState extends ConsumerState<LateWritingView> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<dynamic> showLatePostCompleteDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('인증글 작성 완료!'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('확인'),
+            ),
+          ],
+        );
+      },
     );
   }
 
