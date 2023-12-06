@@ -15,12 +15,20 @@ class ReactionCameraWidgetModel {
 
   bool isShowingHelpMessage = false;
 
-  late double screenWidth;
-  late double screenHeight;
+  double screenWidth = 300;
+  double screenHeight = 800;
 
-  late double cameraWidgetPositionX;
-  late double cameraWidgetPositionY;
-  late double cameraWidgetRadius;
+  double cameraWidgetPositionX = 100;
+  double cameraWidgetPositionY = 100;
+  double cameraWidgetRadius = 50;
 
-  late CameraController cameraController;
+  CameraController? cameraController;
+
+  ReactionCameraWidgetModel copyWith(
+      {bool? isFocusingMode, CameraController? cameraController}) {
+    var newModel = ReactionCameraWidgetModel();
+    newModel.isFocusingMode = isFocusingMode ?? newModel.isFocusingMode;
+    newModel.cameraController = cameraController ?? newModel.cameraController;
+    return newModel;
+  }
 }

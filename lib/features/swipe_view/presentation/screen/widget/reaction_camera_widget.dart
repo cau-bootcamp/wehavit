@@ -25,7 +25,7 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
   late final SwipeViewModelProvider _swipeViewModelProvider;
 
   @override
-  void didChangeDependencies() {
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
 
     _reactionCameraWidgetModel = ref.watch(reactionCameraWidgetModelProvider);
@@ -33,6 +33,9 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
         ref.read(reactionCameraWidgetModelProvider.notifier);
     _reactionCameraWidgetModel.cameraController = widget.cameraController;
     _swipeViewModelProvider = ref.read(swipeViewModelProvider.notifier);
+
+    // _reactionCameraWidgetModelProvider
+    //     .updateCameraControllerWith(widget.cameraController);
 
     _reactionCameraWidgetModel.screenWidth =
         View.of(context).physicalSize.width / 3;
@@ -82,7 +85,7 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
             width: _reactionCameraWidgetModel.cameraWidgetRadius * 2,
             height: _reactionCameraWidgetModel.cameraWidgetRadius *
                 2 *
-                _reactionCameraWidgetModel.cameraController.value.aspectRatio,
+                widget.cameraController.value.aspectRatio,
             child: Opacity(
               opacity: _reactionCameraWidgetModel.isFocusingMode ? 1 : 0,
               child: RepaintBoundary(
@@ -95,7 +98,7 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
                     ),
                     clipBehavior: Clip.hardEdge,
                     child: CameraPreview(
-                      _reactionCameraWidgetModel.cameraController,
+                      widget.cameraController,
                     ),
                   ),
                 ),

@@ -24,6 +24,7 @@ class SwipeViewState extends ConsumerState<SwipeView>
     with SingleTickerProviderStateMixin {
   late final SwipeViewModel _swipeViewModel;
   late final SwipeViewModelProvider _swipeViewModelProvider;
+
   late final ReactionCameraWidgetModel _reactionCameraWidgetModel;
   late final ReactionCameraWidgetModelProvider
       _reactionCameraWidgetModelProvider;
@@ -145,11 +146,8 @@ class SwipeViewState extends ConsumerState<SwipeView>
             ),
           ),
           if (_swipeViewModel.isCameraInitialized)
-            Visibility(
-              visible: _reactionCameraWidgetModel.isFocusingMode,
-              child: ReactionCameraWidget(
-                cameraController: _swipeViewModel.cameraController,
-              ),
+            ReactionCameraWidget(
+              cameraController: _swipeViewModel.cameraController,
             ),
         ],
       ),

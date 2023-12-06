@@ -3,6 +3,7 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
+import 'package:camera/camera.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
@@ -17,16 +18,20 @@ class ReactionCameraWidgetModelProvider
   ReactionCameraWidgetModelProvider(Ref ref)
       : super(ReactionCameraWidgetModel());
 
+  void updateCameraControllerWith(CameraController cameraController) {
+    state = state.copyWith(cameraController: cameraController);
+  }
+
   void setFocusingModeTo(bool newValue) {
     if (newValue) {
-      state.cameraController.resumePreview();
+      // state.cameraController.resumePreview();
     } else {
       // 사용하지 않을 때는 멀리 치워놓기
       state.cameraButtonOriginXOffset = -100;
       state.cameraButtonOriginYOffset = -100;
-      state.cameraController.pausePreview();
+      // state.cameraController.pausePreview();
     }
-    state.isFocusingMode = newValue;
+    state = state.copyWith(isFocusingMode: newValue);
   }
 
   bool isFingerInCameraArea() {

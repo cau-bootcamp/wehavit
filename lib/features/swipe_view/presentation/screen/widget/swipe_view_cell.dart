@@ -300,12 +300,17 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
       child: GestureDetector(
         onPanStart: (details) {
           setState(() {
+            print("DEBUG_pan start");
             _reactionCameraWidgetModelProvider.setFocusingModeTo(true);
+            // _reactionCameraWidgetModel.isFocusingMode = true;
+            // ref.read(reactionCameraWidgetModelProvider).isFocusingMode = true;
           });
         },
         onPanEnd: (details) async {
+          print("DEBUG_pan end");
           setState(() {
             _reactionCameraWidgetModelProvider.setFocusingModeTo(false);
+            // ref.read(reactionCameraWidgetModelProvider).isFocusingMode = false;
           });
 
           if (_reactionCameraWidgetModelProvider.isFingerInCameraArea()) {
