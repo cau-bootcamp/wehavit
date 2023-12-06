@@ -3,7 +3,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
-import 'package:wehavit/common/utils/emoji_assets.dart';
 import 'package:wehavit/features/swipe_view/presentation/model/reaction_camera_widget_model.dart';
 import 'package:wehavit/features/swipe_view/presentation/model/swipe_view_model.dart';
 import 'package:wehavit/features/swipe_view/presentation/provider/reaction_camera_widget_model_provider.dart';
@@ -99,7 +98,7 @@ class SwipeViewState extends ConsumerState<SwipeView>
                               Navigator.of(context).pop();
                             },
                             // icon: Icon(Icons.arrow_back_ios),
-                            icon: Icon(Icons.arrow_back_ios),
+                            icon: const Icon(Icons.arrow_back_ios),
                             color: CustomColors.whWhite,
                           ),
                           Expanded(child: Container()),
@@ -113,19 +112,23 @@ class SwipeViewState extends ConsumerState<SwipeView>
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: modelList.asMap().entries.map((entry) {
                             return GestureDetector(
-                              onTap: () => _swipeViewModel.carouselController
+                              onTap: () async => _swipeViewModel
+                                  .carouselController
                                   .animateToPage(entry.key),
                               child: Container(
                                 width: 12.0,
                                 height: 12.0,
-                                margin: EdgeInsets.symmetric(
-                                    vertical: 8.0, horizontal: 4.0),
+                                margin: const EdgeInsets.symmetric(
+                                  vertical: 8.0,
+                                  horizontal: 4.0,
+                                ),
                                 decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: _swipeViewModel.currentCellIndex ==
-                                            entry.key
-                                        ? CustomColors.whYellow
-                                        : CustomColors.whSemiWhite),
+                                  shape: BoxShape.circle,
+                                  color: _swipeViewModel.currentCellIndex ==
+                                          entry.key
+                                      ? CustomColors.whYellow
+                                      : CustomColors.whSemiWhite,
+                                ),
                               ),
                             );
                           }).toList(),
@@ -139,7 +142,7 @@ class SwipeViewState extends ConsumerState<SwipeView>
                         color: const Color.fromRGBO(0, 188, 212, 1),
                       ),
                       (modelList) => Container(
-                        constraints: BoxConstraints.expand(),
+                        constraints: const BoxConstraints.expand(),
                         child: GestureDetector(
                           onTap: () =>
                               _swipeViewModelProvider.unfocusCommentTextForm(),
