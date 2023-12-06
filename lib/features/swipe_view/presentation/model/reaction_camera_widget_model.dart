@@ -24,9 +24,11 @@ class ReactionCameraWidgetModel {
 
   CameraController? cameraController;
 
-  ReactionCameraWidgetModel copyWith(
-      {bool? isFocusingMode, CameraController? cameraController}) {
-    var newModel = ReactionCameraWidgetModel();
+  ReactionCameraWidgetModel copyWith({
+    bool? isFocusingMode,
+    CameraController? cameraController,
+  }) {
+    final newModel = ReactionCameraWidgetModel();
     newModel.isFocusingMode = isFocusingMode ?? newModel.isFocusingMode;
     newModel.cameraController = cameraController ?? newModel.cameraController;
     return newModel;

@@ -19,40 +19,33 @@ class ReactionCameraWidget extends ConsumerStatefulWidget {
 }
 
 class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
-  late final ReactionCameraWidgetModel _reactionCameraWidgetModel;
-  late final ReactionCameraWidgetModelProvider
-      _reactionCameraWidgetModelProvider;
-  late final SwipeViewModelProvider _swipeViewModelProvider;
+  late ReactionCameraWidgetModel _reactionCameraWidgetModel;
+  late ReactionCameraWidgetModelProvider _reactionCameraWidgetModelProvider;
+  late SwipeViewModelProvider _swipeViewModelProvider;
 
   @override
   Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
 
-    _reactionCameraWidgetModel = ref.watch(reactionCameraWidgetModelProvider);
-    _reactionCameraWidgetModelProvider =
-        ref.read(reactionCameraWidgetModelProvider.notifier);
-    _reactionCameraWidgetModel.cameraController = widget.cameraController;
-    _swipeViewModelProvider = ref.read(swipeViewModelProvider.notifier);
-
     // _reactionCameraWidgetModelProvider
     //     .updateCameraControllerWith(widget.cameraController);
 
-    _reactionCameraWidgetModel.screenWidth =
-        View.of(context).physicalSize.width / 3;
-    _reactionCameraWidgetModel.screenHeight =
-        View.of(context).physicalSize.height / 3;
-
-    _reactionCameraWidgetModel.cameraWidgetPositionX =
-        _reactionCameraWidgetModel.screenWidth / 2;
-    _reactionCameraWidgetModel.cameraWidgetPositionY =
-        _reactionCameraWidgetModel.screenHeight / 3;
-    _reactionCameraWidgetModel.cameraWidgetRadius =
-        _reactionCameraWidgetModel.screenWidth / 2.3;
-
-    _reactionCameraWidgetModel.cameraButtonXOffset =
-        _reactionCameraWidgetModel.cameraButtonOriginXOffset;
-    _reactionCameraWidgetModel.cameraButtonYOffset =
-        _reactionCameraWidgetModel.cameraButtonOriginYOffset;
+    // _reactionCameraWidgetModel.screenWidth =
+    //     View.of(context).physicalSize.width / 3;
+    // _reactionCameraWidgetModel.screenHeight =
+    //     View.of(context).physicalSize.height / 3;
+    //
+    // _reactionCameraWidgetModel.cameraWidgetPositionX =
+    //     _reactionCameraWidgetModel.screenWidth / 2;
+    // _reactionCameraWidgetModel.cameraWidgetPositionY =
+    //     _reactionCameraWidgetModel.screenHeight / 3;
+    // _reactionCameraWidgetModel.cameraWidgetRadius =
+    //     _reactionCameraWidgetModel.screenWidth / 2.3;
+    //
+    // _reactionCameraWidgetModel.cameraButtonXOffset =
+    //     _reactionCameraWidgetModel.cameraButtonOriginXOffset;
+    // _reactionCameraWidgetModel.cameraButtonYOffset =
+    //     _reactionCameraWidgetModel.cameraButtonOriginYOffset;
 
     setState(() {});
   }
@@ -64,6 +57,11 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
 
   @override
   Widget build(BuildContext context) {
+    _reactionCameraWidgetModel = ref.watch(reactionCameraWidgetModelProvider);
+    _reactionCameraWidgetModelProvider =
+        ref.read(reactionCameraWidgetModelProvider.notifier);
+    _reactionCameraWidgetModel.cameraController = widget.cameraController;
+    _swipeViewModelProvider = ref.read(swipeViewModelProvider.notifier);
     return Container(
       constraints: const BoxConstraints.expand(),
       child: Stack(
