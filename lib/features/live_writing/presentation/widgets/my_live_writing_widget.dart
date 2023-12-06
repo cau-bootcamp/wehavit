@@ -32,7 +32,8 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
   late EitherFuture<UserModel> myUserModel;
   XFile? imageFile;
   String imageUrl = '';
-  bool isLoadingImage = false;
+
+  // bool isLoadingImage = false;
 
   @override
   Future<void> didChangeDependencies() async {
@@ -44,8 +45,9 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
 
   @override
   Widget build(BuildContext context) {
-    var titleController = useTextEditingController();
-    var contentController = useTextEditingController();
+    final titleController = useTextEditingController();
+    final contentController = useTextEditingController();
+    final isLoadingImage = useState(false);
 
     useEffect(
       () {
@@ -69,7 +71,7 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
       return !(titleController.text == '' ||
           contentController.text == '' ||
           imageFile == null ||
-          isLoadingImage == true);
+          isLoadingImage.value == true);
     }
 
     return Align(
@@ -110,12 +112,13 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
                                 top: 14.0,
                                 bottom: 8.0,
                               ),
-                              child: imageContainerWidget(),
+                              child: imageContainerWidget(isLoadingImage),
                             ),
                             restOrSubmitButtonsWidget(
                               isSubmittable,
                               titleController,
                               contentController,
+                              isLoadingImage,
                             ),
                           ],
                         ),
@@ -197,7 +200,7 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
     );
   }
 
-  Container imageContainerWidget() {
+  Container imageContainerWidget(ValueNotifier<bool> isLoadingImage) {
     return Container(
       width: 151,
       height: 104,
@@ -213,9 +216,9 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
               source: ImageSource.gallery,
             );
             if (pickedFile != null) {
-              isLoadingImage = true;
+              isLoadingImage.value = true;
               imageUrl = await setImage(pickedFile);
-              isLoadingImage = false;
+              isLoadingImage.value = false;
             } else {
               debugPrint('이미지 선택안함');
             }
@@ -248,6 +251,7 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
     bool Function() isSubmittable,
     TextEditingController titleController,
     TextEditingController contentController,
+    ValueNotifier<bool> isLoadingImage,
   ) {
     return Visibility(
       visible: !isSubmitted,
@@ -306,7 +310,7 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
                 );
               }
             },
-            child: Text(isLoadingImage ? '처리중' : '휴식'),
+            child: Text(isLoadingImage.value ? '처리중' : '휴식'),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -349,7 +353,7 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
                 );
               }
             },
-            child: Text(isLoadingImage ? '처리중' : '완료'),
+            child: Text(isLoadingImage.value ? '처리중' : '완료'),
           ),
         ],
       ),
