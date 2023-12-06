@@ -12,4 +12,8 @@ abstract class ConfirmPostDatasource {
   EitherFuture<bool> deleteConfirmPost(DocumentReference<ConfirmPostModel> ref);
 
   EitherFuture<bool> getConfirmPostByUserId(String userId);
+
+  EitherFuture<ConfirmPostModel> getConfirmPostOfTodayByResolutionGoalId(
+    String resolutionId,
+  );
 }

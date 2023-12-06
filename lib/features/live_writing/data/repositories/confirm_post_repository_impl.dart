@@ -20,11 +20,33 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
 
   @override
   EitherFuture<bool> createConfirmPost(ConfirmPostModel confirmPost) async {
-    confirmPost = confirmPost.copyWith(
-      owner: FirebaseAuth.instance.currentUser!.uid,
-    );
+    final String resolutionId = confirmPost.resolutionId!;
     try {
-      _confirmPostRemoteDatasourceImpl.uploadConfirmPost(confirmPost);
+      final existingPost = await _confirmPostRemoteDatasourceImpl
+          .getConfirmPostOfTodayByResolutionGoalId(resolutionId);
+
+      existingPost.fold(
+        (l) {
+          // create new post if not exist
+          confirmPost = confirmPost.copyWith(
+            owner: FirebaseAuth.instance.currentUser!.uid,
+          );
+
+          _confirmPostRemoteDatasourceImpl.uploadConfirmPost(confirmPost);
+        },
+        (cf) {
+          // update existing post
+          confirmPost = confirmPost.copyWith(
+            id: cf.id,
+            owner: FirebaseAuth.instance.currentUser!.uid,
+            createdAt: cf.createdAt,
+            updatedAt: DateTime.now(),
+          );
+
+          _confirmPostRemoteDatasourceImpl.updateConfirmPost(confirmPost);
+        },
+      );
+
       return Future(() => right(true));
     } on FirebaseException catch (e) {
       return left(Failure(e.message ?? 'FirebaseException'));
@@ -33,23 +55,26 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
 
   @override
   EitherFuture<bool> deleteConfirmPost(
-      DocumentReference<ConfirmPostModel> confirmPostRef) {
+    DocumentReference<ConfirmPostModel> confirmPostRef,
+  ) {
     // TODO: implement deleteConfirmPost
     return Future(
-        () => left(const Failure('deleteConfirmPost not implemented')));
+      () => left(const Failure('deleteConfirmPost not implemented')),
+    );
   }
 
   @override
   EitherFuture<ConfirmPostModel> getConfirmPostByUserId(String userId) {
     // TODO: implement getConfirmPostByUserId
     return Future(
-        () => left(const Failure('getConfirmPostByUserId not implemented')));
+      () => left(const Failure('getConfirmPostByUserId not implemented')),
+    );
   }
 
   @override
   EitherFuture<bool> updateConfirmPost(ConfirmPostModel confirmPost) {
-    // TODO: implement updateConfirmPost
     return Future(
-        () => left(const Failure('updateConfirmPost not implemented')));
+      () => left(const Failure('updateConfirmPost not implemented')),
+    );
   }
 }

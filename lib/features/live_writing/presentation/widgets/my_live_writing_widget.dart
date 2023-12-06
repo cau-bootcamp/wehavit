@@ -279,8 +279,9 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
                   recentStrike: 0,
                   createdAt: DateTime.now(),
                   updatedAt: DateTime.now(),
+                  // repository impl에서 자동으로 채워짐
                   owner: '',
-                  fan: [],
+                  fan: widget.resolutionModel.fanList,
                   attributes: {
                     'has_participated_live': true,
                     'has_rested': true,
@@ -323,7 +324,7 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
                   createdAt: DateTime.now(),
                   updatedAt: DateTime.now(),
                   owner: '',
-                  fan: [],
+                  fan: widget.resolutionModel.fanList,
                   attributes: {
                     'has_participated_live': true,
                     'has_rested': false,
