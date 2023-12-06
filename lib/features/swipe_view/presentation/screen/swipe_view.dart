@@ -82,119 +82,124 @@ class SwipeViewState extends ConsumerState<SwipeView>
         ),
         child: Stack(
           children: [
-            SafeArea(
-              left: false,
-              right: false,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Row(
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            // icon: Icon(Icons.arrow_back_ios),
-                            icon: const Icon(Icons.arrow_back_ios),
-                            color: CustomColors.whWhite,
+            Padding(
+              padding: const EdgeInsets.only(bottom: 4.0),
+              child: SafeArea(
+                left: false,
+                right: false,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              // icon: Icon(Icons.arrow_back_ios),
+                              icon: const Icon(Icons.arrow_back_ios),
+                              color: CustomColors.whWhite,
+                            ),
+                            Expanded(child: Container()),
+                          ],
+                        ),
+                        _swipeViewModel.confirmPostModelList.fold(
+                          (failure) => Container(
+                            color: const Color.fromRGBO(0, 188, 212, 1),
                           ),
-                          Expanded(child: Container()),
-                        ],
-                      ),
-                      _swipeViewModel.confirmPostModelList.fold(
+                          (modelList) {
+                            if (modelList.isEmpty) {
+                              return const Center(
+                                child: Text(
+                                  '인증글을 불러오는 중입니다',
+                                  style: TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.w600,
+                                    color: CustomColors.whWhite,
+                                  ),
+                                ),
+                              );
+                            } else {
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children:
+                                    modelList.asMap().entries.map((entry) {
+                                  return GestureDetector(
+                                    onTap: () async => _swipeViewModel
+                                        .carouselController
+                                        .animateToPage(entry.key),
+                                    child: Container(
+                                      width: 12.0,
+                                      height: 12.0,
+                                      margin: const EdgeInsets.symmetric(
+                                        vertical: 8.0,
+                                        horizontal: 4.0,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color:
+                                            _swipeViewModel.currentCellIndex ==
+                                                    entry.key
+                                                ? CustomColors.whYellow
+                                                : CustomColors.whSemiWhite,
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                              );
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                    Expanded(
+                      child: _swipeViewModel.confirmPostModelList.fold(
                         (failure) => Container(
                           color: const Color.fromRGBO(0, 188, 212, 1),
                         ),
-                        (modelList) {
-                          if (modelList.isEmpty) {
-                            return const Center(
-                              child: Text(
-                                '인증글을 불러오는 중입니다',
-                                style: TextStyle(
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.w600,
-                                  color: CustomColors.whWhite,
-                                ),
+                        (modelList) => Container(
+                          constraints: const BoxConstraints.expand(),
+                          child: GestureDetector(
+                            onTap: () => _swipeViewModelProvider
+                                .unfocusCommentTextForm(),
+                            child: CarouselSlider(
+                              options: CarouselOptions(
+                                viewportFraction: 1.0,
+                                height: MediaQuery.of(context).size.height,
+                                onPageChanged: (index, reason) {
+                                  setState(() {
+                                    _swipeViewModel.currentCellIndex = index;
+                                  });
+                                },
+                                enableInfiniteScroll: false,
                               ),
-                            );
-                          } else {
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: modelList.asMap().entries.map((entry) {
-                                return GestureDetector(
-                                  onTap: () async => _swipeViewModel
-                                      .carouselController
-                                      .animateToPage(entry.key),
-                                  child: Container(
-                                    width: 12.0,
-                                    height: 12.0,
-                                    margin: const EdgeInsets.symmetric(
-                                      vertical: 8.0,
-                                      horizontal: 4.0,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: _swipeViewModel.currentCellIndex ==
-                                              entry.key
-                                          ? CustomColors.whYellow
-                                          : CustomColors.whSemiWhite,
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                            );
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                  Expanded(
-                    child: _swipeViewModel.confirmPostModelList.fold(
-                      (failure) => Container(
-                        color: const Color.fromRGBO(0, 188, 212, 1),
-                      ),
-                      (modelList) => Container(
-                        constraints: const BoxConstraints.expand(),
-                        child: GestureDetector(
-                          onTap: () =>
-                              _swipeViewModelProvider.unfocusCommentTextForm(),
-                          child: CarouselSlider(
-                            options: CarouselOptions(
-                              viewportFraction: 1.0,
-                              height: MediaQuery.of(context).size.height,
-                              onPageChanged: (index, reason) {
-                                setState(() {
-                                  _swipeViewModel.currentCellIndex = index;
-                                });
-                              },
-                              enableInfiniteScroll: false,
-                            ),
-                            carouselController:
-                                _swipeViewModel.carouselController,
-                            items: List<Widget>.generate(
-                              modelList.length,
-                              (index) {
-                                return Flex(
-                                  direction: Axis.vertical,
-                                  children: [
-                                    SwipeViewCellWidget(
-                                      model: modelList[index],
-                                      panUpdateCallback: updatePanPosition,
-                                      panEndCallback: endOnCapturingPosition,
-                                    ),
-                                  ],
-                                );
-                              },
+                              carouselController:
+                                  _swipeViewModel.carouselController,
+                              items: List<Widget>.generate(
+                                modelList.length,
+                                (index) {
+                                  return Flex(
+                                    direction: Axis.vertical,
+                                    children: [
+                                      SwipeViewCellWidget(
+                                        model: modelList[index],
+                                        panUpdateCallback: updatePanPosition,
+                                        panEndCallback: endOnCapturingPosition,
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             if (_swipeViewModel.isCameraInitialized)
@@ -213,7 +218,7 @@ class SwipeViewState extends ConsumerState<SwipeView>
       vsync: this,
       duration: const Duration(milliseconds: 200),
     );
-    _swipeViewModel.animation = Tween<double>(begin: 0, end: 130).animate(
+    _swipeViewModel.animation = Tween<double>(begin: 0, end: 140).animate(
       CurvedAnimation(
         parent: _swipeViewModel.animationController,
         curve: Curves.linear,

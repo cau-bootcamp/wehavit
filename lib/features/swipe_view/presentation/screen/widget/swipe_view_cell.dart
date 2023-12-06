@@ -146,9 +146,9 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
                       color: CustomColors.whWhite,
                     ),
                   ),
-                  const SizedBox(
-                    height: 8,
-                  ),
+                  // const SizedBox(
+                  //   height: 8,
+                  // ),
                   const Divider(
                     thickness: 2.5,
                     color: CustomColors.whYellow,
@@ -191,12 +191,12 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
                       ),
                     ),
                   ),
+                  const SizedBox(
+                    height: 16,
+                  ),
                   Wrap(
                     clipBehavior: Clip.hardEdge,
                     children: [
-                      Container(
-                        constraints: BoxConstraints.loose(Size(5, 16)),
-                      ),
                       // 통계치 영역
                       SizedBox(
                         height: _swipeViewModel.animation.value,
@@ -210,9 +210,9 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
                         thickness: 2.5,
                         color: CustomColors.whYellow,
                       ),
-                      const SizedBox(
-                        height: 16,
-                      ),
+                      // const SizedBox(
+                      //   height: 16,
+                      // ),
                     ],
                   ),
                   // 인증글 영역
