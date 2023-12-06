@@ -3,7 +3,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/utils/emoji_assets.dart';
+import 'package:wehavit/features/swipe_view/presentation/model/reaction_camera_widget_model.dart';
 import 'package:wehavit/features/swipe_view/presentation/model/swipe_view_model.dart';
+import 'package:wehavit/features/swipe_view/presentation/provider/reaction_camera_widget_model_provider.dart';
 import 'package:wehavit/features/swipe_view/presentation/provider/swipe_view_model_provider.dart';
 import 'package:wehavit/features/swipe_view/presentation/screen/widget/emoji_sheet_widget.dart';
 import 'package:wehavit/features/swipe_view/presentation/screen/widget/reaction_camera_widget.dart';
@@ -22,8 +24,14 @@ class SwipeViewState extends ConsumerState<SwipeView>
     with SingleTickerProviderStateMixin {
   late final SwipeViewModel _swipeViewModel;
   late final SwipeViewModelProvider _swipeViewModelProvider;
+  late final ReactionCameraWidgetModel _reactionCameraWidgetModel;
+  late final ReactionCameraWidgetModelProvider
+      _reactionCameraWidgetModelProvider;
 
   bool _initOccurred = false;
+
+  double fromLeft = 0;
+  double fromTop = 0;
 
   @override
   void initState() {
@@ -37,15 +45,16 @@ class SwipeViewState extends ConsumerState<SwipeView>
     if (!_initOccurred) {
       _swipeViewModel = ref.watch(swipeViewModelProvider);
       _swipeViewModelProvider = ref.read(swipeViewModelProvider.notifier);
+
+      _reactionCameraWidgetModel = ref.watch(reactionCameraWidgetModelProvider);
+      _reactionCameraWidgetModelProvider =
+          ref.read(reactionCameraWidgetModelProvider.notifier);
+
       await ref
           .read(swipeViewModelProvider.notifier)
           .getTodayConfirmPostModelList();
 
       await _swipeViewModelProvider.initializeCamera();
-
-      _swipeViewModel.cameraButtonPosition =
-          _swipeViewModelProvider.getCameraButtonPosition() ??
-              const Offset(0, 0);
 
       setAnimationVariables();
 
@@ -196,23 +205,7 @@ class SwipeViewState extends ConsumerState<SwipeView>
                                   ),
                                 ),
                               ),
-                              Container(
-                                key: _swipeViewModel.cameraButtonPlaceholderKey,
-                                width: 50,
-                                height: 50,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  // color: Colors.black,
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    _swipeViewModel.isCameraInitialized == true
-                                        ? '📸'
-                                        : '❌',
-                                    style: const TextStyle(fontSize: 30),
-                                  ),
-                                ),
-                              ),
+                              photoReactionButtonWidget(),
                             ],
                           ),
                         ),
@@ -267,11 +260,60 @@ class SwipeViewState extends ConsumerState<SwipeView>
             ),
           ),
           if (_swipeViewModel.isCameraInitialized)
-            ReactionCameraWidget(
-              originPosition: _swipeViewModel.cameraButtonPosition,
-              cameraController: _swipeViewModel.cameraController,
+            Visibility(
+              visible: _reactionCameraWidgetModel.isFocusingMode,
+              child: ReactionCameraWidget(
+                cameraController: _swipeViewModel.cameraController,
+              ),
             ),
         ],
+      ),
+    );
+  }
+
+  Container photoReactionButtonWidget() {
+    return Container(
+      width: 50,
+      height: 50,
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        // color: Colors.black,
+      ),
+      child: GestureDetector(
+        onPanStart: (details) {
+          setState(() {
+            _reactionCameraWidgetModelProvider.setFocusingModeTo(true);
+          });
+        },
+        onPanEnd: (details) async {
+          setState(() {
+            _reactionCameraWidgetModelProvider.setFocusingModeTo(false);
+          });
+
+          if (_reactionCameraWidgetModelProvider.isFingerInCameraArea()) {
+            final imageFilePath =
+                await _reactionCameraWidgetModelProvider.capture();
+
+            // 반응 전송 로직 아래에 삽입
+            _swipeViewModelProvider.sendImageReaction(
+              imageFilePath: imageFilePath,
+            );
+          }
+        },
+        onPanUpdate: (details) {
+          setState(() {
+            _reactionCameraWidgetModel.cameraButtonXOffset =
+                details.globalPosition.dx;
+            _reactionCameraWidgetModel.cameraButtonYOffset =
+                details.globalPosition.dy;
+          });
+        },
+        child: Center(
+          child: Text(
+            _swipeViewModel.isCameraInitialized == true ? '📸' : '❌',
+            style: const TextStyle(fontSize: 30),
+          ),
+        ),
       ),
     );
   }
@@ -327,7 +369,7 @@ class SwipeViewState extends ConsumerState<SwipeView>
                           3,
                           (index) => Row(
                             children: List<Widget>.generate(5, (jndex) {
-                              final key = GlobalKey();
+                              final key = UniqueKey();
                               return Expanded(
                                 key: key,
                                 child: GestureDetector(

@@ -27,7 +27,7 @@ class MyLiveWritingWidget extends StatefulHookConsumerWidget {
 }
 
 class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
-  final _confirmPostFormKey = GlobalKey<FormState>();
+  // final _confirmPostFormKey = GlobalKey<FormState>();
   bool isSubmitted = false;
   late EitherFuture<UserModel> myUserModel;
   XFile? imageFile;
@@ -362,11 +362,11 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
       return;
     }
 
-    if (_confirmPostFormKey.currentState!.validate()) {
-      _confirmPostFormKey.currentState!.save();
-      isSubmitted = true;
-      // onSubmit(titleController.text, contentController.text);
-    }
+    // if (_confirmPostFormKey.currentState!.validate()) {
+    //   _confirmPostFormKey.currentState!.save();
+    //   isSubmitted = true;
+    // onSubmit(titleController.text, contentController.text);
+    // }
   }
 
   Future<String> setImage(XFile pickedFile) async {

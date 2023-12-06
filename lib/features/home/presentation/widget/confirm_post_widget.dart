@@ -55,9 +55,9 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
 
       await _swipeViewModelProvider.initializeCamera();
 
-      _swipeViewModel.cameraButtonPosition =
-          _swipeViewModelProvider.getCameraButtonPosition() ??
-              const Offset(0, 0);
+      // _swipeViewModel.cameraButtonPosition =
+      //     _swipeViewModelProvider.getCameraButtonPosition() ??
+      //         const Offset(0, 0);
 
       setAnimationVariables();
 
@@ -249,9 +249,9 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                     ),
                   ),
                   Container(
-                    key: _swipeViewModel.cameraButtonPlaceholderKey,
-                    width: 40,
-                    height: 40,
+                    // key: _swipeViewModel.cameraButtonPlaceholderKey,
+                    width: 50,
+                    height: 50,
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                       // color: Colors.black,
