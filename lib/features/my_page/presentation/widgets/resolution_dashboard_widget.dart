@@ -102,6 +102,7 @@ class _ResolutionDashboardWidgetState
                     if (snapshot.hasData) {
                       return ResolutionDoughnutGraphWidget(
                         sourceData: snapshot.data!,
+                        duration: 14,
                       );
                     } else if (snapshot.hasError) {
                       return const Placeholder();

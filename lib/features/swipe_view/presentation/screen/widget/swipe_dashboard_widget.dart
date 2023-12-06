@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
 import 'package:wehavit/features/my_page/presentation/widgets/resolution_doughnut_graph_widget.dart';
 import 'package:wehavit/features/my_page/presentation/widgets/resolution_linear_gauge_graph_widget.dart';
@@ -35,68 +36,108 @@ class _ResolutionDashboardWidgetState
             Expanded(
               child: Column(
                 children: [
-                  Text(
-                    "최근 한 달 달성률",
+                  const Text(
+                    '최근 한 달 달성률',
                     textAlign: TextAlign.start,
+                    style: TextStyle(
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.w400,
+                      color: CustomColors.whWhite,
+                    ),
                   ),
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Container(
-                        decoration: const BoxDecoration(
-                          color: Colors.black38,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(
-                              20,
+                  FutureBuilder<List<ConfirmPostModel>>(
+                    future: widget.confirmPostList,
+                    builder: (context, snapshot) {
+                      int durationDays = 28;
+
+                      if (snapshot.hasData) {
+                        final sourceData = snapshot.data!;
+                        sourceData.sort(
+                          (a, b) => a.toString().compareTo(b.toString()),
+                        );
+                        final data = sourceData.where((element) {
+                          return DateTime.now()
+                                  .difference(element.createdAt!)
+                                  .inDays <
+                              durationDays;
+                        }).toList();
+
+                        final attendList =
+                            List<bool>.generate(durationDays, (index) => false);
+
+                        for (var element in data) {
+                          attendList[DateTime.now()
+                              .difference(element.createdAt!)
+                              .inDays] = true;
+                        }
+
+                        int attendedDays = 0;
+                        for (bool element in attendList) {
+                          attendedDays += element ? 1 : 0;
+                        }
+
+                        return Stack(alignment: Alignment.center, children: [
+                          Container(
+                            decoration: const BoxDecoration(
+                              color: CustomColors.whSemiBlack,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(
+                                  20,
+                                ),
+                              ),
+                            ),
+                            child: AspectRatio(
+                              aspectRatio: 1,
+                              child: ResolutionDoughnutGraphWidget(
+                                sourceData: snapshot.data!,
+                                duration: durationDays,
+                              ),
                             ),
                           ),
-                        ),
-                        child: AspectRatio(
-                          aspectRatio: 1,
-                          child: FutureBuilder<List<ConfirmPostModel>>(
-                            future: widget.confirmPostList,
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                return ResolutionDoughnutGraphWidget(
-                                  sourceData: snapshot.data!,
-                                );
-                              } else if (snapshot.hasError) {
-                                return const Placeholder();
-                              } else {
-                                return Container();
-                              }
-                            },
+                          AspectRatio(
+                            aspectRatio: 2,
+                            child: Container(
+                              // width: 45,
+                              // height: 45,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: CustomColors.whDarkBlack,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      AspectRatio(
-                        aspectRatio: 2,
-                        child: Container(
-                          // width: 45,
-                          // height: 45,
-                          decoration: const BoxDecoration(
-                              shape: BoxShape.circle, color: Colors.black87),
-                        ),
-                      ),
-                      const Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            '90%',
-                            style: TextStyle(color: Colors.white),
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                '${(attendedDays / durationDays * 100).toInt()}%',
+                                style: const TextStyle(
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.w800,
+                                  color: CustomColors.whWhite,
+                                ),
+                              ),
+                              Text(
+                                '$attendedDays/$durationDays',
+                                style: const TextStyle(
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w600,
+                                  color: CustomColors.whWhite,
+                                ),
+                              )
+                            ],
                           ),
-                          Text(
-                            '9/10',
-                            style: TextStyle(color: Colors.white),
-                          )
-                        ],
-                      ),
-                    ],
+                        ]);
+                      } else if (snapshot.hasError) {
+                        return const Placeholder();
+                      } else {
+                        return Container();
+                      }
+                    },
                   ),
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             Expanded(
@@ -109,17 +150,24 @@ class _ResolutionDashboardWidgetState
                       aspectRatio: 2,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text('최근 7일 달성률'),
+                                const Text(
+                                  '최근 7일 달성률',
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.w400,
+                                    color: CustomColors.whWhite,
+                                  ),
+                                ),
                                 Container(
                                   padding: const EdgeInsets.all(4),
                                   decoration: const BoxDecoration(
-                                    color: Colors.black38,
+                                    color: CustomColors.whBlack,
                                     borderRadius: BorderRadius.all(
                                       Radius.circular(
                                         10.0,
@@ -138,11 +186,18 @@ class _ResolutionDashboardWidgetState
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text('지난 7일 달성률'),
+                                const Text(
+                                  '지난 7일 달성률',
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.w400,
+                                    color: CustomColors.whWhite,
+                                  ),
+                                ),
                                 Container(
                                   padding: const EdgeInsets.all(4),
                                   decoration: const BoxDecoration(
-                                    color: Colors.black38,
+                                    color: CustomColors.whBlack,
                                     borderRadius: BorderRadius.all(
                                       Radius.circular(
                                         10.0,

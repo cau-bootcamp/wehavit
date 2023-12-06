@@ -81,119 +81,110 @@ class SwipeViewState extends ConsumerState<SwipeView>
             end: Alignment.bottomCenter,
           ),
         ),
-        child: Expanded(
-          child: Stack(
-            children: [
-              SafeArea(
-                left: false,
-                right: false,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Row(
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              // icon: Icon(Icons.arrow_back_ios),
-                              icon: Icon(Icons.arrow_back_ios),
-                              color: CustomColors.whWhite,
-                            ),
-                            Expanded(child: Container()),
-                          ],
-                        ),
-                        Expanded(
-                          child: _swipeViewModel.confirmPostModelList.fold(
-                            (failure) => Container(
-                              color: const Color.fromRGBO(0, 188, 212, 1),
-                            ),
-                            (modelList) => Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: modelList.asMap().entries.map((entry) {
-                                return GestureDetector(
-                                  onTap: () => _swipeViewModel
-                                      .carouselController
-                                      .animateToPage(entry.key),
-                                  child: Container(
-                                    width: 12.0,
-                                    height: 12.0,
-                                    margin: EdgeInsets.symmetric(
-                                        vertical: 8.0, horizontal: 4.0),
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color:
-                                            _swipeViewModel.currentCellIndex ==
-                                                    entry.key
-                                                ? CustomColors.whYellow
-                                                : CustomColors.whSemiWhite),
-                                  ),
-                                );
-                              }).toList(),
-                            ),
+        child: Stack(
+          children: [
+            SafeArea(
+              left: false,
+              right: false,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Row(
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            // icon: Icon(Icons.arrow_back_ios),
+                            icon: Icon(Icons.arrow_back_ios),
+                            color: CustomColors.whWhite,
                           ),
-                        ),
-                      ],
-                    ),
-                    Expanded(
-                      child: _swipeViewModel.confirmPostModelList.fold(
+                          Expanded(child: Container()),
+                        ],
+                      ),
+                      _swipeViewModel.confirmPostModelList.fold(
                         (failure) => Container(
                           color: const Color.fromRGBO(0, 188, 212, 1),
                         ),
-                        (modelList) => Container(
-                          constraints: BoxConstraints.expand(),
-                          child: Expanded(
-                            child: GestureDetector(
-                              onTap: () => _swipeViewModelProvider
-                                  .unfocusCommentTextForm(),
-                              child: CarouselSlider(
-                                options: CarouselOptions(
-                                  viewportFraction: 1.0,
-                                  height: MediaQuery.of(context).size.height,
-                                  onPageChanged: (index, reason) {
-                                    setState(() {
-                                      _swipeViewModel.currentCellIndex = index;
-                                    });
-                                  },
-                                  enableInfiniteScroll: false,
-                                ),
-                                carouselController:
-                                    _swipeViewModel.carouselController,
-                                items: List<Widget>.generate(
-                                  modelList.length,
-                                  (index) {
-                                    return Flex(
-                                      direction: Axis.vertical,
-                                      children: [
-                                        SwipeViewCellWidget(
-                                          model: modelList[index],
-                                          panUpdateCallback: updatePanPosition,
-                                          panEndCallback:
-                                              endOnCapturingPosition,
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                ),
+                        (modelList) => Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: modelList.asMap().entries.map((entry) {
+                            return GestureDetector(
+                              onTap: () => _swipeViewModel.carouselController
+                                  .animateToPage(entry.key),
+                              child: Container(
+                                width: 12.0,
+                                height: 12.0,
+                                margin: EdgeInsets.symmetric(
+                                    vertical: 8.0, horizontal: 4.0),
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: _swipeViewModel.currentCellIndex ==
+                                            entry.key
+                                        ? CustomColors.whYellow
+                                        : CustomColors.whSemiWhite),
                               ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Expanded(
+                    child: _swipeViewModel.confirmPostModelList.fold(
+                      (failure) => Container(
+                        color: const Color.fromRGBO(0, 188, 212, 1),
+                      ),
+                      (modelList) => Container(
+                        constraints: BoxConstraints.expand(),
+                        child: GestureDetector(
+                          onTap: () =>
+                              _swipeViewModelProvider.unfocusCommentTextForm(),
+                          child: CarouselSlider(
+                            options: CarouselOptions(
+                              viewportFraction: 1.0,
+                              height: MediaQuery.of(context).size.height,
+                              onPageChanged: (index, reason) {
+                                setState(() {
+                                  _swipeViewModel.currentCellIndex = index;
+                                });
+                              },
+                              enableInfiniteScroll: false,
+                            ),
+                            carouselController:
+                                _swipeViewModel.carouselController,
+                            items: List<Widget>.generate(
+                              modelList.length,
+                              (index) {
+                                return Flex(
+                                  direction: Axis.vertical,
+                                  children: [
+                                    SwipeViewCellWidget(
+                                      model: modelList[index],
+                                      panUpdateCallback: updatePanPosition,
+                                      panEndCallback: endOnCapturingPosition,
+                                    ),
+                                  ],
+                                );
+                              },
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              if (_swipeViewModel.isCameraInitialized)
-                ReactionCameraWidget(
-                  cameraController: _swipeViewModel.cameraController,
-                  panPosition: panPosition,
-                ),
-            ],
-          ),
+            ),
+            if (_swipeViewModel.isCameraInitialized)
+              ReactionCameraWidget(
+                cameraController: _swipeViewModel.cameraController,
+                panPosition: panPosition,
+              ),
+          ],
         ),
       ),
     );

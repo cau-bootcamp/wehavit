@@ -261,7 +261,7 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
                   Container(
                     height: 30,
                     decoration: const BoxDecoration(
-                      color: Colors.amber,
+                      color: CustomColors.whYellowDark,
                       borderRadius: BorderRadius.all(
                         Radius.circular(10.0),
                       ),
@@ -276,11 +276,18 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
                             textAlignVertical: TextAlignVertical.center,
                             style: const TextStyle(
                               fontSize: 12.0,
+                              fontWeight: FontWeight.w400,
+                              color: CustomColors.whWhite,
                             ),
                             decoration: const InputDecoration(
                               filled: true,
                               hintText: '응원 메시지 남기기',
                               border: InputBorder.none,
+                              hintStyle: TextStyle(
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w300,
+                                color: CustomColors.whWhite,
+                              ),
                               // contentPadding: EdgeInsets.zero,
                             ),
                             onTap: () {
@@ -295,6 +302,7 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
                           icon: const Icon(
                             Icons.send,
                             size: 16,
+                            color: CustomColors.whWhite,
                           ),
                         ),
                       ],
@@ -382,7 +390,7 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
                   children: [
                     Container(
                       clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: CustomColors.whBlack,
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(20),
@@ -402,7 +410,7 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
                         width: 80,
                         child: Divider(
                           thickness: 4,
-                          color: CustomColors.whYellow,
+                          color: CustomColors.whYellowDark,
                         ),
                       ),
                     ),
@@ -412,7 +420,7 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
                       child: Text(
                         '반응을 ${_swipeViewModel.countSend}회 보냈어요!',
                         style: const TextStyle(
-                          fontSize: 20,
+                          fontSize: 22,
                           color: CustomColors.whWhite,
                         ),
                       ),
