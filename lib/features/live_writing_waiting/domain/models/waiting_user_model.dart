@@ -10,6 +10,7 @@ class WaitingUser with _$WaitingUser {
   const factory WaitingUser({
     DateTime? updatedAt,
     String? userId,
+    String? name,
     String? email,
     String? imageUrl,
   }) = _WaitingUser;

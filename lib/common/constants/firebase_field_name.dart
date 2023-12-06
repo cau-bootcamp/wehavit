@@ -67,6 +67,7 @@ class FirebaseConfirmPostFieldName {
 class FirebaseLiveWaitingFieldName {
   static const String updatedAt = 'updatedAt';
   static const String userId = 'userId';
+  static const String name = 'name';
   static const String email = 'email';
   static const String imageUrl = 'imageUrl';
 }

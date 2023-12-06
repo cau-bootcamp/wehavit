@@ -10,6 +10,7 @@ import 'package:wehavit/features/live_writing_waiting/domain/repositories/live_w
 class LiveWaitingRepositoryImpl implements LiveWaitingRepository {
   LiveWaitingRepositoryImpl(this._friendRepository) {
     user = WaitingUser(
+      name: FirebaseAuth.instance.currentUser!.displayName!,
       userId: FirebaseAuth.instance.currentUser!.uid,
       email: FirebaseAuth.instance.currentUser!.email!,
       imageUrl: FirebaseAuth.instance.currentUser!.photoURL,

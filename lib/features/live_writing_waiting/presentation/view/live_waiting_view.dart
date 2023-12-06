@@ -94,16 +94,19 @@ class LoadedWaitingView extends HookConsumerWidget {
       liveWaitingUsersStream,
     );
 
-    // 5초 이내에 업데이트 된 유저들만 필터링
+    // 30초 이내에 업데이트 된 유저들만 필터링
     final liveWaitingUsers = (liveWaitingUsersStreamSnapshot.data ?? [])
         .where(
           (e) => e.updatedAt!.isAfter(
             DateTime.now().subtract(
-              const Duration(seconds: 5),
+              const Duration(seconds: 30),
             ),
           ),
         )
-        .toList();
+        .toList()
+      ..sort(
+        (a, b) => a.name!.compareTo(b.name!),
+      );
 
     return SafeArea(
       child: Stack(
@@ -156,7 +159,7 @@ class LoadedWaitingView extends HookConsumerWidget {
                             children: liveWaitingUsers
                                 .map(
                                   (e) => Text(
-                                    '😃${e.email}님이 기다리고 있습니다.'
+                                    '😃${e.name}(${e.email})님이 기다리고 있습니다.'
                                     '\n ${e.updatedAt}',
                                     style: const TextStyle(
                                       fontSize: 10,
