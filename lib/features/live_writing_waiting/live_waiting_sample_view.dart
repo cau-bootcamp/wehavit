@@ -5,26 +5,11 @@ import 'package:wehavit/features/live_writing_waiting/presentation/view/live_wai
 
 final timeProvider = StateProvider<DateTime>((ref) => DateTime.now());
 
-class LiveWaitingSampleView extends ConsumerStatefulWidget {
+class LiveWaitingSampleView extends ConsumerWidget {
   const LiveWaitingSampleView({super.key});
 
   @override
-  ConsumerState<LiveWaitingSampleView> createState() =>
-      _LiveWaitingSampleViewState();
-}
-
-class _LiveWaitingSampleViewState extends ConsumerState<LiveWaitingSampleView> {
-  late LiveWaitingViewUserImageUrlList _imageUrlListProvider;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _imageUrlListProvider =
-        ref.read(liveWaitingViewUserImageUrlListProvider.notifier);
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       backgroundColor: Colors.black,
       body: Container(
@@ -44,14 +29,6 @@ class _LiveWaitingSampleViewState extends ConsumerState<LiveWaitingSampleView> {
                 ),
               ),
             ),
-            ElevatedButton(
-                onPressed: () {
-                  _imageUrlListProvider.addUserImageUrl(
-                    imageUrl:
-                        'https://avatars.githubusercontent.com/u/63251068?v=4',
-                  );
-                },
-                child: const Text('Add User')),
             const LiveWritingView(),
           ],
         ),
