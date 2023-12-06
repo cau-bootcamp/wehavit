@@ -130,7 +130,8 @@ class MyResolutionListWidget extends StatelessWidget {
         (left) => null,
         (right) => Expanded(
           child: ListView.builder(
-            itemCount: right.$1.length + 1,
+            itemCount:
+                right.$1.length < 3 ? right.$1.length + 1 : right.$1.length,
             itemBuilder: (context, index) {
               if (index < right.$1.length) {
                 return ResolutionDashboardWidget(
