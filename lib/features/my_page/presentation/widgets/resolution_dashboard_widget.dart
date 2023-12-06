@@ -49,15 +49,35 @@ class _ResolutionDashboardWidgetState
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(goalStatement),
-                  Text(actionStatement),
+                  Text(
+                    goalStatement,
+                    style: const TextStyle(
+                      color: CustomColors.whWhite,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    actionStatement,
+                    style: const TextStyle(
+                      color: CustomColors.whWhite,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
                   FutureBuilder<List<ConfirmPostModel>>(
                     future: widget.confirmPostList,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SizedBox(height: 20),
+                            const Text(
+                              '이번 주 달성률',
+                              style: TextStyle(
+                                color: CustomColors.whWhite,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
                             Container(
                               padding: const EdgeInsets.all(2),
                               decoration: const BoxDecoration(
@@ -65,6 +85,13 @@ class _ResolutionDashboardWidgetState
                               child: ResolutionLinearGaugeGraphWidget(
                                 sourceData: snapshot.data!,
                                 lastPeriod: false,
+                              ),
+                            ),
+                            const Text(
+                              '지난 주 달성률',
+                              style: TextStyle(
+                                color: CustomColors.whWhite,
+                                fontWeight: FontWeight.normal,
                               ),
                             ),
                             Container(
@@ -91,9 +118,19 @@ class _ResolutionDashboardWidgetState
               ),
             ),
           ),
+//          Column(
+//            children: [
+//              const Text(
+//                '최근 한 달 달성률',
+//                style: TextStyle(
+//                  color: CustomColors.whWhite,
+//                  fontWeight: FontWeight.normal,
+//                  fontSize: 12,
+//                ),
+//              ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(right: 16.0),
+              padding: const EdgeInsets.only(right: 8.0),
               child: AspectRatio(
                 aspectRatio: 1,
                 child: FutureBuilder<List<ConfirmPostModel>>(
@@ -115,6 +152,8 @@ class _ResolutionDashboardWidgetState
           ),
         ],
       ),
+//        ],
+//      ),
     );
   }
 }
