@@ -105,15 +105,6 @@ class LoadedWaitingView extends HookConsumerWidget {
         )
         .toList();
 
-    useEffect(
-      () {
-        // debugPrint('UseEffect LIVE_USERS: $liveWaitingUsers');
-
-        return () {};
-      },
-      [liveWaitingUsersStreamSnapshot],
-    );
-
     return SafeArea(
       child: Stack(
         alignment: Alignment.center,
@@ -160,21 +151,15 @@ class LoadedWaitingView extends HookConsumerWidget {
                 ),
                 liveWaitingUsersStreamSnapshot.hasData
                     ? liveWaitingUsersStreamSnapshot.data!.isEmpty
-                        ? const Text('누구도 기다리고 있지 않습니다.')
+                        ? const Text('🥵누구도 기다리고 있지 않습니다.')
                         : Column(
-                            children: liveWaitingUsersStreamSnapshot.data!
-                                .where(
-                                  (e) => e.updatedAt!.isAfter(
-                                    DateTime.now().subtract(
-                                      const Duration(seconds: 5),
-                                    ),
-                                  ),
-                                )
+                            children: liveWaitingUsers
                                 .map(
                                   (e) => Text(
-                                    '${e.email}님이\n 기다리고 있습니다.\n ${e.updatedAt}}',
+                                    '😃${e.email}님이 기다리고 있습니다.'
+                                    '\n ${e.updatedAt}',
                                     style: const TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 10,
                                       fontWeight: FontWeight.w600,
                                       color: Colors.white,
                                     ),
