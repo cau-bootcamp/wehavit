@@ -1,3 +1,4 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -142,16 +143,30 @@ class MyResolutionListWidget extends StatelessWidget {
                 return Container(
                   margin:
                       const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  decoration: BoxDecoration(border: Border.all()),
                   height: 150,
-                  child: TextButton(
-                    onPressed: () async {
-                      context.push('/addResolution');
-                    },
-                    child: const Center(
-                      child: Text(
-                        '추가하기',
-                        style: TextStyle(color: Colors.black),
+                  child: DottedBorder(
+                    borderType: BorderType.RRect,
+                    // 모서리 둥글기
+                    radius: const Radius.circular(16),
+                    padding: const EdgeInsets.all(6),
+                    // 점선의 길이와 간격
+                    dashPattern: const [12, 8],
+                    // 선의 두께
+                    strokeWidth: 3,
+                    color: CustomColors.whGrey,
+                    child: TextButton(
+                      onPressed: () async {
+                        context.push('/addResolution');
+                      },
+                      child: const Center(
+                        child: Text(
+                          '새 목표 추가하기',
+                          style: TextStyle(
+                            color: CustomColors.whGrey,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
                       ),
                     ),
                   ),
