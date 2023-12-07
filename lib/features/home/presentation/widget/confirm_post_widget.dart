@@ -8,6 +8,8 @@ import 'package:wehavit/features/home/domain/models/confirm_post_model.dart';
 // import 'package:wehavit/features/home/domain/models/confirm_post_model.dart';
 import 'package:wehavit/features/home/presentation/model/main_view_model.dart';
 import 'package:wehavit/features/home/presentation/provider/main_view_model_provider.dart';
+import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
+import 'package:wehavit/features/my_page/presentation/widgets/resolution_linear_gauge_graph_widget.dart';
 import 'package:wehavit/features/swipe_view/presentation/model/reaction_camera_widget_model.dart';
 import 'package:wehavit/features/swipe_view/presentation/model/swipe_view_model.dart';
 import 'package:wehavit/features/swipe_view/presentation/provider/reaction_camera_widget_model_provider.dart';
@@ -55,6 +57,8 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
   bool _initOccurred = false;
   bool _isTextFieldActive = false;
 
+  List<ConfirmPostModel> confirmPostList = [];
+
   @override
   void initState() {
     super.initState();
@@ -82,6 +86,8 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
       //         const Offset(0, 0);
 
       setAnimationVariables();
+      confirmPostList = await _mainViewModelProvider.getConfirmPostListFor(
+          resolutionId: widget.model.resolutionId!);
 
       setState(() {});
       _initOccurred = true;
@@ -204,16 +210,32 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  if (_isTextFieldActive)
-                    Expanded(
-                      child: Container(),
+                  Expanded(
+                    child: Container(
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: const BoxDecoration(
+                          color: CustomColors.whBlack,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(
+                              10.0,
+                            ),
+                          ),
+                        ),
+                        child: ResolutionLinearGaugeGraphWidget(
+                          sourceData: confirmPostList,
+                          lastPeriod: false,
+                        ),
+                      ),
                     ),
+                  ),
                   IconButton(
                     onPressed: () async {
                       if (_isTextFieldActive == true &&
                           _mainViewModel.textEditingController.text != '') {
                         await _mainViewModelProvider.sendTextReaction(
-                            confirmModleId: confirmPostId ?? 'NO_id');
+                          confirmModleId: confirmPostId ?? 'NO_id',
+                        );
                       }
                       setState(() {
                         _isTextFieldActive =
@@ -230,7 +252,8 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                     onTapUp: (details) async =>
                         emojiSheetWidget(context).whenComplete(() async {
                       _mainViewModelProvider.sendEmojiReaction(
-                          confirmModleId: confirmPostId ?? 'NO_id');
+                        confirmModleId: confirmPostId ?? 'NO_id',
+                      );
                       _mainViewModel.countSend = 0;
                     }),
                     child: Container(

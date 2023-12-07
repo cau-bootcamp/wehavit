@@ -9,6 +9,7 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/features/home/presentation/model/main_view_model.dart';
 import 'package:wehavit/features/home/presentation/provider/main_view_model_provider.dart';
 import 'package:wehavit/features/home/presentation/widget/confirm_post_widget.dart';
+import 'package:wehavit/features/reaction/presentation/widget/reaction_animation_widget.dart';
 import 'package:wehavit/features/swipe_view/presentation/model/reaction_camera_widget_model.dart';
 import 'package:wehavit/features/swipe_view/presentation/provider/reaction_camera_widget_model_provider.dart';
 import 'package:wehavit/features/swipe_view/presentation/provider/swipe_view_model_provider.dart';
@@ -227,7 +228,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                                 itemCount: right.length,
                                 itemBuilder: (context, index) {
                                   return ConfirmPostWidget(
-                                    key: ValueKey(right[index].userName),
+                                    key: UniqueKey(),
                                     model: right[index],
                                     panUpdateCallback: updatePanPosition,
                                     panEndCallback: endOnCapturingPosition,
@@ -277,6 +278,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               cameraController: _mainViewModel.cameraController,
               panPosition: panPosition,
             ),
+          const ReactionAnimationWidget(),
         ],
       ),
     );

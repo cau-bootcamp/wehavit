@@ -69,6 +69,8 @@ class _ReactionAnimationWidgetState
     _reactionAnimationWidgetManager =
         ref.read(reactionAnimationWidgetManagerProvider.notifier);
     _fetchUserDataFromIdUsecase = ref.watch(fetchUserDataFromIdUsecaseProvider);
+
+    showReactionFromLastConfrimPost();
   }
 
   @override
@@ -108,13 +110,6 @@ class _ReactionAnimationWidgetState
             child: Stack(
               children: _textBubbleWidgets.values.toList(),
             ),
-          ),
-          // TODO: 테스트용 ElevatedButton은 이후에 제거해주면 됨.
-          ElevatedButton(
-            onPressed: () async {
-              await showReactionFromLastConfrimPost();
-            },
-            child: const Text('Get Reaction Data'),
           ),
         ],
       ),
