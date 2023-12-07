@@ -228,6 +228,7 @@ class _LateWritingViewState extends ConsumerState<LateWritingView> {
                             ),
                             SizedBox(
                               width: double.infinity,
+                              height: 50.0,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: CustomColors.whYellow,
