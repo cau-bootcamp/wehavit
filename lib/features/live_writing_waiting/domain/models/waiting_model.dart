@@ -11,8 +11,10 @@ const int availableWritingLimitMinute = 5; // 실시간 글 작성 제한 시간
 @riverpod
 class Waiting extends _$Waiting {
   // TODO. This is for debug. If needed, uncomment this and set time to test
-  // static int fixedTimeHour = 1;
-  // static int fixedTimeMinute = 28;
+  static int fixedTimeHour = DateTime.now().hour;
+  static int fixedTimeMinute = DateTime.now().minute + 1;
+  static int availableWritingLimitMinute = 0;
+  static int availableWritingLimitSecond = 30;
 
   final DateTime _writingStartTime = DateTime(
     DateTime.now().year,
@@ -28,6 +30,7 @@ class Waiting extends _$Waiting {
     DateTime.now().day,
     fixedTimeHour,
     fixedTimeMinute + availableWritingLimitMinute,
+    availableWritingLimitSecond,
   );
 
   @override
