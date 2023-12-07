@@ -31,50 +31,81 @@ class AuthScreen extends HookConsumerWidget {
     });
 
     return Scaffold(
-      body: Padding(
-        padding: Dimensions.kPaddingAllLarge,
-        child: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                appTitle,
-                style: TextStyle(
-                  fontSize: 38,
-                  fontWeight: FontWeight.bold,
-                ),
-              ).animate().fade(duration: 1500.ms).fadeIn(),
-              Dimensions.kVerticalSpaceLarge,
-              AuthField(
-                hintText: 'Email',
-                controller: emailTextFieldController,
-              ),
-              Dimensions.kVerticalSpaceSmall,
-              AuthField(
-                hintText: 'Password',
-                hasObscureText: true,
-                controller: passwordTextFieldController,
-              ),
-              Dimensions.kVerticalSpaceSmall,
-              LogInWithGoogleButton(textTheme: textTheme),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  EmailLogInButton(
-                    emailTextFieldController: emailTextFieldController,
-                    passwordTextFieldController: passwordTextFieldController,
-                    textTheme: textTheme,
-                  ),
-                  EmailRegisterButton(
-                    emailTextFieldController: emailTextFieldController,
-                    passwordTextFieldController: passwordTextFieldController,
-                    textTheme: textTheme,
-                  ),
-                ],
-              )
-            ],
+      resizeToAvoidBottomInset: false,
+      body: Stack(
+        children: [
+          Container(
+            constraints: const BoxConstraints.expand(),
+            child: const Image(
+              fit: BoxFit.cover,
+              image: AssetImage('assets/logo/login_background.png'),
+            ),
           ),
-        ),
+          Padding(
+            padding: Dimensions.kPaddingAllLarge,
+            child: SafeArea(
+              child: Expanded(
+                child: Container(
+                  alignment: Alignment.center,
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 40.0),
+                          child: Image(
+                            image: AssetImage(
+                              'assets/logo/wehavit_text_image.png',
+                            ),
+                          ),
+                        ),
+                        Dimensions.kVerticalSpaceLarge,
+                        AuthField(
+                          hintText: 'Email',
+                          controller: emailTextFieldController,
+                        ),
+                        Dimensions.kVerticalSpaceSmall,
+                        AuthField(
+                          hintText: 'Password',
+                          hasObscureText: true,
+                          controller: passwordTextFieldController,
+                        ),
+                        Dimensions.kVerticalSpaceSmall,
+                        LogInWithGoogleButton(textTheme: textTheme),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Expanded(
+                              child: EmailLogInButton(
+                                emailTextFieldController:
+                                    emailTextFieldController,
+                                passwordTextFieldController:
+                                    passwordTextFieldController,
+                                textTheme: textTheme,
+                              ),
+                            ),
+                            const SizedBox(width: 20),
+                            Expanded(
+                              child: EmailRegisterButton(
+                                emailTextFieldController:
+                                    emailTextFieldController,
+                                passwordTextFieldController:
+                                    passwordTextFieldController,
+                                textTheme: textTheme,
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -95,6 +126,9 @@ class EmailRegisterButton extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: CustomColors.whSemiWhite,
+      ),
       onPressed: () async {
         await ref.read(authProvider.notifier).emailAndPasswordRegister(
               emailTextFieldController.text,
@@ -134,6 +168,9 @@ class EmailLogInButton extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: CustomColors.whYellow,
+      ),
       onPressed: () async {
         await ref.read(authProvider.notifier).emailAndPasswordLogIn(
               emailTextFieldController.text,
@@ -169,6 +206,9 @@ class LogInWithGoogleButton extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: CustomColors.whSemiWhite,
+      ),
       onPressed: () async {
         await ref.read(authProvider.notifier).googleLogIn();
       },
@@ -207,10 +247,32 @@ class AuthField extends HookConsumerWidget {
     return TextField(
       controller: controller,
       obscureText: hasObscureText,
+      style: const TextStyle(
+        fontSize: 16.0,
+        fontWeight: FontWeight.w600,
+        color: CustomColors.whWhite,
+      ),
       decoration: InputDecoration(
         hintText: hintText,
+        hintStyle: const TextStyle(
+          fontSize: 16.0,
+          fontWeight: FontWeight.w600,
+          color: CustomColors.whGrey,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
+            color: CustomColors.whYellow,
+            width: 3.0,
+          ),
+        ),
+        enabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
+            color: CustomColors.whWhite,
+            width: 3.0,
+          ),
         ),
       ),
     );

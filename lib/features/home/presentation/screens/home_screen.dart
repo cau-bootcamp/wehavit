@@ -124,7 +124,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               decoration: const BoxDecoration(
                 color: CustomColors.whBlack,
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 0),
               height: 70,
               child: ListView.builder(
                 padding: const EdgeInsets.only(left: 4, right: 4),
