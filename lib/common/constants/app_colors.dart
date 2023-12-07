@@ -28,6 +28,8 @@ class CustomColors {
   static const Color whYellow = Color(0xffFFB800);
   static const Color whYellowBright = Color(0xfffadf92);
   static const Color whYellowDark = Color(0xff8C6500);
+  static const Color whRed = Color(0xffA23333);
+  static const Color whRedBright = Color(0xffDA3A3A);
   static const Color whUnSelectedTextColor = Color(0xffA2A2A2);
   static const Color whSelectedTextColor = Color(0xff000000);
 }

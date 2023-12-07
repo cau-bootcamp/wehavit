@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/common/utils/emoji_assets.dart';
 import 'package:wehavit/features/live_writing/presentation/model/live_writing_state.dart';
 import 'package:wehavit/features/live_writing/presentation/widgets/friend_live_bubble_components.dart';
@@ -12,6 +13,7 @@ class FriendLiveBubbleWidget extends StatefulHookConsumerWidget {
     required this.bubbleState,
     required this.postContent,
     required this.postImageFirestoreURL,
+    required this.userEmail,
     required this.emojiSendCallback,
   });
 
@@ -20,6 +22,8 @@ class FriendLiveBubbleWidget extends StatefulHookConsumerWidget {
   final LiveBubbleState bubbleState;
   final String postContent;
   final String postImageFirestoreURL;
+
+  final String userEmail;
   final Function emojiSendCallback;
 
   @override
@@ -34,7 +38,7 @@ class _FriendLivePostBubbleState extends ConsumerState<FriendLiveBubbleWidget> {
       children: [
         Container(
           decoration: const BoxDecoration(
-            color: Colors.blue,
+            color: CustomColors.whGrey,
             borderRadius: BorderRadius.all(
               Radius.circular(10.0),
             ),
@@ -51,7 +55,7 @@ class _FriendLivePostBubbleState extends ConsumerState<FriendLiveBubbleWidget> {
                       child: Container(
                         constraints: const BoxConstraints(minWidth: 120),
                         child: Padding(
-                          padding: const EdgeInsets.all(2.0),
+                          padding: const EdgeInsets.all(4.0),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,7 +79,6 @@ class _FriendLivePostBubbleState extends ConsumerState<FriendLiveBubbleWidget> {
                     ),
                   ],
                 ),
-                // TODO : 반응 남기기 기능 개발
                 Visibility(
                   visible: widget.bubbleState == LiveBubbleState.showingDetail,
                   child: Padding(
@@ -94,8 +97,13 @@ class _FriendLivePostBubbleState extends ConsumerState<FriendLiveBubbleWidget> {
                               ),
                             ),
                           ),
-                          onTap: () async {
-                            widget.emojiSendCallback(index);
+                          onTapUp: (details) async {
+                            widget.emojiSendCallback(
+                              index,
+                              widget.userEmail,
+                              details,
+                              // TODO : emojiWidget에서 지우기
+                            );
                           },
                         ),
                       ),

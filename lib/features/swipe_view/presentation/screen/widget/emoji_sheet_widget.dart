@@ -80,8 +80,8 @@ class _ShootEmojiWidgetState extends State<ShootEmojiWidget>
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      bottom: (widget.targetPos.y * 1.0 * _yAnimation.value) +
-          (400) * (1 - _yAnimation.value),
+      top: (widget.currentPos.y.toDouble()) * (1 - _yAnimation.value) -
+          (widget.targetPos.y * 1.0 * _yAnimation.value),
       left: widget.targetPos.x.toDouble() * _xAnimation.value +
           (widget.currentPos.x.toDouble()) * (1 - _xAnimation.value) -
           emojiSize / 2,

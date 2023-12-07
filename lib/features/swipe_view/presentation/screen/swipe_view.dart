@@ -73,9 +73,10 @@ class SwipeViewState extends ConsumerState<SwipeView>
           gradient: LinearGradient(
             colors: [
               CustomColors.whDarkBlack,
+              CustomColors.whYellowDark,
               CustomColors.whYellow,
             ],
-            stops: [0.5, 1.0],
+            stops: [0.3, 0.8, 1.2],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -225,38 +226,6 @@ class SwipeViewState extends ConsumerState<SwipeView>
       ),
     );
     _swipeViewModel.animationController.value = 1;
-  }
-
-  void shootEmoji(
-    StateSetter setState,
-    int index,
-    int jndex,
-    TapUpDetails detail,
-    BuildContext context,
-    void Function(UniqueKey key) disposeWidget,
-  ) {
-    return setState(
-      () {
-        _swipeViewModel.countSend++;
-        _swipeViewModel.sendingEmojis[index * 5 + jndex] += 1;
-        final animationWidgetKey = UniqueKey();
-        _swipeViewModel.emojiWidgets.addEntries(
-          {
-            animationWidgetKey: ShootEmojiWidget(
-              key: animationWidgetKey,
-              emojiIndex: index * 5 + jndex,
-              currentPos:
-                  Point(detail.globalPosition.dx, detail.globalPosition.dy),
-              targetPos: Point(
-                MediaQuery.of(context).size.width / 2,
-                MediaQuery.of(context).size.height + 50,
-              ),
-              disposeWidgetFromParent: disposeWidget,
-            ),
-          }.entries,
-        );
-      },
-    );
   }
 
   void updatePanPosition(Point<double> position) {

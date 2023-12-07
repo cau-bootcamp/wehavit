@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/features/live_writing/domain/domain.dart';
 import 'package:wehavit/features/live_writing/presentation/model/live_writing_state.dart';
 import 'package:wehavit/features/live_writing/presentation/widgets/friend_live_bubble_widget.dart';
@@ -9,8 +10,13 @@ import 'package:wehavit/features/live_writing/presentation/widgets/friend_waitin
 import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';
 
 class FriendLivePostWidget extends StatefulHookConsumerWidget {
-  const FriendLivePostWidget({super.key, required this.userEmail});
+  const FriendLivePostWidget({
+    super.key,
+    required this.sendReactionCallback,
+    required this.userEmail,
+  });
   final String userEmail;
+  final Function sendReactionCallback;
 
   @override
   ConsumerState<FriendLivePostWidget> createState() =>
@@ -95,6 +101,7 @@ class _FriendLivePostWidgetState extends ConsumerState<FriendLivePostWidget> {
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
             child: CircleAvatar(
+              backgroundColor: CustomColors.whYellowDark,
               radius: profileImageRadius,
               foregroundImage: NetworkImage(
                 profileImageUrlSnapshot.data ??
@@ -104,7 +111,7 @@ class _FriendLivePostWidgetState extends ConsumerState<FriendLivePostWidget> {
           ),
           Expanded(
             child: SizedBox(
-              height: bubbleState == LiveBubbleState.showingDefault ? 47 : null,
+              height: bubbleState == LiveBubbleState.showingDefault ? 50 : null,
               child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) {
                   return GestureDetector(
@@ -117,15 +124,16 @@ class _FriendLivePostWidgetState extends ConsumerState<FriendLivePostWidget> {
                       });
                     },
                     child: FriendLiveBubbleWidget(
-                      userName: nameSnapshot.data ?? '누구세요?',
-                      postTitle: titleSnapshot.data ?? '제목을 못불러왔어요!',
-                      postContent: messageSnapshot.data ?? '내용을 못불러왔어요!',
+                      userName: nameSnapshot.data ?? '이름',
+                      postTitle: titleSnapshot.data ?? '제목을 불러오는 중',
+                      postContent: messageSnapshot.data ?? '내용을 불러오는 중',
                       postImageFirestoreURL: postImageSnapshot.data == '' ||
                               postImageSnapshot.data == null
                           ? 'https://mblogthumb-phinf.pstatic.net/MjAyMjAxMjVfNTgg/MDAxNjQzMTAyOTg1MTk1.kvD7eFVnAbMS2LREsFqsYfsw4hnJDFuGUfBUX2kUKikg.jr9qYJbmDH9AmJPHbJcM9FrhpOnOaYp5qAVk8nF9vR4g.JPEG.minziminzi128/IMG_7365.JPG?type=w800'
                           : postImageSnapshot.data!,
                       bubbleState: bubbleState,
-                      emojiSendCallback: sendEmojiReaction,
+                      userEmail: widget.userEmail,
+                      emojiSendCallback: widget.sendReactionCallback,
                     ),
                   );
                 },
@@ -134,23 +142,6 @@ class _FriendLivePostWidgetState extends ConsumerState<FriendLivePostWidget> {
           ),
         ],
       ),
-    );
-  }
-
-  Future<void> sendEmojiReaction(int emojiNo) async {
-    final sendResult = await ref
-        .read(liveWritingFriendRepositoryProvider)
-        .sendReactionToTargetFriend(
-          widget.userEmail,
-          ReactionModel(
-            complimenterUid: '',
-            reactionType: ReactionType.emoji.index,
-            emoji: {'t${emojiNo.toString().padLeft(2, '0')}': 1},
-          ),
-        );
-    sendResult.fold(
-      (l) => debugPrint('send emoji to ${widget.userEmail} failed'),
-      (r) => debugPrint('send emoji to ${widget.userEmail} success'),
     );
   }
 }

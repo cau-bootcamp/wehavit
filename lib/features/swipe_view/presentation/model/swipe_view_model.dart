@@ -13,6 +13,7 @@ class SwipeViewModel {
   int _currentCellIndex = 0;
   int get currentCellIndex => _currentCellIndex;
   set currentCellIndex(int newIndex) {
+    countSend = 0;
     _currentCellIndex = newIndex;
     if (confirmPostModelList.isRight() &&
         confirmPostModelList
