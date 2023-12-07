@@ -1,10 +1,11 @@
 import 'dart:math';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/features/home/domain/models/confirm_post_model.dart';
+// import 'package:wehavit/features/home/domain/models/confirm_post_model.dart';
 import 'package:wehavit/features/home/presentation/model/main_view_model.dart';
 import 'package:wehavit/features/home/presentation/provider/main_view_model_provider.dart';
 import 'package:wehavit/features/swipe_view/presentation/model/reaction_camera_widget_model.dart';
@@ -23,7 +24,7 @@ class ConfirmPostWidget extends ConsumerStatefulWidget {
     required this.panEndCallback,
   });
 
-  final ConfirmPostModel model;
+  final HomeConfirmPostModel model;
   final Function panUpdateCallback;
   final Function panEndCallback;
 
@@ -35,13 +36,14 @@ class ConfirmPostWidget extends ConsumerStatefulWidget {
 
 class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
     with SingleTickerProviderStateMixin {
-  late String userName = widget.model.userName;
+  late String? confirmPostId = widget.model.id;
+  late String? userName = widget.model.userName;
   late String? userImageUrl = widget.model.userImageUrl;
-  late String resolutionGoalStatement = widget.model.resolutionGoalStatement;
-  late String title = widget.model.title;
-  late String content = widget.model.content;
-  late String? contentImageUrl = widget.model.contentImageUrl;
-  late Timestamp postAt = widget.model.postAt;
+  late String? resolutionGoalStatement = widget.model.resolutionGoalStatement;
+  late String? title = widget.model.title;
+  late String? content = widget.model.content;
+  late String? contentImageUrl = widget.model.imageUrl;
+  late DateTime? postAt = widget.model.createdAt;
   late final MainViewModel _mainViewModel;
   late final MainViewModelProvider _mainViewModelProvider;
 
@@ -114,7 +116,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                       ),
                       const SizedBox(width: 10),
                       Text(
-                        userName,
+                        userName!,
                         style: const TextStyle(
                           color: CustomColors.whSemiWhite,
                           fontWeight: FontWeight.bold,
@@ -136,7 +138,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
-                          resolutionGoalStatement,
+                          resolutionGoalStatement!,
                           style: const TextStyle(
                             color: CustomColors.whWhite,
                             fontWeight: FontWeight.bold,
@@ -149,7 +151,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
               ),
               const SizedBox(height: 8),
               Text(
-                title,
+                title!,
                 style: const TextStyle(
                   color: CustomColors.whSemiWhite,
                   fontWeight: FontWeight.bold,
@@ -210,8 +212,8 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                     onPressed: () async {
                       if (_isTextFieldActive == true &&
                           _mainViewModel.textEditingController.text != '') {
-                        await _mainViewModelProvider
-                            .sendTextReaction(widget.model.confirmModelId);
+                        await _mainViewModelProvider.sendTextReaction(
+                            confirmModleId: confirmPostId ?? 'NO_id');
                       }
                       setState(() {
                         _isTextFieldActive =
@@ -227,7 +229,8 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                   GestureDetector(
                     onTapUp: (details) async =>
                         emojiSheetWidget(context).whenComplete(() async {
-                      _mainViewModelProvider.sendEmojiReaction(confirmModleId);
+                      _mainViewModelProvider.sendEmojiReaction(
+                          confirmModleId: confirmPostId ?? 'NO_id');
                       _mainViewModel.countSend = 0;
                     }),
                     child: Container(
@@ -298,7 +301,9 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                     ),
                     IconButton(
                       onPressed: () async {
-                        _mainViewModelProvider.sendTextReaction();
+                        _mainViewModelProvider.sendTextReaction(
+                          confirmModleId: confirmPostId ?? 'NO_id',
+                        );
                       },
                       icon: const Icon(
                         Icons.send,
@@ -526,7 +531,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
         onPanEnd: (details) async {
           if (_reactionCameraWidgetModelProvider
               .isPosInCameraAreaOf(panningPosition)) {
-            widget.panEndCallback(panningPosition);
+            widget.panEndCallback(panningPosition, confirmPostId ?? 'NO_id');
           }
 
           _reactionCameraWidgetModelProvider.setFocusingModeTo(false);

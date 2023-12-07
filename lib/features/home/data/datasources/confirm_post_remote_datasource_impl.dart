@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/features/home/data/datasources/confirm_post_datasource.dart';
-import 'package:wehavit/features/home/data/entities/confirm_post_entity.dart';
+import 'package:wehavit/features/home/domain/models/confirm_post_model.dart';
+// import 'package:wehavit/features/home/data/entities/confirm_post_entity.dart';
 
 class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
   static const int maxDay = 27;
 
   @override
-  EitherFuture<List<ConfirmPostEntity>> getConfirmPostEntityList(
+  EitherFuture<List<HomeConfirmPostModel>> getConfirmPostEntityList(
     int selectedIndex,
   ) async {
     try {
@@ -25,7 +26,7 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
 //      print('\n'
 //          'isGreaterThan: ${Timestamp.fromDate(startDate)}\n'
 //          'isLessThan: ${Timestamp.fromDate(endDate)}');
-      // 첫 번째 쿼리 결과
+      // 1. 결과 start 2 end date confirmpost
       QuerySnapshot firstQueryResult = await FirebaseFirestore.instance
           .collection(FirebaseCollectionName.confirmPosts)
           .where(
@@ -110,12 +111,12 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
         }
       }
 
-      List<ConfirmPostEntity> confirmPosts = resultDocs
+      List<HomeConfirmPostModel> confirmPosts = resultDocs
           .map(
-            (doc) => ConfirmPostEntity.fromFirebaseDocument(
+            (doc) => HomeConfirmPostModel.fromFireStoreDocument(
               userDataMap[
                   (doc.data() as dynamic)[FirebaseConfirmPostFieldName.owner]]!,
-              doc.data() as dynamic,
+              doc,
             ),
           )
           .toList();

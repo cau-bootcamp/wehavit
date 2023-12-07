@@ -8,7 +8,6 @@ import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.d
 import 'package:wehavit/features/my_page/domain/usecases/get_confirm_post_list_for_resolution_id.dart';
 import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';
 import 'package:wehavit/features/swipe_view/domain/usecase/swipe_view_usecase.dart';
-import 'package:wehavit/features/swipe_view/presentation/model/swipe_view_model.dart';
 
 final mainViewModelProvider =
     StateNotifierProvider<MainViewModelProvider, MainViewModel>(
@@ -83,10 +82,6 @@ class MainViewModelProvider extends StateNotifier<MainViewModel> {
     ReactionModel reactionModel,
     String confirmModleId,
   ) async {
-    if (state.currentCellConfirmModel == null) {
-      return Future(() => null);
-    }
-
     await _sendReactionToTargetConfirmPostUsecase
         .call((confirmModleId, reactionModel));
 
@@ -158,6 +153,7 @@ class MainViewModelProvider extends StateNotifier<MainViewModel> {
       reactionType: ReactionType.instantPhoto.index,
       instantPhotoUrl: imageFilePath,
     );
+
     sendReactionToTargetConfirmPost(reactionModel, confirmModleId);
   }
 

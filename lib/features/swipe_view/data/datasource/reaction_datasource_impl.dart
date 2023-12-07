@@ -35,7 +35,6 @@ class ReactionDatasourceImpl implements ReactionDatasource {
           },
         );
       }
-
       FirebaseFirestore.instance
           .collection(
         '${FirebaseCollectionName.confirmPosts}/$targetConfirmPostId/${FirebaseCollectionName.encourages}',
@@ -52,6 +51,7 @@ class ReactionDatasourceImpl implements ReactionDatasource {
           FirebaseReactionFieldName.hasRead: false,
         },
       );
+      print(targetConfirmPostId);
       return Future(() => right(true));
     } on Exception {
       debugPrint('DEBUG : Error on sendReactionToTargetConfirmPost Function');
