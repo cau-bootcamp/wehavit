@@ -10,29 +10,6 @@ class LiveWaitingSampleView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Container(
-        constraints: const BoxConstraints.expand(),
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.black,
-                    Colors.amber,
-                  ],
-                ),
-              ),
-            ),
-            const LiveWritingView(),
-          ],
-        ),
-      ),
-    );
+    return const LiveWritingView();
   }
 }
