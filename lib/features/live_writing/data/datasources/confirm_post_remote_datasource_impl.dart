@@ -16,7 +16,7 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
           )
           .where(
             FirebaseConfirmPostFieldName.fan,
-            arrayContains: FirebaseAuth.instance.currentUser!.uid,
+            arrayContains: FirebaseAuth.instance.currentUser!.email,
           )
           .get();
 
