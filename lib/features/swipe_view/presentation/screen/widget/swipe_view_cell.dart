@@ -428,28 +428,40 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
                     Expanded(
                       flex: 2,
                       // padding: const EdgeInsets.only(bottom: 30.0),
-                      child: Center(
-                        child: Column(
-                          children: [
-                            Text(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            alignment: Alignment.center,
+                            height: 70,
+                            child: Text(
                               _swipeViewModel.countSend.toString(),
-                              style: const TextStyle(
-                                fontSize: 64,
-                                color: CustomColors.whYellow,
+                              style: TextStyle(
+                                fontSize: 40 +
+                                    24 *
+                                        min(
+                                          1,
+                                          _swipeViewModel.countSend / 24,
+                                        ),
+                                color: Color.lerp(
+                                  CustomColors.whYellow,
+                                  CustomColors.whRedBright,
+                                  min(1, _swipeViewModel.countSend / 24),
+                                ),
                                 fontWeight: FontWeight.w700,
                                 fontStyle: FontStyle.italic,
                               ),
                             ),
-                            const Text(
-                              '반응을 보내주세요!',
-                              style: TextStyle(
-                                fontSize: 24,
-                                color: CustomColors.whYellow,
-                                fontWeight: FontWeight.w500,
-                              ),
+                          ),
+                          const Text(
+                            '반응을 보내주세요!',
+                            style: TextStyle(
+                              fontSize: 24,
+                              color: CustomColors.whYellow,
+                              fontWeight: FontWeight.w500,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                     Builder(
@@ -531,7 +543,7 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
               currentPos: Point(detail.globalPosition.dx, 100),
               targetPos: Point(
                 MediaQuery.of(context).size.width / 2,
-                MediaQuery.of(context).size.height - 500 + 100,
+                MediaQuery.of(context).size.height - 500 + 200,
               ),
               disposeWidgetFromParent: disposeWidget,
             ),

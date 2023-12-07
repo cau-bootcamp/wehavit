@@ -97,198 +97,205 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView>
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              CustomColors.whDarkBlack,
-              CustomColors.whYellowDark,
-              CustomColors.whYellow,
-            ],
-            stops: [0.3, 0.8, 1.2],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+      body: GestureDetector(
+        onTapUp: (details) {
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                CustomColors.whDarkBlack,
+                CustomColors.whYellowDark,
+                CustomColors.whYellow,
+              ],
+              stops: [0.3, 0.8, 1.2],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
           ),
-        ),
-        child: Stack(
-          children: [
-            SafeArea(
-              minimum: const EdgeInsets.all(16.0),
-              child: Stack(
-                children: [
-                  LayoutBuilder(
-                    builder: (context, constraints) {
-                      return SingleChildScrollView(
-                        keyboardDismissBehavior:
-                            ScrollViewKeyboardDismissBehavior.onDrag,
-                        padding: const EdgeInsets.only(
-                          bottom: 350,
-                          top: 120,
-                        ),
-                        child: Column(
-                          children: List<Widget>.generate(
-                            friendEmailsSnapshot.data?.length ?? 0,
-                            (index) => Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 12.0),
-                              child: FriendLivePostWidget(
-                                userEmail: friendEmailsSnapshot.data![index],
-                                sendReactionCallback: sendEmojiReaction,
+          child: Stack(
+            children: [
+              SafeArea(
+                minimum: const EdgeInsets.all(16.0),
+                child: Stack(
+                  children: [
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        return SingleChildScrollView(
+                          keyboardDismissBehavior:
+                              ScrollViewKeyboardDismissBehavior.onDrag,
+                          padding: const EdgeInsets.only(
+                            bottom: 350,
+                            top: 120,
+                          ),
+                          child: Column(
+                            children: List<Widget>.generate(
+                              friendEmailsSnapshot.data?.length ?? 0,
+                              (index) => Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 12.0),
+                                child: FriendLivePostWidget(
+                                  userEmail: friendEmailsSnapshot.data![index],
+                                  sendReactionCallback: sendEmojiReaction,
+                                ),
                               ),
                             ),
                           ),
+                        );
+                      },
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(top: 34, bottom: 34),
+                      width: double.infinity,
+                      child: const Column(
+                        children: [
+                          Text(
+                            '남은 시간',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w400,
+                              color: CustomColors.whWhite,
+                            ),
+                          ),
+                          Text(
+                            '00:07',
+                            style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                              color: CustomColors.whWhite,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: IgnorePointer(
+                        child: SizedBox(
+                          width: 10,
+                          height: 10,
+                          child: Stack(
+                            children: emojiFireWorkManager
+                                .fireworkWidgets.values
+                                .toList(),
+                          ),
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      icon: const Icon(
+                        Icons.arrow_back_ios,
+                        color: CustomColors.whWhite,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              activeResolutionList.when(
+                data: (fetchedActiveResolutionList) {
+                  // load first goal statement
+                  fetchedActiveResolutionList.fold(
+                    (error) => debugPrint(
+                      'Error, when fetching active resolution list: $error',
+                    ),
+                    (resolutionList) async {
+                      if (resolutionList.isNotEmpty) {
+                        // selectedResolutionGoal.value =
+                        //     resolutionList.first.goalStatement;
+                        resolutionModelList = resolutionList;
+                      } else {
+                        //
+                      }
+                    },
+                  );
+
+                  List<Widget> writingCellList = resolutionModelList.map(
+                    (model) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: MyLiveWritingWidget(
+                          resolutionModel: model,
                         ),
                       );
                     },
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(top: 34, bottom: 34),
-                    width: double.infinity,
-                    child: const Column(
-                      children: [
-                        Text(
-                          '남은 시간',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400,
-                            color: CustomColors.whWhite,
-                          ),
-                        ),
-                        Text(
-                          '00:07',
-                          style: TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                            color: CustomColors.whWhite,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: IgnorePointer(
-                      child: SizedBox(
-                        width: 10,
-                        height: 10,
-                        child: Stack(
-                          children: emojiFireWorkManager.fireworkWidgets.values
-                              .toList(),
-                        ),
-                      ),
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    icon: const Icon(
-                      Icons.arrow_back_ios,
-                      color: CustomColors.whWhite,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            activeResolutionList.when(
-              data: (fetchedActiveResolutionList) {
-                // load first goal statement
-                fetchedActiveResolutionList.fold(
-                  (error) => debugPrint(
-                    'Error, when fetching active resolution list: $error',
-                  ),
-                  (resolutionList) async {
-                    if (resolutionList.isNotEmpty) {
-                      // selectedResolutionGoal.value =
-                      //     resolutionList.first.goalStatement;
-                      resolutionModelList = resolutionList;
-                    } else {
-                      //
-                    }
-                  },
-                );
+                  ).toList();
 
-                List<Widget> writingCellList = resolutionModelList.map(
-                  (model) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: MyLiveWritingWidget(
-                        resolutionModel: model,
-                      ),
-                    );
-                  },
-                ).toList();
-
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 16.0),
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: Container(),
-                        ),
-                        CarouselSlider(
-                          items: writingCellList,
-                          carouselController: _controller,
-                          options: CarouselOptions(
-                            enableInfiniteScroll: false,
-                            height: 330,
-                            viewportFraction: 0.9,
-                            // enlargeCenterPage: true,
-                            onPageChanged: (index, reason) {
-                              setState(() {
-                                _current = index;
-                              });
-                            },
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: Container(),
                           ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children:
-                              writingCellList.asMap().entries.map((entry) {
-                            return GestureDetector(
-                              onTap: () => _controller.animateToPage(entry.key),
-                              child: Container(
-                                width: 12.0,
-                                height: 12.0,
-                                margin: const EdgeInsets.symmetric(
-                                  vertical: 8.0,
-                                  horizontal: 4.0,
-                                ),
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: (Theme.of(context).brightness ==
-                                              Brightness.dark
-                                          ? Colors.white
-                                          : Colors.black)
-                                      .withOpacity(
-                                    _current == entry.key ? 0.9 : 0.4,
+                          CarouselSlider(
+                            items: writingCellList,
+                            carouselController: _controller,
+                            options: CarouselOptions(
+                              enableInfiniteScroll: false,
+                              height: 330,
+                              viewportFraction: 0.9,
+                              // enlargeCenterPage: true,
+                              onPageChanged: (index, reason) {
+                                setState(() {
+                                  _current = index;
+                                });
+                              },
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children:
+                                writingCellList.asMap().entries.map((entry) {
+                              return GestureDetector(
+                                onTap: () =>
+                                    _controller.animateToPage(entry.key),
+                                child: Container(
+                                  width: 12.0,
+                                  height: 12.0,
+                                  margin: const EdgeInsets.symmetric(
+                                    vertical: 8.0,
+                                    horizontal: 4.0,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: (Theme.of(context).brightness ==
+                                                Brightness.dark
+                                            ? Colors.white
+                                            : Colors.black)
+                                        .withOpacity(
+                                      _current == entry.key ? 0.9 : 0.4,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      ],
+                              );
+                            }).toList(),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-                // return
-              },
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (error, stackTrace) =>
-                  Center(child: Text(error.toString())),
-            ),
-            Container(
-              constraints: BoxConstraints.expand(),
-              child: Stack(
-                alignment: Alignment.bottomCenter,
-                clipBehavior: Clip.none,
-                children: emojiWidgets.values.toList(),
+                  );
+                  // return
+                },
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (error, stackTrace) =>
+                    Center(child: Text(error.toString())),
               ),
-            ),
-          ],
+              Container(
+                constraints: BoxConstraints.expand(),
+                child: Stack(
+                  alignment: Alignment.bottomCenter,
+                  clipBehavior: Clip.none,
+                  children: emojiWidgets.values.toList(),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -345,7 +345,14 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
               ),
               elevation: 15.0,
             ),
-            child: const Text('수정'),
+            child: const Text(
+              '수정',
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+                color: CustomColors.whBlack,
+              ),
+            ),
           ),
         ),
         child: Row(
@@ -396,15 +403,21 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: imageFile != null
-                    ? CustomColors.whRed
-                    : CustomColors.whGrey,
+                backgroundColor:
+                    isSubmittable() ? CustomColors.whRed : CustomColors.whGrey,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(25),
                 ),
                 elevation: 15.0,
               ),
-              child: const Text('휴식'),
+              child: const Text(
+                '휴식',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                  color: CustomColors.whWhite,
+                ),
+              ),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -449,7 +462,7 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: imageFile != null
+                backgroundColor: isSubmittable()
                     ? CustomColors.whYellow
                     : CustomColors.whGrey,
                 shape: RoundedRectangleBorder(
@@ -457,7 +470,16 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
                 ),
                 elevation: 15.0,
               ),
-              child: const Text('완료'),
+              child: Text(
+                '완료',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                  color: isSubmittable()
+                      ? CustomColors.whBlack
+                      : CustomColors.whWhite,
+                ),
+              ),
             ),
           ],
         ),
