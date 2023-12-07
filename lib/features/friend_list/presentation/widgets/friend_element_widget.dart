@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/features/friend_list/domain/models/friend_model.dart';
@@ -14,6 +16,7 @@ class FriendElementWidget extends StatefulWidget {
 class _FriendElementWidgetState extends State<FriendElementWidget> {
   late String friendName = widget.model.friendName;
   late String friendImageUrl = widget.model.friendImageUrl;
+  int activeIndex = Random().nextInt(3) + 1;
 
   @override
   Widget build(BuildContext context) {
@@ -48,14 +51,14 @@ class _FriendElementWidgetState extends State<FriendElementWidget> {
           ),
           Row(
             children: [
-              ActiveCircle(true),
-              ActiveCircle(false),
-              ActiveCircle(false),
+              ActiveCircle(activeIndex > 0),
+              ActiveCircle(activeIndex > 1),
+              ActiveCircle(activeIndex > 2),
               Container(
                 margin: const EdgeInsets.only(right: 16.0),
               ),
             ],
-          )
+          ),
         ],
       ),
     );

@@ -43,6 +43,7 @@ dependencies:
   image_picker: ^1.0.4
   firebase_messaging: ^14.7.5
   flutter_local_notifications: ^16.2.0
+  dotted_border: ^2.1.0
 
 
 dev_dependencies:

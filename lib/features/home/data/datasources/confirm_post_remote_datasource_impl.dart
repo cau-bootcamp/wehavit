@@ -47,6 +47,15 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
           )
           .get();
 
+      // 세 번째 쿼리 결과
+      var thirdQueryResult = await FirebaseFirestore.instance
+          .collection(FirebaseCollectionName.confirmPosts)
+          .where(
+            FirebaseConfirmPostFieldName.owner,
+            isEqualTo: FirebaseAuth.instance.currentUser!.uid,
+          )
+          .get();
+
 // 첫 번째 쿼리 결과에서 문서 ID 추출
       Set<String> firstQueryDocIds =
           firstQueryResult.docs.map((doc) => doc.id).toSet();
@@ -55,14 +64,28 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
       Set<String> secondQueryDocIds =
           secondQueryResult.docs.map((doc) => doc.id).toSet();
 
-// 교집합 찾기
-      Set<String> intersection =
+// 세 번째 쿼리 결과에서 문서 ID 추출
+      Set<String> thirdQueryDocIds =
+          thirdQueryResult.docs.map((doc) => doc.id).toSet();
+
+// 첫 번째와 두 번째 교집합 찾기 : 내 친구의 해당 날짜 게시글
+      Set<String> firstIntersection =
           firstQueryDocIds.intersection(secondQueryDocIds);
+
+      // 첫 번째와 세 번째 교집합 찾기 : 내 해당 날짜 게시글
+      Set<String> secondIntersection =
+          firstQueryDocIds.intersection(thirdQueryDocIds);
 
 // 최종 결과: 교집합에 해당하는 문서들
       List<QueryDocumentSnapshot> resultDocs = firstQueryResult.docs
-          .where((doc) => intersection.contains(doc.id))
+          .where((doc) => firstIntersection.contains(doc.id))
           .toList();
+
+      resultDocs.addAll(
+        firstQueryResult.docs
+            .where((doc) => secondIntersection.contains(doc.id))
+            .toList(),
+      );
 
       debugPrint(resultDocs.length.toString());
 
