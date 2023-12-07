@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/features/late_writing/presentation/model/late_writing_view_model.dart';
 import 'package:wehavit/features/late_writing/presentation/provider/late_writing_view_provider.dart';
 import 'package:wehavit/features/my_page/domain/models/resolution_model.dart';
@@ -25,163 +26,248 @@ class _LateWritingViewState extends ConsumerState<LateWritingView> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('늦은 인증글 작성'),
+        backgroundColor: CustomColors.whDarkBlack,
+        title: const Text(
+          '늦은 인증글 작성',
+          style: TextStyle(
+            fontSize: 24.0,
+            fontWeight: FontWeight.w500,
+            color: CustomColors.whWhite,
+          ),
+        ),
+        elevation: 0,
       ),
-      body: Padding(
-        padding:
-            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-        child: SafeArea(
-          minimum: const EdgeInsets.all(8),
-          child: FutureBuilder(
-            future: viewModel.resolutionList,
-            builder: (context, snapshot) {
-              if (snapshot.hasData && snapshot.data!.isRight()) {
-                final resolutionList = snapshot.data!
-                    .getRight()
-                    .fold(() => [], (t) => t) as List<ResolutionModel>;
-                return Stack(
-                  children: [
-                    SingleChildScrollView(
-                      padding: const EdgeInsets.only(bottom: 40),
-                      child: Column(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  CustomColors.whDarkBlack,
+                  CustomColors.whYellowDark,
+                  CustomColors.whYellow,
+                ],
+                stops: [0.3, 0.8, 1.2],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: SafeArea(
+              minimum: const EdgeInsets.all(8),
+              child: FutureBuilder(
+                future: viewModel.resolutionList,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData && snapshot.data!.isRight()) {
+                    final resolutionList = snapshot.data!
+                        .getRight()
+                        .fold(() => [], (t) => t) as List<ResolutionModel>;
+                    return Stack(
+                      children: [
+                        SingleChildScrollView(
+                          padding: const EdgeInsets.only(bottom: 40),
+                          child: Column(
                             children: [
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Padding(
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 8.0),
+                                        child: Text(
+                                          '작성할 목표',
+                                          style: TextStyle(
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.w600,
+                                            color: CustomColors.whWhite,
+                                          ),
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTapUp: (details) async {
+                                          showResolutionSelectionList(
+                                            context,
+                                            resolutionList,
+                                          );
+                                        },
+                                        child: Container(
+                                          height: 50,
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(
+                                            color: CustomColors.whSemiWhite,
+                                            border: Border.all(
+                                              color: CustomColors.whYellowDark,
+                                              width: 3,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                          ),
+                                          child: Center(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: SizedBox(
+                                                width: double.infinity,
+                                                child: Text(
+                                                  resolutionList[viewModel
+                                                          .resolutionIndex]
+                                                      .goalStatement,
+                                                  textAlign: TextAlign.left,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 16.0,
+                                  ),
                                   const Padding(
                                     padding:
                                         EdgeInsets.symmetric(vertical: 8.0),
                                     child: Text(
-                                      '작성할 목표',
-                                      style: TextStyle(fontSize: 24.0),
+                                      '실천 기록',
+                                      style: TextStyle(
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.w600,
+                                        color: CustomColors.whWhite,
+                                      ),
                                     ),
                                   ),
-                                  GestureDetector(
-                                    onTapUp: (details) async {
-                                      showResolutionSelectionList(
-                                        context,
-                                        resolutionList,
-                                      );
-                                    },
+                                  TitleAndContentFormWidget(
+                                    viewModel: viewModel,
+                                  ),
+                                  // 사진
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 16.0),
                                     child: Container(
-                                      height: 50,
                                       width: double.infinity,
+                                      height: 250,
                                       decoration: BoxDecoration(
-                                        border: Border.all(),
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
+                                        color: CustomColors.whSemiWhite,
+                                        border: Border.all(
+                                          color: CustomColors.whYellowDark,
+                                          width: 3,
+                                        ),
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(10.0),
+                                        ),
                                       ),
-                                      child: Center(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: SizedBox(
-                                            width: double.infinity,
-                                            child: Text(
-                                              resolutionList[
-                                                      viewModel.resolutionIndex]
-                                                  .goalStatement,
-                                              textAlign: TextAlign.left,
+                                      child: GestureDetector(
+                                        behavior: HitTestBehavior.opaque,
+                                        onTapUp: (details) async {
+                                          viewModel.imageFileUrl =
+                                              await viewModelProvider
+                                                  .getPhotoLibraryImage();
+                                          setState(() {});
+                                        },
+                                        child: Visibility(
+                                          visible:
+                                              viewModel.imageFileUrl != null,
+                                          replacement: const Center(
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Icon(
+                                                  Icons.photo_library_outlined,
+                                                ),
+                                                Text(
+                                                  '여기를 눌러 \n사진을 추가해주세요',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    fontSize: 20.0,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: CustomColors.whBlack,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          child: Container(
+                                            decoration: const BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(10.0),
+                                              ),
+                                            ),
+                                            clipBehavior: Clip.hardEdge,
+                                            child: Image(
+                                              image: FileImage(
+                                                File(viewModel.imageFileUrl ??
+                                                    ''),
+                                              ),
+                                              fit: BoxFit.cover,
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
+                                  )
                                 ],
                               ),
-                              const SizedBox(
-                                height: 16.0,
-                              ),
-                              TitleAndContentFormWidget(viewModel: viewModel),
-                              // 사진
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16.0),
-                                child: Container(
-                                  width: double.infinity,
-                                  height: 250,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(10.0),
-                                    ),
-                                  ),
-                                  child: GestureDetector(
-                                    behavior: HitTestBehavior.opaque,
-                                    onTapUp: (details) async {
-                                      viewModel.imageFileUrl =
-                                          await viewModelProvider
-                                              .getPhotoLibraryImage();
-                                      setState(() {});
-                                    },
-                                    child: Visibility(
-                                      visible: viewModel.imageFileUrl != null,
-                                      replacement: const Center(
-                                        child: Text('사진 추가하기'),
-                                      ),
-                                      child: Container(
-                                        decoration: const BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(10.0),
-                                          ),
-                                        ),
-                                        clipBehavior: Clip.hardEdge,
-                                        child: Image(
-                                          image: FileImage(
-                                            File(viewModel.imageFileUrl ?? ''),
-                                          ),
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              )
+                              // Expanded(
+                              //   child: Container(),
+                              // ),
                             ],
                           ),
-                          // Expanded(
-                          //   child: Container(),
-                          // ),
-                        ],
-                      ),
-                    ),
-                    Column(
-                      children: [
-                        Expanded(
-                          child: Container(),
                         ),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              viewModelProvider.postCurrentConfirmPost();
-                              // 인증글 작성 완료 다이얼로그(임시)
-                              await showLatePostCompleteDialog(context);
-                              viewModel.contentTextEditingController.clear();
-                              viewModel.titleTextEditingController.clear();
-                            },
-                            child: const Text('Save'),
-                          ),
+                        Column(
+                          children: [
+                            Expanded(
+                              child: Container(),
+                            ),
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: CustomColors.whYellow,
+                                ),
+                                onPressed: () async {
+                                  viewModelProvider.postCurrentConfirmPost();
+                                  // 인증글 작성 완료 다이얼로그(임시)
+                                  await showLatePostCompleteDialog(context);
+                                  viewModel.contentTextEditingController
+                                      .clear();
+                                  viewModel.titleTextEditingController.clear();
+                                },
+                                child: const Text(
+                                  '기록 남기기',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: CustomColors.whDarkBlack,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
-                    ),
-                  ],
-                );
-              } else if (!snapshot.hasData) {
-                return const CircularProgressIndicator();
-              } else if (snapshot.hasError || snapshot.data!.isLeft()) {
-                return const Center(
-                  child: Text('DEBUG - SOMETHING WENT WRONG'),
-                );
-              } else {
-                return const Placeholder();
-              }
-            },
+                    );
+                  } else if (!snapshot.hasData) {
+                    return const CircularProgressIndicator();
+                  } else if (snapshot.hasError || snapshot.data!.isLeft()) {
+                    return const Center(
+                      child: Text('DEBUG - SOMETHING WENT WRONG'),
+                    );
+                  } else {
+                    return const Placeholder();
+                  }
+                },
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -256,7 +342,11 @@ class TitleAndContentFormWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(),
+        color: CustomColors.whSemiWhite,
+        border: Border.all(
+          color: CustomColors.whYellowDark,
+          width: 3,
+        ),
         borderRadius: BorderRadius.circular(10.0),
       ),
       child: Padding(
@@ -267,7 +357,8 @@ class TitleAndContentFormWidget extends StatelessWidget {
             TextFormField(
               controller: viewModel.titleTextEditingController,
               decoration: const InputDecoration(
-                hintText: '제목을 입력해주세요',
+                contentPadding: EdgeInsets.zero,
+                hintText: '오늘은 어떤 실천을 했나요?',
                 border: InputBorder.none,
               ),
             ),
@@ -277,8 +368,10 @@ class TitleAndContentFormWidget extends StatelessWidget {
             TextFormField(
               controller: viewModel.contentTextEditingController,
               maxLines: 5,
+              style: const TextStyle(height: 1.3),
               decoration: const InputDecoration(
-                hintText: '오늘의 실천에 대해 한마디!',
+                contentPadding: EdgeInsets.symmetric(vertical: 8.0),
+                hintText: '오늘의 이야기를 들려주세요',
                 border: InputBorder.none,
               ),
             ),
