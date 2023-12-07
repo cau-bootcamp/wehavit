@@ -1,4 +1,6 @@
 // ignore_for_file: discarded_futures
+import 'dart:math';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -11,6 +13,7 @@ import 'package:wehavit/features/live_writing/presentation/widgets/friend_live_p
 import 'package:wehavit/features/live_writing/presentation/widgets/my_live_writing_widget.dart';
 import 'package:wehavit/features/my_page/domain/models/resolution_model.dart';
 import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';
+import 'package:wehavit/features/swipe_view/presentation/screen/widget/emoji_sheet_widget.dart';
 
 class LiveWritingView extends StatefulHookConsumerWidget {
   const LiveWritingView({super.key});
@@ -19,7 +22,8 @@ class LiveWritingView extends StatefulHookConsumerWidget {
   ConsumerState<LiveWritingView> createState() => _LiveWritingViewState();
 }
 
-class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
+class _LiveWritingViewState extends ConsumerState<LiveWritingView>
+    with SingleTickerProviderStateMixin {
   XFile? imageFile;
   ValueNotifier<bool> isSubmitted = ValueNotifier(false);
   late List<ResolutionModel> resolutionModelList;
@@ -41,6 +45,16 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
 
   EmojiFireWorkManager emojiFireWorkManager =
       EmojiFireWorkManager(emojiAmount: 10);
+
+  Map<Key, ShootEmojiWidget> emojiWidgets = {};
+  late AnimationController animationController;
+  late Animation animation;
+
+  @override
+  void initState() {
+    super.initState();
+    setAnimationVariables();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,6 +133,7 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
                                   const EdgeInsets.symmetric(vertical: 12.0),
                               child: FriendLivePostWidget(
                                 userEmail: friendEmailsSnapshot.data![index],
+                                sendReactionCallback: sendEmojiReaction,
                               ),
                             ),
                           ),
@@ -265,9 +280,91 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView> {
               error: (error, stackTrace) =>
                   Center(child: Text(error.toString())),
             ),
+            Container(
+              constraints: BoxConstraints.expand(),
+              child: Stack(
+                alignment: Alignment.bottomCenter,
+                clipBehavior: Clip.none,
+                children: emojiWidgets.values.toList(),
+              ),
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  void setAnimationVariables() {
+    animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
+    animation = Tween<double>(begin: 0, end: 140).animate(
+      CurvedAnimation(
+        parent: animationController,
+        curve: Curves.linear,
+      ),
+    );
+    animationController.value = 1;
+  }
+
+  Future<void> sendEmojiReaction(
+    int emojiNo,
+    String userEmail,
+    TapUpDetails detail,
+    // Function(UniqueKey key) disposeWidget,
+  ) async {
+    shootEmoji(
+      emojiNo,
+      detail,
+    );
+
+    final sendResult = await ref
+        .read(liveWritingFriendRepositoryProvider)
+        .sendReactionToTargetFriend(
+          userEmail,
+          ReactionModel(
+            complimenterUid: '',
+            reactionType: ReactionType.emoji.index,
+            emoji: {'t${emojiNo.toString().padLeft(2, '0')}': 1},
+          ),
+        );
+    sendResult.fold(
+      (l) => debugPrint('send emoji to $userEmail failed'),
+      (r) => debugPrint('send emoji to $userEmail success'),
+    );
+  }
+
+  void shootEmoji(
+    int emojiNo,
+    TapUpDetails detail,
+    // void Function(UniqueKey key) disposeWidget,
+  ) {
+    print(detail.globalPosition.dy);
+
+    return setState(
+      () {
+        final animationWidgetKey = UniqueKey();
+        emojiWidgets.addEntries(
+          {
+            animationWidgetKey: ShootEmojiWidget(
+              key: animationWidgetKey,
+              emojiIndex: emojiNo,
+              currentPos: Point(
+                detail.globalPosition.dx,
+                detail.globalPosition.dy - 25,
+              ),
+              targetPos: Point(
+                MediaQuery.of(context).size.width / 2,
+                150,
+              ),
+              disposeWidgetFromParent: () {
+                emojiWidgets.remove(animationWidgetKey);
+              },
+            ),
+          }.entries,
+        );
+      },
     );
   }
 }

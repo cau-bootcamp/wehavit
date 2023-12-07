@@ -531,7 +531,7 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
               currentPos: Point(detail.globalPosition.dx, 100),
               targetPos: Point(
                 MediaQuery.of(context).size.width / 2,
-                MediaQuery.of(context).size.height + 50,
+                MediaQuery.of(context).size.height - 500 + 100,
               ),
               disposeWidgetFromParent: disposeWidget,
             ),

@@ -10,8 +10,13 @@ import 'package:wehavit/features/live_writing/presentation/widgets/friend_waitin
 import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';
 
 class FriendLivePostWidget extends StatefulHookConsumerWidget {
-  const FriendLivePostWidget({super.key, required this.userEmail});
+  const FriendLivePostWidget({
+    super.key,
+    required this.sendReactionCallback,
+    required this.userEmail,
+  });
   final String userEmail;
+  final Function sendReactionCallback;
 
   @override
   ConsumerState<FriendLivePostWidget> createState() =>
@@ -127,7 +132,8 @@ class _FriendLivePostWidgetState extends ConsumerState<FriendLivePostWidget> {
                           ? 'https://mblogthumb-phinf.pstatic.net/MjAyMjAxMjVfNTgg/MDAxNjQzMTAyOTg1MTk1.kvD7eFVnAbMS2LREsFqsYfsw4hnJDFuGUfBUX2kUKikg.jr9qYJbmDH9AmJPHbJcM9FrhpOnOaYp5qAVk8nF9vR4g.JPEG.minziminzi128/IMG_7365.JPG?type=w800'
                           : postImageSnapshot.data!,
                       bubbleState: bubbleState,
-                      emojiSendCallback: sendEmojiReaction,
+                      userEmail: widget.userEmail,
+                      emojiSendCallback: widget.sendReactionCallback,
                     ),
                   );
                 },
@@ -136,23 +142,6 @@ class _FriendLivePostWidgetState extends ConsumerState<FriendLivePostWidget> {
           ),
         ],
       ),
-    );
-  }
-
-  Future<void> sendEmojiReaction(int emojiNo) async {
-    final sendResult = await ref
-        .read(liveWritingFriendRepositoryProvider)
-        .sendReactionToTargetFriend(
-          widget.userEmail,
-          ReactionModel(
-            complimenterUid: '',
-            reactionType: ReactionType.emoji.index,
-            emoji: {'t${emojiNo.toString().padLeft(2, '0')}': 1},
-          ),
-        );
-    sendResult.fold(
-      (l) => debugPrint('send emoji to ${widget.userEmail} failed'),
-      (r) => debugPrint('send emoji to ${widget.userEmail} success'),
     );
   }
 }

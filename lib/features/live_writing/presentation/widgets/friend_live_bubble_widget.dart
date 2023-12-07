@@ -13,6 +13,7 @@ class FriendLiveBubbleWidget extends StatefulHookConsumerWidget {
     required this.bubbleState,
     required this.postContent,
     required this.postImageFirestoreURL,
+    required this.userEmail,
     required this.emojiSendCallback,
   });
 
@@ -21,6 +22,8 @@ class FriendLiveBubbleWidget extends StatefulHookConsumerWidget {
   final LiveBubbleState bubbleState;
   final String postContent;
   final String postImageFirestoreURL;
+
+  final String userEmail;
   final Function emojiSendCallback;
 
   @override
@@ -94,8 +97,13 @@ class _FriendLivePostBubbleState extends ConsumerState<FriendLiveBubbleWidget> {
                               ),
                             ),
                           ),
-                          onTap: () async {
-                            widget.emojiSendCallback(index);
+                          onTapUp: (details) async {
+                            widget.emojiSendCallback(
+                              index,
+                              widget.userEmail,
+                              details,
+                              // TODO : emojiWidget에서 지우기
+                            );
                           },
                         ),
                       ),
