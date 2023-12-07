@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,12 +8,14 @@ import 'package:wehavit/features/swipe_view/presentation/provider/reaction_camer
 import 'package:wehavit/features/swipe_view/presentation/provider/swipe_view_model_provider.dart';
 
 class ReactionCameraWidget extends ConsumerStatefulWidget {
-  const ReactionCameraWidget({
+  ReactionCameraWidget({
     super.key,
     required this.cameraController,
+    required this.panPosition,
   });
 
   final CameraController cameraController;
+  Point<double> panPosition;
 
   @override
   ConsumerState<ReactionCameraWidget> createState() =>
@@ -19,18 +23,31 @@ class ReactionCameraWidget extends ConsumerStatefulWidget {
 }
 
 class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
-  late final ReactionCameraWidgetModel _reactionCameraWidgetModel;
-  late final ReactionCameraWidgetModelProvider
-      _reactionCameraWidgetModelProvider;
-  late final SwipeViewModelProvider _swipeViewModelProvider;
+  late ReactionCameraWidgetModel _reactionCameraWidgetModel;
+  late ReactionCameraWidgetModelProvider _reactionCameraWidgetModelProvider;
+  late SwipeViewModelProvider _swipeViewModelProvider;
 
   @override
-  void didChangeDependencies() {
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
 
+    // _reactionCameraWidgetModelProvider
+    //     .updateCameraControllerWith(widget.cameraController);
+
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     _reactionCameraWidgetModel = ref.watch(reactionCameraWidgetModelProvider);
     _reactionCameraWidgetModelProvider =
         ref.read(reactionCameraWidgetModelProvider.notifier);
+
     _reactionCameraWidgetModel.cameraController = widget.cameraController;
     _swipeViewModelProvider = ref.read(swipeViewModelProvider.notifier);
 
@@ -51,16 +68,6 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
     _reactionCameraWidgetModel.cameraButtonYOffset =
         _reactionCameraWidgetModel.cameraButtonOriginYOffset;
 
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Container(
       constraints: const BoxConstraints.expand(),
       child: Stack(
@@ -82,7 +89,7 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
             width: _reactionCameraWidgetModel.cameraWidgetRadius * 2,
             height: _reactionCameraWidgetModel.cameraWidgetRadius *
                 2 *
-                _reactionCameraWidgetModel.cameraController.value.aspectRatio,
+                widget.cameraController.value.aspectRatio,
             child: Opacity(
               opacity: _reactionCameraWidgetModel.isFocusingMode ? 1 : 0,
               child: RepaintBoundary(
@@ -95,7 +102,7 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
                     ),
                     clipBehavior: Clip.hardEdge,
                     child: CameraPreview(
-                      _reactionCameraWidgetModel.cameraController,
+                      widget.cameraController,
                     ),
                   ),
                 ),
@@ -103,10 +110,8 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
             ),
           ),
           Positioned(
-            left: _reactionCameraWidgetModel.cameraButtonXOffset -
-                _reactionCameraWidgetModel.cameraButtonRadius,
-            top: _reactionCameraWidgetModel.cameraButtonYOffset -
-                _reactionCameraWidgetModel.cameraButtonRadius,
+            left: widget.panPosition.x,
+            top: widget.panPosition.y,
             child: Container(
               width: _reactionCameraWidgetModel.cameraButtonRadius * 2,
               height: _reactionCameraWidgetModel.cameraButtonRadius * 2,
@@ -115,6 +120,7 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
                 color: _reactionCameraWidgetModel.isFocusingMode
                     ? Colors.amber
                     : Colors.transparent,
+                // color: Colors.blue,
               ),
             ),
           ),

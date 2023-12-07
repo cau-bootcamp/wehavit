@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_gauges/gauges.dart';
-import 'package:wehavit/common/common.dart';
 import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
 
 class ResolutionLinearGaugeGraphWidget extends StatelessWidget {
@@ -12,10 +10,10 @@ class ResolutionLinearGaugeGraphWidget extends StatelessWidget {
     sourceData.sort((a, b) => a.toString().compareTo(b.toString()));
     data = sourceData.where((element) {
       if (lastPeriod) {
-        return todaysDate.difference(element.createdAt!).inDays < 28 &&
-            todaysDate.difference(element.createdAt!).inDays >= 14;
+        return todaysDate.difference(element.createdAt!).inDays < 14 &&
+            todaysDate.difference(element.createdAt!).inDays >= 7;
       } else {
-        return todaysDate.difference(element.createdAt!).inDays < 14;
+        return todaysDate.difference(element.createdAt!).inDays < 7;
       }
     }).toList();
   }
@@ -26,39 +24,30 @@ class ResolutionLinearGaugeGraphWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SfLinearGauge(
-      showTicks: false,
-      showAxisTrack: false,
-      showLabels: false,
-      maximum: 13,
-      markerPointers: List<LinearWidgetPointer>.generate(
-        14,
-        (int index) {
-          return _buildLinearWidgetPointer(
-            index.toDouble(),
-            data.any(
-              (element) =>
-                  todaysDate.difference(element.createdAt!).inDays == index,
-            )
-                ? CustomColors.whBlack
-                : CustomColors.whWhite,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      child: Row(
+        children: List<Widget>.generate(7, (index) {
+          return Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: Container(
+                height: 22,
+                transform: Matrix4.skewX(-.5),
+                decoration: BoxDecoration(
+                  color: data.any(
+                    (element) =>
+                        todaysDate.difference(element.createdAt!).inDays ==
+                        6 - index,
+                  )
+                      // TODO: 여기에 색깔 넣기
+                      ? Colors.amber
+                      : Colors.brown,
+                ),
+              ),
+            ),
           );
-        },
-      ),
-    );
-  }
-
-  LinearWidgetPointer _buildLinearWidgetPointer(double value, Color color) {
-    return LinearWidgetPointer(
-      value: value,
-      enableAnimation: false,
-      child: Container(
-        constraints: const BoxConstraints(maxHeight: 30),
-        width: 13,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(4),
-          color: color,
-        ),
+        }),
       ),
     );
   }

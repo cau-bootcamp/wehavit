@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/common/routers/route_location.dart';
 import 'package:wehavit/features/live_writing_waiting/domain/models/counter_state.dart';
 import 'package:wehavit/features/live_writing_waiting/domain/models/waiting_model.dart';
@@ -56,17 +57,42 @@ class LiveWritingView extends HookConsumerWidget {
       context.go(RouteLocation.liveWriting);
     }
 
-    return liveWaitingUserStreamSnapshot.hasData
-        ? LoadedWaitingView(
-            enteringTitle: enteringTitle,
-            enteringDescription: enteringDescription,
-            timerStreamSnapshot: timerStreamSnapshot,
-            liveWaitingUserStreamSnapshotData:
-                liveWaitingUserStreamSnapshot.data!,
-          )
-        : const Center(
-            child: CircularProgressIndicator(),
-          );
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Container(
+        constraints: const BoxConstraints.expand(),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    CustomColors.whDarkBlack,
+                    CustomColors.whYellowDark,
+                    CustomColors.whYellow,
+                  ],
+                  stops: [0.3, 0.8, 1.2],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
+            ),
+            liveWaitingUserStreamSnapshot.hasData
+                ? LoadedWaitingView(
+                    enteringTitle: enteringTitle,
+                    enteringDescription: enteringDescription,
+                    timerStreamSnapshot: timerStreamSnapshot,
+                    liveWaitingUserStreamSnapshotData:
+                        liveWaitingUserStreamSnapshot.data!,
+                  )
+                : const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -130,7 +156,7 @@ class LoadedWaitingView extends HookConsumerWidget {
                   style: const TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: CustomColors.whWhite,
                   ),
                 ),
                 const SizedBox(
@@ -141,7 +167,7 @@ class LoadedWaitingView extends HookConsumerWidget {
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
-                    color: Colors.white,
+                    color: CustomColors.whWhite,
                   ),
                 ),
                 Text(
@@ -149,27 +175,39 @@ class LoadedWaitingView extends HookConsumerWidget {
                   style: const TextStyle(
                     fontSize: 44,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: CustomColors.whWhite,
                   ),
                 ),
                 liveWaitingUsersStreamSnapshot.hasData
                     ? liveWaitingUsersStreamSnapshot.data!.isEmpty
-                        ? const Text('🥵누구도 기다리고 있지 않습니다.')
-                        : Column(
-                            children: liveWaitingUsers
-                                .map(
-                                  (e) => Text(
-                                    '😃${e.name}(${e.email})님이 기다리고 있습니다.'
-                                    '\n ${e.updatedAt}',
-                                    style: const TextStyle(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                )
-                                .toList(),
+                        ? const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 24.0),
+                            child: Text(
+                              '오늘 제일 먼저 도착하셨네요!\n곧 친구들이 들어올거예요 ',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                                color: CustomColors.whWhite,
+                              ),
+                            ),
                           )
+                        : Container()
+                    // : Column(
+                    //     children: liveWaitingUsers
+                    //         .map(
+                    //           (e) => Text(
+                    //             '😃${e.name}(${e.email})님이 기다리고 있습니다.'
+                    //             '\n ${e.updatedAt}',
+                    //             style: const TextStyle(
+                    //               fontSize: 10,
+                    //               fontWeight: FontWeight.w600,
+                    //               color: Colors.white,
+                    //             ),
+                    //           ),
+                    //         )
+                    //         .toList(),
+                    //   )
                     : const SizedBox(),
               ],
             ),

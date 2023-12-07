@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/models/user_model/user_model.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
@@ -32,7 +33,8 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
   late EitherFuture<UserModel> myUserModel;
   XFile? imageFile;
   String imageUrl = '';
-  bool isLoadingImage = false;
+
+  // bool isLoadingImage = false;
 
   @override
   Future<void> didChangeDependencies() async {
@@ -44,8 +46,16 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
 
   @override
   Widget build(BuildContext context) {
-    var titleController = useTextEditingController();
-    var contentController = useTextEditingController();
+    final titleController = useTextEditingController();
+    final contentController = useTextEditingController();
+    final isLoadingImage = useState(false);
+    final hasDoneSubmit = useState(false);
+
+    bool isSubmittable() {
+      return titleController.text != '' &&
+          contentController.text != '' &&
+          imageFile != null;
+    }
 
     useEffect(
       () {
@@ -53,11 +63,16 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
           ref
               .read(liveWritingPostRepositoryProvider)
               .updateTitle(titleController.text);
+
+          hasDoneSubmit.value = isSubmittable();
         });
+
         contentController.addListener(() async {
           ref
               .read(liveWritingPostRepositoryProvider)
               .updateMessage(contentController.text);
+
+          hasDoneSubmit.value = isSubmittable();
         });
 
         return null;
@@ -65,19 +80,15 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
       [],
     );
 
-    bool isSubmittable() {
-      return !(titleController.text == '' ||
-          contentController.text == '' ||
-          imageFile == null ||
-          isLoadingImage == true);
-    }
-
     return Align(
       alignment: const Alignment(1, 1),
       child: LayoutBuilder(
         builder: (context, constraints) {
           return Container(
-            color: Colors.grey.shade800,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.0),
+              color: CustomColors.whSemiBlack,
+            ),
             width: constraints.maxWidth,
             height: 320,
             child: Padding(
@@ -104,18 +115,21 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
                         width: 151,
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Padding(
                               padding: const EdgeInsets.only(
                                 top: 14.0,
                                 bottom: 8.0,
                               ),
-                              child: imageContainerWidget(),
+                              child: imageContainerWidget(
+                                  isLoadingImage, isSubmittable),
                             ),
                             restOrSubmitButtonsWidget(
                               isSubmittable,
                               titleController,
                               contentController,
+                              isLoadingImage,
                             ),
                           ],
                         ),
@@ -162,23 +176,49 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
             FirebaseAuth.instance.currentUser!.displayName!,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: CustomColors.whWhite,
+            ),
           ),
         ),
         Expanded(child: Container()),
-        Text(widget.resolutionModel.goalStatement),
+        Padding(
+          padding: const EdgeInsets.only(right: 8.0),
+          child: Text(
+            '· ${widget.resolutionModel.goalStatement}',
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: CustomColors.whYellow,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ),
       ],
     );
   }
 
   TextFormField titleTextFormFieldWidget(
-      TextEditingController titleController) {
+    TextEditingController titleController,
+  ) {
     return TextFormField(
       controller: titleController,
-      style: const TextStyle(color: Colors.white),
-      decoration: const InputDecoration(
+      readOnly: isSubmitted,
+      style: const TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.w600,
+        color: CustomColors.whWhite,
+      ),
+      decoration: InputDecoration(
         border: InputBorder.none,
-        hintText: '제목',
-        hintStyle: TextStyle(color: Colors.white),
+        hintText: '어떤 노력을 하셨나요?',
+        hintStyle: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+          color: CustomColors.whSemiWhite.withAlpha(0xa0),
+        ),
       ),
     );
   }
@@ -187,17 +227,27 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
       TextEditingController contentController) {
     return TextFormField(
       controller: contentController,
+      readOnly: isSubmitted,
       maxLines: 6,
-      style: const TextStyle(color: Colors.white),
-      decoration: const InputDecoration(
+      style: const TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        color: CustomColors.whWhite,
+      ),
+      decoration: InputDecoration(
         border: InputBorder.none,
-        hintText: '본문',
-        hintStyle: TextStyle(color: Colors.white),
+        hintText: '오늘의 이야기를 들려주세요',
+        hintStyle: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          color: CustomColors.whWhite.withAlpha(0xa0),
+        ),
       ),
     );
   }
 
-  Container imageContainerWidget() {
+  Container imageContainerWidget(
+      ValueNotifier<bool> isLoadingImage, bool Function() isSubmittable) {
     return Container(
       width: 151,
       height: 104,
@@ -213,9 +263,10 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
               source: ImageSource.gallery,
             );
             if (pickedFile != null) {
-              isLoadingImage = true;
+              isLoadingImage.value = true;
               imageUrl = await setImage(pickedFile);
-              isLoadingImage = false;
+              isLoadingImage.value = false;
+              isSubmittable();
             } else {
               debugPrint('이미지 선택안함');
             }
@@ -225,12 +276,29 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
           visible: imageFile != null,
           replacement: Container(
             decoration: BoxDecoration(
+              color: CustomColors.whYellowBright,
+              borderRadius: BorderRadius.circular(10.0),
               border: Border.all(
-                color: Colors.white,
+                width: 2,
+                color: CustomColors.whYellow,
               ),
             ),
             child: const Center(
-              child: Text('Tap To Add Image'),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.photo_library_outlined),
+                  SizedBox(width: 4),
+                  Text(
+                    '사진 추가하기',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: CustomColors.whDarkBlack,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           child: Image(
@@ -248,111 +316,185 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
     bool Function() isSubmittable,
     TextEditingController titleController,
     TextEditingController contentController,
+    ValueNotifier<bool> isLoadingImage,
   ) {
-    return Visibility(
-      visible: !isSubmitted,
-      replacement: ElevatedButton(
-        onPressed: () async {
-          setState(() {
-            isSubmitted = false;
-          });
-          // 다시 편집 상태로 돌아가기
-        },
-        child: const Text('수정'),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    if (isLoadingImage.value) {
+      return const Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          ElevatedButton(
-            onPressed: () async {
-              if (isSubmittable()) {
-                setState(() {
-                  isSubmitted = true;
-                });
-
-                ConfirmPostModel cf = ConfirmPostModel(
-                  title: titleController.text,
-                  content: contentController.text,
-                  resolutionGoalStatement: widget.resolutionModel.goalStatement,
-                  resolutionId: widget.resolutionModel.resolutionId,
-                  imageUrl: imageUrl,
-                  recentStrike: 0,
-                  createdAt: DateTime.now(),
-                  updatedAt: DateTime.now(),
-                  owner: '',
-                  fan: [],
-                  attributes: {
-                    'has_participated_live': true,
-                    'has_rested': true,
-                  },
-                );
-
-                (await ref.read(
-                  createPostUseCaseProvider,
-                )(cf))
-                    .fold(
-                  (l) {
-                    debugPrint(
-                      Failure(l.message).toString(),
-                    );
-                  },
-                  (r) => () {},
-                );
-              } else {
-                // 제출할 수 없음
-                debugPrint(
-                  '제목, 내용, 사진이 모두 입력되지 않아 저장하지 않음',
-                );
-              }
-            },
-            child: Text(isLoadingImage ? '처리중' : '휴식'),
+          LinearProgressIndicator(
+            color: CustomColors.whYellow,
+            backgroundColor: CustomColors.whYellowBright,
           ),
-          ElevatedButton(
-            onPressed: () async {
-              if (isSubmittable()) {
-                setState(() {
-                  isSubmitted = true;
-                });
-                ConfirmPostModel cf = ConfirmPostModel(
-                  title: titleController.text,
-                  content: contentController.text,
-                  resolutionGoalStatement: widget.resolutionModel.goalStatement,
-                  resolutionId: widget.resolutionModel.resolutionId,
-                  imageUrl: imageUrl,
-                  recentStrike: 0,
-                  createdAt: DateTime.now(),
-                  updatedAt: DateTime.now(),
-                  owner: '',
-                  fan: [],
-                  attributes: {
-                    'has_participated_live': true,
-                    'has_rested': false,
-                  },
-                );
-
-                (await ref.read(
-                  createPostUseCaseProvider,
-                )(cf))
-                    .fold(
-                  (l) {
-                    debugPrint(
-                      Failure(l.message).toString(),
-                    );
-                  },
-                  (r) => () {},
-                );
-              } else {
-                // 제출할 수 없음
-                debugPrint(
-                  '제목, 내용, 사진이 모두 입력되지 않아 저장하지 않음',
-                );
-              }
-            },
-            child: Text(isLoadingImage ? '처리중' : '완료'),
+          SizedBox(height: 5.0),
+          Text(
+            '사진을 공유하고 있습니다',
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w300,
+              color: CustomColors.whWhite,
+            ),
           ),
         ],
-      ),
-    );
+      );
+    } else {
+      return Visibility(
+        visible: !isSubmitted,
+        replacement: ProviderScope(
+          child: ElevatedButton(
+            onPressed: () async {
+              setState(() {
+                isSubmitted = false;
+              });
+              // 다시 편집 상태로 돌아가기
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: CustomColors.whYellow,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25),
+              ),
+              elevation: 15.0,
+            ),
+            child: const Text(
+              '수정',
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+                color: CustomColors.whBlack,
+              ),
+            ),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ElevatedButton(
+              onPressed: () async {
+                if (isSubmittable()) {
+                  setState(() {
+                    isSubmitted = true;
+                  });
+
+                  ConfirmPostModel cf = ConfirmPostModel(
+                    title: titleController.text,
+                    content: contentController.text,
+                    resolutionGoalStatement:
+                        widget.resolutionModel.goalStatement,
+                    resolutionId: widget.resolutionModel.resolutionId,
+                    imageUrl: imageUrl,
+                    recentStrike: 0,
+                    createdAt: DateTime.now(),
+                    updatedAt: DateTime.now(),
+                    // repository impl에서 자동으로 채워짐
+                    owner: '',
+                    fan: widget.resolutionModel.fanList,
+                    attributes: {
+                      'has_participated_live': true,
+                      'has_rested': true,
+                    },
+                  );
+
+                  (await ref.read(
+                    createPostUseCaseProvider,
+                  )(cf))
+                      .fold(
+                    (l) {
+                      debugPrint(
+                        Failure(l.message).toString(),
+                      );
+                    },
+                    (r) => () {},
+                  );
+                } else {
+                  // 제출할 수 없음
+                  debugPrint(
+                    '제목, 내용, 사진이 모두 입력되지 않아 저장하지 않음',
+                  );
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor:
+                    isSubmittable() ? CustomColors.whRed : CustomColors.whGrey,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                elevation: 15.0,
+              ),
+              child: const Text(
+                '휴식',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                  color: CustomColors.whWhite,
+                ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                if (isSubmittable()) {
+                  setState(() {
+                    isSubmitted = true;
+                  });
+                  ConfirmPostModel cf = ConfirmPostModel(
+                    title: titleController.text,
+                    content: contentController.text,
+                    resolutionGoalStatement:
+                        widget.resolutionModel.goalStatement,
+                    resolutionId: widget.resolutionModel.resolutionId,
+                    imageUrl: imageUrl,
+                    recentStrike: 0,
+                    createdAt: DateTime.now(),
+                    updatedAt: DateTime.now(),
+                    owner: '',
+                    fan: widget.resolutionModel.fanList,
+                    attributes: {
+                      'has_participated_live': true,
+                      'has_rested': false,
+                    },
+                  );
+
+                  (await ref.read(
+                    createPostUseCaseProvider,
+                  )(cf))
+                      .fold(
+                    (l) {
+                      debugPrint(
+                        Failure(l.message).toString(),
+                      );
+                    },
+                    (r) => () {},
+                  );
+                } else {
+                  // 제출할 수 없음
+                  debugPrint(
+                    '제목, 내용, 사진이 모두 입력되지 않아 저장하지 않음',
+                  );
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: isSubmittable()
+                    ? CustomColors.whYellow
+                    : CustomColors.whGrey,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                elevation: 15.0,
+              ),
+              child: Text(
+                '완료',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                  color: isSubmittable()
+                      ? CustomColors.whBlack
+                      : CustomColors.whWhite,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   Future<void> onSave() async {
@@ -361,12 +503,6 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
     if (isSubmitted) {
       return;
     }
-
-    // if (_confirmPostFormKey.currentState!.validate()) {
-    //   _confirmPostFormKey.currentState!.save();
-    //   isSubmitted = true;
-    // onSubmit(titleController.text, contentController.text);
-    // }
   }
 
   Future<String> setImage(XFile pickedFile) async {

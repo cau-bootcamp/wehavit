@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/features/live_writing/presentation/model/live_writing_state.dart';
 
 class PostContentWidget extends StatelessWidget {
@@ -15,6 +16,11 @@ class PostContentWidget extends StatelessWidget {
       postTitle,
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
+      style: const TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        color: CustomColors.whYellow,
+      ),
     );
   }
 }
@@ -33,6 +39,11 @@ class PostTitleWidget extends StatelessWidget {
       userName,
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
+      style: const TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.w300,
+        color: CustomColors.whWhite,
+      ),
     );
   }
 }
@@ -72,13 +83,13 @@ class PostWidgetImageForDetail extends StatelessWidget {
             fit: BoxFit.fill,
             image: postImage,
             errorBuilder: (context, error, stackTrace) {
-              // TODO: 이미지가 유효하지 않은 경우에 넣어줄 placeholder 지정해주기
               return const Image(
                 width: 50,
                 height: 37,
                 fit: BoxFit.cover,
                 image: NetworkImage(
-                  // TODO: dummy image
+                  // TODO: 이미지가 유효하지 않은 경우에 넣어줄 placeholder 지정해주기
+                  // dummy image
                   'https://i2.ruliweb.com/img/19/08/30/16cde8040044c8ac6.png',
                 ),
               );
@@ -100,6 +111,9 @@ class PostImageWidgetForDefault extends StatelessWidget {
   final String postContent;
   final ImageProvider<Object> postImage;
 
+  final double detailImageWidth = 133;
+  final double detailImageHeight = 84;
+
   @override
   Widget build(BuildContext context) {
     return Visibility(
@@ -107,34 +121,55 @@ class PostImageWidgetForDefault extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Text(
-                postContent,
+            child: SizedBox(
+              height: detailImageHeight,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: Text(
+                  postContent,
+                  textAlign: TextAlign.start,
+                  maxLines: 5,
+                  style: const TextStyle(
+                    overflow: TextOverflow.ellipsis,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    color: CustomColors.whWhite,
+                  ),
+                ),
               ),
             ),
           ),
           const SizedBox(
-            width: 4,
+            width: 8,
           ),
           Visibility(
             visible: bubbleState != LiveBubbleState.showingDefault,
-            child: Image(
-                width: 113,
-                height: 84,
+            child: Container(
+              clipBehavior: Clip.hardEdge,
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10.0),
+                ),
+              ),
+              child: Image(
+                width: detailImageWidth,
+                height: detailImageHeight,
                 fit: BoxFit.cover,
                 image: postImage,
                 errorBuilder: (context, error, stackTrace) {
-                  // TODO: 이미지가 유효하지 않은 경우에 넣어줄 placeholder 지정해주기
-                  return const Image(
-                    width: 113,
-                    height: 84,
+                  return Image(
+                    width: detailImageWidth,
+                    height: detailImageHeight,
                     fit: BoxFit.cover,
-                    image: NetworkImage(
-                        // TODO: dummy Image
-                        'https://i2.ruliweb.com/img/19/08/30/16cde8040044c8ac6.png'),
+                    image: const NetworkImage(
+                      // TODO: 이미지가 유효하지 않은 경우에 넣어줄 placeholder 지정해주기
+                      // dummy Image
+                      'https://i2.ruliweb.com/img/19/08/30/16cde8040044c8ac6.png',
+                    ),
                   );
-                }),
+                },
+              ),
+            ),
           ),
         ],
       ),
