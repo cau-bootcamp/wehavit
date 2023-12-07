@@ -7,7 +7,6 @@ import 'package:wehavit/features/swipe_view/presentation/model/reaction_camera_w
 import 'package:wehavit/features/swipe_view/presentation/model/swipe_view_model.dart';
 import 'package:wehavit/features/swipe_view/presentation/provider/reaction_camera_widget_model_provider.dart';
 import 'package:wehavit/features/swipe_view/presentation/provider/swipe_view_model_provider.dart';
-import 'package:wehavit/features/swipe_view/presentation/screen/widget/emoji_sheet_widget.dart';
 import 'package:wehavit/features/swipe_view/presentation/screen/widget/reaction_camera_widget.dart';
 import 'package:wehavit/features/swipe_view/presentation/screen/widget/swipe_view_cell.dart';
 
