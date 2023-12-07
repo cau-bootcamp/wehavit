@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/common/utils/emoji_assets.dart';
 import 'package:wehavit/features/live_writing/presentation/model/live_writing_state.dart';
 import 'package:wehavit/features/live_writing/presentation/widgets/friend_live_bubble_components.dart';
@@ -34,7 +35,7 @@ class _FriendLivePostBubbleState extends ConsumerState<FriendLiveBubbleWidget> {
       children: [
         Container(
           decoration: const BoxDecoration(
-            color: Colors.blue,
+            color: CustomColors.whGrey,
             borderRadius: BorderRadius.all(
               Radius.circular(10.0),
             ),
@@ -51,7 +52,7 @@ class _FriendLivePostBubbleState extends ConsumerState<FriendLiveBubbleWidget> {
                       child: Container(
                         constraints: const BoxConstraints(minWidth: 120),
                         child: Padding(
-                          padding: const EdgeInsets.all(2.0),
+                          padding: const EdgeInsets.all(4.0),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,

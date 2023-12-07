@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/features/live_writing/domain/domain.dart';
 import 'package:wehavit/features/live_writing/presentation/model/live_writing_state.dart';
 import 'package:wehavit/features/live_writing/presentation/widgets/friend_live_bubble_widget.dart';
@@ -95,6 +96,7 @@ class _FriendLivePostWidgetState extends ConsumerState<FriendLivePostWidget> {
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
             child: CircleAvatar(
+              backgroundColor: CustomColors.whYellowDark,
               radius: profileImageRadius,
               foregroundImage: NetworkImage(
                 profileImageUrlSnapshot.data ??
