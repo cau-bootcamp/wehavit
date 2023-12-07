@@ -340,11 +340,10 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView>
     TapUpDetails detail,
     // void Function(UniqueKey key) disposeWidget,
   ) {
-    print(detail.globalPosition.dy);
-
     return setState(
       () {
         final animationWidgetKey = UniqueKey();
+
         emojiWidgets.addEntries(
           {
             animationWidgetKey: ShootEmojiWidget(
@@ -358,8 +357,8 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView>
                 MediaQuery.of(context).size.width / 2,
                 150,
               ),
-              disposeWidgetFromParent: () {
-                emojiWidgets.remove(animationWidgetKey);
+              disposeWidgetFromParent: (UniqueKey key) {
+                emojiWidgets.remove(key);
               },
             ),
           }.entries,
