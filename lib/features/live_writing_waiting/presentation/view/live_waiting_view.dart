@@ -34,8 +34,8 @@ class LiveWritingView extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Timer Countdown Stream
-    final timerStream =
-        useMemoized(() => ref.read(waitingProvider.notifier).getTimerStream());
+    final timerStream = useMemoized(
+        () => ref.read(waitingProvider.notifier).getWaitingTimerStream());
     final timerStreamSnapshot = useStream(timerStream);
 
     // Syncing Online Status
