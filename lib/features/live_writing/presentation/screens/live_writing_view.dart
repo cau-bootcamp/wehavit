@@ -68,6 +68,8 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView>
     // ignore: unused_local_variable
     final reactionSnapshot = useStream<List<ReactionModel>>(reactionStream);
 
+    final resolutionModelList = useState(<ResolutionModel>[]);
+
     // auto dispose을 방지하기 위해 watch 삽입
     final _ = ref.watch(liveWritingFriendRepositoryProvider);
 
@@ -198,7 +200,7 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView>
               ),
               activeResolutionList.when(
                 data: (fetchedActiveResolutionList) {
-                  List<ResolutionModel> resolutionModelList = [];
+                  // List<ResolutionModel> resolutionModelList = [];
                   // load first goal statement
                   fetchedActiveResolutionList.fold(
                     (error) {
@@ -210,12 +212,14 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView>
                       if (resolutionList.isNotEmpty) {
                         // selectedResolutionGoal.value =
                         //     resolutionList.first.goalStatement;
-                        resolutionModelList = resolutionList;
+                        final sortedList = resolutionList
+                          ..sort((a, b) => a.startDate.compareTo(b.startDate));
+                        resolutionModelList.value = resolutionList;
                       }
                     },
                   );
 
-                  if (resolutionModelList.isEmpty) {
+                  if (resolutionModelList.value.isEmpty) {
                     return Container(
                       alignment: Alignment.bottomCenter,
                       child: const Center(
@@ -232,7 +236,7 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView>
                     );
                   }
 
-                  List<Widget> writingCellList = resolutionModelList.map(
+                  List<Widget> writingCellList = resolutionModelList.value.map(
                     (model) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
