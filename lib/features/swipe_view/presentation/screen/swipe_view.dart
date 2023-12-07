@@ -73,9 +73,10 @@ class SwipeViewState extends ConsumerState<SwipeView>
           gradient: LinearGradient(
             colors: [
               CustomColors.whDarkBlack,
+              CustomColors.whYellowDark,
               CustomColors.whYellow,
             ],
-            stops: [0.5, 1.0],
+            stops: [0.3, 0.8, 1.2],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
