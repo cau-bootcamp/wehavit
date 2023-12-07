@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
 import 'package:wehavit/features/my_page/presentation/widgets/resolution_accomplishment_donut_graph_datamodel.dart';
 
@@ -7,13 +8,14 @@ class ResolutionDoughnutGraphWidget extends StatelessWidget {
   ResolutionDoughnutGraphWidget({
     super.key,
     required List<ConfirmPostModel> sourceData,
+    required int duration,
   }) {
     sourceData.sort((a, b) => a.toString().compareTo(b.toString()));
     data = sourceData.where((element) {
-      return todaysDate.difference(element.createdAt!).inDays < 14;
+      return todaysDate.difference(element.createdAt!).inDays < duration;
     }).toList();
 
-    ratioOfDoneDays = (data.length / 14) * 100;
+    ratioOfDoneDays = (data.length / duration) * 100;
   }
 
   late final List<ConfirmPostModel> data;
@@ -47,6 +49,13 @@ class ResolutionDoughnutGraphWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SfCircularChart(series: _getDefaultDoughnutSeries());
+    return SfCircularChart(
+      palette: const [
+        CustomColors.whYellow,
+        CustomColors.whYellowDark,
+      ],
+      series: _getDefaultDoughnutSeries(),
+      margin: EdgeInsets.zero,
+    );
   }
 }

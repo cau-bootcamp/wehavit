@@ -14,8 +14,15 @@ class SwipeViewModel {
   int get currentCellIndex => _currentCellIndex;
   set currentCellIndex(int newIndex) {
     _currentCellIndex = newIndex;
-    _currentCellConfirmPostModel =
-        confirmPostModelList.foldRight(null, (acc, b) => b[_currentCellIndex]);
+    if (confirmPostModelList.isRight() &&
+        confirmPostModelList
+            .getRight()
+            .fold(() => false, (list) => list.isNotEmpty)) {
+      _currentCellConfirmPostModel = confirmPostModelList.foldRight(
+        null,
+        (acc, b) => b[_currentCellIndex],
+      );
+    }
   }
 
   Either<Failure, List<ConfirmPostModel>> confirmPostModelList = right([]);
