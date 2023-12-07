@@ -9,6 +9,7 @@ import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.d
 import 'package:wehavit/features/my_page/domain/models/resolution_model.dart';
 import 'package:wehavit/features/my_page/presentation/providers/my_page_resolution_list_provider.dart';
 import 'package:wehavit/features/my_page/presentation/widgets/resolution_dashboard_widget.dart';
+import 'package:wehavit/features/swipe_view/presentation/screen/widget/swipe_dashboard_widget.dart';
 
 class MyPageScreen extends ConsumerStatefulWidget {
   const MyPageScreen({super.key});
@@ -135,9 +136,59 @@ class MyResolutionListWidget extends StatelessWidget {
                 right.$1.length < 3 ? right.$1.length + 1 : right.$1.length,
             itemBuilder: (context, index) {
               if (index < right.$1.length) {
-                return ResolutionDashboardWidget(
-                  model: right.$1[index],
-                  confirmPostList: right.$2[index],
+                return Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: CustomColors.whGrey,
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    ),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 16.0, right: 16.0, top: 16.0),
+                          child: Row(
+                            children: [
+                              Text(
+                                right.$1[index].goalStatement,
+                                style: const TextStyle(
+                                  color: CustomColors.whWhite,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              Expanded(
+                                child: Container(),
+                              ),
+                              Text(
+                                '${DateTime.now().difference(right.$1[index].startDate).inDays.toString()}일차',
+                                style: const TextStyle(
+                                  color: CustomColors.whYellow,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Divider(
+                            thickness: 2,
+                            color: CustomColors.whYellow,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SwipeDashboardWidget(
+                            confirmPostList: right.$2[index],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 );
               } else {
                 return Container(
