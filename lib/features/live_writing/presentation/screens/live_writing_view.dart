@@ -239,7 +239,7 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView>
                         //     resolutionList.first.goalStatement;
                         final sortedList = resolutionList
                           ..sort((a, b) => a.startDate.compareTo(b.startDate));
-                        resolutionModelList.value = resolutionList;
+                        resolutionModelList.value = sortedList;
                       }
                     },
                   );
