@@ -4,13 +4,17 @@ import 'dart:math';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
+import 'package:wehavit/common/routers/route_location.dart';
 import 'package:wehavit/features/effects/emoji_firework_animation/emoji_firework_manager.dart';
 import 'package:wehavit/features/live_writing/live_writing.dart';
 import 'package:wehavit/features/live_writing/presentation/widgets/friend_live_post_widget.dart';
 import 'package:wehavit/features/live_writing/presentation/widgets/my_live_writing_widget.dart';
+import 'package:wehavit/features/live_writing_waiting/domain/models/counter_state.dart';
+import 'package:wehavit/features/live_writing_waiting/domain/models/waiting_model.dart';
 import 'package:wehavit/features/my_page/domain/models/resolution_model.dart';
 import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';
 import 'package:wehavit/features/swipe_view/presentation/screen/widget/emoji_sheet_widget.dart';
@@ -26,7 +30,8 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView>
     with SingleTickerProviderStateMixin {
   XFile? imageFile;
   ValueNotifier<bool> isSubmitted = ValueNotifier(false);
-  late List<ResolutionModel> resolutionModelList;
+
+  // List<ResolutionModel> resolutionModelList = [];
 
   int _current = 0;
   final CarouselController _controller = CarouselController();
@@ -58,6 +63,14 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView>
 
   @override
   Widget build(BuildContext context) {
+    // Timer Countdown Stream
+    final timerStream = useMemoized(
+      () => ref.read(waitingProvider.notifier).getWritingTimerStream(),
+    );
+    final timerStreamSnapshot = useStream(timerStream);
+
+    final timerCounterState = ref.watch(waitingProvider);
+
     final activeResolutionList = ref.watch(activeResolutionListProvider);
 
     final friendEmailsFuture = useMemoized(() => getVisibleFriends(ref));
@@ -67,8 +80,23 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView>
     // ignore: unused_local_variable
     final reactionSnapshot = useStream<List<ReactionModel>>(reactionStream);
 
+    final resolutionModelList = useState(<ResolutionModel>[]);
+
     // auto dispose을 방지하기 위해 watch 삽입
     final _ = ref.watch(liveWritingFriendRepositoryProvider);
+
+    useEffect(
+      () {
+        debugPrint('timerCounterState.counterStateEnum: '
+            '${timerCounterState.counterStateEnum}');
+
+        if (timerCounterState.counterStateEnum == CounterStateEnum.timeOver) {
+          context.go(RouteLocation.home);
+        }
+        return null;
+      },
+      [timerCounterState.counterStateEnum],
+    );
 
     useEffect(
       () {
@@ -148,9 +176,9 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView>
                     Container(
                       padding: const EdgeInsets.only(top: 34, bottom: 34),
                       width: double.infinity,
-                      child: const Column(
+                      child: Column(
                         children: [
-                          Text(
+                          const Text(
                             '남은 시간',
                             style: TextStyle(
                               fontSize: 18,
@@ -159,8 +187,8 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView>
                             ),
                           ),
                           Text(
-                            '00:07',
-                            style: TextStyle(
+                            timerStreamSnapshot.data ?? '',
+                            style: const TextStyle(
                               fontSize: 30,
                               fontWeight: FontWeight.bold,
                               color: CustomColors.whWhite,
@@ -197,23 +225,44 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView>
               ),
               activeResolutionList.when(
                 data: (fetchedActiveResolutionList) {
+                  // List<ResolutionModel> resolutionModelList = [];
                   // load first goal statement
                   fetchedActiveResolutionList.fold(
-                    (error) => debugPrint(
-                      'Error, when fetching active resolution list: $error',
-                    ),
+                    (error) {
+                      debugPrint(
+                        'Error, when fetching active resolution list: $error',
+                      );
+                    },
                     (resolutionList) async {
                       if (resolutionList.isNotEmpty) {
                         // selectedResolutionGoal.value =
                         //     resolutionList.first.goalStatement;
-                        resolutionModelList = resolutionList;
-                      } else {
-                        //
+                        final sortedList = resolutionList
+                          ..sort((a, b) => a.startDate.compareTo(b.startDate));
+                        resolutionModelList.value = sortedList;
                       }
                     },
                   );
 
-                  List<Widget> writingCellList = resolutionModelList.map(
+                  if (resolutionModelList.value.isEmpty) {
+                    return Container(
+                      alignment: Alignment.bottomCenter,
+                      child: const Center(
+                        child: Text(
+                          '친구들과 함께 인증글을 작성하기\n'
+                          '위해서는 목표를 추가해주세요.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: CustomColors.whSemiWhite,
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+
+                  List<Widget> writingCellList = resolutionModelList.value.map(
                     (model) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -287,7 +336,7 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView>
                     Center(child: Text(error.toString())),
               ),
               Container(
-                constraints: BoxConstraints.expand(),
+                constraints: const BoxConstraints.expand(),
                 child: Stack(
                   alignment: Alignment.bottomCenter,
                   clipBehavior: Clip.none,

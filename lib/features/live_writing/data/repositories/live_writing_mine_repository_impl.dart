@@ -83,23 +83,27 @@ class LiveWritingPostRepositoryImpl extends MyLiveWritingRepository {
 
   @override
   Stream<List<ReactionModel>> getReactionListStream() {
-    final stream = FirebaseFirestore.instance
-        .collection(FirebaseCollectionName.liveConfirmPosts)
-        .doc(
-          '$livePostDocumentPrefix${FirebaseAuth.instance.currentUser!.email}',
-        )
-        .collection(FirebaseCollectionName.encourages)
-        .snapshots()
-        .map((event) => event.docs)
-        .map(
-          (docs) => docs
-              .map(
-                (doc) => ReactionModel.fromFireStoreDocument(doc),
-              )
-              .toList(),
-        );
-
-    return stream;
+    try {
+      final stream = FirebaseFirestore.instance
+          .collection(FirebaseCollectionName.liveConfirmPosts)
+          .doc(
+            '$livePostDocumentPrefix${FirebaseAuth.instance.currentUser!.email}',
+          )
+          .collection(FirebaseCollectionName.encourages)
+          .snapshots()
+          .map((event) => event.docs)
+          .map(
+            (docs) => docs
+                .map(
+                  (doc) => ReactionModel.fromFireStoreDocument(doc),
+                )
+                .toList(),
+          );
+      return stream;
+    } catch (e) {
+      debugPrint(e.toString());
+      return Stream.empty();
+    }
   }
 
   @override
