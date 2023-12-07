@@ -26,7 +26,8 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView>
     with SingleTickerProviderStateMixin {
   XFile? imageFile;
   ValueNotifier<bool> isSubmitted = ValueNotifier(false);
-  late List<ResolutionModel> resolutionModelList;
+
+  // List<ResolutionModel> resolutionModelList = [];
 
   int _current = 0;
   final CarouselController _controller = CarouselController();
@@ -197,21 +198,39 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView>
               ),
               activeResolutionList.when(
                 data: (fetchedActiveResolutionList) {
+                  List<ResolutionModel> resolutionModelList = [];
                   // load first goal statement
                   fetchedActiveResolutionList.fold(
-                    (error) => debugPrint(
-                      'Error, when fetching active resolution list: $error',
-                    ),
+                    (error) {
+                      debugPrint(
+                        'Error, when fetching active resolution list: $error',
+                      );
+                    },
                     (resolutionList) async {
                       if (resolutionList.isNotEmpty) {
                         // selectedResolutionGoal.value =
                         //     resolutionList.first.goalStatement;
                         resolutionModelList = resolutionList;
-                      } else {
-                        //
                       }
                     },
                   );
+
+                  if (resolutionModelList.isEmpty) {
+                    return Container(
+                      alignment: Alignment.bottomCenter,
+                      child: const Center(
+                        child: Text(
+                          '친구들과 함께 인증글을 작성하기 \n위해서는 목표를 추가해주세요.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: CustomColors.whSemiWhite,
+                          ),
+                        ),
+                      ),
+                    );
+                  }
 
                   List<Widget> writingCellList = resolutionModelList.map(
                     (model) {
@@ -287,7 +306,7 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView>
                     Center(child: Text(error.toString())),
               ),
               Container(
-                constraints: BoxConstraints.expand(),
+                constraints: const BoxConstraints.expand(),
                 child: Stack(
                   alignment: Alignment.bottomCenter,
                   clipBehavior: Clip.none,
