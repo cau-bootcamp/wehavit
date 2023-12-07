@@ -366,12 +366,6 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
     if (isSubmitted) {
       return;
     }
-
-    // if (_confirmPostFormKey.currentState!.validate()) {
-    //   _confirmPostFormKey.currentState!.save();
-    //   isSubmitted = true;
-    // onSubmit(titleController.text, contentController.text);
-    // }
   }
 
   Future<String> setImage(XFile pickedFile) async {

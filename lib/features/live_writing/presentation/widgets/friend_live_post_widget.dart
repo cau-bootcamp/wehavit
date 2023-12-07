@@ -104,7 +104,7 @@ class _FriendLivePostWidgetState extends ConsumerState<FriendLivePostWidget> {
           ),
           Expanded(
             child: SizedBox(
-              height: bubbleState == LiveBubbleState.showingDefault ? 47 : null,
+              height: bubbleState == LiveBubbleState.showingDefault ? 50 : null,
               child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) {
                   return GestureDetector(

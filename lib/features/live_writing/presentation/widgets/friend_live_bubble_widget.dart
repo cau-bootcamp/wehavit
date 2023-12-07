@@ -75,7 +75,6 @@ class _FriendLivePostBubbleState extends ConsumerState<FriendLiveBubbleWidget> {
                     ),
                   ],
                 ),
-                // TODO : 반응 남기기 기능 개발
                 Visibility(
                   visible: widget.bubbleState == LiveBubbleState.showingDetail,
                   child: Padding(
