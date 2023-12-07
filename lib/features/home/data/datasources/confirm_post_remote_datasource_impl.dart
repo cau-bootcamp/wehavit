@@ -39,12 +39,12 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
           )
           .get();
 
-      // 두 번째 쿼리 결과
+      // 두 번째 쿼리 결과: Fan
       QuerySnapshot secondQueryResult = await FirebaseFirestore.instance
           .collection(FirebaseCollectionName.confirmPosts)
           .where(
             FirebaseConfirmPostFieldName.fan,
-            arrayContains: FirebaseAuth.instance.currentUser!.uid,
+            arrayContains: FirebaseAuth.instance.currentUser!.email,
           )
           .get();
 
