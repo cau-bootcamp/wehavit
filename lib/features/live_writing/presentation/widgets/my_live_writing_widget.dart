@@ -49,6 +49,13 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
     final titleController = useTextEditingController();
     final contentController = useTextEditingController();
     final isLoadingImage = useState(false);
+    final hasDoneSubmit = useState(false);
+
+    bool isSubmittable() {
+      return titleController.text != '' &&
+          contentController.text != '' &&
+          imageFile != null;
+    }
 
     useEffect(
       () {
@@ -56,24 +63,22 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
           ref
               .read(liveWritingPostRepositoryProvider)
               .updateTitle(titleController.text);
+
+          hasDoneSubmit.value = isSubmittable();
         });
+
         contentController.addListener(() async {
           ref
               .read(liveWritingPostRepositoryProvider)
               .updateMessage(contentController.text);
+
+          hasDoneSubmit.value = isSubmittable();
         });
 
         return null;
       },
       [],
     );
-
-    bool isSubmittable() {
-      return !(titleController.text == '' ||
-          contentController.text == '' ||
-          imageFile == null ||
-          isLoadingImage.value == true);
-    }
 
     return Align(
       alignment: const Alignment(1, 1),
@@ -117,7 +122,8 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
                                 top: 14.0,
                                 bottom: 8.0,
                               ),
-                              child: imageContainerWidget(isLoadingImage),
+                              child: imageContainerWidget(
+                                  isLoadingImage, isSubmittable),
                             ),
                             restOrSubmitButtonsWidget(
                               isSubmittable,
@@ -199,6 +205,7 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
   ) {
     return TextFormField(
       controller: titleController,
+      readOnly: isSubmitted,
       style: const TextStyle(
         fontSize: 18,
         fontWeight: FontWeight.w600,
@@ -220,6 +227,7 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
       TextEditingController contentController) {
     return TextFormField(
       controller: contentController,
+      readOnly: isSubmitted,
       maxLines: 6,
       style: const TextStyle(
         fontSize: 14,
@@ -238,7 +246,8 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
     );
   }
 
-  Container imageContainerWidget(ValueNotifier<bool> isLoadingImage) {
+  Container imageContainerWidget(
+      ValueNotifier<bool> isLoadingImage, bool Function() isSubmittable) {
     return Container(
       width: 151,
       height: 104,
@@ -257,6 +266,7 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
               isLoadingImage.value = true;
               imageUrl = await setImage(pickedFile);
               isLoadingImage.value = false;
+              isSubmittable();
             } else {
               debugPrint('이미지 선택안함');
             }

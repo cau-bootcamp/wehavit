@@ -124,9 +124,9 @@ class _FriendLivePostWidgetState extends ConsumerState<FriendLivePostWidget> {
                       });
                     },
                     child: FriendLiveBubbleWidget(
-                      userName: nameSnapshot.data ?? '누구세요?',
-                      postTitle: titleSnapshot.data ?? '제목을 못불러왔어요!',
-                      postContent: messageSnapshot.data ?? '내용을 못불러왔어요!',
+                      userName: nameSnapshot.data ?? '이름',
+                      postTitle: titleSnapshot.data ?? '제목을 불러오는 중',
+                      postContent: messageSnapshot.data ?? '내용을 불러오는 중',
                       postImageFirestoreURL: postImageSnapshot.data == '' ||
                               postImageSnapshot.data == null
                           ? 'https://mblogthumb-phinf.pstatic.net/MjAyMjAxMjVfNTgg/MDAxNjQzMTAyOTg1MTk1.kvD7eFVnAbMS2LREsFqsYfsw4hnJDFuGUfBUX2kUKikg.jr9qYJbmDH9AmJPHbJcM9FrhpOnOaYp5qAVk8nF9vR4g.JPEG.minziminzi128/IMG_7365.JPG?type=w800'
