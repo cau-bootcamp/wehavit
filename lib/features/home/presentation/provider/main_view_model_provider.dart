@@ -3,19 +3,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/models/user_model/user_model.dart';
 import 'package:wehavit/common/utils/no_params.dart';
+import 'package:wehavit/features/home/presentation/model/main_view_model.dart';
 import 'package:wehavit/features/live_writing/domain/models/confirm_post_model.dart';
 import 'package:wehavit/features/my_page/domain/usecases/get_confirm_post_list_for_resolution_id.dart';
 import 'package:wehavit/features/swipe_view/domain/model/reaction_model.dart';
 import 'package:wehavit/features/swipe_view/domain/usecase/swipe_view_usecase.dart';
 import 'package:wehavit/features/swipe_view/presentation/model/swipe_view_model.dart';
 
-final swipeViewModelProvider =
-    StateNotifierProvider<SwipeViewModelProvider, SwipeViewModel>(
-  (ref) => SwipeViewModelProvider(ref),
+final mainViewModelProvider =
+    StateNotifierProvider<MainViewModelProvider, MainViewModel>(
+  (ref) => MainViewModelProvider(ref),
 );
 
-class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
-  SwipeViewModelProvider(Ref ref) : super(SwipeViewModel()) {
+class MainViewModelProvider extends StateNotifier<MainViewModel> {
+  MainViewModelProvider(Ref ref) : super(MainViewModel()) {
     _getTodayConfirmPostListUsecase =
         ref.watch(getTodayConfirmPostListUsecaseProvider);
     _fetchUserDataFromIdUsecase = ref.watch(fetchUserDataFromIdUsecaseProvider);
@@ -80,13 +81,14 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
 
   Future<void> sendReactionToTargetConfirmPost(
     ReactionModel reactionModel,
+    String confirmModleId,
   ) async {
     if (state.currentCellConfirmModel == null) {
       return Future(() => null);
     }
 
     await _sendReactionToTargetConfirmPostUsecase
-        .call((state.currentCellConfirmModel!.id!, reactionModel));
+        .call((confirmModleId, reactionModel));
 
     return Future(() => null);
   }
@@ -124,7 +126,7 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
     startGrowingLayout();
   }
 
-  Future<void> sendEmojiReaction() async {
+  Future<void> sendEmojiReaction({required String confirmModleId}) async {
     state.emojiWidgets.clear();
 
     if (state.sendingEmojis.any((element) => element > 0)) {
@@ -141,22 +143,25 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
         emoji: emojiMap,
       );
 
-      sendReactionToTargetConfirmPost(reactionModel);
+      sendReactionToTargetConfirmPost(reactionModel, confirmModleId);
 
       state.sendingEmojis = List<int>.generate(15, (index) => 0);
     }
   }
 
-  Future<void> sendImageReaction({required String imageFilePath}) async {
+  Future<void> sendImageReaction({
+    required String imageFilePath,
+    required String confirmModleId,
+  }) async {
     final reactionModel = ReactionModel(
       complimenterUid: FirebaseAuth.instance.currentUser!.uid,
       reactionType: ReactionType.instantPhoto.index,
       instantPhotoUrl: imageFilePath,
     );
-    sendReactionToTargetConfirmPost(reactionModel);
+    sendReactionToTargetConfirmPost(reactionModel, confirmModleId);
   }
 
-  Future<void> sendTextReaction() async {
+  Future<void> sendTextReaction({required String confirmModleId}) async {
     unfocusCommentTextForm();
 
     final reactionModel = ReactionModel(
@@ -164,9 +169,10 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
       reactionType: ReactionType.comment.index,
       comment: state.textEditingController.text,
     );
-    print(reactionModel);
+
     sendReactionToTargetConfirmPost(
       reactionModel,
+      confirmModleId,
     );
     state.textEditingController.clear();
   }

@@ -5,16 +5,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/features/home/domain/models/confirm_post_model.dart';
+import 'package:wehavit/features/home/presentation/model/main_view_model.dart';
+import 'package:wehavit/features/home/presentation/provider/main_view_model_provider.dart';
+import 'package:wehavit/features/swipe_view/presentation/model/reaction_camera_widget_model.dart';
 import 'package:wehavit/features/swipe_view/presentation/model/swipe_view_model.dart';
+import 'package:wehavit/features/swipe_view/presentation/provider/reaction_camera_widget_model_provider.dart';
 import 'package:wehavit/features/swipe_view/presentation/provider/swipe_view_model_provider.dart';
 import 'package:wehavit/features/swipe_view/presentation/screen/widget/emoji_sheet_widget.dart';
 
 import '../../../../common/utils/emoji_assets.dart';
 
 class ConfirmPostWidget extends ConsumerStatefulWidget {
-  const ConfirmPostWidget({super.key, required this.model});
+  const ConfirmPostWidget({
+    super.key,
+    required this.model,
+    required this.panUpdateCallback,
+    required this.panEndCallback,
+  });
 
   final ConfirmPostModel model;
+  final Function panUpdateCallback;
+  final Function panEndCallback;
 
   @override
   ConsumerState<ConfirmPostWidget> createState() {
@@ -31,8 +42,13 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
   late String content = widget.model.content;
   late String? contentImageUrl = widget.model.contentImageUrl;
   late Timestamp postAt = widget.model.postAt;
-  late final SwipeViewModel _swipeViewModel;
-  late final SwipeViewModelProvider _swipeViewModelProvider;
+  late final MainViewModel _mainViewModel;
+  late final MainViewModelProvider _mainViewModelProvider;
+
+  late ReactionCameraWidgetModel _reactionCameraWidgetModel;
+  late ReactionCameraWidgetModelProvider _reactionCameraWidgetModelProvider;
+
+  Point<double> panningPosition = const Point(0, 0);
 
   bool _initOccurred = false;
   bool _isTextFieldActive = false;
@@ -47,14 +63,18 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
     super.didChangeDependencies();
 
     if (!_initOccurred) {
-      _swipeViewModel = ref.watch(swipeViewModelProvider);
-      _swipeViewModelProvider = ref.read(swipeViewModelProvider.notifier);
+      _mainViewModel = ref.watch(mainViewModelProvider);
+      _mainViewModelProvider = ref.read(mainViewModelProvider.notifier);
+
       await ref
           .read(swipeViewModelProvider.notifier)
           .getTodayConfirmPostModelList();
 
-      await _swipeViewModelProvider.initializeCamera();
+      await _mainViewModelProvider.initializeCamera();
 
+      _reactionCameraWidgetModel = ref.watch(reactionCameraWidgetModelProvider);
+      _reactionCameraWidgetModelProvider =
+          ref.read(reactionCameraWidgetModelProvider.notifier);
       // _swipeViewModel.cameraButtonPosition =
       //     _swipeViewModelProvider.getCameraButtonPosition() ??
       //         const Offset(0, 0);
@@ -184,40 +204,14 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                 children: <Widget>[
                   if (_isTextFieldActive)
                     Expanded(
-                      child: SizedBox(
-                        height: 36,
-                        child: TextFormField(
-                          controller: _swipeViewModel.textEditingController,
-                          textAlign: TextAlign.left,
-                          style: const TextStyle(
-                            fontSize: 10,
-                          ),
-                          cursorColor: CustomColors.whYellow,
-                          // 여기에 적절한 커스텀 색상을 사용하세요
-                          decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 8,
-                            ),
-                            fillColor: CustomColors.whYellowDark,
-                            // 여기에 적절한 커스텀 색상을 사용하세요
-                            filled: true,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                          ),
-                        ),
-                      ),
+                      child: Container(),
                     ),
                   IconButton(
                     onPressed: () async {
                       if (_isTextFieldActive == true &&
-                          _swipeViewModel.textEditingController.text != '') {
-                        await _swipeViewModelProvider.sendTextReaction();
+                          _mainViewModel.textEditingController.text != '') {
+                        await _mainViewModelProvider
+                            .sendTextReaction(widget.model.confirmModelId);
                       }
                       setState(() {
                         _isTextFieldActive =
@@ -225,14 +219,16 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                       });
                     },
                     icon: const Icon(
-                      Icons.send,
+                      Icons.messenger_outline,
+                      color: CustomColors.whWhite,
                       size: 24,
                     ),
                   ),
                   GestureDetector(
                     onTapUp: (details) async =>
                         emojiSheetWidget(context).whenComplete(() async {
-                      _swipeViewModelProvider.sendEmojiReaction();
+                      _mainViewModelProvider.sendEmojiReaction(confirmModleId);
+                      _mainViewModel.countSend = 0;
                     }),
                     child: Container(
                       width: 40,
@@ -248,24 +244,70 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                       ),
                     ),
                   ),
-                  Container(
-                    // key: _swipeViewModel.cameraButtonPlaceholderKey,
-                    width: 50,
-                    height: 50,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      // color: Colors.black,
-                    ),
-                    child: Center(
-                      child: Text(
-                        _swipeViewModel.isCameraInitialized == true
-                            ? '📸'
-                            : '❌',
-                        style: const TextStyle(fontSize: 24),
+                  photoReactionButtonWidget()
+                ],
+              ),
+              Visibility(
+                visible: _isTextFieldActive,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Stack(
+                        children: [
+                          Container(
+                            height: 35,
+                            child: TextFormField(
+                              focusNode: _mainViewModel.commentFieldFocus,
+                              controller: _mainViewModel.textEditingController,
+                              maxLines: 1,
+                              textAlignVertical: TextAlignVertical.center,
+                              style: const TextStyle(
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w400,
+                                color: CustomColors.whWhite,
+                              ),
+                              decoration: InputDecoration(
+                                filled: true,
+                                hintText: '응원 메시지 남기기',
+                                hintStyle: const TextStyle(
+                                  fontSize: 12.0,
+                                  fontWeight: FontWeight.w300,
+                                  color: CustomColors.whWhite,
+                                ),
+
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 2,
+                                ),
+                                fillColor: CustomColors.whYellowDark,
+                                // 여기에 적절한 커스텀 색상을 사용하세요
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                // contentPadding: EdgeInsets.zero,
+                              ),
+                              onTap: () {},
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                ],
+                    IconButton(
+                      onPressed: () async {
+                        _mainViewModelProvider.sendTextReaction();
+                      },
+                      icon: const Icon(
+                        Icons.send,
+                        size: 16,
+                        color: CustomColors.whWhite,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -283,7 +325,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
       builder: (context) {
         void disposeWidget(UniqueKey key) {
           setState(() {
-            _swipeViewModel.emojiWidgets.remove(key);
+            _mainViewModel.emojiWidgets.remove(key);
           });
         }
 
@@ -294,72 +336,124 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
               clipBehavior: Clip.none,
               children: [
                 Stack(
-                  alignment: Alignment.topCenter,
+                  alignment: Alignment.bottomCenter,
                   clipBehavior: Clip.none,
-                  children: _swipeViewModel.emojiWidgets.values.toList(),
+                  children: _mainViewModel.emojiWidgets.values.toList(),
                 ),
-                Container(
-                  clipBehavior: Clip.hardEdge,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
+                Stack(
+                  children: [
+                    Container(
+                      clipBehavior: Clip.hardEdge,
+                      decoration: const BoxDecoration(
+                        color: CustomColors.whBlack,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
                 Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 30.0),
-                      child: Text(
-                        '반응을 ${_swipeViewModel.countSend}회 보냈어요!',
-                        style: const TextStyle(fontSize: 20),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Column(
-                        children: List<Widget>.generate(
-                          3,
-                          (index) => Row(
-                            children: List<Widget>.generate(5, (jndex) {
-                              final key = GlobalKey();
-                              return Expanded(
-                                key: key,
-                                child: GestureDetector(
-                                  onTapDown: (detail) {},
-                                  onTapUp: (detail) {
-                                    shootEmoji(
-                                      setState,
-                                      index,
-                                      jndex,
-                                      detail,
-                                      context,
-                                      disposeWidget,
-                                    );
-                                  },
-                                  child: Stack(
-                                    clipBehavior: Clip.none,
-                                    children: [
-                                      Image(
-                                        image: AssetImage(
-                                          Emojis.emojiList[index * 5 + jndex],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            }),
-                          ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8.0),
+                      child: SizedBox(
+                        width: 80,
+                        child: Divider(
+                          thickness: 4,
+                          color: CustomColors.whYellowDark,
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 60,
+                    Expanded(
+                      flex: 2,
+                      // padding: const EdgeInsets.only(bottom: 30.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            alignment: Alignment.center,
+                            height: 70,
+                            child: Text(
+                              _mainViewModel.countSend.toString(),
+                              style: TextStyle(
+                                fontSize: 40 +
+                                    24 *
+                                        min(
+                                          1,
+                                          _mainViewModel.countSend / 24,
+                                        ),
+                                color: Color.lerp(
+                                  CustomColors.whYellow,
+                                  CustomColors.whRedBright,
+                                  min(1, _mainViewModel.countSend / 24),
+                                ),
+                                fontWeight: FontWeight.w700,
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
+                          ),
+                          const Text(
+                            '반응을 보내주세요!',
+                            style: TextStyle(
+                              fontSize: 24,
+                              color: CustomColors.whYellow,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
+                    Builder(
+                      builder: (context) {
+                        return SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          child: Column(
+                            children: List<Widget>.generate(
+                              3,
+                              (index) => Row(
+                                children: List<Widget>.generate(5, (jndex) {
+                                  final key = UniqueKey();
+                                  return Expanded(
+                                    key: key,
+                                    child: GestureDetector(
+                                      onTapDown: (detail) {},
+                                      onTapUp: (detail) {
+                                        shootEmoji(
+                                          setState,
+                                          index,
+                                          jndex,
+                                          detail,
+                                          context,
+                                          disposeWidget,
+                                        );
+                                      },
+                                      child: Stack(
+                                        clipBehavior: Clip.none,
+                                        children: [
+                                          Image(
+                                            image: AssetImage(
+                                              Emojis
+                                                  .emojiList[index * 5 + jndex],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                }),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    Expanded(child: Container()),
+                    // const SizedBox(
+                    //   height: 60,
+                    // ),
                   ],
                 ),
               ],
@@ -371,17 +465,17 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
   }
 
   void setAnimationVariables() {
-    _swipeViewModel.animationController = AnimationController(
+    _mainViewModel.animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 200),
     );
-    _swipeViewModel.animation = Tween<double>(begin: 0, end: 130).animate(
+    _mainViewModel.animation = Tween<double>(begin: 0, end: 130).animate(
       CurvedAnimation(
-        parent: _swipeViewModel.animationController,
+        parent: _mainViewModel.animationController,
         curve: Curves.linear,
       ),
     );
-    _swipeViewModel.animationController.value = 1;
+    _mainViewModel.animationController.value = 1;
   }
 
   void shootEmoji(
@@ -394,25 +488,69 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
   ) {
     return setState(
       () {
-        _swipeViewModel.countSend++;
-        _swipeViewModel.sendingEmojis[index * 5 + jndex] += 1;
+        _mainViewModel.countSend++;
+        _mainViewModel.sendingEmojis[index * 5 + jndex] += 1;
         final animationWidgetKey = UniqueKey();
-        _swipeViewModel.emojiWidgets.addEntries(
+        _mainViewModel.emojiWidgets.addEntries(
           {
             animationWidgetKey: ShootEmojiWidget(
               key: animationWidgetKey,
               emojiIndex: index * 5 + jndex,
-              currentPos:
-                  Point(detail.globalPosition.dx, detail.globalPosition.dy),
+              currentPos: Point(detail.globalPosition.dx, 0),
               targetPos: Point(
                 MediaQuery.of(context).size.width / 2,
-                MediaQuery.of(context).size.height + 50,
+                MediaQuery.of(context).size.height - 500 + 200,
               ),
               disposeWidgetFromParent: disposeWidget,
             ),
           }.entries,
         );
       },
+    );
+  }
+
+  Container photoReactionButtonWidget() {
+    return Container(
+      width: 50,
+      height: 50,
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        // color: Colors.black,
+      ),
+      child: GestureDetector(
+        onPanStart: (details) {
+          setState(() {
+            _reactionCameraWidgetModelProvider.setFocusingModeTo(true);
+          });
+        },
+        onPanEnd: (details) async {
+          if (_reactionCameraWidgetModelProvider
+              .isPosInCameraAreaOf(panningPosition)) {
+            widget.panEndCallback(panningPosition);
+          }
+
+          _reactionCameraWidgetModelProvider.setFocusingModeTo(false);
+        },
+        onPanUpdate: (details) {
+          panningPosition =
+              Point(details.globalPosition.dx, details.globalPosition.dy);
+
+          widget.panUpdateCallback(panningPosition);
+
+          _reactionCameraWidgetModel = _reactionCameraWidgetModel.copyWith(
+            currentButtonPosition: Point(
+              details.globalPosition.dx,
+              details.globalPosition.dy,
+            ),
+          );
+        },
+        child: Center(
+          child: Text(
+            _mainViewModel.isCameraInitialized == true ? '📸' : '❌',
+            style: const TextStyle(fontSize: 30),
+          ),
+        ),
+      ),
     );
   }
 }
