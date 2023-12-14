@@ -11,7 +11,7 @@ This is a flutter project designed to cultivate habits based on praise and encou
   - Instant Photo
   - Emoji
   - Text
-- Secret gift
+- Secret gift (Will be added soon)
 - ...
 
 ## Project Development
@@ -90,8 +90,13 @@ Flutter `3.13.6`
 #### Flutter Packages
 
 - State Management: Flutter Riverpod `>= 2.0`
-- 
+- Routing: go_router `>= 12.1.1`
+- Camera: camera `>= 0.10.5+5`
+- Animation: flutter_animate `>= 4.2.0+1`
+- Remote Server: firebase_core `>= 2.23.0`
+- Chart: syncfusion_flutter_charts `>= ^23.1.44`, syncfusion_flutter_gauges `>= 23.1.44`
+- Utils: freezed_annotation `>= 2.4.1`, json_annotation `>= 4.8.1`, font_awesome_flutter `>= 10.6.0`, equatable `>= 2.0.5`, fpdart `>= 1.1.0`, uuid `>= 4.2.1`, ...
 
 ## License
 
-* TBD
+MIT
