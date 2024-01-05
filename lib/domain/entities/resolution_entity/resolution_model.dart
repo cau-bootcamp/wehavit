@@ -1,17 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:wehavit/common/constants/firebase_field_name.dart';
+import 'package:wehavit/domain/entities/friend_entity/friend_model.dart';
 
 class ResolutionModel {
   ResolutionModel({
-    required this.resolutionId,
-    required this.isActive,
-    required this.goalStatement,
-    required this.actionStatement,
-    required this.oathStatement,
-    required this.isDaySelectedList,
-    required this.startDate,
-    required this.fanList,
+    this.goalStatement,
+    this.actionStatement,
+    this.oathStatement,
+    this.fanList,
+    this.isDaySelectedList,
+    this.resolutionId,
+    this.isActive,
+    this.startDate,
   });
+
+  String? goalStatement;
+  String? actionStatement;
+  String? oathStatement;
+  List<bool>? isDaySelectedList;
+  List<FriendModel>? fanList = [];
+  String? resolutionId;
+  bool? isActive;
+  DateTime? startDate;
 
   ResolutionModel.fromMapData(
     Map<String, dynamic> data,
@@ -29,15 +39,6 @@ class ResolutionModel {
             data[FirebaseResolutionFieldName.resolutionOathStatement],
         fanList = data[FirebaseResolutionFieldName.resolutionFanList];
 
-  String resolutionId;
-  String goalStatement;
-  String actionStatement;
-  String oathStatement;
-  List<bool> isDaySelectedList;
-  DateTime startDate;
-  bool isActive;
-  List<String> fanList = [];
-
   ResolutionModel copyWith({
     List<bool>? isDaySelectedList,
     String? goalStatement,
@@ -46,7 +47,7 @@ class ResolutionModel {
     bool? isActive,
     DateTime? startDate,
     String? resolutionId,
-    List<String>? fanList,
+    List<FriendModel>? fanList,
   }) {
     return ResolutionModel(
       goalStatement: goalStatement ?? this.goalStatement,

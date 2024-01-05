@@ -14,8 +14,8 @@ class FriendElementWidget extends StatefulWidget {
 }
 
 class _FriendElementWidgetState extends State<FriendElementWidget> {
-  late String friendName = widget.model.friendName;
-  late String friendImageUrl = widget.model.friendImageUrl;
+  late String friendName = widget.model.friendName ?? 'no_name';
+  late String friendImageUrl = widget.model.friendImageUrl ?? 'no_imageurl';
   int activeIndex = Random().nextInt(3) + 1;
 
   @override

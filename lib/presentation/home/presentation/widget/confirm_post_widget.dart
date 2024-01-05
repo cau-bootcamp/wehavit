@@ -24,7 +24,7 @@ class ConfirmPostWidget extends ConsumerStatefulWidget {
     required this.panEndCallback,
   });
 
-  final HomeConfirmPostModel model;
+  final ConfirmPostModel model;
   final Function panUpdateCallback;
   final Function panEndCallback;
 

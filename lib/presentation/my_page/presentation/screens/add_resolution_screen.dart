@@ -178,14 +178,20 @@ class AddResolutionScreen extends HookConsumerWidget {
                                     style: ElevatedButton.styleFrom(
                                       padding: EdgeInsets.zero,
                                       backgroundColor: resolutionProvider
-                                              .isDaySelectedList[idx]
+                                              .isDaySelectedList![idx]
                                           ? CustomColors.whYellow
                                           : CustomColors.whYellowBright,
                                     ),
                                     onPressed: () {
+                                      List<bool> newSelectedDayList =
+                                          resolutionProvider.isDaySelectedList!;
+                                      newSelectedDayList[idx] =
+                                          !newSelectedDayList[idx];
+
                                       ref
                                           .read(addResolutionProvider.notifier)
-                                          .changePeriodState(idx);
+                                          .changePeriodState(
+                                              newSelectedDayList);
                                     },
                                     child: Text(
                                       dayList[idx],
@@ -344,10 +350,10 @@ class SelectFans extends HookConsumerWidget {
               .read(addResolutionProvider.notifier)
               .changeFanList(friendList ?? []);
         },
-        options: friendListSnapshot.data?.map((e) => e.friendName).toList() ??
+        options: friendListSnapshot.data?.map((e) => e.friendName!).toList() ??
             ['친구를 불러오는 중입니다.'],
         selectedValues:
-            resolutionState.fanList.map((e) => e.friendName).toList(),
+            resolutionState.fanList!.map((e) => e.friendName!).toList(),
         whenEmpty: '친구를 선택해주세요.',
         // 스타일링을 위한 코드
         selected_values_style: const TextStyle(

@@ -6,12 +6,12 @@ import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_model.d
 import 'package:wehavit/domain/usecases/get_confirm_post_list_usecase.dart';
 
 final confirmPostListProvider = StateNotifierProvider<ConfirmPostListProvider,
-    Either<Failure, List<HomeConfirmPostModel>>>((ref) {
+    Either<Failure, List<ConfirmPostModel>>>((ref) {
   return ConfirmPostListProvider(ref);
 });
 
 class ConfirmPostListProvider
-    extends StateNotifier<Either<Failure, List<HomeConfirmPostModel>>> {
+    extends StateNotifier<Either<Failure, List<ConfirmPostModel>>> {
   ConfirmPostListProvider(Ref ref) : super(const Right([])) {
     getConfirmPostListUsecase = ref.watch(getConfirmPostListUsecaseProvider);
   }

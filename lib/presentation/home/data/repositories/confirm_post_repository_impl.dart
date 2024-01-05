@@ -17,7 +17,7 @@ class ConfirmPostRepositoryImpl implements HomeConfirmPostRepository {
   late final ConfirmPostDatasource _confirmPostDatasource;
 
   @override
-  EitherFuture<List<HomeConfirmPostModel>> getConfirmPostModelList(
+  EitherFuture<List<ConfirmPostModel>> getConfirmPostModelList(
     int selectedIndex,
   ) async {
     try {

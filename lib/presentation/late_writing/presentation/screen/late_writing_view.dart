@@ -118,7 +118,7 @@ class _LateWritingViewState extends ConsumerState<LateWritingView> {
                                                 child: Text(
                                                   resolutionList[viewModel
                                                           .resolutionIndex]
-                                                      .goalStatement,
+                                                      .goalStatement!,
                                                   textAlign: TextAlign.left,
                                                 ),
                                               ),
@@ -318,7 +318,7 @@ class _LateWritingViewState extends ConsumerState<LateWritingView> {
                       Navigator.of(context).pop();
                     },
                     child: Text(
-                      resolutionList[index].goalStatement,
+                      resolutionList[index].goalStatement!,
                     ),
                   ),
                 ),

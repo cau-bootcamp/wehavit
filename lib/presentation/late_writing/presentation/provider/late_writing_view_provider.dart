@@ -7,7 +7,6 @@ import 'package:wehavit/domain/entities/resolution_entity/resolution_model.dart'
 import 'package:wehavit/domain/usecases/confirm_post_usecase.dart';
 import 'package:wehavit/domain/usecases/get_my_resolution_list_usecase.dart';
 import 'package:wehavit/presentation/late_writing/presentation/model/late_writing_view_model.dart';
-import 'package:wehavit/presentation/live_writing/live_writing.dart';
 
 final lateWritingViewModelProvider =
     StateNotifierProvider<LateWritingViewModelProvider, LateWritingViewModel>(

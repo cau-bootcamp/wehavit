@@ -11,7 +11,7 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
   static const int maxDay = 27;
 
   @override
-  EitherFuture<List<HomeConfirmPostModel>> getConfirmPostEntityList(
+  EitherFuture<List<ConfirmPostModel>> getConfirmPostEntityList(
     int selectedIndex,
   ) async {
     try {
@@ -111,15 +111,17 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
         }
       }
 
-      List<HomeConfirmPostModel> confirmPosts = resultDocs
-          .map(
-            (doc) => HomeConfirmPostModel.fromFireStoreDocument(
-              userDataMap[
-                  (doc.data() as dynamic)[FirebaseConfirmPostFieldName.owner]]!,
-              doc,
-            ),
-          )
-          .toList();
+      // TODO: 아래 코드 구현하기
+      List<ConfirmPostModel> confirmPosts = List.empty();
+
+      // List<ConfirmPostModel> confirmPosts = resultDocs
+      //     .map(
+      //       (doc) => ConfirmPostModel.fromFireStoreDocument(
+      //         userDataMap[
+      //             (doc.data() as dynamic)[FirebaseConfirmPostFieldName.owner]],
+      //       ),
+      //     )
+      //     .toList();
 
       return Future(() => right(confirmPosts));
     } on Exception {
@@ -129,5 +131,10 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
         ),
       );
     }
+  }
+
+  @override
+  void getAllFanMarkedConfirmPosts() {
+    // TODO: implement getAllFanMarkedConfirmPosts
   }
 }

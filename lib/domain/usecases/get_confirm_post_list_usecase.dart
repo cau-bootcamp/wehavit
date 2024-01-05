@@ -13,19 +13,17 @@ final getConfirmPostListUsecaseProvider =
 });
 
 class GetConfirmPostListUsecase
-    implements UseCase<List<HomeConfirmPostModel>?, NoParams> {
+    implements UseCase<List<ConfirmPostModel>?, NoParams> {
   GetConfirmPostListUsecase(this._confirmPostRepository);
 
   final HomeConfirmPostRepository _confirmPostRepository;
 
   @override
-  Future<Either<Failure, List<HomeConfirmPostModel>>> call(
-      NoParams params) async {
+  Future<Either<Failure, List<ConfirmPostModel>>> call(NoParams params) async {
     return _confirmPostRepository.getConfirmPostModelList(maxIndex);
   }
 
-  Future<Either<Failure, List<HomeConfirmPostModel>>>
-      getConfirmPostModelListByDate(
+  Future<Either<Failure, List<ConfirmPostModel>>> getConfirmPostModelListByDate(
     int selectedIndex,
   ) async {
     return _confirmPostRepository.getConfirmPostModelList(selectedIndex);

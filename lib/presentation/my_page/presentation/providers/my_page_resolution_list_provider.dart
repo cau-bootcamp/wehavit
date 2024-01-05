@@ -38,7 +38,7 @@ class MyPageResolutionListProvider extends StateNotifier<
         resolutionList.map((resolutionModel) async {
       final confirmListFetchResult =
           await getConfirmPostListForResolutionIdUsecase(
-        resolutionModel.resolutionId,
+        resolutionModel.resolutionId!,
       );
 
       final List<ConfirmPostModel> confirmList = confirmListFetchResult.fold(

@@ -1,9 +1,9 @@
 // ignore_for_file: invalid_annotation_target
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:wehavit/domain/entities/friend_entity/friend_model.dart';
 
 part 'confirm_post_model.freezed.dart';
-part 'confirm_post_model.g.dart';
 
 @freezed
 class ConfirmPostModel with _$ConfirmPostModel {
@@ -31,13 +31,19 @@ class ConfirmPostModel with _$ConfirmPostModel {
     @JsonKey(includeFromJson: false, includeToJson: false)
     @Default('')
     String? id,
+    @Default('')
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    String? userName,
+    @Default('')
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    String? userImageUrl,
     required String? resolutionGoalStatement,
     required String? resolutionId,
     required String? title,
     required String? content,
     required String? imageUrl,
     required String? owner,
-    required List<String>? fan,
+    required List<FriendModel>? fan,
     required int? recentStrike,
     required DateTime? createdAt,
     required DateTime? updatedAt,
@@ -83,43 +89,4 @@ class TimestampConverter implements JsonConverter<DateTime, Timestamp> {
 
   @override
   Timestamp toJson(DateTime date) => Timestamp.fromDate(date);
-}
-
-@freezed
-class HomeConfirmPostModel with _$HomeConfirmPostModel {
-  @TimestampConverter()
-  @DocumentReferenceJsonConverter()
-  factory HomeConfirmPostModel({
-    @JsonKey(includeFromJson: false, includeToJson: false)
-    @Default('')
-    String? id,
-    @Default('')
-    @JsonKey(includeFromJson: false, includeToJson: false)
-    String? userName,
-    @Default('')
-    @JsonKey(includeFromJson: false, includeToJson: false)
-    String? userImageUrl,
-    required String? resolutionGoalStatement,
-    required String? resolutionId,
-    required String? title,
-    required String? content,
-    required String? imageUrl,
-    required String? owner,
-    required List<String>? fan,
-    required int? recentStrike,
-    required DateTime? createdAt,
-    required DateTime? updatedAt,
-    required Map<String, bool>? attributes,
-  }) = _HomeConfirmPostModel;
-
-  factory HomeConfirmPostModel.fromJson(Map<String, dynamic> json) =>
-      _$HomeConfirmPostModelFromJson(json);
-
-  factory HomeConfirmPostModel.fromFireStoreDocument(
-      (String, String) userData, DocumentSnapshot doc) {
-    if (doc.data() == null) throw Exception('Document data was null');
-
-    return HomeConfirmPostModel.fromJson(doc.data() as Map<String, Object?>)
-        .copyWith(id: doc.id, userName: userData.$2, userImageUrl: userData.$1);
-  }
 }

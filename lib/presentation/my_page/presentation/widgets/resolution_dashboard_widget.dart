@@ -23,8 +23,8 @@ class ResolutionDashboardWidget extends ConsumerStatefulWidget {
 
 class _ResolutionDashboardWidgetState
     extends ConsumerState<ResolutionDashboardWidget> {
-  late String goalStatement = widget.model.goalStatement;
-  late String actionStatement = widget.model.actionStatement;
+  late String goalStatement = widget.model.goalStatement!;
+  late String actionStatement = widget.model.actionStatement!;
 
   @override
   void initState() {

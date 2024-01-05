@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:wehavit/common/constants/firebase_field_name.dart';
+import 'package:wehavit/domain/entities/friend_entity/friend_model.dart';
 import 'package:wehavit/domain/entities/resolution_entity/resolution_model.dart';
 
 class ResolutionEntity {
@@ -18,13 +19,13 @@ class ResolutionEntity {
             .toList();
 
   ResolutionEntity.fromResolutionModel(ResolutionModel model) {
-    goal = model.goalStatement;
-    action = model.actionStatement;
+    goal = model.goalStatement!;
+    action = model.actionStatement!;
     startDate = DateTime.now();
     isActive = true;
-    period = model.isDaySelectedList.toIntPeriod();
-    resolutionId = model.resolutionId;
-    fanList = model.fanList;
+    period = model.isDaySelectedList!.toIntPeriod();
+    resolutionId = model.resolutionId!;
+    fanList = model.fanList!;
   }
 
   late String goal;
@@ -33,7 +34,7 @@ class ResolutionEntity {
   late DateTime startDate;
   late bool isActive;
   late String resolutionId;
-  late List<String> fanList;
+  late List<FriendModel> fanList;
 }
 
 extension ResolutionEntityConvertFunctions on ResolutionEntity {

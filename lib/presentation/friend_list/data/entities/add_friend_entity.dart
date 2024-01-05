@@ -1,10 +1,10 @@
 import 'package:wehavit/common/constants/firebase_field_name.dart';
-import 'package:wehavit/domain/entities/add_friend_entity/add_friend_model.dart';
+import 'package:wehavit/domain/entities/friend_entity/friend_model.dart';
 
 class AddFriendEntity {
-  AddFriendEntity.fromAddFriendModel(AddFriendModel model) {
+  AddFriendEntity.fromAddFriendModel(FriendModel model) {
     //print('model : ${model.friendID}');
-    friendEmail = model.friendEmail;
+    friendEmail = model.friendEmail ?? 'no_email';
   }
 
   late String friendEmail;

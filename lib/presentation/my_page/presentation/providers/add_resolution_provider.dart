@@ -1,17 +1,17 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
-import 'package:wehavit/domain/entities/add_resolution_entity/add_resolution_model.dart';
 import 'package:wehavit/domain/entities/friend_entity/friend_model.dart';
 import 'package:wehavit/domain/entities/resolution_entity/resolution_model.dart';
 import 'package:wehavit/domain/usecases/upload_resolution_usecase.dart';
 
-final addResolutionProvider = StateNotifierProvider.autoDispose<
-    AddResolutionNotifier, AddResolutionModel>((ref) {
+final addResolutionProvider =
+    StateNotifierProvider.autoDispose<AddResolutionNotifier, ResolutionModel>(
+        (ref) {
   return AddResolutionNotifier(ref);
 });
 
-class AddResolutionNotifier extends StateNotifier<AddResolutionModel> {
-  AddResolutionNotifier(Ref ref) : super(AddResolutionModel()) {
+class AddResolutionNotifier extends StateNotifier<ResolutionModel> {
+  AddResolutionNotifier(Ref ref) : super(ResolutionModel()) {
     _uploadResolutionUsecase = ref.watch(uploadResolutionUsecaseProvider);
   }
 
@@ -21,10 +21,8 @@ class AddResolutionNotifier extends StateNotifier<AddResolutionModel> {
     state = state.copyWith(fanList: newFanList);
   }
 
-  void changePeriodState(int day) {
-    state = state.copyWith(
-      isDaySelectedList: state.getToggledDaySelectedList(day),
-    );
+  void changePeriodState(List<bool> isDaySelectedList) {
+    state = state.copyWith(isDaySelectedList: isDaySelectedList);
   }
 
   void changeGoalStatement(String newStatement) {
@@ -47,7 +45,7 @@ class AddResolutionNotifier extends StateNotifier<AddResolutionModel> {
       isDaySelectedList: state.isDaySelectedList,
       isActive: true,
       startDate: DateTime.now(),
-      fanList: state.fanList.map((e) => e.friendEmail).toList(),
+      fanList: state.fanList,
       resolutionId: '',
     );
     return _uploadResolutionUsecase.call(newModel);

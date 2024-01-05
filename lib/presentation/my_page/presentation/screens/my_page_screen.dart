@@ -152,7 +152,7 @@ class MyResolutionListWidget extends StatelessWidget {
                           child: Row(
                             children: [
                               Text(
-                                right.$1[index].goalStatement,
+                                right.$1[index].goalStatement!,
                                 style: const TextStyle(
                                   color: CustomColors.whWhite,
                                   fontSize: 14,
@@ -163,7 +163,7 @@ class MyResolutionListWidget extends StatelessWidget {
                                 child: Container(),
                               ),
                               Text(
-                                '${DateTime.now().difference(right.$1[index].startDate).inDays.toString()}일차',
+                                '${DateTime.now().difference(right.$1[index].startDate!).inDays.toString()}일차',
                                 style: const TextStyle(
                                   color: CustomColors.whYellow,
                                   fontSize: 14,
