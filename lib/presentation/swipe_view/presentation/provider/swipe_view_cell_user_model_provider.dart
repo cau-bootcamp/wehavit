@@ -1,18 +1,19 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/errors/failure.dart';
-import 'package:wehavit/common/models/user_model/user_model.dart';
 import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
+import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
 import 'package:wehavit/domain/usecases/fetch_user_data_from_id_usecase.dart';
 import 'package:wehavit/domain/usecases/send_reaction_to_target_confirm_post.dart';
 
 final swipeViewCellUserModelProvider = StateNotifierProvider<
-    SwipeViewCellUserModelProvider,
-    Either<Failure, UserModel>>((ref) => SwipeViewCellUserModelProvider(ref));
+        SwipeViewCellUserModelProvider, Either<Failure, UserDataEntity>>(
+    (ref) => SwipeViewCellUserModelProvider(ref));
 
 class SwipeViewCellUserModelProvider
-    extends StateNotifier<Either<Failure, UserModel>> {
-  SwipeViewCellUserModelProvider(Ref ref) : super(Right(UserModel.dummyModel)) {
+    extends StateNotifier<Either<Failure, UserDataEntity>> {
+  SwipeViewCellUserModelProvider(Ref ref)
+      : super(Right(UserDataEntity.dummyModel)) {
     _fetchUserDataFromIdUsecase = ref.watch(fetchUserDataFromIdUsecaseProvider);
     _sendReactionToTargetConfirmPostUsecase =
         ref.watch(sendReactionToTargetConfirmPostUsecaseProvider);

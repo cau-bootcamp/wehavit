@@ -1,6 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:wehavit/common/models/user_model/user_model.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
+import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
 import 'package:wehavit/presentation/swipe_view/data/repository/user_model_fetch_repository_impl.dart';
 
 final userModelFetchRepositoryProvider =
@@ -9,5 +9,5 @@ final userModelFetchRepositoryProvider =
 });
 
 abstract class UserModelFetchRepository {
-  EitherFuture<UserModel> fetchUserModelFromId(String targetUserId);
+  EitherFuture<UserDataEntity> fetchUserModelFromId(String targetUserId);
 }

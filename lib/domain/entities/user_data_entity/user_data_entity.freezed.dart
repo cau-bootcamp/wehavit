@@ -20,10 +20,10 @@ UserDataEntity _$UserDataEntityFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$UserDataEntity {
-  String? get friendEmail => throw _privateConstructorUsedError;
-  String? get friendId => throw _privateConstructorUsedError;
-  String? get friendName => throw _privateConstructorUsedError;
-  String? get friendImageUrl => throw _privateConstructorUsedError;
+  String? get userEmail => throw _privateConstructorUsedError;
+  String? get userId => throw _privateConstructorUsedError;
+  String? get userName => throw _privateConstructorUsedError;
+  String? get userImageUrl => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -38,10 +38,10 @@ abstract class $UserDataEntityCopyWith<$Res> {
       _$UserDataEntityCopyWithImpl<$Res, UserDataEntity>;
   @useResult
   $Res call(
-      {String? friendEmail,
-      String? friendId,
-      String? friendName,
-      String? friendImageUrl});
+      {String? userEmail,
+      String? userId,
+      String? userName,
+      String? userImageUrl});
 }
 
 /// @nodoc
@@ -57,27 +57,27 @@ class _$UserDataEntityCopyWithImpl<$Res, $Val extends UserDataEntity>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? friendEmail = freezed,
-    Object? friendId = freezed,
-    Object? friendName = freezed,
-    Object? friendImageUrl = freezed,
+    Object? userEmail = freezed,
+    Object? userId = freezed,
+    Object? userName = freezed,
+    Object? userImageUrl = freezed,
   }) {
     return _then(_value.copyWith(
-      friendEmail: freezed == friendEmail
-          ? _value.friendEmail
-          : friendEmail // ignore: cast_nullable_to_non_nullable
+      userEmail: freezed == userEmail
+          ? _value.userEmail
+          : userEmail // ignore: cast_nullable_to_non_nullable
               as String?,
-      friendId: freezed == friendId
-          ? _value.friendId
-          : friendId // ignore: cast_nullable_to_non_nullable
+      userId: freezed == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
               as String?,
-      friendName: freezed == friendName
-          ? _value.friendName
-          : friendName // ignore: cast_nullable_to_non_nullable
+      userName: freezed == userName
+          ? _value.userName
+          : userName // ignore: cast_nullable_to_non_nullable
               as String?,
-      friendImageUrl: freezed == friendImageUrl
-          ? _value.friendImageUrl
-          : friendImageUrl // ignore: cast_nullable_to_non_nullable
+      userImageUrl: freezed == userImageUrl
+          ? _value.userImageUrl
+          : userImageUrl // ignore: cast_nullable_to_non_nullable
               as String?,
     ) as $Val);
   }
@@ -92,10 +92,10 @@ abstract class _$$UserDataEntityImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? friendEmail,
-      String? friendId,
-      String? friendName,
-      String? friendImageUrl});
+      {String? userEmail,
+      String? userId,
+      String? userName,
+      String? userImageUrl});
 }
 
 /// @nodoc
@@ -109,27 +109,27 @@ class __$$UserDataEntityImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? friendEmail = freezed,
-    Object? friendId = freezed,
-    Object? friendName = freezed,
-    Object? friendImageUrl = freezed,
+    Object? userEmail = freezed,
+    Object? userId = freezed,
+    Object? userName = freezed,
+    Object? userImageUrl = freezed,
   }) {
     return _then(_$UserDataEntityImpl(
-      friendEmail: freezed == friendEmail
-          ? _value.friendEmail
-          : friendEmail // ignore: cast_nullable_to_non_nullable
+      userEmail: freezed == userEmail
+          ? _value.userEmail
+          : userEmail // ignore: cast_nullable_to_non_nullable
               as String?,
-      friendId: freezed == friendId
-          ? _value.friendId
-          : friendId // ignore: cast_nullable_to_non_nullable
+      userId: freezed == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
               as String?,
-      friendName: freezed == friendName
-          ? _value.friendName
-          : friendName // ignore: cast_nullable_to_non_nullable
+      userName: freezed == userName
+          ? _value.userName
+          : userName // ignore: cast_nullable_to_non_nullable
               as String?,
-      friendImageUrl: freezed == friendImageUrl
-          ? _value.friendImageUrl
-          : friendImageUrl // ignore: cast_nullable_to_non_nullable
+      userImageUrl: freezed == userImageUrl
+          ? _value.userImageUrl
+          : userImageUrl // ignore: cast_nullable_to_non_nullable
               as String?,
     ));
   }
@@ -139,23 +139,23 @@ class __$$UserDataEntityImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$UserDataEntityImpl implements _UserDataEntity {
   _$UserDataEntityImpl(
-      {this.friendEmail, this.friendId, this.friendName, this.friendImageUrl});
+      {this.userEmail, this.userId, this.userName, this.userImageUrl});
 
   factory _$UserDataEntityImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserDataEntityImplFromJson(json);
 
   @override
-  final String? friendEmail;
+  final String? userEmail;
   @override
-  final String? friendId;
+  final String? userId;
   @override
-  final String? friendName;
+  final String? userName;
   @override
-  final String? friendImageUrl;
+  final String? userImageUrl;
 
   @override
   String toString() {
-    return 'UserDataEntity(friendEmail: $friendEmail, friendId: $friendId, friendName: $friendName, friendImageUrl: $friendImageUrl)';
+    return 'UserDataEntity(userEmail: $userEmail, userId: $userId, userName: $userName, userImageUrl: $userImageUrl)';
   }
 
   @override
@@ -163,20 +163,19 @@ class _$UserDataEntityImpl implements _UserDataEntity {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$UserDataEntityImpl &&
-            (identical(other.friendEmail, friendEmail) ||
-                other.friendEmail == friendEmail) &&
-            (identical(other.friendId, friendId) ||
-                other.friendId == friendId) &&
-            (identical(other.friendName, friendName) ||
-                other.friendName == friendName) &&
-            (identical(other.friendImageUrl, friendImageUrl) ||
-                other.friendImageUrl == friendImageUrl));
+            (identical(other.userEmail, userEmail) ||
+                other.userEmail == userEmail) &&
+            (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.userName, userName) ||
+                other.userName == userName) &&
+            (identical(other.userImageUrl, userImageUrl) ||
+                other.userImageUrl == userImageUrl));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, friendEmail, friendId, friendName, friendImageUrl);
+  int get hashCode =>
+      Object.hash(runtimeType, userEmail, userId, userName, userImageUrl);
 
   @JsonKey(ignore: true)
   @override
@@ -195,22 +194,22 @@ class _$UserDataEntityImpl implements _UserDataEntity {
 
 abstract class _UserDataEntity implements UserDataEntity {
   factory _UserDataEntity(
-      {final String? friendEmail,
-      final String? friendId,
-      final String? friendName,
-      final String? friendImageUrl}) = _$UserDataEntityImpl;
+      {final String? userEmail,
+      final String? userId,
+      final String? userName,
+      final String? userImageUrl}) = _$UserDataEntityImpl;
 
   factory _UserDataEntity.fromJson(Map<String, dynamic> json) =
       _$UserDataEntityImpl.fromJson;
 
   @override
-  String? get friendEmail;
+  String? get userEmail;
   @override
-  String? get friendId;
+  String? get userId;
   @override
-  String? get friendName;
+  String? get userName;
   @override
-  String? get friendImageUrl;
+  String? get userImageUrl;
   @override
   @JsonKey(ignore: true)
   _$$UserDataEntityImplCopyWith<_$UserDataEntityImpl> get copyWith =>

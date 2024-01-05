@@ -15,9 +15,9 @@ class FriendEntity {
 extension FriendEntityConvertFunctions on FriendEntity {
   UserDataEntity toFriendModel() {
     final model = UserDataEntity(
-      friendEmail: friendEmail,
-      friendName: friendName,
-      friendImageUrl: friendImageUrl,
+      userEmail: friendEmail,
+      userName: friendName,
+      userImageUrl: friendImageUrl,
     );
     return model;
   }

@@ -8,17 +8,17 @@ part of 'user_data_entity.dart';
 
 _$UserDataEntityImpl _$$UserDataEntityImplFromJson(Map<String, dynamic> json) =>
     _$UserDataEntityImpl(
-      friendEmail: json['friendEmail'] as String?,
-      friendId: json['friendId'] as String?,
-      friendName: json['friendName'] as String?,
-      friendImageUrl: json['friendImageUrl'] as String?,
+      userEmail: json['userEmail'] as String?,
+      userId: json['userId'] as String?,
+      userName: json['userName'] as String?,
+      userImageUrl: json['userImageUrl'] as String?,
     );
 
 Map<String, dynamic> _$$UserDataEntityImplToJson(
         _$UserDataEntityImpl instance) =>
     <String, dynamic>{
-      'friendEmail': instance.friendEmail,
-      'friendId': instance.friendId,
-      'friendName': instance.friendName,
-      'friendImageUrl': instance.friendImageUrl,
+      'userEmail': instance.userEmail,
+      'userId': instance.userId,
+      'userName': instance.userName,
+      'userImageUrl': instance.userImageUrl,
     };

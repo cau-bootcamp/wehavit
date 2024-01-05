@@ -171,7 +171,7 @@ class _ReactionAnimationWidgetState
               return 'https://png.pngtree.com/thumb_back/fh260/background/20210409/pngtree-rules-of-biotex-cat-image_600076.jpg';
             },
             (userModel) {
-              return userModel.imageUrl;
+              return userModel.userImageUrl!;
             },
           );
         }

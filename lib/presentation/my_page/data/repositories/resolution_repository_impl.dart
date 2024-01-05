@@ -4,9 +4,9 @@ import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
 import 'package:wehavit/domain/entities/resolution_entity/resolution_entity.dart';
+import 'package:wehavit/domain/repositories/resolution_repository.dart';
 import 'package:wehavit/presentation/my_page/data/datasources/resolution_datasource.dart';
 import 'package:wehavit/presentation/my_page/data/datasources/resolution_datasource_provider.dart';
-import 'package:wehavit/domain/repositories/resolution_repository.dart';
 
 class ResolutionRepositoryImpl implements ResolutionRepository {
   ResolutionRepositoryImpl(Ref ref) {

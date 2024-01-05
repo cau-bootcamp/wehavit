@@ -8,16 +8,14 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/common/errors/failure.dart';
-import 'package:wehavit/common/models/user_model/user_model.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
 import 'package:wehavit/domain/entities/resolution_entity/resolution_entity.dart';
+import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
 import 'package:wehavit/domain/repositories/user_model_fetch_repository.dart';
-import 'package:wehavit/domain/usecases/get_all_post_usecase.dart';
-import 'package:wehavit/domain/usecases/create_post_usecase.dart';
+import 'package:wehavit/domain/usecases/create_confirm_post_usecase.dart';
 import 'package:wehavit/legacy/live_writing/live_writing.dart';
 import 'package:wehavit/legacy/repository/live_writing_mine_repository_provider.dart';
-import 'package:wehavit/presentation/home/data/datasources/confirm_post_datasource_provider.dart';
 
 class MyLiveWritingWidget extends StatefulHookConsumerWidget {
   const MyLiveWritingWidget({
@@ -35,7 +33,7 @@ class MyLiveWritingWidget extends StatefulHookConsumerWidget {
 class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
   // final _confirmPostFormKey = GlobalKey<FormState>();
   bool isSubmitted = false;
-  late EitherFuture<UserModel> myUserModel;
+  late EitherFuture<UserDataEntity> myUserModel;
   XFile? imageFile;
   String imageUrl = '';
 
@@ -162,7 +160,7 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
                 (l) => Container(),
                 (r) => CircleAvatar(
                   // radius: 32,
-                  foregroundImage: NetworkImage(r.imageUrl),
+                  foregroundImage: NetworkImage(r.userImageUrl!),
                 ),
               );
             } else if (snapshot.hasError) {
@@ -400,7 +398,7 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
                   );
 
                   (await ref.read(
-                    createPostUseCaseProvider,
+                    createConfirmPostUseCaseProvider,
                   )(cf))
                       .fold(
                     (l) {
@@ -459,7 +457,7 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
                   );
 
                   (await ref.read(
-                    createPostUseCaseProvider,
+                    createConfirmPostUseCaseProvider,
                   )(cf))
                       .fold(
                     (l) {

@@ -4,7 +4,7 @@ import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
 class AddFriendEntity {
   AddFriendEntity.fromAddFriendModel(UserDataEntity model) {
     //print('model : ${model.friendID}');
-    friendEmail = model.friendEmail ?? 'no_email';
+    friendEmail = model.userEmail ?? 'no_email';
   }
 
   late String friendEmail;

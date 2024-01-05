@@ -1,10 +1,10 @@
 import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wehavit/common/models/user_model/user_model.dart';
 import 'package:wehavit/common/utils/no_params.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
 import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
+import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
 import 'package:wehavit/domain/usecases/fetch_user_data_from_id_usecase.dart';
 import 'package:wehavit/domain/usecases/get_confirm_post_list_for_resolution_id.dart';
 import 'package:wehavit/domain/usecases/get_today_confirm_post_list_usecase.dart';
@@ -42,11 +42,11 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
         await _getTodayConfirmPostListUsecase.call(NoParams());
 
     state.confirmPostModelList.fold((failure) {
-      state.userModelList = [];
+      state.userDataEntityList = [];
     }, (confirmPostModelList) {
-      state.userModelList = List<Future<UserModel>>.generate(
+      state.userDataEntityList = List<Future<UserDataEntity>>.generate(
         confirmPostModelList.length,
-        (_) => Future(() => UserModel.dummyModel),
+        (_) => Future(() => UserDataEntity.dummyModel),
       );
       state.confirmPostList = List<Future<List<ConfirmPostEntity>>>.generate(
         confirmPostModelList.length,
@@ -55,7 +55,7 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
 
       for (int index = 0; index < confirmPostModelList.length; index++) {
         final model = confirmPostModelList[index];
-        state.userModelList[index] = getUserModelFromId(model.owner!);
+        state.userDataEntityList[index] = getUserDataEntityFromId(model.owner!);
         state.confirmPostList[index] =
             getConfirmPostListFor(resolutionId: model.resolutionId ?? 'NO_ID');
       }
@@ -66,19 +66,19 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
     return Future(() => null);
   }
 
-  Future<UserModel> getUserModelFromId(String targetUserId) async {
+  Future<UserDataEntity> getUserDataEntityFromId(String targetUserId) async {
     final fetchResult = await _fetchUserDataFromIdUsecase.call(targetUserId);
 
-    UserModel resultUserModel = fetchResult.fold(
+    UserDataEntity resultUserDataEntity = fetchResult.fold(
       (failure) {
-        return UserModel.dummyModel;
+        return UserDataEntity.dummyModel;
       },
-      (userModel) {
-        return userModel;
+      (userDataEntity) {
+        return userDataEntity;
       },
     );
 
-    return Future(() => resultUserModel);
+    return Future(() => resultUserDataEntity);
   }
 
   Future<void> sendReactionToTargetConfirmPost(

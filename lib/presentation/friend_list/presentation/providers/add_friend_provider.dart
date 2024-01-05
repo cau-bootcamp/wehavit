@@ -16,14 +16,14 @@ class AddFriendNotifier extends StateNotifier<UserDataEntity> {
   late final UploadFriendUseCase _uploadFriendUsecase;
 
   void setFriendEmail(String friendEmail) {
-    state = state.copyWith(friendEmail: friendEmail);
+    state = state.copyWith(userEmail: friendEmail);
     //print('add_friend_provider : ${state.friendEmail}');
   }
 
   EitherFuture<bool> uploadFriendModel() {
     //print('watch state.friendEmail : ${state.friendEmail}');
     UserDataEntity newModel = UserDataEntity(
-      friendEmail: state.friendEmail,
+      userEmail: state.userEmail,
     );
     return _uploadFriendUsecase(newModel);
   }

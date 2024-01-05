@@ -1,6 +1,6 @@
-import 'package:wehavit/common/models/user_model/user_model.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
+import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
 
 abstract class UserModelFetchDatasource {
-  EitherFuture<UserModel> fetchUserModelFromId(String targetUserId);
+  EitherFuture<UserDataEntity> fetchUserDataEntityFromId(String targetUserId);
 }

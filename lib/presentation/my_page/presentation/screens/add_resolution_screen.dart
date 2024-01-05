@@ -344,16 +344,16 @@ class SelectFans extends HookConsumerWidget {
       child: DropDownMultiSelect<String>(
         onChanged: (currentSelected) {
           final friendList = friendListSnapshot.data
-              ?.where((element) => currentSelected.contains(element.friendName))
+              ?.where((element) => currentSelected.contains(element.userName))
               .toList();
           ref
               .read(addResolutionProvider.notifier)
               .changeFanList(friendList ?? []);
         },
-        options: friendListSnapshot.data?.map((e) => e.friendName!).toList() ??
+        options: friendListSnapshot.data?.map((e) => e.userName!).toList() ??
             ['친구를 불러오는 중입니다.'],
         selectedValues:
-            resolutionState.fanList!.map((e) => e.friendName!).toList(),
+            resolutionState.fanList!.map((e) => e.userName!).toList(),
         whenEmpty: '친구를 선택해주세요.',
         // 스타일링을 위한 코드
         selected_values_style: const TextStyle(

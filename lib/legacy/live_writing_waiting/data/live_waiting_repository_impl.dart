@@ -41,7 +41,7 @@ class LiveWaitingRepositoryImpl implements LiveWaitingRepository {
   }) async {
     friendList = await _getFriendList();
 
-    final friendEmails = friendList.map((e) => e.friendEmail);
+    final friendEmails = friendList.map((e) => e.userEmail!);
     // debugPrint('FriendList: $friendEmails');
 
     if (friendEmails.isEmpty) {

@@ -3,9 +3,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
-import 'package:wehavit/common/models/user_model/user_model.dart';
 import 'package:wehavit/common/utils/emoji_assets.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
+import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
 import 'package:wehavit/presentation/swipe_view/presentation/model/reaction_camera_widget_model.dart';
 import 'package:wehavit/presentation/swipe_view/presentation/model/swipe_view_model.dart';
 import 'package:wehavit/presentation/swipe_view/presentation/provider/reaction_camera_widget_model_provider.dart';
@@ -76,12 +76,12 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
                   // 프로필 영역
                   Column(
                     children: [
-                      FutureBuilder<UserModel>(
-                        future: _swipeViewModel
-                            .userModelList[_swipeViewModel.currentCellIndex],
+                      FutureBuilder<UserDataEntity>(
+                        future: _swipeViewModel.userDataEntityList[
+                            _swipeViewModel.currentCellIndex],
                         builder: (
                           BuildContext context,
-                          AsyncSnapshot<UserModel> snapshot,
+                          AsyncSnapshot<UserDataEntity> snapshot,
                         ) {
                           // 해당 부분은 data를 아직 받아 오지 못했을때 실행되는 코드
                           if (snapshot.hasData == false) {
@@ -101,15 +101,16 @@ class _SwipeViewCellWidgetState extends ConsumerState<SwipeViewCellWidget> {
                               children: [
                                 CircleAvatar(
                                   radius: 24,
-                                  foregroundImage:
-                                      NetworkImage(snapshot.data!.imageUrl),
+                                  foregroundImage: NetworkImage(
+                                    snapshot.data!.userImageUrl!,
+                                  ),
                                   backgroundColor: Colors.grey,
                                 ),
                                 const SizedBox(
                                   width: 16,
                                 ),
                                 Text(
-                                  snapshot.data!.displayName,
+                                  snapshot.data!.userName!,
                                   style: const TextStyle(
                                     fontSize: 18.0,
                                     fontWeight: FontWeight.w600,
@@ -561,5 +562,5 @@ class SwipeViewCellWidgetModel {
   });
 
   late final ConfirmPostEntity confirmPostModel;
-  late final UserModel owner;
+  late final UserDataEntity owner;
 }
