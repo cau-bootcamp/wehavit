@@ -1,4 +1,4 @@
-import 'package:wehavit/domain/entities/reaction_model.dart';
+import 'package:wehavit/domain/entities/reaction_entity/reaction_model.dart';
 
 abstract class MyLiveWritingRepository {
   MyLiveWritingRepository();

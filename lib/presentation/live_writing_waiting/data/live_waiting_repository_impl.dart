@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/entities/friend_model.dart';
-import 'package:wehavit/domain/entities/waiting_user_model.dart';
+import 'package:wehavit/domain/entities/friend_entity/friend_model.dart';
+import 'package:wehavit/domain/entities/waiting_user_entity/waiting_user_model.dart';
 import 'package:wehavit/domain/repositories/friend_repository.dart';
 import 'package:wehavit/domain/repositories/live_waiting_repository.dart';
 

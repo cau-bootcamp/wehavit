@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/entities/confirm_post_model.dart';
+import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_model.dart';
 // import 'package:wehavit/features/home/domain/models/confirm_post_model.dart';
 import 'package:wehavit/domain/usecases/get_confirm_post_list_usecase.dart';
 

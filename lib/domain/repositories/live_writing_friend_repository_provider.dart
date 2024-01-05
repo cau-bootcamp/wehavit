@@ -5,6 +5,6 @@ import 'package:wehavit/presentation/live_writing/data/repositories/live_writing
 part 'live_writing_friend_repository_provider.g.dart';
 
 @riverpod
-LiveWritingFriendRepositoryImpl liveWritingFriendRepository(
+LiveWritingFriendRepository liveWritingFriendRepository(
         LiveWritingFriendRepositoryRef ref) =>
     LiveWritingFriendRepositoryImpl();

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:wehavit/common/constants/firebase_field_name.dart';
-import 'package:wehavit/domain/entities/resolution_model.dart';
+import 'package:wehavit/domain/entities/resolution_entity/resolution_model.dart';
 
 class ResolutionEntity {
   ResolutionEntity.fromFirebaseDocument(

@@ -2,14 +2,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
-import 'package:wehavit/domain/entities/confirm_post_model.dart';
+import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_model.dart';
 import 'package:wehavit/presentation/home/data/datasources/confirm_post_datasource.dart';
 import 'package:wehavit/presentation/home/data/datasources/confirm_post_datasource_provider.dart';
 // import 'package:wehavit/features/home/data/entities/confirm_post_entity.dart';
 // import 'package:wehavit/features/home/domain/models/confirm_post_model.dart';
-import 'package:wehavit/domain/repositories/confirm_post_repository.dart';
+import 'package:wehavit/domain/repositories/home_confirm_post_repository.dart';
 
-class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
+class ConfirmPostRepositoryImpl implements HomeConfirmPostRepository {
   ConfirmPostRepositoryImpl(Ref ref) {
     _confirmPostDatasource = ref.watch(confirmPostDatasourceProvider);
   }

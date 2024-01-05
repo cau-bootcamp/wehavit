@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/common/models/user_model/user_model.dart';
 import 'package:wehavit/common/utils/emoji_assets.dart';
+import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_model.dart';
 import 'package:wehavit/presentation/swipe_view/presentation/model/reaction_camera_widget_model.dart';
 import 'package:wehavit/presentation/swipe_view/presentation/model/swipe_view_model.dart';
 import 'package:wehavit/presentation/swipe_view/presentation/provider/reaction_camera_widget_model_provider.dart';

@@ -1,6 +1,7 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/usecases/usecase.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
-import 'package:wehavit/domain/entities/reaction_model.dart';
+import 'package:wehavit/domain/entities/reaction_entity/reaction_model.dart';
 import 'package:wehavit/domain/repositories/swipe_view_repository.dart';
 
 final sendReactionToTargetConfirmPostUsecaseProvider =

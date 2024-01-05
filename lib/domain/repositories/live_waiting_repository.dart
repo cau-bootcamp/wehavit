@@ -1,5 +1,5 @@
-import 'package:wehavit/domain/entities/friend_model.dart';
-import 'package:wehavit/domain/entities/waiting_user_model.dart';
+import 'package:wehavit/domain/entities/friend_entity/friend_model.dart';
+import 'package:wehavit/domain/entities/waiting_user_entity/waiting_user_model.dart';
 
 abstract class LiveWaitingRepository {
   Future<bool> syncLiveWaitingUserStatus(DateTime nowTime);

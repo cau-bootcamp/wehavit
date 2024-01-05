@@ -6,7 +6,7 @@ import 'package:wehavit/common/constants/firebase_field_name.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/common/utils/firebase_collection_name.dart';
-import 'package:wehavit/domain/entities/reaction_model.dart';
+import 'package:wehavit/domain/entities/reaction_entity/reaction_model.dart';
 import 'package:wehavit/domain/repositories/live_writing_friend_repository.dart';
 
 class LiveWritingFriendRepositoryImpl extends LiveWritingFriendRepository {

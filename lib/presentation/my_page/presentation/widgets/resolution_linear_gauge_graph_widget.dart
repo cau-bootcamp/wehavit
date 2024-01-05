@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wehavit/domain/entities/confirm_post_model.dart';
+import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_model.dart';
 
 class ResolutionLinearGaugeGraphWidget extends StatelessWidget {
   ResolutionLinearGaugeGraphWidget({

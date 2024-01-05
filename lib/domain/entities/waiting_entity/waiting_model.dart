@@ -1,5 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:wehavit/domain/entities/counter_state.dart';
+import 'package:wehavit/domain/entities/counter_state/counter_state.dart';
 
 part 'waiting_model.g.dart';
 

@@ -3,11 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/entities/confirm_post_model.dart';
-import 'package:wehavit/domain/repositories/confirm_post_repository.dart';
+import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_model.dart';
+import 'package:wehavit/domain/repositories/home_confirm_post_repository.dart';
 import 'package:wehavit/presentation/live_writing/data/data.dart';
 
-class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
+class ConfirmPostRepositoryImpl implements HomeConfirmPostRepository {
   ConfirmPostRepositoryImpl(Ref ref) {
     _confirmPostRemoteDatasourceImpl = ref.watch(confirmPostDatasourceProvider);
   }

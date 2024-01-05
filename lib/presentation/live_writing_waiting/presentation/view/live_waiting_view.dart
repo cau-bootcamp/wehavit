@@ -6,9 +6,9 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/common/routers/route_location.dart';
-import 'package:wehavit/domain/entities/counter_state.dart';
-import 'package:wehavit/domain/entities/waiting_model.dart';
-import 'package:wehavit/domain/entities/waiting_user_model.dart';
+import 'package:wehavit/domain/entities/counter_state/counter_state.dart';
+import 'package:wehavit/domain/entities/waiting_entity/waiting_model.dart';
+import 'package:wehavit/domain/entities/waiting_user_entity/waiting_user_model.dart';
 import 'package:wehavit/domain/repositories/live_waiting_repository_provider.dart';
 import 'package:wehavit/presentation/live_writing_waiting/presentation/view/widget/live_waiting_avatar_animation_widget.dart';
 

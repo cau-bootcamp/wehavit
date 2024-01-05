@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
-import 'package:wehavit/domain/entities/confirm_post_model.dart';
+import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_model.dart';
 import 'package:wehavit/presentation/my_page/presentation/widgets/resolution_doughnut_graph_widget.dart';
 import 'package:wehavit/presentation/my_page/presentation/widgets/resolution_linear_gauge_graph_widget.dart';
 

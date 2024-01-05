@@ -1,4 +1,4 @@
-import 'package:wehavit/domain/entities/friend_model.dart';
+import 'package:wehavit/domain/entities/friend_entity/friend_model.dart';
 
 class AddResolutionModel {
   AddResolutionModel({

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/models/user_model/user_model.dart';
-import 'package:wehavit/domain/entities/confirm_post_model.dart';
+import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_model.dart';
 import 'package:wehavit/presentation/swipe_view/presentation/screen/widget/emoji_sheet_widget.dart';
 
 class MainViewModel {

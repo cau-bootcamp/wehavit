@@ -1,7 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:wehavit/common/usecases/usecase.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
-import 'package:wehavit/domain/entities/resolution_model.dart';
+import 'package:wehavit/domain/entities/resolution_entity/resolution_model.dart';
 import 'package:wehavit/domain/repositories/resolution_repository.dart';
 
 final uploadResolutionUsecaseProvider =

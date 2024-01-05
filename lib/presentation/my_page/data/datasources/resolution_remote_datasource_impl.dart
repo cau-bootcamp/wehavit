@@ -4,7 +4,7 @@ import 'package:wehavit/common/constants/firebase_field_name.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/common/utils/firebase_collection_name.dart';
-import 'package:wehavit/domain/entities/confirm_post_model.dart';
+import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_model.dart';
 import 'package:wehavit/presentation/my_page/data/datasources/resolution_datasource.dart';
 import 'package:wehavit/presentation/my_page/data/entities/resolution_entity.dart';
 

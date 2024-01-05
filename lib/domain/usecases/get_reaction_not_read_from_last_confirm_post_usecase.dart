@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/entities/reaction_model.dart';
+import 'package:wehavit/domain/entities/reaction_entity/reaction_model.dart';
 import 'package:wehavit/domain/repositories/get_reaction_repository.dart';
 
 final getReactionUnreadFromLastConfirmPostUsecaseProvider =

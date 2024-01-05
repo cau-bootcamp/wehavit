@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
-import 'package:wehavit/domain/entities/add_resolution_model.dart';
-import 'package:wehavit/domain/entities/friend_model.dart';
-import 'package:wehavit/domain/entities/resolution_model.dart';
+import 'package:wehavit/domain/entities/add_resolution_entity/add_resolution_model.dart';
+import 'package:wehavit/domain/entities/friend_entity/friend_model.dart';
+import 'package:wehavit/domain/entities/resolution_entity/resolution_model.dart';
 import 'package:wehavit/domain/usecases/upload_resolution_usecase.dart';
 
 final addResolutionProvider = StateNotifierProvider.autoDispose<

@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
-import 'package:wehavit/domain/entities/reaction_model.dart';
+import 'package:wehavit/domain/entities/reaction_entity/reaction_model.dart';
 import 'package:wehavit/presentation/swipe_view/data/repository/swipe_view_repository_impl.dart';
 
 final swipeViewRepositoryProvider = Provider<SwipeViewRepository>((ref) {

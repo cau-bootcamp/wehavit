@@ -1,5 +1,5 @@
 import 'package:wehavit/common/constants/firebase_field_name.dart';
-import 'package:wehavit/domain/entities/add_friend_model.dart';
+import 'package:wehavit/domain/entities/add_friend_entity/add_friend_model.dart';
 
 class AddFriendEntity {
   AddFriendEntity.fromAddFriendModel(AddFriendModel model) {

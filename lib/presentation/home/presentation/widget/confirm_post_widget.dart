@@ -4,7 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/entities/confirm_post_model.dart';
+import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_model.dart';
 // import 'package:wehavit/features/home/domain/models/confirm_post_model.dart';
 import 'package:wehavit/presentation/home/presentation/model/main_view_model.dart';
 import 'package:wehavit/presentation/home/presentation/provider/main_view_model_provider.dart';
