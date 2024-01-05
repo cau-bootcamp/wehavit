@@ -2,7 +2,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_model.dart';
-import 'package:wehavit/domain/repositories/home_confirm_post_repository.dart';
+import 'package:wehavit/domain/repositories/confirm_post_repository.dart';
 
 const int maxIndex = 27;
 
@@ -13,10 +13,10 @@ final getConfirmPostListUsecaseProvider =
 });
 
 class GetConfirmPostListUsecase
-    implements UseCase<List<ConfirmPostModel>?, NoParams> {
+    implements FutureUseCase<List<ConfirmPostModel>?, NoParams> {
   GetConfirmPostListUsecase(this._confirmPostRepository);
 
-  final HomeConfirmPostRepository _confirmPostRepository;
+  final ConfirmPostRepository _confirmPostRepository;
 
   @override
   Future<Either<Failure, List<ConfirmPostModel>>> call(NoParams params) async {

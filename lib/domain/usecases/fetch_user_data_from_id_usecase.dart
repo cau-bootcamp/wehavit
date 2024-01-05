@@ -10,7 +10,7 @@ final fetchUserDataFromIdUsecaseProvider =
   return FetchUserDataFromIdUsecase(repository);
 });
 
-class FetchUserDataFromIdUsecase extends UseCase<UserModel, String> {
+class FetchUserDataFromIdUsecase extends FutureUseCase<UserModel, String> {
   FetchUserDataFromIdUsecase(this._userModelFetchRepository);
 
   final UserModelFetchRepository _userModelFetchRepository;

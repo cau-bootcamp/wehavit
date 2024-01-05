@@ -10,7 +10,7 @@ final getConfirmPostListForResolutionIdUsecaseProvider =
 });
 
 class GetConfirmPostListForResolutionIdUsecase
-    extends UseCase<List<ConfirmPostModel>, String> {
+    extends FutureUseCase<List<ConfirmPostModel>, String> {
   GetConfirmPostListForResolutionIdUsecase(this._resolutionRepository);
 
   final ResolutionRepository _resolutionRepository;

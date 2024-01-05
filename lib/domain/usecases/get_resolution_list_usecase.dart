@@ -11,7 +11,7 @@ final getResolutionListUseCaseProvider =
 });
 
 class GetResolutionListUsecase
-    implements UseCase<List<ResolutionModel>?, NoParams> {
+    implements FutureUseCase<List<ResolutionModel>?, NoParams> {
   GetResolutionListUsecase(this._resolutionRepository);
 
   final ResolutionRepository _resolutionRepository;

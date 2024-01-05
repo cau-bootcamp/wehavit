@@ -11,7 +11,7 @@ final sendReactionToTargetConfirmPostUsecaseProvider =
 });
 
 class SendReactionToTargetConfirmPostUsecase
-    extends UseCase<void, (String, ReactionModel)> {
+    extends FutureUseCase<void, (String, ReactionModel)> {
   SendReactionToTargetConfirmPostUsecase(this._swipeViewRepository);
   final SwipeViewRepository _swipeViewRepository;
 

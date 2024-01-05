@@ -7,6 +7,7 @@ part 'reaction_model.g.dart';
 @freezed
 class ReactionModel with _$ReactionModel {
   factory ReactionModel({
+    // ignore: invalid_annotation_target
     @JsonKey(includeFromJson: false, includeToJson: false)
     @Default('')
     String? id,

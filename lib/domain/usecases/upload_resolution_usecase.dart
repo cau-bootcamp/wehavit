@@ -10,7 +10,7 @@ final uploadResolutionUsecaseProvider =
   return UploadResolutionUseCase(resolutionRepository);
 });
 
-class UploadResolutionUseCase implements UseCase<bool, ResolutionModel> {
+class UploadResolutionUseCase implements FutureUseCase<bool, ResolutionModel> {
   UploadResolutionUseCase(this._resolutionRepository);
 
   final ResolutionRepository _resolutionRepository;

@@ -10,7 +10,7 @@ final getReactionUnreadFromLastConfirmPostUsecaseProvider =
 });
 
 class GetReactionUnreadFromLastConfirmPostUsecase
-    extends UseCase<List<ReactionModel>, NoParams> {
+    extends FutureUseCase<List<ReactionModel>, NoParams> {
   GetReactionUnreadFromLastConfirmPostUsecase(
     this._confirmPostReactionRepository,
   );

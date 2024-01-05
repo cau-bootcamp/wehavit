@@ -1,15 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_model.dart';
+import 'package:wehavit/domain/repositories/confirm_post_repository.dart';
 import 'package:wehavit/presentation/home/data/datasources/confirm_post_datasource.dart';
 import 'package:wehavit/presentation/home/data/datasources/confirm_post_datasource_provider.dart';
 // import 'package:wehavit/features/home/data/entities/confirm_post_entity.dart';
 // import 'package:wehavit/features/home/domain/models/confirm_post_model.dart';
-import 'package:wehavit/domain/repositories/home_confirm_post_repository.dart';
 
-class ConfirmPostRepositoryImpl implements HomeConfirmPostRepository {
+class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
   ConfirmPostRepositoryImpl(Ref ref) {
     _confirmPostDatasource = ref.watch(confirmPostDatasourceProvider);
   }
@@ -33,5 +34,30 @@ class ConfirmPostRepositoryImpl implements HomeConfirmPostRepository {
     } on Exception catch (e) {
       return Future(() => left(Failure(e.toString())));
     }
+  }
+
+  @override
+  EitherFuture<bool> createConfirmPost(ConfirmPostModel confirmPost) {
+    // TODO: implement createConfirmPost
+    throw UnimplementedError();
+  }
+
+  @override
+  EitherFuture<bool> deleteConfirmPost(
+      DocumentReference<ConfirmPostModel> confirmPostRef) {
+    // TODO: implement deleteConfirmPost
+    throw UnimplementedError();
+  }
+
+  @override
+  EitherFuture<ConfirmPostModel> getConfirmPostByUserId(String userId) {
+    // TODO: implement getConfirmPostByUserId
+    throw UnimplementedError();
+  }
+
+  @override
+  EitherFuture<bool> updateConfirmPost(ConfirmPostModel confirmPost) {
+    // TODO: implement updateConfirmPost
+    throw UnimplementedError();
   }
 }

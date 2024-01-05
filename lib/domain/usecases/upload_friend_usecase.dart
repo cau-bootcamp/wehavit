@@ -1,7 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:wehavit/common/usecases/usecase.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
-import 'package:wehavit/domain/entities/user_data_entity/friend_model.dart';
+import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
 import 'package:wehavit/domain/repositories/friend_repository.dart';
 
 final uploadFriendUsecaseProvider = Provider<UploadFriendUseCase>((ref) {
@@ -9,7 +9,7 @@ final uploadFriendUsecaseProvider = Provider<UploadFriendUseCase>((ref) {
   return UploadFriendUseCase(friendRepository);
 });
 
-class UploadFriendUseCase implements UseCase<bool, UserDataEntity> {
+class UploadFriendUseCase implements FutureUseCase<bool, UserDataEntity> {
   UploadFriendUseCase(this._friendRepository);
 
   final FriendRepository _friendRepository;

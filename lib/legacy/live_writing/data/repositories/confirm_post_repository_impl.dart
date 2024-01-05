@@ -4,10 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_model.dart';
+import 'package:wehavit/domain/repositories/confirm_post_repository.dart';
 import 'package:wehavit/domain/repositories/home_confirm_post_repository.dart';
 import 'package:wehavit/legacy/live_writing/live_writing.dart';
 
-class ConfirmPostRepositoryImpl implements HomeConfirmPostRepository {
+class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
   ConfirmPostRepositoryImpl(Ref ref) {
     _confirmPostRemoteDatasourceImpl = ref.watch(
         liveWritingConfirmPostDatasourceProvider

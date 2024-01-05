@@ -12,7 +12,7 @@ final getMyResolutionListUsecaseProvider =
 });
 
 class GetMyResolutionListUsecase
-    extends UseCase<List<ResolutionModel>, NoParams> {
+    extends FutureUseCase<List<ResolutionModel>, NoParams> {
   GetMyResolutionListUsecase(this._resolutionRepository);
 
   final ResolutionRepository _resolutionRepository;

@@ -1,7 +1,7 @@
 // ignore_for_file: invalid_annotation_target
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:wehavit/domain/entities/user_data_entity/friend_model.dart';
+import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
 
 part 'confirm_post_model.freezed.dart';
 

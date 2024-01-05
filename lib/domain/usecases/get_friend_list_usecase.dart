@@ -1,7 +1,7 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/entities/user_data_entity/friend_model.dart';
+import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
 import 'package:wehavit/domain/repositories/friend_repository.dart';
 
 final getFriendListUseCaseProvider = Provider<GetFriendListUsecase>((ref) {
@@ -9,7 +9,8 @@ final getFriendListUseCaseProvider = Provider<GetFriendListUsecase>((ref) {
   return GetFriendListUsecase(resolutionRepository);
 });
 
-class GetFriendListUsecase implements UseCase<List<UserDataEntity>?, NoParams> {
+class GetFriendListUsecase
+    implements FutureUseCase<List<UserDataEntity>?, NoParams> {
   GetFriendListUsecase(this._friendRepository);
 
   final FriendRepository _friendRepository;
