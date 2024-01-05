@@ -1,15 +1,15 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
-import 'package:wehavit/domain/entities/friend_entity/friend_model.dart';
+import 'package:wehavit/domain/entities/user_data_entity/friend_model.dart';
 import 'package:wehavit/domain/usecases/upload_friend_usecase.dart';
 
 final addFriendProvider =
-    StateNotifierProvider.autoDispose<AddFriendNotifier, FriendModel>((ref) {
+    StateNotifierProvider.autoDispose<AddFriendNotifier, UserDataEntity>((ref) {
   return AddFriendNotifier(ref);
 });
 
-class AddFriendNotifier extends StateNotifier<FriendModel> {
-  AddFriendNotifier(Ref ref) : super(FriendModel()) {
+class AddFriendNotifier extends StateNotifier<UserDataEntity> {
+  AddFriendNotifier(Ref ref) : super(UserDataEntity()) {
     _uploadFriendUsecase = ref.watch(uploadFriendUsecaseProvider);
   }
 
@@ -22,7 +22,7 @@ class AddFriendNotifier extends StateNotifier<FriendModel> {
 
   EitherFuture<bool> uploadFriendModel() {
     //print('watch state.friendEmail : ${state.friendEmail}');
-    FriendModel newModel = FriendModel(
+    UserDataEntity newModel = UserDataEntity(
       friendEmail: state.friendEmail,
     );
     return _uploadFriendUsecase(newModel);

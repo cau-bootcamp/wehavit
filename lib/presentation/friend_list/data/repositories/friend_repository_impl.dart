@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
-import 'package:wehavit/domain/entities/friend_entity/friend_model.dart';
+import 'package:wehavit/domain/entities/user_data_entity/friend_model.dart';
 import 'package:wehavit/domain/repositories/friend_repository.dart';
 import 'package:wehavit/presentation/friend_list/data/datasources/friend_datasource.dart';
 import 'package:wehavit/presentation/friend_list/data/datasources/friend_datasource_provider.dart';
@@ -17,7 +17,7 @@ class FriendRepositoryImpl implements FriendRepository {
   late final FriendDatasource _friendDatasource;
 
   @override
-  EitherFuture<List<FriendModel>> getFriendModelList() async {
+  EitherFuture<List<UserDataEntity>> getFriendModelList() async {
     try {
       final getResult = await _friendDatasource.getFriendEntityList();
 
@@ -34,7 +34,7 @@ class FriendRepositoryImpl implements FriendRepository {
 
   @override
   EitherFuture<bool> uploadFriendModel(
-    FriendModel model,
+    UserDataEntity model,
   ) async {
     final entity = AddFriendEntity.fromAddFriendModel(model);
     return _friendDatasource.uploadAddFriendEntity(entity);

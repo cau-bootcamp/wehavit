@@ -2,12 +2,12 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/entities/friend_entity/friend_model.dart';
+import 'package:wehavit/domain/entities/user_data_entity/friend_model.dart';
 
 class FriendElementWidget extends StatefulWidget {
   const FriendElementWidget({super.key, required this.model});
 
-  final FriendModel model;
+  final UserDataEntity model;
 
   @override
   State<FriendElementWidget> createState() => _FriendElementWidgetState();

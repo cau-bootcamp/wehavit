@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:wehavit/common/constants/firebase_field_name.dart';
-import 'package:wehavit/domain/entities/friend_entity/friend_model.dart';
+import 'package:wehavit/domain/entities/user_data_entity/friend_model.dart';
 import 'package:wehavit/domain/entities/resolution_entity/resolution_model.dart';
 
 class ResolutionEntity {
@@ -34,7 +34,7 @@ class ResolutionEntity {
   late DateTime startDate;
   late bool isActive;
   late String resolutionId;
-  late List<FriendModel> fanList;
+  late List<UserDataEntity> fanList;
 }
 
 extension ResolutionEntityConvertFunctions on ResolutionEntity {

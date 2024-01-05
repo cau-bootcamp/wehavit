@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
-import 'package:wehavit/domain/entities/friend_entity/friend_model.dart';
+import 'package:wehavit/domain/entities/user_data_entity/friend_model.dart';
 import 'package:wehavit/domain/entities/resolution_entity/resolution_model.dart';
 import 'package:wehavit/domain/usecases/upload_resolution_usecase.dart';
 
@@ -17,7 +17,7 @@ class AddResolutionNotifier extends StateNotifier<ResolutionModel> {
 
   late final UploadResolutionUseCase _uploadResolutionUsecase;
 
-  void changeFanList(List<FriendModel> newFanList) {
+  void changeFanList(List<UserDataEntity> newFanList) {
     state = state.copyWith(fanList: newFanList);
   }
 

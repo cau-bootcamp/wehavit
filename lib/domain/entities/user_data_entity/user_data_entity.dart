@@ -1,7 +1,7 @@
 import 'package:wehavit/common/constants/firebase_field_name.dart';
 
-class FriendModel {
-  FriendModel({
+class UserDataEntity {
+  UserDataEntity({
     this.friendEmail,
     this.friendId,
     this.friendName,
@@ -14,20 +14,20 @@ class FriendModel {
   String? friendImageUrl;
 
   // TODO: Friend Model 생성 시점에 FriendId
-  FriendModel.fromMapData(
+  UserDataEntity.fromMapData(
     Map<String, dynamic> data,
     Map<String, dynamic> usersData,
   )   : friendEmail = data[FirebaseFriendFieldName.friendEmail],
         friendName = usersData[FirebaseUserFieldName.displayName],
         friendImageUrl = usersData[FirebaseUserFieldName.imageUrl];
 
-  FriendModel copyWith({
+  UserDataEntity copyWith({
     String? friendId,
     String? friendName,
     String? friendImageUrl,
     String? friendEmail,
   }) {
-    return FriendModel(
+    return UserDataEntity(
       friendId: friendId ?? this.friendId,
       friendEmail: friendEmail ?? this.friendEmail,
       friendName: friendName ?? this.friendName,

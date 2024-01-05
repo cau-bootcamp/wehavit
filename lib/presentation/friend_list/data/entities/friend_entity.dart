@@ -1,5 +1,5 @@
 import 'package:wehavit/common/constants/firebase_field_name.dart';
-import 'package:wehavit/domain/entities/friend_entity/friend_model.dart';
+import 'package:wehavit/domain/entities/user_data_entity/friend_model.dart';
 
 class FriendEntity {
   FriendEntity.fromFirebaseDocument(Map<String, dynamic> data)
@@ -13,8 +13,8 @@ class FriendEntity {
 }
 
 extension FriendEntityConvertFunctions on FriendEntity {
-  FriendModel toFriendModel() {
-    final model = FriendModel(
+  UserDataEntity toFriendModel() {
+    final model = UserDataEntity(
       friendEmail: friendEmail,
       friendName: friendName,
       friendImageUrl: friendImageUrl,

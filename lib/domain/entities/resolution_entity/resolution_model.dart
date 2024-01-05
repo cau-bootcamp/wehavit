@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:wehavit/common/constants/firebase_field_name.dart';
-import 'package:wehavit/domain/entities/friend_entity/friend_model.dart';
+import 'package:wehavit/domain/entities/user_data_entity/friend_model.dart';
 
 class ResolutionModel {
   ResolutionModel({
@@ -18,7 +18,7 @@ class ResolutionModel {
   String? actionStatement;
   String? oathStatement;
   List<bool>? isDaySelectedList;
-  List<FriendModel>? fanList = [];
+  List<UserDataEntity>? fanList = [];
   String? resolutionId;
   bool? isActive;
   DateTime? startDate;
@@ -47,7 +47,7 @@ class ResolutionModel {
     bool? isActive,
     DateTime? startDate,
     String? resolutionId,
-    List<FriendModel>? fanList,
+    List<UserDataEntity>? fanList,
   }) {
     return ResolutionModel(
       goalStatement: goalStatement ?? this.goalStatement,

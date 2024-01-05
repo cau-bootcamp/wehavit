@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/entities/friend_entity/friend_model.dart';
+import 'package:wehavit/domain/entities/user_data_entity/friend_model.dart';
 import 'package:wehavit/domain/repositories/friend_repository.dart';
 import 'package:wehavit/legacy/repository/live_waiting_repository.dart';
 import 'package:wehavit/legacy/waiting_user_entity/waiting_user_model.dart';
@@ -37,7 +37,7 @@ class LiveWaitingRepositoryImpl implements LiveWaitingRepository {
 
   @override
   Future<Stream<List<WaitingUser>>> getLiveWaitingUsersStream({
-    List<FriendModel> friendList = const [],
+    List<UserDataEntity> friendList = const [],
   }) async {
     friendList = await _getFriendList();
 
@@ -77,9 +77,9 @@ class LiveWaitingRepositoryImpl implements LiveWaitingRepository {
     }
   }
 
-  Future<List<FriendModel>> _getFriendList() async {
-    final friendList =
-        (await _friendRepository.getFriendModelList()).fold<List<FriendModel>>(
+  Future<List<UserDataEntity>> _getFriendList() async {
+    final friendList = (await _friendRepository.getFriendModelList())
+        .fold<List<UserDataEntity>>(
       (l) => [],
       (r) => r,
     );

@@ -1,7 +1,7 @@
 // ignore_for_file: invalid_annotation_target
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:wehavit/domain/entities/friend_entity/friend_model.dart';
+import 'package:wehavit/domain/entities/user_data_entity/friend_model.dart';
 
 part 'confirm_post_model.freezed.dart';
 
@@ -43,7 +43,7 @@ class ConfirmPostModel with _$ConfirmPostModel {
     required String? content,
     required String? imageUrl,
     required String? owner,
-    required List<FriendModel>? fan,
+    required List<UserDataEntity>? fan,
     required int? recentStrike,
     required DateTime? createdAt,
     required DateTime? updatedAt,
