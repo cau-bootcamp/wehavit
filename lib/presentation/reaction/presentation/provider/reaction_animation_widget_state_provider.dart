@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/utils/no_params.dart';
-import 'package:wehavit/domain/entities/reaction_entity/reaction_model.dart';
+import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
 import 'package:wehavit/domain/usecases/get_reaction_not_read_from_last_confirm_post_usecase.dart';
 
 final reactionAnimationWidgetManagerProvider =
@@ -73,7 +73,7 @@ class ReactionGroupModel {
   });
 
   String complimenterUid;
-  List<ReactionModel>? emojiReacionModelList;
-  ReactionModel? imageReacionModel;
-  ReactionModel? textReactionModel;
+  List<ReactionEntity>? emojiReacionModelList;
+  ReactionEntity? imageReacionModel;
+  ReactionEntity? textReactionModel;
 }

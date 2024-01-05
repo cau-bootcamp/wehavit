@@ -1,36 +1,17 @@
-import 'package:wehavit/common/constants/firebase_field_name.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class UserDataEntity {
-  UserDataEntity.fromMapData(
-    String this.friendId,
-    Map<String, dynamic> data,
-    Map<String, dynamic> usersData,
-  )   : friendEmail = data[FirebaseFriendFieldName.friendEmail],
-        friendName = usersData[FirebaseUserFieldName.displayName],
-        friendImageUrl = usersData[FirebaseUserFieldName.imageUrl];
-  UserDataEntity({
-    this.friendEmail,
-    this.friendId,
-    this.friendName,
-    this.friendImageUrl,
-  });
+part 'user_data_entity.freezed.dart';
+part 'user_data_entity.g.dart';
 
-  String? friendEmail;
-  String? friendId;
-  String? friendName;
-  String? friendImageUrl;
-
-  UserDataEntity copyWith({
+@freezed
+class UserDataEntity with _$UserDataEntity {
+  factory UserDataEntity({
+    String? friendEmail,
     String? friendId,
     String? friendName,
     String? friendImageUrl,
-    String? friendEmail,
-  }) {
-    return UserDataEntity(
-      friendId: friendId ?? this.friendId,
-      friendEmail: friendEmail ?? this.friendEmail,
-      friendName: friendName ?? this.friendName,
-      friendImageUrl: friendImageUrl ?? this.friendImageUrl,
-    );
-  }
+  }) = _UserDataEntity;
+
+  factory UserDataEntity.fromJson(Map<String, dynamic> json) =>
+      _$UserDataEntityFromJson(json);
 }

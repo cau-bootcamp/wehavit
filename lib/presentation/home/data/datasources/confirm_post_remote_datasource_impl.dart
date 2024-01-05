@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_model.dart';
+import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
 import 'package:wehavit/presentation/home/data/datasources/confirm_post_datasource.dart';
 // import 'package:wehavit/features/home/data/entities/confirm_post_entity.dart';
 
@@ -11,7 +11,7 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
   static const int maxDay = 27;
 
   @override
-  EitherFuture<List<ConfirmPostModel>> getConfirmPostEntityList(
+  EitherFuture<List<ConfirmPostEntity>> getConfirmPostEntityList(
     int selectedIndex,
   ) async {
     try {
@@ -112,7 +112,7 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
       }
 
       // TODO: 아래 코드 구현하기
-      List<ConfirmPostModel> confirmPosts = List.empty();
+      List<ConfirmPostEntity> confirmPosts = List.empty();
 
       // List<ConfirmPostModel> confirmPosts = resultDocs
       //     .map(

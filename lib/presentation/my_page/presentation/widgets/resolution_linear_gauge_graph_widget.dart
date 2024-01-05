@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_model.dart';
+import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
 
 class ResolutionLinearGaugeGraphWidget extends StatelessWidget {
   ResolutionLinearGaugeGraphWidget({
     super.key,
-    required List<ConfirmPostModel> sourceData,
+    required List<ConfirmPostEntity> sourceData,
     required this.lastPeriod,
   }) {
     sourceData.sort((a, b) => a.toString().compareTo(b.toString()));
@@ -18,7 +18,7 @@ class ResolutionLinearGaugeGraphWidget extends StatelessWidget {
     }).toList();
   }
 
-  late final List<ConfirmPostModel> data;
+  late final List<ConfirmPostEntity> data;
   final bool lastPeriod;
   final todaysDate = DateTime.now();
 

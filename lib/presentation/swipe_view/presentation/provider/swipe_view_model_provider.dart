@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/models/user_model/user_model.dart';
 import 'package:wehavit/common/utils/no_params.dart';
-import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_model.dart';
-import 'package:wehavit/domain/entities/reaction_entity/reaction_model.dart';
+import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
+import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
 import 'package:wehavit/domain/usecases/fetch_user_data_from_id_usecase.dart';
 import 'package:wehavit/domain/usecases/get_confirm_post_list_for_resolution_id.dart';
 import 'package:wehavit/domain/usecases/get_today_confirm_post_list_usecase.dart';
@@ -48,7 +48,7 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
         confirmPostModelList.length,
         (_) => Future(() => UserModel.dummyModel),
       );
-      state.confirmPostList = List<Future<List<ConfirmPostModel>>>.generate(
+      state.confirmPostList = List<Future<List<ConfirmPostEntity>>>.generate(
         confirmPostModelList.length,
         (_) => Future(() => []),
       );
@@ -82,7 +82,7 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
   }
 
   Future<void> sendReactionToTargetConfirmPost(
-    ReactionModel reactionModel,
+    ReactionEntity reactionModel,
   ) async {
     if (state.currentCellConfirmModel == null) {
       return Future(() => null);
@@ -138,7 +138,7 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
             ),
           );
 
-      final reactionModel = ReactionModel(
+      final reactionModel = ReactionEntity(
         complimenterUid: currentUserUid,
         reactionType: ReactionType.emoji.index,
         emoji: emojiMap,
@@ -151,7 +151,7 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
   }
 
   Future<void> sendImageReaction({required String imageFilePath}) async {
-    final reactionModel = ReactionModel(
+    final reactionModel = ReactionEntity(
       complimenterUid: FirebaseAuth.instance.currentUser!.uid,
       reactionType: ReactionType.instantPhoto.index,
       instantPhotoUrl: imageFilePath,
@@ -162,7 +162,7 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
   Future<void> sendTextReaction() async {
     unfocusCommentTextForm();
 
-    final reactionModel = ReactionModel(
+    final reactionModel = ReactionEntity(
       complimenterUid: FirebaseAuth.instance.currentUser!.uid,
       reactionType: ReactionType.comment.index,
       comment: state.textEditingController.text,
@@ -182,13 +182,13 @@ class SwipeViewModelProvider extends StateNotifier<SwipeViewModel> {
     state.animationController.reverse();
   }
 
-  Future<List<ConfirmPostModel>> getConfirmPostListFor({
+  Future<List<ConfirmPostEntity>> getConfirmPostListFor({
     required String resolutionId,
   }) async {
     final confirmListFetchResult =
         await getConfirmPostListForResolutionIdUsecase(resolutionId);
 
-    return Future<List<ConfirmPostModel>>(
+    return Future<List<ConfirmPostEntity>>(
       () => confirmListFetchResult.fold(
         (failure) => [],
         (modelList) => modelList,

@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'reaction_model.freezed.dart';
-part 'reaction_model.g.dart';
+part 'reaction_entity.freezed.dart';
+part 'reaction_entity.g.dart';
 
 @freezed
-class ReactionModel with _$ReactionModel {
-  factory ReactionModel({
+class ReactionEntity with _$ReactionEntity {
+  factory ReactionEntity({
     // ignore: invalid_annotation_target
     @JsonKey(includeFromJson: false, includeToJson: false)
     @Default('')
@@ -17,14 +17,14 @@ class ReactionModel with _$ReactionModel {
     @Default('') String instantPhotoUrl,
     @Default('') String comment,
     @Default({}) Map<String, int> emoji,
-  }) = _ReactionModel;
+  }) = _ReactionEntity;
 
-  factory ReactionModel.fromJson(Map<String, dynamic> json) =>
-      _$ReactionModelFromJson(json);
+  factory ReactionEntity.fromJson(Map<String, dynamic> json) =>
+      _$ReactionEntityFromJson(json);
 
-  factory ReactionModel.fromFireStoreDocument(DocumentSnapshot doc) {
+  factory ReactionEntity.fromFireStoreDocument(DocumentSnapshot doc) {
     if (doc.data() == null) throw Exception('Document data was null');
-    return ReactionModel.fromJson(doc.data() as Map<String, Object?>)
+    return ReactionEntity.fromJson(doc.data() as Map<String, Object?>)
         .copyWith(id: doc.id);
   }
 }

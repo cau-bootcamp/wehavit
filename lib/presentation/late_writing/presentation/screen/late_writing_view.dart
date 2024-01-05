@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
-import 'package:wehavit/domain/entities/resolution_entity/resolution_model.dart';
+import 'package:wehavit/domain/entities/resolution_entity/resolution_entity.dart';
 import 'package:wehavit/presentation/late_writing/presentation/model/late_writing_view_model.dart';
 import 'package:wehavit/presentation/late_writing/presentation/provider/late_writing_view_provider.dart';
 
@@ -64,7 +64,7 @@ class _LateWritingViewState extends ConsumerState<LateWritingView> {
                   if (snapshot.hasData && snapshot.data!.isRight()) {
                     final resolutionList = snapshot.data!
                         .getRight()
-                        .fold(() => [], (t) => t) as List<ResolutionModel>;
+                        .fold(() => [], (t) => t) as List<ResolutionEntity>;
                     return Stack(
                       children: [
                         SingleChildScrollView(
@@ -294,7 +294,7 @@ class _LateWritingViewState extends ConsumerState<LateWritingView> {
 
   Future<dynamic> showResolutionSelectionList(
     BuildContext context,
-    List<ResolutionModel> resolutionList,
+    List<ResolutionEntity> resolutionList,
   ) {
     return showModalBottomSheet(
       context: context,

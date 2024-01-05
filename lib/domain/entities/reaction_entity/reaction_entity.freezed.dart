@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'reaction_model.dart';
+part of 'reaction_entity.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,12 +14,13 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-ReactionModel _$ReactionModelFromJson(Map<String, dynamic> json) {
-  return _ReactionModel.fromJson(json);
+ReactionEntity _$ReactionEntityFromJson(Map<String, dynamic> json) {
+  return _ReactionEntity.fromJson(json);
 }
 
 /// @nodoc
-mixin _$ReactionModel {
+mixin _$ReactionEntity {
+// ignore: invalid_annotation_target
   @JsonKey(includeFromJson: false, includeToJson: false)
   String? get id => throw _privateConstructorUsedError;
   String get complimenterUid => throw _privateConstructorUsedError;
@@ -31,15 +32,15 @@ mixin _$ReactionModel {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $ReactionModelCopyWith<ReactionModel> get copyWith =>
+  $ReactionEntityCopyWith<ReactionEntity> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $ReactionModelCopyWith<$Res> {
-  factory $ReactionModelCopyWith(
-          ReactionModel value, $Res Function(ReactionModel) then) =
-      _$ReactionModelCopyWithImpl<$Res, ReactionModel>;
+abstract class $ReactionEntityCopyWith<$Res> {
+  factory $ReactionEntityCopyWith(
+          ReactionEntity value, $Res Function(ReactionEntity) then) =
+      _$ReactionEntityCopyWithImpl<$Res, ReactionEntity>;
   @useResult
   $Res call(
       {@JsonKey(includeFromJson: false, includeToJson: false) String? id,
@@ -52,9 +53,9 @@ abstract class $ReactionModelCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$ReactionModelCopyWithImpl<$Res, $Val extends ReactionModel>
-    implements $ReactionModelCopyWith<$Res> {
-  _$ReactionModelCopyWithImpl(this._value, this._then);
+class _$ReactionEntityCopyWithImpl<$Res, $Val extends ReactionEntity>
+    implements $ReactionEntityCopyWith<$Res> {
+  _$ReactionEntityCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -106,11 +107,11 @@ class _$ReactionModelCopyWithImpl<$Res, $Val extends ReactionModel>
 }
 
 /// @nodoc
-abstract class _$$ReactionModelImplCopyWith<$Res>
-    implements $ReactionModelCopyWith<$Res> {
-  factory _$$ReactionModelImplCopyWith(
-          _$ReactionModelImpl value, $Res Function(_$ReactionModelImpl) then) =
-      __$$ReactionModelImplCopyWithImpl<$Res>;
+abstract class _$$ReactionEntityImplCopyWith<$Res>
+    implements $ReactionEntityCopyWith<$Res> {
+  factory _$$ReactionEntityImplCopyWith(_$ReactionEntityImpl value,
+          $Res Function(_$ReactionEntityImpl) then) =
+      __$$ReactionEntityImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -124,11 +125,11 @@ abstract class _$$ReactionModelImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$ReactionModelImplCopyWithImpl<$Res>
-    extends _$ReactionModelCopyWithImpl<$Res, _$ReactionModelImpl>
-    implements _$$ReactionModelImplCopyWith<$Res> {
-  __$$ReactionModelImplCopyWithImpl(
-      _$ReactionModelImpl _value, $Res Function(_$ReactionModelImpl) _then)
+class __$$ReactionEntityImplCopyWithImpl<$Res>
+    extends _$ReactionEntityCopyWithImpl<$Res, _$ReactionEntityImpl>
+    implements _$$ReactionEntityImplCopyWith<$Res> {
+  __$$ReactionEntityImplCopyWithImpl(
+      _$ReactionEntityImpl _value, $Res Function(_$ReactionEntityImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -142,7 +143,7 @@ class __$$ReactionModelImplCopyWithImpl<$Res>
     Object? comment = null,
     Object? emoji = null,
   }) {
-    return _then(_$ReactionModelImpl(
+    return _then(_$ReactionEntityImpl(
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -177,8 +178,8 @@ class __$$ReactionModelImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$ReactionModelImpl implements _ReactionModel {
-  _$ReactionModelImpl(
+class _$ReactionEntityImpl implements _ReactionEntity {
+  _$ReactionEntityImpl(
       {@JsonKey(includeFromJson: false, includeToJson: false) this.id = '',
       required this.complimenterUid,
       required this.reactionType,
@@ -188,9 +189,10 @@ class _$ReactionModelImpl implements _ReactionModel {
       final Map<String, int> emoji = const {}})
       : _emoji = emoji;
 
-  factory _$ReactionModelImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ReactionModelImplFromJson(json);
+  factory _$ReactionEntityImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ReactionEntityImplFromJson(json);
 
+// ignore: invalid_annotation_target
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   final String? id;
@@ -218,14 +220,14 @@ class _$ReactionModelImpl implements _ReactionModel {
 
   @override
   String toString() {
-    return 'ReactionModel(id: $id, complimenterUid: $complimenterUid, reactionType: $reactionType, hasRead: $hasRead, instantPhotoUrl: $instantPhotoUrl, comment: $comment, emoji: $emoji)';
+    return 'ReactionEntity(id: $id, complimenterUid: $complimenterUid, reactionType: $reactionType, hasRead: $hasRead, instantPhotoUrl: $instantPhotoUrl, comment: $comment, emoji: $emoji)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ReactionModelImpl &&
+            other is _$ReactionEntityImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.complimenterUid, complimenterUid) ||
                 other.complimenterUid == complimenterUid) &&
@@ -253,31 +255,32 @@ class _$ReactionModelImpl implements _ReactionModel {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$ReactionModelImplCopyWith<_$ReactionModelImpl> get copyWith =>
-      __$$ReactionModelImplCopyWithImpl<_$ReactionModelImpl>(this, _$identity);
+  _$$ReactionEntityImplCopyWith<_$ReactionEntityImpl> get copyWith =>
+      __$$ReactionEntityImplCopyWithImpl<_$ReactionEntityImpl>(
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ReactionModelImplToJson(
+    return _$$ReactionEntityImplToJson(
       this,
     );
   }
 }
 
-abstract class _ReactionModel implements ReactionModel {
-  factory _ReactionModel(
+abstract class _ReactionEntity implements ReactionEntity {
+  factory _ReactionEntity(
       {@JsonKey(includeFromJson: false, includeToJson: false) final String? id,
       required final String complimenterUid,
       required final int reactionType,
       final bool hasRead,
       final String instantPhotoUrl,
       final String comment,
-      final Map<String, int> emoji}) = _$ReactionModelImpl;
+      final Map<String, int> emoji}) = _$ReactionEntityImpl;
 
-  factory _ReactionModel.fromJson(Map<String, dynamic> json) =
-      _$ReactionModelImpl.fromJson;
+  factory _ReactionEntity.fromJson(Map<String, dynamic> json) =
+      _$ReactionEntityImpl.fromJson;
 
-  @override
+  @override // ignore: invalid_annotation_target
   @JsonKey(includeFromJson: false, includeToJson: false)
   String? get id;
   @override
@@ -294,6 +297,6 @@ abstract class _ReactionModel implements ReactionModel {
   Map<String, int> get emoji;
   @override
   @JsonKey(ignore: true)
-  _$$ReactionModelImplCopyWith<_$ReactionModelImpl> get copyWith =>
+  _$$ReactionEntityImplCopyWith<_$ReactionEntityImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

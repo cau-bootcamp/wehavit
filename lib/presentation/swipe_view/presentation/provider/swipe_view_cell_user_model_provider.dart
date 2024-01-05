@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/models/user_model/user_model.dart';
-import 'package:wehavit/domain/entities/reaction_entity/reaction_model.dart';
+import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
 import 'package:wehavit/domain/usecases/fetch_user_data_from_id_usecase.dart';
 import 'package:wehavit/domain/usecases/send_reaction_to_target_confirm_post.dart';
 
@@ -28,7 +28,7 @@ class SwipeViewCellUserModelProvider
 
   Future<void> sendReactionToTargetConfirmPost(
     String targetConfirmPostId,
-    ReactionModel reactionModel,
+    ReactionEntity reactionModel,
   ) async {
     await _sendReactionToTargetConfirmPostUsecase
         .call((targetConfirmPostId, reactionModel));

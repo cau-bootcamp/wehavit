@@ -10,10 +10,11 @@ import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/models/user_model/user_model.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
-import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_model.dart';
-import 'package:wehavit/domain/entities/resolution_entity/resolution_model.dart';
+import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
+import 'package:wehavit/domain/entities/resolution_entity/resolution_entity.dart';
 import 'package:wehavit/domain/repositories/user_model_fetch_repository.dart';
-import 'package:wehavit/domain/usecases/confirm_post_usecase.dart';
+import 'package:wehavit/domain/usecases/get_all_post_usecase.dart';
+import 'package:wehavit/domain/usecases/create_post_usecase.dart';
 import 'package:wehavit/legacy/live_writing/live_writing.dart';
 import 'package:wehavit/legacy/repository/live_writing_mine_repository_provider.dart';
 import 'package:wehavit/presentation/home/data/datasources/confirm_post_datasource_provider.dart';
@@ -24,7 +25,7 @@ class MyLiveWritingWidget extends StatefulHookConsumerWidget {
     super.key,
   });
 
-  final ResolutionModel resolutionModel;
+  final ResolutionEntity resolutionModel;
 
   @override
   ConsumerState<MyLiveWritingWidget> createState() =>
@@ -379,7 +380,7 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
                     isSubmitted = true;
                   });
 
-                  ConfirmPostModel cf = ConfirmPostModel(
+                  ConfirmPostEntity cf = ConfirmPostEntity(
                     title: titleController.text,
                     content: contentController.text,
                     resolutionGoalStatement:
@@ -439,7 +440,7 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
                   setState(() {
                     isSubmitted = true;
                   });
-                  ConfirmPostModel cf = ConfirmPostModel(
+                  ConfirmPostEntity cf = ConfirmPostEntity(
                     title: titleController.text,
                     content: contentController.text,
                     resolutionGoalStatement:

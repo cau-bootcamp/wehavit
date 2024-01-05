@@ -1,17 +1,17 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
-import 'package:wehavit/domain/entities/user_data_entity/friend_model.dart';
-import 'package:wehavit/domain/entities/resolution_entity/resolution_model.dart';
+import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
+import 'package:wehavit/domain/entities/resolution_entity/resolution_entity.dart';
 import 'package:wehavit/domain/usecases/upload_resolution_usecase.dart';
 
 final addResolutionProvider =
-    StateNotifierProvider.autoDispose<AddResolutionNotifier, ResolutionModel>(
+    StateNotifierProvider.autoDispose<AddResolutionNotifier, ResolutionEntity>(
         (ref) {
   return AddResolutionNotifier(ref);
 });
 
-class AddResolutionNotifier extends StateNotifier<ResolutionModel> {
-  AddResolutionNotifier(Ref ref) : super(ResolutionModel()) {
+class AddResolutionNotifier extends StateNotifier<ResolutionEntity> {
+  AddResolutionNotifier(Ref ref) : super(ResolutionEntity()) {
     _uploadResolutionUsecase = ref.watch(uploadResolutionUsecaseProvider);
   }
 
@@ -38,7 +38,7 @@ class AddResolutionNotifier extends StateNotifier<ResolutionModel> {
   }
 
   EitherFuture<bool> uploadResolutionModel() {
-    ResolutionModel newModel = ResolutionModel(
+    ResolutionEntity newModel = ResolutionEntity(
       goalStatement: state.goalStatement,
       actionStatement: state.actionStatement,
       oathStatement: state.oathStatement,

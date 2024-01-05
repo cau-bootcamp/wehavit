@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
-import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_model.dart';
+import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
 import 'package:wehavit/presentation/my_page/presentation/widgets/resolution_doughnut_graph_widget.dart';
 import 'package:wehavit/presentation/my_page/presentation/widgets/resolution_linear_gauge_graph_widget.dart';
 
@@ -11,7 +11,7 @@ class SwipeDashboardWidget extends ConsumerStatefulWidget {
     required this.confirmPostList,
   });
 
-  final Future<List<ConfirmPostModel>> confirmPostList;
+  final Future<List<ConfirmPostEntity>> confirmPostList;
 
   @override
   ConsumerState<SwipeDashboardWidget> createState() =>
@@ -45,7 +45,7 @@ class _ResolutionDashboardWidgetState
                       color: CustomColors.whWhite,
                     ),
                   ),
-                  FutureBuilder<List<ConfirmPostModel>>(
+                  FutureBuilder<List<ConfirmPostEntity>>(
                     future: widget.confirmPostList,
                     builder: (context, snapshot) {
                       int durationDays = 28;
@@ -142,7 +142,7 @@ class _ResolutionDashboardWidgetState
             ),
             Expanded(
               flex: 2,
-              child: FutureBuilder<List<ConfirmPostModel>>(
+              child: FutureBuilder<List<ConfirmPostEntity>>(
                 future: widget.confirmPostList,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {

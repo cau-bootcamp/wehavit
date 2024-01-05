@@ -9,14 +9,14 @@ import 'package:wehavit/common/constants/firebase_field_name.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/common/utils/firebase_collection_name.dart';
-import 'package:wehavit/domain/entities/reaction_entity/reaction_model.dart';
+import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
 import 'package:wehavit/presentation/swipe_view/data/datasource/reaction_datasource.dart';
 
 class ReactionDatasourceImpl implements ReactionDatasource {
   @override
   EitherFuture<bool> sendReactionToTargetConfirmPost(
     String targetConfirmPostId,
-    ReactionModel reactionModel,
+    ReactionEntity reactionModel,
   ) async {
     try {
       if (reactionModel.reactionType == ReactionType.instantPhoto.index) {
@@ -78,7 +78,7 @@ class ReactionDatasourceImpl implements ReactionDatasource {
   }
 
   @override
-  EitherFuture<List<ReactionModel>>
+  EitherFuture<List<ReactionEntity>>
       getReactionUnreadFromLastConfirmPost() async {
     final confirmPostFetchResult = await FirebaseFirestore.instance
         .collection(FirebaseCollectionName.confirmPosts)
@@ -106,7 +106,7 @@ class ReactionDatasourceImpl implements ReactionDatasource {
     }
 
     final result = encourages.docs
-        .map((doc) => ReactionModel.fromJson(doc.data()))
+        .map((doc) => ReactionEntity.fromJson(doc.data()))
         .toList();
 
     return Future(

@@ -5,8 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/src/either.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_model.dart';
-import 'package:wehavit/domain/entities/resolution_entity/resolution_model.dart';
+import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
+import 'package:wehavit/domain/entities/resolution_entity/resolution_entity.dart';
 import 'package:wehavit/presentation/my_page/presentation/providers/my_page_resolution_list_provider.dart';
 import 'package:wehavit/presentation/my_page/presentation/widgets/resolution_dashboard_widget.dart';
 import 'package:wehavit/presentation/swipe_view/presentation/screen/widget/swipe_dashboard_widget.dart';
@@ -122,7 +122,7 @@ class MyResolutionListWidget extends StatelessWidget {
   });
 
   final Either<Failure,
-          (List<ResolutionModel>, List<Future<List<ConfirmPostModel>>>)>
+          (List<ResolutionEntity>, List<Future<List<ConfirmPostEntity>>>)>
       resolutionListProvider;
 
   @override

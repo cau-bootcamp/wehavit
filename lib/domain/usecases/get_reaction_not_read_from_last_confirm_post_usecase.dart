@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/entities/reaction_entity/reaction_model.dart';
+import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
 import 'package:wehavit/domain/repositories/get_reaction_repository.dart';
 
 final getReactionUnreadFromLastConfirmPostUsecaseProvider =
@@ -10,7 +10,7 @@ final getReactionUnreadFromLastConfirmPostUsecaseProvider =
 });
 
 class GetReactionUnreadFromLastConfirmPostUsecase
-    extends FutureUseCase<List<ReactionModel>, NoParams> {
+    extends FutureUseCase<List<ReactionEntity>, NoParams> {
   GetReactionUnreadFromLastConfirmPostUsecase(
     this._confirmPostReactionRepository,
   );
@@ -18,7 +18,7 @@ class GetReactionUnreadFromLastConfirmPostUsecase
   final ConfirmPostReactionRepository _confirmPostReactionRepository;
 
   @override
-  EitherFuture<List<ReactionModel>> call(NoParams params) {
+  EitherFuture<List<ReactionEntity>> call(NoParams params) {
     return _confirmPostReactionRepository
         .getReactionUnreadFromLastConfirmPost();
   }

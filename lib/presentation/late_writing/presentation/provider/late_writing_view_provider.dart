@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_model.dart';
-import 'package:wehavit/domain/entities/resolution_entity/resolution_model.dart';
-import 'package:wehavit/domain/usecases/confirm_post_usecase.dart';
+import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
+import 'package:wehavit/domain/entities/resolution_entity/resolution_entity.dart';
+import 'package:wehavit/domain/usecases/create_post_usecase.dart';
 import 'package:wehavit/domain/usecases/get_my_resolution_list_usecase.dart';
 import 'package:wehavit/presentation/late_writing/presentation/model/late_writing_view_model.dart';
 
@@ -35,12 +35,12 @@ class LateWritingViewModelProvider extends StateNotifier<LateWritingViewModel> {
 
   Future<void> postCurrentConfirmPost() async {
     final fetchResult = await state.resolutionList;
-    final ResolutionModel currentWritingResolutionModel = fetchResult
+    final ResolutionEntity currentWritingResolutionModel = fetchResult
         .getRight()
-        .fold(() => [], (t) => t)[state.resolutionIndex] as ResolutionModel;
+        .fold(() => [], (t) => t)[state.resolutionIndex] as ResolutionEntity;
 
     _createPostUseCase(
-      ConfirmPostModel(
+      ConfirmPostEntity(
         resolutionGoalStatement: currentWritingResolutionModel.goalStatement,
         resolutionId: currentWritingResolutionModel.resolutionId,
         title: state.titleTextEditingController.text,

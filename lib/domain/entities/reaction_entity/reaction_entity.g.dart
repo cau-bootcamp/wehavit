@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'reaction_model.dart';
+part of 'reaction_entity.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ReactionModelImpl _$$ReactionModelImplFromJson(Map<String, dynamic> json) =>
-    _$ReactionModelImpl(
+_$ReactionEntityImpl _$$ReactionEntityImplFromJson(Map<String, dynamic> json) =>
+    _$ReactionEntityImpl(
       complimenterUid: json['complimenterUid'] as String,
       reactionType: json['reactionType'] as int,
       hasRead: json['hasRead'] as bool? ?? false,
@@ -19,7 +19,8 @@ _$ReactionModelImpl _$$ReactionModelImplFromJson(Map<String, dynamic> json) =>
           const {},
     );
 
-Map<String, dynamic> _$$ReactionModelImplToJson(_$ReactionModelImpl instance) =>
+Map<String, dynamic> _$$ReactionEntityImplToJson(
+        _$ReactionEntityImpl instance) =>
     <String, dynamic>{
       'complimenterUid': instance.complimenterUid,
       'reactionType': instance.reactionType,

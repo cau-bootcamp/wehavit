@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/entities/reaction_entity/reaction_model.dart';
+import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
 import 'package:wehavit/legacy/repository/live_writing_mine_repository.dart';
 
 const livePostDocumentPrefix = 'LIVE-';
@@ -82,7 +82,7 @@ class LiveWritingPostRepositoryImpl extends MyLiveWritingRepository {
   }
 
   @override
-  Stream<List<ReactionModel>> getReactionListStream() {
+  Stream<List<ReactionEntity>> getReactionListStream() {
     try {
       final stream = FirebaseFirestore.instance
           .collection(FirebaseCollectionName.liveConfirmPosts)
@@ -95,7 +95,7 @@ class LiveWritingPostRepositoryImpl extends MyLiveWritingRepository {
           .map(
             (docs) => docs
                 .map(
-                  (doc) => ReactionModel.fromFireStoreDocument(doc),
+                  (doc) => ReactionEntity.fromFireStoreDocument(doc),
                 )
                 .toList(),
           );

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
-import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_model.dart';
+import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
 import 'package:wehavit/domain/repositories/confirm_post_repository.dart';
 import 'package:wehavit/presentation/home/data/datasources/confirm_post_datasource.dart';
 import 'package:wehavit/presentation/home/data/datasources/confirm_post_datasource_provider.dart';
@@ -18,7 +18,7 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
   late final ConfirmPostDatasource _confirmPostDatasource;
 
   @override
-  EitherFuture<List<ConfirmPostModel>> getConfirmPostModelList(
+  EitherFuture<List<ConfirmPostEntity>> getConfirmPostModelList(
     int selectedIndex,
   ) async {
     try {
@@ -37,26 +37,26 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
   }
 
   @override
-  EitherFuture<bool> createConfirmPost(ConfirmPostModel confirmPost) {
+  EitherFuture<bool> createConfirmPost(ConfirmPostEntity confirmPost) {
     // TODO: implement createConfirmPost
     throw UnimplementedError();
   }
 
   @override
   EitherFuture<bool> deleteConfirmPost(
-      DocumentReference<ConfirmPostModel> confirmPostRef) {
+      DocumentReference<ConfirmPostEntity> confirmPostRef) {
     // TODO: implement deleteConfirmPost
     throw UnimplementedError();
   }
 
   @override
-  EitherFuture<ConfirmPostModel> getConfirmPostByUserId(String userId) {
+  EitherFuture<ConfirmPostEntity> getConfirmPostByUserId(String userId) {
     // TODO: implement getConfirmPostByUserId
     throw UnimplementedError();
   }
 
   @override
-  EitherFuture<bool> updateConfirmPost(ConfirmPostModel confirmPost) {
+  EitherFuture<bool> updateConfirmPost(ConfirmPostEntity confirmPost) {
     // TODO: implement updateConfirmPost
     throw UnimplementedError();
   }

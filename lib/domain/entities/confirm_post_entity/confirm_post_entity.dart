@@ -3,10 +3,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
 
-part 'confirm_post_model.freezed.dart';
+part 'confirm_post_entity.freezed.dart';
+part 'confirm_post_entity.g.dart';
 
 @freezed
-class ConfirmPostModel with _$ConfirmPostModel {
+class ConfirmPostEntity with _$ConfirmPostEntity {
   @Assert(
     'resolutionGoalStatement != null',
     'resolutionGoalStatement must not be null',
@@ -27,7 +28,7 @@ class ConfirmPostModel with _$ConfirmPostModel {
   @Assert('attributes != null', 'attribute must not be null')
   @TimestampConverter()
   @DocumentReferenceJsonConverter()
-  factory ConfirmPostModel({
+  factory ConfirmPostEntity({
     @JsonKey(includeFromJson: false, includeToJson: false)
     @Default('')
     String? id,
@@ -48,15 +49,15 @@ class ConfirmPostModel with _$ConfirmPostModel {
     required DateTime? createdAt,
     required DateTime? updatedAt,
     required Map<String, bool>? attributes,
-  }) = _ConfirmPostModel;
+  }) = _ConfirmPostEntity;
 
-  factory ConfirmPostModel.fromJson(Map<String, dynamic> json) =>
-      _$ConfirmPostModelFromJson(json);
+  factory ConfirmPostEntity.fromJson(Map<String, dynamic> json) =>
+      _$ConfirmPostEntityFromJson(json);
 
-  factory ConfirmPostModel.fromFireStoreDocument(DocumentSnapshot doc) {
+  factory ConfirmPostEntity.fromFireStoreDocument(DocumentSnapshot doc) {
     if (doc.data() == null) throw Exception('Document data was null');
 
-    return ConfirmPostModel.fromJson(doc.data() as Map<String, Object?>)
+    return ConfirmPostEntity.fromJson(doc.data() as Map<String, Object?>)
         .copyWith(id: doc.id);
   }
 }

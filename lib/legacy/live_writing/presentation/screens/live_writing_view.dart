@@ -9,8 +9,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/common/routers/route_location.dart';
-import 'package:wehavit/domain/entities/reaction_entity/reaction_model.dart';
-import 'package:wehavit/domain/entities/resolution_entity/resolution_model.dart';
+import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
+import 'package:wehavit/domain/entities/resolution_entity/resolution_entity.dart';
 import 'package:wehavit/legacy/counter_state/counter_state.dart';
 import 'package:wehavit/legacy/live_writing/presentation/providers/active_resolution_provider.dart';
 import 'package:wehavit/legacy/live_writing/presentation/widgets/friend_live_post_widget.dart';
@@ -45,7 +45,7 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView>
         .getVisibleFriendEmailList();
   }
 
-  Stream<List<ReactionModel>> reactionNotificationStream(
+  Stream<List<ReactionEntity>> reactionNotificationStream(
     WidgetRef ref,
   ) {
     return ref.watch(liveWritingPostRepositoryProvider).getReactionListStream();
@@ -81,9 +81,9 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView>
 
     final reactionStream = useMemoized(() => reactionNotificationStream(ref));
     // ignore: unused_local_variable
-    final reactionSnapshot = useStream<List<ReactionModel>>(reactionStream);
+    final reactionSnapshot = useStream<List<ReactionEntity>>(reactionStream);
 
-    final resolutionModelList = useState(<ResolutionModel>[]);
+    final resolutionModelList = useState(<ResolutionEntity>[]);
 
     // auto dispose을 방지하기 위해 watch 삽입
     final _ = ref.watch(liveWritingFriendRepositoryProvider);
@@ -384,7 +384,7 @@ class _LiveWritingViewState extends ConsumerState<LiveWritingView>
         .read(liveWritingFriendRepositoryProvider)
         .sendReactionToTargetFriend(
           userEmail,
-          ReactionModel(
+          ReactionEntity(
             complimenterUid: '',
             reactionType: ReactionType.emoji.index,
             emoji: {'t${emojiNo.toString().padLeft(2, '0')}': 1},

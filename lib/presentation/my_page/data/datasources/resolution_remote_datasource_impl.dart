@@ -4,9 +4,9 @@ import 'package:wehavit/common/constants/firebase_field_name.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/common/utils/firebase_collection_name.dart';
-import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_model.dart';
+import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
+import 'package:wehavit/domain/entities/resolution_entity/resolution_entity.dart';
 import 'package:wehavit/presentation/my_page/data/datasources/resolution_datasource.dart';
-import 'package:wehavit/presentation/my_page/data/entities/resolution_entity.dart';
 
 class ResolutionRemoteDatasourceImpl implements ResolutionDatasource {
   /// Firebase에서 나의 도전 목표 데이터를 받아온다.
@@ -110,7 +110,7 @@ class ResolutionRemoteDatasourceImpl implements ResolutionDatasource {
   }
 
   @override
-  EitherFuture<List<ConfirmPostModel>> getConfirmPostListForResolutionId({
+  EitherFuture<List<ConfirmPostEntity>> getConfirmPostListForResolutionId({
     required String resolutionId,
   }) async {
     try {
@@ -123,7 +123,7 @@ class ResolutionRemoteDatasourceImpl implements ResolutionDatasource {
           .get();
 
       final confirmPostModelList = fetchResult.docs.map((doc) {
-        return ConfirmPostModel.fromFireStoreDocument(doc);
+        return ConfirmPostEntity.fromFireStoreDocument(doc);
       }).toList();
 
       return Future(() => right(confirmPostModelList));

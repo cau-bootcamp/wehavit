@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
-import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_model.dart';
+import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
 import 'package:wehavit/presentation/my_page/presentation/widgets/resolution_accomplishment_donut_graph_datamodel.dart';
 
 class ResolutionDoughnutGraphWidget extends StatelessWidget {
   ResolutionDoughnutGraphWidget({
     super.key,
-    required List<ConfirmPostModel> sourceData,
+    required List<ConfirmPostEntity> sourceData,
     required int duration,
   }) {
     sourceData.sort((a, b) => a.toString().compareTo(b.toString()));
@@ -18,7 +18,7 @@ class ResolutionDoughnutGraphWidget extends StatelessWidget {
     ratioOfDoneDays = (data.length / duration) * 100;
   }
 
-  late final List<ConfirmPostModel> data;
+  late final List<ConfirmPostEntity> data;
   final todaysDate = DateTime.now();
   late final double ratioOfDoneDays;
 

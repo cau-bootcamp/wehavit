@@ -1,4 +1,4 @@
-import 'package:wehavit/domain/entities/reaction_entity/reaction_model.dart';
+import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
 
 abstract class MyLiveWritingRepository {
   MyLiveWritingRepository();
@@ -16,7 +16,7 @@ abstract class MyLiveWritingRepository {
     String imageFileUrl,
   );
 
-  Stream<List<ReactionModel>> getReactionListStream();
+  Stream<List<ReactionEntity>> getReactionListStream();
 
   Future<bool> consumeReaction(
     String reactionId,

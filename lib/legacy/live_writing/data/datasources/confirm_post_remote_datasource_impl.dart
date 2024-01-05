@@ -3,12 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_model.dart';
+import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
 import 'package:wehavit/presentation/home/data/datasources/confirm_post_datasource.dart';
 
 class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
   @override
-  EitherFuture<List<ConfirmPostModel>> getAllFanMarkedConfirmPosts() async {
+  EitherFuture<List<ConfirmPostEntity>> getAllFanMarkedConfirmPosts() async {
     try {
       final fetchResult = await FirebaseFirestore.instance
           .collection(
@@ -22,8 +22,8 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
 
       debugPrint(fetchResult.docs.length.toString());
 
-      List<ConfirmPostModel> confirmPosts = fetchResult.docs
-          .map((doc) => ConfirmPostModel.fromFireStoreDocument(doc))
+      List<ConfirmPostEntity> confirmPosts = fetchResult.docs
+          .map((doc) => ConfirmPostEntity.fromFireStoreDocument(doc))
           .toList();
 
       return Future(() => right(confirmPosts));
@@ -37,7 +37,7 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
   }
 
   @override
-  EitherFuture<bool> uploadConfirmPost(ConfirmPostModel confirmPost) async {
+  EitherFuture<bool> uploadConfirmPost(ConfirmPostEntity confirmPost) async {
     await FirebaseFirestore.instance
         .collection(FirebaseCollectionName.confirmPosts)
         .add(confirmPost.toJson());
@@ -47,7 +47,7 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
 
   @override
   EitherFuture<bool> deleteConfirmPost(
-    DocumentReference<ConfirmPostModel> ref,
+    DocumentReference<ConfirmPostEntity> ref,
   ) {
     // TODO: implement deleteConfirmPost
     throw UnimplementedError();
@@ -60,7 +60,7 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
   }
 
   @override
-  EitherFuture<bool> updateConfirmPost(ConfirmPostModel confirmPost) {
+  EitherFuture<bool> updateConfirmPost(ConfirmPostEntity confirmPost) {
     FirebaseFirestore.instance
         .collection(FirebaseCollectionName.confirmPosts)
         .doc(confirmPost.id)
@@ -70,7 +70,7 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
   }
 
   @override
-  EitherFuture<ConfirmPostModel> getConfirmPostOfTodayByResolutionGoalId(
+  EitherFuture<ConfirmPostEntity> getConfirmPostOfTodayByResolutionGoalId(
     String resolutionId,
   ) async {
     DateTime today = DateTime.now();
@@ -109,7 +109,7 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
     if (existingConfirmPost != null) {
       return Future(
         () =>
-            right(ConfirmPostModel.fromFireStoreDocument(existingConfirmPost)),
+            right(ConfirmPostEntity.fromFireStoreDocument(existingConfirmPost)),
       );
     } else {
       return Future(() => left(const Failure('no existing post')));
@@ -117,7 +117,7 @@ class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
   }
 
   @override
-  EitherFuture<List<ConfirmPostModel>> getConfirmPostEntityList(
+  EitherFuture<List<ConfirmPostEntity>> getConfirmPostEntityList(
       int selectedIndex) {
     // TODO: implement getConfirmPostEntityList
     throw UnimplementedError();

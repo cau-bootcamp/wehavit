@@ -1,6 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_model.dart';
+import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
 import 'package:wehavit/domain/repositories/confirm_post_repository.dart';
 import 'package:wehavit/domain/repositories/home_confirm_post_repository.dart';
 
@@ -11,14 +11,14 @@ final getTodayConfirmPostListUsecaseProvider =
 });
 
 class GetTodayConfirmPostListUsecase
-    extends FutureUseCase<List<ConfirmPostModel>, NoParams> {
+    extends FutureUseCase<List<ConfirmPostEntity>, NoParams> {
   // GetTodayConfirmPostListUsecase(this._swipeViewRepository);
   // final SwipeViewRepository _swipeViewRepository;
   GetTodayConfirmPostListUsecase(this._confirmPostRepository);
   final ConfirmPostRepository _confirmPostRepository;
 
   @override
-  EitherFuture<List<ConfirmPostModel>> call(NoParams params) async {
+  EitherFuture<List<ConfirmPostEntity>> call(NoParams params) async {
     // return await _confirmPostRepository.getAllConfirmPosts();
     throw UnimplementedError();
   }

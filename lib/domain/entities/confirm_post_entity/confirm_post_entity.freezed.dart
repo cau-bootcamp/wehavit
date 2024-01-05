@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'confirm_post_model.dart';
+part of 'confirm_post_entity.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,12 +14,12 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-ConfirmPostModel _$ConfirmPostModelFromJson(Map<String, dynamic> json) {
-  return _ConfirmPostModel.fromJson(json);
+ConfirmPostEntity _$ConfirmPostEntityFromJson(Map<String, dynamic> json) {
+  return _ConfirmPostEntity.fromJson(json);
 }
 
 /// @nodoc
-mixin _$ConfirmPostModel {
+mixin _$ConfirmPostEntity {
   @JsonKey(includeFromJson: false, includeToJson: false)
   String? get id => throw _privateConstructorUsedError;
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -32,7 +32,7 @@ mixin _$ConfirmPostModel {
   String? get content => throw _privateConstructorUsedError;
   String? get imageUrl => throw _privateConstructorUsedError;
   String? get owner => throw _privateConstructorUsedError;
-  List<FriendModel>? get fan => throw _privateConstructorUsedError;
+  List<UserDataEntity>? get fan => throw _privateConstructorUsedError;
   int? get recentStrike => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
   DateTime? get updatedAt => throw _privateConstructorUsedError;
@@ -40,15 +40,15 @@ mixin _$ConfirmPostModel {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $ConfirmPostModelCopyWith<ConfirmPostModel> get copyWith =>
+  $ConfirmPostEntityCopyWith<ConfirmPostEntity> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $ConfirmPostModelCopyWith<$Res> {
-  factory $ConfirmPostModelCopyWith(
-          ConfirmPostModel value, $Res Function(ConfirmPostModel) then) =
-      _$ConfirmPostModelCopyWithImpl<$Res, ConfirmPostModel>;
+abstract class $ConfirmPostEntityCopyWith<$Res> {
+  factory $ConfirmPostEntityCopyWith(
+          ConfirmPostEntity value, $Res Function(ConfirmPostEntity) then) =
+      _$ConfirmPostEntityCopyWithImpl<$Res, ConfirmPostEntity>;
   @useResult
   $Res call(
       {@JsonKey(includeFromJson: false, includeToJson: false) String? id,
@@ -61,7 +61,7 @@ abstract class $ConfirmPostModelCopyWith<$Res> {
       String? content,
       String? imageUrl,
       String? owner,
-      List<FriendModel>? fan,
+      List<UserDataEntity>? fan,
       int? recentStrike,
       DateTime? createdAt,
       DateTime? updatedAt,
@@ -69,9 +69,9 @@ abstract class $ConfirmPostModelCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$ConfirmPostModelCopyWithImpl<$Res, $Val extends ConfirmPostModel>
-    implements $ConfirmPostModelCopyWith<$Res> {
-  _$ConfirmPostModelCopyWithImpl(this._value, this._then);
+class _$ConfirmPostEntityCopyWithImpl<$Res, $Val extends ConfirmPostEntity>
+    implements $ConfirmPostEntityCopyWith<$Res> {
+  _$ConfirmPostEntityCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -136,7 +136,7 @@ class _$ConfirmPostModelCopyWithImpl<$Res, $Val extends ConfirmPostModel>
       fan: freezed == fan
           ? _value.fan
           : fan // ignore: cast_nullable_to_non_nullable
-              as List<FriendModel>?,
+              as List<UserDataEntity>?,
       recentStrike: freezed == recentStrike
           ? _value.recentStrike
           : recentStrike // ignore: cast_nullable_to_non_nullable
@@ -158,11 +158,11 @@ class _$ConfirmPostModelCopyWithImpl<$Res, $Val extends ConfirmPostModel>
 }
 
 /// @nodoc
-abstract class _$$ConfirmPostModelImplCopyWith<$Res>
-    implements $ConfirmPostModelCopyWith<$Res> {
-  factory _$$ConfirmPostModelImplCopyWith(_$ConfirmPostModelImpl value,
-          $Res Function(_$ConfirmPostModelImpl) then) =
-      __$$ConfirmPostModelImplCopyWithImpl<$Res>;
+abstract class _$$ConfirmPostEntityImplCopyWith<$Res>
+    implements $ConfirmPostEntityCopyWith<$Res> {
+  factory _$$ConfirmPostEntityImplCopyWith(_$ConfirmPostEntityImpl value,
+          $Res Function(_$ConfirmPostEntityImpl) then) =
+      __$$ConfirmPostEntityImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -176,7 +176,7 @@ abstract class _$$ConfirmPostModelImplCopyWith<$Res>
       String? content,
       String? imageUrl,
       String? owner,
-      List<FriendModel>? fan,
+      List<UserDataEntity>? fan,
       int? recentStrike,
       DateTime? createdAt,
       DateTime? updatedAt,
@@ -184,11 +184,11 @@ abstract class _$$ConfirmPostModelImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$ConfirmPostModelImplCopyWithImpl<$Res>
-    extends _$ConfirmPostModelCopyWithImpl<$Res, _$ConfirmPostModelImpl>
-    implements _$$ConfirmPostModelImplCopyWith<$Res> {
-  __$$ConfirmPostModelImplCopyWithImpl(_$ConfirmPostModelImpl _value,
-      $Res Function(_$ConfirmPostModelImpl) _then)
+class __$$ConfirmPostEntityImplCopyWithImpl<$Res>
+    extends _$ConfirmPostEntityCopyWithImpl<$Res, _$ConfirmPostEntityImpl>
+    implements _$$ConfirmPostEntityImplCopyWith<$Res> {
+  __$$ConfirmPostEntityImplCopyWithImpl(_$ConfirmPostEntityImpl _value,
+      $Res Function(_$ConfirmPostEntityImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -209,7 +209,7 @@ class __$$ConfirmPostModelImplCopyWithImpl<$Res>
     Object? updatedAt = freezed,
     Object? attributes = freezed,
   }) {
-    return _then(_$ConfirmPostModelImpl(
+    return _then(_$ConfirmPostEntityImpl(
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -249,7 +249,7 @@ class __$$ConfirmPostModelImplCopyWithImpl<$Res>
       fan: freezed == fan
           ? _value._fan
           : fan // ignore: cast_nullable_to_non_nullable
-              as List<FriendModel>?,
+              as List<UserDataEntity>?,
       recentStrike: freezed == recentStrike
           ? _value.recentStrike
           : recentStrike // ignore: cast_nullable_to_non_nullable
@@ -274,8 +274,8 @@ class __$$ConfirmPostModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 @TimestampConverter()
 @DocumentReferenceJsonConverter()
-class _$ConfirmPostModelImpl implements _ConfirmPostModel {
-  _$ConfirmPostModelImpl(
+class _$ConfirmPostEntityImpl implements _ConfirmPostEntity {
+  _$ConfirmPostEntityImpl(
       {@JsonKey(includeFromJson: false, includeToJson: false) this.id = '',
       @JsonKey(includeFromJson: false, includeToJson: false) this.userName = '',
       @JsonKey(includeFromJson: false, includeToJson: false)
@@ -286,7 +286,7 @@ class _$ConfirmPostModelImpl implements _ConfirmPostModel {
       required this.content,
       required this.imageUrl,
       required this.owner,
-      required final List<FriendModel>? fan,
+      required final List<UserDataEntity>? fan,
       required this.recentStrike,
       required this.createdAt,
       required this.updatedAt,
@@ -306,8 +306,8 @@ class _$ConfirmPostModelImpl implements _ConfirmPostModel {
         _fan = fan,
         _attributes = attributes;
 
-  factory _$ConfirmPostModelImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ConfirmPostModelImplFromJson(json);
+  factory _$ConfirmPostEntityImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ConfirmPostEntityImplFromJson(json);
 
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -330,9 +330,9 @@ class _$ConfirmPostModelImpl implements _ConfirmPostModel {
   final String? imageUrl;
   @override
   final String? owner;
-  final List<FriendModel>? _fan;
+  final List<UserDataEntity>? _fan;
   @override
-  List<FriendModel>? get fan {
+  List<UserDataEntity>? get fan {
     final value = _fan;
     if (value == null) return null;
     if (_fan is EqualUnmodifiableListView) return _fan;
@@ -358,14 +358,14 @@ class _$ConfirmPostModelImpl implements _ConfirmPostModel {
 
   @override
   String toString() {
-    return 'ConfirmPostModel(id: $id, userName: $userName, userImageUrl: $userImageUrl, resolutionGoalStatement: $resolutionGoalStatement, resolutionId: $resolutionId, title: $title, content: $content, imageUrl: $imageUrl, owner: $owner, fan: $fan, recentStrike: $recentStrike, createdAt: $createdAt, updatedAt: $updatedAt, attributes: $attributes)';
+    return 'ConfirmPostEntity(id: $id, userName: $userName, userImageUrl: $userImageUrl, resolutionGoalStatement: $resolutionGoalStatement, resolutionId: $resolutionId, title: $title, content: $content, imageUrl: $imageUrl, owner: $owner, fan: $fan, recentStrike: $recentStrike, createdAt: $createdAt, updatedAt: $updatedAt, attributes: $attributes)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ConfirmPostModelImpl &&
+            other is _$ConfirmPostEntityImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.userName, userName) ||
                 other.userName == userName) &&
@@ -414,20 +414,20 @@ class _$ConfirmPostModelImpl implements _ConfirmPostModel {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$ConfirmPostModelImplCopyWith<_$ConfirmPostModelImpl> get copyWith =>
-      __$$ConfirmPostModelImplCopyWithImpl<_$ConfirmPostModelImpl>(
+  _$$ConfirmPostEntityImplCopyWith<_$ConfirmPostEntityImpl> get copyWith =>
+      __$$ConfirmPostEntityImplCopyWithImpl<_$ConfirmPostEntityImpl>(
           this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ConfirmPostModelImplToJson(
+    return _$$ConfirmPostEntityImplToJson(
       this,
     );
   }
 }
 
-abstract class _ConfirmPostModel implements ConfirmPostModel {
-  factory _ConfirmPostModel(
+abstract class _ConfirmPostEntity implements ConfirmPostEntity {
+  factory _ConfirmPostEntity(
       {@JsonKey(includeFromJson: false, includeToJson: false) final String? id,
       @JsonKey(includeFromJson: false, includeToJson: false)
       final String? userName,
@@ -439,14 +439,14 @@ abstract class _ConfirmPostModel implements ConfirmPostModel {
       required final String? content,
       required final String? imageUrl,
       required final String? owner,
-      required final List<FriendModel>? fan,
+      required final List<UserDataEntity>? fan,
       required final int? recentStrike,
       required final DateTime? createdAt,
       required final DateTime? updatedAt,
-      required final Map<String, bool>? attributes}) = _$ConfirmPostModelImpl;
+      required final Map<String, bool>? attributes}) = _$ConfirmPostEntityImpl;
 
-  factory _ConfirmPostModel.fromJson(Map<String, dynamic> json) =
-      _$ConfirmPostModelImpl.fromJson;
+  factory _ConfirmPostEntity.fromJson(Map<String, dynamic> json) =
+      _$ConfirmPostEntityImpl.fromJson;
 
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -470,7 +470,7 @@ abstract class _ConfirmPostModel implements ConfirmPostModel {
   @override
   String? get owner;
   @override
-  List<FriendModel>? get fan;
+  List<UserDataEntity>? get fan;
   @override
   int? get recentStrike;
   @override
@@ -481,6 +481,6 @@ abstract class _ConfirmPostModel implements ConfirmPostModel {
   Map<String, bool>? get attributes;
   @override
   @JsonKey(ignore: true)
-  _$$ConfirmPostModelImplCopyWith<_$ConfirmPostModelImpl> get copyWith =>
+  _$$ConfirmPostEntityImplCopyWith<_$ConfirmPostEntityImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
