@@ -15,7 +15,7 @@ class UploadFriendUseCase implements FutureUseCase<bool, UserDataEntity> {
   final FriendRepository _friendRepository;
 
   @override
-  EitherFuture<bool> call(UserDataEntity newModel) async {
-    return await _friendRepository.uploadFriendModel(newModel);
+  EitherFuture<bool> call(UserDataEntity newEntity) async {
+    return await _friendRepository.uploadFriendEntity(newEntity);
   }
 }

@@ -5,7 +5,6 @@ import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
 import 'package:wehavit/domain/repositories/confirm_post_repository.dart';
-import 'package:wehavit/domain/repositories/home_confirm_post_repository.dart';
 import 'package:wehavit/legacy/live_writing/live_writing.dart';
 
 class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
@@ -86,6 +85,13 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
   EitherFuture<List<ConfirmPostEntity>> getConfirmPostModelList(
       int selectedIndex) {
     // TODO: implement getConfirmPostModelList
+    throw UnimplementedError();
+  }
+
+  @override
+  EitherFuture<List<ConfirmPostEntity>> getConfirmPostListForResolutionId(
+      {required String resolutionId}) {
+    // TODO: implement getConfirmPostListForResolutionId
     throw UnimplementedError();
   }
 }

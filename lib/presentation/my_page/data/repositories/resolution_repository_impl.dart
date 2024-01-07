@@ -33,7 +33,7 @@ class ResolutionRepositoryImpl implements ResolutionRepository {
   }
 
   @override
-  EitherFuture<bool> uploadResolutionModel(
+  EitherFuture<bool> uploadResolutionEntity(
     ResolutionEntity entity,
   ) async {
     return _resolutionDatasource.uploadResolutionEntity(entity);

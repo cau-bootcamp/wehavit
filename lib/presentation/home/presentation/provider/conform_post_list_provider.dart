@@ -20,7 +20,6 @@ class ConfirmPostListProvider
 
   Future<void> getConfirmPostList(int selectedIndex) async {
     //state = await getConfirmPostListUsecase(NoParams());
-    state = await getConfirmPostListUsecase
-        .getConfirmPostModelListByDate(selectedIndex);
+    state = await getConfirmPostListUsecase(selectedIndex);
   }
 }

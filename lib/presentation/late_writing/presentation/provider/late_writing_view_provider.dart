@@ -11,7 +11,7 @@ import 'package:wehavit/presentation/late_writing/presentation/model/late_writin
 final lateWritingViewModelProvider =
     StateNotifierProvider<LateWritingViewModelProvider, LateWritingViewModel>(
   (ref) {
-    final createPostUsecase = ref.watch(createConfirmPostUseCaseProvider);
+    final createPostUsecase = ref.watch(uploadConfirmPostUseCaseProvider);
     final getMyResolutionListUsecase =
         ref.watch(getMyResolutionListUsecaseProvider);
 
@@ -30,7 +30,7 @@ class LateWritingViewModelProvider extends StateNotifier<LateWritingViewModel> {
     state.resolutionList = _getMyResolutionListUsecase(NoParams());
   }
 
-  final CreateConfirmPostUseCase _createPostUseCase;
+  final UploadConfirmPostUseCase _createPostUseCase;
   final GetMyResolutionListUsecase _getMyResolutionListUsecase;
 
   Future<void> postCurrentConfirmPost() async {

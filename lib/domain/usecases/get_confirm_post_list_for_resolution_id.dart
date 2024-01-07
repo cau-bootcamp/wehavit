@@ -1,23 +1,24 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
+import 'package:wehavit/domain/repositories/confirm_post_repository.dart';
 import 'package:wehavit/domain/repositories/resolution_repository.dart';
 
 final getConfirmPostListForResolutionIdUsecaseProvider =
     Provider<GetConfirmPostListForResolutionIdUsecase>((ref) {
-  final resolutionRepository = ref.watch(resolutionRepositoryProvider);
-  return GetConfirmPostListForResolutionIdUsecase(resolutionRepository);
+  final confirmPostRepository = ref.watch(uploadPostRepositoryProvider);
+  return GetConfirmPostListForResolutionIdUsecase(confirmPostRepository);
 });
 
 class GetConfirmPostListForResolutionIdUsecase
     extends FutureUseCase<List<ConfirmPostEntity>, String> {
-  GetConfirmPostListForResolutionIdUsecase(this._resolutionRepository);
+  GetConfirmPostListForResolutionIdUsecase(this._confirmPostRepository);
 
-  final ResolutionRepository _resolutionRepository;
+  final ConfirmPostRepository _confirmPostRepository;
 
   @override
   EitherFuture<List<ConfirmPostEntity>> call(params) {
-    return _resolutionRepository.getConfirmPostListForResolutionId(
+    return _confirmPostRepository.getConfirmPostListForResolutionId(
       resolutionId: params,
     );
   }

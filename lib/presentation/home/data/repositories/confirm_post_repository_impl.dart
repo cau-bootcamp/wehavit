@@ -7,8 +7,6 @@ import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.
 import 'package:wehavit/domain/repositories/confirm_post_repository.dart';
 import 'package:wehavit/presentation/home/data/datasources/confirm_post_datasource.dart';
 import 'package:wehavit/presentation/home/data/datasources/confirm_post_datasource_provider.dart';
-// import 'package:wehavit/features/home/data/entities/confirm_post_entity.dart';
-// import 'package:wehavit/features/home/domain/models/confirm_post_model.dart';
 
 class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
   ConfirmPostRepositoryImpl(Ref ref) {
@@ -58,6 +56,19 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
   @override
   EitherFuture<bool> updateConfirmPost(ConfirmPostEntity confirmPost) {
     // TODO: implement updateConfirmPost
+    throw UnimplementedError();
+  }
+
+  @override
+  EitherFuture<List<ConfirmPostEntity>> getAllConfirmPosts() {
+    // TODO: implement getAllConfirmPosts
+    throw UnimplementedError();
+  }
+
+  @override
+  EitherFuture<List<ConfirmPostEntity>> getConfirmPostListForResolutionId(
+      {required String resolutionId}) {
+    // TODO: implement getConfirmPostListForResolutionId
     throw UnimplementedError();
   }
 }

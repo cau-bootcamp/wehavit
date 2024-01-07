@@ -6,16 +6,16 @@ import 'package:wehavit/domain/repositories/user_model_fetch_repository.dart';
 
 final fetchUserDataFromIdUsecaseProvider =
     Provider<FetchUserDataFromIdUsecase>((ref) {
-  final repository = ref.watch(userModelFetchRepositoryProvider);
+  final repository = ref.watch(userDataFetchRepositoryProvider);
   return FetchUserDataFromIdUsecase(repository);
 });
 
 class FetchUserDataFromIdUsecase extends FutureUseCase<UserDataEntity, String> {
-  FetchUserDataFromIdUsecase(this._userModelFetchRepository);
+  FetchUserDataFromIdUsecase(this._userDataEntityFetchRepository);
 
-  final UserModelFetchRepository _userModelFetchRepository;
+  final UserModelFetchRepository _userDataEntityFetchRepository;
   @override
   EitherFuture<UserDataEntity> call(String params) {
-    return _userModelFetchRepository.fetchUserModelFromId(params);
+    return _userDataEntityFetchRepository.fetchUserModelFromId(params);
   }
 }

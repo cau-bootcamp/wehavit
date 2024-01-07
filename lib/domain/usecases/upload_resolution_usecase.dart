@@ -16,7 +16,7 @@ class UploadResolutionUseCase implements FutureUseCase<bool, ResolutionEntity> {
   final ResolutionRepository _resolutionRepository;
 
   @override
-  EitherFuture<bool> call(ResolutionEntity newModel) async {
-    return await _resolutionRepository.uploadResolutionModel(newModel);
+  EitherFuture<bool> call(ResolutionEntity newEntity) async {
+    return await _resolutionRepository.uploadResolutionEntity(newEntity);
   }
 }

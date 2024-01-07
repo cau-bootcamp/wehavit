@@ -10,5 +10,5 @@ final friendRepositoryProvider = Provider<FriendRepository>((ref) {
 abstract class FriendRepository {
   EitherFuture<List<UserDataEntity>> getFriendModelList();
 
-  EitherFuture<bool> uploadFriendModel(UserDataEntity model);
+  EitherFuture<bool> uploadFriendEntity(UserDataEntity model);
 }

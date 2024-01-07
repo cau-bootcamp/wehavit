@@ -43,7 +43,7 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
   Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
     myUserModel = ref
-        .read(userModelFetchRepositoryProvider)
+        .read(userDataFetchRepositoryProvider)
         .fetchUserModelFromId(FirebaseAuth.instance.currentUser!.uid);
   }
 
@@ -398,7 +398,7 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
                   );
 
                   (await ref.read(
-                    createConfirmPostUseCaseProvider,
+                    uploadConfirmPostUseCaseProvider,
                   )(cf))
                       .fold(
                     (l) {
@@ -457,7 +457,7 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
                   );
 
                   (await ref.read(
-                    createConfirmPostUseCaseProvider,
+                    uploadConfirmPostUseCaseProvider,
                   )(cf))
                       .fold(
                     (l) {

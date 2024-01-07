@@ -33,7 +33,7 @@ class FriendRepositoryImpl implements FriendRepository {
   }
 
   @override
-  EitherFuture<bool> uploadFriendModel(
+  EitherFuture<bool> uploadFriendEntity(
     UserDataEntity model,
   ) async {
     final entity = AddFriendEntity.fromAddFriendModel(model);

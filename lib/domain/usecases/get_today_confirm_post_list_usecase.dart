@@ -2,11 +2,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
 import 'package:wehavit/domain/repositories/confirm_post_repository.dart';
-import 'package:wehavit/domain/repositories/home_confirm_post_repository.dart';
 
 final getTodayConfirmPostListUsecaseProvider =
     Provider<GetTodayConfirmPostListUsecase>((ref) {
-  final confirmPostRepository = ref.watch(confirmPostRepositoryProvider);
+  final confirmPostRepository = ref.watch(uploadPostRepositoryProvider);
   return GetTodayConfirmPostListUsecase(confirmPostRepository);
 });
 

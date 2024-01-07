@@ -5,7 +5,7 @@ import 'package:wehavit/domain/repositories/confirm_post_repository.dart';
 
 final getAllPostUseCaseProvider = Provider<GetAllPostUseCase>(
   (ref) => GetAllPostUseCase(
-    ref.watch(confirmPostRepositoryProvider),
+    ref.watch(uploadPostRepositoryProvider),
   ),
 );
 
@@ -15,7 +15,6 @@ class GetAllPostUseCase {
   final ConfirmPostRepository _repository;
 
   EitherFuture<List<ConfirmPostEntity>> call() async {
-    // return await _repository.getAllConfirmPosts();
-    throw UnimplementedError();
+    return await _repository.getAllConfirmPosts();
   }
 }

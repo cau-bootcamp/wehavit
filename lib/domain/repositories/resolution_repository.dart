@@ -10,8 +10,6 @@ final resolutionRepositoryProvider = Provider<ResolutionRepository>((ref) {
 
 abstract class ResolutionRepository {
   EitherFuture<List<ResolutionEntity>> getActiveResolutionModelList();
-  EitherFuture<bool> uploadResolutionModel(ResolutionEntity model);
-  EitherFuture<List<ConfirmPostEntity>> getConfirmPostListForResolutionId({
-    required String resolutionId,
-  });
+
+  EitherFuture<bool> uploadResolutionEntity(ResolutionEntity model);
 }
