@@ -3,17 +3,24 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
+import 'package:wehavit/data/datasources/wehavit_auth_datasource.dart';
+import 'package:wehavit/data/datasources/google_auth_datasource.dart';
+import 'package:wehavit/presentation/auth/data/entities/auth_result.dart';
 import 'package:wehavit/presentation/features.dart';
 
-class AuthRepositoryImpl implements AuthRepository {
-  AuthRepositoryImpl(this._authRemoteDataSource);
+class WehavitAuthRepositoryImpl implements AuthRepository {
+  WehavitAuthRepositoryImpl(
+    this._authDataSource,
+    this._googleAuthDataSource,
+  );
 
-  final AuthRemoteDataSource _authRemoteDataSource;
+  final WehavitAuthDataSource _authDataSource;
+  final GoogleAuthDatasource _googleAuthDataSource;
 
   @override
   Stream<User?> authStateChanges() {
     try {
-      final result = _authRemoteDataSource.authStateChanges();
+      final result = _authDataSource.authStateChanges();
       return result;
     } catch (e) {
       throw const Failure('there is no user');
@@ -23,7 +30,7 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   EitherFuture<AuthResult> logInWithGoogle() async {
     try {
-      final result = await _authRemoteDataSource.googleLogIn();
+      final result = await _googleAuthDataSource.googleLogIn();
       return Right(result);
     } catch (e) {
       return const Left(Failure('something went wrong'));
@@ -32,12 +39,12 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<void> logOut() async {
-    return await _authRemoteDataSource.logOut();
+    return await _authDataSource.logOut();
   }
 
   @override
   Future<void> googleLogOut() async {
-    return await _authRemoteDataSource.googleLogOut();
+    return await _googleAuthDataSource.googleLogOut();
   }
 
   @override
@@ -46,7 +53,7 @@ class AuthRepositoryImpl implements AuthRepository {
     String password,
   ) async {
     try {
-      final result = await _authRemoteDataSource.registerWithEmailAndPassword(
+      final result = await _authDataSource.registerWithEmailAndPassword(
         email,
         password,
       );
@@ -63,7 +70,7 @@ class AuthRepositoryImpl implements AuthRepository {
     String password,
   ) async {
     try {
-      final result = await _authRemoteDataSource.logInWithEmailAndPassword(
+      final result = await _authDataSource.logInWithEmailAndPassword(
         email,
         password,
       );

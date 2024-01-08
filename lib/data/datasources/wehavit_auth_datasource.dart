@@ -1,9 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:wehavit/presentation/auth/auth.dart';
+import 'package:wehavit/presentation/auth/data/entities/auth_result.dart';
 
-abstract class AuthRemoteDataSource {
-  Future<AuthResult> googleLogIn();
-
+abstract class WehavitAuthDataSource {
   Future<AuthResult> registerWithEmailAndPassword(
     String email,
     String password,
@@ -12,8 +10,6 @@ abstract class AuthRemoteDataSource {
   Future<AuthResult> logInWithEmailAndPassword(String email, String password);
 
   Future<void> logOut();
-
-  Future<void> googleLogOut();
 
   Stream<User?> authStateChanges();
 }
