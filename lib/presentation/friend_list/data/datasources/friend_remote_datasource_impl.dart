@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/constants/firebase_field_name.dart';
 import 'package:wehavit/common/errors/failure.dart';
@@ -8,6 +9,10 @@ import 'package:wehavit/common/utils/firebase_collection_name.dart';
 import 'package:wehavit/presentation/friend_list/data/datasources/friend_datasource.dart';
 import 'package:wehavit/presentation/friend_list/data/entities/add_friend_entity.dart';
 import 'package:wehavit/presentation/friend_list/data/entities/friend_entity.dart';
+
+final friendDatasourceProvider = Provider<FriendDatasource>((ref) {
+  return FriendRemoteDatasourceImpl();
+});
 
 class FriendRemoteDatasourceImpl implements FriendDatasource {
   @override

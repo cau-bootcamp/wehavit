@@ -5,7 +5,7 @@ import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
 import 'package:wehavit/domain/repositories/friend_repository.dart';
 import 'package:wehavit/presentation/friend_list/data/datasources/friend_datasource.dart';
-import 'package:wehavit/presentation/friend_list/data/datasources/friend_datasource_provider.dart';
+import 'package:wehavit/presentation/friend_list/data/datasources/friend_remote_datasource_impl.dart';
 import 'package:wehavit/presentation/friend_list/data/entities/add_friend_entity.dart';
 import 'package:wehavit/presentation/friend_list/data/entities/friend_entity.dart';
 
