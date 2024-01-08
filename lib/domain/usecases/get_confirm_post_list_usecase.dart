@@ -6,7 +6,7 @@ import 'package:wehavit/domain/repositories/confirm_post_repository.dart';
 
 final getConfirmPostListUsecaseProvider =
     Provider<GetConfirmPostListUsecase>((ref) {
-  final confirmPostRepository = ref.watch(uploadPostRepositoryProvider);
+  final confirmPostRepository = ref.watch(confirmPostRepositoryProvider);
   return GetConfirmPostListUsecase(confirmPostRepository);
 });
 
@@ -18,8 +18,10 @@ class GetConfirmPostListUsecase
 
   @override
   Future<Either<Failure, List<ConfirmPostEntity>>> call(
-    int selectedIndex,
+    int selectedDate,
   ) async {
-    return _confirmPostRepository.getConfirmPostModelList(selectedIndex);
+    return _confirmPostRepository.getConfirmPostEntityListByDate(
+      selectedDate: selectedDate,
+    );
   }
 }

@@ -1,13 +1,11 @@
 import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wehavit/common/utils/no_params.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
 import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
 import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
 import 'package:wehavit/domain/usecases/fetch_user_data_from_id_usecase.dart';
 import 'package:wehavit/domain/usecases/get_confirm_post_list_for_resolution_id.dart';
-import 'package:wehavit/domain/usecases/get_today_confirm_post_list_usecase.dart';
 import 'package:wehavit/domain/usecases/send_reaction_to_target_confirm_post.dart';
 import 'package:wehavit/presentation/home/presentation/model/main_view_model.dart';
 
@@ -18,27 +16,25 @@ final mainViewModelProvider =
 
 class MainViewModelProvider extends StateNotifier<MainViewModel> {
   MainViewModelProvider(Ref ref) : super(MainViewModel()) {
-    _getTodayConfirmPostListUsecase =
-        ref.watch(getTodayConfirmPostListUsecaseProvider);
     _fetchUserDataFromIdUsecase = ref.watch(fetchUserDataFromIdUsecaseProvider);
     _sendReactionToTargetConfirmPostUsecase =
-        ref.watch(sendReactionToTargetConfirmPostUsecaseProvider);
+        ref.watch(uploadReactionToTargetConfirmPostUsecaseProvider);
 
     getConfirmPostListForResolutionIdUsecase =
         ref.watch(getConfirmPostListForResolutionIdUsecaseProvider);
   }
 
-  late final GetTodayConfirmPostListUsecase _getTodayConfirmPostListUsecase;
   late final FetchUserDataFromIdUsecase _fetchUserDataFromIdUsecase;
-  late final SendReactionToTargetConfirmPostUsecase
+  late final UploadReactionToTargetConfirmPostUsecase
       _sendReactionToTargetConfirmPostUsecase;
   late final GetConfirmPostListForResolutionIdUsecase
       getConfirmPostListForResolutionIdUsecase;
   final currentUserUid = FirebaseAuth.instance.currentUser!.uid;
 
   Future<void> getTodayConfirmPostModelList() async {
-    state.confirmPostModelList =
-        await _getTodayConfirmPostListUsecase.call(NoParams());
+    // TODO: 오늘의 Confirm Post Entity List를 불러오기
+    // state.confirmPostModelList =
+    //     await _getTodayConfirmPostListUsecase.call(NoParams());
 
     state.confirmPostModelList.fold((failure) {
       state.userModelList = [];

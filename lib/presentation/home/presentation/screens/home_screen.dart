@@ -10,10 +10,10 @@ import 'package:wehavit/presentation/home/presentation/model/main_view_model.dar
 import 'package:wehavit/presentation/home/presentation/provider/main_view_model_provider.dart';
 import 'package:wehavit/presentation/home/presentation/widget/confirm_post_widget.dart';
 import 'package:wehavit/presentation/reaction/presentation/widget/reaction_animation_widget.dart';
-import 'package:wehavit/presentation/swipe_view/presentation/model/reaction_camera_widget_model.dart';
-import 'package:wehavit/presentation/swipe_view/presentation/provider/reaction_camera_widget_model_provider.dart';
-import 'package:wehavit/presentation/swipe_view/presentation/provider/swipe_view_model_provider.dart';
-import 'package:wehavit/presentation/swipe_view/presentation/screen/widget/reaction_camera_widget.dart';
+import 'package:wehavit/legacy/swipe_view/presentation/model/reaction_camera_widget_model.dart';
+import 'package:wehavit/legacy/swipe_view/presentation/provider/reaction_camera_widget_model_provider.dart';
+import 'package:wehavit/legacy/swipe_view/presentation/provider/swipe_view_model_provider.dart';
+import 'package:wehavit/legacy/swipe_view/presentation/screen/widget/reaction_camera_widget.dart';
 
 import '../provider/conform_post_list_provider.dart';
 

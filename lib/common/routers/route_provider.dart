@@ -12,7 +12,7 @@ import 'package:wehavit/presentation/home/presentation/screens/home_screen.dart'
 import 'package:wehavit/presentation/late_writing/presentation/screen/late_writing_view.dart';
 import 'package:wehavit/presentation/my_page/presentation/screens/add_resolution_screen.dart';
 import 'package:wehavit/presentation/my_page/presentation/screens/my_page_screen.dart';
-import 'package:wehavit/presentation/swipe_view/presentation/screen/swipe_view.dart';
+import 'package:wehavit/legacy/swipe_view/presentation/screen/swipe_view.dart';
 
 part 'route_provider.g.dart';
 

@@ -21,17 +21,18 @@ class MyPageResolutionListProvider extends StateNotifier<
     Either<Failure,
         (List<ResolutionEntity>, List<Future<List<ConfirmPostEntity>>>)>> {
   MyPageResolutionListProvider(Ref ref) : super(const Right(([], []))) {
-    getResolutionListUsecase = ref.watch(getMyResolutionListUsecaseProvider);
+    getResolutionListUsecase =
+        ref.watch(getResolutionListByUserIdUsecaseProvider);
     getConfirmPostListForResolutionIdUsecase =
         ref.watch(getConfirmPostListForResolutionIdUsecaseProvider);
   }
 
-  late final GetMyResolutionListUsecase getResolutionListUsecase;
+  late final GetResolutionListByUserIdUsecase getResolutionListUsecase;
   late final GetConfirmPostListForResolutionIdUsecase
       getConfirmPostListForResolutionIdUsecase;
 
   Future<void> getActiveResolutionList() async {
-    final resolutionFetchResult = await getResolutionListUsecase(NoParams());
+    final resolutionFetchResult = await getResolutionListUsecase("my user id");
 
     final List<ResolutionEntity> resolutionList = resolutionFetchResult.fold(
       (failure) => [],

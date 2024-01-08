@@ -13,7 +13,7 @@ import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.
 import 'package:wehavit/domain/entities/resolution_entity/resolution_entity.dart';
 import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
 import 'package:wehavit/domain/repositories/user_model_fetch_repository.dart';
-import 'package:wehavit/domain/usecases/create_confirm_post_usecase.dart';
+import 'package:wehavit/domain/usecases/upload_confirm_post_usecase.dart';
 import 'package:wehavit/legacy/live_writing/live_writing.dart';
 import 'package:wehavit/legacy/repository/live_writing_mine_repository_provider.dart';
 

@@ -9,7 +9,7 @@ import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.
 import 'package:wehavit/domain/entities/resolution_entity/resolution_entity.dart';
 import 'package:wehavit/presentation/my_page/presentation/providers/my_page_resolution_list_provider.dart';
 import 'package:wehavit/presentation/my_page/presentation/widgets/resolution_dashboard_widget.dart';
-import 'package:wehavit/presentation/swipe_view/presentation/screen/widget/swipe_dashboard_widget.dart';
+import 'package:wehavit/legacy/swipe_view/presentation/screen/widget/swipe_dashboard_widget.dart';
 
 class MyPageScreen extends ConsumerStatefulWidget {
   const MyPageScreen({super.key});

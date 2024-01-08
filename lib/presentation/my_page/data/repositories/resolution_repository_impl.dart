@@ -16,7 +16,9 @@ class ResolutionRepositoryImpl implements ResolutionRepository {
   late final ResolutionDatasource _resolutionDatasource;
 
   @override
-  EitherFuture<List<ResolutionEntity>> getActiveResolutionModelList() async {
+  EitherFuture<List<ResolutionEntity>> getActiveResolutionModelList(
+    String userId,
+  ) async {
     try {
       final getResult =
           await _resolutionDatasource.getActiveResolutionEntityList();
@@ -37,14 +39,5 @@ class ResolutionRepositoryImpl implements ResolutionRepository {
     ResolutionEntity entity,
   ) async {
     return _resolutionDatasource.uploadResolutionEntity(entity);
-  }
-
-  @override
-  EitherFuture<List<ConfirmPostEntity>> getConfirmPostListForResolutionId({
-    required String resolutionId,
-  }) {
-    return _resolutionDatasource.getConfirmPostListForResolutionId(
-      resolutionId: resolutionId,
-    );
   }
 }

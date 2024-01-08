@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/utils/no_params.dart';
 import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
-import 'package:wehavit/domain/usecases/get_reaction_not_read_from_last_confirm_post_usecase.dart';
+import 'package:wehavit/domain/usecases/get_unread_reaction_from_last_confirm_post_usecase.dart';
 
 final reactionAnimationWidgetManagerProvider =
     StateNotifierProvider<ReactionAnimationWidgetManager, void>((ref) {
@@ -11,10 +11,10 @@ final reactionAnimationWidgetManagerProvider =
 class ReactionAnimationWidgetManager extends StateNotifier<void> {
   ReactionAnimationWidgetManager(Ref ref) : super([]) {
     _getReactionUnreadFromLastConfirmPostUsecase =
-        ref.watch(getReactionUnreadFromLastConfirmPostUsecaseProvider);
+        ref.watch(getUnreadReactionListFromLastConfirmPostUsecaseProvider);
   }
 
-  late GetReactionUnreadFromLastConfirmPostUsecase
+  late GetUnreadReactionListFromLastConfirmPostUsecase
       _getReactionUnreadFromLastConfirmPostUsecase;
 
   Future<List<ReactionGroupModel>>

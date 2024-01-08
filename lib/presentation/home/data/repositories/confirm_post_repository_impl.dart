@@ -16,25 +16,6 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
   late final ConfirmPostDatasource _confirmPostDatasource;
 
   @override
-  EitherFuture<List<ConfirmPostEntity>> getConfirmPostModelList(
-    int selectedIndex,
-  ) async {
-    try {
-      final getResult = await _confirmPostDatasource.getConfirmPostEntityList(
-        selectedIndex,
-      );
-
-      return getResult.fold((failure) => left(failure), (entityList) {
-        final modelList = entityList.toList();
-
-        return Future(() => right(modelList));
-      });
-    } on Exception catch (e) {
-      return Future(() => left(Failure(e.toString())));
-    }
-  }
-
-  @override
   EitherFuture<bool> createConfirmPost(ConfirmPostEntity confirmPost) {
     // TODO: implement createConfirmPost
     throw UnimplementedError();
@@ -48,7 +29,9 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
   }
 
   @override
-  EitherFuture<ConfirmPostEntity> getConfirmPostByUserId(String userId) {
+  EitherFuture<ConfirmPostEntity> getConfirmPostEntityByUserId({
+    required String userId,
+  }) {
     // TODO: implement getConfirmPostByUserId
     throw UnimplementedError();
   }
@@ -60,15 +43,27 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
   }
 
   @override
-  EitherFuture<List<ConfirmPostEntity>> getAllConfirmPosts() {
-    // TODO: implement getAllConfirmPosts
+  EitherFuture<List<ConfirmPostEntity>> getConfirmPostEntityListByResolutionId(
+      {required String resolutionId}) {
+    // TODO: implement getConfirmPostListForResolutionId
     throw UnimplementedError();
   }
 
   @override
-  EitherFuture<List<ConfirmPostEntity>> getConfirmPostListForResolutionId(
-      {required String resolutionId}) {
-    // TODO: implement getConfirmPostListForResolutionId
-    throw UnimplementedError();
+  EitherFuture<List<ConfirmPostEntity>> getConfirmPostEntityListByDate(
+      {required int selectedDate}) async {
+    try {
+      final getResult = await _confirmPostDatasource.getConfirmPostEntityList(
+        selectedDate,
+      );
+
+      return getResult.fold((failure) => left(failure), (entityList) {
+        final modelList = entityList.toList();
+
+        return Future(() => right(modelList));
+      });
+    } on Exception catch (e) {
+      return Future(() => left(Failure(e.toString())));
+    }
   }
 }

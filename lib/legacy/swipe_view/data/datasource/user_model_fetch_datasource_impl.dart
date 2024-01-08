@@ -7,7 +7,7 @@ import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/common/utils/firebase_collection_name.dart';
 import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
-import 'package:wehavit/presentation/swipe_view/data/datasource/user_model_fetch_datasource.dart';
+import 'package:wehavit/legacy/swipe_view/data/datasource/user_model_fetch_datasource.dart';
 
 class UserModelFetchDatasourceImpl extends UserModelFetchDatasource {
   @override

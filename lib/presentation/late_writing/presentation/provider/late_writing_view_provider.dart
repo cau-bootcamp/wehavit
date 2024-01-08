@@ -4,7 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
 import 'package:wehavit/domain/entities/resolution_entity/resolution_entity.dart';
-import 'package:wehavit/domain/usecases/create_confirm_post_usecase.dart';
+import 'package:wehavit/domain/usecases/upload_confirm_post_usecase.dart';
 import 'package:wehavit/domain/usecases/get_my_resolution_list_usecase.dart';
 import 'package:wehavit/presentation/late_writing/presentation/model/late_writing_view_model.dart';
 
@@ -13,7 +13,7 @@ final lateWritingViewModelProvider =
   (ref) {
     final createPostUsecase = ref.watch(uploadConfirmPostUseCaseProvider);
     final getMyResolutionListUsecase =
-        ref.watch(getMyResolutionListUsecaseProvider);
+        ref.watch(getResolutionListByUserIdUsecaseProvider);
 
     return LateWritingViewModelProvider(
       createPostUsecase,
@@ -31,7 +31,7 @@ class LateWritingViewModelProvider extends StateNotifier<LateWritingViewModel> {
   }
 
   final UploadConfirmPostUseCase _createPostUseCase;
-  final GetMyResolutionListUsecase _getMyResolutionListUsecase;
+  final GetResolutionListByUserIdUsecase _getMyResolutionListUsecase;
 
   Future<void> postCurrentConfirmPost() async {
     final fetchResult = await state.resolutionList;

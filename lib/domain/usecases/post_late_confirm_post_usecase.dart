@@ -9,7 +9,6 @@ class PostLateConfirmPostUsecase
   final ConfirmPostRepository _repository;
   @override
   EitherFuture<bool> call(ConfirmPostEntity params) async {
-    // return await _repository.createConfirmPost(params);
-    throw UnimplementedError();
+    return await _repository.createConfirmPost(params);
   }
 }

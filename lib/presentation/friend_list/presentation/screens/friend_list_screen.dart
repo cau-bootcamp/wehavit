@@ -71,7 +71,7 @@ class _FriendListScreenState extends ConsumerState<FriendListScreen> {
                   itemCount: right.length,
                   itemBuilder: (context, index) {
                     return FriendElementWidget(
-                      key: ValueKey(right[index].friendEmail),
+                      key: ValueKey(right[index].userEmail),
                       model: right[index],
                     );
                   },

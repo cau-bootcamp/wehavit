@@ -16,10 +16,10 @@ class SwipeViewCellUserModelProvider
       : super(Right(UserDataEntity.dummyModel)) {
     _fetchUserDataFromIdUsecase = ref.watch(fetchUserDataFromIdUsecaseProvider);
     _sendReactionToTargetConfirmPostUsecase =
-        ref.watch(sendReactionToTargetConfirmPostUsecaseProvider);
+        ref.watch(uploadReactionToTargetConfirmPostUsecaseProvider);
   }
   late final FetchUserDataFromIdUsecase _fetchUserDataFromIdUsecase;
-  late final SendReactionToTargetConfirmPostUsecase
+  late final UploadReactionToTargetConfirmPostUsecase
       _sendReactionToTargetConfirmPostUsecase;
 
   void getUserModelFromUi(String userId) async {

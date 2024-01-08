@@ -3,12 +3,12 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
-import 'package:wehavit/presentation/swipe_view/presentation/model/reaction_camera_widget_model.dart';
-import 'package:wehavit/presentation/swipe_view/presentation/model/swipe_view_model.dart';
-import 'package:wehavit/presentation/swipe_view/presentation/provider/reaction_camera_widget_model_provider.dart';
-import 'package:wehavit/presentation/swipe_view/presentation/provider/swipe_view_model_provider.dart';
-import 'package:wehavit/presentation/swipe_view/presentation/screen/widget/reaction_camera_widget.dart';
-import 'package:wehavit/presentation/swipe_view/presentation/screen/widget/swipe_view_cell.dart';
+import 'package:wehavit/legacy/swipe_view/presentation/model/reaction_camera_widget_model.dart';
+import 'package:wehavit/legacy/swipe_view/presentation/model/swipe_view_model.dart';
+import 'package:wehavit/legacy/swipe_view/presentation/provider/reaction_camera_widget_model_provider.dart';
+import 'package:wehavit/legacy/swipe_view/presentation/provider/swipe_view_model_provider.dart';
+import 'package:wehavit/legacy/swipe_view/presentation/screen/widget/reaction_camera_widget.dart';
+import 'package:wehavit/legacy/swipe_view/presentation/screen/widget/swipe_view_cell.dart';
 
 class SwipeView extends ConsumerStatefulWidget {
   const SwipeView({super.key});

@@ -20,7 +20,7 @@ import 'package:wehavit/legacy/repository/live_writing_mine_repository_provider.
 import 'package:wehavit/legacy/waiting_entity/waiting_model.dart';
 import 'package:wehavit/presentation/effects/emoji_firework_animation/emoji_firework_manager.dart';
 
-import 'package:wehavit/presentation/swipe_view/presentation/screen/widget/emoji_sheet_widget.dart';
+import 'package:wehavit/legacy/swipe_view/presentation/screen/widget/emoji_sheet_widget.dart';
 
 class LiveWritingView extends StatefulHookConsumerWidget {
   const LiveWritingView({super.key});
