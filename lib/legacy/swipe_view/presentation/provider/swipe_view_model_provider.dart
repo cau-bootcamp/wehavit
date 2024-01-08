@@ -6,7 +6,7 @@ import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
 import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
 import 'package:wehavit/domain/usecases/fetch_user_data_from_id_usecase.dart';
 import 'package:wehavit/domain/usecases/get_confirm_post_list_for_resolution_id.dart';
-import 'package:wehavit/domain/usecases/send_reaction_to_target_confirm_post.dart';
+import 'package:wehavit/domain/usecases/upload_reaction_to_target_confirm_post.dart';
 
 import 'package:wehavit/legacy/swipe_view/presentation/model/swipe_view_model.dart';
 

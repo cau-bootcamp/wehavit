@@ -4,7 +4,7 @@ import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
 import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
 import 'package:wehavit/domain/usecases/fetch_user_data_from_id_usecase.dart';
-import 'package:wehavit/domain/usecases/send_reaction_to_target_confirm_post.dart';
+import 'package:wehavit/domain/usecases/upload_reaction_to_target_confirm_post.dart';
 
 final swipeViewCellUserModelProvider = StateNotifierProvider<
         SwipeViewCellUserModelProvider, Either<Failure, UserDataEntity>>(
