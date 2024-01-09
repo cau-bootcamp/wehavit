@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
+import 'package:wehavit/data/repositories/resolution_repository_impl.dart';
 import 'package:wehavit/domain/entities/resolution_entity/resolution_entity.dart';
 import 'package:wehavit/domain/repositories/resolution_repository.dart';
 

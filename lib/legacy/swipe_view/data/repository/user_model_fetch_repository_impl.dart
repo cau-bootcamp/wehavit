@@ -5,7 +5,7 @@ import 'package:wehavit/domain/repositories/user_model_fetch_repository.dart';
 import 'package:wehavit/legacy/swipe_view/data/datasource/user_model_fetch_datasource.dart';
 import 'package:wehavit/legacy/swipe_view/data/datasource/user_model_fetch_datasource_provider.dart';
 
-class UserModelFetchRepositoryImpl implements UserModelFetchRepository {
+class UserModelFetchRepositoryImpl implements UserModelRepository {
   UserModelFetchRepositoryImpl(Ref ref) {
     _userDataEntityFetchDatasource =
         ref.watch(userModelFetchDatasourceProvider);

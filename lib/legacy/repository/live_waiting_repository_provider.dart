@@ -1,4 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:wehavit/data/repositories/friend_repository_impl.dart';
 import 'package:wehavit/domain/repositories/friend_repository.dart';
 import 'package:wehavit/legacy/live_writing_waiting/data/live_waiting_repository_impl.dart';
 

@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:multiselect/multiselect.dart';
 import 'package:wehavit/common/common.dart';
+import 'package:wehavit/data/repositories/friend_repository_impl.dart';
 import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
-import 'package:wehavit/domain/repositories/friend_repository.dart';
 import 'package:wehavit/presentation/my_page/providers/add_resolution_provider.dart';
 import 'package:wehavit/presentation/my_page/providers/my_page_resolution_list_provider.dart';
 

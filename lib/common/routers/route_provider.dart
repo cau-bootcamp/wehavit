@@ -8,11 +8,11 @@ import 'package:wehavit/legacy/live_writing/presentation/screens/live_writing_vi
 import 'package:wehavit/legacy/live_writing_waiting/live_waiting_sample_view.dart';
 import 'package:wehavit/presentation/effects/animation_sample_page.dart';
 import 'package:wehavit/presentation/features.dart';
-import 'package:wehavit/presentation/home/presentation/screens/home_screen.dart';
-import 'package:wehavit/presentation/late_writing/presentation/screen/late_writing_view.dart';
-import 'package:wehavit/presentation/my_page/presentation/screens/add_resolution_screen.dart';
-import 'package:wehavit/presentation/my_page/presentation/screens/my_page_screen.dart';
 import 'package:wehavit/legacy/swipe_view/presentation/screen/swipe_view.dart';
+import 'package:wehavit/presentation/home/screens/home_screen.dart';
+import 'package:wehavit/presentation/late_writing/screen/late_writing_view.dart';
+import 'package:wehavit/presentation/my_page/screens/add_resolution_screen.dart';
+import 'package:wehavit/presentation/my_page/screens/my_page_screen.dart';
 
 part 'route_provider.g.dart';
 

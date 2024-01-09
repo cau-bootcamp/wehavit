@@ -1,15 +1,28 @@
 // ignore_for_file: avoid_catches_without_on_clauses
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/data/datasources/auth_google_datasource.dart';
+import 'package:wehavit/data/datasources/auth_google_datasource_impl.dart';
 import 'package:wehavit/data/datasources/auth_wehavit_datasource.dart';
-import 'package:wehavit/presentation/auth/data/entities/auth_result.dart';
+import 'package:wehavit/data/datasources/auth_wehavit_datasource_impl.dart';
+import 'package:wehavit/data/models/auth_result_model.dart';
+import 'package:wehavit/domain/repositories/auth_repository.dart';
 import 'package:wehavit/presentation/features.dart';
 
-class WehavitAuthRepositoryImpl implements AuthRepository {
-  WehavitAuthRepositoryImpl(
+final authRepositoryProvider = Provider<AuthRepository>((ref) {
+  final wehavitAuthDataSource = ref.watch(wehavitAuthDatasourceProvider);
+  final googleAuthDataSource = ref.watch(googleAuthDatasourceProvider);
+  return AuthRepositoryImpl(
+    wehavitAuthDataSource,
+    googleAuthDataSource,
+  );
+});
+
+class AuthRepositoryImpl implements AuthRepository {
+  AuthRepositoryImpl(
     this._authDataSource,
     this._googleAuthDataSource,
   );

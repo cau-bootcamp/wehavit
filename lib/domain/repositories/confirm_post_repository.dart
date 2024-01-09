@@ -4,10 +4,6 @@ import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/data/repositories/wehavit_data_repository_impl.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
 
-final confirmPostRepositoryProvider = Provider<ConfirmPostRepository>((ref) {
-  return ref.watch(wehavitDataRepositoryProvider);
-});
-
 abstract class ConfirmPostRepository {
   EitherFuture<List<ConfirmPostEntity>> getConfirmPostEntityListByDate({
     required int selectedDate,

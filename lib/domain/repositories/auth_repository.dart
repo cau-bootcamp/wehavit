@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/presentation/auth/data/entities/auth_result.dart';
+import 'package:wehavit/data/models/auth_result_model.dart';
 
 abstract class AuthRepository {
   EitherFuture<AuthResult> logInWithGoogle();

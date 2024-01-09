@@ -13,10 +13,6 @@ import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
 import 'package:wehavit/domain/entities/resolution_entity/resolution_entity.dart';
 import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
 
-final firebaseDatasourceImplProvider = Provider<FirebaseDatasourceImpl>((ref) {
-  return FirebaseDatasourceImpl();
-});
-
 class FirebaseDatasourceImpl implements WehavitDatasource {
   int get maxDay => 27;
 

@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wehavit/presentation/auth/auth.dart';
-import 'package:wehavit/presentation/auth/domain/usecases/login/email_and_password_register_usecase.dart';
+import 'package:wehavit/data/repositories/auth_repository_impl.dart';
+import 'package:wehavit/domain/usecases/login/email_and_password_register_usecase.dart';
 
 final emailAndPasswordRegisterUseCaseProvider =
     Provider<EmailAndPasswordRegisterUseCase>((ref) {

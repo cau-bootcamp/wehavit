@@ -1,3 +1,4 @@
+import 'package:wehavit/domain/repositories/auth_repository.dart';
 import 'package:wehavit/presentation/auth/auth.dart';
 
 class LogOutUseCase {

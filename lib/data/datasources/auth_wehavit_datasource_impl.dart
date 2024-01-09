@@ -1,9 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/constants/firebase_field_name.dart';
 import 'package:wehavit/common/utils/firebase_collection_name.dart';
 import 'package:wehavit/data/datasources/auth_wehavit_datasource.dart';
 import 'package:wehavit/presentation/auth/data/entities/auth_result.dart';
+
+final wehavitAuthDatasourceProvider = Provider<AuthWehavitDataSource>((ref) {
+  return AuthWehavitDataSourceImpl();
+});
 
 class AuthWehavitDataSourceImpl implements AuthWehavitDataSource {
   @override

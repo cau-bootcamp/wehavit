@@ -1,1 +1,1 @@
-enum AuthResult { none, aborted, success, failure }
+// TODO Implement this library.
