@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:wehavit/presentation/auth/auth.dart';
 import 'package:wehavit/presentation/auth/data/entities/auth_result.dart';
 
 @immutable

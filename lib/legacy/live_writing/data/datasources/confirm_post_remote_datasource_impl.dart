@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
-import 'package:wehavit/presentation/home/data/datasources/confirm_post_datasource.dart';
+import 'package:wehavit/legacy/live_writing/live_writing.dart';
 
 class ConfirmPostRemoteDatasourceImpl implements ConfirmPostDatasource {
   @override

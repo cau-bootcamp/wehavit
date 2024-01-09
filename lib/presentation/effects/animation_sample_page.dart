@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wehavit/presentation/reaction/presentation/widget/reaction_animation_widget.dart';
+import 'package:wehavit/presentation/reaction/widget/reaction_animation_widget.dart';
 
 class AnimationSamplePage extends StatelessWidget {
   const AnimationSamplePage({super.key});

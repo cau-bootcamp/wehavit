@@ -1,13 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wehavit/data/datasources/google_auth_datasource.dart';
-import 'package:wehavit/data/datasources/google_auth_datasource_impl.dart';
-import 'package:wehavit/data/datasources/wehavit_auth_datasource.dart';
-import 'package:wehavit/data/datasources/wehavit_auth_datasource_impl.dart';
+import 'package:wehavit/data/datasources/auth_google_datasource.dart';
+import 'package:wehavit/data/datasources/auth_google_datasource_impl.dart';
+import 'package:wehavit/data/datasources/auth_wehavit_datasource.dart';
+import 'package:wehavit/data/datasources/auth_wehavit_datasource_impl.dart';
 
-final wehavitAuthDatasourceProvider = Provider<WehavitAuthDataSource>((ref) {
-  return WehavitAuthDataSourceImpl();
+final wehavitAuthDatasourceProvider = Provider<AuthWehavitDataSource>((ref) {
+  return AuthWehavitDataSourceImpl();
 });
 
-final googleAuthDatasourceProvider = Provider<GoogleAuthDatasource>((ref) {
-  return GoogleAuthDatasourceImpl();
+final googleAuthDatasourceProvider = Provider<AuthGoogleDatasource>((ref) {
+  return AuthGoogleDatasourceImpl();
 });

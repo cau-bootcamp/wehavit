@@ -3,8 +3,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/data/datasources/wehavit_auth_datasource.dart';
-import 'package:wehavit/data/datasources/google_auth_datasource.dart';
+import 'package:wehavit/data/datasources/auth_google_datasource.dart';
+import 'package:wehavit/data/datasources/auth_wehavit_datasource.dart';
 import 'package:wehavit/presentation/auth/data/entities/auth_result.dart';
 import 'package:wehavit/presentation/features.dart';
 
@@ -14,8 +14,8 @@ class WehavitAuthRepositoryImpl implements AuthRepository {
     this._googleAuthDataSource,
   );
 
-  final WehavitAuthDataSource _authDataSource;
-  final GoogleAuthDatasource _googleAuthDataSource;
+  final AuthWehavitDataSource _authDataSource;
+  final AuthGoogleDatasource _googleAuthDataSource;
 
   @override
   Stream<User?> authStateChanges() {
