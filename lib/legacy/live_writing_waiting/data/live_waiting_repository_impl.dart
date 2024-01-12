@@ -78,7 +78,7 @@ class LiveWaitingRepositoryImpl implements LiveWaitingRepository {
   }
 
   Future<List<UserDataEntity>> _getFriendList() async {
-    final friendList = (await _friendRepository.getFriendModelList())
+    final friendList = (await _friendRepository.getFriendEntityList())
         .fold<List<UserDataEntity>>(
       (l) => [],
       (r) => r,

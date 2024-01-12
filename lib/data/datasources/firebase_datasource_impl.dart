@@ -1,31 +1,95 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/constants/firebase_field_name.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/common/utils/firebase_collection_name.dart';
 import 'package:wehavit/data/datasources/wehavit_datasource.dart';
+import 'package:wehavit/data/models/user_model.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
 import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
 import 'package:wehavit/domain/entities/resolution_entity/resolution_entity.dart';
-import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
 
 class FirebaseDatasourceImpl implements WehavitDatasource {
   int get maxDay => 27;
 
   @override
-  EitherFuture<List<UserDataEntity>> getFriendEntityList() {
-    // TODO: implement getFriendEntityList
-    return Future(() => left(const Failure('not implemented')));
+  EitherFuture<List<UserModel>> getFriendModelList() async {
+    // users에서 내 user 정보 접근해서 friends 리스트 받아오기
+    try {
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+      final friendDocument =
+          await firestore.collection(FirebaseCollectionName.friends).get();
+
+      List<UserModel?> fetchResult = await Future.wait(
+        friendDocument.docs.map((doc) async {
+          return getUserModelByUserId(
+            doc.data()[FirebaseFriendFieldName.friendUid],
+          );
+        }),
+      );
+
+      return Future(() => right(fetchResult.whereNotNull().toList()));
+    } on Exception {
+      return Future(
+        () => left(
+          const Failure('catch error on registerFriend'),
+        ),
+      );
+    }
   }
 
   @override
-  EitherFuture<bool> uploadFriendEntity(UserDataEntity entity) {
-    // TODO: implement uploadFriendEntity
-    return Future(() => left(const Failure('not implemented')));
+  EitherFuture<bool> registerFriend(String email) async {
+    try {
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+      final friendDocument = await firestore
+          .collection(FirebaseCollectionName.users)
+          .where(FirebaseUserFieldName.email, isEqualTo: email)
+          .get();
+
+      if (friendDocument.size == 0) {
+        return Future(
+          () => left(
+            const Failure('friend email does not exist'),
+          ),
+        );
+      }
+
+      final friendUid = friendDocument.docs.first.id;
+
+      final isFriendAlreadyRegistered = await checkIsAlreadyFriend(friendUid);
+
+      if (!isFriendAlreadyRegistered) {
+        await firestore.collection(FirebaseCollectionName.friends).add(
+          {
+            FirebaseFriendFieldName.friendUid: friendUid,
+            FirebaseFriendFieldName.friendState: '0',
+          },
+        );
+
+        return Future(
+          () => right(true),
+        );
+      } else {
+        return Future(
+          () => left(
+            const Failure('already registered friend'),
+          ),
+        );
+      }
+    } on Exception {
+      return Future(
+        () => left(
+          const Failure('catch error on registerFriend'),
+        ),
+      );
+    }
   }
 
   @override
@@ -132,12 +196,12 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       // TODO: 아래 코드 구현하기
       List<ConfirmPostEntity> confirmPosts = List.empty();
 
-      // List<ConfirmPostModel> confirmPosts = resultDocs
+      // List<ConfirmPostEntity> confirmPosts = resultDocs
       //     .map(
-      //       (doc) => ConfirmPostModel.fromFireStoreDocument(
+      //       (doc) => FirebaseConfirmPostModel.fromJson(
       //         userDataMap[
       //             (doc.data() as dynamic)[FirebaseConfirmPostFieldName.owner]],
-      //       ),
+      //       ).toConfirmPostEntity(),
       //     )
       //     .toList();
 
@@ -190,7 +254,42 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }
 
   @override
-  EitherFuture<UserDataEntity> fetchUserDataEntityFromId(String targetUserId) {
+  EitherFuture<UserModel> fetchUserModelFromId(String targetUserId) {
     return Future(() => left(const Failure('not implemented')));
+  }
+
+  Future<UserModel?> getUserModelByUserId(String targetUserId) async {
+    try {
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+      final friendDocument = await firestore
+          .collection(FirebaseCollectionName.users)
+          .doc(targetUserId)
+          .get();
+
+      final result = UserModel(
+        uid: targetUserId,
+        displayName: friendDocument.data()![FirebaseUserFieldName.displayName],
+        imageUrl: friendDocument.data()![FirebaseUserFieldName.imageUrl],
+        email: friendDocument.data()![FirebaseUserFieldName.email],
+      );
+
+      return result;
+    } on Exception {
+      return null;
+    }
+  }
+
+  Future<bool> checkIsAlreadyFriend(String friendUid) async {
+    final result = await FirebaseFirestore.instance
+        .collection(FirebaseCollectionName.friends)
+        .where(FirebaseFriendFieldName.friendUid, isEqualTo: friendUid)
+        .get()
+        .then((value) => value.size)
+        .then(
+          (value) => value >= 1 ? true : false,
+        );
+
+    return result;
   }
 }

@@ -386,7 +386,7 @@ class SelectFans extends HookConsumerWidget {
 }
 
 Future<List<UserDataEntity>> getFriendList(WidgetRef ref) {
-  return ref.read(friendRepositoryProvider).getFriendModelList().then(
+  return ref.read(friendRepositoryProvider).getFriendEntityList().then(
     (result) {
       return result.fold((failure) {
         return [];

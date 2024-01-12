@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:wehavit/common/common.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/data/datasources/wehavit_datasource.dart';
 import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
@@ -16,7 +18,39 @@ class UserModelRepositoryImpl implements UserModelRepository {
   final WehavitDatasource _wehavitDatasource;
 
   @override
-  EitherFuture<UserDataEntity> fetchUserModelFromId(String targetUserId) {
-    return _wehavitDatasource.fetchUserDataEntityFromId(targetUserId);
+  EitherFuture<UserDataEntity> fetchUserModelFromId(String targetUserId) async {
+    final userModelRequest =
+        await _wehavitDatasource.fetchUserModelFromId(targetUserId);
+
+    final Either<Failure, UserDataEntity> result = userModelRequest.fold(
+      (failure) => left(Failure(failure.message)),
+      (userModel) => right(userModel.toUserDataEntity()),
+    );
+
+    return Future(() => result);
+  }
+
+  @override
+  EitherFuture<List<UserDataEntity>> getFriendEntityList() async {
+    try {
+      final getResult = await _wehavitDatasource.getFriendModelList();
+
+      return getResult.fold(
+        (failure) => left(failure),
+        (modelList) {
+          final entityList =
+              modelList.map((model) => model.toUserDataEntity()).toList();
+
+          return Future(() => right(entityList));
+        },
+      );
+    } on Exception catch (e) {
+      return Future(() => left(Failure(e.toString())));
+    }
+  }
+
+  @override
+  EitherFuture<bool> registerFriend(String email) async {
+    return _wehavitDatasource.registerFriend(email);
   }
 }

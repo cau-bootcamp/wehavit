@@ -18,17 +18,19 @@ class FriendRepositoryImpl implements FriendRepository {
   final WehavitDatasource _wehavitDatasource;
 
   @override
-  EitherFuture<List<UserDataEntity>> getFriendModelList() async {
+  EitherFuture<List<UserDataEntity>> getFriendEntityList() async {
     try {
-      final getResult = await _wehavitDatasource.getFriendEntityList();
+      final getResult = await _wehavitDatasource.getFriendModelList();
 
       return getResult.fold(
         (failure) => left(failure),
         (modelList) {
-          // final entityList =
-          //     modelList.map((model) => model.toFriendModel()).toList();
-
-          return Future(() => right(modelList));
+          final entityList =
+              modelList.map((model) => model.toUserDataEntity()).toList();
+          print("DEBUG");
+          print(modelList);
+          print(entityList);
+          return Future(() => right(entityList));
         },
       );
     } on Exception catch (e) {
@@ -37,8 +39,7 @@ class FriendRepositoryImpl implements FriendRepository {
   }
 
   @override
-  EitherFuture<bool> uploadFriendEntity(UserDataEntity entity) async {
-    // final model = UserDataModel.fromEntity(entity);
-    return _wehavitDatasource.uploadFriendEntity(entity);
+  EitherFuture<bool> registerFriend(String email) async {
+    return _wehavitDatasource.registerFriend(email);
   }
 }

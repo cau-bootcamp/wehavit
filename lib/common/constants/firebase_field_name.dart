@@ -35,9 +35,7 @@ class FirebaseReactionFieldName {
 @immutable
 class FirebaseFriendFieldName {
   //friend
-  static const friendName = 'friendName';
-  static const friendImageUrl = 'friendImageUrl';
-  static const friendEmail = 'friendEmail';
+  static const friendUid = 'userId';
   static const friendState = 'friendState';
 }
 

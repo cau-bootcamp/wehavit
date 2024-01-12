@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/data/datasources/firebase_datasource_impl.dart';
+import 'package:wehavit/data/models/user_model.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
 import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
 import 'package:wehavit/domain/entities/resolution_entity/resolution_entity.dart';
@@ -12,10 +13,10 @@ final wehavitDatasourceProvider = Provider<WehavitDatasource>((ref) {
 
 abstract class WehavitDatasource {
   // Friend Repository
-  EitherFuture<List<UserDataEntity>> getFriendEntityList();
+  EitherFuture<List<UserModel>> getFriendModelList();
 
-  EitherFuture<bool> uploadFriendEntity(
-    UserDataEntity entity,
+  EitherFuture<bool> registerFriend(
+    String email,
   );
 
   // Confirm Post Repository
@@ -40,5 +41,5 @@ abstract class WehavitDatasource {
 
   EitherFuture<bool> uploadResolutionEntity(ResolutionEntity entity);
 
-  EitherFuture<UserDataEntity> fetchUserDataEntityFromId(String targetUserId);
+  EitherFuture<UserModel> fetchUserModelFromId(String targetUserId);
 }

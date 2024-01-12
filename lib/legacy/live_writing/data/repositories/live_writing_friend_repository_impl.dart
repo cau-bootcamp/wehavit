@@ -29,7 +29,7 @@ class LiveWritingFriendRepositoryImpl extends LiveWritingFriendRepository {
     // });
 
     return friendsAccepted.map<String>((data) {
-      return data.data()[FirebaseFriendFieldName.friendEmail];
+      return data.data()[FirebaseFriendFieldName.friendUid];
     }).toList();
   }
 

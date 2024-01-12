@@ -42,9 +42,9 @@ class _MyLiveWritingWidgetState extends ConsumerState<MyLiveWritingWidget> {
   @override
   Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
-    myUserModel = ref
-        .read(userDataRepositoryProvider)
-        .fetchUserModelFromId(FirebaseAuth.instance.currentUser!.uid);
+    // myUserModel = ref
+    //     .read(userDataRepositoryProvider)
+    //     .fetchUserModelFromId(FirebaseAuth.instance.currentUser!.uid);
   }
 
   @override
