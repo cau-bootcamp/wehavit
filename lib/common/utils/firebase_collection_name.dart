@@ -9,13 +9,21 @@ class FirebaseCollectionName {
   static final myResolutions = FirebaseAuth.instance.currentUser != null
       ? 'users/${FirebaseAuth.instance.currentUser?.uid}/resolutions'
       : 'invalid_address';
+
   static final friends = FirebaseAuth.instance.currentUser != null
       ? 'users/${FirebaseAuth.instance.currentUser?.uid}/friends'
       : 'invalid_address';
 
-  static String getTargetFriendsCollection(String fId) {
+  static String getTargetFriendsCollectionName(String fId) {
     final targetFriends = FirebaseAuth.instance.currentUser != null
         ? 'users/$fId/friends'
+        : 'invalid_address';
+    return targetFriends;
+  }
+
+  static String getTargetResolutionCollectionName(String userId) {
+    final targetFriends = FirebaseAuth.instance.currentUser != null
+        ? 'users/$userId/resolutions'
         : 'invalid_address';
     return targetFriends;
   }

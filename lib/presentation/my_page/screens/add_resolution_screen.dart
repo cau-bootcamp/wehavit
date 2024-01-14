@@ -174,33 +174,33 @@ class AddResolutionScreen extends HookConsumerWidget {
                               return Expanded(
                                 child: Padding(
                                   padding: const EdgeInsets.all(2.0),
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      padding: EdgeInsets.zero,
-                                      backgroundColor: resolutionProvider
-                                              .isDaySelectedList![idx]
-                                          ? CustomColors.whYellow
-                                          : CustomColors.whYellowBright,
-                                    ),
-                                    onPressed: () {
-                                      List<bool> newSelectedDayList =
-                                          resolutionProvider.isDaySelectedList!;
-                                      newSelectedDayList[idx] =
-                                          !newSelectedDayList[idx];
+                                  // child: ElevatedButton(
+                                  //   style: ElevatedButton.styleFrom(
+                                  //     padding: EdgeInsets.zero,
+                                  //     backgroundColor: resolutionProvider
+                                  //             .isDaySelectedList![idx]
+                                  //         ? CustomColors.whYellow
+                                  //         : CustomColors.whYellowBright,
+                                  //   ),
+                                  //   onPressed: () {
+                                  //     List<bool> newSelectedDayList =
+                                  //         resolutionProvider.isDaySelectedList!;
+                                  //     newSelectedDayList[idx] =
+                                  //         !newSelectedDayList[idx];
 
-                                      ref
-                                          .read(addResolutionProvider.notifier)
-                                          .changePeriodState(
-                                              newSelectedDayList);
-                                    },
-                                    child: Text(
-                                      dayList[idx],
-                                      style: TextStyle(
-                                        fontSize: 14.0,
-                                        color: CustomColors.whDarkBlack,
-                                      ),
-                                    ),
-                                  ),
+                                  //     ref
+                                  //         .read(addResolutionProvider.notifier)
+                                  //         .changePeriodState(
+                                  //             newSelectedDayList);
+                                  //   },
+                                  //   child: Text(
+                                  //     dayList[idx],
+                                  //     style: TextStyle(
+                                  //       fontSize: 14.0,
+                                  //       color: CustomColors.whDarkBlack,
+                                  //     ),
+                                  //   ),
+                                  // ),
                                 ),
                               );
                             }).toList(),
@@ -302,7 +302,7 @@ class AddResolutionScreen extends HookConsumerWidget {
                               }, (success) {
                                 ref
                                     .read(myPageResolutionListProvider.notifier)
-                                    .getActiveResolutionList();
+                                    .getMyActiveResolutionList();
                                 context.pop();
                               });
                             },

@@ -5,6 +5,7 @@ import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.
 import 'package:wehavit/domain/entities/resolution_entity/resolution_entity.dart';
 import 'package:wehavit/domain/usecases/get_confirm_post_list_for_resolution_id.dart';
 import 'package:wehavit/domain/usecases/get_my_resolution_list_usecase.dart';
+import 'package:wehavit/domain/usecases/get_resolution_list_usecase.dart';
 
 final myPageResolutionListProvider = StateNotifierProvider<
     MyPageResolutionListProvider,
@@ -23,16 +24,19 @@ class MyPageResolutionListProvider extends StateNotifier<
   MyPageResolutionListProvider(Ref ref) : super(const Right(([], []))) {
     getResolutionListUsecase =
         ref.watch(getResolutionListByUserIdUsecaseProvider);
+    getMyResolutionListUsecase =
+        ref.watch(getMyResolutionListByUserIdUsecaseProvider);
     getConfirmPostListForResolutionIdUsecase =
         ref.watch(getConfirmPostListForResolutionIdUsecaseProvider);
   }
 
   late final GetResolutionListByUserIdUsecase getResolutionListUsecase;
+  late final GetMyResolutionListByUserIdUsecase getMyResolutionListUsecase;
   late final GetConfirmPostListForResolutionIdUsecase
       getConfirmPostListForResolutionIdUsecase;
 
-  Future<void> getActiveResolutionList() async {
-    final resolutionFetchResult = await getResolutionListUsecase("my user id");
+  Future<void> getMyActiveResolutionList() async {
+    final resolutionFetchResult = await getMyResolutionListUsecase(NoParams());
 
     final List<ResolutionEntity> resolutionList = resolutionFetchResult.fold(
       (failure) => [],
@@ -43,7 +47,7 @@ class MyPageResolutionListProvider extends StateNotifier<
         resolutionList.map((resolutionModel) async {
       final confirmListFetchResult =
           await getConfirmPostListForResolutionIdUsecase(
-        resolutionModel.resolutionId!,
+        resolutionModel.resolutionId ?? 'no',
       );
 
       final List<ConfirmPostEntity> confirmList = confirmListFetchResult.fold(

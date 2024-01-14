@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/data/datasources/firebase_datasource_impl.dart';
+import 'package:wehavit/data/models/firebase_resolution_model.dart';
 import 'package:wehavit/data/models/user_model.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
 import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
@@ -37,7 +38,9 @@ abstract class WehavitDatasource {
     ReactionEntity reactionEntity,
   );
 
-  EitherFuture<List<ResolutionEntity>> getActiveResolutionEntityList();
+  EitherFuture<List<ResolutionEntity>> getActiveResolutionEntityList(
+    String userId,
+  );
 
   EitherFuture<bool> uploadResolutionEntity(ResolutionEntity entity);
 

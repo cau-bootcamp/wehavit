@@ -1,9 +1,8 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/domain/entities/resolution_entity/resolution_entity.dart';
 
 abstract class ResolutionRepository {
-  EitherFuture<List<ResolutionEntity>> getActiveResolutionModelList(
+  EitherFuture<List<ResolutionEntity>> getActiveResolutionEntityList(
     String userId,
   );
 

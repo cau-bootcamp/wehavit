@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,12 +10,16 @@ import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/common/utils/firebase_collection_name.dart';
 import 'package:wehavit/data/datasources/wehavit_datasource.dart';
+import 'package:wehavit/data/models/firebase_resolution_model.dart';
 import 'package:wehavit/data/models/user_model.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
 import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
 import 'package:wehavit/domain/entities/resolution_entity/resolution_entity.dart';
+import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
 
 class FirebaseDatasourceImpl implements WehavitDatasource {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
   int get maxDay => 27;
 
   @override
@@ -215,9 +221,6 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     }
   }
 
-  // TODO: 여기에 Datasource 에서 팔요한 함수 구현 추가하기
-  // Confirm Post Repository
-
   @override
   EitherFuture<ConfirmPostEntity> getConfirmPostOfTodayByResolutionGoalId(
     String resolutionId,
@@ -244,8 +247,50 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }
 
   @override
-  EitherFuture<List<ResolutionEntity>> getActiveResolutionEntityList() {
-    return Future(() => left(const Failure('not implemented')));
+  EitherFuture<List<ResolutionEntity>> getActiveResolutionEntityList(
+    String userId,
+  ) async {
+    try {
+      final userDocument = await firestore
+          .collection(
+              FirebaseCollectionName.getTargetResolutionCollectionName(userId))
+          .get();
+
+      final fetchResult = await Future.wait(
+        userDocument.docs.map((doc) async {
+          final model = FirebaseResolutionModel.fromFireStoreDocument(
+            doc,
+          ).copyWith(documentId: doc.reference.id);
+
+          final fetchFanList = await Future.wait(
+            (model.fanUserIdList ?? []).map((userId) async {
+              final fetchResult = (await fetchUserModelFromId(userId)).fold(
+                (l) => null,
+                (r) => r,
+              );
+              if (fetchResult != null) {
+                return fetchResult.toUserDataEntity();
+              }
+            }).toList(),
+          );
+
+          final fanUserEntityList = fetchFanList.whereNotNull().toList();
+
+          final entity = model.toResolutionEntity(
+            fanUserEntityList,
+          );
+
+          return entity;
+        }).toList(),
+      );
+
+      return Future(() => right(fetchResult));
+    } on Exception {
+      return Future(
+        () =>
+            left(const Failure('catch error on getActiveResolutionEntityList')),
+      );
+    }
   }
 
   @override
@@ -260,8 +305,6 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
 
   Future<UserModel?> getUserModelByUserId(String targetUserId) async {
     try {
-      FirebaseFirestore firestore = FirebaseFirestore.instance;
-
       final friendDocument = await firestore
           .collection(FirebaseCollectionName.users)
           .doc(targetUserId)

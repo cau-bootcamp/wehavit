@@ -4,22 +4,29 @@ import 'package:wehavit/data/repositories/resolution_repository_impl.dart';
 import 'package:wehavit/domain/entities/resolution_entity/resolution_entity.dart';
 import 'package:wehavit/domain/repositories/resolution_repository.dart';
 
-final getResolutionListByUserIdUsecaseProvider =
-    Provider<GetResolutionListByUserIdUsecase>((ref) {
+final getMyResolutionListByUserIdUsecaseProvider =
+    Provider<GetMyResolutionListByUserIdUsecase>((ref) {
   final resolutionRepository = ref.watch(resolutionRepositoryProvider);
-  return GetResolutionListByUserIdUsecase(
+  return GetMyResolutionListByUserIdUsecase(
     resolutionRepository,
   );
 });
 
-class GetResolutionListByUserIdUsecase
-    extends FutureUseCase<List<ResolutionEntity>, String> {
-  GetResolutionListByUserIdUsecase(this._resolutionRepository);
+class GetMyResolutionListByUserIdUsecase
+    extends FutureUseCase<List<ResolutionEntity>, NoParams> {
+  GetMyResolutionListByUserIdUsecase(this._resolutionRepository);
 
   final ResolutionRepository _resolutionRepository;
 
   @override
-  EitherFuture<List<ResolutionEntity>> call(String params) {
-    return _resolutionRepository.getActiveResolutionModelList(params);
+  EitherFuture<List<ResolutionEntity>> call(NoParams params) {
+    // current user id?
+    final temp = _resolutionRepository
+        .getActiveResolutionEntityList('69dlXoGSBKhzrySuhb8t9MvqzdD3');
+    print(temp);
+    return temp;
+
+    // return _resolutionRepository
+    //     .getActiveResolutionModelList('69dlXoGSBKhzrySuhb8t9MvqzdD3');
   }
 }

@@ -22,7 +22,7 @@ class AddResolutionNotifier extends StateNotifier<ResolutionEntity> {
   }
 
   void changePeriodState(List<bool> isDaySelectedList) {
-    state = state.copyWith(isDaySelectedList: isDaySelectedList);
+    // state = state.copyWith(isDaySelectedList: isDaySelectedList);
   }
 
   void changeGoalStatement(String newStatement) {
@@ -34,15 +34,15 @@ class AddResolutionNotifier extends StateNotifier<ResolutionEntity> {
   }
 
   void changeOathStatement(String newStatement) {
-    state = state.copyWith(oathStatement: newStatement);
+    // state = state.copyWith(oathStatement: newStatement);
   }
 
   EitherFuture<bool> uploadResolutionModel() {
     ResolutionEntity newModel = ResolutionEntity(
       goalStatement: state.goalStatement,
       actionStatement: state.actionStatement,
-      oathStatement: state.oathStatement,
-      isDaySelectedList: state.isDaySelectedList,
+      // oathStatement: state.oathStatement,
+      // isDaySelectedList: state.isDaySelectedList,
       isActive: true,
       startDate: DateTime.now(),
       fanList: state.fanList,
