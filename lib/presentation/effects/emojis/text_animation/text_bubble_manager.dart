@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wehavit/presentation/effects/text_animation/text_bubble_widget.dart';
+import 'package:wehavit/presentation/effects/emojis/text_animation/text_bubble_widget.dart';
 
 final textBubbleAnimationManagerProvider = StateNotifierProvider<
     TextBubbleAnimationManager, Map<Key, TextBubbleFrameWidget>>(

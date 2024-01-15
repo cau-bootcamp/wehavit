@@ -27,9 +27,6 @@ class FriendRepositoryImpl implements FriendRepository {
         (modelList) {
           final entityList =
               modelList.map((model) => model.toUserDataEntity()).toList();
-          print("DEBUG");
-          print(modelList);
-          print(entityList);
           return Future(() => right(entityList));
         },
       );

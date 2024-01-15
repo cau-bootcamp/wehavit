@@ -4,11 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/legacy/live_writing/presentation/screens/live_writing_view.dart';
-import 'package:wehavit/legacy/live_writing_waiting/live_waiting_sample_view.dart';
 import 'package:wehavit/presentation/effects/animation_sample_page.dart';
 import 'package:wehavit/presentation/features.dart';
-import 'package:wehavit/legacy/swipe_view/presentation/screen/swipe_view.dart';
 import 'package:wehavit/presentation/home/screens/home_screen.dart';
 import 'package:wehavit/presentation/late_writing/screen/late_writing_view.dart';
 import 'package:wehavit/presentation/my_page/screens/add_resolution_screen.dart';
@@ -163,30 +160,6 @@ class FriendListRoute extends GoRouteData {
   }
 }
 
-@TypedGoRoute<LiveWritingRoute>(path: LiveWritingRoute.path)
-class LiveWritingRoute extends GoRouteData {
-  const LiveWritingRoute();
-
-  static const path = RouteLocation.liveWriting;
-
-  @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return const LiveWritingView();
-  }
-}
-
-@TypedGoRoute<SwipeViewRoute>(path: SwipeViewRoute.path)
-class SwipeViewRoute extends GoRouteData {
-  const SwipeViewRoute();
-
-  static const path = RouteLocation.swipeView;
-
-  @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return const SwipeView();
-  }
-}
-
 @TypedGoRoute<AnimationSampleViewRoute>(path: AnimationSampleViewRoute.path)
 class AnimationSampleViewRoute extends GoRouteData {
   const AnimationSampleViewRoute();
@@ -196,18 +169,6 @@ class AnimationSampleViewRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const AnimationSamplePage();
-  }
-}
-
-@TypedGoRoute<LiveWaitingSampleViewRoute>(path: LiveWaitingSampleViewRoute.path)
-class LiveWaitingSampleViewRoute extends GoRouteData {
-  const LiveWaitingSampleViewRoute();
-
-  static const path = RouteLocation.liveWaitingSampleView;
-
-  @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return const LiveWaitingSampleView();
   }
 }
 

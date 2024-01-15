@@ -6,6 +6,7 @@ part 'resolution_entity.g.dart';
 
 @freezed
 class ResolutionEntity with _$ResolutionEntity {
+  // ignore: invalid_annotation_target
   @JsonSerializable()
   const factory ResolutionEntity({
     String? resolutionId,

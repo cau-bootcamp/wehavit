@@ -14,10 +14,7 @@ List<RouteBase> get $appRoutes => [
       $testPageRoute,
       $addResolutionRoute,
       $friendListRoute,
-      $liveWritingRoute,
-      $swipeViewRoute,
       $animationSampleViewRoute,
-      $liveWaitingSampleViewRoute,
       $lateWritingViewRoute,
     ];
 
@@ -177,52 +174,6 @@ extension $FriendListRouteExtension on FriendListRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-RouteBase get $liveWritingRoute => GoRouteData.$route(
-      path: '/liveWriting',
-      factory: $LiveWritingRouteExtension._fromState,
-    );
-
-extension $LiveWritingRouteExtension on LiveWritingRoute {
-  static LiveWritingRoute _fromState(GoRouterState state) =>
-      const LiveWritingRoute();
-
-  String get location => GoRouteData.$location(
-        '/liveWriting',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-RouteBase get $swipeViewRoute => GoRouteData.$route(
-      path: '/swipeView',
-      factory: $SwipeViewRouteExtension._fromState,
-    );
-
-extension $SwipeViewRouteExtension on SwipeViewRoute {
-  static SwipeViewRoute _fromState(GoRouterState state) =>
-      const SwipeViewRoute();
-
-  String get location => GoRouteData.$location(
-        '/swipeView',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
 RouteBase get $animationSampleViewRoute => GoRouteData.$route(
       path: '/animationSampleView',
       factory: $AnimationSampleViewRouteExtension._fromState,
@@ -234,29 +185,6 @@ extension $AnimationSampleViewRouteExtension on AnimationSampleViewRoute {
 
   String get location => GoRouteData.$location(
         '/animationSampleView',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-RouteBase get $liveWaitingSampleViewRoute => GoRouteData.$route(
-      path: '/liveWaitingSampleView',
-      factory: $LiveWaitingSampleViewRouteExtension._fromState,
-    );
-
-extension $LiveWaitingSampleViewRouteExtension on LiveWaitingSampleViewRoute {
-  static LiveWaitingSampleViewRoute _fromState(GoRouterState state) =>
-      const LiveWaitingSampleViewRoute();
-
-  String get location => GoRouteData.$location(
-        '/liveWaitingSampleView',
       );
 
   void go(BuildContext context) => context.go(location);

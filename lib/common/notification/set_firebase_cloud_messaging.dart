@@ -56,13 +56,13 @@ Future<String?> setFirebaseCloudMessaging(BuildContext context) async {
         ?.createNotificationChannel(channel);
 
     // background 상태. Notification 서랍에서 메시지 터치하여 앱으로 돌아왔을 때의 동작은 여기서.
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      if (message.data['goto'] == 'LiveWaitingView') {
-        navigationKey.currentContext!.push(RouteLocation.liveWaitingSampleView);
-      } else {
-        //
-      }
-    });
+    // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    //   if (message.data['goto'] == 'LiveWaitingView') {
+    //     navigationKey.currentContext!.push(RouteLocation.liveWaitingSampleView);
+    //   } else {
+    //     //
+    //   }
+    // });
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification? notification = message.notification;

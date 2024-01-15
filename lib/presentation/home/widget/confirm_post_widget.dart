@@ -5,10 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
-import 'package:wehavit/legacy/swipe_view/presentation/model/reaction_camera_widget_model.dart';
-import 'package:wehavit/legacy/swipe_view/presentation/provider/reaction_camera_widget_model_provider.dart';
-import 'package:wehavit/legacy/swipe_view/presentation/provider/swipe_view_model_provider.dart';
-import 'package:wehavit/legacy/swipe_view/presentation/screen/widget/emoji_sheet_widget.dart';
+import 'package:wehavit/presentation/effects/camera_quickshot/reaction_camera_widget_model.dart';
+import 'package:wehavit/presentation/effects/camera_quickshot/reaction_camera_widget_model_provider.dart';
+import 'package:wehavit/presentation/effects/emojis/emoji_sheet_widget.dart';
 import 'package:wehavit/presentation/home/model/main_view_model.dart';
 import 'package:wehavit/presentation/home/provider/main_view_model_provider.dart';
 import 'package:wehavit/presentation/my_page/widgets/resolution_linear_gauge_graph_widget.dart';
@@ -70,9 +69,9 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
       _mainViewModel = ref.watch(mainViewModelProvider);
       _mainViewModelProvider = ref.read(mainViewModelProvider.notifier);
 
-      await ref
-          .read(swipeViewModelProvider.notifier)
-          .getTodayConfirmPostModelList();
+      // await ref
+      //     .read(swipeViewModelProvider.notifier)
+      //     .getTodayConfirmPostModelList();
 
       await _mainViewModelProvider.initializeCamera();
 

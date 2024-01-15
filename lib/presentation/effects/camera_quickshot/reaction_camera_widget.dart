@@ -3,9 +3,8 @@ import 'dart:math';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wehavit/legacy/swipe_view/presentation/model/reaction_camera_widget_model.dart';
-import 'package:wehavit/legacy/swipe_view/presentation/provider/reaction_camera_widget_model_provider.dart';
-import 'package:wehavit/legacy/swipe_view/presentation/provider/swipe_view_model_provider.dart';
+import 'package:wehavit/presentation/effects/camera_quickshot/reaction_camera_widget_model.dart';
+import 'package:wehavit/presentation/effects/camera_quickshot/reaction_camera_widget_model_provider.dart';
 
 class ReactionCameraWidget extends ConsumerStatefulWidget {
   ReactionCameraWidget({
@@ -25,7 +24,7 @@ class ReactionCameraWidget extends ConsumerStatefulWidget {
 class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
   late ReactionCameraWidgetModel _reactionCameraWidgetModel;
   late ReactionCameraWidgetModelProvider _reactionCameraWidgetModelProvider;
-  late SwipeViewModelProvider _swipeViewModelProvider;
+  // late SwipeViewModelProvider _swipeViewModelProvider;
 
   @override
   Future<void> didChangeDependencies() async {
@@ -49,7 +48,7 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
         ref.read(reactionCameraWidgetModelProvider.notifier);
 
     _reactionCameraWidgetModel.cameraController = widget.cameraController;
-    _swipeViewModelProvider = ref.read(swipeViewModelProvider.notifier);
+    // _swipeViewModelProvider = ref.read(swipeViewModelProvider.notifier);
 
     _reactionCameraWidgetModel.screenWidth =
         View.of(context).physicalSize.width / 3;
