@@ -11,7 +11,7 @@ final addResolutionProvider =
 });
 
 class AddResolutionNotifier extends StateNotifier<ResolutionEntity> {
-  AddResolutionNotifier(Ref ref) : super(ResolutionEntity()) {
+  AddResolutionNotifier(Ref ref) : super(const ResolutionEntity()) {
     _uploadResolutionUsecase = ref.watch(uploadResolutionUsecaseProvider);
   }
 
@@ -37,17 +37,16 @@ class AddResolutionNotifier extends StateNotifier<ResolutionEntity> {
     // state = state.copyWith(oathStatement: newStatement);
   }
 
-  EitherFuture<bool> uploadResolutionModel() {
+  EitherFuture<bool> uploadResolutionEntity() {
     ResolutionEntity newModel = ResolutionEntity(
       goalStatement: state.goalStatement,
       actionStatement: state.actionStatement,
-      // oathStatement: state.oathStatement,
-      // isDaySelectedList: state.isDaySelectedList,
       isActive: true,
       startDate: DateTime.now(),
       fanList: state.fanList,
+      actionPerWeek: 3,
       resolutionId: '',
     );
-    return _uploadResolutionUsecase.call(newModel);
+    return _uploadResolutionUsecase(newModel);
   }
 }

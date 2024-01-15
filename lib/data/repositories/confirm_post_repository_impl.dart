@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
-import 'package:wehavit/data/datasources/firebase_datasource_impl.dart';
 import 'package:wehavit/data/datasources/wehavit_datasource.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
 import 'package:wehavit/domain/repositories/confirm_post_repository.dart';

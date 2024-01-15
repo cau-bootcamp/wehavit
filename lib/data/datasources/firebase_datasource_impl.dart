@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,7 +13,6 @@ import 'package:wehavit/data/models/user_model.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
 import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
 import 'package:wehavit/domain/entities/resolution_entity/resolution_entity.dart';
-import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
 
 class FirebaseDatasourceImpl implements WehavitDatasource {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -260,7 +257,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
         userDocument.docs.map((doc) async {
           final model = FirebaseResolutionModel.fromFireStoreDocument(
             doc,
-          ).copyWith(documentId: doc.reference.id);
+          );
 
           final fetchFanList = await Future.wait(
             (model.fanUserIdList ?? []).map((userId) async {
@@ -277,7 +274,8 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           final fanUserEntityList = fetchFanList.whereNotNull().toList();
 
           final entity = model.toResolutionEntity(
-            fanUserEntityList,
+            documentId: doc.reference.id,
+            fanUserEntityList: fanUserEntityList,
           );
 
           return entity;
@@ -294,8 +292,29 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }
 
   @override
-  EitherFuture<bool> uploadResolutionEntity(ResolutionEntity entity) {
-    return Future(() => left(const Failure('not implemented')));
+  EitherFuture<bool> uploadResolutionEntity(ResolutionEntity entity) async {
+    try {
+      FirebaseResolutionModel resolutionModel =
+          FirebaseResolutionModel.fromJson(entity.toJson());
+
+      final List<String> fanList =
+          (await firestore.collection(FirebaseCollectionName.friends).get())
+              .docs
+              .map((doc) => doc[FirebaseFriendFieldName.friendUid] as String)
+              .toList();
+
+      resolutionModel = resolutionModel.copyWith(fanUserIdList: fanList);
+
+      await firestore
+          .collection(FirebaseCollectionName.myResolutions)
+          .add(resolutionModel.toJson());
+
+      return Future(() => right(true));
+    } on Exception {
+      return Future(
+        () => left(const Failure('catch error on uploadResolutionEntity')),
+      );
+    }
   }
 
   @override

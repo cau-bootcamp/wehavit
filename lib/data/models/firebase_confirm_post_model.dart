@@ -1,14 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:wehavit/common/constants/firebase_field_name.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
-import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
 
 part 'firebase_confirm_post_model.g.dart';
 part 'firebase_confirm_post_model.freezed.dart';
 
 @freezed
 class FirebaseConfirmPostModel with _$FirebaseConfirmPostModel {
+  // ignore: invalid_annotation_target
   @JsonSerializable()
   const factory FirebaseConfirmPostModel({
     required String? resolutionGoalStatement,

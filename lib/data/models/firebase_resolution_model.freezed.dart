@@ -28,7 +28,6 @@ mixin _$FirebaseResolutionModel {
   @TimestampSerializer()
   DateTime? get startDate => throw _privateConstructorUsedError;
   List<String>? get fanUserIdList => throw _privateConstructorUsedError;
-  String? get documentId => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -48,8 +47,7 @@ abstract class $FirebaseResolutionModelCopyWith<$Res> {
       bool? isActive,
       int? actionPerWeek,
       @TimestampSerializer() DateTime? startDate,
-      List<String>? fanUserIdList,
-      String? documentId});
+      List<String>? fanUserIdList});
 }
 
 /// @nodoc
@@ -72,7 +70,6 @@ class _$FirebaseResolutionModelCopyWithImpl<$Res,
     Object? actionPerWeek = freezed,
     Object? startDate = freezed,
     Object? fanUserIdList = freezed,
-    Object? documentId = freezed,
   }) {
     return _then(_value.copyWith(
       goalStatement: freezed == goalStatement
@@ -99,10 +96,6 @@ class _$FirebaseResolutionModelCopyWithImpl<$Res,
           ? _value.fanUserIdList
           : fanUserIdList // ignore: cast_nullable_to_non_nullable
               as List<String>?,
-      documentId: freezed == documentId
-          ? _value.documentId
-          : documentId // ignore: cast_nullable_to_non_nullable
-              as String?,
     ) as $Val);
   }
 }
@@ -122,8 +115,7 @@ abstract class _$$FirebaseResolutionModelImplCopyWith<$Res>
       bool? isActive,
       int? actionPerWeek,
       @TimestampSerializer() DateTime? startDate,
-      List<String>? fanUserIdList,
-      String? documentId});
+      List<String>? fanUserIdList});
 }
 
 /// @nodoc
@@ -145,7 +137,6 @@ class __$$FirebaseResolutionModelImplCopyWithImpl<$Res>
     Object? actionPerWeek = freezed,
     Object? startDate = freezed,
     Object? fanUserIdList = freezed,
-    Object? documentId = freezed,
   }) {
     return _then(_$FirebaseResolutionModelImpl(
       goalStatement: freezed == goalStatement
@@ -172,10 +163,6 @@ class __$$FirebaseResolutionModelImplCopyWithImpl<$Res>
           ? _value._fanUserIdList
           : fanUserIdList // ignore: cast_nullable_to_non_nullable
               as List<String>?,
-      documentId: freezed == documentId
-          ? _value.documentId
-          : documentId // ignore: cast_nullable_to_non_nullable
-              as String?,
     ));
   }
 }
@@ -190,8 +177,7 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
       required this.isActive,
       required this.actionPerWeek,
       @TimestampSerializer() required this.startDate,
-      required final List<String>? fanUserIdList,
-      required this.documentId})
+      required final List<String>? fanUserIdList})
       : _fanUserIdList = fanUserIdList;
 
   factory _$FirebaseResolutionModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -219,11 +205,8 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
   }
 
   @override
-  final String? documentId;
-
-  @override
   String toString() {
-    return 'FirebaseResolutionModel(goalStatement: $goalStatement, actionStatement: $actionStatement, isActive: $isActive, actionPerWeek: $actionPerWeek, startDate: $startDate, fanUserIdList: $fanUserIdList, documentId: $documentId)';
+    return 'FirebaseResolutionModel(goalStatement: $goalStatement, actionStatement: $actionStatement, isActive: $isActive, actionPerWeek: $actionPerWeek, startDate: $startDate, fanUserIdList: $fanUserIdList)';
   }
 
   @override
@@ -242,9 +225,7 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
             (identical(other.startDate, startDate) ||
                 other.startDate == startDate) &&
             const DeepCollectionEquality()
-                .equals(other._fanUserIdList, _fanUserIdList) &&
-            (identical(other.documentId, documentId) ||
-                other.documentId == documentId));
+                .equals(other._fanUserIdList, _fanUserIdList));
   }
 
   @JsonKey(ignore: true)
@@ -256,8 +237,7 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
       isActive,
       actionPerWeek,
       startDate,
-      const DeepCollectionEquality().hash(_fanUserIdList),
-      documentId);
+      const DeepCollectionEquality().hash(_fanUserIdList));
 
   @JsonKey(ignore: true)
   @override
@@ -276,13 +256,13 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
 
 abstract class _FirebaseResolutionModel implements FirebaseResolutionModel {
   const factory _FirebaseResolutionModel(
-      {required final String? goalStatement,
-      required final String? actionStatement,
-      required final bool? isActive,
-      required final int? actionPerWeek,
-      @TimestampSerializer() required final DateTime? startDate,
-      required final List<String>? fanUserIdList,
-      required final String? documentId}) = _$FirebaseResolutionModelImpl;
+          {required final String? goalStatement,
+          required final String? actionStatement,
+          required final bool? isActive,
+          required final int? actionPerWeek,
+          @TimestampSerializer() required final DateTime? startDate,
+          required final List<String>? fanUserIdList}) =
+      _$FirebaseResolutionModelImpl;
 
   factory _FirebaseResolutionModel.fromJson(Map<String, dynamic> json) =
       _$FirebaseResolutionModelImpl.fromJson;
@@ -300,8 +280,6 @@ abstract class _FirebaseResolutionModel implements FirebaseResolutionModel {
   DateTime? get startDate;
   @override
   List<String>? get fanUserIdList;
-  @override
-  String? get documentId;
   @override
   @JsonKey(ignore: true)
   _$$FirebaseResolutionModelImplCopyWith<_$FirebaseResolutionModelImpl>

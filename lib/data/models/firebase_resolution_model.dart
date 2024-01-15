@@ -9,6 +9,7 @@ part 'firebase_resolution_model.freezed.dart';
 
 @freezed
 class FirebaseResolutionModel with _$FirebaseResolutionModel {
+  // ignore: invalid_annotation_target
   @JsonSerializable()
   const factory FirebaseResolutionModel({
     required String? goalStatement,
@@ -17,7 +18,6 @@ class FirebaseResolutionModel with _$FirebaseResolutionModel {
     required int? actionPerWeek,
     @TimestampSerializer() required DateTime? startDate,
     required List<String>? fanUserIdList,
-    required String? documentId,
   }) = _FirebaseResolutionModel;
 
   factory FirebaseResolutionModel.fromJson(Map<String, dynamic> json) =>
@@ -32,9 +32,10 @@ class FirebaseResolutionModel with _$FirebaseResolutionModel {
 }
 
 extension ConvertFirebaseResolutionModel on FirebaseResolutionModel {
-  ResolutionEntity toResolutionEntity(
-    List<UserDataEntity> fanUserEntityList,
-  ) {
+  ResolutionEntity toResolutionEntity({
+    required String documentId,
+    required List<UserDataEntity> fanUserEntityList,
+  }) {
     return ResolutionEntity(
       resolutionId: documentId,
       goalStatement: goalStatement,

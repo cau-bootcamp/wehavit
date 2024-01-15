@@ -17,7 +17,6 @@ _$FirebaseResolutionModelImpl _$$FirebaseResolutionModelImplFromJson(
       fanUserIdList: (json['fanUserIdList'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
-      documentId: json['documentId'] as String?,
     );
 
 Map<String, dynamic> _$$FirebaseResolutionModelImplToJson(
@@ -30,7 +29,6 @@ Map<String, dynamic> _$$FirebaseResolutionModelImplToJson(
       'startDate': _$JsonConverterToJson<dynamic, DateTime>(
           instance.startDate, const TimestampSerializer().toJson),
       'fanUserIdList': instance.fanUserIdList,
-      'documentId': instance.documentId,
     };
 
 Json? _$JsonConverterToJson<Json, Value>(

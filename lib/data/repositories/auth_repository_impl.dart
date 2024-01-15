@@ -10,7 +10,6 @@ import 'package:wehavit/data/datasources/auth_wehavit_datasource.dart';
 import 'package:wehavit/data/datasources/auth_wehavit_datasource_impl.dart';
 import 'package:wehavit/data/models/auth_result_model.dart';
 import 'package:wehavit/domain/repositories/auth_repository.dart';
-import 'package:wehavit/presentation/features.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   final wehavitAuthDataSource = ref.watch(wehavitAuthDatasourceProvider);

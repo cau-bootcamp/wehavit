@@ -222,7 +222,7 @@ class AddResolutionScreen extends HookConsumerWidget {
                           ),
                         ),
                       ),
-                      const SelectFans(),
+                      // const SelectFans(),
                       const SizedBox(
                         height: 20.0,
                       ),
@@ -292,7 +292,7 @@ class AddResolutionScreen extends HookConsumerWidget {
                         onPressed: () async {
                           ref
                               .read(addResolutionProvider.notifier)
-                              .uploadResolutionModel()
+                              .uploadResolutionEntity()
                               .then(
                             (result) {
                               result.fold((failure) {
