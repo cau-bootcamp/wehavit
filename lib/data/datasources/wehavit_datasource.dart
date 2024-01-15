@@ -17,8 +17,12 @@ abstract class WehavitDatasource {
     String email,
   );
 
-  EitherFuture<List<ConfirmPostEntity>> getConfirmPostEntityList(
-    int selectedDate,
+  EitherFuture<List<ConfirmPostEntity>> getConfirmPostEntityListByDate(
+    DateTime selectedDate,
+  );
+
+  EitherFuture<List<ConfirmPostEntity>> getConfirmPostEntityListByResolutionId(
+    String resolutionId,
   );
 
   EitherFuture<ConfirmPostEntity> getConfirmPostOfTodayByResolutionGoalId(
@@ -28,6 +32,8 @@ abstract class WehavitDatasource {
   EitherFuture<bool> uploadConfirmPost(ConfirmPostEntity confirmPost);
 
   EitherFuture<bool> updateConfirmPost(ConfirmPostEntity confirmPost);
+
+  EitherFuture<bool> deleteConfirmPost(ConfirmPostEntity confirmPost);
 
   EitherFuture<bool> sendReactionToTargetConfirmPost(
     String targetConfirmPostId,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:wehavit/common/utils/utils.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
 import 'package:wehavit/domain/entities/resolution_entity/resolution_entity.dart';
 import 'package:wehavit/domain/usecases/get_resolution_list_usecase.dart';
@@ -22,16 +23,22 @@ final lateWritingViewModelProvider =
 );
 
 class LateWritingViewModelProvider extends StateNotifier<LateWritingViewModel> {
+  final UploadConfirmPostUseCase _createPostUseCase;
+  final GetResolutionListByUserIdUsecase _getMyResolutionListUsecase;
+
   LateWritingViewModelProvider(
     this._createPostUseCase,
     this._getMyResolutionListUsecase,
   ) : super(LateWritingViewModel()) {
-    // TODO: 자신의 resolution list를 받아오는 코드 작성하기
-    // state.resolutionList = _getMyResolutionListUsecase(NoParams());
+    // 팩토리 메서드 호출
+    _initialize();
   }
 
-  final UploadConfirmPostUseCase _createPostUseCase;
-  final GetResolutionListByUserIdUsecase _getMyResolutionListUsecase;
+  // 비동기적으로 초기화를 진행하는 팩토리 메서드
+  Future<void> _initialize() async {
+    // TODO: 자신의 resolution list를 받아오는 코드 작성하기
+    state.resolutionList = _getMyResolutionListUsecase('hello');
+  }
 
   Future<void> postCurrentConfirmPost() async {
     final fetchResult = await state.resolutionList;

@@ -13,13 +13,13 @@ final getMyResolutionListByUserIdUsecaseProvider =
 });
 
 class GetMyResolutionListByUserIdUsecase
-    extends FutureUseCase<List<ResolutionEntity>, NoParams> {
+    extends FutureUseCase<List<ResolutionEntity>, String> {
   GetMyResolutionListByUserIdUsecase(this._resolutionRepository);
 
   final ResolutionRepository _resolutionRepository;
 
   @override
-  EitherFuture<List<ResolutionEntity>> call(NoParams params) {
+  EitherFuture<List<ResolutionEntity>> call(String params) {
     // current user id?
     final temp = _resolutionRepository
         .getActiveResolutionEntityList('69dlXoGSBKhzrySuhb8t9MvqzdD3');

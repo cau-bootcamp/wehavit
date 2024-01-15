@@ -29,7 +29,9 @@ mixin _$FirebaseConfirmPostModel {
   String? get owner => throw _privateConstructorUsedError;
   List<String>? get fan => throw _privateConstructorUsedError;
   int? get recentStrike => throw _privateConstructorUsedError;
+  @TimestampConverter()
   DateTime? get createdAt => throw _privateConstructorUsedError;
+  @TimestampConverter()
   DateTime? get updatedAt => throw _privateConstructorUsedError;
   Map<String, bool>? get attributes => throw _privateConstructorUsedError;
 
@@ -54,8 +56,8 @@ abstract class $FirebaseConfirmPostModelCopyWith<$Res> {
       String? owner,
       List<String>? fan,
       int? recentStrike,
-      DateTime? createdAt,
-      DateTime? updatedAt,
+      @TimestampConverter() DateTime? createdAt,
+      @TimestampConverter() DateTime? updatedAt,
       Map<String, bool>? attributes});
 }
 
@@ -152,8 +154,8 @@ abstract class _$$FirebaseConfirmPostModelImplCopyWith<$Res>
       String? owner,
       List<String>? fan,
       int? recentStrike,
-      DateTime? createdAt,
-      DateTime? updatedAt,
+      @TimestampConverter() DateTime? createdAt,
+      @TimestampConverter() DateTime? updatedAt,
       Map<String, bool>? attributes});
 }
 
@@ -244,8 +246,8 @@ class _$FirebaseConfirmPostModelImpl implements _FirebaseConfirmPostModel {
       required this.owner,
       required final List<String>? fan,
       required this.recentStrike,
-      required this.createdAt,
-      required this.updatedAt,
+      @TimestampConverter() required this.createdAt,
+      @TimestampConverter() required this.updatedAt,
       required final Map<String, bool>? attributes})
       : _fan = fan,
         _attributes = attributes;
@@ -278,8 +280,10 @@ class _$FirebaseConfirmPostModelImpl implements _FirebaseConfirmPostModel {
   @override
   final int? recentStrike;
   @override
+  @TimestampConverter()
   final DateTime? createdAt;
   @override
+  @TimestampConverter()
   final DateTime? updatedAt;
   final Map<String, bool>? _attributes;
   @override
@@ -363,8 +367,8 @@ abstract class _FirebaseConfirmPostModel implements FirebaseConfirmPostModel {
           required final String? owner,
           required final List<String>? fan,
           required final int? recentStrike,
-          required final DateTime? createdAt,
-          required final DateTime? updatedAt,
+          @TimestampConverter() required final DateTime? createdAt,
+          @TimestampConverter() required final DateTime? updatedAt,
           required final Map<String, bool>? attributes}) =
       _$FirebaseConfirmPostModelImpl;
 
@@ -388,8 +392,10 @@ abstract class _FirebaseConfirmPostModel implements FirebaseConfirmPostModel {
   @override
   int? get recentStrike;
   @override
+  @TimestampConverter()
   DateTime? get createdAt;
   @override
+  @TimestampConverter()
   DateTime? get updatedAt;
   @override
   Map<String, bool>? get attributes;

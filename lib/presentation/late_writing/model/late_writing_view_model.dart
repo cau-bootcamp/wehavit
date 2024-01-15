@@ -10,7 +10,7 @@ class LateWritingViewModel {
   EitherFuture<List<ResolutionEntity>> resolutionList = Future(
     () => right([]),
   );
-  int resolutionIndex = 0;
 
+  int resolutionIndex = 0;
   String? imageFileUrl;
 }

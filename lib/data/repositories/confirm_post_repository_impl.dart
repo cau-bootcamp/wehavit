@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
@@ -20,8 +19,10 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
   final WehavitDatasource _wehavitDatasource;
 
   @override
-  EitherFuture<bool> createConfirmPost(ConfirmPostEntity confirmPost) async {
-    final String resolutionId = confirmPost.resolutionId!;
+  EitherFuture<bool> createConfirmPost(
+    ConfirmPostEntity confirmPostEntity,
+  ) async {
+    final String resolutionId = confirmPostEntity.resolutionId!;
     try {
       final existingPost = await _wehavitDatasource
           .getConfirmPostOfTodayByResolutionGoalId(resolutionId);
@@ -29,22 +30,22 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
       existingPost.fold(
         (l) {
           // create new post if not exist
-          confirmPost = confirmPost.copyWith(
+          confirmPostEntity = confirmPostEntity.copyWith(
             owner: FirebaseAuth.instance.currentUser!.uid,
           );
 
-          _wehavitDatasource.uploadConfirmPost(confirmPost);
+          _wehavitDatasource.uploadConfirmPost(confirmPostEntity);
         },
         (cf) {
           // update existing post
-          confirmPost = confirmPost.copyWith(
+          confirmPostEntity = confirmPostEntity.copyWith(
             id: cf.id,
             owner: FirebaseAuth.instance.currentUser!.uid,
             createdAt: cf.createdAt,
             updatedAt: DateTime.now(),
           );
 
-          _wehavitDatasource.updateConfirmPost(confirmPost);
+          _wehavitDatasource.updateConfirmPost(confirmPostEntity);
         },
       );
 
@@ -56,52 +57,67 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
 
   @override
   EitherFuture<bool> deleteConfirmPost(
-    DocumentReference<ConfirmPostEntity> confirmPostRef,
-  ) {
-    // TODO: implement deleteConfirmPost
-    return Future(
-      () => left(const Failure('deleteConfirmPost not implemented')),
-    );
+    ConfirmPostEntity entity,
+  ) async {
+    try {
+      final getResult = await _wehavitDatasource.deleteConfirmPost(entity);
+      return Future(() => getResult);
+    } on Exception catch (e) {
+      return Future(() => left(Failure(e.toString())));
+    }
   }
 
   @override
-  EitherFuture<ConfirmPostEntity> getConfirmPostEntityByUserId({
-    required String userId,
-  }) {
-    // TODO: implement getConfirmPostByUserId
-    return Future(
-      () => left(const Failure('getConfirmPostByUserId not implemented')),
-    );
+  EitherFuture<bool> updateConfirmPost(ConfirmPostEntity entity) async {
+    try {
+      // update existing post
+      entity = entity.copyWith(
+        id: entity.id,
+        owner: FirebaseAuth.instance.currentUser!.uid,
+        createdAt: entity.createdAt,
+        updatedAt: DateTime.now(),
+      );
+
+      _wehavitDatasource.updateConfirmPost(entity);
+
+      return Future(() => right(true));
+    } on FirebaseException catch (e) {
+      return left(Failure(e.message ?? 'FirebaseException'));
+    }
   }
 
   @override
-  EitherFuture<bool> updateConfirmPost(ConfirmPostEntity confirmPost) {
-    return Future(
-      () => left(const Failure('updateConfirmPost not implemented')),
-    );
-  }
+  EitherFuture<List<ConfirmPostEntity>> getConfirmPostEntityListByResolutionId({
+    required String resolutionId,
+  }) async {
+    try {
+      final getResult =
+          await _wehavitDatasource.getConfirmPostEntityListByResolutionId(
+        resolutionId,
+      );
 
-  @override
-  EitherFuture<List<ConfirmPostEntity>> getConfirmPostEntityListByResolutionId(
-      {required String resolutionId}) {
-    // TODO: implement getConfirmPostListForResolutionId
-    throw UnimplementedError();
+      return getResult.fold(
+        (failure) => Future(() => left(failure)),
+        (entityList) => Future(() => right(entityList)),
+      );
+    } on Exception catch (e) {
+      return Future(() => left(Failure(e.toString())));
+    }
   }
 
   @override
   EitherFuture<List<ConfirmPostEntity>> getConfirmPostEntityListByDate({
-    required int selectedDate,
+    required DateTime selectedDate,
   }) async {
     try {
-      final getResult = await _wehavitDatasource.getConfirmPostEntityList(
+      final getResult = await _wehavitDatasource.getConfirmPostEntityListByDate(
         selectedDate,
       );
 
-      return getResult.fold((failure) => left(failure), (entityList) {
-        final modelList = entityList.toList();
-
-        return Future(() => right(modelList));
-      });
+      return getResult.fold(
+        (failure) => Future(() => left(failure)),
+        (entityList) => Future(() => right(entityList)),
+      );
     } on Exception catch (e) {
       return Future(() => left(Failure(e.toString())));
     }

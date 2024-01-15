@@ -53,13 +53,6 @@ class ConfirmPostEntity with _$ConfirmPostEntity {
 
   factory ConfirmPostEntity.fromJson(Map<String, dynamic> json) =>
       _$ConfirmPostEntityFromJson(json);
-
-  factory ConfirmPostEntity.fromFireStoreDocument(DocumentSnapshot doc) {
-    if (doc.data() == null) throw Exception('Document data was null');
-
-    return ConfirmPostEntity.fromJson(doc.data() as Map<String, Object?>)
-        .copyWith(id: doc.id);
-  }
 }
 
 T? tryCast<T>(value) {

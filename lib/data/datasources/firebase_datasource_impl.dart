@@ -8,6 +8,7 @@ import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/common/utils/firebase_collection_name.dart';
 import 'package:wehavit/data/datasources/wehavit_datasource.dart';
+import 'package:wehavit/data/models/firebase_confirm_post_model.dart';
 import 'package:wehavit/data/models/firebase_resolution_model.dart';
 import 'package:wehavit/data/models/user_model.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
@@ -96,14 +97,13 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }
 
   @override
-  EitherFuture<List<ConfirmPostEntity>> getConfirmPostEntityList(
-    int selectedDate,
+  EitherFuture<List<ConfirmPostEntity>> getConfirmPostEntityListByDate(
+    DateTime selectedDate,
   ) async {
     try {
-      int nDaysAgo = maxDay - selectedDate;
-      DateTime today = DateTime.now();
-      DateTime startDate = DateTime(today.year, today.month, today.day)
-          .subtract(Duration(days: nDaysAgo));
+      DateTime startDate =
+          DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+
       DateTime endDate =
           DateTime(startDate.year, startDate.month, startDate.day)
               .add(const Duration(days: 1));
@@ -219,20 +219,93 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }
 
   @override
+  EitherFuture<List<ConfirmPostEntity>> getConfirmPostEntityListByResolutionId(
+    String resolutionId,
+  ) async {
+    try {
+      final fetchResult = await firestore
+          .collection(FirebaseCollectionName.confirmPosts)
+          .where(
+            FirebaseConfirmPostFieldName.resolutionId,
+            isEqualTo: resolutionId,
+          )
+          .get();
+
+      final entityList = fetchResult.docs.map((doc) {
+        final model = FirebaseConfirmPostModel.fromFireStoreDocument(doc);
+        final entity = model.toConfirmPostEntity();
+        return entity;
+      }).toList();
+
+      return Future(() => right(entityList));
+    } on Exception catch (e) {
+      return Future(() => left(Failure(e.toString())));
+    }
+  }
+
+  @override
   EitherFuture<ConfirmPostEntity> getConfirmPostOfTodayByResolutionGoalId(
     String resolutionId,
-  ) {
-    return Future(() => left(const Failure('not implemented')));
+  ) async {
+    try {
+      final fetchResult = await firestore
+          .collection(FirebaseCollectionName.confirmPosts)
+          .where(
+            FirebaseConfirmPostFieldName.resolutionId,
+            isEqualTo: resolutionId,
+          )
+          .get();
+
+      if (fetchResult.docs.isEmpty) {
+        return Future(
+          () => left(Failure('no post today for resolution $resolutionId')),
+        );
+      } else {
+        final model = FirebaseConfirmPostModel.fromFireStoreDocument(
+          fetchResult.docs.first,
+        );
+        final entity = model.toConfirmPostEntity();
+
+        return Future(() => right(entity));
+      }
+    } on Exception catch (e) {
+      return Future(() => left(Failure(e.toString())));
+    }
   }
 
   @override
-  EitherFuture<bool> uploadConfirmPost(ConfirmPostEntity confirmPost) {
-    return Future(() => left(const Failure('not implemented')));
+  EitherFuture<bool> uploadConfirmPost(ConfirmPostEntity entity) async {
+    try {
+      final model = FirebaseConfirmPostModel.fromConfirmPostEntity(entity);
+
+      await firestore
+          .collection(FirebaseCollectionName.confirmPosts)
+          .add(model.toFirestoreMap());
+
+      return Future(() => right(true));
+    } on Exception catch (e) {
+      return Future(
+        () => left(Failure(e.toString())),
+      );
+    }
   }
 
   @override
-  EitherFuture<bool> updateConfirmPost(ConfirmPostEntity confirmPost) {
-    return Future(() => left(const Failure('not implemented')));
+  EitherFuture<bool> updateConfirmPost(ConfirmPostEntity entity) async {
+    try {
+      final model = FirebaseConfirmPostModel.fromConfirmPostEntity(entity);
+
+      await firestore
+          .collection(FirebaseCollectionName.confirmPosts)
+          .doc(entity.id)
+          .update(model.toFirestoreMap());
+
+      return Future(() => right(true));
+    } on Exception catch (e) {
+      return Future(
+        () => left(Failure(e.toString())),
+      );
+    }
   }
 
   @override
@@ -250,7 +323,8 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     try {
       final userDocument = await firestore
           .collection(
-              FirebaseCollectionName.getTargetResolutionCollectionName(userId))
+            FirebaseCollectionName.getTargetResolutionCollectionName(userId),
+          )
           .get();
 
       final fetchResult = await Future.wait(
@@ -353,5 +427,28 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
         );
 
     return result;
+  }
+
+  @override
+  EitherFuture<bool> deleteConfirmPost(ConfirmPostEntity entity) async {
+    try {
+      if (entity.owner != FirebaseAuth.instance.currentUser?.uid) {
+        // 자신의 post가 아님
+        return Future(
+          () => left(const Failure('post is not owned by current user')),
+        );
+      }
+
+      await firestore
+          .collection(FirebaseCollectionName.confirmPosts)
+          .doc(entity.id)
+          .delete();
+
+      return Future(() => right(true));
+    } on Exception {
+      return Future(
+        () => left(const Failure('catch error on deleteConfirmPost')),
+      );
+    }
   }
 }

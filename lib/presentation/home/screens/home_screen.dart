@@ -33,6 +33,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     with SingleTickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
   int selectedIndex = -1;
+  int maxIndex = 27;
 
   static const String dateFormat = 'yyyy년 MM월 dd일';
   static const List<String> weekdayKR = ['월', '화', '수', '목', '금', '토', '일'];
@@ -55,12 +56,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       if (_scrollController.hasClients) {
         _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
       }
-      ref
-          .read(confirmPostListProvider.notifier)
-          .getConfirmPostList(selectedIndex);
+      ref.read(confirmPostListProvider.notifier).getConfirmPostList(
+            DateTime.now().add(Duration(days: maxIndex - selectedIndex)),
+          );
     });
     setState(() {
-      selectedIndex = 27;
+      selectedIndex = maxIndex;
     });
   }
 
@@ -69,9 +70,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     super.didChangeDependencies();
 
     if (!_initOccurred) {
-      ref
-          .read(confirmPostListProvider.notifier)
-          .getConfirmPostList(selectedIndex);
+      ref.read(confirmPostListProvider.notifier).getConfirmPostList(
+            DateTime.now().add(Duration(days: maxIndex - selectedIndex)),
+          );
 
       _mainViewModel = ref.watch(mainViewModelProvider);
       _mainViewModelProvider = ref.read(mainViewModelProvider.notifier);
@@ -309,7 +310,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                     });
                     await ref
                         .read(confirmPostListProvider.notifier)
-                        .getConfirmPostList(selectedIndex);
+                        .getConfirmPostList(
+                          DateTime.now()
+                              .add(Duration(days: maxIndex - selectedIndex)),
+                        );
                   },
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(47, 70),

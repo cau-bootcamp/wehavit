@@ -12,14 +12,14 @@ final getConfirmPostListUsecaseProvider =
 });
 
 class GetConfirmPostListUsecase
-    implements FutureUseCase<List<ConfirmPostEntity>?, int> {
+    implements FutureUseCase<List<ConfirmPostEntity>?, DateTime> {
   GetConfirmPostListUsecase(this._confirmPostRepository);
 
   final ConfirmPostRepository _confirmPostRepository;
 
   @override
   Future<Either<Failure, List<ConfirmPostEntity>>> call(
-    int selectedDate,
+    DateTime selectedDate,
   ) async {
     return _confirmPostRepository.getConfirmPostEntityListByDate(
       selectedDate: selectedDate,

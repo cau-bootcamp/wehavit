@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
 
 part 'firebase_confirm_post_model.g.dart';
@@ -18,8 +19,8 @@ class FirebaseConfirmPostModel with _$FirebaseConfirmPostModel {
     required String? owner,
     required List<String>? fan,
     required int? recentStrike,
-    required DateTime? createdAt,
-    required DateTime? updatedAt,
+    @TimestampConverter() required DateTime? createdAt,
+    @TimestampConverter() required DateTime? updatedAt,
     required Map<String, bool>? attributes,
   }) = _FirebaseConfirmPostModel;
 
@@ -33,7 +34,25 @@ class FirebaseConfirmPostModel with _$FirebaseConfirmPostModel {
         .copyWith();
   }
 
+  factory FirebaseConfirmPostModel.fromConfirmPostEntity(
+    ConfirmPostEntity entity,
+  ) {
+    return FirebaseConfirmPostModel.fromJson(entity.toJson());
+  }
+}
+
+extension FirebaseConfirmPostModelConvert on FirebaseConfirmPostModel {
   ConfirmPostEntity toConfirmPostEntity() {
-    return ConfirmPostEntity.fromJson(this.toJson());
+    return ConfirmPostEntity.fromJson(toJson());
+  }
+
+  Map<String, dynamic> toFirestoreMap() {
+    Map<String, dynamic> result = toJson();
+    result[FirebaseConfirmPostFieldName.updatedAt] =
+        Timestamp.fromDate(updatedAt!);
+    result[FirebaseConfirmPostFieldName.createdAt] =
+        Timestamp.fromDate(createdAt!);
+
+    return result;
   }
 }

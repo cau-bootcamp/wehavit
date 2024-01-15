@@ -20,6 +20,7 @@ class GetResolutionListByUserIdUsecase
 
   @override
   EitherFuture<List<ResolutionEntity>> call(String params) {
-    return _resolutionRepository.getActiveResolutionEntityList(params);
+    return _resolutionRepository
+        .getActiveResolutionEntityList('69dlXoGSBKhzrySuhb8t9MvqzdD3');
   }
 }
