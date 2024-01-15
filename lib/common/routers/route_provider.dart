@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/presentation/effects/animation_sample_page.dart';
+import 'package:wehavit/presentation/effects/emojis/animation_sample_page.dart';
 import 'package:wehavit/presentation/features.dart';
 import 'package:wehavit/presentation/home/screens/home_screen.dart';
 import 'package:wehavit/presentation/late_writing/screen/late_writing_view.dart';

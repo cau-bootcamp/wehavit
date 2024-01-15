@@ -17,7 +17,9 @@ class UserModelRepositoryImpl implements UserModelRepository {
   final WehavitDatasource _wehavitDatasource;
 
   @override
-  EitherFuture<UserDataEntity> fetchUserModelFromId(String targetUserId) async {
+  EitherFuture<UserDataEntity> fetchUserDataEntityFromId(
+    String targetUserId,
+  ) async {
     final userModelRequest =
         await _wehavitDatasource.fetchUserModelFromId(targetUserId);
 
