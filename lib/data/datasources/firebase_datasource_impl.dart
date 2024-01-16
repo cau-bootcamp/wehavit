@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/widgets.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/constants/firebase_field_name.dart';
 import 'package:wehavit/common/errors/failure.dart';
@@ -10,10 +9,12 @@ import 'package:wehavit/common/utils/firebase_collection_name.dart';
 import 'package:wehavit/data/datasources/wehavit_datasource.dart';
 import 'package:wehavit/data/models/firebase_confirm_post_model.dart';
 import 'package:wehavit/data/models/firebase_resolution_model.dart';
+import 'package:wehavit/data/models/firebase_user_model.dart';
 import 'package:wehavit/data/models/user_model.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
 import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
 import 'package:wehavit/domain/entities/resolution_entity/resolution_entity.dart';
+import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
 
 class FirebaseDatasourceImpl implements WehavitDatasource {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -112,7 +113,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
 //          'isGreaterThan: ${Timestamp.fromDate(startDate)}\n'
 //          'isLessThan: ${Timestamp.fromDate(endDate)}');
       // 1. 결과 start 2 end date confirmpost
-      QuerySnapshot firstQueryResult = await FirebaseFirestore.instance
+      final firstQueryResult = await FirebaseFirestore.instance
           .collection(FirebaseCollectionName.confirmPosts)
           .where(
             FirebaseConfirmPostFieldName.createdAt,
@@ -124,89 +125,98 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           )
           .get();
 
-      // 두 번째 쿼리 결과: Fan
-      QuerySnapshot secondQueryResult = await FirebaseFirestore.instance
-          .collection(FirebaseCollectionName.confirmPosts)
-          .where(
-            FirebaseConfirmPostFieldName.fan,
-            arrayContains: FirebaseAuth.instance.currentUser!.email,
-          )
-          .get();
-
-      // 세 번째 쿼리 결과
-      var thirdQueryResult = await FirebaseFirestore.instance
-          .collection(FirebaseCollectionName.confirmPosts)
-          .where(
-            FirebaseConfirmPostFieldName.owner,
-            isEqualTo: FirebaseAuth.instance.currentUser!.uid,
-          )
-          .get();
-
-// 첫 번째 쿼리 결과에서 문서 ID 추출
-      Set<String> firstQueryDocIds =
-          firstQueryResult.docs.map((doc) => doc.id).toSet();
-
-// 두 번째 쿼리 결과에서 문서 ID 추출
-      Set<String> secondQueryDocIds =
-          secondQueryResult.docs.map((doc) => doc.id).toSet();
-
-// 세 번째 쿼리 결과에서 문서 ID 추출
-      Set<String> thirdQueryDocIds =
-          thirdQueryResult.docs.map((doc) => doc.id).toSet();
-
-// 첫 번째와 두 번째 교집합 찾기 : 내 친구의 해당 날짜 게시글
-      Set<String> firstIntersection =
-          firstQueryDocIds.intersection(secondQueryDocIds);
-
-      // 첫 번째와 세 번째 교집합 찾기 : 내 해당 날짜 게시글
-      Set<String> secondIntersection =
-          firstQueryDocIds.intersection(thirdQueryDocIds);
-
-// 최종 결과: 교집합에 해당하는 문서들
-      List<QueryDocumentSnapshot> resultDocs = firstQueryResult.docs
-          .where((doc) => firstIntersection.contains(doc.id))
-          .toList();
-
-      resultDocs.addAll(
-        firstQueryResult.docs
-            .where((doc) => secondIntersection.contains(doc.id))
-            .toList(),
-      );
-
-      debugPrint(resultDocs.length.toString());
-
-      final userDocsList = resultDocs
-          .map(
-            (doc) =>
-                (doc.data() as dynamic)[FirebaseConfirmPostFieldName.owner],
-          )
-          .toList();
-
-      Map<String, (String, String)> userDataMap = {};
-      for (var userDoc in userDocsList) {
-        if (userDataMap[userDoc] == null) {
-          final fetchUserResult = await FirebaseFirestore.instance
-              .collection(FirebaseCollectionName.users)
-              .doc(userDoc)
-              .get();
-          userDataMap[userDoc] = (
-            fetchUserResult.data()?[FirebaseUserFieldName.imageUrl],
-            fetchUserResult.data()?[FirebaseUserFieldName.displayName]
-          );
-        }
-      }
-
       // TODO: 아래 코드 구현하기
-      List<ConfirmPostEntity> confirmPosts = List.empty();
 
-      // List<ConfirmPostEntity> confirmPosts = resultDocs
+      // 두 번째 쿼리 결과: Fan
+//       QuerySnapshot secondQueryResult = await FirebaseFirestore.instance
+//           .collection(FirebaseCollectionName.confirmPosts)
+//           .where(
+//             FirebaseConfirmPostFieldName.fan,
+//             arrayContains: FirebaseAuth.instance.currentUser!.uid,
+//           )
+//           .get();
+
+//       // 세 번째 쿼리 결과
+//       var thirdQueryResult = await FirebaseFirestore.instance
+//           .collection(FirebaseCollectionName.confirmPosts)
+//           .where(
+//             FirebaseConfirmPostFieldName.owner,
+//             isEqualTo: FirebaseAuth.instance.currentUser!.uid,
+//           )
+//           .get();
+
+// // 첫 번째 쿼리 결과에서 문서 ID 추출
+//       Set<String> firstQueryDocIds =
+//           firstQueryResult.docs.map((doc) => doc.id).toSet();
+
+// // 두 번째 쿼리 결과에서 문서 ID 추출
+//       Set<String> secondQueryDocIds =
+//           secondQueryResult.docs.map((doc) => doc.id).toSet();
+
+// // 세 번째 쿼리 결과에서 문서 ID 추출
+//       Set<String> thirdQueryDocIds =
+//           thirdQueryResult.docs.map((doc) => doc.id).toSet();
+
+// // 첫 번째와 두 번째 교집합 찾기 : 내 친구의 해당 날짜 게시글
+//       Set<String> firstIntersection =
+//           firstQueryDocIds.intersection(secondQueryDocIds);
+
+//       // 첫 번째와 세 번째 교집합 찾기 : 내 해당 날짜 게시글
+//       Set<String> secondIntersection =
+//           firstQueryDocIds.intersection(thirdQueryDocIds);
+
+// // 최종 결과: 교집합에 해당하는 문서들
+//       List<QueryDocumentSnapshot> resultDocs = firstQueryResult.docs
+//           .where((doc) => firstIntersection.contains(doc.id))
+//           .toList();
+
+//       resultDocs.addAll(
+//         firstQueryResult.docs
+//             .where((doc) => secondIntersection.contains(doc.id))
+//             .toList(),
+//       );
+
+//       debugPrint(resultDocs.length.toString());
+
+      // final userDocsList = resultDocs
       //     .map(
-      //       (doc) => FirebaseConfirmPostModel.fromJson(
-      //         userDataMap[
-      //             (doc.data() as dynamic)[FirebaseConfirmPostFieldName.owner]],
-      //       ).toConfirmPostEntity(),
+      //       (doc) =>
+      //           (doc.data() as dynamic)[FirebaseConfirmPostFieldName.owner],
       //     )
       //     .toList();
+
+      // Map<String, (String, String)> userDataMap = {};
+      // for (var userDoc in userDocsList) {
+      //   if (userDataMap[userDoc] == null) {
+      //     final fetchUserResult = await FirebaseFirestore.instance
+      //         .collection(FirebaseCollectionName.users)
+      //         .doc(userDoc)
+      //         .get();
+      //     userDataMap[userDoc] = (
+      //       fetchUserResult.data()?[FirebaseUserFieldName.imageUrl],
+      //       fetchUserResult.data()?[FirebaseUserFieldName.displayName]
+      //     );
+      //   }
+      // }
+
+      // List<ConfirmPostEntity> confirmPosts = List.empty();
+
+      // List<ConfirmPostEntity> confirmPosts = resultDocs.map((doc) {
+      //   if (userDataMap doc.data()[FirebaseConfirmPostFieldName.owner])
+
+      //   return FirebaseConfirmPostModel.fromJson(userDataMap[
+      //           (doc.data() as dynamic)[FirebaseConfirmPostFieldName.owner]])
+      //       .toConfirmPostEntity();
+      // }).toList();
+
+      List<ConfirmPostEntity> confirmPosts = firstQueryResult.docs.map(
+        (doc) {
+          final model = FirebaseConfirmPostModel.fromFireStoreDocument(doc);
+          final entity = model.toConfirmPostEntity();
+
+          return entity;
+        },
+      ).toList();
 
       return Future(() => right(confirmPosts));
     } on Exception {
@@ -335,12 +345,13 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
 
           final fetchFanList = await Future.wait(
             (model.fanUserIdList ?? []).map((userId) async {
-              final fetchResult = (await fetchUserModelFromId(userId)).fold(
+              final fetchResult =
+                  (await fetchUserDataEntityByUserId(userId)).fold(
                 (l) => null,
                 (r) => r,
               );
               if (fetchResult != null) {
-                return fetchResult.toUserDataEntity();
+                return fetchResult;
               }
             }).toList(),
           );
@@ -392,8 +403,24 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }
 
   @override
-  EitherFuture<UserModel> fetchUserModelFromId(String targetUserId) {
-    return Future(() => left(const Failure('not implemented')));
+  EitherFuture<UserDataEntity> fetchUserDataEntityByUserId(
+    String targetUserId,
+  ) async {
+    try {
+      final friendDocument = await firestore
+          .collection(FirebaseCollectionName.users)
+          .doc(targetUserId)
+          .get();
+
+      final model = FirebaseUserModel.fromFireStoreDocument(friendDocument);
+      final entity = model.toUserDataEntity(
+        userId: friendDocument.reference.id,
+      );
+
+      return Future(() => right(entity));
+    } on Exception catch (e) {
+      return Future(() => left(Failure(e.toString())));
+    }
   }
 
   Future<UserModel?> getUserModelByUserId(String targetUserId) async {

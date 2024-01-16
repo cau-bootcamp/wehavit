@@ -5,6 +5,7 @@ import 'package:wehavit/data/models/user_model.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
 import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
 import 'package:wehavit/domain/entities/resolution_entity/resolution_entity.dart';
+import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
 
 final wehavitDatasourceProvider = Provider<WehavitDatasource>((ref) {
   return FirebaseDatasourceImpl();
@@ -46,5 +47,5 @@ abstract class WehavitDatasource {
 
   EitherFuture<bool> uploadResolutionEntity(ResolutionEntity entity);
 
-  EitherFuture<UserModel> fetchUserModelFromId(String targetUserId);
+  EitherFuture<UserDataEntity> fetchUserDataEntityByUserId(String targetUserId);
 }
