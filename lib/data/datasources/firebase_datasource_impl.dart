@@ -115,14 +115,14 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       // 1. 결과 start 2 end date confirmpost
       final firstQueryResult = await FirebaseFirestore.instance
           .collection(FirebaseCollectionName.confirmPosts)
-          .where(
-            FirebaseConfirmPostFieldName.createdAt,
-            isGreaterThanOrEqualTo: Timestamp.fromDate(startDate),
-          )
-          .where(
-            FirebaseConfirmPostFieldName.createdAt,
-            isLessThan: Timestamp.fromDate(endDate),
-          )
+          // .where(
+          //   FirebaseConfirmPostFieldName.createdAt,
+          //   isGreaterThanOrEqualTo: Timestamp.fromDate(startDate),
+          // )
+          // .where(
+          //   FirebaseConfirmPostFieldName.createdAt,
+          //   isLessThan: Timestamp.fromDate(endDate),
+          // )
           .get();
 
       // TODO: 아래 코드 구현하기
@@ -209,14 +209,31 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       //       .toConfirmPostEntity();
       // }).toList();
 
-      List<ConfirmPostEntity> confirmPosts = firstQueryResult.docs.map(
-        (doc) {
+      print(firstQueryResult.docs.length);
+
+      List<ConfirmPostEntity> confirmPosts =
+          await Future.wait(firstQueryResult.docs.map(
+        (doc) async {
           final model = FirebaseConfirmPostModel.fromFireStoreDocument(doc);
-          final entity = model.toConfirmPostEntity();
+          final fanList = await Future.wait(
+            model.fan!
+                .map(
+                  (userId) async =>
+                      (await getUserModelByUserId(userId))!.toUserDataEntity(),
+                )
+                .toList(),
+          );
+          final ownerUserEntity =
+              (await getUserModelByUserId(model.owner!))!.toUserDataEntity();
+          final entity = model.toConfirmPostEntity(
+            doc.reference.id,
+            fanList,
+            ownerUserEntity,
+          );
 
           return entity;
         },
-      ).toList();
+      ).toList());
 
       return Future(() => right(confirmPosts));
     } on Exception {
@@ -241,13 +258,31 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           )
           .get();
 
-      final entityList = fetchResult.docs.map((doc) {
-        final model = FirebaseConfirmPostModel.fromFireStoreDocument(doc);
-        final entity = model.toConfirmPostEntity();
-        return entity;
-      }).toList();
+      List<ConfirmPostEntity> confirmPosts =
+          await Future.wait(fetchResult.docs.map(
+        (doc) async {
+          final model = FirebaseConfirmPostModel.fromFireStoreDocument(doc);
+          final fanList = await Future.wait(
+            model.fan!
+                .map(
+                  (userId) async =>
+                      (await getUserModelByUserId(userId))!.toUserDataEntity(),
+                )
+                .toList(),
+          );
+          final ownerUserEntity =
+              (await getUserModelByUserId(model.owner!))!.toUserDataEntity();
+          final entity = model.toConfirmPostEntity(
+            doc.reference.id,
+            fanList,
+            ownerUserEntity,
+          );
 
-      return Future(() => right(entityList));
+          return entity;
+        },
+      ).toList());
+
+      return Future(() => right(confirmPosts));
     } on Exception catch (e) {
       return Future(() => left(Failure(e.toString())));
     }
@@ -274,7 +309,26 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
         final model = FirebaseConfirmPostModel.fromFireStoreDocument(
           fetchResult.docs.first,
         );
-        final entity = model.toConfirmPostEntity();
+
+        final fanList = await Future.wait(
+          model.fan!
+              .map(
+                (userId) async =>
+                    (await getUserModelByUserId(userId))!.toUserDataEntity(),
+              )
+              .toList(),
+        );
+        final ownerUserEntity =
+            (await getUserModelByUserId(model.owner!))!.toUserDataEntity();
+
+        final entity = model.toConfirmPostEntity(
+          fetchResult.docs.first.reference.id,
+          fanList,
+          ownerUserEntity,
+        );
+        print("DEBUG");
+        print(entity.id);
+        print(entity.title);
 
         return Future(() => right(entity));
       }

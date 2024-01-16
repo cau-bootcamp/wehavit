@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
+import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
 
 part 'firebase_confirm_post_model.g.dart';
 part 'firebase_confirm_post_model.freezed.dart';
@@ -37,13 +38,44 @@ class FirebaseConfirmPostModel with _$FirebaseConfirmPostModel {
   factory FirebaseConfirmPostModel.fromConfirmPostEntity(
     ConfirmPostEntity entity,
   ) {
-    return FirebaseConfirmPostModel.fromJson(entity.toJson());
+    return FirebaseConfirmPostModel(
+      resolutionGoalStatement: entity.resolutionGoalStatement,
+      resolutionId: entity.resolutionId,
+      title: entity.title,
+      content: entity.content,
+      imageUrl: entity.imageUrl,
+      owner: entity.owner,
+      fan: entity.fan!.map((entity) => entity.userId!).toList(),
+      recentStrike: entity.recentStrike,
+      createdAt: entity.createdAt,
+      updatedAt: entity.updatedAt,
+      attributes: entity.attributes,
+    );
   }
 }
 
 extension FirebaseConfirmPostModelConvert on FirebaseConfirmPostModel {
-  ConfirmPostEntity toConfirmPostEntity() {
-    return ConfirmPostEntity.fromJson(toJson());
+  ConfirmPostEntity toConfirmPostEntity(
+    String postId,
+    List<UserDataEntity> fanList,
+    UserDataEntity owner,
+  ) {
+    return ConfirmPostEntity(
+      id: postId,
+      userName: owner.userName,
+      userImageUrl: owner.userImageUrl,
+      resolutionGoalStatement: resolutionGoalStatement,
+      resolutionId: resolutionId,
+      title: title,
+      content: content,
+      imageUrl: imageUrl,
+      owner: owner.userId,
+      fan: fanList,
+      recentStrike: recentStrike,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+      attributes: attributes,
+    );
   }
 
   Map<String, dynamic> toFirestoreMap() {

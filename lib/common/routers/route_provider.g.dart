@@ -15,6 +15,7 @@ List<RouteBase> get $appRoutes => [
       $addResolutionRoute,
       $friendListRoute,
       $animationSampleViewRoute,
+      $reactionSampleViewRoute,
       $lateWritingViewRoute,
     ];
 
@@ -185,6 +186,29 @@ extension $AnimationSampleViewRouteExtension on AnimationSampleViewRoute {
 
   String get location => GoRouteData.$location(
         '/animationSampleView',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $reactionSampleViewRoute => GoRouteData.$route(
+      path: '/reactionSampleView',
+      factory: $ReactionSampleViewRouteExtension._fromState,
+    );
+
+extension $ReactionSampleViewRouteExtension on ReactionSampleViewRoute {
+  static ReactionSampleViewRoute _fromState(GoRouterState state) =>
+      const ReactionSampleViewRoute();
+
+  String get location => GoRouteData.$location(
+        '/reactionSampleView',
       );
 
   void go(BuildContext context) => context.go(location);

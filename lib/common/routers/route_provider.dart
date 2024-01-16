@@ -10,6 +10,7 @@ import 'package:wehavit/presentation/home/screens/home_screen.dart';
 import 'package:wehavit/presentation/late_writing/screen/late_writing_view.dart';
 import 'package:wehavit/presentation/my_page/screens/add_resolution_screen.dart';
 import 'package:wehavit/presentation/my_page/screens/my_page_screen.dart';
+import 'package:wehavit/presentation/test_view/reaction/reaction_sample_view.dart';
 
 part 'route_provider.g.dart';
 
@@ -169,6 +170,18 @@ class AnimationSampleViewRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const AnimationSamplePage();
+  }
+}
+
+@TypedGoRoute<ReactionSampleViewRoute>(path: ReactionSampleViewRoute.path)
+class ReactionSampleViewRoute extends GoRouteData {
+  const ReactionSampleViewRoute();
+
+  static const path = RouteLocation.reactionSampleView;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const ReactionSampleView();
   }
 }
 

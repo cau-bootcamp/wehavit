@@ -136,6 +136,7 @@ class __$$UserDataEntityImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
+
 @JsonSerializable()
 class _$UserDataEntityImpl implements _UserDataEntity {
   _$UserDataEntityImpl(
