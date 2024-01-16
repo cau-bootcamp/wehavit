@@ -7,20 +7,19 @@ import 'package:wehavit/domain/repositories/resolution_repository.dart';
 final getResolutionListByUserIdUsecaseProvider =
     Provider<GetResolutionListByUserIdUsecase>((ref) {
   final resolutionRepository = ref.watch(resolutionRepositoryProvider);
-  return GetResolutionListByUserIdUsecase(
-    resolutionRepository,
-  );
+  return GetResolutionListByUserIdUsecase(resolutionRepository);
 });
 
 class GetResolutionListByUserIdUsecase
     extends FutureUseCase<List<ResolutionEntity>, String> {
-  GetResolutionListByUserIdUsecase(this._resolutionRepository);
+  GetResolutionListByUserIdUsecase(
+    this._resolutionRepository,
+  );
 
   final ResolutionRepository _resolutionRepository;
 
   @override
   EitherFuture<List<ResolutionEntity>> call(String params) {
-    return _resolutionRepository
-        .getActiveResolutionEntityList('69dlXoGSBKhzrySuhb8t9MvqzdD3');
+    return _resolutionRepository.getActiveResolutionEntityList(params);
   }
 }
