@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:wehavit/presentation/auth/auth.dart';
+import 'package:wehavit/data/models/auth_result_model.dart';
 
 @immutable
 class AuthState extends Equatable {

@@ -30,7 +30,6 @@ class _FriendListScreenState extends ConsumerState<FriendListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var currentUser = FirebaseAuth.instance.currentUser;
     var friendList = ref.watch(friendListProvider);
 
     return Scaffold(
@@ -52,7 +51,7 @@ class _FriendListScreenState extends ConsumerState<FriendListScreen> {
           children: [
             const AddFriendTextFieldWidget(),
             // 내 프로필
-            MyProfile(currentUser: currentUser),
+            // MyProfile(currentUser: currentUser),
             // 친구 수 표시
             Container(
               alignment: Alignment.centerLeft,
@@ -65,7 +64,7 @@ class _FriendListScreenState extends ConsumerState<FriendListScreen> {
             ),
             // 친구 리스트
             friendList.fold(
-              (left) => null,
+              (left) => Placeholder(),
               (right) => Expanded(
                 child: ListView.builder(
                   itemCount: right.length,
@@ -77,7 +76,7 @@ class _FriendListScreenState extends ConsumerState<FriendListScreen> {
                   },
                 ),
               ),
-            ) as Widget,
+            ),
           ],
         ),
       ),
