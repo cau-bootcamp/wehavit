@@ -478,4 +478,17 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       );
     }
   }
+
+  @override
+  EitherFuture<String> getMyUserId() {
+    try {
+      final userId = FirebaseAuth.instance.currentUser!.uid;
+
+      return Future(() => right(userId));
+    } on Exception catch (e) {
+      return Future(
+        () => left(const Failure('catch error on deleteConfirmPost')),
+      );
+    }
+  }
 }

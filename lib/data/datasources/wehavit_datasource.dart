@@ -48,4 +48,6 @@ abstract class WehavitDatasource {
   EitherFuture<bool> uploadResolutionEntity(ResolutionEntity entity);
 
   EitherFuture<UserDataEntity> fetchUserDataEntityByUserId(String targetUserId);
+
+  EitherFuture<String> getMyUserId();
 }
