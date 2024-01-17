@@ -11,7 +11,7 @@ _$FirebaseReactionModelImpl _$$FirebaseReactionModelImplFromJson(
     _$FirebaseReactionModelImpl(
       complimenterUid: json['complimenterUid'] as String,
       reactionType: json['reactionType'] as int,
-      instantPhotoUrl: json['instantPhotoUrl'] as String,
+      quickShotUrl: json['quickShotUrl'] as String,
       comment: json['comment'] as String,
       emoji: Map<String, int>.from(json['emoji'] as Map),
     );
@@ -21,7 +21,7 @@ Map<String, dynamic> _$$FirebaseReactionModelImplToJson(
     <String, dynamic>{
       'complimenterUid': instance.complimenterUid,
       'reactionType': instance.reactionType,
-      'instantPhotoUrl': instance.instantPhotoUrl,
+      'quickShotUrl': instance.quickShotUrl,
       'comment': instance.comment,
       'emoji': instance.emoji,
     };

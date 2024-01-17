@@ -28,6 +28,10 @@ class FirebaseCollectionName {
     return targetFriends;
   }
 
+  static String getConfirmPostReactionCollectionName(String confirmPostId) {
+    return 'confirm_posts/$confirmPostId/reactions';
+  }
+
   static final confirmPosts = FirebaseAuth.instance.currentUser != null
       ? 'confirm_posts'
       : 'invalid_address';

@@ -50,4 +50,9 @@ abstract class WehavitDatasource {
   EitherFuture<UserDataEntity> fetchUserDataEntityByUserId(String targetUserId);
 
   EitherFuture<String> getMyUserId();
+
+  EitherFuture<String> uploadPhotoFromLocalUrlToConfirmPost({
+    required String localPhotoUrl,
+    required String confirmPostId,
+  });
 }

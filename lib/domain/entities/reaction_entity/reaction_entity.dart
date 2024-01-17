@@ -6,12 +6,14 @@ part 'reaction_entity.g.dart';
 
 @freezed
 class ReactionEntity with _$ReactionEntity {
+  // ignore: invalid_annotation_target
   @JsonSerializable()
   factory ReactionEntity({
+    @JsonKey(includeFromJson: true, includeToJson: false)
     required String confirmPostId,
     required String complimenterUid,
     required int reactionType,
-    @Default('') String instantPhotoUrl,
+    @Default('') String quickShotUrl,
     @Default('') String comment,
     @Default({}) Map<String, int> emoji,
   }) = _ReactionEntity;
@@ -31,16 +33,16 @@ class ReactionEntity with _$ReactionEntity {
   factory ReactionEntity.quickShotType({
     required String confirmPostId,
     required String complimenterUid,
-    required String instantPhotoUrl,
+    required String quickShotUrl,
   }) =>
       ReactionEntity(
         confirmPostId: confirmPostId,
         complimenterUid: complimenterUid,
         reactionType: ReactionType.quickShot.index,
-        instantPhotoUrl: instantPhotoUrl,
+        quickShotUrl: quickShotUrl,
       );
 
-  factory ReactionEntity.comment({
+  factory ReactionEntity.commentType({
     required String confirmPostId,
     required String complimenterUid,
     required String comment,

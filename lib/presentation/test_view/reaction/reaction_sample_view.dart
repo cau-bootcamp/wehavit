@@ -5,6 +5,7 @@ import 'package:wehavit/common/utils/emoji_assets.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
 import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
 import 'package:wehavit/domain/usecases/get_confirm_post_list_usecase.dart';
+import 'package:wehavit/domain/usecases/send_emoji_reaction_to_confirm_post_usercase.dart';
 import 'package:wehavit/domain/usecases/upload_reaction_to_target_confirm_post.dart';
 
 class ReactionSampleView extends ConsumerStatefulWidget {
@@ -24,8 +25,8 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
   Widget build(BuildContext context) {
     final getConfirmPostListUsecase =
         ref.watch(getConfirmPostListUsecaseProvider);
-    final uploadReactionToTargetConfirmPostUsecase =
-        ref.watch(uploadReactionToTargetConfirmPostUsecaseProvider);
+    final sendEmojiReactionToConfirmPostUsecase =
+        ref.watch(sendEmojiReactionToConfirmPostUsecaseProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Reaction Sample View')),
@@ -37,15 +38,15 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
                 const Text('Target Post'),
                 ElevatedButton(
                     onPressed: () async {
-                      setState(() async {
-                        targetPostEntity =
-                            (await getConfirmPostListUsecase(DateTime.now()))
-                                .fold(
-                          (l) => null,
-                          (r) => r.isEmpty ? null : r.first,
-                        );
+                      final fetchedEntity =
+                          (await getConfirmPostListUsecase(DateTime.now()))
+                              .fold(
+                        (l) => null,
+                        (r) => r.isEmpty ? null : r.first,
+                      );
+                      setState(() {
+                        targetPostEntity = fetchedEntity;
                       });
-                      print(targetPostEntity);
                     },
                     child: const Text('load element')),
                 Text(
@@ -60,15 +61,14 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
               children: [
                 ElevatedButton(
                   onPressed: () async {
-                    emojiSheetWidget(context);
-                    // .whenComplete(() {
-                    //   final reaction = ReactionEntity(
-                    //     complimenterUid: complimenterUid,
-                    //     reactionType: reactionType,
-
-                    //   );
-                    //   uploadReactionToTargetConfirmPostUsecase(reaction);
-                    // });
+                    emojiSheetWidget(context).whenComplete(() {
+                      sendEmojiReactionToConfirmPostUsecase(
+                        (
+                          targetPostEntity!.id!,
+                          <String, int>{'t0': 1},
+                        ),
+                      );
+                    });
                   },
                   child: Text('emoji'),
                 ),

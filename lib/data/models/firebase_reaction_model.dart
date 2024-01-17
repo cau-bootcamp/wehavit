@@ -12,7 +12,7 @@ class FirebaseReactionModel with _$FirebaseReactionModel {
   const factory FirebaseReactionModel({
     required String complimenterUid,
     required int reactionType,
-    required String instantPhotoUrl,
+    required String quickShotUrl,
     required String comment,
     required Map<String, int> emoji,
   }) = _FirebaseReactionModel;
@@ -25,6 +25,15 @@ class FirebaseReactionModel with _$FirebaseReactionModel {
 
     return FirebaseReactionModel.fromJson(doc.data() as Map<String, Object?>);
   }
+
+  factory FirebaseReactionModel.fromReactionEntity(ReactionEntity entity) =>
+      FirebaseReactionModel(
+        complimenterUid: entity.complimenterUid,
+        reactionType: entity.reactionType,
+        quickShotUrl: entity.quickShotUrl,
+        comment: entity.comment,
+        emoji: entity.emoji,
+      );
 }
 
 extension ConvertFirebaseReactionModel on FirebaseReactionModel {

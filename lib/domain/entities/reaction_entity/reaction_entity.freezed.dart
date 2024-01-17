@@ -20,10 +20,11 @@ ReactionEntity _$ReactionEntityFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ReactionEntity {
+  @JsonKey(includeFromJson: true, includeToJson: false)
   String get confirmPostId => throw _privateConstructorUsedError;
   String get complimenterUid => throw _privateConstructorUsedError;
   int get reactionType => throw _privateConstructorUsedError;
-  String get instantPhotoUrl => throw _privateConstructorUsedError;
+  String get quickShotUrl => throw _privateConstructorUsedError;
   String get comment => throw _privateConstructorUsedError;
   Map<String, int> get emoji => throw _privateConstructorUsedError;
 
@@ -40,10 +41,11 @@ abstract class $ReactionEntityCopyWith<$Res> {
       _$ReactionEntityCopyWithImpl<$Res, ReactionEntity>;
   @useResult
   $Res call(
-      {String confirmPostId,
+      {@JsonKey(includeFromJson: true, includeToJson: false)
+      String confirmPostId,
       String complimenterUid,
       int reactionType,
-      String instantPhotoUrl,
+      String quickShotUrl,
       String comment,
       Map<String, int> emoji});
 }
@@ -64,7 +66,7 @@ class _$ReactionEntityCopyWithImpl<$Res, $Val extends ReactionEntity>
     Object? confirmPostId = null,
     Object? complimenterUid = null,
     Object? reactionType = null,
-    Object? instantPhotoUrl = null,
+    Object? quickShotUrl = null,
     Object? comment = null,
     Object? emoji = null,
   }) {
@@ -81,9 +83,9 @@ class _$ReactionEntityCopyWithImpl<$Res, $Val extends ReactionEntity>
           ? _value.reactionType
           : reactionType // ignore: cast_nullable_to_non_nullable
               as int,
-      instantPhotoUrl: null == instantPhotoUrl
-          ? _value.instantPhotoUrl
-          : instantPhotoUrl // ignore: cast_nullable_to_non_nullable
+      quickShotUrl: null == quickShotUrl
+          ? _value.quickShotUrl
+          : quickShotUrl // ignore: cast_nullable_to_non_nullable
               as String,
       comment: null == comment
           ? _value.comment
@@ -106,10 +108,11 @@ abstract class _$$ReactionEntityImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String confirmPostId,
+      {@JsonKey(includeFromJson: true, includeToJson: false)
+      String confirmPostId,
       String complimenterUid,
       int reactionType,
-      String instantPhotoUrl,
+      String quickShotUrl,
       String comment,
       Map<String, int> emoji});
 }
@@ -128,7 +131,7 @@ class __$$ReactionEntityImplCopyWithImpl<$Res>
     Object? confirmPostId = null,
     Object? complimenterUid = null,
     Object? reactionType = null,
-    Object? instantPhotoUrl = null,
+    Object? quickShotUrl = null,
     Object? comment = null,
     Object? emoji = null,
   }) {
@@ -145,9 +148,9 @@ class __$$ReactionEntityImplCopyWithImpl<$Res>
           ? _value.reactionType
           : reactionType // ignore: cast_nullable_to_non_nullable
               as int,
-      instantPhotoUrl: null == instantPhotoUrl
-          ? _value.instantPhotoUrl
-          : instantPhotoUrl // ignore: cast_nullable_to_non_nullable
+      quickShotUrl: null == quickShotUrl
+          ? _value.quickShotUrl
+          : quickShotUrl // ignore: cast_nullable_to_non_nullable
               as String,
       comment: null == comment
           ? _value.comment
@@ -166,10 +169,11 @@ class __$$ReactionEntityImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ReactionEntityImpl implements _ReactionEntity {
   _$ReactionEntityImpl(
-      {required this.confirmPostId,
+      {@JsonKey(includeFromJson: true, includeToJson: false)
+      required this.confirmPostId,
       required this.complimenterUid,
       required this.reactionType,
-      this.instantPhotoUrl = '',
+      this.quickShotUrl = '',
       this.comment = '',
       final Map<String, int> emoji = const {}})
       : _emoji = emoji;
@@ -178,6 +182,7 @@ class _$ReactionEntityImpl implements _ReactionEntity {
       _$$ReactionEntityImplFromJson(json);
 
   @override
+  @JsonKey(includeFromJson: true, includeToJson: false)
   final String confirmPostId;
   @override
   final String complimenterUid;
@@ -185,7 +190,7 @@ class _$ReactionEntityImpl implements _ReactionEntity {
   final int reactionType;
   @override
   @JsonKey()
-  final String instantPhotoUrl;
+  final String quickShotUrl;
   @override
   @JsonKey()
   final String comment;
@@ -200,7 +205,7 @@ class _$ReactionEntityImpl implements _ReactionEntity {
 
   @override
   String toString() {
-    return 'ReactionEntity(confirmPostId: $confirmPostId, complimenterUid: $complimenterUid, reactionType: $reactionType, instantPhotoUrl: $instantPhotoUrl, comment: $comment, emoji: $emoji)';
+    return 'ReactionEntity(confirmPostId: $confirmPostId, complimenterUid: $complimenterUid, reactionType: $reactionType, quickShotUrl: $quickShotUrl, comment: $comment, emoji: $emoji)';
   }
 
   @override
@@ -214,8 +219,8 @@ class _$ReactionEntityImpl implements _ReactionEntity {
                 other.complimenterUid == complimenterUid) &&
             (identical(other.reactionType, reactionType) ||
                 other.reactionType == reactionType) &&
-            (identical(other.instantPhotoUrl, instantPhotoUrl) ||
-                other.instantPhotoUrl == instantPhotoUrl) &&
+            (identical(other.quickShotUrl, quickShotUrl) ||
+                other.quickShotUrl == quickShotUrl) &&
             (identical(other.comment, comment) || other.comment == comment) &&
             const DeepCollectionEquality().equals(other._emoji, _emoji));
   }
@@ -227,7 +232,7 @@ class _$ReactionEntityImpl implements _ReactionEntity {
       confirmPostId,
       complimenterUid,
       reactionType,
-      instantPhotoUrl,
+      quickShotUrl,
       comment,
       const DeepCollectionEquality().hash(_emoji));
 
@@ -248,10 +253,11 @@ class _$ReactionEntityImpl implements _ReactionEntity {
 
 abstract class _ReactionEntity implements ReactionEntity {
   factory _ReactionEntity(
-      {required final String confirmPostId,
+      {@JsonKey(includeFromJson: true, includeToJson: false)
+      required final String confirmPostId,
       required final String complimenterUid,
       required final int reactionType,
-      final String instantPhotoUrl,
+      final String quickShotUrl,
       final String comment,
       final Map<String, int> emoji}) = _$ReactionEntityImpl;
 
@@ -259,13 +265,14 @@ abstract class _ReactionEntity implements ReactionEntity {
       _$ReactionEntityImpl.fromJson;
 
   @override
+  @JsonKey(includeFromJson: true, includeToJson: false)
   String get confirmPostId;
   @override
   String get complimenterUid;
   @override
   int get reactionType;
   @override
-  String get instantPhotoUrl;
+  String get quickShotUrl;
   @override
   String get comment;
   @override

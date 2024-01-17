@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/constants/firebase_field_name.dart';
 import 'package:wehavit/common/errors/failure.dart';
@@ -8,6 +11,7 @@ import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/common/utils/firebase_collection_name.dart';
 import 'package:wehavit/data/datasources/wehavit_datasource.dart';
 import 'package:wehavit/data/models/firebase_confirm_post_model.dart';
+import 'package:wehavit/data/models/firebase_reaction_model.dart';
 import 'package:wehavit/data/models/firebase_resolution_model.dart';
 import 'package:wehavit/data/models/firebase_user_model.dart';
 import 'package:wehavit/data/models/user_model.dart';
@@ -209,8 +213,6 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       //       .toConfirmPostEntity();
       // }).toList();
 
-      print(firstQueryResult.docs.length);
-
       List<ConfirmPostEntity> confirmPosts =
           await Future.wait(firstQueryResult.docs.map(
         (doc) async {
@@ -326,9 +328,6 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           fanList,
           ownerUserEntity,
         );
-        print("DEBUG");
-        print(entity.id);
-        print(entity.title);
 
         return Future(() => right(entity));
       }
@@ -376,8 +375,26 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   EitherFuture<bool> sendReactionToTargetConfirmPost(
     String targetConfirmPostId,
     ReactionEntity reactionEntity,
-  ) {
-    return Future(() => left(const Failure('not implemented')));
+  ) async {
+    try {
+      final reactionModel =
+          FirebaseReactionModel.fromReactionEntity(reactionEntity);
+      await firestore
+          .collection(
+            FirebaseCollectionName.getConfirmPostReactionCollectionName(
+              targetConfirmPostId,
+            ),
+          )
+          .add(reactionModel.toJson());
+
+      return Future(() => right(true));
+    } on Exception {
+      return Future(
+        () => left(
+          const Failure('catch error on sendReactionToTargetConfirmPost'),
+        ),
+      );
+    }
   }
 
   @override
@@ -543,6 +560,23 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       return Future(
         () => left(const Failure('catch error on deleteConfirmPost')),
       );
+    }
+  }
+
+  @override
+  EitherFuture<String> uploadPhotoFromLocalUrlToConfirmPost({
+    required String confirmPostId,
+    required String localPhotoUrl,
+  }) async {
+    try {
+      String storagePath =
+          '$confirmPostId/_${FirebaseAuth.instance.currentUser!.uid}_${DateTime.now().toIso8601String()}';
+      final ref = FirebaseStorage.instance.ref(storagePath);
+
+      await ref.putFile(File(localPhotoUrl));
+      return Future(() async => right(await ref.getDownloadURL()));
+    } on Exception catch (e) {
+      return Future(() => left(Failure(e.toString())));
     }
   }
 }

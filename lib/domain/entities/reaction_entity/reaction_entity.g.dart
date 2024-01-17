@@ -11,7 +11,7 @@ _$ReactionEntityImpl _$$ReactionEntityImplFromJson(Map<String, dynamic> json) =>
       confirmPostId: json['confirmPostId'] as String,
       complimenterUid: json['complimenterUid'] as String,
       reactionType: json['reactionType'] as int,
-      instantPhotoUrl: json['instantPhotoUrl'] as String? ?? '',
+      quickShotUrl: json['quickShotUrl'] as String? ?? '',
       comment: json['comment'] as String? ?? '',
       emoji: (json['emoji'] as Map<String, dynamic>?)?.map(
             (k, e) => MapEntry(k, e as int),
@@ -22,10 +22,9 @@ _$ReactionEntityImpl _$$ReactionEntityImplFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$ReactionEntityImplToJson(
         _$ReactionEntityImpl instance) =>
     <String, dynamic>{
-      'confirmPostId': instance.confirmPostId,
       'complimenterUid': instance.complimenterUid,
       'reactionType': instance.reactionType,
-      'instantPhotoUrl': instance.instantPhotoUrl,
+      'quickShotUrl': instance.quickShotUrl,
       'comment': instance.comment,
       'emoji': instance.emoji,
     };

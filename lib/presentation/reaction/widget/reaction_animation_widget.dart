@@ -167,7 +167,7 @@ class _ReactionAnimationWidgetState
       setState(() {
         String userImageUrl;
         if (reactionGroupModel.imageReacionModel != null) {
-          userImageUrl = reactionGroupModel.imageReacionModel!.instantPhotoUrl;
+          userImageUrl = reactionGroupModel.imageReacionModel!.quickShotUrl;
         } else {
           userImageUrl = fetchUserModelResult.fold(
             (failure) {

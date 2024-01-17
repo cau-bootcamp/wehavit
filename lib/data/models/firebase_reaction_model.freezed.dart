@@ -23,7 +23,7 @@ FirebaseReactionModel _$FirebaseReactionModelFromJson(
 mixin _$FirebaseReactionModel {
   String get complimenterUid => throw _privateConstructorUsedError;
   int get reactionType => throw _privateConstructorUsedError;
-  String get instantPhotoUrl => throw _privateConstructorUsedError;
+  String get quickShotUrl => throw _privateConstructorUsedError;
   String get comment => throw _privateConstructorUsedError;
   Map<String, int> get emoji => throw _privateConstructorUsedError;
 
@@ -42,7 +42,7 @@ abstract class $FirebaseReactionModelCopyWith<$Res> {
   $Res call(
       {String complimenterUid,
       int reactionType,
-      String instantPhotoUrl,
+      String quickShotUrl,
       String comment,
       Map<String, int> emoji});
 }
@@ -63,7 +63,7 @@ class _$FirebaseReactionModelCopyWithImpl<$Res,
   $Res call({
     Object? complimenterUid = null,
     Object? reactionType = null,
-    Object? instantPhotoUrl = null,
+    Object? quickShotUrl = null,
     Object? comment = null,
     Object? emoji = null,
   }) {
@@ -76,9 +76,9 @@ class _$FirebaseReactionModelCopyWithImpl<$Res,
           ? _value.reactionType
           : reactionType // ignore: cast_nullable_to_non_nullable
               as int,
-      instantPhotoUrl: null == instantPhotoUrl
-          ? _value.instantPhotoUrl
-          : instantPhotoUrl // ignore: cast_nullable_to_non_nullable
+      quickShotUrl: null == quickShotUrl
+          ? _value.quickShotUrl
+          : quickShotUrl // ignore: cast_nullable_to_non_nullable
               as String,
       comment: null == comment
           ? _value.comment
@@ -104,7 +104,7 @@ abstract class _$$FirebaseReactionModelImplCopyWith<$Res>
   $Res call(
       {String complimenterUid,
       int reactionType,
-      String instantPhotoUrl,
+      String quickShotUrl,
       String comment,
       Map<String, int> emoji});
 }
@@ -123,7 +123,7 @@ class __$$FirebaseReactionModelImplCopyWithImpl<$Res>
   $Res call({
     Object? complimenterUid = null,
     Object? reactionType = null,
-    Object? instantPhotoUrl = null,
+    Object? quickShotUrl = null,
     Object? comment = null,
     Object? emoji = null,
   }) {
@@ -136,9 +136,9 @@ class __$$FirebaseReactionModelImplCopyWithImpl<$Res>
           ? _value.reactionType
           : reactionType // ignore: cast_nullable_to_non_nullable
               as int,
-      instantPhotoUrl: null == instantPhotoUrl
-          ? _value.instantPhotoUrl
-          : instantPhotoUrl // ignore: cast_nullable_to_non_nullable
+      quickShotUrl: null == quickShotUrl
+          ? _value.quickShotUrl
+          : quickShotUrl // ignore: cast_nullable_to_non_nullable
               as String,
       comment: null == comment
           ? _value.comment
@@ -159,7 +159,7 @@ class _$FirebaseReactionModelImpl implements _FirebaseReactionModel {
   const _$FirebaseReactionModelImpl(
       {required this.complimenterUid,
       required this.reactionType,
-      required this.instantPhotoUrl,
+      required this.quickShotUrl,
       required this.comment,
       required final Map<String, int> emoji})
       : _emoji = emoji;
@@ -172,7 +172,7 @@ class _$FirebaseReactionModelImpl implements _FirebaseReactionModel {
   @override
   final int reactionType;
   @override
-  final String instantPhotoUrl;
+  final String quickShotUrl;
   @override
   final String comment;
   final Map<String, int> _emoji;
@@ -185,7 +185,7 @@ class _$FirebaseReactionModelImpl implements _FirebaseReactionModel {
 
   @override
   String toString() {
-    return 'FirebaseReactionModel(complimenterUid: $complimenterUid, reactionType: $reactionType, instantPhotoUrl: $instantPhotoUrl, comment: $comment, emoji: $emoji)';
+    return 'FirebaseReactionModel(complimenterUid: $complimenterUid, reactionType: $reactionType, quickShotUrl: $quickShotUrl, comment: $comment, emoji: $emoji)';
   }
 
   @override
@@ -197,8 +197,8 @@ class _$FirebaseReactionModelImpl implements _FirebaseReactionModel {
                 other.complimenterUid == complimenterUid) &&
             (identical(other.reactionType, reactionType) ||
                 other.reactionType == reactionType) &&
-            (identical(other.instantPhotoUrl, instantPhotoUrl) ||
-                other.instantPhotoUrl == instantPhotoUrl) &&
+            (identical(other.quickShotUrl, quickShotUrl) ||
+                other.quickShotUrl == quickShotUrl) &&
             (identical(other.comment, comment) || other.comment == comment) &&
             const DeepCollectionEquality().equals(other._emoji, _emoji));
   }
@@ -206,7 +206,7 @@ class _$FirebaseReactionModelImpl implements _FirebaseReactionModel {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, complimenterUid, reactionType,
-      instantPhotoUrl, comment, const DeepCollectionEquality().hash(_emoji));
+      quickShotUrl, comment, const DeepCollectionEquality().hash(_emoji));
 
   @JsonKey(ignore: true)
   @override
@@ -227,7 +227,7 @@ abstract class _FirebaseReactionModel implements FirebaseReactionModel {
   const factory _FirebaseReactionModel(
       {required final String complimenterUid,
       required final int reactionType,
-      required final String instantPhotoUrl,
+      required final String quickShotUrl,
       required final String comment,
       required final Map<String, int> emoji}) = _$FirebaseReactionModelImpl;
 
@@ -239,7 +239,7 @@ abstract class _FirebaseReactionModel implements FirebaseReactionModel {
   @override
   int get reactionType;
   @override
-  String get instantPhotoUrl;
+  String get quickShotUrl;
   @override
   String get comment;
   @override
