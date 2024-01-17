@@ -5,6 +5,7 @@ import 'package:wehavit/common/utils/emoji_assets.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
 import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
 import 'package:wehavit/domain/usecases/get_confirm_post_list_usecase.dart';
+import 'package:wehavit/domain/usecases/send_comment_reaction_to_confirm_post_usecase.dart';
 import 'package:wehavit/domain/usecases/send_emoji_reaction_to_confirm_post_usercase.dart';
 import 'package:wehavit/domain/usecases/send_quickshot_reaction_to_confirm_post_usecase.dart';
 import 'package:wehavit/domain/usecases/upload_reaction_to_target_confirm_post.dart';
@@ -30,6 +31,8 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
         ref.watch(sendEmojiReactionToConfirmPostUsecaseProvider);
     final sendQuickShotReactionToConfirmPostUsecase =
         ref.watch(sendQuickShotReactionToConfirmPostUsecaseProvider);
+    final sendCommentReactionToConfrimPostUsecase =
+        ref.watch(sendCommentReactionToConfirmPostUsecaseProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Reaction Sample View')),
@@ -76,7 +79,14 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
                   child: Text('emoji'),
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    sendCommentReactionToConfrimPostUsecase(
+                      (
+                        targetPostEntity!.id!,
+                        '행복한 하루 보내세요!!',
+                      ),
+                    );
+                  },
                   child: Text('text'),
                 ),
                 ElevatedButton(
