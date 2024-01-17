@@ -57,7 +57,7 @@ class ReactionAnimationWidgetManager extends StateNotifier<void> {
           }
           reactionGroupModelList[index].emojiReacionModelList!.add(reaction);
           break;
-        case ReactionType.instantPhoto:
+        case ReactionType.quickShot:
           reactionGroupModelList[index].imageReacionModel = reaction;
           break;
       }

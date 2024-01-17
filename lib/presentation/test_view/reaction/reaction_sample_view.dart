@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/common/utils/emoji_assets.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
+import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
 import 'package:wehavit/domain/usecases/get_confirm_post_list_usecase.dart';
+import 'package:wehavit/domain/usecases/upload_reaction_to_target_confirm_post.dart';
 
 class ReactionSampleView extends ConsumerStatefulWidget {
   const ReactionSampleView({super.key});
@@ -14,10 +16,17 @@ class ReactionSampleView extends ConsumerStatefulWidget {
 
 class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
   late ConfirmPostEntity? targetPostEntity = null;
-  late GetConfirmPostListUsecase _getConfirmPostListUsecase;
+  // late GetConfirmPostListUsecase _getConfirmPostListUsecase;
+  // late UploadReactionToTargetConfirmPostUsecase
+  //     _uploadReactionToTargetConfirmPostUsecase;
 
   @override
   Widget build(BuildContext context) {
+    final getConfirmPostListUsecase =
+        ref.watch(getConfirmPostListUsecaseProvider);
+    final uploadReactionToTargetConfirmPostUsecase =
+        ref.watch(uploadReactionToTargetConfirmPostUsecaseProvider);
+
     return Scaffold(
       appBar: AppBar(title: const Text('Reaction Sample View')),
       body: Container(
@@ -28,11 +37,9 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
                 const Text('Target Post'),
                 ElevatedButton(
                     onPressed: () async {
-                      _getConfirmPostListUsecase =
-                          ref.watch(getConfirmPostListUsecaseProvider);
                       setState(() async {
                         targetPostEntity =
-                            (await _getConfirmPostListUsecase(DateTime.now()))
+                            (await getConfirmPostListUsecase(DateTime.now()))
                                 .fold(
                           (l) => null,
                           (r) => r.isEmpty ? null : r.first,
@@ -54,6 +61,14 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
                 ElevatedButton(
                   onPressed: () async {
                     emojiSheetWidget(context);
+                    // .whenComplete(() {
+                    //   final reaction = ReactionEntity(
+                    //     complimenterUid: complimenterUid,
+                    //     reactionType: reactionType,
+
+                    //   );
+                    //   uploadReactionToTargetConfirmPostUsecase(reaction);
+                    // });
                   },
                   child: Text('emoji'),
                 ),
