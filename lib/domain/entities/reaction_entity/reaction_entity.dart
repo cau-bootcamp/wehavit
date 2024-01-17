@@ -6,6 +6,7 @@ part 'reaction_entity.g.dart';
 
 @freezed
 class ReactionEntity with _$ReactionEntity {
+  @JsonSerializable()
   factory ReactionEntity({
     required String confirmPostId,
     required String complimenterUid,
