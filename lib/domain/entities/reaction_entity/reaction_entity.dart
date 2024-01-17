@@ -9,8 +9,7 @@ class ReactionEntity with _$ReactionEntity {
   // ignore: invalid_annotation_target
   @JsonSerializable()
   factory ReactionEntity({
-    @JsonKey(includeFromJson: true, includeToJson: false)
-    required String confirmPostId,
+    @Default('') String confirmPostId,
     required String complimenterUid,
     required int reactionType,
     @Default('') String quickShotUrl,
@@ -19,36 +18,30 @@ class ReactionEntity with _$ReactionEntity {
   }) = _ReactionEntity;
 
   factory ReactionEntity.emojiType({
-    required String confirmPostId,
     required String complimenterUid,
     required Map<String, int> emoji,
   }) =>
       ReactionEntity(
-        confirmPostId: confirmPostId,
         complimenterUid: complimenterUid,
         reactionType: ReactionType.emoji.index,
         emoji: emoji,
       );
 
   factory ReactionEntity.quickShotType({
-    required String confirmPostId,
     required String complimenterUid,
     required String quickShotUrl,
   }) =>
       ReactionEntity(
-        confirmPostId: confirmPostId,
         complimenterUid: complimenterUid,
         reactionType: ReactionType.quickShot.index,
         quickShotUrl: quickShotUrl,
       );
 
   factory ReactionEntity.commentType({
-    required String confirmPostId,
     required String complimenterUid,
     required String comment,
   }) =>
       ReactionEntity(
-        confirmPostId: confirmPostId,
         complimenterUid: complimenterUid,
         reactionType: ReactionType.comment.index,
         comment: comment,

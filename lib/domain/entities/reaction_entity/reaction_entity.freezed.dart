@@ -20,7 +20,6 @@ ReactionEntity _$ReactionEntityFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ReactionEntity {
-  @JsonKey(includeFromJson: true, includeToJson: false)
   String get confirmPostId => throw _privateConstructorUsedError;
   String get complimenterUid => throw _privateConstructorUsedError;
   int get reactionType => throw _privateConstructorUsedError;
@@ -41,8 +40,7 @@ abstract class $ReactionEntityCopyWith<$Res> {
       _$ReactionEntityCopyWithImpl<$Res, ReactionEntity>;
   @useResult
   $Res call(
-      {@JsonKey(includeFromJson: true, includeToJson: false)
-      String confirmPostId,
+      {String confirmPostId,
       String complimenterUid,
       int reactionType,
       String quickShotUrl,
@@ -108,8 +106,7 @@ abstract class _$$ReactionEntityImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(includeFromJson: true, includeToJson: false)
-      String confirmPostId,
+      {String confirmPostId,
       String complimenterUid,
       int reactionType,
       String quickShotUrl,
@@ -169,8 +166,7 @@ class __$$ReactionEntityImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ReactionEntityImpl implements _ReactionEntity {
   _$ReactionEntityImpl(
-      {@JsonKey(includeFromJson: true, includeToJson: false)
-      required this.confirmPostId,
+      {this.confirmPostId = '',
       required this.complimenterUid,
       required this.reactionType,
       this.quickShotUrl = '',
@@ -182,7 +178,7 @@ class _$ReactionEntityImpl implements _ReactionEntity {
       _$$ReactionEntityImplFromJson(json);
 
   @override
-  @JsonKey(includeFromJson: true, includeToJson: false)
+  @JsonKey()
   final String confirmPostId;
   @override
   final String complimenterUid;
@@ -253,8 +249,7 @@ class _$ReactionEntityImpl implements _ReactionEntity {
 
 abstract class _ReactionEntity implements ReactionEntity {
   factory _ReactionEntity(
-      {@JsonKey(includeFromJson: true, includeToJson: false)
-      required final String confirmPostId,
+      {final String confirmPostId,
       required final String complimenterUid,
       required final int reactionType,
       final String quickShotUrl,
@@ -265,7 +260,6 @@ abstract class _ReactionEntity implements ReactionEntity {
       _$ReactionEntityImpl.fromJson;
 
   @override
-  @JsonKey(includeFromJson: true, includeToJson: false)
   String get confirmPostId;
   @override
   String get complimenterUid;

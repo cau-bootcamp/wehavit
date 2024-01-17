@@ -6,6 +6,7 @@ import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.
 import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
 import 'package:wehavit/domain/usecases/get_confirm_post_list_usecase.dart';
 import 'package:wehavit/domain/usecases/send_emoji_reaction_to_confirm_post_usercase.dart';
+import 'package:wehavit/domain/usecases/send_quickshot_reaction_to_confirm_post_usecase.dart';
 import 'package:wehavit/domain/usecases/upload_reaction_to_target_confirm_post.dart';
 
 class ReactionSampleView extends ConsumerStatefulWidget {
@@ -27,6 +28,8 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
         ref.watch(getConfirmPostListUsecaseProvider);
     final sendEmojiReactionToConfirmPostUsecase =
         ref.watch(sendEmojiReactionToConfirmPostUsecaseProvider);
+    final sendQuickShotReactionToConfirmPostUsecase =
+        ref.watch(sendQuickShotReactionToConfirmPostUsecaseProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Reaction Sample View')),
@@ -77,7 +80,14 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
                   child: Text('text'),
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    sendQuickShotReactionToConfirmPostUsecase(
+                      (
+                        targetPostEntity!.id!,
+                        '/Users/sungmin/Library/Developer/CoreSimulator/Devices/B9B7688C-62AC-4015-BE90-F172CADB897D/data/Containers/Data/Application/ED556332-753D-4846-BD51-D5580F2A643B/tmp/image_picker_3555CC98-DB81-4093-862B-D6A7565092C7-8442-00001181F2341243.jpg'
+                      ),
+                    );
+                  },
                   child: Text('camera'),
                 )
               ],

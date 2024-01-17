@@ -39,7 +39,6 @@ class SendEmojiReactionToConfirmPostUsecase
     }
 
     final reactionEntity = ReactionEntity.emojiType(
-      confirmPostId: 'upload',
       complimenterUid: myUid,
       emoji: params.$2,
     );

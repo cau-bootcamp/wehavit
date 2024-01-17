@@ -1,9 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
+import 'package:wehavit/data/repositories/photo_repository_impl.dart';
 import 'package:wehavit/data/repositories/reaction_repository_impl.dart';
 import 'package:wehavit/data/repositories/user_model_repository_impl.dart';
 import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
+import 'package:wehavit/domain/repositories/photo_repository.dart';
 import 'package:wehavit/domain/repositories/reaction_repository.dart';
 import 'package:wehavit/domain/repositories/user_model_fetch_repository.dart';
 
@@ -11,9 +13,12 @@ final sendQuickShotReactionToConfirmPostUsecaseProvider =
     Provider<SendQuickShotReactionToConfirmPostUsecase>((ref) {
   final reactionRepository = ref.watch(reactionRepositoryProvider);
   final userModelRepository = ref.watch(userModelRepositoryProvider);
+  final photoRepository = ref.watch(photoRepositoryProvider);
+
   return SendQuickShotReactionToConfirmPostUsecase(
     reactionRepository,
     userModelRepository,
+    photoRepository,
   );
 });
 
@@ -22,9 +27,11 @@ class SendQuickShotReactionToConfirmPostUsecase
   SendQuickShotReactionToConfirmPostUsecase(
     this._reactionRepository,
     this._userModelRepository,
+    this._photoRepository,
   );
   final ReactionRepository _reactionRepository;
   final UserModelRepository _userModelRepository;
+  final PhotoRepository _photoRepository;
 
   @override
   EitherFuture<bool> call((String, String) params) async {
@@ -38,10 +45,26 @@ class SendQuickShotReactionToConfirmPostUsecase
       return Future(() => left(const Failure('cannot get my user id')));
     }
 
+    final imageUploadResult =
+        await _photoRepository.uploadPhotoForConfirmPostAndGetDownloadUrl(
+      localPhotoUrl: params.$2,
+      confirmPostId: params.$1,
+    );
+
+    final uploadedImageUrl = imageUploadResult.fold(
+      (l) => null,
+      (uploadedImageUrl) => uploadedImageUrl,
+    );
+
+    if (uploadedImageUrl == null) {
+      return Future(
+        () => left(const Failure('fail to upload quickshot photo')),
+      );
+    }
+
     final reactionEntity = ReactionEntity.quickShotType(
-      confirmPostId: 'upload',
       complimenterUid: myUid,
-      quickShotUrl: '',
+      quickShotUrl: uploadedImageUrl,
     );
 
     return _reactionRepository.addReactionToConfirmPost(

@@ -3,7 +3,7 @@ import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/data/datasources/wehavit_datasource.dart';
 import 'package:wehavit/domain/repositories/photo_repository.dart';
 
-final photoRepositoryImpl = Provider<PhotoRepository>((ref) {
+final photoRepositoryProvider = Provider<PhotoRepository>((ref) {
   final WehavitDatasource wehavitDatasource =
       ref.watch(wehavitDatasourceProvider);
   return PhotoRepositoryImpl(wehavitDatasource);

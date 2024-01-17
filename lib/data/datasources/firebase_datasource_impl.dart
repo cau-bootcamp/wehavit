@@ -574,6 +574,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       final ref = FirebaseStorage.instance.ref(storagePath);
 
       await ref.putFile(File(localPhotoUrl));
+
       return Future(() async => right(await ref.getDownloadURL()));
     } on Exception catch (e) {
       return Future(() => left(Failure(e.toString())));
