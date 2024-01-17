@@ -8,9 +8,9 @@ part of 'reaction_entity.dart';
 
 _$ReactionEntityImpl _$$ReactionEntityImplFromJson(Map<String, dynamic> json) =>
     _$ReactionEntityImpl(
+      confirmPostId: json['confirmPostId'] as String,
       complimenterUid: json['complimenterUid'] as String,
       reactionType: json['reactionType'] as int,
-      hasRead: json['hasRead'] as bool? ?? false,
       instantPhotoUrl: json['instantPhotoUrl'] as String? ?? '',
       comment: json['comment'] as String? ?? '',
       emoji: (json['emoji'] as Map<String, dynamic>?)?.map(
@@ -22,9 +22,9 @@ _$ReactionEntityImpl _$$ReactionEntityImplFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$ReactionEntityImplToJson(
         _$ReactionEntityImpl instance) =>
     <String, dynamic>{
+      'confirmPostId': instance.confirmPostId,
       'complimenterUid': instance.complimenterUid,
       'reactionType': instance.reactionType,
-      'hasRead': instance.hasRead,
       'instantPhotoUrl': instance.instantPhotoUrl,
       'comment': instance.comment,
       'emoji': instance.emoji,

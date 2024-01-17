@@ -20,12 +20,9 @@ ReactionEntity _$ReactionEntityFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ReactionEntity {
-// ignore: invalid_annotation_target
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  String? get id => throw _privateConstructorUsedError;
+  String get confirmPostId => throw _privateConstructorUsedError;
   String get complimenterUid => throw _privateConstructorUsedError;
   int get reactionType => throw _privateConstructorUsedError;
-  bool get hasRead => throw _privateConstructorUsedError;
   String get instantPhotoUrl => throw _privateConstructorUsedError;
   String get comment => throw _privateConstructorUsedError;
   Map<String, int> get emoji => throw _privateConstructorUsedError;
@@ -43,10 +40,9 @@ abstract class $ReactionEntityCopyWith<$Res> {
       _$ReactionEntityCopyWithImpl<$Res, ReactionEntity>;
   @useResult
   $Res call(
-      {@JsonKey(includeFromJson: false, includeToJson: false) String? id,
+      {String confirmPostId,
       String complimenterUid,
       int reactionType,
-      bool hasRead,
       String instantPhotoUrl,
       String comment,
       Map<String, int> emoji});
@@ -65,19 +61,18 @@ class _$ReactionEntityCopyWithImpl<$Res, $Val extends ReactionEntity>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
+    Object? confirmPostId = null,
     Object? complimenterUid = null,
     Object? reactionType = null,
-    Object? hasRead = null,
     Object? instantPhotoUrl = null,
     Object? comment = null,
     Object? emoji = null,
   }) {
     return _then(_value.copyWith(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String?,
+      confirmPostId: null == confirmPostId
+          ? _value.confirmPostId
+          : confirmPostId // ignore: cast_nullable_to_non_nullable
+              as String,
       complimenterUid: null == complimenterUid
           ? _value.complimenterUid
           : complimenterUid // ignore: cast_nullable_to_non_nullable
@@ -86,10 +81,6 @@ class _$ReactionEntityCopyWithImpl<$Res, $Val extends ReactionEntity>
           ? _value.reactionType
           : reactionType // ignore: cast_nullable_to_non_nullable
               as int,
-      hasRead: null == hasRead
-          ? _value.hasRead
-          : hasRead // ignore: cast_nullable_to_non_nullable
-              as bool,
       instantPhotoUrl: null == instantPhotoUrl
           ? _value.instantPhotoUrl
           : instantPhotoUrl // ignore: cast_nullable_to_non_nullable
@@ -115,10 +106,9 @@ abstract class _$$ReactionEntityImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(includeFromJson: false, includeToJson: false) String? id,
+      {String confirmPostId,
       String complimenterUid,
       int reactionType,
-      bool hasRead,
       String instantPhotoUrl,
       String comment,
       Map<String, int> emoji});
@@ -135,19 +125,18 @@ class __$$ReactionEntityImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
+    Object? confirmPostId = null,
     Object? complimenterUid = null,
     Object? reactionType = null,
-    Object? hasRead = null,
     Object? instantPhotoUrl = null,
     Object? comment = null,
     Object? emoji = null,
   }) {
     return _then(_$ReactionEntityImpl(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String?,
+      confirmPostId: null == confirmPostId
+          ? _value.confirmPostId
+          : confirmPostId // ignore: cast_nullable_to_non_nullable
+              as String,
       complimenterUid: null == complimenterUid
           ? _value.complimenterUid
           : complimenterUid // ignore: cast_nullable_to_non_nullable
@@ -156,10 +145,6 @@ class __$$ReactionEntityImplCopyWithImpl<$Res>
           ? _value.reactionType
           : reactionType // ignore: cast_nullable_to_non_nullable
               as int,
-      hasRead: null == hasRead
-          ? _value.hasRead
-          : hasRead // ignore: cast_nullable_to_non_nullable
-              as bool,
       instantPhotoUrl: null == instantPhotoUrl
           ? _value.instantPhotoUrl
           : instantPhotoUrl // ignore: cast_nullable_to_non_nullable
@@ -180,10 +165,9 @@ class __$$ReactionEntityImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ReactionEntityImpl implements _ReactionEntity {
   _$ReactionEntityImpl(
-      {@JsonKey(includeFromJson: false, includeToJson: false) this.id = '',
+      {required this.confirmPostId,
       required this.complimenterUid,
       required this.reactionType,
-      this.hasRead = false,
       this.instantPhotoUrl = '',
       this.comment = '',
       final Map<String, int> emoji = const {}})
@@ -192,17 +176,12 @@ class _$ReactionEntityImpl implements _ReactionEntity {
   factory _$ReactionEntityImpl.fromJson(Map<String, dynamic> json) =>
       _$$ReactionEntityImplFromJson(json);
 
-// ignore: invalid_annotation_target
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  final String? id;
+  final String confirmPostId;
   @override
   final String complimenterUid;
   @override
   final int reactionType;
-  @override
-  @JsonKey()
-  final bool hasRead;
   @override
   @JsonKey()
   final String instantPhotoUrl;
@@ -220,7 +199,7 @@ class _$ReactionEntityImpl implements _ReactionEntity {
 
   @override
   String toString() {
-    return 'ReactionEntity(id: $id, complimenterUid: $complimenterUid, reactionType: $reactionType, hasRead: $hasRead, instantPhotoUrl: $instantPhotoUrl, comment: $comment, emoji: $emoji)';
+    return 'ReactionEntity(confirmPostId: $confirmPostId, complimenterUid: $complimenterUid, reactionType: $reactionType, instantPhotoUrl: $instantPhotoUrl, comment: $comment, emoji: $emoji)';
   }
 
   @override
@@ -228,12 +207,12 @@ class _$ReactionEntityImpl implements _ReactionEntity {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ReactionEntityImpl &&
-            (identical(other.id, id) || other.id == id) &&
+            (identical(other.confirmPostId, confirmPostId) ||
+                other.confirmPostId == confirmPostId) &&
             (identical(other.complimenterUid, complimenterUid) ||
                 other.complimenterUid == complimenterUid) &&
             (identical(other.reactionType, reactionType) ||
                 other.reactionType == reactionType) &&
-            (identical(other.hasRead, hasRead) || other.hasRead == hasRead) &&
             (identical(other.instantPhotoUrl, instantPhotoUrl) ||
                 other.instantPhotoUrl == instantPhotoUrl) &&
             (identical(other.comment, comment) || other.comment == comment) &&
@@ -244,10 +223,9 @@ class _$ReactionEntityImpl implements _ReactionEntity {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      id,
+      confirmPostId,
       complimenterUid,
       reactionType,
-      hasRead,
       instantPhotoUrl,
       comment,
       const DeepCollectionEquality().hash(_emoji));
@@ -269,10 +247,9 @@ class _$ReactionEntityImpl implements _ReactionEntity {
 
 abstract class _ReactionEntity implements ReactionEntity {
   factory _ReactionEntity(
-      {@JsonKey(includeFromJson: false, includeToJson: false) final String? id,
+      {required final String confirmPostId,
       required final String complimenterUid,
       required final int reactionType,
-      final bool hasRead,
       final String instantPhotoUrl,
       final String comment,
       final Map<String, int> emoji}) = _$ReactionEntityImpl;
@@ -280,15 +257,12 @@ abstract class _ReactionEntity implements ReactionEntity {
   factory _ReactionEntity.fromJson(Map<String, dynamic> json) =
       _$ReactionEntityImpl.fromJson;
 
-  @override // ignore: invalid_annotation_target
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  String? get id;
+  @override
+  String get confirmPostId;
   @override
   String get complimenterUid;
   @override
   int get reactionType;
-  @override
-  bool get hasRead;
   @override
   String get instantPhotoUrl;
   @override

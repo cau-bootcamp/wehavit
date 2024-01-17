@@ -25,7 +25,7 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
           children: [
             Column(
               children: [
-                const Text("Target Post"),
+                const Text('Target Post'),
                 ElevatedButton(
                     onPressed: () async {
                       _getConfirmPostListUsecase =
