@@ -3,8 +3,8 @@ import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/data/datasources/wehavit_datasource.dart';
-import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
-import 'package:wehavit/domain/repositories/friend_repository.dart';
+import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wehavit/domain/repositories/repositories.dart';
 
 final friendRepositoryProvider = Provider<FriendRepository>((ref) {
   final WehavitDatasource wehavitDatasource =

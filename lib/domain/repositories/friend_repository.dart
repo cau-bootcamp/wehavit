@@ -1,5 +1,5 @@
 import 'package:wehavit/common/utils/custom_types.dart';
-import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
+import 'package:wehavit/domain/entities/entities.dart';
 
 abstract class FriendRepository {
   EitherFuture<List<UserDataEntity>> getFriendEntityList();

@@ -1,6 +1,5 @@
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
-import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
+import 'package:wehavit/domain/entities/entities.dart';
 
 abstract class ReactionRepository {
   EitherFuture<List<ReactionEntity>> getUnreadReactionList();

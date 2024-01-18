@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
-import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
+import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/my_page/widgets/resolution_accomplishment_donut_graph_datamodel.dart';
 
 class ResolutionDoughnutGraphWidget extends StatelessWidget {

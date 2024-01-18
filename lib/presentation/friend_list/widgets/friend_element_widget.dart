@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
+import 'package:wehavit/domain/entities/entities.dart';
 
 class FriendElementWidget extends StatefulWidget {
   const FriendElementWidget({super.key, required this.model});

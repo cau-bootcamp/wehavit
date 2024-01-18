@@ -3,9 +3,8 @@ import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/data/repositories/reaction_repository_impl.dart';
 import 'package:wehavit/data/repositories/user_model_repository_impl.dart';
-import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
-import 'package:wehavit/domain/repositories/reaction_repository.dart';
-import 'package:wehavit/domain/repositories/user_model_fetch_repository.dart';
+import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wehavit/domain/repositories/repositories.dart';
 
 final sendEmojiReactionToConfirmPostUsecaseProvider =
     Provider<SendEmojiReactionToConfirmPostUsecase>((ref) {

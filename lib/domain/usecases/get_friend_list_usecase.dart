@@ -2,8 +2,8 @@ import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/data/repositories/friend_repository_impl.dart';
-import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
-import 'package:wehavit/domain/repositories/friend_repository.dart';
+import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wehavit/domain/repositories/repositories.dart';
 
 final getFriendListUseCaseProvider = Provider<GetFriendListUsecase>((ref) {
   final resolutionRepository = ref.watch(friendRepositoryProvider);

@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/data/models/auth_result_model.dart';
+import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/auth/presentation.dart';
 
 class AuthScreen extends HookConsumerWidget {

@@ -1,4 +1,4 @@
-import 'package:wehavit/data/models/auth_result_model.dart';
+import 'package:wehavit/domain/entities/entities.dart';
 
 abstract class AuthGoogleDatasource {
   Future<AuthResult> googleLogIn();

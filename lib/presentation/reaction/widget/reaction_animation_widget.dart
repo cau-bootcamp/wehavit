@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wehavit/domain/usecases/fetch_user_data_from_id_usecase.dart';
+import 'package:wehavit/domain/usecases/usecases.dart';
 import 'package:wehavit/presentation/effects/emojis/balloon_animation/balloon_manager.dart';
 import 'package:wehavit/presentation/effects/emojis/emoji_firework_animation/emoji_firework_manager.dart';
 import 'package:wehavit/presentation/effects/emojis/text_animation/text_bubble_manager.dart';

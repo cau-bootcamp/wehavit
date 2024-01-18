@@ -5,8 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
-import 'package:wehavit/domain/entities/resolution_entity/resolution_entity.dart';
+import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/effects/dashboard/swipe_dashboard_widget.dart';
 import 'package:wehavit/presentation/my_page/providers/my_page_resolution_list_provider.dart';
 

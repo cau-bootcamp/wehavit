@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wehavit/common/utils/no_params.dart';
-import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
-import 'package:wehavit/domain/entities/resolution_entity/resolution_entity.dart';
-import 'package:wehavit/domain/usecases/get_my_resolution_list_usecase.dart';
-import 'package:wehavit/domain/usecases/upload_confirm_post_usecase.dart';
+import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wehavit/domain/usecases/usecases.dart';
+import 'package:wehavit/domain/usecases/usecases.dart';
 import 'package:wehavit/presentation/late_writing/model/late_writing_view_model.dart';
 
 final lateWritingViewModelProvider =

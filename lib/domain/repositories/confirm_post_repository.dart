@@ -1,5 +1,5 @@
 import 'package:wehavit/common/utils/custom_types.dart';
-import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
+import 'package:wehavit/domain/entities/entities.dart';
 
 abstract class ConfirmPostRepository {
   EitherFuture<List<ConfirmPostEntity>> getConfirmPostEntityListByDate({

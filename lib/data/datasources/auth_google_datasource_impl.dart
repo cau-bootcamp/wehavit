@@ -6,7 +6,7 @@ import 'package:wehavit/common/constants.dart';
 import 'package:wehavit/common/constants/firebase_field_name.dart';
 import 'package:wehavit/common/utils/firebase_collection_name.dart';
 import 'package:wehavit/data/datasources/auth_google_datasource.dart';
-import 'package:wehavit/data/models/auth_result_model.dart';
+import 'package:wehavit/domain/entities/entities.dart';
 
 final googleAuthDatasourceProvider = Provider<AuthGoogleDatasource>((ref) {
   return AuthGoogleDatasourceImpl();

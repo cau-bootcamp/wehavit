@@ -4,8 +4,8 @@ import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/data/datasources/wehavit_datasource.dart';
-import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
-import 'package:wehavit/domain/repositories/confirm_post_repository.dart';
+import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wehavit/domain/repositories/repositories.dart';
 
 final confirmPostRepositoryProvider = Provider<ConfirmPostRepository>((ref) {
   final WehavitDatasource wehavitDatasource =

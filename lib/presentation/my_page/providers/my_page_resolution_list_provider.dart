@@ -1,11 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
-import 'package:wehavit/domain/entities/resolution_entity/resolution_entity.dart';
-import 'package:wehavit/domain/usecases/get_confirm_post_list_for_resolution_id.dart';
-import 'package:wehavit/domain/usecases/get_my_resolution_list_usecase.dart';
-import 'package:wehavit/domain/usecases/get_resolution_list_by_uid_usecase.dart';
+import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wehavit/domain/usecases/usecases.dart';
+import 'package:wehavit/domain/usecases/usecases.dart';
+import 'package:wehavit/domain/usecases/usecases.dart';
 
 final myPageResolutionListProvider = StateNotifierProvider<
     MyPageResolutionListProvider,
