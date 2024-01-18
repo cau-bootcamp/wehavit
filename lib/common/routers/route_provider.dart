@@ -4,15 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/presentation/auth/presentation.dart';
-import 'package:wehavit/presentation/effects/emojis/animation_sample_page.dart';
-import 'package:wehavit/presentation/friend_list/presentation.dart';
-import 'package:wehavit/presentation/home/screens/home_screen.dart';
-import 'package:wehavit/presentation/late_writing/screen/late_writing_view.dart';
-import 'package:wehavit/presentation/my_page/screens/add_resolution_screen.dart';
-import 'package:wehavit/presentation/my_page/screens/my_page_screen.dart';
+import 'package:wehavit/presentation/auth/auth.dart';
+import 'package:wehavit/presentation/effects/effects.dart';
+import 'package:wehavit/presentation/friend_list/friend_list.dart';
+import 'package:wehavit/presentation/home/home.dart';
+import 'package:wehavit/presentation/late_writing/late_writing.dart';
+import 'package:wehavit/presentation/my_page/my_page.dart';
 import 'package:wehavit/presentation/splash/splash.dart';
-import 'package:wehavit/presentation/test_view/reaction/reaction_sample_view.dart';
+import 'package:wehavit/presentation/test_view/test_view.dart';
 
 part 'route_provider.g.dart';
 

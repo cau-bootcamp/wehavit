@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/presentation/auth/presentation.dart';
+import 'package:wehavit/presentation/auth/auth.dart';
 
 class AuthScreen extends HookConsumerWidget {
   const AuthScreen({super.key});

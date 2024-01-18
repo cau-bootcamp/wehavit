@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/presentation/friend_list/providers/friend_list_provider.dart';
-import 'package:wehavit/presentation/friend_list/widgets/add_friend_textfield_widget.dart';
-import 'package:wehavit/presentation/friend_list/widgets/friend_element_widget.dart';
+import 'package:wehavit/presentation/friend_list/friend_list.dart';
 
 class FriendListScreen extends ConsumerStatefulWidget {
   const FriendListScreen({super.key});

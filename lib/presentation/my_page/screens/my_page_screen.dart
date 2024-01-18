@@ -6,9 +6,8 @@ import 'package:fpdart/fpdart.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/presentation/effects/dashboard/swipe_dashboard_widget.dart';
-import 'package:wehavit/presentation/my_page/providers/my_page_resolution_list_provider.dart';
+import 'package:wehavit/presentation/effects/effects.dart';
+import 'package:wehavit/presentation/my_page/my_page.dart';
 
 class MyPageScreen extends ConsumerStatefulWidget {
   const MyPageScreen({super.key});

@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/presentation/my_page/widgets/resolution_doughnut_graph_widget.dart';
-import 'package:wehavit/presentation/my_page/widgets/resolution_linear_gauge_graph_widget.dart';
+import 'package:wehavit/presentation/my_page/my_page.dart';
 
 class SwipeDashboardWidget extends ConsumerStatefulWidget {
   const SwipeDashboardWidget({

@@ -1,11 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/utils/no_params.dart';
 import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/domain/usecases/login/email_and_password_login_usecase.dart';
-import 'package:wehavit/domain/usecases/login/email_and_password_register_usecase.dart';
-import 'package:wehavit/domain/usecases/login/google_login_usecase.dart';
-import 'package:wehavit/domain/usecases/logout/logout_usecase.dart';
-import 'package:wehavit/presentation/auth/presentation.dart';
+import 'package:wehavit/domain/usecases/usecases.dart';
+import 'package:wehavit/presentation/auth/auth.dart';
 
 class AuthNotifier extends StateNotifier<AuthState> {
   AuthNotifier(
