@@ -213,29 +213,30 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       //       .toConfirmPostEntity();
       // }).toList();
 
-      List<ConfirmPostEntity> confirmPosts =
-          await Future.wait(firstQueryResult.docs.map(
-        (doc) async {
-          final model = FirebaseConfirmPostModel.fromFireStoreDocument(doc);
-          final fanList = await Future.wait(
-            model.fan!
-                .map(
-                  (userId) async =>
-                      (await getUserModelByUserId(userId))!.toUserDataEntity(),
-                )
-                .toList(),
-          );
-          final ownerUserEntity =
-              (await getUserModelByUserId(model.owner!))!.toUserDataEntity();
-          final entity = model.toConfirmPostEntity(
-            doc.reference.id,
-            fanList,
-            ownerUserEntity,
-          );
+      List<ConfirmPostEntity> confirmPosts = await Future.wait(
+        firstQueryResult.docs.map(
+          (doc) async {
+            final model = FirebaseConfirmPostModel.fromFireStoreDocument(doc);
+            final fanList = await Future.wait(
+              model.fan!
+                  .map(
+                    (userId) async => (await getUserModelByUserId(userId))!
+                        .toUserDataEntity(),
+                  )
+                  .toList(),
+            );
+            final ownerUserEntity =
+                (await getUserModelByUserId(model.owner!))!.toUserDataEntity();
+            final entity = model.toConfirmPostEntity(
+              doc.reference.id,
+              fanList,
+              ownerUserEntity,
+            );
 
-          return entity;
-        },
-      ).toList());
+            return entity;
+          },
+        ).toList(),
+      );
 
       return Future(() => right(confirmPosts));
     } on Exception {
@@ -260,29 +261,30 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           )
           .get();
 
-      List<ConfirmPostEntity> confirmPosts =
-          await Future.wait(fetchResult.docs.map(
-        (doc) async {
-          final model = FirebaseConfirmPostModel.fromFireStoreDocument(doc);
-          final fanList = await Future.wait(
-            model.fan!
-                .map(
-                  (userId) async =>
-                      (await getUserModelByUserId(userId))!.toUserDataEntity(),
-                )
-                .toList(),
-          );
-          final ownerUserEntity =
-              (await getUserModelByUserId(model.owner!))!.toUserDataEntity();
-          final entity = model.toConfirmPostEntity(
-            doc.reference.id,
-            fanList,
-            ownerUserEntity,
-          );
+      List<ConfirmPostEntity> confirmPosts = await Future.wait(
+        fetchResult.docs.map(
+          (doc) async {
+            final model = FirebaseConfirmPostModel.fromFireStoreDocument(doc);
+            final fanList = await Future.wait(
+              model.fan!
+                  .map(
+                    (userId) async => (await getUserModelByUserId(userId))!
+                        .toUserDataEntity(),
+                  )
+                  .toList(),
+            );
+            final ownerUserEntity =
+                (await getUserModelByUserId(model.owner!))!.toUserDataEntity();
+            final entity = model.toConfirmPostEntity(
+              doc.reference.id,
+              fanList,
+              ownerUserEntity,
+            );
 
-          return entity;
-        },
-      ).toList());
+            return entity;
+          },
+        ).toList(),
+      );
 
       return Future(() => right(confirmPosts));
     } on Exception catch (e) {
@@ -564,7 +566,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       final userId = FirebaseAuth.instance.currentUser!.uid;
 
       return Future(() => right(userId));
-    } on Exception catch (e) {
+    } on Exception {
       return Future(
         () => left(const Failure('catch error on deleteConfirmPost')),
       );
@@ -602,8 +604,6 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           )
           .get();
 
-      print(reactions.docs.length);
-
       final reactionEntityList = await Future.wait(
         reactions.docs.map((doc) async {
           final reactionModel = FirebaseReactionModel.fromFireStoreDocument(doc)
@@ -639,8 +639,6 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
             FirebaseCollectionName.getUserReactionBoxCollectionName(fetchUid),
           )
           .get();
-
-      print(reactions.docs.length);
 
       final reactionEntityList = await Future.wait(
         reactions.docs.map((doc) async {
