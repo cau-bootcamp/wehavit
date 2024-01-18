@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
-import 'package:wehavit/data/datasources/wehavit_datasource.dart';
+import 'package:wehavit/data/datasources/datasources.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
 

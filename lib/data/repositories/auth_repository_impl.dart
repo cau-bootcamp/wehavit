@@ -4,10 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/data/datasources/auth_google_datasource.dart';
-import 'package:wehavit/data/datasources/auth_google_datasource_impl.dart';
-import 'package:wehavit/data/datasources/auth_wehavit_datasource.dart';
-import 'package:wehavit/data/datasources/auth_wehavit_datasource_impl.dart';
+import 'package:wehavit/data/datasources/datasources.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
 

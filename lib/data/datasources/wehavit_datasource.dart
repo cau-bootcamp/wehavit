@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
-import 'package:wehavit/data/datasources/firebase_datasource_impl.dart';
-import 'package:wehavit/data/models/user_model.dart';
+import 'package:wehavit/data/datasources/datasources.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 
 final wehavitDatasourceProvider = Provider<WehavitDatasource>((ref) {
@@ -9,7 +8,7 @@ final wehavitDatasourceProvider = Provider<WehavitDatasource>((ref) {
 });
 
 abstract class WehavitDatasource {
-  EitherFuture<List<UserModel>> getFriendModelList();
+  EitherFuture<List<UserDataEntity>> getFriendModelList();
 
   EitherFuture<bool> registerFriend(
     String email,
