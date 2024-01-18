@@ -5,6 +5,7 @@ import 'package:wehavit/common/utils/emoji_assets.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
 import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
 import 'package:wehavit/domain/usecases/get_confirm_post_list_usecase.dart';
+import 'package:wehavit/domain/usecases/get_reaction_list_from_confirm_post_usecase.dart';
 import 'package:wehavit/domain/usecases/get_unread_reaction_list_usecase.dart';
 import 'package:wehavit/domain/usecases/send_comment_reaction_to_confirm_post_usecase.dart';
 import 'package:wehavit/domain/usecases/send_emoji_reaction_to_confirm_post_usercase.dart';
@@ -36,6 +37,8 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
         ref.watch(sendCommentReactionToConfirmPostUsecaseProvider);
     final getUnreadReactionListUsecase =
         ref.watch(getUnreadReactionListUsecaseProvider);
+    final getUnreadReactionListFromConfirmPostUsecase =
+        ref.watch(getReactionListFromConfirmPostUsecaseProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Reaction Sample View')),
@@ -112,6 +115,16 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
                 print(reactionList);
               },
               child: Text('receive reactions'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                final reactionList =
+                    await getUnreadReactionListFromConfirmPostUsecase(
+                  targetPostEntity!,
+                );
+                print(reactionList);
+              },
+              child: Text('receive reactions from confirmpost'),
             )
           ],
         ),

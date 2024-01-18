@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/data/datasources/wehavit_datasource.dart';
+import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
 import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
 import 'package:wehavit/domain/repositories/reaction_repository.dart';
 
@@ -29,5 +30,12 @@ class ReactionRepositoryImpl implements ReactionRepository {
   @override
   EitherFuture<List<ReactionEntity>> getUnreadReactionList() async {
     return _wehavitDatasource.getUnreadReactions();
+  }
+
+  @override
+  EitherFuture<List<ReactionEntity>> getReactionListFromConfirmPost({
+    required ConfirmPostEntity entity,
+  }) {
+    return _wehavitDatasource.getReactionsFromConfirmPost(entity);
   }
 }

@@ -592,9 +592,35 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   @override
   EitherFuture<List<ReactionEntity>> getReactionsFromConfirmPost(
     ConfirmPostEntity entity,
-  ) {
-    // TODO: implement getReactionsFromConfirmPost
-    throw UnimplementedError();
+  ) async {
+    try {
+      final reactions = await firestore
+          .collection(
+            FirebaseCollectionName.getConfirmPostReactionCollectionName(
+              entity.id!,
+            ),
+          )
+          .get();
+
+      print(reactions.docs.length);
+
+      final reactionEntityList = await Future.wait(
+        reactions.docs.map((doc) async {
+          final reactionModel = FirebaseReactionModel.fromFireStoreDocument(doc)
+              .toReactionEntity();
+
+          return reactionModel;
+        }).toList(),
+      );
+
+      return Future(() => right(reactionEntityList));
+    } on Exception {
+      return Future(
+        () => left(
+          const Failure('catch error on getUnreadReactions'),
+        ),
+      );
+    }
   }
 
   @override
