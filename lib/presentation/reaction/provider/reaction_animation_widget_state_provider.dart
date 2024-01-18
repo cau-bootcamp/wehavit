@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/utils/no_params.dart';
 import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
-import 'package:wehavit/domain/usecases/get_unread_reaction_from_last_confirm_post_usecase.dart';
+import 'package:wehavit/domain/usecases/get_unread_reaction_list_usecase.dart';
 
 final reactionAnimationWidgetManagerProvider =
     StateNotifierProvider<ReactionAnimationWidgetManager, void>((ref) {
@@ -10,16 +10,15 @@ final reactionAnimationWidgetManagerProvider =
 
 class ReactionAnimationWidgetManager extends StateNotifier<void> {
   ReactionAnimationWidgetManager(Ref ref) : super([]) {
-    _getReactionUnreadFromLastConfirmPostUsecase =
-        ref.watch(getUnreadReactionListFromLastConfirmPostUsecaseProvider);
+    getUnreadReactionListUsecase =
+        ref.watch(getUnreadReactionListUsecaseProvider);
   }
 
-  late GetUnreadReactionListFromLastConfirmPostUsecase
-      _getReactionUnreadFromLastConfirmPostUsecase;
+  late GetUnreadReactionListUsecase getUnreadReactionListUsecase;
 
   Future<List<ReactionGroupModel>>
       getUnreadReactionModelGroupListFromLastConfirmPost() async {
-    final fetchResult = await _getReactionUnreadFromLastConfirmPostUsecase(
+    final fetchResult = await getUnreadReactionListUsecase(
       NoParams(),
     );
 
@@ -57,7 +56,7 @@ class ReactionAnimationWidgetManager extends StateNotifier<void> {
           }
           reactionGroupModelList[index].emojiReacionModelList!.add(reaction);
           break;
-        case ReactionType.instantPhoto:
+        case ReactionType.quickShot:
           reactionGroupModelList[index].imageReacionModel = reaction;
           break;
       }

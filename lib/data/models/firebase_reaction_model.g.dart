@@ -1,25 +1,23 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'reaction_entity.dart';
+part of 'firebase_reaction_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ReactionEntityImpl _$$ReactionEntityImplFromJson(Map<String, dynamic> json) =>
-    _$ReactionEntityImpl(
+_$FirebaseReactionModelImpl _$$FirebaseReactionModelImplFromJson(
+        Map<String, dynamic> json) =>
+    _$FirebaseReactionModelImpl(
       complimenterUid: json['complimenterUid'] as String,
       reactionType: json['reactionType'] as int,
-      quickShotUrl: json['quickShotUrl'] as String? ?? '',
-      comment: json['comment'] as String? ?? '',
-      emoji: (json['emoji'] as Map<String, dynamic>?)?.map(
-            (k, e) => MapEntry(k, e as int),
-          ) ??
-          const {},
+      quickShotUrl: json['quickShotUrl'] as String,
+      comment: json['comment'] as String,
+      emoji: Map<String, int>.from(json['emoji'] as Map),
     );
 
-Map<String, dynamic> _$$ReactionEntityImplToJson(
-        _$ReactionEntityImpl instance) =>
+Map<String, dynamic> _$$FirebaseReactionModelImplToJson(
+        _$FirebaseReactionModelImpl instance) =>
     <String, dynamic>{
       'complimenterUid': instance.complimenterUid,
       'reactionType': instance.reactionType,

@@ -54,12 +54,6 @@ class TestPage extends ConsumerWidget {
             ),
             MoveButton(
               onPressCallback: () async {
-                context.push(RouteLocation.liveWriting);
-              },
-              buttonText: 'Go to LiveWriting Page',
-            ),
-            MoveButton(
-              onPressCallback: () async {
                 context.push(RouteLocation.auth);
               },
               buttonText: 'Go to Login Page',
@@ -72,27 +66,21 @@ class TestPage extends ConsumerWidget {
             ),
             MoveButton(
               onPressCallback: () async {
-                context.push(RouteLocation.swipeView);
-              },
-              buttonText: 'Swipe View',
-            ),
-            MoveButton(
-              onPressCallback: () async {
                 context.push('/route/to/nowhere');
               },
               buttonText: 'Go to Error View',
             ),
             MoveButton(
               onPressCallback: () async {
-                context.push('/animationSampleView');
+                context.push('/reactionSampleView');
               },
-              buttonText: 'Animation Sample View',
+              buttonText: 'Reaction Sample View',
             ),
             MoveButton(
               onPressCallback: () async {
-                context.push('/liveWaitingSampleView');
+                context.push('/animationSampleView');
               },
-              buttonText: 'Live Waiting Sample View',
+              buttonText: 'Animation Sample View',
             ),
             MoveButton(
               onPressCallback: () async {

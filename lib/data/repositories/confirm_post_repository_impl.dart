@@ -113,11 +113,7 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
       final getResult = await _wehavitDatasource.getConfirmPostEntityListByDate(
         selectedDate,
       );
-
-      return getResult.fold(
-        (failure) => Future(() => left(failure)),
-        (entityList) => Future(() => right(entityList)),
-      );
+      return getResult;
     } on Exception catch (e) {
       return Future(() => left(Failure(e.toString())));
     }

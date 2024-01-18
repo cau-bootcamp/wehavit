@@ -5,6 +5,8 @@ part 'user_data_entity.g.dart';
 
 @freezed
 class UserDataEntity with _$UserDataEntity {
+  // ignore: invalid_annotation_target
+  @JsonSerializable()
   factory UserDataEntity({
     String? userEmail,
     String? userId,

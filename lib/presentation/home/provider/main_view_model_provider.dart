@@ -148,8 +148,8 @@ class MainViewModelProvider extends StateNotifier<MainViewModel> {
   }) async {
     final reactionModel = ReactionEntity(
       complimenterUid: FirebaseAuth.instance.currentUser!.uid,
-      reactionType: ReactionType.instantPhoto.index,
-      instantPhotoUrl: imageFilePath,
+      reactionType: ReactionType.quickShot.index,
+      quickShotUrl: imageFilePath,
     );
 
     sendReactionToTargetConfirmPost(reactionModel, confirmModleId);

@@ -7,7 +7,7 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
 import 'package:wehavit/presentation/effects/camera_quickshot/reaction_camera_widget_model.dart';
 import 'package:wehavit/presentation/effects/camera_quickshot/reaction_camera_widget_model_provider.dart';
-import 'package:wehavit/presentation/effects/emojis/emoji_sheet_widget.dart';
+import 'package:wehavit/presentation/effects/emojis/shoot_emoji_widget.dart';
 import 'package:wehavit/presentation/home/model/main_view_model.dart';
 import 'package:wehavit/presentation/home/provider/main_view_model_provider.dart';
 import 'package:wehavit/presentation/my_page/widgets/resolution_linear_gauge_graph_widget.dart';

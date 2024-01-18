@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/constants/firebase_field_name.dart';
 import 'package:wehavit/common/errors/failure.dart';
@@ -8,6 +11,7 @@ import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/common/utils/firebase_collection_name.dart';
 import 'package:wehavit/data/datasources/wehavit_datasource.dart';
 import 'package:wehavit/data/models/firebase_confirm_post_model.dart';
+import 'package:wehavit/data/models/firebase_reaction_model.dart';
 import 'package:wehavit/data/models/firebase_resolution_model.dart';
 import 'package:wehavit/data/models/firebase_user_model.dart';
 import 'package:wehavit/data/models/user_model.dart';
@@ -115,14 +119,14 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       // 1. 결과 start 2 end date confirmpost
       final firstQueryResult = await FirebaseFirestore.instance
           .collection(FirebaseCollectionName.confirmPosts)
-          .where(
-            FirebaseConfirmPostFieldName.createdAt,
-            isGreaterThanOrEqualTo: Timestamp.fromDate(startDate),
-          )
-          .where(
-            FirebaseConfirmPostFieldName.createdAt,
-            isLessThan: Timestamp.fromDate(endDate),
-          )
+          // .where(
+          //   FirebaseConfirmPostFieldName.createdAt,
+          //   isGreaterThanOrEqualTo: Timestamp.fromDate(startDate),
+          // )
+          // .where(
+          //   FirebaseConfirmPostFieldName.createdAt,
+          //   isLessThan: Timestamp.fromDate(endDate),
+          // )
           .get();
 
       // TODO: 아래 코드 구현하기
@@ -209,14 +213,30 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       //       .toConfirmPostEntity();
       // }).toList();
 
-      List<ConfirmPostEntity> confirmPosts = firstQueryResult.docs.map(
-        (doc) {
-          final model = FirebaseConfirmPostModel.fromFireStoreDocument(doc);
-          final entity = model.toConfirmPostEntity();
+      List<ConfirmPostEntity> confirmPosts = await Future.wait(
+        firstQueryResult.docs.map(
+          (doc) async {
+            final model = FirebaseConfirmPostModel.fromFireStoreDocument(doc);
+            final fanList = await Future.wait(
+              model.fan!
+                  .map(
+                    (userId) async => (await getUserModelByUserId(userId))!
+                        .toUserDataEntity(),
+                  )
+                  .toList(),
+            );
+            final ownerUserEntity =
+                (await getUserModelByUserId(model.owner!))!.toUserDataEntity();
+            final entity = model.toConfirmPostEntity(
+              doc.reference.id,
+              fanList,
+              ownerUserEntity,
+            );
 
-          return entity;
-        },
-      ).toList();
+            return entity;
+          },
+        ).toList(),
+      );
 
       return Future(() => right(confirmPosts));
     } on Exception {
@@ -241,13 +261,32 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           )
           .get();
 
-      final entityList = fetchResult.docs.map((doc) {
-        final model = FirebaseConfirmPostModel.fromFireStoreDocument(doc);
-        final entity = model.toConfirmPostEntity();
-        return entity;
-      }).toList();
+      List<ConfirmPostEntity> confirmPosts = await Future.wait(
+        fetchResult.docs.map(
+          (doc) async {
+            final model = FirebaseConfirmPostModel.fromFireStoreDocument(doc);
+            final fanList = await Future.wait(
+              model.fan!
+                  .map(
+                    (userId) async => (await getUserModelByUserId(userId))!
+                        .toUserDataEntity(),
+                  )
+                  .toList(),
+            );
+            final ownerUserEntity =
+                (await getUserModelByUserId(model.owner!))!.toUserDataEntity();
+            final entity = model.toConfirmPostEntity(
+              doc.reference.id,
+              fanList,
+              ownerUserEntity,
+            );
 
-      return Future(() => right(entityList));
+            return entity;
+          },
+        ).toList(),
+      );
+
+      return Future(() => right(confirmPosts));
     } on Exception catch (e) {
       return Future(() => left(Failure(e.toString())));
     }
@@ -274,7 +313,23 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
         final model = FirebaseConfirmPostModel.fromFireStoreDocument(
           fetchResult.docs.first,
         );
-        final entity = model.toConfirmPostEntity();
+
+        final fanList = await Future.wait(
+          model.fan!
+              .map(
+                (userId) async =>
+                    (await getUserModelByUserId(userId))!.toUserDataEntity(),
+              )
+              .toList(),
+        );
+        final ownerUserEntity =
+            (await getUserModelByUserId(model.owner!))!.toUserDataEntity();
+
+        final entity = model.toConfirmPostEntity(
+          fetchResult.docs.first.reference.id,
+          fanList,
+          ownerUserEntity,
+        );
 
         return Future(() => right(entity));
       }
@@ -322,8 +377,34 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   EitherFuture<bool> sendReactionToTargetConfirmPost(
     String targetConfirmPostId,
     ReactionEntity reactionEntity,
-  ) {
-    return Future(() => left(const Failure('not implemented')));
+  ) async {
+    try {
+      final reactionModel =
+          FirebaseReactionModel.fromReactionEntity(reactionEntity);
+      await firestore
+          .collection(
+            FirebaseCollectionName.getConfirmPostReactionCollectionName(
+              targetConfirmPostId,
+            ),
+          )
+          .add(reactionModel.toJson());
+
+      await firestore
+          .collection(
+            FirebaseCollectionName.getUserReactionBoxCollectionName(
+              reactionEntity.complimenterUid,
+            ),
+          )
+          .add(reactionModel.toJson());
+
+      return Future(() => right(true));
+    } on Exception {
+      return Future(
+        () => left(
+          const Failure('catch error on sendReactionToTargetConfirmPost'),
+        ),
+      );
+    }
   }
 
   @override
@@ -485,9 +566,96 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       final userId = FirebaseAuth.instance.currentUser!.uid;
 
       return Future(() => right(userId));
-    } on Exception catch (e) {
+    } on Exception {
       return Future(
         () => left(const Failure('catch error on deleteConfirmPost')),
+      );
+    }
+  }
+
+  @override
+  EitherFuture<String> uploadPhotoFromLocalUrlToConfirmPost({
+    required String confirmPostId,
+    required String localPhotoUrl,
+  }) async {
+    try {
+      String storagePath =
+          '$confirmPostId/_${FirebaseAuth.instance.currentUser!.uid}_${DateTime.now().toIso8601String()}';
+      final ref = FirebaseStorage.instance.ref(storagePath);
+
+      await ref.putFile(File(localPhotoUrl));
+
+      return Future(() async => right(await ref.getDownloadURL()));
+    } on Exception catch (e) {
+      return Future(() => left(Failure(e.toString())));
+    }
+  }
+
+  @override
+  EitherFuture<List<ReactionEntity>> getReactionsFromConfirmPost(
+    ConfirmPostEntity entity,
+  ) async {
+    try {
+      final reactions = await firestore
+          .collection(
+            FirebaseCollectionName.getConfirmPostReactionCollectionName(
+              entity.id!,
+            ),
+          )
+          .get();
+
+      final reactionEntityList = await Future.wait(
+        reactions.docs.map((doc) async {
+          final reactionModel = FirebaseReactionModel.fromFireStoreDocument(doc)
+              .toReactionEntity();
+
+          return reactionModel;
+        }).toList(),
+      );
+
+      return Future(() => right(reactionEntityList));
+    } on Exception {
+      return Future(
+        () => left(
+          const Failure('catch error on getUnreadReactions'),
+        ),
+      );
+    }
+  }
+
+  @override
+  EitherFuture<List<ReactionEntity>> getUnreadReactions() async {
+    try {
+      final fetchUid = (await getMyUserId()).fold((l) => null, (uid) => uid);
+
+      if (fetchUid == null) {
+        return Future(
+          () => left(const Failure('unable to get firebase user id')),
+        );
+      }
+
+      final reactions = await firestore
+          .collection(
+            FirebaseCollectionName.getUserReactionBoxCollectionName(fetchUid),
+          )
+          .get();
+
+      final reactionEntityList = await Future.wait(
+        reactions.docs.map((doc) async {
+          await doc.reference.delete();
+          final reactionModel = FirebaseReactionModel.fromFireStoreDocument(doc)
+              .toReactionEntity();
+
+          return reactionModel;
+        }).toList(),
+      );
+
+      return Future(() => right(reactionEntityList));
+    } on Exception {
+      return Future(
+        () => left(
+          const Failure('catch error on getUnreadReactions'),
+        ),
       );
     }
   }

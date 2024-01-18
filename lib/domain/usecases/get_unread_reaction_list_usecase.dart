@@ -1,18 +1,20 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wehavit/common/common.dart';
+import 'package:wehavit/common/usecases/usecase.dart';
+import 'package:wehavit/common/utils/custom_types.dart';
+import 'package:wehavit/common/utils/no_params.dart';
 import 'package:wehavit/data/repositories/reaction_repository_impl.dart';
 import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
 import 'package:wehavit/domain/repositories/reaction_repository.dart';
 
-final getUnreadReactionListFromLastConfirmPostUsecaseProvider =
-    Provider<GetUnreadReactionListFromLastConfirmPostUsecase>((ref) {
+final getUnreadReactionListUsecaseProvider =
+    Provider<GetUnreadReactionListUsecase>((ref) {
   final repository = ref.watch(reactionRepositoryProvider);
-  return GetUnreadReactionListFromLastConfirmPostUsecase(repository);
+  return GetUnreadReactionListUsecase(repository);
 });
 
-class GetUnreadReactionListFromLastConfirmPostUsecase
+class GetUnreadReactionListUsecase
     extends FutureUseCase<List<ReactionEntity>, NoParams> {
-  GetUnreadReactionListFromLastConfirmPostUsecase(
+  GetUnreadReactionListUsecase(
     this._reactionRepository,
   );
 
@@ -20,6 +22,6 @@ class GetUnreadReactionListFromLastConfirmPostUsecase
 
   @override
   EitherFuture<List<ReactionEntity>> call(NoParams params) {
-    return _reactionRepository.getUnreadReactionFromLastConfirmPost();
+    return _reactionRepository.getUnreadReactionList();
   }
 }

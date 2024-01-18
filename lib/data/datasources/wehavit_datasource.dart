@@ -41,6 +41,11 @@ abstract class WehavitDatasource {
     ReactionEntity reactionEntity,
   );
 
+  EitherFuture<List<ReactionEntity>> getUnreadReactions();
+  EitherFuture<List<ReactionEntity>> getReactionsFromConfirmPost(
+    ConfirmPostEntity entity,
+  );
+
   EitherFuture<List<ResolutionEntity>> getActiveResolutionEntityList(
     String userId,
   );
@@ -50,4 +55,9 @@ abstract class WehavitDatasource {
   EitherFuture<UserDataEntity> fetchUserDataEntityByUserId(String targetUserId);
 
   EitherFuture<String> getMyUserId();
+
+  EitherFuture<String> uploadPhotoFromLocalUrlToConfirmPost({
+    required String localPhotoUrl,
+    required String confirmPostId,
+  });
 }
