@@ -20,7 +20,6 @@ ReactionEntity _$ReactionEntityFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ReactionEntity {
-  String get confirmPostId => throw _privateConstructorUsedError;
   String get complimenterUid => throw _privateConstructorUsedError;
   int get reactionType => throw _privateConstructorUsedError;
   String get quickShotUrl => throw _privateConstructorUsedError;
@@ -40,8 +39,7 @@ abstract class $ReactionEntityCopyWith<$Res> {
       _$ReactionEntityCopyWithImpl<$Res, ReactionEntity>;
   @useResult
   $Res call(
-      {String confirmPostId,
-      String complimenterUid,
+      {String complimenterUid,
       int reactionType,
       String quickShotUrl,
       String comment,
@@ -61,7 +59,6 @@ class _$ReactionEntityCopyWithImpl<$Res, $Val extends ReactionEntity>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? confirmPostId = null,
     Object? complimenterUid = null,
     Object? reactionType = null,
     Object? quickShotUrl = null,
@@ -69,10 +66,6 @@ class _$ReactionEntityCopyWithImpl<$Res, $Val extends ReactionEntity>
     Object? emoji = null,
   }) {
     return _then(_value.copyWith(
-      confirmPostId: null == confirmPostId
-          ? _value.confirmPostId
-          : confirmPostId // ignore: cast_nullable_to_non_nullable
-              as String,
       complimenterUid: null == complimenterUid
           ? _value.complimenterUid
           : complimenterUid // ignore: cast_nullable_to_non_nullable
@@ -106,8 +99,7 @@ abstract class _$$ReactionEntityImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String confirmPostId,
-      String complimenterUid,
+      {String complimenterUid,
       int reactionType,
       String quickShotUrl,
       String comment,
@@ -125,7 +117,6 @@ class __$$ReactionEntityImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? confirmPostId = null,
     Object? complimenterUid = null,
     Object? reactionType = null,
     Object? quickShotUrl = null,
@@ -133,10 +124,6 @@ class __$$ReactionEntityImplCopyWithImpl<$Res>
     Object? emoji = null,
   }) {
     return _then(_$ReactionEntityImpl(
-      confirmPostId: null == confirmPostId
-          ? _value.confirmPostId
-          : confirmPostId // ignore: cast_nullable_to_non_nullable
-              as String,
       complimenterUid: null == complimenterUid
           ? _value.complimenterUid
           : complimenterUid // ignore: cast_nullable_to_non_nullable
@@ -166,8 +153,7 @@ class __$$ReactionEntityImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ReactionEntityImpl implements _ReactionEntity {
   _$ReactionEntityImpl(
-      {this.confirmPostId = '',
-      required this.complimenterUid,
+      {required this.complimenterUid,
       required this.reactionType,
       this.quickShotUrl = '',
       this.comment = '',
@@ -177,9 +163,6 @@ class _$ReactionEntityImpl implements _ReactionEntity {
   factory _$ReactionEntityImpl.fromJson(Map<String, dynamic> json) =>
       _$$ReactionEntityImplFromJson(json);
 
-  @override
-  @JsonKey()
-  final String confirmPostId;
   @override
   final String complimenterUid;
   @override
@@ -201,7 +184,7 @@ class _$ReactionEntityImpl implements _ReactionEntity {
 
   @override
   String toString() {
-    return 'ReactionEntity(confirmPostId: $confirmPostId, complimenterUid: $complimenterUid, reactionType: $reactionType, quickShotUrl: $quickShotUrl, comment: $comment, emoji: $emoji)';
+    return 'ReactionEntity(complimenterUid: $complimenterUid, reactionType: $reactionType, quickShotUrl: $quickShotUrl, comment: $comment, emoji: $emoji)';
   }
 
   @override
@@ -209,8 +192,6 @@ class _$ReactionEntityImpl implements _ReactionEntity {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ReactionEntityImpl &&
-            (identical(other.confirmPostId, confirmPostId) ||
-                other.confirmPostId == confirmPostId) &&
             (identical(other.complimenterUid, complimenterUid) ||
                 other.complimenterUid == complimenterUid) &&
             (identical(other.reactionType, reactionType) ||
@@ -223,14 +204,8 @@ class _$ReactionEntityImpl implements _ReactionEntity {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      confirmPostId,
-      complimenterUid,
-      reactionType,
-      quickShotUrl,
-      comment,
-      const DeepCollectionEquality().hash(_emoji));
+  int get hashCode => Object.hash(runtimeType, complimenterUid, reactionType,
+      quickShotUrl, comment, const DeepCollectionEquality().hash(_emoji));
 
   @JsonKey(ignore: true)
   @override
@@ -249,8 +224,7 @@ class _$ReactionEntityImpl implements _ReactionEntity {
 
 abstract class _ReactionEntity implements ReactionEntity {
   factory _ReactionEntity(
-      {final String confirmPostId,
-      required final String complimenterUid,
+      {required final String complimenterUid,
       required final int reactionType,
       final String quickShotUrl,
       final String comment,
@@ -259,8 +233,6 @@ abstract class _ReactionEntity implements ReactionEntity {
   factory _ReactionEntity.fromJson(Map<String, dynamic> json) =
       _$ReactionEntityImpl.fromJson;
 
-  @override
-  String get confirmPostId;
   @override
   String get complimenterUid;
   @override

@@ -37,9 +37,7 @@ class FirebaseReactionModel with _$FirebaseReactionModel {
 }
 
 extension ConvertFirebaseReactionModel on FirebaseReactionModel {
-  ReactionEntity toReactionEntity({required String fromConfirmPostId}) {
-    return ReactionEntity.fromJson(toJson()).copyWith(
-      confirmPostId: fromConfirmPostId,
-    );
+  ReactionEntity toReactionEntity() {
+    return ReactionEntity.fromJson(toJson());
   }
 }

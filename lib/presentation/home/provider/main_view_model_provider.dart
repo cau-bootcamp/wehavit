@@ -134,7 +134,6 @@ class MainViewModelProvider extends StateNotifier<MainViewModel> {
         complimenterUid: currentUserUid,
         reactionType: ReactionType.emoji.index,
         emoji: emojiMap,
-        confirmPostId: confirmModleId,
       );
 
       sendReactionToTargetConfirmPost(reactionModel, confirmModleId);
@@ -151,7 +150,6 @@ class MainViewModelProvider extends StateNotifier<MainViewModel> {
       complimenterUid: FirebaseAuth.instance.currentUser!.uid,
       reactionType: ReactionType.quickShot.index,
       quickShotUrl: imageFilePath,
-      confirmPostId: confirmModleId,
     );
 
     sendReactionToTargetConfirmPost(reactionModel, confirmModleId);
@@ -164,7 +162,6 @@ class MainViewModelProvider extends StateNotifier<MainViewModel> {
       complimenterUid: FirebaseAuth.instance.currentUser!.uid,
       reactionType: ReactionType.comment.index,
       comment: state.textEditingController.text,
-      confirmPostId: confirmModleId,
     );
 
     sendReactionToTargetConfirmPost(

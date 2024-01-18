@@ -9,7 +9,6 @@ class ReactionEntity with _$ReactionEntity {
   // ignore: invalid_annotation_target
   @JsonSerializable()
   factory ReactionEntity({
-    @Default('') String confirmPostId,
     required String complimenterUid,
     required int reactionType,
     @Default('') String quickShotUrl,
@@ -49,11 +48,6 @@ class ReactionEntity with _$ReactionEntity {
 
   factory ReactionEntity.fromJson(Map<String, dynamic> json) =>
       _$ReactionEntityFromJson(json);
-
-  factory ReactionEntity.fromFireStoreDocument(DocumentSnapshot doc) {
-    if (doc.data() == null) throw Exception('Document data was null');
-    return ReactionEntity.fromJson(doc.data() as Map<String, Object?>);
-  }
 }
 
 enum ReactionType {

@@ -41,6 +41,11 @@ abstract class WehavitDatasource {
     ReactionEntity reactionEntity,
   );
 
+  EitherFuture<List<ReactionEntity>> getUnreadReactions();
+  EitherFuture<List<ReactionEntity>> getReactionsFromConfirmPost(
+    ConfirmPostEntity entity,
+  );
+
   EitherFuture<List<ResolutionEntity>> getActiveResolutionEntityList(
     String userId,
   );

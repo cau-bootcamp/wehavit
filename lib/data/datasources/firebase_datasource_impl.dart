@@ -387,6 +387,14 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           )
           .add(reactionModel.toJson());
 
+      await firestore
+          .collection(
+            FirebaseCollectionName.getUserReactionBoxCollectionName(
+              reactionEntity.complimenterUid,
+            ),
+          )
+          .add(reactionModel.toJson());
+
       return Future(() => right(true));
     } on Exception {
       return Future(
@@ -578,6 +586,53 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       return Future(() async => right(await ref.getDownloadURL()));
     } on Exception catch (e) {
       return Future(() => left(Failure(e.toString())));
+    }
+  }
+
+  @override
+  EitherFuture<List<ReactionEntity>> getReactionsFromConfirmPost(
+    ConfirmPostEntity entity,
+  ) {
+    // TODO: implement getReactionsFromConfirmPost
+    throw UnimplementedError();
+  }
+
+  @override
+  EitherFuture<List<ReactionEntity>> getUnreadReactions() async {
+    try {
+      final fetchUid = (await getMyUserId()).fold((l) => null, (uid) => uid);
+
+      if (fetchUid == null) {
+        return Future(
+          () => left(const Failure('unable to get firebase user id')),
+        );
+      }
+
+      final reactions = await firestore
+          .collection(
+            FirebaseCollectionName.getUserReactionBoxCollectionName(fetchUid),
+          )
+          .get();
+
+      print(reactions.docs.length);
+
+      final reactionEntityList = await Future.wait(
+        reactions.docs.map((doc) async {
+          await doc.reference.delete();
+          final reactionModel = FirebaseReactionModel.fromFireStoreDocument(doc)
+              .toReactionEntity();
+
+          return reactionModel;
+        }).toList(),
+      );
+
+      return Future(() => right(reactionEntityList));
+    } on Exception {
+      return Future(
+        () => left(
+          const Failure('catch error on getUnreadReactions'),
+        ),
+      );
     }
   }
 }

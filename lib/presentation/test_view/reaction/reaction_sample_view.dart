@@ -5,6 +5,7 @@ import 'package:wehavit/common/utils/emoji_assets.dart';
 import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
 import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
 import 'package:wehavit/domain/usecases/get_confirm_post_list_usecase.dart';
+import 'package:wehavit/domain/usecases/get_unread_reaction_list_usecase.dart';
 import 'package:wehavit/domain/usecases/send_comment_reaction_to_confirm_post_usecase.dart';
 import 'package:wehavit/domain/usecases/send_emoji_reaction_to_confirm_post_usercase.dart';
 import 'package:wehavit/domain/usecases/send_quickshot_reaction_to_confirm_post_usecase.dart';
@@ -33,6 +34,8 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
         ref.watch(sendQuickShotReactionToConfirmPostUsecaseProvider);
     final sendCommentReactionToConfrimPostUsecase =
         ref.watch(sendCommentReactionToConfirmPostUsecaseProvider);
+    final getUnreadReactionListUsecase =
+        ref.watch(getUnreadReactionListUsecaseProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Reaction Sample View')),
@@ -43,22 +46,22 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
               children: [
                 const Text('Target Post'),
                 ElevatedButton(
-                    onPressed: () async {
-                      final fetchedEntity =
-                          (await getConfirmPostListUsecase(DateTime.now()))
-                              .fold(
-                        (l) => null,
-                        (r) => r.isEmpty ? null : r.first,
-                      );
-                      setState(() {
-                        targetPostEntity = fetchedEntity;
-                      });
-                    },
-                    child: const Text('load element')),
+                  onPressed: () async {
+                    final fetchedEntity =
+                        (await getConfirmPostListUsecase(DateTime.now())).fold(
+                      (l) => null,
+                      (r) => r.isEmpty ? null : r.first,
+                    );
+                    setState(() {
+                      targetPostEntity = fetchedEntity;
+                    });
+                  },
+                  child: const Text('load element'),
+                ),
                 Text(
                   targetPostEntity != null
                       ? targetPostEntity!.title!
-                      : "no element",
+                      : 'no element',
                 ),
               ],
             ),
@@ -79,7 +82,7 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
                   child: Text('emoji'),
                 ),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     sendCommentReactionToConfrimPostUsecase(
                       (
                         targetPostEntity!.id!,
@@ -90,7 +93,7 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
                   child: Text('text'),
                 ),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     sendQuickShotReactionToConfirmPostUsecase(
                       (
                         targetPostEntity!.id!,
@@ -102,6 +105,14 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
                 )
               ],
             ),
+            ElevatedButton(
+              onPressed: () async {
+                final reactionList =
+                    await getUnreadReactionListUsecase(NoParams());
+                print(reactionList);
+              },
+              child: Text('receive reactions'),
+            )
           ],
         ),
       ),
