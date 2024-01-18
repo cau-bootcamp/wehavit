@@ -6,15 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/presentation/effects/camera_quickshot/reaction_camera_widget.dart';
-import 'package:wehavit/presentation/effects/camera_quickshot/reaction_camera_widget_model.dart';
-import 'package:wehavit/presentation/effects/camera_quickshot/reaction_camera_widget_model_provider.dart';
-import 'package:wehavit/presentation/home/model/main_view_model.dart';
-import 'package:wehavit/presentation/home/provider/main_view_model_provider.dart';
-import 'package:wehavit/presentation/home/widget/confirm_post_widget.dart';
+import 'package:wehavit/presentation/effects/effects.dart';
+import 'package:wehavit/presentation/home/home.dart';
 import 'package:wehavit/presentation/reaction/widget/reaction_animation_widget.dart';
-
-import '../provider/conform_post_list_provider.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});

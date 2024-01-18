@@ -1,12 +1,8 @@
 import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
-import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
-import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
-import 'package:wehavit/domain/usecases/fetch_user_data_from_id_usecase.dart';
-import 'package:wehavit/domain/usecases/get_confirm_post_list_for_resolution_id.dart';
-import 'package:wehavit/domain/usecases/upload_reaction_to_target_confirm_post.dart';
+import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wehavit/domain/usecases/usecases.dart';
 import 'package:wehavit/presentation/home/model/main_view_model.dart';
 
 final mainViewModelProvider =

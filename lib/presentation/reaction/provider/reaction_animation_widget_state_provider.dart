@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/utils/no_params.dart';
-import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
-import 'package:wehavit/domain/usecases/get_unread_reaction_list_usecase.dart';
+import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wehavit/domain/usecases/usecases.dart';
 
 final reactionAnimationWidgetManagerProvider =
     StateNotifierProvider<ReactionAnimationWidgetManager, void>((ref) {

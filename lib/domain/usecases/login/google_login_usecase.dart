@@ -1,6 +1,6 @@
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/data/models/auth_result_model.dart';
-import 'package:wehavit/domain/repositories/auth_repository.dart';
+import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wehavit/domain/repositories/repositories.dart';
 
 class GoogleLogInUseCase implements FutureUseCase<AuthResult, NoParams> {
   GoogleLogInUseCase(this._authRepository);

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
-import 'package:wehavit/domain/entities/resolution_entity/resolution_entity.dart';
+import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/late_writing/model/late_writing_view_model.dart';
 import 'package:wehavit/presentation/late_writing/provider/late_writing_view_provider.dart';
 

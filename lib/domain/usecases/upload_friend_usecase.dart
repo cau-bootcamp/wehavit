@@ -1,8 +1,8 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:wehavit/common/usecases/usecase.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
-import 'package:wehavit/data/repositories/friend_repository_impl.dart';
-import 'package:wehavit/domain/repositories/friend_repository.dart';
+import 'package:wehavit/data/repositories/repositories.dart';
+import 'package:wehavit/domain/repositories/repositories.dart';
 
 final registerFriendUsecaseProvider = Provider<RegisterFriendUsecase>((ref) {
   final friendRepository = ref.watch(friendRepositoryProvider);

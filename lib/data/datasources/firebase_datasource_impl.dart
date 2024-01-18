@@ -5,20 +5,10 @@ import 'package:collection/collection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:wehavit/common/constants/firebase_field_name.dart';
-import 'package:wehavit/common/errors/failure.dart';
-import 'package:wehavit/common/utils/custom_types.dart';
-import 'package:wehavit/common/utils/firebase_collection_name.dart';
-import 'package:wehavit/data/datasources/wehavit_datasource.dart';
-import 'package:wehavit/data/models/firebase_confirm_post_model.dart';
-import 'package:wehavit/data/models/firebase_reaction_model.dart';
-import 'package:wehavit/data/models/firebase_resolution_model.dart';
-import 'package:wehavit/data/models/firebase_user_model.dart';
-import 'package:wehavit/data/models/user_model.dart';
-import 'package:wehavit/domain/entities/confirm_post_entity/confirm_post_entity.dart';
-import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
-import 'package:wehavit/domain/entities/resolution_entity/resolution_entity.dart';
-import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
+import 'package:wehavit/common/common.dart';
+import 'package:wehavit/data/datasources/datasources.dart';
+import 'package:wehavit/data/models/models.dart';
+import 'package:wehavit/domain/entities/entities.dart';
 
 class FirebaseDatasourceImpl implements WehavitDatasource {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -26,7 +16,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   int get maxDay => 27;
 
   @override
-  EitherFuture<List<UserModel>> getFriendModelList() async {
+  EitherFuture<List<UserDataEntity>> getFriendModelList() async {
     // users에서 내 user 정보 접근해서 friends 리스트 받아오기
     try {
       FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -34,9 +24,9 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       final friendDocument =
           await firestore.collection(FirebaseCollectionName.friends).get();
 
-      List<UserModel?> fetchResult = await Future.wait(
+      List<UserDataEntity?> fetchResult = await Future.wait(
         friendDocument.docs.map((doc) async {
-          return getUserModelByUserId(
+          return getUserEntityByUserId(
             doc.data()[FirebaseFriendFieldName.friendUid],
           );
         }),
@@ -216,18 +206,19 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       List<ConfirmPostEntity> confirmPosts = await Future.wait(
         firstQueryResult.docs.map(
           (doc) async {
-            final model = FirebaseConfirmPostModel.fromFireStoreDocument(doc);
+            final confirmPostModel =
+                FirebaseConfirmPostModel.fromFireStoreDocument(doc);
             final fanList = await Future.wait(
-              model.fan!
+              confirmPostModel.fan!
                   .map(
-                    (userId) async => (await getUserModelByUserId(userId))!
-                        .toUserDataEntity(),
+                    (userId) async => (await getUserEntityByUserId(userId))!,
                   )
                   .toList(),
             );
             final ownerUserEntity =
-                (await getUserModelByUserId(model.owner!))!.toUserDataEntity();
-            final entity = model.toConfirmPostEntity(
+                (await getUserEntityByUserId(confirmPostModel.owner!))!;
+
+            final entity = confirmPostModel.toConfirmPostEntity(
               doc.reference.id,
               fanList,
               ownerUserEntity,
@@ -268,13 +259,12 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
             final fanList = await Future.wait(
               model.fan!
                   .map(
-                    (userId) async => (await getUserModelByUserId(userId))!
-                        .toUserDataEntity(),
+                    (userId) async => (await getUserEntityByUserId(userId))!,
                   )
                   .toList(),
             );
             final ownerUserEntity =
-                (await getUserModelByUserId(model.owner!))!.toUserDataEntity();
+                (await getUserEntityByUserId(model.owner!))!;
             final entity = model.toConfirmPostEntity(
               doc.reference.id,
               fanList,
@@ -317,13 +307,11 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
         final fanList = await Future.wait(
           model.fan!
               .map(
-                (userId) async =>
-                    (await getUserModelByUserId(userId))!.toUserDataEntity(),
+                (userId) async => (await getUserEntityByUserId(userId))!,
               )
               .toList(),
         );
-        final ownerUserEntity =
-            (await getUserModelByUserId(model.owner!))!.toUserDataEntity();
+        final ownerUserEntity = (await getUserEntityByUserId(model.owner!))!;
 
         final entity = model.toConfirmPostEntity(
           fetchResult.docs.first.reference.id,
@@ -504,19 +492,15 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     }
   }
 
-  Future<UserModel?> getUserModelByUserId(String targetUserId) async {
+  Future<UserDataEntity?> getUserEntityByUserId(String targetUserId) async {
     try {
       final friendDocument = await firestore
           .collection(FirebaseCollectionName.users)
           .doc(targetUserId)
           .get();
 
-      final result = UserModel(
-        uid: targetUserId,
-        displayName: friendDocument.data()![FirebaseUserFieldName.displayName],
-        imageUrl: friendDocument.data()![FirebaseUserFieldName.imageUrl],
-        email: friendDocument.data()![FirebaseUserFieldName.email],
-      );
+      final result = FirebaseUserModel.fromFireStoreDocument(friendDocument)
+          .toUserDataEntity(userId: targetUserId);
 
       return result;
     } on Exception {

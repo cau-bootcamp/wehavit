@@ -7,7 +7,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:wehavit/presentation/effects/camera_quickshot/reaction_camera_widget_model.dart';
+import 'package:wehavit/presentation/effects/effects.dart';
 
 final reactionCameraWidgetModelProvider = StateNotifierProvider<
     ReactionCameraWidgetModelProvider,

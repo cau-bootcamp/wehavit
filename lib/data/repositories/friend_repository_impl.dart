@@ -2,9 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
-import 'package:wehavit/data/datasources/wehavit_datasource.dart';
-import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
-import 'package:wehavit/domain/repositories/friend_repository.dart';
+import 'package:wehavit/data/datasources/datasources.dart';
+import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wehavit/domain/repositories/repositories.dart';
 
 final friendRepositoryProvider = Provider<FriendRepository>((ref) {
   final WehavitDatasource wehavitDatasource =
@@ -24,9 +24,7 @@ class FriendRepositoryImpl implements FriendRepository {
 
       return getResult.fold(
         (failure) => left(failure),
-        (modelList) {
-          final entityList =
-              modelList.map((model) => model.toUserDataEntity()).toList();
+        (entityList) {
           return Future(() => right(entityList));
         },
       );

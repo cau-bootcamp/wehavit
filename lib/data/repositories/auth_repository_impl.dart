@@ -4,12 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/data/datasources/auth_google_datasource.dart';
-import 'package:wehavit/data/datasources/auth_google_datasource_impl.dart';
-import 'package:wehavit/data/datasources/auth_wehavit_datasource.dart';
-import 'package:wehavit/data/datasources/auth_wehavit_datasource_impl.dart';
-import 'package:wehavit/data/models/auth_result_model.dart';
-import 'package:wehavit/domain/repositories/auth_repository.dart';
+import 'package:wehavit/data/datasources/datasources.dart';
+import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wehavit/domain/repositories/repositories.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   final wehavitAuthDataSource = ref.watch(wehavitAuthDatasourceProvider);

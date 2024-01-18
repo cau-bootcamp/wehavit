@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/data/datasources/wehavit_datasource.dart';
-import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
-import 'package:wehavit/domain/repositories/user_model_fetch_repository.dart';
+import 'package:wehavit/data/datasources/datasources.dart';
+import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wehavit/domain/repositories/repositories.dart';
 
 final userModelRepositoryProvider = Provider<UserModelRepository>((ref) {
   final WehavitDatasource wehavitDatasource =

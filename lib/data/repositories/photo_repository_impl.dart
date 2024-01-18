@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
-import 'package:wehavit/data/datasources/wehavit_datasource.dart';
-import 'package:wehavit/domain/repositories/photo_repository.dart';
+import 'package:wehavit/data/datasources/datasources.dart';
+import 'package:wehavit/domain/repositories/repositories.dart';
 
 final photoRepositoryProvider = Provider<PhotoRepository>((ref) {
   final WehavitDatasource wehavitDatasource =

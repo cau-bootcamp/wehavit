@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:wehavit/domain/entities/reaction_entity/reaction_entity.dart';
-
+import 'package:wehavit/domain/entities/entities.dart';
 part 'firebase_reaction_model.g.dart';
 part 'firebase_reaction_model.freezed.dart';
 

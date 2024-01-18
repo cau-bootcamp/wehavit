@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
+import 'package:wehavit/domain/entities/entities.dart';
 
 part 'resolution_entity.freezed.dart';
 part 'resolution_entity.g.dart';

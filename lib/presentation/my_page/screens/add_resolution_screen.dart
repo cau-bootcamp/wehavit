@@ -4,10 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:multiselect/multiselect.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/data/repositories/friend_repository_impl.dart';
-import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
-import 'package:wehavit/presentation/my_page/providers/add_resolution_provider.dart';
-import 'package:wehavit/presentation/my_page/providers/my_page_resolution_list_provider.dart';
+// import 'package:wehavit/data/repositories/repositories.dart';
+import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wehavit/domain/usecases/usecases.dart';
+import 'package:wehavit/presentation/my_page/my_page.dart';
 
 // 여기에 뷰가 적용되면 수정할 예정임.
 class AddResolutionScreen extends HookConsumerWidget {
@@ -386,7 +386,7 @@ class SelectFans extends HookConsumerWidget {
 }
 
 Future<List<UserDataEntity>> getFriendList(WidgetRef ref) {
-  return ref.read(friendRepositoryProvider).getFriendEntityList().then(
+  return ref.read(getFriendListUseCaseProvider).call(NoParams()).then(
     (result) {
       return result.fold((failure) {
         return [];

@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:wehavit/domain/repositories/auth_repository.dart';
+import 'package:wehavit/domain/repositories/repositories.dart';
 
 class AuthStateChangesUseCase {
   AuthStateChangesUseCase(this._repository);
