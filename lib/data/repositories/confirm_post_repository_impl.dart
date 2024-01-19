@@ -111,4 +111,13 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
       return Future(() => left(Failure(e.toString())));
     }
   }
+
+  @override
+  EitherFuture<String> uploadConfirmPostImage({
+    required String localFileUrl,
+  }) async {
+    final uploadResult = await _wehavitDatasource
+        .uploadConfirmPostImageFromLocalUrl(localFileUrl);
+    return uploadResult;
+  }
 }

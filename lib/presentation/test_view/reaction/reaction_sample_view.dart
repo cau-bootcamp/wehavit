@@ -92,8 +92,8 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
                   onPressed: () async {
                     sendQuickShotReactionToConfirmPostUsecase(
                       (
-                        targetPostEntity!.id!,
-                        '/Users/sungmin/Library/Developer/CoreSimulator/Devices/B9B7688C-62AC-4015-BE90-F172CADB897D/data/Containers/Data/Application/344574EB-D94F-46B4-AE73-079312029589/tmp/image_picker_CE716066-BD0A-468E-9A11-632DC15C259C-20976-000012A5051594EE.jpg'
+                        targetPostEntity!,
+                        '/Users/sungmin/Library/Developer/CoreSimulator/Devices/B9B7688C-62AC-4015-BE90-F172CADB897D/data/Containers/Data/Application/27D68663-AD15-43C0-A86E-96CD7DAD6FA7/tmp/image_picker_A58844E4-B105-40D4-9E1C-613227D83EF8-52365-000012CFE7410B08.jpg'
                       ),
                     );
                   },

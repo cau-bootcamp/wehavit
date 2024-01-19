@@ -558,13 +558,14 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }
 
   @override
-  EitherFuture<String> uploadPhotoFromLocalUrlToConfirmPost({
-    required String confirmPostId,
+  EitherFuture<String> uploadQuickShotFromLocalUrlToConfirmPost({
+    required ConfirmPostEntity entity,
     required String localPhotoUrl,
   }) async {
     try {
       String storagePath =
-          '$confirmPostId/_${FirebaseAuth.instance.currentUser!.uid}_${DateTime.now().toIso8601String()}';
+          FirebaseCollectionName.getConfirmPostQuickShotReactionStorageName(
+              entity.owner!, entity.id!);
       final ref = FirebaseStorage.instance.ref(storagePath);
 
       await ref.putFile(File(localPhotoUrl));
@@ -641,6 +642,32 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           const Failure('catch error on getUnreadReactions'),
         ),
       );
+    }
+  }
+
+  @override
+  EitherFuture<String> uploadConfirmPostImageFromLocalUrl(
+    String localFileUrl,
+  ) async {
+    try {
+      final getUidResult = (await getMyUserId()).fold(
+        (l) => null,
+        (uid) => uid,
+      );
+
+      if (getUidResult == null) {
+        return Future(() => left(const Failure('cannot get uid')));
+      }
+
+      String storagePath =
+          '$getUidResult/confirm_post/_${DateTime.now().toIso8601String()}';
+      final ref = FirebaseStorage.instance.ref(storagePath);
+
+      await ref.putFile(File(localFileUrl));
+
+      return Future(() async => right(await ref.getDownloadURL()));
+    } on Exception catch (e) {
+      return Future(() => left(Failure(e.toString())));
     }
   }
 }
