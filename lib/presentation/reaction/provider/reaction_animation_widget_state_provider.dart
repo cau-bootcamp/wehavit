@@ -1,12 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/utils/no_params.dart';
+import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
-
-final reactionAnimationWidgetManagerProvider =
-    StateNotifierProvider<ReactionAnimationWidgetManager, void>((ref) {
-  return ReactionAnimationWidgetManager(ref);
-});
 
 class ReactionAnimationWidgetManager extends StateNotifier<void> {
   ReactionAnimationWidgetManager(Ref ref) : super([]) {

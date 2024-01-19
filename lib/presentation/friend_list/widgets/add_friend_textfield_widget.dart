@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/presentation/friend_list/friend_list.dart';
+import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 
 class AddFriendTextFieldWidget extends ConsumerWidget {
   const AddFriendTextFieldWidget({super.key});

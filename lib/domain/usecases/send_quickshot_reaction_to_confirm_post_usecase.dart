@@ -1,22 +1,7 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/data/repositories/repositories.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
-
-final sendQuickShotReactionToConfirmPostUsecaseProvider =
-    Provider<SendQuickShotReactionToConfirmPostUsecase>((ref) {
-  final reactionRepository = ref.watch(reactionRepositoryProvider);
-  final userModelRepository = ref.watch(userModelRepositoryProvider);
-  final photoRepository = ref.watch(photoRepositoryProvider);
-
-  return SendQuickShotReactionToConfirmPostUsecase(
-    reactionRepository,
-    userModelRepository,
-    photoRepository,
-  );
-});
 
 class SendQuickShotReactionToConfirmPostUsecase
     extends FutureUseCase<void, (String, String)> {

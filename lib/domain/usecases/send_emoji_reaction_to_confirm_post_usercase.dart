@@ -1,20 +1,7 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/data/repositories/repositories.dart';
-import 'package:wehavit/data/repositories/repositories.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
-
-final sendEmojiReactionToConfirmPostUsecaseProvider =
-    Provider<SendEmojiReactionToConfirmPostUsecase>((ref) {
-  final reactionRepository = ref.watch(reactionRepositoryProvider);
-  final userModelRepository = ref.watch(userModelRepositoryProvider);
-  return SendEmojiReactionToConfirmPostUsecase(
-    reactionRepository,
-    userModelRepository,
-  );
-});
 
 class SendEmojiReactionToConfirmPostUsecase
     extends FutureUseCase<void, (String, Map<String, int>)> {

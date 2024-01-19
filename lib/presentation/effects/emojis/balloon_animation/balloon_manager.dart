@@ -2,13 +2,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final balloonManagerProvider =
-    StateNotifierProvider<BalloonManager, Map<Key, BalloonWidget>>(
-  (ref) {
-    return BalloonManager();
-  },
-);
-
 /// 화면 위에서 타원모양을 그리며 터트릴 수 있는 위젯을 그려줍니다.
 ///
 /// - radius 값을 수정하면 풍선의 크기를 조절할 수 있음

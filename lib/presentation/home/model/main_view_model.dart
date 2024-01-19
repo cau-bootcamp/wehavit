@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/effects/emojis/shoot_emoji_widget.dart';
 
 class MainViewModel {
