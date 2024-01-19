@@ -56,6 +56,7 @@ final registerFriendUsecaseProvider = Provider<RegisterFriendUsecase>((ref) {
 final uploadConfirmPostUseCaseProvider = Provider<UploadConfirmPostUseCase>(
   (ref) => UploadConfirmPostUseCase(
     ref.watch(confirmPostRepositoryProvider),
+    ref.watch(userModelRepositoryProvider),
   ),
 );
 

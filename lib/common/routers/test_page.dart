@@ -24,21 +24,15 @@ class TestPage extends ConsumerWidget {
           children: [
             MoveButton(
               onPressCallback: () async {
-                context.push(RouteLocation.myPage);
-              },
-              buttonText: 'Go to My Page',
-            ),
-            MoveButton(
-              onPressCallback: () async {
-                context.push(RouteLocation.addResolution);
-              },
-              buttonText: 'Go to Add Resolution Page',
-            ),
-            MoveButton(
-              onPressCallback: () async {
                 context.push(RouteLocation.home);
               },
               buttonText: 'Go to Main View',
+            ),
+            MoveButton(
+              onPressCallback: () async {
+                context.push(RouteLocation.myPage);
+              },
+              buttonText: 'Go to My Page',
             ),
             MoveButton(
               onPressCallback: () async {
@@ -48,9 +42,27 @@ class TestPage extends ConsumerWidget {
             ),
             MoveButton(
               onPressCallback: () async {
-                context.push(RouteLocation.profile);
+                context.push(RouteLocation.addResolution);
               },
-              buttonText: 'Go to Profile Page',
+              buttonText: 'Go to Add Resolution Page',
+            ),
+            MoveButton(
+              onPressCallback: () async {
+                context.push('/reactionSampleView');
+              },
+              buttonText: 'Reaction Sample View',
+            ),
+            MoveButton(
+              onPressCallback: () async {
+                context.push('/animationSampleView');
+              },
+              buttonText: 'Animation Sample View',
+            ),
+            MoveButton(
+              onPressCallback: () async {
+                context.push('/lateWritingView');
+              },
+              buttonText: 'Write Confirm Post View',
             ),
             MoveButton(
               onPressCallback: () async {
@@ -69,24 +81,6 @@ class TestPage extends ConsumerWidget {
                 context.push('/route/to/nowhere');
               },
               buttonText: 'Go to Error View',
-            ),
-            MoveButton(
-              onPressCallback: () async {
-                context.push('/reactionSampleView');
-              },
-              buttonText: 'Reaction Sample View',
-            ),
-            MoveButton(
-              onPressCallback: () async {
-                context.push('/animationSampleView');
-              },
-              buttonText: 'Animation Sample View',
-            ),
-            MoveButton(
-              onPressCallback: () async {
-                context.push('/lateWritingView');
-              },
-              buttonText: 'Late Writing View',
             ),
           ],
         ),
