@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/data/datasources/datasources.dart';
@@ -287,11 +288,25 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     String resolutionId,
   ) async {
     try {
+      final DateTime today = DateTime.now();
+
+      Timestamp startDate =
+          Timestamp.fromDate(DateTime(today.year, today.month, today.day));
+
+      Timestamp endDate = Timestamp.fromDate(
+          DateTime(today.year, today.month, today.day)
+              .add(const Duration(days: 1)));
+
       final fetchResult = await firestore
           .collection(FirebaseCollectionName.confirmPosts)
           .where(
             FirebaseConfirmPostFieldName.resolutionId,
             isEqualTo: resolutionId,
+          )
+          .where(
+            FirebaseConfirmPostFieldName.createdAt,
+            isGreaterThanOrEqualTo: startDate,
+            isLessThanOrEqualTo: endDate,
           )
           .get();
 
@@ -322,6 +337,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
         return Future(() => right(entity));
       }
     } on Exception catch (e) {
+      debugPrint(e.toString());
       return Future(() => left(Failure(e.toString())));
     }
   }

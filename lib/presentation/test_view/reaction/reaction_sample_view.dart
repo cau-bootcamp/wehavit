@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/common/utils/emoji_assets.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
@@ -90,10 +91,16 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
                 ),
                 ElevatedButton(
                   onPressed: () async {
+                    final reactionImage = await getPhotoLibraryImage();
+
+                    if (reactionImage == null) {
+                      return;
+                    }
+
                     sendQuickShotReactionToConfirmPostUsecase(
                       (
                         targetPostEntity!,
-                        '/Users/sungmin/Library/Developer/CoreSimulator/Devices/B9B7688C-62AC-4015-BE90-F172CADB897D/data/Containers/Data/Application/27D68663-AD15-43C0-A86E-96CD7DAD6FA7/tmp/image_picker_A58844E4-B105-40D4-9E1C-613227D83EF8-52365-000012CFE7410B08.jpg'
+                        reactionImage,
                       ),
                     );
                   },
@@ -123,6 +130,17 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
         ),
       ),
     );
+  }
+
+  Future<String?> getPhotoLibraryImage() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      return pickedFile.path;
+    } else {
+      debugPrint('이미지 선택안함');
+      return null;
+    }
   }
 
   Future<dynamic> emojiSheetWidget(BuildContext context) {

@@ -23,10 +23,6 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
       existingPost.fold(
         (l) {
           // create new post if not exist
-          confirmPostEntity = confirmPostEntity.copyWith(
-            owner: FirebaseAuth.instance.currentUser!.uid,
-          );
-
           _wehavitDatasource.uploadConfirmPost(confirmPostEntity);
         },
         (cf) {
