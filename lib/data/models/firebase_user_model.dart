@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:wehavit/domain/entities/user_data_entity/user_data_entity.dart';
+import 'package:wehavit/domain/entities/entities.dart';
 
 part 'firebase_user_model.g.dart';
 part 'firebase_user_model.freezed.dart';

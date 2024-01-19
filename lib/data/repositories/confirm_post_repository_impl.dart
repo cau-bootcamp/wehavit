@@ -1,17 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/data/datasources/datasources.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
-
-final confirmPostRepositoryProvider = Provider<ConfirmPostRepository>((ref) {
-  final WehavitDatasource wehavitDatasource =
-      ref.watch(wehavitDatasourceProvider);
-  return ConfirmPostRepositoryImpl(wehavitDatasource);
-});
 
 class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
   ConfirmPostRepositoryImpl(this._wehavitDatasource);

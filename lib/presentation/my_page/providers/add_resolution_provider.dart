@@ -1,13 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
+import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
-
-final addResolutionProvider =
-    StateNotifierProvider.autoDispose<AddResolutionNotifier, ResolutionEntity>(
-        (ref) {
-  return AddResolutionNotifier(ref);
-});
 
 class AddResolutionNotifier extends StateNotifier<ResolutionEntity> {
   AddResolutionNotifier(Ref ref) : super(const ResolutionEntity()) {

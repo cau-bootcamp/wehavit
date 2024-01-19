@@ -1,19 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
+import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
-
-final myPageResolutionListProvider = StateNotifierProvider<
-    MyPageResolutionListProvider,
-    Either<
-        Failure,
-        (
-          List<ResolutionEntity>,
-          List<Future<List<ConfirmPostEntity>>>
-        )>>((ref) {
-  return MyPageResolutionListProvider(ref);
-});
 
 class MyPageResolutionListProvider extends StateNotifier<
     Either<Failure,

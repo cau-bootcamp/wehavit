@@ -219,7 +219,7 @@ class _$ResolutionEntityImpl implements _ResolutionEntity {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ResolutionEntityImpl &&

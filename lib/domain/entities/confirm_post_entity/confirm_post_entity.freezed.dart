@@ -362,7 +362,7 @@ class _$ConfirmPostEntityImpl implements _ConfirmPostEntity {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ConfirmPostEntityImpl &&

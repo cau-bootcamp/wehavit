@@ -1,13 +1,6 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/data/datasources/datasources.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
-
-final photoRepositoryProvider = Provider<PhotoRepository>((ref) {
-  final WehavitDatasource wehavitDatasource =
-      ref.watch(wehavitDatasourceProvider);
-  return PhotoRepositoryImpl(wehavitDatasource);
-});
 
 class PhotoRepositoryImpl implements PhotoRepository {
   PhotoRepositoryImpl(this._wehavitDatasource);

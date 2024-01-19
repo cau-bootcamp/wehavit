@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/common/utils/emoji_assets.dart';
+import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/domain/usecases/usecases.dart';
 
 class ReactionSampleView extends ConsumerStatefulWidget {
   const ReactionSampleView({super.key});
@@ -93,7 +93,7 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
                     sendQuickShotReactionToConfirmPostUsecase(
                       (
                         targetPostEntity!.id!,
-                        '/Users/sungmin/Library/Developer/CoreSimulator/Devices/B9B7688C-62AC-4015-BE90-F172CADB897D/data/Containers/Data/Application/ED556332-753D-4846-BD51-D5580F2A643B/tmp/image_picker_3555CC98-DB81-4093-862B-D6A7565092C7-8442-00001181F2341243.jpg'
+                        '/Users/sungmin/Library/Developer/CoreSimulator/Devices/B9B7688C-62AC-4015-BE90-F172CADB897D/data/Containers/Data/Application/344574EB-D94F-46B4-AE73-079312029589/tmp/image_picker_CE716066-BD0A-468E-9A11-632DC15C259C-20976-000012A5051594EE.jpg'
                       ),
                     );
                   },

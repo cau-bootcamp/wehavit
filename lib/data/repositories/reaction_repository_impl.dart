@@ -1,14 +1,7 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/data/datasources/datasources.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
-
-final reactionRepositoryProvider = Provider<ReactionRepository>((ref) {
-  final WehavitDatasource wehavitDatasource =
-      ref.watch(wehavitDatasourceProvider);
-  return ReactionRepositoryImpl(wehavitDatasource);
-});
 
 class ReactionRepositoryImpl implements ReactionRepository {
   ReactionRepositoryImpl(this._wehavitDatasource);

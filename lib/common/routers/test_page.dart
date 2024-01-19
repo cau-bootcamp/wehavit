@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/presentation/auth/auth.dart';
+import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 
 class TestPage extends ConsumerWidget {
   const TestPage({super.key});

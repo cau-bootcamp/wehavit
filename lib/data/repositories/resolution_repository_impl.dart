@@ -1,16 +1,9 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/data/datasources/datasources.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
-
-final resolutionRepositoryProvider = Provider<ResolutionRepository>((ref) {
-  final WehavitDatasource wehavitDatasource =
-      ref.watch(wehavitDatasourceProvider);
-  return ResolutionRepositoryImpl(wehavitDatasource);
-});
 
 class ResolutionRepositoryImpl implements ResolutionRepository {
   ResolutionRepositoryImpl(this._wehavitDatasource);
