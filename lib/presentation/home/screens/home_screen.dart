@@ -391,9 +391,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   }
 
   void updatePanPosition(Point<double> position) {
-    setState(() {
-      panPosition = position;
-    });
+    // TODO: panPosition update로 현재 touch position을 보여줘야 함
+    // print(position);ㄷ
+    // setState(() {
+    //   panPosition = position;
+    // });
   }
 
   Future<void> endOnCapturingPosition(

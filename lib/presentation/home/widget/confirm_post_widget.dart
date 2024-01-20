@@ -543,11 +543,11 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
           });
         },
         onPanEnd: (details) async {
+          print("tap up");
           if (_reactionCameraWidgetModelProvider
               .isPosInCameraAreaOf(panningPosition)) {
-            widget.panEndCallback(panningPosition, confirmPostId ?? 'NO_id');
+            widget.panEndCallback(panningPosition, widget.entity);
           }
-
           _reactionCameraWidgetModelProvider.setFocusingModeTo(false);
         },
         onPanUpdate: (details) {
