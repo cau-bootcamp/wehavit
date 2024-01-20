@@ -24,6 +24,7 @@ class ResolutionRepositoryImpl implements ResolutionRepository {
         },
       );
     } on Exception catch (e) {
+      print(e.toString());
       return Future(() => left(Failure(e.toString())));
     }
   }
