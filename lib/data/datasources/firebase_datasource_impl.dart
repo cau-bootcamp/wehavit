@@ -123,12 +123,16 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
             isLessThanOrEqualTo: Timestamp.fromDate(endDate),
           )
           .where(
-            FirebaseConfirmPostFieldName.fan,
-            arrayContains: uid,
-          )
-          .where(
-            FirebaseConfirmPostFieldName.owner,
-            isEqualTo: uid,
+            Filter.or(
+              Filter(
+                FirebaseConfirmPostFieldName.fan,
+                arrayContains: uid,
+              ),
+              Filter(
+                FirebaseConfirmPostFieldName.owner,
+                isEqualTo: uid,
+              ),
+            ),
           )
           .get();
 
