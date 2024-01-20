@@ -7,6 +7,7 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wheel_chooser/wheel_chooser.dart';
 
 // 여기에 뷰가 적용되면 수정할 예정임.
 class AddResolutionScreen extends HookConsumerWidget {
@@ -15,7 +16,6 @@ class AddResolutionScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final resolutionProvider = ref.watch(addResolutionProvider);
-    final dayList = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
     // ignore: discarded_futures
     final friendListFuture = useMemoized(() => getFriendList(ref));
@@ -168,41 +168,28 @@ class AddResolutionScreen extends HookConsumerWidget {
                               ),
                             ),
                           ),
-                          Row(
-                            children: Iterable<int>.generate(7).map((idx) {
-                              return Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(2.0),
-                                  // child: ElevatedButton(
-                                  //   style: ElevatedButton.styleFrom(
-                                  //     padding: EdgeInsets.zero,
-                                  //     backgroundColor: resolutionProvider
-                                  //             .isDaySelectedList![idx]
-                                  //         ? CustomColors.whYellow
-                                  //         : CustomColors.whYellowBright,
-                                  //   ),
-                                  //   onPressed: () {
-                                  //     List<bool> newSelectedDayList =
-                                  //         resolutionProvider.isDaySelectedList!;
-                                  //     newSelectedDayList[idx] =
-                                  //         !newSelectedDayList[idx];
-
-                                  //     ref
-                                  //         .read(addResolutionProvider.notifier)
-                                  //         .changePeriodState(
-                                  //             newSelectedDayList);
-                                  //   },
-                                  //   child: Text(
-                                  //     dayList[idx],
-                                  //     style: TextStyle(
-                                  //       fontSize: 14.0,
-                                  //       color: CustomColors.whDarkBlack,
-                                  //     ),
-                                  //   ),
-                                  // ),
+                          Container(
+                            height: 100,
+                            child: WheelChooser.custom(
+                              horizontal: true,
+                              onValueChanged: (a) => ref
+                                  .read(addResolutionProvider.notifier)
+                                  .changeActionPerWeekState(a + 1),
+                              children: List<Widget>.generate(
+                                7,
+                                (index) => Container(
+                                  alignment: Alignment.center,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
+                                  ),
+                                  child: Text(
+                                    (index + 1).toString(),
+                                  ),
                                 ),
-                              );
-                            }).toList(),
+                              ),
+                            ),
                           ),
                         ],
                       ),
@@ -221,7 +208,7 @@ class AddResolutionScreen extends HookConsumerWidget {
                           ),
                         ),
                       ),
-                      // const SelectFans(),
+                      const SelectFans(),
                       const SizedBox(
                         height: 20.0,
                       ),
@@ -352,7 +339,7 @@ class SelectFans extends HookConsumerWidget {
         options: friendListSnapshot.data?.map((e) => e.userName!).toList() ??
             ['친구를 불러오는 중입니다.'],
         selectedValues:
-            resolutionState.fanList!.map((e) => e.userName!).toList(),
+            (resolutionState.fanList ?? []).map((e) => e.userName!).toList(),
         whenEmpty: '친구를 선택해주세요.',
         // 스타일링을 위한 코드
         selected_values_style: const TextStyle(
