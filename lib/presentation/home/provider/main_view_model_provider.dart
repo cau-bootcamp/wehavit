@@ -14,16 +14,24 @@ final mainViewModelProvider =
 class MainViewModelProvider extends StateNotifier<MainViewModel> {
   MainViewModelProvider(Ref ref) : super(MainViewModel()) {
     _fetchUserDataFromIdUsecase = ref.watch(fetchUserDataFromIdUsecaseProvider);
-    _sendReactionToTargetConfirmPostUsecase =
-        ref.watch(uploadReactionToTargetConfirmPostUsecaseProvider);
+    _sendCommentReactionToConfirmPostUsecase =
+        ref.watch(sendCommentReactionToConfirmPostUsecaseProvider);
+    _sendEmojiReactionToConfirmPostUsecase =
+        ref.watch(sendEmojiReactionToConfirmPostUsecaseProvider);
+    _sendQuickShotReactionToConfirmPostUsecase =
+        ref.watch(sendQuickShotReactionToConfirmPostUsecaseProvider);
 
     getConfirmPostListForResolutionIdUsecase =
         ref.watch(getConfirmPostListForResolutionIdUsecaseProvider);
   }
 
   late final FetchUserDataFromIdUsecase _fetchUserDataFromIdUsecase;
-  late final UploadReactionToTargetConfirmPostUsecase
-      _sendReactionToTargetConfirmPostUsecase;
+  late final SendCommentReactionToConfirmPostUsecase
+      _sendCommentReactionToConfirmPostUsecase;
+  late final SendEmojiReactionToConfirmPostUsecase
+      _sendEmojiReactionToConfirmPostUsecase;
+  late final SendQuickShotReactionToConfirmPostUsecase
+      _sendQuickShotReactionToConfirmPostUsecase;
   late final GetConfirmPostListForResolutionIdUsecase
       getConfirmPostListForResolutionIdUsecase;
   final currentUserUid = FirebaseAuth.instance.currentUser!.uid;
@@ -59,7 +67,7 @@ class MainViewModelProvider extends StateNotifier<MainViewModel> {
   }
 
   Future<UserDataEntity> getUserModelFromId(String targetUserId) async {
-    final fetchResult = await _fetchUserDataFromIdUsecase.call(targetUserId);
+    final fetchResult = await _fetchUserDataFromIdUsecase(targetUserId);
 
     UserDataEntity resultUserEntity = fetchResult.fold(
       (failure) {
@@ -71,16 +79,6 @@ class MainViewModelProvider extends StateNotifier<MainViewModel> {
     );
 
     return Future(() => resultUserEntity);
-  }
-
-  Future<void> sendReactionToTargetConfirmPost(
-    ReactionEntity reactionModel,
-    String confirmModleId,
-  ) async {
-    await _sendReactionToTargetConfirmPostUsecase
-        .call((confirmModleId, reactionModel));
-
-    return Future(() => null);
   }
 
   Future<bool> initializeCamera() async {
@@ -116,24 +114,16 @@ class MainViewModelProvider extends StateNotifier<MainViewModel> {
     startGrowingLayout();
   }
 
-  Future<void> sendEmojiReaction({required String confirmModleId}) async {
+  Future<void> sendEmojiReaction({required ConfirmPostEntity entity}) async {
     state.emojiWidgets.clear();
 
     if (state.sendingEmojis.any((element) => element > 0)) {
-      final Map<String, int> emojiMap = {};
-      state.sendingEmojis.asMap().forEach(
-            (index, value) => emojiMap.addAll(
-              {'t${index.toString().padLeft(2, '0')}': value},
-            ),
-          );
-
-      final reactionModel = ReactionEntity(
-        complimenterUid: currentUserUid,
-        reactionType: ReactionType.emoji.index,
-        emoji: emojiMap,
+      _sendEmojiReactionToConfirmPostUsecase(
+        (
+          entity,
+          state.sendingEmojis,
+        ),
       );
-
-      sendReactionToTargetConfirmPost(reactionModel, confirmModleId);
 
       state.sendingEmojis = List<int>.generate(15, (index) => 0);
     }
@@ -141,29 +131,19 @@ class MainViewModelProvider extends StateNotifier<MainViewModel> {
 
   Future<void> sendImageReaction({
     required String imageFilePath,
-    required String confirmModleId,
+    required ConfirmPostEntity entity,
   }) async {
-    final reactionModel = ReactionEntity(
-      complimenterUid: FirebaseAuth.instance.currentUser!.uid,
-      reactionType: ReactionType.quickShot.index,
-      quickShotUrl: imageFilePath,
-    );
-
-    sendReactionToTargetConfirmPost(reactionModel, confirmModleId);
+    _sendQuickShotReactionToConfirmPostUsecase((entity, imageFilePath));
   }
 
-  Future<void> sendTextReaction({required String confirmModleId}) async {
+  Future<void> sendTextReaction({required ConfirmPostEntity entity}) async {
     unfocusCommentTextForm();
 
-    final reactionModel = ReactionEntity(
-      complimenterUid: FirebaseAuth.instance.currentUser!.uid,
-      reactionType: ReactionType.comment.index,
-      comment: state.textEditingController.text,
-    );
-
-    sendReactionToTargetConfirmPost(
-      reactionModel,
-      confirmModleId,
+    _sendCommentReactionToConfirmPostUsecase(
+      (
+        entity,
+        state.textEditingController.text,
+      ),
     );
     state.textEditingController.clear();
   }

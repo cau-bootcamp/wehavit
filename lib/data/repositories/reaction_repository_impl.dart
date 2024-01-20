@@ -20,8 +20,8 @@ class ReactionRepositoryImpl implements ReactionRepository {
   }
 
   @override
-  EitherFuture<List<ReactionEntity>> getUnreadReactionList() async {
-    return _wehavitDatasource.getUnreadReactions();
+  EitherFuture<List<ReactionEntity>> getUnreadReactionListAndDelete() async {
+    return _wehavitDatasource.getUnreadReactionsAndDelete();
   }
 
   @override

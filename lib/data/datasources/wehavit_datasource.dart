@@ -31,7 +31,7 @@ abstract class WehavitDatasource {
     ReactionEntity reactionEntity,
   );
 
-  EitherFuture<List<ReactionEntity>> getUnreadReactions();
+  EitherFuture<List<ReactionEntity>> getUnreadReactionsAndDelete();
   EitherFuture<List<ReactionEntity>> getReactionsFromConfirmPost(
     ConfirmPostEntity entity,
   );

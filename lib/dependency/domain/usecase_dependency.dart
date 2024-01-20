@@ -42,12 +42,6 @@ final uploadResolutionUsecaseProvider =
   return UploadResolutionUseCase(resolutionRepository);
 });
 
-final uploadReactionToTargetConfirmPostUsecaseProvider =
-    Provider<UploadReactionToTargetConfirmPostUsecase>((ref) {
-  final reactionRepository = ref.watch(reactionRepositoryProvider);
-  return UploadReactionToTargetConfirmPostUsecase(reactionRepository);
-});
-
 final registerFriendUsecaseProvider = Provider<RegisterFriendUsecase>((ref) {
   final friendRepository = ref.watch(friendRepositoryProvider);
   return RegisterFriendUsecase(friendRepository);

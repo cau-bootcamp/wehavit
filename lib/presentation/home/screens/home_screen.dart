@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
+import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/effects/effects.dart';
 import 'package:wehavit/presentation/home/home.dart';
 import 'package:wehavit/presentation/reaction/widget/reaction_animation_widget.dart';
@@ -51,10 +52,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       if (_scrollController.hasClients) {
         _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
       }
-      ref.read(confirmPostListProvider.notifier).getConfirmPostList(
-            DateTime.now().add(Duration(days: maxIndex - selectedIndex)),
-          );
     });
+
     setState(() {
       selectedIndex = maxIndex;
     });
@@ -65,24 +64,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     super.didChangeDependencies();
 
     if (!_initOccurred) {
-      ref.read(confirmPostListProvider.notifier).getConfirmPostList(
-            DateTime.now().add(Duration(days: maxIndex - selectedIndex)),
-          );
+      // ref.read(confirmPostListProvider.notifier).getConfirmPostList(
+      //       DateTime.now().add(Duration(days: maxIndex - selectedIndex)),
+      //     );
 
       _mainViewModel = ref.watch(mainViewModelProvider);
       _mainViewModelProvider = ref.read(mainViewModelProvider.notifier);
 
-      _reactionCameraWidgetModel = ref.watch(reactionCameraWidgetModelProvider);
-      _reactionCameraWidgetModelProvider =
-          ref.read(reactionCameraWidgetModelProvider.notifier);
+      // _reactionCameraWidgetModel = ref.watch(reactionCameraWidgetModelProvider);
+      // _reactionCameraWidgetModelProvider =
+      //     ref.read(reactionCameraWidgetModelProvider.notifier);
 
-      await ref
-          .read(mainViewModelProvider.notifier)
-          .getTodayConfirmPostModelList();
+      // await ref
+      //     .read(mainViewModelProvider.notifier)
+      //     .getTodayConfirmPostModelList();
 
-      await _mainViewModelProvider.initializeCamera();
+      // await _mainViewModelProvider.initializeCamera();
 
-      setAnimationVariables();
+      // setAnimationVariables();
 
       setState(() {});
       _initOccurred = true;
@@ -224,7 +223,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                                 itemBuilder: (context, index) {
                                   return ConfirmPostWidget(
                                     key: UniqueKey(),
-                                    model: right[index],
+                                    entity: right[index],
                                     panUpdateCallback: updatePanPosition,
                                     panEndCallback: endOnCapturingPosition,
                                   );
@@ -314,7 +313,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                     minimumSize: const Size(47, 70),
                     maximumSize: const Size(47, 70),
                     padding: const EdgeInsets.symmetric(
-                      vertical: 12,
+                      vertical: 0,
                     ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
@@ -326,6 +325,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                     shadowColor: CustomColors.whDarkBlack,
                   ),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                         weekdayKR[dates[index].weekday - 1],
@@ -393,13 +393,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
   Future<void> endOnCapturingPosition(
     Point<double> position,
-    String confirmModleId,
+    ConfirmPostEntity entity,
   ) async {
     final imageFilePath = await _reactionCameraWidgetModelProvider.capture();
     // 반응 전송 로직 아래에 삽입
     _mainViewModelProvider.sendImageReaction(
       imageFilePath: imageFilePath,
-      confirmModleId: confirmModleId,
+      entity: entity,
     );
   }
 }

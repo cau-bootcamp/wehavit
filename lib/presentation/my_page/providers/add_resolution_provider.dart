@@ -32,15 +32,11 @@ class AddResolutionNotifier extends StateNotifier<ResolutionEntity> {
   }
 
   EitherFuture<bool> uploadResolutionEntity() {
-    ResolutionEntity newModel = ResolutionEntity(
-      goalStatement: state.goalStatement,
-      actionStatement: state.actionStatement,
-      isActive: true,
-      startDate: DateTime.now(),
-      fanList: state.fanList,
+    return _uploadResolutionUsecase(
+      goalStatement: state.goalStatement!,
+      actionStatement: state.actionStatement!,
+      fanList: state.fanList!,
       actionPerWeek: 3,
-      resolutionId: '',
     );
-    return _uploadResolutionUsecase(newModel);
   }
 }

@@ -628,7 +628,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }
 
   @override
-  EitherFuture<List<ReactionEntity>> getUnreadReactions() async {
+  EitherFuture<List<ReactionEntity>> getUnreadReactionsAndDelete() async {
     try {
       final fetchUid = (await getMyUserId()).fold((l) => null, (uid) => uid);
 

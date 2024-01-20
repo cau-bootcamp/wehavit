@@ -70,8 +70,8 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
                     emojiSheetWidget(context).whenComplete(() {
                       sendEmojiReactionToConfirmPostUsecase(
                         (
-                          targetPostEntity!.id!,
-                          <String, int>{'t0': 1},
+                          targetPostEntity!,
+                          [2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                         ),
                       );
                     });
@@ -82,7 +82,7 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
                   onPressed: () async {
                     sendCommentReactionToConfrimPostUsecase(
                       (
-                        targetPostEntity!.id!,
+                        targetPostEntity!,
                         '행복한 하루 보내세요!!',
                       ),
                     );
