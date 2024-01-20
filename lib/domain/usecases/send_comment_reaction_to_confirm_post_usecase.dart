@@ -4,7 +4,7 @@ import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
 
 class SendCommentReactionToConfirmPostUsecase
-    extends FutureUseCase<void, (String, String)> {
+    extends FutureUseCase<void, (ConfirmPostEntity, String)> {
   SendCommentReactionToConfirmPostUsecase(
     this._reactionRepository,
     this._userModelRepository,
@@ -13,7 +13,7 @@ class SendCommentReactionToConfirmPostUsecase
   final UserModelRepository _userModelRepository;
 
   @override
-  EitherFuture<bool> call((String, String) params) async {
+  EitherFuture<bool> call((ConfirmPostEntity, String) params) async {
     final uidFetchResult = await _userModelRepository.getMyUserId();
     final myUid = uidFetchResult.fold(
       (l) => null,
@@ -30,7 +30,7 @@ class SendCommentReactionToConfirmPostUsecase
     );
 
     return _reactionRepository.addReactionToConfirmPost(
-      params.$1,
+      params.$1.id!,
       reactionEntity,
     );
   }

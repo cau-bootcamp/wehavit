@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/data/datasources/datasources.dart';
@@ -103,108 +104,36 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           DateTime(startDate.year, startDate.month, startDate.day)
               .add(const Duration(days: 1));
 
-//      print('\n'
-//          'isGreaterThan: ${Timestamp.fromDate(startDate)}\n'
-//          'isLessThan: ${Timestamp.fromDate(endDate)}');
-      // 1. 결과 start 2 end date confirmpost
-      final firstQueryResult = await FirebaseFirestore.instance
+      final uid = (await getMyUserId()).fold(
+        (l) => null,
+        (uid) => uid,
+      );
+
+      if (uid == null) {
+        return Future(
+          () => left(const Failure('unable to get firebase user id')),
+        );
+      }
+
+      final fetchResult = await FirebaseFirestore.instance
           .collection(FirebaseCollectionName.confirmPosts)
-          // .where(
-          //   FirebaseConfirmPostFieldName.createdAt,
-          //   isGreaterThanOrEqualTo: Timestamp.fromDate(startDate),
-          // )
-          // .where(
-          //   FirebaseConfirmPostFieldName.createdAt,
-          //   isLessThan: Timestamp.fromDate(endDate),
-          // )
+          .where(
+            FirebaseConfirmPostFieldName.createdAt,
+            isGreaterThanOrEqualTo: Timestamp.fromDate(startDate),
+            isLessThanOrEqualTo: Timestamp.fromDate(endDate),
+          )
+          .where(
+            FirebaseConfirmPostFieldName.fan,
+            arrayContains: uid,
+          )
+          .where(
+            FirebaseConfirmPostFieldName.owner,
+            isEqualTo: uid,
+          )
           .get();
 
-      // TODO: 아래 코드 구현하기
-
-      // 두 번째 쿼리 결과: Fan
-//       QuerySnapshot secondQueryResult = await FirebaseFirestore.instance
-//           .collection(FirebaseCollectionName.confirmPosts)
-//           .where(
-//             FirebaseConfirmPostFieldName.fan,
-//             arrayContains: FirebaseAuth.instance.currentUser!.uid,
-//           )
-//           .get();
-
-//       // 세 번째 쿼리 결과
-//       var thirdQueryResult = await FirebaseFirestore.instance
-//           .collection(FirebaseCollectionName.confirmPosts)
-//           .where(
-//             FirebaseConfirmPostFieldName.owner,
-//             isEqualTo: FirebaseAuth.instance.currentUser!.uid,
-//           )
-//           .get();
-
-// // 첫 번째 쿼리 결과에서 문서 ID 추출
-//       Set<String> firstQueryDocIds =
-//           firstQueryResult.docs.map((doc) => doc.id).toSet();
-
-// // 두 번째 쿼리 결과에서 문서 ID 추출
-//       Set<String> secondQueryDocIds =
-//           secondQueryResult.docs.map((doc) => doc.id).toSet();
-
-// // 세 번째 쿼리 결과에서 문서 ID 추출
-//       Set<String> thirdQueryDocIds =
-//           thirdQueryResult.docs.map((doc) => doc.id).toSet();
-
-// // 첫 번째와 두 번째 교집합 찾기 : 내 친구의 해당 날짜 게시글
-//       Set<String> firstIntersection =
-//           firstQueryDocIds.intersection(secondQueryDocIds);
-
-//       // 첫 번째와 세 번째 교집합 찾기 : 내 해당 날짜 게시글
-//       Set<String> secondIntersection =
-//           firstQueryDocIds.intersection(thirdQueryDocIds);
-
-// // 최종 결과: 교집합에 해당하는 문서들
-//       List<QueryDocumentSnapshot> resultDocs = firstQueryResult.docs
-//           .where((doc) => firstIntersection.contains(doc.id))
-//           .toList();
-
-//       resultDocs.addAll(
-//         firstQueryResult.docs
-//             .where((doc) => secondIntersection.contains(doc.id))
-//             .toList(),
-//       );
-
-//       debugPrint(resultDocs.length.toString());
-
-      // final userDocsList = resultDocs
-      //     .map(
-      //       (doc) =>
-      //           (doc.data() as dynamic)[FirebaseConfirmPostFieldName.owner],
-      //     )
-      //     .toList();
-
-      // Map<String, (String, String)> userDataMap = {};
-      // for (var userDoc in userDocsList) {
-      //   if (userDataMap[userDoc] == null) {
-      //     final fetchUserResult = await FirebaseFirestore.instance
-      //         .collection(FirebaseCollectionName.users)
-      //         .doc(userDoc)
-      //         .get();
-      //     userDataMap[userDoc] = (
-      //       fetchUserResult.data()?[FirebaseUserFieldName.imageUrl],
-      //       fetchUserResult.data()?[FirebaseUserFieldName.displayName]
-      //     );
-      //   }
-      // }
-
-      // List<ConfirmPostEntity> confirmPosts = List.empty();
-
-      // List<ConfirmPostEntity> confirmPosts = resultDocs.map((doc) {
-      //   if (userDataMap doc.data()[FirebaseConfirmPostFieldName.owner])
-
-      //   return FirebaseConfirmPostModel.fromJson(userDataMap[
-      //           (doc.data() as dynamic)[FirebaseConfirmPostFieldName.owner]])
-      //       .toConfirmPostEntity();
-      // }).toList();
-
       List<ConfirmPostEntity> confirmPosts = await Future.wait(
-        firstQueryResult.docs.map(
+        fetchResult.docs.map(
           (doc) async {
             final confirmPostModel =
                 FirebaseConfirmPostModel.fromFireStoreDocument(doc);
@@ -230,10 +159,10 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       );
 
       return Future(() => right(confirmPosts));
-    } on Exception {
+    } on Exception catch (e) {
       return Future(
         () => left(
-          const Failure('catch error on getConfirmPostEntityList'),
+          Failure('catch error on getConfirmPostEntityList - $e'),
         ),
       );
     }
@@ -287,11 +216,25 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     String resolutionId,
   ) async {
     try {
+      final DateTime today = DateTime.now();
+
+      Timestamp startDate =
+          Timestamp.fromDate(DateTime(today.year, today.month, today.day));
+
+      Timestamp endDate = Timestamp.fromDate(
+          DateTime(today.year, today.month, today.day)
+              .add(const Duration(days: 1)));
+
       final fetchResult = await firestore
           .collection(FirebaseCollectionName.confirmPosts)
           .where(
             FirebaseConfirmPostFieldName.resolutionId,
             isEqualTo: resolutionId,
+          )
+          .where(
+            FirebaseConfirmPostFieldName.createdAt,
+            isGreaterThanOrEqualTo: startDate,
+            isLessThanOrEqualTo: endDate,
           )
           .get();
 
@@ -322,6 +265,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
         return Future(() => right(entity));
       }
     } on Exception catch (e) {
+      debugPrint(e.toString());
       return Future(() => left(Failure(e.toString())));
     }
   }
@@ -464,7 +408,8 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           .add(resolutionModel.toJson());
 
       return Future(() => right(true));
-    } on Exception {
+    } on Exception catch (e) {
+      debugPrint(e.toString());
       return Future(
         () => left(const Failure('catch error on uploadResolutionEntity')),
       );
@@ -558,13 +503,14 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }
 
   @override
-  EitherFuture<String> uploadPhotoFromLocalUrlToConfirmPost({
-    required String confirmPostId,
+  EitherFuture<String> uploadQuickShotFromLocalUrlToConfirmPost({
+    required ConfirmPostEntity entity,
     required String localPhotoUrl,
   }) async {
     try {
       String storagePath =
-          '$confirmPostId/_${FirebaseAuth.instance.currentUser!.uid}_${DateTime.now().toIso8601String()}';
+          FirebaseCollectionName.getConfirmPostQuickShotReactionStorageName(
+              entity.owner!, entity.id!);
       final ref = FirebaseStorage.instance.ref(storagePath);
 
       await ref.putFile(File(localPhotoUrl));
@@ -608,7 +554,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }
 
   @override
-  EitherFuture<List<ReactionEntity>> getUnreadReactions() async {
+  EitherFuture<List<ReactionEntity>> getUnreadReactionsAndDelete() async {
     try {
       final fetchUid = (await getMyUserId()).fold((l) => null, (uid) => uid);
 
@@ -641,6 +587,32 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           const Failure('catch error on getUnreadReactions'),
         ),
       );
+    }
+  }
+
+  @override
+  EitherFuture<String> uploadConfirmPostImageFromLocalUrl(
+    String localFileUrl,
+  ) async {
+    try {
+      final getUidResult = (await getMyUserId()).fold(
+        (l) => null,
+        (uid) => uid,
+      );
+
+      if (getUidResult == null) {
+        return Future(() => left(const Failure('cannot get uid')));
+      }
+
+      String storagePath =
+          '$getUidResult/confirm_post/_${DateTime.now().toIso8601String()}';
+      final ref = FirebaseStorage.instance.ref(storagePath);
+
+      await ref.putFile(File(localFileUrl));
+
+      return Future(() async => right(await ref.getDownloadURL()));
+    } on Exception catch (e) {
+      return Future(() => left(Failure(e.toString())));
     }
   }
 }

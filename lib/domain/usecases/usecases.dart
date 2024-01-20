@@ -16,5 +16,4 @@ export 'send_emoji_reaction_to_confirm_post_usercase.dart';
 export 'send_quickshot_reaction_to_confirm_post_usecase.dart';
 export 'upload_confirm_post_usecase.dart';
 export 'upload_friend_usecase.dart';
-export 'upload_reaction_to_target_confirm_post.dart';
 export 'upload_resolution_usecase.dart';

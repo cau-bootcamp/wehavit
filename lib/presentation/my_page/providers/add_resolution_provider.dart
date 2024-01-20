@@ -15,8 +15,8 @@ class AddResolutionNotifier extends StateNotifier<ResolutionEntity> {
     state = state.copyWith(fanList: newFanList);
   }
 
-  void changePeriodState(List<bool> isDaySelectedList) {
-    // state = state.copyWith(isDaySelectedList: isDaySelectedList);
+  void changeActionPerWeekState(int newActionPerWeek) {
+    state = state.copyWith(actionPerWeek: newActionPerWeek);
   }
 
   void changeGoalStatement(String newStatement) {
@@ -32,15 +32,11 @@ class AddResolutionNotifier extends StateNotifier<ResolutionEntity> {
   }
 
   EitherFuture<bool> uploadResolutionEntity() {
-    ResolutionEntity newModel = ResolutionEntity(
-      goalStatement: state.goalStatement,
-      actionStatement: state.actionStatement,
-      isActive: true,
-      startDate: DateTime.now(),
-      fanList: state.fanList,
-      actionPerWeek: 3,
-      resolutionId: '',
+    return _uploadResolutionUsecase(
+      goalStatement: state.goalStatement!,
+      actionStatement: state.actionStatement!,
+      fanList: state.fanList!,
+      actionPerWeek: state.actionPerWeek!,
     );
-    return _uploadResolutionUsecase(newModel);
   }
 }

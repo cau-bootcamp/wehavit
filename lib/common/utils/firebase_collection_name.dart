@@ -36,6 +36,17 @@ class FirebaseCollectionName {
     return 'users/$userId/received_reactions';
   }
 
+  static String getConfirmPostImageStorageName(String uid) {
+    return '$uid/confirm_post/_${DateTime.now().toIso8601String()}';
+  }
+
+  static String getConfirmPostQuickShotReactionStorageName(
+    String postOwnerUid,
+    String confirmPostId,
+  ) {
+    return '$postOwnerUid/confirm_post/$confirmPostId/_${FirebaseAuth.instance.currentUser!.uid}_${DateTime.now().toIso8601String()}';
+  }
+
   static final confirmPosts = FirebaseAuth.instance.currentUser != null
       ? 'confirm_posts'
       : 'invalid_address';

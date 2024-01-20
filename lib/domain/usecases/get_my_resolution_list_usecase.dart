@@ -16,18 +16,18 @@ class GetMyResolutionListByUserIdUsecase
   @override
   EitherFuture<List<ResolutionEntity>> call(NoParams params) async {
     final fetchResult = (await _userModelRepository.getMyUserId()).fold(
-      (l) => '',
+      (l) => null,
       (uid) => uid,
     );
 
-    if (fetchResult.isNotEmpty) {
-      return _resolutionRepository.getActiveResolutionEntityList(fetchResult);
-    } else {
+    if (fetchResult == null) {
       return Future(
         () => left(
           const Failure('catch error on GetResolutionListByUserIdUsecase'),
         ),
       );
     }
+
+    return _resolutionRepository.getActiveResolutionEntityList(fetchResult);
   }
 }

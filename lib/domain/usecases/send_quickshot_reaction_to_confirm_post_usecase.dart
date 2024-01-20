@@ -4,7 +4,7 @@ import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
 
 class SendQuickShotReactionToConfirmPostUsecase
-    extends FutureUseCase<void, (String, String)> {
+    extends FutureUseCase<void, (ConfirmPostEntity, String)> {
   SendQuickShotReactionToConfirmPostUsecase(
     this._reactionRepository,
     this._userModelRepository,
@@ -15,7 +15,7 @@ class SendQuickShotReactionToConfirmPostUsecase
   final PhotoRepository _photoRepository;
 
   @override
-  EitherFuture<bool> call((String, String) params) async {
+  EitherFuture<bool> call((ConfirmPostEntity, String) params) async {
     final uidFetchResult = await _userModelRepository.getMyUserId();
     final myUid = uidFetchResult.fold(
       (l) => null,
@@ -29,7 +29,7 @@ class SendQuickShotReactionToConfirmPostUsecase
     final imageUploadResult =
         await _photoRepository.uploadPhotoForConfirmPostAndGetDownloadUrl(
       localPhotoUrl: params.$2,
-      confirmPostId: params.$1,
+      entity: params.$1,
     );
 
     final uploadedImageUrl = imageUploadResult.fold(
@@ -49,7 +49,7 @@ class SendQuickShotReactionToConfirmPostUsecase
     );
 
     return _reactionRepository.addReactionToConfirmPost(
-      params.$1,
+      params.$1.id!,
       reactionEntity,
     );
   }

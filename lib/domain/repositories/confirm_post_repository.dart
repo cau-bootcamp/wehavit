@@ -17,4 +17,6 @@ abstract class ConfirmPostRepository {
   EitherFuture<bool> deleteConfirmPost(
     ConfirmPostEntity confirmPost,
   );
+
+  EitherFuture<String> uploadConfirmPostImage({required String localFileUrl});
 }

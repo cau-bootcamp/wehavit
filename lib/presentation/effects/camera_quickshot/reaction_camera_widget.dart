@@ -29,8 +29,8 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
   Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
 
-    // _reactionCameraWidgetModelProvider
-    //     .updateCameraControllerWith(widget.cameraController);
+    _reactionCameraWidgetModelProvider
+        .updateCameraControllerWith(widget.cameraController);
 
     setState(() {});
   }

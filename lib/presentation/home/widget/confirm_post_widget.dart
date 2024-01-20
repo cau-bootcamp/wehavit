@@ -12,12 +12,12 @@ import 'package:wehavit/presentation/my_page/widgets/resolution_linear_gauge_gra
 class ConfirmPostWidget extends ConsumerStatefulWidget {
   const ConfirmPostWidget({
     super.key,
-    required this.model,
+    required this.entity,
     required this.panUpdateCallback,
     required this.panEndCallback,
   });
 
-  final ConfirmPostEntity model;
+  final ConfirmPostEntity entity;
   final Function panUpdateCallback;
   final Function panEndCallback;
 
@@ -29,14 +29,14 @@ class ConfirmPostWidget extends ConsumerStatefulWidget {
 
 class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
     with SingleTickerProviderStateMixin {
-  late String? confirmPostId = widget.model.id;
-  late String? userName = widget.model.userName;
-  late String? userImageUrl = widget.model.userImageUrl;
-  late String? resolutionGoalStatement = widget.model.resolutionGoalStatement;
-  late String? title = widget.model.title;
-  late String? content = widget.model.content;
-  late String? contentImageUrl = widget.model.imageUrl;
-  late DateTime? postAt = widget.model.createdAt;
+  late String? confirmPostId = widget.entity.id;
+  late String? userName = widget.entity.userName;
+  late String? userImageUrl = widget.entity.userImageUrl;
+  late String? resolutionGoalStatement = widget.entity.resolutionGoalStatement;
+  late String? title = widget.entity.title;
+  late String? content = widget.entity.content;
+  late String? contentImageUrl = widget.entity.imageUrl;
+  late DateTime? postAt = widget.entity.createdAt;
   late final MainViewModel _mainViewModel;
   late final MainViewModelProvider _mainViewModelProvider;
 
@@ -78,7 +78,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
 
       setAnimationVariables();
       confirmPostList = await _mainViewModelProvider.getConfirmPostListFor(
-          resolutionId: widget.model.resolutionId!);
+          resolutionId: widget.entity.resolutionId!);
 
       setState(() {});
       _initOccurred = true;
@@ -225,7 +225,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                       if (_isTextFieldActive == true &&
                           _mainViewModel.textEditingController.text != '') {
                         await _mainViewModelProvider.sendTextReaction(
-                          confirmModleId: confirmPostId ?? 'NO_id',
+                          entity: widget.entity,
                         );
                       }
                       setState(() {
@@ -243,7 +243,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                     onTapUp: (details) async =>
                         emojiSheetWidget(context).whenComplete(() async {
                       _mainViewModelProvider.sendEmojiReaction(
-                        confirmModleId: confirmPostId ?? 'NO_id',
+                        entity: widget.entity,
                       );
                       _mainViewModel.countSend = 0;
                     }),
@@ -316,7 +316,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                     IconButton(
                       onPressed: () async {
                         _mainViewModelProvider.sendTextReaction(
-                          confirmModleId: confirmPostId ?? 'NO_id',
+                          entity: widget.entity,
                         );
                       },
                       icon: const Icon(
@@ -543,11 +543,11 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
           });
         },
         onPanEnd: (details) async {
+
           if (_reactionCameraWidgetModelProvider
               .isPosInCameraAreaOf(panningPosition)) {
-            widget.panEndCallback(panningPosition, confirmPostId ?? 'NO_id');
+            widget.panEndCallback(panningPosition, widget.entity);
           }
-
           _reactionCameraWidgetModelProvider.setFocusingModeTo(false);
         },
         onPanUpdate: (details) {

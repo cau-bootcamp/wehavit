@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/widgets.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
@@ -23,10 +24,6 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
       existingPost.fold(
         (l) {
           // create new post if not exist
-          confirmPostEntity = confirmPostEntity.copyWith(
-            owner: FirebaseAuth.instance.currentUser!.uid,
-          );
-
           _wehavitDatasource.uploadConfirmPost(confirmPostEntity);
         },
         (cf) {
@@ -108,7 +105,17 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
       );
       return getResult;
     } on Exception catch (e) {
+      debugPrint(e.toString());
       return Future(() => left(Failure(e.toString())));
     }
+  }
+
+  @override
+  EitherFuture<String> uploadConfirmPostImage({
+    required String localFileUrl,
+  }) async {
+    final uploadResult = await _wehavitDatasource
+        .uploadConfirmPostImageFromLocalUrl(localFileUrl);
+    return uploadResult;
   }
 }

@@ -14,6 +14,6 @@ class GetUnreadReactionListUsecase
 
   @override
   EitherFuture<List<ReactionEntity>> call(NoParams params) {
-    return _reactionRepository.getUnreadReactionList();
+    return _reactionRepository.getUnreadReactionListAndDelete();
   }
 }

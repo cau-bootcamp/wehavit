@@ -16,4 +16,8 @@ class ConfirmPostListProvider
   Future<void> getConfirmPostList(DateTime selectedDate) async {
     state = await getConfirmPostListUsecase(selectedDate);
   }
+
+  void eraseCurrentPostList() {
+    state = const Right([]);
+  }
 }

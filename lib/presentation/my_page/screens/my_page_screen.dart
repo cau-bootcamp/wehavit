@@ -130,8 +130,7 @@ class MyResolutionListWidget extends StatelessWidget {
         (left) => null,
         (right) => Expanded(
           child: ListView.builder(
-            itemCount:
-                right.$1.length < 3 ? right.$1.length + 1 : right.$1.length,
+            itemCount: right.$1.length + 1,
             itemBuilder: (context, index) {
               if (index < right.$1.length) {
                 return Padding(

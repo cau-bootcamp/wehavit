@@ -1,5 +1,6 @@
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/data/datasources/datasources.dart';
+import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
 
 class PhotoRepositoryImpl implements PhotoRepository {
@@ -10,12 +11,12 @@ class PhotoRepositoryImpl implements PhotoRepository {
   @override
   EitherFuture<String> uploadPhotoForConfirmPostAndGetDownloadUrl({
     required String localPhotoUrl,
-    required String confirmPostId,
+    required ConfirmPostEntity entity,
   }) {
     final uploadResult =
-        _wehavitDatasource.uploadPhotoFromLocalUrlToConfirmPost(
+        _wehavitDatasource.uploadQuickShotFromLocalUrlToConfirmPost(
       localPhotoUrl: localPhotoUrl,
-      confirmPostId: confirmPostId,
+      entity: entity,
     );
     return uploadResult;
   }
