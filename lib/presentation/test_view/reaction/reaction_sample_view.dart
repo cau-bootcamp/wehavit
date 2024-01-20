@@ -112,6 +112,7 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
               onPressed: () async {
                 final reactionList =
                     await getUnreadReactionListUsecase(NoParams());
+                print("DEBUG");
                 print(reactionList);
               },
               child: Text('receive reactions'),
@@ -122,6 +123,7 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
                     await getUnreadReactionListFromConfirmPostUsecase(
                   targetPostEntity!,
                 );
+                print("DEBUG");
                 print(reactionList);
               },
               child: Text('receive reactions from confirmpost'),

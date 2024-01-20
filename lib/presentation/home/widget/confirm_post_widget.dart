@@ -543,7 +543,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
           });
         },
         onPanEnd: (details) async {
-          print("tap up");
+
           if (_reactionCameraWidgetModelProvider
               .isPosInCameraAreaOf(panningPosition)) {
             widget.panEndCallback(panningPosition, widget.entity);

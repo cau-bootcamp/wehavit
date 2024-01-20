@@ -403,15 +403,13 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
 
       resolutionModel = resolutionModel.copyWith(fanUserIdList: fanList);
 
-      print(resolutionModel);
-
       await firestore
           .collection(FirebaseCollectionName.myResolutions)
           .add(resolutionModel.toJson());
 
       return Future(() => right(true));
     } on Exception catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
       return Future(
         () => left(const Failure('catch error on uploadResolutionEntity')),
       );

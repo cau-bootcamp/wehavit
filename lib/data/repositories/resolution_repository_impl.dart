@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
@@ -24,7 +25,7 @@ class ResolutionRepositoryImpl implements ResolutionRepository {
         },
       );
     } on Exception catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
       return Future(() => left(Failure(e.toString())));
     }
   }

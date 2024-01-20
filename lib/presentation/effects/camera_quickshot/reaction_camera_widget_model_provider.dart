@@ -61,8 +61,6 @@ class ReactionCameraWidgetModelProvider
   }
 
   Future<String> capture() async {
-    print('capture');
-
     var renderObject =
         state.repaintBoundaryGlobalKey.currentContext?.findRenderObject();
     if (renderObject is RenderRepaintBoundary) {
@@ -76,8 +74,6 @@ class ReactionCameraWidgetModelProvider
       File imgFile =
           File('$directory/screenshot${DateTime.now().toString()}.png');
       imgFile.writeAsBytes(pngBytes);
-
-      print(imgFile.path);
 
       return imgFile.path;
     } else {

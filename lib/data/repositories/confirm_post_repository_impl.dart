@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/widgets.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
@@ -104,7 +105,7 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
       );
       return getResult;
     } on Exception catch (e) {
-      print(e);
+      debugPrint(e.toString());
       return Future(() => left(Failure(e.toString())));
     }
   }
