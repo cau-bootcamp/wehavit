@@ -104,6 +104,7 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
       );
       return getResult;
     } on Exception catch (e) {
+      print(e);
       return Future(() => left(Failure(e.toString())));
     }
   }

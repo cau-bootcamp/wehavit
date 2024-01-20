@@ -64,24 +64,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     super.didChangeDependencies();
 
     if (!_initOccurred) {
-      // ref.read(confirmPostListProvider.notifier).getConfirmPostList(
-      //       DateTime.now().add(Duration(days: maxIndex - selectedIndex)),
-      //     );
+      ref.read(confirmPostListProvider.notifier).getConfirmPostList(
+            DateTime.now().subtract(Duration(days: maxIndex - selectedIndex)),
+          );
 
       _mainViewModel = ref.watch(mainViewModelProvider);
       _mainViewModelProvider = ref.read(mainViewModelProvider.notifier);
 
-      // _reactionCameraWidgetModel = ref.watch(reactionCameraWidgetModelProvider);
-      // _reactionCameraWidgetModelProvider =
-      //     ref.read(reactionCameraWidgetModelProvider.notifier);
+      _reactionCameraWidgetModel = ref.watch(reactionCameraWidgetModelProvider);
+      _reactionCameraWidgetModelProvider =
+          ref.read(reactionCameraWidgetModelProvider.notifier);
 
-      // await ref
-      //     .read(mainViewModelProvider.notifier)
-      //     .getTodayConfirmPostModelList();
+      await ref
+          .read(mainViewModelProvider.notifier)
+          .getTodayConfirmPostModelList();
 
-      // await _mainViewModelProvider.initializeCamera();
+      await _mainViewModelProvider.initializeCamera();
 
-      // setAnimationVariables();
+      setAnimationVariables();
 
       setState(() {});
       _initOccurred = true;
@@ -188,78 +188,79 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                     child: Column(
                       children: [
                         confirmPostList.fold(
-                            (left) => const Expanded(
-                                  child: Center(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          '데이터를 가져오는데에 실패했어요',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                            color: CustomColors.whWhite,
-                                          ),
-                                        ),
-                                        Text(
-                                          '🤖',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 40,
-                                            fontWeight: FontWeight.bold,
-                                            color: CustomColors.whWhite,
-                                          ),
-                                        ),
-                                      ],
+                          (left) => const Expanded(
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    '데이터를 가져오는데에 실패했어요',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: CustomColors.whWhite,
                                     ),
                                   ),
-                                ), (right) {
-                          if (right.isNotEmpty) {
-                            return Expanded(
-                              child: ListView.builder(
-                                itemCount: right.length,
-                                itemBuilder: (context, index) {
-                                  return ConfirmPostWidget(
-                                    key: UniqueKey(),
-                                    entity: right[index],
-                                    panUpdateCallback: updatePanPosition,
-                                    panEndCallback: endOnCapturingPosition,
-                                  );
-                                },
+                                  Text(
+                                    '🤖',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 40,
+                                      fontWeight: FontWeight.bold,
+                                      color: CustomColors.whWhite,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            );
-                          } else {
-                            return const Expanded(
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      '아무도 인증글을 남기지 않은\n조용한 날이네요',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: CustomColors.whWhite,
-                                      ),
-                                    ),
-                                    Text(
-                                      '🤫',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 40,
-                                        fontWeight: FontWeight.bold,
-                                        color: CustomColors.whWhite,
-                                      ),
-                                    ),
-                                  ],
+                            ),
+                          ),
+                          (right) {
+                            if (right.isNotEmpty) {
+                              return Expanded(
+                                child: ListView.builder(
+                                  itemCount: right.length,
+                                  itemBuilder: (context, index) {
+                                    return ConfirmPostWidget(
+                                      key: UniqueKey(),
+                                      entity: right[index],
+                                      panUpdateCallback: updatePanPosition,
+                                      panEndCallback: endOnCapturingPosition,
+                                    );
+                                  },
                                 ),
-                              ),
-                            );
-                          }
-                        }),
+                              );
+                            } else {
+                              return const Expanded(
+                                child: Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        '아무도 인증글을 남기지 않은\n조용한 날이네요',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: CustomColors.whWhite,
+                                        ),
+                                      ),
+                                      Text(
+                                        '🤫',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 40,
+                                          fontWeight: FontWeight.bold,
+                                          color: CustomColors.whWhite,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                        ),
                       ],
                     ),
                   ),
@@ -299,14 +300,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                   onPressed: () async {
                     // 버튼을 누르면 selectedIndex 가 변경되고, provider를 통해 해당
                     // 날짜의 데이터를 불러온다.
+                    // ref
+                    //     .read(confirmPostListProvider.notifier)
+                    //     .eraseCurrentPostList();
                     setState(() {
                       selectedIndex = index; // 상태 변경
                     });
                     await ref
                         .read(confirmPostListProvider.notifier)
                         .getConfirmPostList(
-                          DateTime.now()
-                              .add(Duration(days: maxIndex - selectedIndex)),
+                          DateTime.now().subtract(
+                            Duration(days: maxIndex - selectedIndex),
+                          ),
                         );
                   },
                   style: ElevatedButton.styleFrom(

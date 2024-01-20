@@ -14,6 +14,7 @@ final mainViewModelProvider =
 class MainViewModelProvider extends StateNotifier<MainViewModel> {
   MainViewModelProvider(Ref ref) : super(MainViewModel()) {
     _fetchUserDataFromIdUsecase = ref.watch(fetchUserDataFromIdUsecaseProvider);
+
     _sendCommentReactionToConfirmPostUsecase =
         ref.watch(sendCommentReactionToConfirmPostUsecaseProvider);
     _sendEmojiReactionToConfirmPostUsecase =
@@ -37,36 +38,37 @@ class MainViewModelProvider extends StateNotifier<MainViewModel> {
   final currentUserUid = FirebaseAuth.instance.currentUser!.uid;
 
   Future<void> getTodayConfirmPostModelList() async {
-    // TODO: 오늘의 Confirm Post Entity List를 불러오기
     // state.confirmPostModelList =
-    //     await _getTodayConfirmPostListUsecase.call(NoParams());
+    //     await _getTodayConfirmPostListUsecase(NoParams());
 
-    state.confirmPostModelList.fold((failure) {
-      state.userModelList = [];
-    }, (confirmPostModelList) {
-      state.userModelList = List<Future<UserDataEntity>>.generate(
-        confirmPostModelList.length,
-        (_) => Future(() => UserDataEntity.dummyModel),
-      );
-      state.confirmPostList = List<Future<List<ConfirmPostEntity>>>.generate(
-        confirmPostModelList.length,
-        (_) => Future(() => []),
-      );
+    state.confirmPostModelList.fold(
+      (failure) {
+        state.userModelList = [];
+      },
+      (confirmPostEntityList) {
+        state.userModelList = List<Future<UserDataEntity>>.generate(
+          confirmPostEntityList.length,
+          (_) => Future(() => UserDataEntity.dummyModel),
+        );
+        state.confirmPostList = List<Future<List<ConfirmPostEntity>>>.generate(
+          confirmPostEntityList.length,
+          (_) => Future(() => []),
+        );
 
-      for (int index = 0; index < confirmPostModelList.length; index++) {
-        final model = confirmPostModelList[index];
-        state.userModelList[index] = getUserModelFromId(model.owner!);
-        state.confirmPostList[index] =
-            getConfirmPostListFor(resolutionId: model.resolutionId ?? 'NO_ID');
-      }
+        for (int index = 0; index < confirmPostEntityList.length; index++) {
+          final postEntity = confirmPostEntityList[index];
+          state.userModelList[index] = getUserEntityFromId(postEntity.owner!);
+          state.confirmPostList[index] = getConfirmPostListFor(
+            resolutionId: postEntity.resolutionId!,
+          );
+        }
 
-      state.currentCellIndex = 0;
-    });
-
-    return Future(() => null);
+        state.currentCellIndex = 0;
+      },
+    );
   }
 
-  Future<UserDataEntity> getUserModelFromId(String targetUserId) async {
+  Future<UserDataEntity> getUserEntityFromId(String targetUserId) async {
     final fetchResult = await _fetchUserDataFromIdUsecase(targetUserId);
 
     UserDataEntity resultUserEntity = fetchResult.fold(
