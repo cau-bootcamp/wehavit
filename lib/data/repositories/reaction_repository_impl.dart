@@ -10,11 +10,11 @@ class ReactionRepositoryImpl implements ReactionRepository {
 
   @override
   EitherFuture<bool> addReactionToConfirmPost(
-    String targetConfirmPostId,
+    ConfirmPostEntity targetEntity,
     ReactionEntity reactionEntity,
   ) {
     return _wehavitDatasource.sendReactionToTargetConfirmPost(
-      targetConfirmPostId,
+      targetEntity,
       reactionEntity,
     );
   }

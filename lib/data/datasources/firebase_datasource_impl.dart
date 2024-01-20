@@ -311,7 +311,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
 
   @override
   EitherFuture<bool> sendReactionToTargetConfirmPost(
-    String targetConfirmPostId,
+    ConfirmPostEntity targetEntity,
     ReactionEntity reactionEntity,
   ) async {
     try {
@@ -320,7 +320,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       await firestore
           .collection(
             FirebaseCollectionName.getConfirmPostReactionCollectionName(
-              targetConfirmPostId,
+              targetEntity.id!,
             ),
           )
           .add(reactionModel.toJson());
@@ -328,7 +328,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       await firestore
           .collection(
             FirebaseCollectionName.getUserReactionBoxCollectionName(
-              reactionEntity.complimenterUid,
+              targetEntity.owner!,
             ),
           )
           .add(reactionModel.toJson());
@@ -560,7 +560,10 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   @override
   EitherFuture<List<ReactionEntity>> getUnreadReactionsAndDelete() async {
     try {
-      final fetchUid = (await getMyUserId()).fold((l) => null, (uid) => uid);
+      final fetchUid = (await getMyUserId()).fold(
+        (l) => null,
+        (uid) => uid,
+      );
 
       if (fetchUid == null) {
         return Future(

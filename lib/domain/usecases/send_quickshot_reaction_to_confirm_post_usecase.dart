@@ -49,7 +49,7 @@ class SendQuickShotReactionToConfirmPostUsecase
     );
 
     return _reactionRepository.addReactionToConfirmPost(
-      params.$1.id!,
+      params.$1,
       reactionEntity,
     );
   }

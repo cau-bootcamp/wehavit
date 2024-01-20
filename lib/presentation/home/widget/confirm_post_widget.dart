@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/common/utils/emoji_assets.dart';
@@ -78,9 +79,9 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
 
       setAnimationVariables();
       confirmPostList = await _mainViewModelProvider.getConfirmPostListFor(
-          resolutionId: widget.entity.resolutionId!);
+        resolutionId: widget.entity.resolutionId!,
+      );
 
-      setState(() {});
       _initOccurred = true;
     }
   }
@@ -543,7 +544,6 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
           });
         },
         onPanEnd: (details) async {
-
           if (_reactionCameraWidgetModelProvider
               .isPosInCameraAreaOf(panningPosition)) {
             widget.panEndCallback(panningPosition, widget.entity);
