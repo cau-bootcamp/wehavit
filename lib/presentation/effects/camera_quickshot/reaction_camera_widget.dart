@@ -108,8 +108,10 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
             ),
           ),
           Positioned(
-            left: widget.panPosition.x,
-            top: widget.panPosition.y,
+            left: widget.panPosition.x -
+                _reactionCameraWidgetModel.cameraButtonRadius,
+            top: widget.panPosition.y -
+                _reactionCameraWidgetModel.cameraButtonRadius,
             child: Container(
               width: _reactionCameraWidgetModel.cameraButtonRadius * 2,
               height: _reactionCameraWidgetModel.cameraButtonRadius * 2,
