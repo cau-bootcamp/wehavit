@@ -5,7 +5,7 @@ abstract class ReactionRepository {
   EitherFuture<List<ReactionEntity>> getUnreadReactionListAndDelete();
 
   EitherFuture<bool> addReactionToConfirmPost(
-    String targetConfirmPostId,
+    ConfirmPostEntity targetEntity,
     ReactionEntity reactionModel,
   );
 

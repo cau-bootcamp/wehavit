@@ -12,8 +12,7 @@ class ReactionAnimationWidgetManager extends StateNotifier<void> {
 
   late GetUnreadReactionListUsecase getUnreadReactionListUsecase;
 
-  Future<List<ReactionGroupModel>>
-      getUnreadReactionModelGroupListFromLastConfirmPost() async {
+  Future<List<ReactionGroupModel>> getUnreadReactionGroupList() async {
     final fetchResult = await getUnreadReactionListUsecase(
       NoParams(),
     );

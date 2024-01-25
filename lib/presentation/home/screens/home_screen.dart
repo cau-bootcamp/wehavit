@@ -222,7 +222,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                                   itemCount: right.length,
                                   itemBuilder: (context, index) {
                                     return ConfirmPostWidget(
-                                      key: UniqueKey(),
+                                      key: Key(right[index].id!),
                                       entity: right[index],
                                       panUpdateCallback: updatePanPosition,
                                       panEndCallback: endOnCapturingPosition,
@@ -391,11 +391,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   }
 
   void updatePanPosition(Point<double> position) {
-    // TODO: panPosition update로 현재 touch position을 보여줘야 함
-    // print(position);ㄷ
-    // setState(() {
-    //   panPosition = position;
-    // });
+    setState(() {
+      panPosition = position;
+    });
   }
 
   Future<void> endOnCapturingPosition(

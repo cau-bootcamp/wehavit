@@ -78,9 +78,9 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
 
       setAnimationVariables();
       confirmPostList = await _mainViewModelProvider.getConfirmPostListFor(
-          resolutionId: widget.entity.resolutionId!);
+        resolutionId: widget.entity.resolutionId!,
+      );
 
-      setState(() {});
       _initOccurred = true;
     }
   }
@@ -543,7 +543,6 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
           });
         },
         onPanEnd: (details) async {
-
           if (_reactionCameraWidgetModelProvider
               .isPosInCameraAreaOf(panningPosition)) {
             widget.panEndCallback(panningPosition, widget.entity);

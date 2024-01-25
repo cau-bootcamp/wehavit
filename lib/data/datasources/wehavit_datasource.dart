@@ -27,7 +27,7 @@ abstract class WehavitDatasource {
   EitherFuture<bool> deleteConfirmPost(ConfirmPostEntity confirmPost);
 
   EitherFuture<bool> sendReactionToTargetConfirmPost(
-    String targetConfirmPostId,
+    ConfirmPostEntity targetEntity,
     ReactionEntity reactionEntity,
   );
 
