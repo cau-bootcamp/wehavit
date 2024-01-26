@@ -631,25 +631,12 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     required String groupRule,
     required String groupManagerUid,
   }) async {
-    final fetchMyUserEntity =
-        (await fetchUserDataEntityByUserId(groupManagerUid)).fold(
-      (failure) => Failure(failure.message),
-      (entity) => entity,
-    );
-
-    if (fetchMyUserEntity.runtimeType == Failure) {
-      return Future(
-        () => left(fetchMyUserEntity as Failure),
-      );
-    }
-    final myUserEntity = fetchMyUserEntity as UserDataEntity;
-
     final groupModel = FirebaseGroupModel(
       groupName: groupName,
       groupDescription: groupDescription,
       groupRule: groupRule,
       groupManagerUid: groupManagerUid,
-      groupMembers: [myUserEntity],
+      groupMembers: [groupManagerUid],
     );
 
     final documentId = (await firestore
@@ -662,7 +649,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       groupDescription: groupModel.groupDescription,
       groupRule: groupModel.groupRule,
       groupManagerUid: groupModel.groupManagerUid,
-      groupMembers: groupModel.groupMembers,
+      groupMemberUid: groupModel.groupMembers,
       groupId: documentId,
     );
 

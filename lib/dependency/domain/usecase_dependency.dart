@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/dependency/data/repository_dependency.dart';
+import 'package:wehavit/domain/usecases/create_group_usecase.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
 
 final logOutUseCaseProvider = Provider<LogOutUseCase>((ref) {
@@ -136,4 +137,10 @@ final fetchUserDataFromIdUsecaseProvider =
     Provider<FetchUserDataFromIdUsecase>((ref) {
   final repository = ref.watch(userModelRepositoryProvider);
   return FetchUserDataFromIdUsecase(repository);
+});
+
+final createGroupUsecaseProvider = Provider<CreateGroupUsecase>((ref) {
+  final groupRepository = ref.watch(groupRepositoryProvider);
+  final userModelRepository = ref.watch(userModelRepositoryProvider);
+  return CreateGroupUsecase(groupRepository, userModelRepository);
 });

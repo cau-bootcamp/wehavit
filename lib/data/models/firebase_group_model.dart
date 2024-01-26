@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:wehavit/domain/entities/entities.dart';
 
 part 'firebase_group_model.freezed.dart';
 part 'firebase_group_model.g.dart';
@@ -13,7 +12,7 @@ class FirebaseGroupModel with _$FirebaseGroupModel {
     required String groupDescription,
     required String groupRule,
     required String groupManagerUid,
-    required List<UserDataEntity> groupMembers,
+    required List<String> groupMembers,
   }) = _FirebaseGroupModel;
 
   factory FirebaseGroupModel.fromJson(Map<String, dynamic> json) =>

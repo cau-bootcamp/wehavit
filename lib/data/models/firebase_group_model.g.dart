@@ -14,7 +14,7 @@ _$FirebaseGroupModelImpl _$$FirebaseGroupModelImplFromJson(
       groupRule: json['groupRule'] as String,
       groupManagerUid: json['groupManagerUid'] as String,
       groupMembers: (json['groupMembers'] as List<dynamic>)
-          .map((e) => UserDataEntity.fromJson(e as Map<String, dynamic>))
+          .map((e) => e as String)
           .toList(),
     );
 

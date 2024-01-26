@@ -17,6 +17,7 @@ List<RouteBase> get $appRoutes => [
       $animationSampleViewRoute,
       $reactionSampleViewRoute,
       $lateWritingViewRoute,
+      $groupSampleViewRoute,
     ];
 
 RouteBase get $homeRoute => GoRouteData.$route(
@@ -232,6 +233,29 @@ extension $LateWritingViewRouteExtension on LateWritingViewRoute {
 
   String get location => GoRouteData.$location(
         '/lateWritingView',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $groupSampleViewRoute => GoRouteData.$route(
+      path: '/groupSampleView',
+      factory: $GroupSampleViewRouteExtension._fromState,
+    );
+
+extension $GroupSampleViewRouteExtension on GroupSampleViewRoute {
+  static GroupSampleViewRoute _fromState(GoRouterState state) =>
+      const GroupSampleViewRoute();
+
+  String get location => GoRouteData.$location(
+        '/groupSampleView',
       );
 
   void go(BuildContext context) => context.go(location);

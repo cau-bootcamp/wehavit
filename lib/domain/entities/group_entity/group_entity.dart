@@ -13,7 +13,7 @@ class GroupEntity with _$GroupEntity {
     @Default('') String? groupDescription,
     @Default('') String? groupRule,
     required String groupManagerUid,
-    required List<UserDataEntity> groupMembers,
+    required List<String> groupMemberUid,
     required String groupId,
   }) = _GroupEntity;
 
