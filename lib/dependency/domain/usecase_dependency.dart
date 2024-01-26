@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/dependency/data/repository_dependency.dart';
+import 'package:wehavit/domain/usecases/apply_for_joining_group_usecase.dart';
 import 'package:wehavit/domain/usecases/create_group_usecase.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
 
@@ -143,4 +144,10 @@ final createGroupUsecaseProvider = Provider<CreateGroupUsecase>((ref) {
   final groupRepository = ref.watch(groupRepositoryProvider);
   final userModelRepository = ref.watch(userModelRepositoryProvider);
   return CreateGroupUsecase(groupRepository, userModelRepository);
+});
+
+final applyForJoiningGroupUsecaseProvider =
+    Provider<ApplyForJoiningGroupUsecase>((ref) {
+  final groupRepository = ref.watch(groupRepositoryProvider);
+  return ApplyForJoiningGroupUsecase(groupRepository);
 });

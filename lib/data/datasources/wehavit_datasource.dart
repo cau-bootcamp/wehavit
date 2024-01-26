@@ -59,4 +59,6 @@ abstract class WehavitDatasource {
     required String groupRule,
     required String groupManagerUid,
   });
+
+  EitherFuture<void> applyForJoiningGroup(String groupId);
 }

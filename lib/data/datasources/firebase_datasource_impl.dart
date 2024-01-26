@@ -655,4 +655,23 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
 
     return Future(() => right(entity));
   }
+
+  @override
+  EitherFuture<void> applyForJoiningGroup(String groupId) async {
+    final getUidResult = (await getMyUserId()).fold(
+      (l) => null,
+      (uid) => uid,
+    );
+
+    if (getUidResult == null) {
+      return Future(() => left(const Failure('cannot get uid')));
+    }
+
+    await firestore
+        .collection(
+            FirebaseCollectionName.getGroupApplyWaitingCollectionName(groupId))
+        .add({'uid': getUidResult});
+
+    return Future(() => right(null));
+  }
 }

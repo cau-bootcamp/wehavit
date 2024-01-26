@@ -10,5 +10,5 @@ abstract class GroupRepository {
     required String groupManagerUid,
   });
 
-  EitherFuture<void> joinIntoGroup(GroupEntity entity);
+  EitherFuture<void> applyForJoiningGroup({required String groupId});
 }

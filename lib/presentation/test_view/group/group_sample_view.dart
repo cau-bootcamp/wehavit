@@ -35,6 +35,19 @@ class _SampleGroupWidgetState extends ConsumerState<SampleGroupWidget> {
                 child: const Text("create"),
               ),
             ),
+            Center(
+              child: ElevatedButton(
+                onPressed: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const JoinGroupSampleView(),
+                    ),
+                  );
+                },
+                child: const Text("join"),
+              ),
+            ),
           ],
         ),
       ),
@@ -88,6 +101,40 @@ class CreateGroupSampleViewState extends ConsumerState<CreateGroupSampleView> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class JoinGroupSampleView extends ConsumerStatefulWidget {
+  const JoinGroupSampleView({super.key});
+
+  @override
+  ConsumerState<JoinGroupSampleView> createState() =>
+      _JoinGroupSampleViewState();
+}
+
+class _JoinGroupSampleViewState extends ConsumerState<JoinGroupSampleView> {
+  final groupIdController = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('join')),
+      body: SafeArea(
+          child: Container(
+        child: Column(
+          children: [
+            TextField(
+              controller: groupIdController,
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  final groupId = groupIdController.text;
+                  ref.read(applyForJoiningGroupUsecaseProvider)(groupId);
+                },
+                child: Text("Join"))
+          ],
+        ),
+      )),
     );
   }
 }

@@ -42,6 +42,10 @@ class FirebaseCollectionName {
     return '$uid/confirm_post/_${DateTime.now().toIso8601String()}';
   }
 
+  static String getGroupApplyWaitingCollectionName(String groupId) {
+    return '$groups/$groupId/apply_waiting';
+  }
+
   static String getConfirmPostQuickShotReactionStorageName(
     String postOwnerUid,
     String confirmPostId,

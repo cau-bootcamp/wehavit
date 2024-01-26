@@ -24,8 +24,7 @@ class GroupRepositoryImpl implements GroupRepository {
   }
 
   @override
-  EitherFuture<void> joinIntoGroup(GroupEntity entity) {
-    // TODO: implement joinIntoGroup
-    throw UnimplementedError();
+  EitherFuture<void> applyForJoiningGroup({required String groupId}) {
+    return _wehavitDatasource.applyForJoiningGroup(groupId);
   }
 }
