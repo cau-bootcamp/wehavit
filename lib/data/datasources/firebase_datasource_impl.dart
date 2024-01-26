@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/data/datasources/datasources.dart';
+import 'package:wehavit/data/models/firebase_group_model.dart';
 import 'package:wehavit/data/models/models.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 
@@ -621,5 +622,50 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     } on Exception catch (e) {
       return Future(() => left(Failure(e.toString())));
     }
+  }
+
+  @override
+  EitherFuture<GroupEntity> createGroup({
+    required String groupName,
+    required String groupDescription,
+    required String groupRule,
+    required String groupManagerUid,
+  }) async {
+    final fetchMyUserEntity =
+        (await fetchUserDataEntityByUserId(groupManagerUid)).fold(
+      (failure) => Failure(failure.message),
+      (entity) => entity,
+    );
+
+    if (fetchMyUserEntity.runtimeType == Failure) {
+      return Future(
+        () => left(fetchMyUserEntity as Failure),
+      );
+    }
+    final myUserEntity = fetchMyUserEntity as UserDataEntity;
+
+    final groupModel = FirebaseGroupModel(
+      groupName: groupName,
+      groupDescription: groupDescription,
+      groupRule: groupRule,
+      groupManagerUid: groupManagerUid,
+      groupMembers: [myUserEntity],
+    );
+
+    final documentId = (await firestore
+            .collection(FirebaseCollectionName.groups)
+            .add(groupModel.toJson()))
+        .id;
+
+    final entity = GroupEntity(
+      groupName: groupModel.groupName,
+      groupDescription: groupModel.groupDescription,
+      groupRule: groupModel.groupRule,
+      groupManagerUid: groupModel.groupManagerUid,
+      groupMembers: groupModel.groupMembers,
+      groupId: documentId,
+    );
+
+    return Future(() => right(entity));
   }
 }

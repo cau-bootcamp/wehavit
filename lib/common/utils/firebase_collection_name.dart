@@ -6,6 +6,8 @@ class FirebaseCollectionName {
   const FirebaseCollectionName._();
 
   static const users = 'users';
+
+  static const groups = 'groups';
   static final myResolutions = FirebaseAuth.instance.currentUser != null
       ? 'users/${FirebaseAuth.instance.currentUser?.uid}/resolutions'
       : 'invalid_address';
