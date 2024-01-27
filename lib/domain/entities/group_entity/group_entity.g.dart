@@ -12,7 +12,7 @@ _$GroupEntityImpl _$$GroupEntityImplFromJson(Map<String, dynamic> json) =>
       groupDescription: json['groupDescription'] as String? ?? '',
       groupRule: json['groupRule'] as String? ?? '',
       groupManagerUid: json['groupManagerUid'] as String,
-      groupMemberUid: (json['groupMemberUid'] as List<dynamic>)
+      groupMemberUidList: (json['groupMemberUidList'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
       groupId: json['groupId'] as String,
@@ -24,6 +24,5 @@ Map<String, dynamic> _$$GroupEntityImplToJson(_$GroupEntityImpl instance) =>
       'groupDescription': instance.groupDescription,
       'groupRule': instance.groupRule,
       'groupManagerUid': instance.groupManagerUid,
-      'groupMemberUid': instance.groupMemberUid,
-      'groupId': instance.groupId,
+      'groupMemberUidList': instance.groupMemberUidList,
     };

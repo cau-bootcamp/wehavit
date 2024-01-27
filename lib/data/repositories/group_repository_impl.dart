@@ -27,4 +27,28 @@ class GroupRepositoryImpl implements GroupRepository {
   EitherFuture<void> applyForJoiningGroup({required String groupId}) {
     return _wehavitDatasource.applyForJoiningGroup(groupId);
   }
+
+  @override
+  EitherFuture<void> acceptApplyingForGroup({
+    required String groupId,
+    required String targetUid,
+  }) {
+    return _wehavitDatasource.processApplyingForGroup(
+      groupId: groupId,
+      uid: targetUid,
+      isAccepted: true,
+    );
+  }
+
+  @override
+  EitherFuture<void> rejectApplyingForGroup({
+    required String groupId,
+    required String targetUid,
+  }) {
+    return _wehavitDatasource.processApplyingForGroup(
+      groupId: groupId,
+      uid: targetUid,
+      isAccepted: false,
+    );
+  }
 }

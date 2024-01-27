@@ -11,4 +11,14 @@ abstract class GroupRepository {
   });
 
   EitherFuture<void> applyForJoiningGroup({required String groupId});
+
+  EitherFuture<void> acceptApplyingForGroup({
+    required String groupId,
+    required String targetUid,
+  });
+
+  EitherFuture<void> rejectApplyingForGroup({
+    required String groupId,
+    required String targetUid,
+  });
 }

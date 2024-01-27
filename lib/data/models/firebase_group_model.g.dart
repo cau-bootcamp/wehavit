@@ -13,7 +13,7 @@ _$FirebaseGroupModelImpl _$$FirebaseGroupModelImplFromJson(
       groupDescription: json['groupDescription'] as String,
       groupRule: json['groupRule'] as String,
       groupManagerUid: json['groupManagerUid'] as String,
-      groupMembers: (json['groupMembers'] as List<dynamic>)
+      groupMemberUidList: (json['groupMemberUidList'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
     );
@@ -25,5 +25,5 @@ Map<String, dynamic> _$$FirebaseGroupModelImplToJson(
       'groupDescription': instance.groupDescription,
       'groupRule': instance.groupRule,
       'groupManagerUid': instance.groupManagerUid,
-      'groupMembers': instance.groupMembers,
+      'groupMemberUidList': instance.groupMemberUidList,
     };

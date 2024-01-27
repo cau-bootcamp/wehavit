@@ -636,7 +636,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       groupDescription: groupDescription,
       groupRule: groupRule,
       groupManagerUid: groupManagerUid,
-      groupMembers: [groupManagerUid],
+      groupMemberUidList: [groupManagerUid],
     );
 
     final documentId = (await firestore
@@ -649,7 +649,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       groupDescription: groupModel.groupDescription,
       groupRule: groupModel.groupRule,
       groupManagerUid: groupModel.groupManagerUid,
-      groupMemberUid: groupModel.groupMembers,
+      groupMemberUidList: groupModel.groupMemberUidList,
       groupId: documentId,
     );
 
@@ -671,6 +671,44 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
         .collection(
             FirebaseCollectionName.getGroupApplyWaitingCollectionName(groupId))
         .add({'uid': getUidResult});
+
+    return Future(() => right(null));
+  }
+
+  @override
+  EitherFuture<void> processApplyingForGroup({
+    required String groupId,
+    required String uid,
+    required bool isAccepted,
+  }) async {
+    firestore
+        .collection(
+          FirebaseCollectionName.getGroupApplyWaitingCollectionName(
+            groupId,
+          ),
+        )
+        .where('uid', isEqualTo: uid)
+        .get()
+        .then(
+          (data) => data.docs.map(
+            (doc) => firestore
+                .collection(
+                  FirebaseCollectionName.getGroupApplyWaitingCollectionName(
+                    groupId,
+                  ),
+                )
+                .doc(doc.id)
+                .delete(),
+          ),
+        );
+
+    print("processing");
+
+    if (isAccepted) {
+      firestore.collection(FirebaseCollectionName.groups).doc(groupId).update({
+        'groupMemberUidList': FieldValue.arrayUnion([uid]),
+      });
+    }
 
     return Future(() => right(null));
   }

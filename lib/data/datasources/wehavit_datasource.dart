@@ -61,4 +61,10 @@ abstract class WehavitDatasource {
   });
 
   EitherFuture<void> applyForJoiningGroup(String groupId);
+
+  EitherFuture<void> processApplyingForGroup({
+    required String groupId,
+    required String uid,
+    required bool isAccepted,
+  });
 }

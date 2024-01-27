@@ -24,7 +24,7 @@ mixin _$FirebaseGroupModel {
   String get groupDescription => throw _privateConstructorUsedError;
   String get groupRule => throw _privateConstructorUsedError;
   String get groupManagerUid => throw _privateConstructorUsedError;
-  List<String> get groupMembers => throw _privateConstructorUsedError;
+  List<String> get groupMemberUidList => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -43,7 +43,7 @@ abstract class $FirebaseGroupModelCopyWith<$Res> {
       String groupDescription,
       String groupRule,
       String groupManagerUid,
-      List<String> groupMembers});
+      List<String> groupMemberUidList});
 }
 
 /// @nodoc
@@ -63,7 +63,7 @@ class _$FirebaseGroupModelCopyWithImpl<$Res, $Val extends FirebaseGroupModel>
     Object? groupDescription = null,
     Object? groupRule = null,
     Object? groupManagerUid = null,
-    Object? groupMembers = null,
+    Object? groupMemberUidList = null,
   }) {
     return _then(_value.copyWith(
       groupName: null == groupName
@@ -82,9 +82,9 @@ class _$FirebaseGroupModelCopyWithImpl<$Res, $Val extends FirebaseGroupModel>
           ? _value.groupManagerUid
           : groupManagerUid // ignore: cast_nullable_to_non_nullable
               as String,
-      groupMembers: null == groupMembers
-          ? _value.groupMembers
-          : groupMembers // ignore: cast_nullable_to_non_nullable
+      groupMemberUidList: null == groupMemberUidList
+          ? _value.groupMemberUidList
+          : groupMemberUidList // ignore: cast_nullable_to_non_nullable
               as List<String>,
     ) as $Val);
   }
@@ -103,7 +103,7 @@ abstract class _$$FirebaseGroupModelImplCopyWith<$Res>
       String groupDescription,
       String groupRule,
       String groupManagerUid,
-      List<String> groupMembers});
+      List<String> groupMemberUidList});
 }
 
 /// @nodoc
@@ -121,7 +121,7 @@ class __$$FirebaseGroupModelImplCopyWithImpl<$Res>
     Object? groupDescription = null,
     Object? groupRule = null,
     Object? groupManagerUid = null,
-    Object? groupMembers = null,
+    Object? groupMemberUidList = null,
   }) {
     return _then(_$FirebaseGroupModelImpl(
       groupName: null == groupName
@@ -140,9 +140,9 @@ class __$$FirebaseGroupModelImplCopyWithImpl<$Res>
           ? _value.groupManagerUid
           : groupManagerUid // ignore: cast_nullable_to_non_nullable
               as String,
-      groupMembers: null == groupMembers
-          ? _value._groupMembers
-          : groupMembers // ignore: cast_nullable_to_non_nullable
+      groupMemberUidList: null == groupMemberUidList
+          ? _value._groupMemberUidList
+          : groupMemberUidList // ignore: cast_nullable_to_non_nullable
               as List<String>,
     ));
   }
@@ -157,8 +157,8 @@ class _$FirebaseGroupModelImpl implements _FirebaseGroupModel {
       required this.groupDescription,
       required this.groupRule,
       required this.groupManagerUid,
-      required final List<String> groupMembers})
-      : _groupMembers = groupMembers;
+      required final List<String> groupMemberUidList})
+      : _groupMemberUidList = groupMemberUidList;
 
   factory _$FirebaseGroupModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$FirebaseGroupModelImplFromJson(json);
@@ -171,17 +171,18 @@ class _$FirebaseGroupModelImpl implements _FirebaseGroupModel {
   final String groupRule;
   @override
   final String groupManagerUid;
-  final List<String> _groupMembers;
+  final List<String> _groupMemberUidList;
   @override
-  List<String> get groupMembers {
-    if (_groupMembers is EqualUnmodifiableListView) return _groupMembers;
+  List<String> get groupMemberUidList {
+    if (_groupMemberUidList is EqualUnmodifiableListView)
+      return _groupMemberUidList;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_groupMembers);
+    return EqualUnmodifiableListView(_groupMemberUidList);
   }
 
   @override
   String toString() {
-    return 'FirebaseGroupModel(groupName: $groupName, groupDescription: $groupDescription, groupRule: $groupRule, groupManagerUid: $groupManagerUid, groupMembers: $groupMembers)';
+    return 'FirebaseGroupModel(groupName: $groupName, groupDescription: $groupDescription, groupRule: $groupRule, groupManagerUid: $groupManagerUid, groupMemberUidList: $groupMemberUidList)';
   }
 
   @override
@@ -198,7 +199,7 @@ class _$FirebaseGroupModelImpl implements _FirebaseGroupModel {
             (identical(other.groupManagerUid, groupManagerUid) ||
                 other.groupManagerUid == groupManagerUid) &&
             const DeepCollectionEquality()
-                .equals(other._groupMembers, _groupMembers));
+                .equals(other._groupMemberUidList, _groupMemberUidList));
   }
 
   @JsonKey(ignore: true)
@@ -209,7 +210,7 @@ class _$FirebaseGroupModelImpl implements _FirebaseGroupModel {
       groupDescription,
       groupRule,
       groupManagerUid,
-      const DeepCollectionEquality().hash(_groupMembers));
+      const DeepCollectionEquality().hash(_groupMemberUidList));
 
   @JsonKey(ignore: true)
   @override
@@ -228,11 +229,12 @@ class _$FirebaseGroupModelImpl implements _FirebaseGroupModel {
 
 abstract class _FirebaseGroupModel implements FirebaseGroupModel {
   factory _FirebaseGroupModel(
-      {required final String groupName,
-      required final String groupDescription,
-      required final String groupRule,
-      required final String groupManagerUid,
-      required final List<String> groupMembers}) = _$FirebaseGroupModelImpl;
+          {required final String groupName,
+          required final String groupDescription,
+          required final String groupRule,
+          required final String groupManagerUid,
+          required final List<String> groupMemberUidList}) =
+      _$FirebaseGroupModelImpl;
 
   factory _FirebaseGroupModel.fromJson(Map<String, dynamic> json) =
       _$FirebaseGroupModelImpl.fromJson;
@@ -246,7 +248,7 @@ abstract class _FirebaseGroupModel implements FirebaseGroupModel {
   @override
   String get groupManagerUid;
   @override
-  List<String> get groupMembers;
+  List<String> get groupMemberUidList;
   @override
   @JsonKey(ignore: true)
   _$$FirebaseGroupModelImplCopyWith<_$FirebaseGroupModelImpl> get copyWith =>

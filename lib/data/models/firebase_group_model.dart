@@ -12,7 +12,7 @@ class FirebaseGroupModel with _$FirebaseGroupModel {
     required String groupDescription,
     required String groupRule,
     required String groupManagerUid,
-    required List<String> groupMembers,
+    required List<String> groupMemberUidList,
   }) = _FirebaseGroupModel;
 
   factory FirebaseGroupModel.fromJson(Map<String, dynamic> json) =>
