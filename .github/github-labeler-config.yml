@@ -1,0 +1,22 @@
+# GitHub Labeler
+# https://github.com/marketplace/actions/github-labeler
+
+# default
+- name: 🔨 breaking changes
+  color: F2DE92
+  description: 기존 기능에 영향을 주는 수정
+- name: 🎨 design
+  color: 1B9C99
+  description: 외부 툴에서 디자인 작업 (Figma, Sketch, etc)
+- name: 📝 docs
+  color: 0075ca
+  description: 문서화 및 문서 수정
+- name: 💡 etc
+  color: bfd4f2
+  description: 기타 작업 수행
+- name: 🐛 fix bug
+  color: 93D7A2
+  description: 버그 수정
+- name: ✨ new feature
+  color: D5A302
+  description: 기존 기능에 영향을 주지 않는 기능 추가
