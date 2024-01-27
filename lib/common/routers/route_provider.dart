@@ -12,6 +12,7 @@ import 'package:wehavit/presentation/home/home.dart';
 import 'package:wehavit/presentation/late_writing/late_writing.dart';
 import 'package:wehavit/presentation/my_page/my_page.dart';
 import 'package:wehavit/presentation/splash/splash.dart';
+import 'package:wehavit/presentation/test_view/group/group_sample_view.dart';
 import 'package:wehavit/presentation/test_view/test_view.dart';
 
 part 'route_provider.g.dart';
@@ -196,6 +197,18 @@ class LateWritingViewRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const LateWritingView();
+  }
+}
+
+@TypedGoRoute<GroupSampleViewRoute>(path: GroupSampleViewRoute.path)
+class GroupSampleViewRoute extends GoRouteData {
+  const GroupSampleViewRoute();
+
+  static const path = RouteLocation.groupSampleView;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const SampleGroupWidget();
   }
 }
 

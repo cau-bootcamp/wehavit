@@ -6,6 +6,8 @@ class FirebaseCollectionName {
   const FirebaseCollectionName._();
 
   static const users = 'users';
+
+  static const groups = 'groups';
   static final myResolutions = FirebaseAuth.instance.currentUser != null
       ? 'users/${FirebaseAuth.instance.currentUser?.uid}/resolutions'
       : 'invalid_address';
@@ -38,6 +40,10 @@ class FirebaseCollectionName {
 
   static String getConfirmPostImageStorageName(String uid) {
     return '$uid/confirm_post/_${DateTime.now().toIso8601String()}';
+  }
+
+  static String getGroupApplyWaitingCollectionName(String groupId) {
+    return '$groups/$groupId/apply_waiting';
   }
 
   static String getConfirmPostQuickShotReactionStorageName(

@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/data/datasources/datasources.dart';
+import 'package:wehavit/data/models/firebase_group_model.dart';
 import 'package:wehavit/data/models/models.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 
@@ -226,8 +227,9 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           Timestamp.fromDate(DateTime(today.year, today.month, today.day));
 
       Timestamp endDate = Timestamp.fromDate(
-          DateTime(today.year, today.month, today.day)
-              .add(const Duration(days: 1)));
+        DateTime(today.year, today.month, today.day)
+            .add(const Duration(days: 1)),
+      );
 
       final fetchResult = await firestore
           .collection(FirebaseCollectionName.confirmPosts)
@@ -514,7 +516,9 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     try {
       String storagePath =
           FirebaseCollectionName.getConfirmPostQuickShotReactionStorageName(
-              entity.owner!, entity.id!);
+        entity.owner!,
+        entity.id!,
+      );
       final ref = FirebaseStorage.instance.ref(storagePath);
 
       await ref.putFile(File(localPhotoUrl));
@@ -621,5 +625,193 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     } on Exception catch (e) {
       return Future(() => left(Failure(e.toString())));
     }
+  }
+
+  @override
+  EitherFuture<GroupEntity> createGroup({
+    required String groupName,
+    required String groupDescription,
+    required String groupRule,
+    required String groupManagerUid,
+  }) async {
+    final groupModel = FirebaseGroupModel(
+      groupName: groupName,
+      groupDescription: groupDescription,
+      groupRule: groupRule,
+      groupManagerUid: groupManagerUid,
+      groupMemberUidList: [groupManagerUid],
+    );
+
+    final documentId = (await firestore
+            .collection(FirebaseCollectionName.groups)
+            .add(groupModel.toJson()))
+        .id;
+
+    final entity = GroupEntity(
+      groupName: groupModel.groupName,
+      groupDescription: groupModel.groupDescription,
+      groupRule: groupModel.groupRule,
+      groupManagerUid: groupModel.groupManagerUid,
+      groupMemberUidList: groupModel.groupMemberUidList,
+      groupId: documentId,
+    );
+
+    return Future(() => right(entity));
+  }
+
+  @override
+  EitherFuture<void> applyForJoiningGroup(String groupId) async {
+    final getUidResult = (await getMyUserId()).fold(
+      (l) => null,
+      (uid) => uid,
+    );
+
+    if (getUidResult == null) {
+      return Future(() => left(const Failure('cannot get uid')));
+    }
+
+    await firestore
+        .collection(
+      FirebaseCollectionName.getGroupApplyWaitingCollectionName(groupId),
+    )
+        .add({FirebaseGroupFieldName.applyUid: getUidResult});
+
+    return Future(() => right(null));
+  }
+
+  @override
+  EitherFuture<void> processApplyingForGroup({
+    required String groupId,
+    required String uid,
+    required bool isAccepted,
+  }) async {
+    try {
+      final myUid = (await getMyUserId()).fold(
+        (l) => null,
+        (uid) => uid,
+      );
+
+      if (myUid == null) {
+        return Future(() => left(const Failure('cannot get uid')));
+      }
+
+      final isManager = await firestore
+          .collection(FirebaseCollectionName.groups)
+          .doc(groupId)
+          .get()
+          .then(
+            (value) =>
+                value.data()?[FirebaseGroupFieldName.managerUid] == myUid,
+          );
+
+      if (!isManager) {
+        debugPrint('current user is not a group manager');
+        return Future(
+          () => left(const Failure('current user is not a group manager')),
+        );
+      }
+
+      firestore
+          .collection(
+            FirebaseCollectionName.getGroupApplyWaitingCollectionName(
+              groupId,
+            ),
+          )
+          .where(FirebaseGroupFieldName.applyUid, isEqualTo: uid)
+          .get()
+          .then(
+            (data) => data.docs.map(
+              (doc) => firestore
+                  .collection(
+                    FirebaseCollectionName.getGroupApplyWaitingCollectionName(
+                      groupId,
+                    ),
+                  )
+                  .doc(doc.id)
+                  .delete(),
+            ),
+          );
+
+      if (isAccepted) {
+        firestore
+            .collection(FirebaseCollectionName.groups)
+            .doc(groupId)
+            .update({
+          FirebaseGroupFieldName.memberUidList: FieldValue.arrayUnion([uid]),
+        });
+      }
+
+      return Future(() => right(null));
+    } on Exception catch (e) {
+      return Future(() => left(Failure(e.toString())));
+    }
+  }
+
+  @override
+  EitherFuture<void> withdrawalFromGroup({required String groupId}) async {
+    try {
+      final myUid = (await getMyUserId()).fold((l) => null, (uid) => uid);
+
+      if (myUid == null) {
+        return Future(() => left(const Failure('cannot fetch uid')));
+      }
+
+      final remainings = await firestore
+          .collection(FirebaseCollectionName.groups)
+          .doc(groupId)
+          .get()
+          .then((group) {
+        return group.data()?[FirebaseGroupFieldName.memberUidList]?.length;
+      });
+
+      // 현재 그룹에 남아있는 인원에 대한 데이터가 없는 경우
+      if (remainings == null) {
+        debugPrint('group does not exist');
+        return Future(
+          () => left(const Failure('group does not exist')),
+        );
+      }
+
+      // 현재 그룹에 남아있는 인원이 한 명인 경우
+      // 탈퇴와 동시에 그룹 삭제
+      if (remainings == 1) {
+        firestore
+            .collection(
+              FirebaseCollectionName.getGroupApplyWaitingCollectionName(
+                groupId,
+              ),
+            )
+            .get()
+            .then((querySnapshot) {
+          querySnapshot.docs.map((doc) {
+            doc.reference.delete();
+          });
+        }).then(
+          (_) => firestore
+              .collection(FirebaseCollectionName.groups)
+              .doc(groupId)
+              .delete(),
+        );
+      }
+      // 현재 그룹에 남아있는 인원이 여러 명인 경우
+      else if (remainings > 1) {
+        firestore
+            .collection(FirebaseCollectionName.groups)
+            .doc(groupId)
+            .update({
+          FirebaseGroupFieldName.memberUidList: FieldValue.arrayRemove([myUid]),
+        });
+      }
+      // 남은 인원이 음수인 경우는 없음
+      else {
+        return Future(
+          () => left(const Failure('group member length cannot be 0')),
+        );
+      }
+    } on Exception catch (e) {
+      return Future(() => left(Failure(e.toString())));
+    }
+
+    return Future(() => right(null));
   }
 }

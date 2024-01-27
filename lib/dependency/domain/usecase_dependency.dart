@@ -1,6 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/dependency/data/repository_dependency.dart';
+import 'package:wehavit/domain/usecases/accept_applying_for_joining_group_usecase.dart';
+import 'package:wehavit/domain/usecases/apply_for_joining_group_usecase.dart';
+import 'package:wehavit/domain/usecases/create_group_usecase.dart';
+import 'package:wehavit/domain/usecases/reject_applying_for_joining_group_usecase.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
+import 'package:wehavit/domain/usecases/withdrawal_from_group_usecase.dart';
 
 final logOutUseCaseProvider = Provider<LogOutUseCase>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
@@ -136,4 +141,34 @@ final fetchUserDataFromIdUsecaseProvider =
     Provider<FetchUserDataFromIdUsecase>((ref) {
   final repository = ref.watch(userModelRepositoryProvider);
   return FetchUserDataFromIdUsecase(repository);
+});
+
+final createGroupUsecaseProvider = Provider<CreateGroupUsecase>((ref) {
+  final groupRepository = ref.watch(groupRepositoryProvider);
+  final userModelRepository = ref.watch(userModelRepositoryProvider);
+  return CreateGroupUsecase(groupRepository, userModelRepository);
+});
+
+final applyForJoiningGroupUsecaseProvider =
+    Provider<ApplyForJoiningGroupUsecase>((ref) {
+  final groupRepository = ref.watch(groupRepositoryProvider);
+  return ApplyForJoiningGroupUsecase(groupRepository);
+});
+
+final acceptApplyingForJoiningGroupUsecaseProvider =
+    Provider<AcceptApplyingForJoiningGroupUsecase>((ref) {
+  final groupRepository = ref.watch(groupRepositoryProvider);
+  return AcceptApplyingForJoiningGroupUsecase(groupRepository);
+});
+
+final rejectApplyingForJoiningGroupUsecaseProvider =
+    Provider<RejectApplyingForJoiningGroupUsecase>((ref) {
+  final groupRepository = ref.watch(groupRepositoryProvider);
+  return RejectApplyingForJoiningGroupUsecase(groupRepository);
+});
+
+final withdrawalFromGroupUsecaseProvider =
+    Provider<WithdrawalFromGroupUsecase>((ref) {
+  final groupRepository = ref.watch(groupRepositoryProvider);
+  return WithdrawalFromGroupUsecase(groupRepository);
 });

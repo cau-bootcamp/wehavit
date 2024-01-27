@@ -52,4 +52,21 @@ abstract class WehavitDatasource {
   });
 
   EitherFuture<String> uploadConfirmPostImageFromLocalUrl(String localFileUrl);
+
+  EitherFuture<GroupEntity> createGroup({
+    required String groupName,
+    required String groupDescription,
+    required String groupRule,
+    required String groupManagerUid,
+  });
+
+  EitherFuture<void> applyForJoiningGroup(String groupId);
+
+  EitherFuture<void> processApplyingForGroup({
+    required String groupId,
+    required String uid,
+    required bool isAccepted,
+  });
+
+  EitherFuture<void> withdrawalFromGroup({required String groupId});
 }
