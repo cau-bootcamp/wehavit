@@ -1,0 +1,22 @@
+filters:
+  # PULL_REQUEST_TEMPLATE.md
+  - label: 🐛 fix bug
+    regexs:
+      - /^- \[(X|x)\] fix\b/m
+    events: [pull_request]
+    targets: [comment]
+  - label: 📝 docs
+    regexs:
+      - /^- \[(X|x)\] docs\b/m
+    events: [pull_request]
+    targets: [comment]
+  - label: ✨ new feature
+    regexs:
+      - /^- \[(X|x)\] feat\b/m
+    events: [pull_request]
+    targets: [comment]
+  - label: 🎨 design
+    regexs:
+      - /^- \[(X|x)\] design\b/m
+    events: [pull_request]
+    targets: [comment]
