@@ -1,0 +1,28 @@
+name: Github Labeler
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/github-labeler-config.yml
+      - .github/workflows/github-labeler.yml
+
+jobs:
+  labeler:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      issues: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Run Github Labeler
+        uses: crazy-max/ghaction-github-labeler@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          yaml-file: .github/github-labeler-config.yml
+          skip-delete: true
