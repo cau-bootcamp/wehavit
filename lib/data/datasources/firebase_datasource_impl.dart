@@ -729,9 +729,49 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
         return Future(() => left(const Failure('cannot fetch uid')));
       }
 
-      firestore.collection(FirebaseCollectionName.groups).doc(groupId).update({
-        'groupMemberUidList': FieldValue.arrayRemove([myUid]),
+      final remainings = await firestore
+          .collection(FirebaseCollectionName.groups)
+          .doc(groupId)
+          .get()
+          .then((group) {
+        return group.data()?['groupMemberUidList']?.length;
       });
+
+      if (remainings == null) {
+        debugPrint('group does not exist');
+        return Future(
+          () => left(const Failure('group does not exist')),
+        );
+      }
+
+      if (remainings == 1) {
+        firestore
+            .collection(
+              FirebaseCollectionName.getGroupApplyWaitingCollectionName(
+                groupId,
+              ),
+            )
+            .get()
+            .then((querySnapshot) {
+          querySnapshot.docs.map((doc) {
+            doc.reference.delete();
+          });
+        }).then((_) => firestore
+                .collection(FirebaseCollectionName.groups)
+                .doc(groupId)
+                .delete());
+      } else if (remainings > 1) {
+        firestore
+            .collection(FirebaseCollectionName.groups)
+            .doc(groupId)
+            .update({
+          'groupMemberUidList': FieldValue.arrayRemove([myUid]),
+        });
+      } else {
+        return Future(
+          () => left(const Failure('group member length cannot be 0')),
+        );
+      }
     } on Exception catch (e) {
       return Future(() => left(Failure(e.toString())));
     }
