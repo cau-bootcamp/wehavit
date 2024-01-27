@@ -1,0 +1,17 @@
+labels:
+  - name: 🐛 fix bug
+    patterns:
+      - 'bug'
+      - 'fix'
+      - '버그'
+  - name : 📝 docs
+    patterns: 
+      - 'docs'
+      - '문서'
+      - 'documentation'
+  - name : ✨ new feature
+    patterns: 
+      - 'feat'
+  - name : 🎨 design
+    patterns: 
+      - 'design'
