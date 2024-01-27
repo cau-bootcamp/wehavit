@@ -69,3 +69,13 @@ class FirebaseLiveWaitingFieldName {
   static const String email = 'email';
   static const String imageUrl = 'imageUrl';
 }
+
+@immutable
+class FirebaseGroupFieldName {
+  static const String name = 'groupName';
+  static const String description = 'groupDescription';
+  static const String rule = 'groupRule';
+  static const String memberUidList = 'groupMemberUidList';
+  static const String managerUid = 'groupManagerUid';
+  static const String applyUid = 'uid';
+}

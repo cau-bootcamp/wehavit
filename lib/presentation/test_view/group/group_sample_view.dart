@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/utils/firebase_collection_name.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
-import 'package:wehavit/domain/domain.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 
 class SampleGroupWidget extends ConsumerStatefulWidget {

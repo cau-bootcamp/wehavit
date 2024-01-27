@@ -674,7 +674,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
         .collection(
       FirebaseCollectionName.getGroupApplyWaitingCollectionName(groupId),
     )
-        .add({'uid': getUidResult});
+        .add({FirebaseGroupFieldName.applyUid: getUidResult});
 
     return Future(() => right(null));
   }
@@ -699,7 +699,10 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           .collection(FirebaseCollectionName.groups)
           .doc(groupId)
           .get()
-          .then((value) => value.data()?['groupManagerUid'] == myUid);
+          .then(
+            (value) =>
+                value.data()?[FirebaseGroupFieldName.managerUid] == myUid,
+          );
 
       if (!isManager) {
         debugPrint('current user is not a group manager');
@@ -714,7 +717,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
               groupId,
             ),
           )
-          .where('uid', isEqualTo: uid)
+          .where(FirebaseGroupFieldName.applyUid, isEqualTo: uid)
           .get()
           .then(
             (data) => data.docs.map(
@@ -734,7 +737,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
             .collection(FirebaseCollectionName.groups)
             .doc(groupId)
             .update({
-          'groupMemberUidList': FieldValue.arrayUnion([uid]),
+          FirebaseGroupFieldName.memberUidList: FieldValue.arrayUnion([uid]),
         });
       }
 
@@ -758,7 +761,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           .doc(groupId)
           .get()
           .then((group) {
-        return group.data()?['groupMemberUidList']?.length;
+        return group.data()?[FirebaseGroupFieldName.memberUidList]?.length;
       });
 
       // 현재 그룹에 남아있는 인원에 대한 데이터가 없는 경우
@@ -796,7 +799,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
             .collection(FirebaseCollectionName.groups)
             .doc(groupId)
             .update({
-          'groupMemberUidList': FieldValue.arrayRemove([myUid]),
+          FirebaseGroupFieldName.memberUidList: FieldValue.arrayRemove([myUid]),
         });
       }
       // 남은 인원이 음수인 경우는 없음
