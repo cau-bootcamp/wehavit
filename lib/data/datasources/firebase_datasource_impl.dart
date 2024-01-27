@@ -681,33 +681,59 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     required String uid,
     required bool isAccepted,
   }) async {
-    firestore
-        .collection(
-          FirebaseCollectionName.getGroupApplyWaitingCollectionName(
-            groupId,
-          ),
-        )
-        .where('uid', isEqualTo: uid)
-        .get()
-        .then(
-          (data) => data.docs.map(
-            (doc) => firestore
-                .collection(
-                  FirebaseCollectionName.getGroupApplyWaitingCollectionName(
-                    groupId,
-                  ),
-                )
-                .doc(doc.id)
-                .delete(),
-          ),
-        );
+    try {
+      firestore
+          .collection(
+            FirebaseCollectionName.getGroupApplyWaitingCollectionName(
+              groupId,
+            ),
+          )
+          .where('uid', isEqualTo: uid)
+          .get()
+          .then(
+            (data) => data.docs.map(
+              (doc) => firestore
+                  .collection(
+                    FirebaseCollectionName.getGroupApplyWaitingCollectionName(
+                      groupId,
+                    ),
+                  )
+                  .doc(doc.id)
+                  .delete(),
+            ),
+          );
 
-    print("processing");
+      print("processing");
 
-    if (isAccepted) {
+      if (isAccepted) {
+        firestore
+            .collection(FirebaseCollectionName.groups)
+            .doc(groupId)
+            .update({
+          'groupMemberUidList': FieldValue.arrayUnion([uid]),
+        });
+      }
+
+      return Future(() => right(null));
+    } on Exception catch (e) {
+      return Future(() => left(Failure(e.toString())));
+    }
+  }
+
+  @override
+  EitherFuture<void> withdrawalFromGroup({required String groupId}) async {
+    try {
+      final myUid = (await getMyUserId()).fold((l) => null, (uid) => uid);
+
+      if (myUid == null) {
+        return Future(() => left(const Failure('cannot fetch uid')));
+      }
+
       firestore.collection(FirebaseCollectionName.groups).doc(groupId).update({
-        'groupMemberUidList': FieldValue.arrayUnion([uid]),
+        'groupMemberUidList': FieldValue.arrayRemove([myUid]),
       });
+    } on Exception catch (e) {
+      return Future(() => left(Failure(e.toString())));
     }
 
     return Future(() => right(null));

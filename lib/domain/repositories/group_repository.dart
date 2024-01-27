@@ -21,4 +21,6 @@ abstract class GroupRepository {
     required String groupId,
     required String targetUid,
   });
+
+  EitherFuture<void> withdrawalFromGroup({required String groupId});
 }

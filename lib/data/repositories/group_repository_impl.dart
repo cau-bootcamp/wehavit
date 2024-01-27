@@ -51,4 +51,9 @@ class GroupRepositoryImpl implements GroupRepository {
       isAccepted: false,
     );
   }
+
+  @override
+  EitherFuture<void> withdrawalFromGroup({required String groupId}) {
+    return _wehavitDatasource.withdrawalFromGroup(groupId: groupId);
+  }
 }

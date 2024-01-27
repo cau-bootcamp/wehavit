@@ -66,6 +66,19 @@ class _SampleGroupWidgetState extends ConsumerState<SampleGroupWidget> {
                 child: const Text("accept"),
               ),
             ),
+            Center(
+              child: ElevatedButton(
+                onPressed: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const WithdrawalGroupSampleView(),
+                    ),
+                  );
+                },
+                child: const Text("withdrawal"),
+              ),
+            ),
           ],
         ),
       ),
@@ -253,6 +266,44 @@ class _AcceptGroupSampleViewState extends ConsumerState<AcceptGroupSampleView> {
                   )
                   .toList(),
             )
+          ],
+        ),
+      )),
+    );
+  }
+}
+
+class WithdrawalGroupSampleView extends ConsumerStatefulWidget {
+  const WithdrawalGroupSampleView({super.key});
+
+  @override
+  ConsumerState<WithdrawalGroupSampleView> createState() =>
+      _WithdrawalGroupSampleViewState();
+}
+
+class _WithdrawalGroupSampleViewState
+    extends ConsumerState<WithdrawalGroupSampleView> {
+  final groupIdController = TextEditingController();
+  List<UserDataEntity> applyList = [];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('withdrawal')),
+      body: SafeArea(
+          child: Container(
+        child: Column(
+          children: [
+            TextField(
+              controller: groupIdController,
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                final groupId = groupIdController.text;
+                ref.read(withdrawalFromGroupUsecaseProvider)(groupId);
+              },
+              child: const Text('withdrawal'),
+            ),
           ],
         ),
       )),
