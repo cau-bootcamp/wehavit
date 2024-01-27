@@ -227,8 +227,9 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           Timestamp.fromDate(DateTime(today.year, today.month, today.day));
 
       Timestamp endDate = Timestamp.fromDate(
-          DateTime(today.year, today.month, today.day)
-              .add(const Duration(days: 1)));
+        DateTime(today.year, today.month, today.day)
+            .add(const Duration(days: 1)),
+      );
 
       final fetchResult = await firestore
           .collection(FirebaseCollectionName.confirmPosts)
@@ -515,7 +516,9 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     try {
       String storagePath =
           FirebaseCollectionName.getConfirmPostQuickShotReactionStorageName(
-              entity.owner!, entity.id!);
+        entity.owner!,
+        entity.id!,
+      );
       final ref = FirebaseStorage.instance.ref(storagePath);
 
       await ref.putFile(File(localPhotoUrl));
@@ -669,7 +672,8 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
 
     await firestore
         .collection(
-            FirebaseCollectionName.getGroupApplyWaitingCollectionName(groupId))
+      FirebaseCollectionName.getGroupApplyWaitingCollectionName(groupId),
+    )
         .add({'uid': getUidResult});
 
     return Future(() => right(null));
@@ -682,6 +686,28 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     required bool isAccepted,
   }) async {
     try {
+      final myUid = (await getMyUserId()).fold(
+        (l) => null,
+        (uid) => uid,
+      );
+
+      if (myUid == null) {
+        return Future(() => left(const Failure('cannot get uid')));
+      }
+
+      final isManager = await firestore
+          .collection(FirebaseCollectionName.groups)
+          .doc(groupId)
+          .get()
+          .then((value) => value.data()?['groupManagerUid'] == myUid);
+
+      if (!isManager) {
+        debugPrint('current user is not a group manager');
+        return Future(
+          () => left(const Failure('current user is not a group manager')),
+        );
+      }
+
       firestore
           .collection(
             FirebaseCollectionName.getGroupApplyWaitingCollectionName(
@@ -702,8 +728,6 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
                   .delete(),
             ),
           );
-
-      print("processing");
 
       if (isAccepted) {
         firestore
@@ -737,6 +761,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
         return group.data()?['groupMemberUidList']?.length;
       });
 
+      // 현재 그룹에 남아있는 인원에 대한 데이터가 없는 경우
       if (remainings == null) {
         debugPrint('group does not exist');
         return Future(
@@ -744,6 +769,8 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
         );
       }
 
+      // 현재 그룹에 남아있는 인원이 한 명인 경우
+      // 탈퇴와 동시에 그룹 삭제
       if (remainings == 1) {
         firestore
             .collection(
@@ -756,18 +783,24 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           querySnapshot.docs.map((doc) {
             doc.reference.delete();
           });
-        }).then((_) => firestore
-                .collection(FirebaseCollectionName.groups)
-                .doc(groupId)
-                .delete());
-      } else if (remainings > 1) {
+        }).then(
+          (_) => firestore
+              .collection(FirebaseCollectionName.groups)
+              .doc(groupId)
+              .delete(),
+        );
+      }
+      // 현재 그룹에 남아있는 인원이 여러 명인 경우
+      else if (remainings > 1) {
         firestore
             .collection(FirebaseCollectionName.groups)
             .doc(groupId)
             .update({
           'groupMemberUidList': FieldValue.arrayRemove([myUid]),
         });
-      } else {
+      }
+      // 남은 인원이 음수인 경우는 없음
+      else {
         return Future(
           () => left(const Failure('group member length cannot be 0')),
         );
