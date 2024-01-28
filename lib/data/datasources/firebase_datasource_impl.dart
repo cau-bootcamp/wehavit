@@ -15,6 +15,7 @@ import 'package:wehavit/domain/entities/entities.dart';
 class FirebaseDatasourceImpl implements WehavitDatasource {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
+  String? myUid = FirebaseAuth.instance.currentUser?.uid;
   int get maxDay => 27;
 
   @override
@@ -105,16 +106,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           DateTime(startDate.year, startDate.month, startDate.day)
               .add(const Duration(days: 1));
 
-      final uid = (await getMyUserId()).fold(
-        (l) => null,
-        (uid) => uid,
-      );
-
-      if (uid == null) {
-        return Future(
-          () => left(const Failure('unable to get firebase user id')),
-        );
-      }
+      final uid = getMyUserId();
 
       final fetchResult = await FirebaseFirestore.instance
           .collection(FirebaseCollectionName.confirmPosts)
@@ -479,16 +471,11 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }
 
   @override
-  EitherFuture<String> getMyUserId() {
-    try {
-      final userId = FirebaseAuth.instance.currentUser!.uid;
-
-      return Future(() => right(userId));
-    } on Exception {
-      return Future(
-        () => left(const Failure('catch error on deleteConfirmPost')),
-      );
+  String getMyUserId() {
+    if (myUid == null) {
+      throw Exception('unable to get firebase user id');
     }
+    return myUid!;
   }
 
   @override
@@ -547,20 +534,11 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   @override
   EitherFuture<List<ReactionEntity>> getUnreadReactionsAndDelete() async {
     try {
-      final fetchUid = (await getMyUserId()).fold(
-        (l) => null,
-        (uid) => uid,
-      );
-
-      if (fetchUid == null) {
-        return Future(
-          () => left(const Failure('unable to get firebase user id')),
-        );
-      }
+      final uid = getMyUserId();
 
       final reactions = await firestore
           .collection(
-            FirebaseCollectionName.getUserReactionBoxCollectionName(fetchUid),
+            FirebaseCollectionName.getUserReactionBoxCollectionName(uid),
           )
           .get();
 
@@ -589,17 +567,10 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     String localFileUrl,
   ) async {
     try {
-      final getUidResult = (await getMyUserId()).fold(
-        (l) => null,
-        (uid) => uid,
-      );
-
-      if (getUidResult == null) {
-        return Future(() => left(const Failure('cannot get uid')));
-      }
+      final uid = getMyUserId();
 
       String storagePath =
-          FirebaseConfirmPostImagePathName.storagePath(uid: getUidResult);
+          FirebaseConfirmPostImagePathName.storagePath(uid: uid);
       final ref = FirebaseStorage.instance.ref(storagePath);
 
       await ref.putFile(File(localFileUrl));
@@ -644,20 +615,13 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
 
   @override
   EitherFuture<void> applyForJoiningGroup(String groupId) async {
-    final getUidResult = (await getMyUserId()).fold(
-      (l) => null,
-      (uid) => uid,
-    );
-
-    if (getUidResult == null) {
-      return Future(() => left(const Failure('cannot get uid')));
-    }
+    final uid = getMyUserId();
 
     await firestore
         .collection(
       FirebaseCollectionName.getGroupApplyWaitingCollectionName(groupId),
     )
-        .add({FirebaseGroupFieldName.applyUid: getUidResult});
+        .add({FirebaseGroupFieldName.applyUid: uid});
 
     return Future(() => right(null));
   }
@@ -669,14 +633,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     required bool isAccepted,
   }) async {
     try {
-      final myUid = (await getMyUserId()).fold(
-        (l) => null,
-        (uid) => uid,
-      );
-
-      if (myUid == null) {
-        return Future(() => left(const Failure('cannot get uid')));
-      }
+      final myUid = getMyUserId();
 
       final isManager = await firestore
           .collection(FirebaseCollectionName.groups)
@@ -733,11 +690,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   @override
   EitherFuture<void> withdrawalFromGroup({required String groupId}) async {
     try {
-      final myUid = (await getMyUserId()).fold((l) => null, (uid) => uid);
-
-      if (myUid == null) {
-        return Future(() => left(const Failure('cannot fetch uid')));
-      }
+      final myUid = getMyUserId();
 
       final remainings = await firestore
           .collection(FirebaseCollectionName.groups)
