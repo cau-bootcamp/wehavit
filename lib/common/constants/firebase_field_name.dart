@@ -15,11 +15,11 @@ class FirebaseResolutionFieldName {
   // resolutions
   static const resolutionGoalStatement = 'goalStatement';
   static const resolutionActionStatement = 'actionStatement';
-  static const resolutionOathStatement = 'oathStatement';
   static const resolutionStartDate = 'startDate';
-  static const resolutionPeriod = 'period';
+  static const resolutionActionPerWeek = 'actionPerWeek';
   static const resolutionIsActive = 'isActive';
-  static const resolutionFanList = 'fan';
+  static const resolutionShareFriendIdList = 'shareFriendIdList';
+  static const resolutionShareGroupIdList = 'shareGroupIdList';
 }
 
 @immutable
@@ -27,8 +27,7 @@ class FirebaseReactionFieldName {
   static const complimenterUid = 'complimenterUid';
   static const comment = 'comment';
   static const emoji = 'emoji';
-  static const hasRead = 'hasRead';
-  static const instantPhotoUrl = 'instantPhotoUrl';
+  static const quickShotUrl = 'quickShotUrl';
   static const reactionType = 'reactionType';
 }
 
@@ -40,18 +39,9 @@ class FirebaseFriendFieldName {
 }
 
 @immutable
-class FirebaseLiveConfirmPostFieldName {
-  static const title = 'title';
-  static const message = 'message';
-  static const userId = 'userId';
-  static const imageUrl = 'imageUrl';
-}
-
-@immutable
 class FirebaseConfirmPostFieldName {
   static const content = 'content';
   static const createdAt = 'createdAt';
-  static const fan = 'fan';
   static const imageUrl = 'imageUrl';
   static const owner = 'owner';
   static const recentStrike = 'recentStrike';
@@ -62,12 +52,12 @@ class FirebaseConfirmPostFieldName {
 }
 
 @immutable
-class FirebaseLiveWaitingFieldName {
-  static const String updatedAt = 'updatedAt';
-  static const String userId = 'userId';
-  static const String name = 'name';
-  static const String email = 'email';
-  static const String imageUrl = 'imageUrl';
+class FirebaseConfirmPostImagePathName {
+  static String storagePath({
+    required String uid,
+  }) {
+    return '$uid/confirm_post/_${DateTime.now().toIso8601String()}';
+  }
 }
 
 @immutable

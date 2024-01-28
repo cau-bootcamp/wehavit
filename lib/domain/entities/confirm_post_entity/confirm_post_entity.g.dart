@@ -15,9 +15,6 @@ _$ConfirmPostEntityImpl _$$ConfirmPostEntityImplFromJson(
       content: json['content'] as String?,
       imageUrl: json['imageUrl'] as String?,
       owner: json['owner'] as String?,
-      fan: (json['fan'] as List<dynamic>?)
-          ?.map((e) => UserDataEntity.fromJson(e as Map<String, dynamic>))
-          .toList(),
       recentStrike: json['recentStrike'] as int?,
       createdAt: _$JsonConverterFromJson<Timestamp, DateTime>(
           json['createdAt'], const TimestampConverter().fromJson),
@@ -37,7 +34,6 @@ Map<String, dynamic> _$$ConfirmPostEntityImplToJson(
       'content': instance.content,
       'imageUrl': instance.imageUrl,
       'owner': instance.owner,
-      'fan': instance.fan,
       'recentStrike': instance.recentStrike,
       'createdAt': _$JsonConverterToJson<Timestamp, DateTime>(
           instance.createdAt, const TimestampConverter().toJson),

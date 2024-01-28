@@ -124,16 +124,16 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
             isLessThanOrEqualTo: Timestamp.fromDate(endDate),
           )
           .where(
-            Filter.or(
-              Filter(
-                FirebaseConfirmPostFieldName.fan,
-                arrayContains: uid,
-              ),
-              Filter(
-                FirebaseConfirmPostFieldName.owner,
-                isEqualTo: uid,
-              ),
+            // Filter.or(
+            // Filter(
+            //   FirebaseConfirmPostFieldName.fan,
+            //   arrayContains: uid,
+            // ),
+            Filter(
+              FirebaseConfirmPostFieldName.owner,
+              isEqualTo: uid,
             ),
+            // ),
           )
           .get();
 
@@ -142,19 +142,12 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           (doc) async {
             final confirmPostModel =
                 FirebaseConfirmPostModel.fromFireStoreDocument(doc);
-            final fanList = await Future.wait(
-              confirmPostModel.fan!
-                  .map(
-                    (userId) async => (await getUserEntityByUserId(userId))!,
-                  )
-                  .toList(),
-            );
+
             final ownerUserEntity =
                 (await getUserEntityByUserId(confirmPostModel.owner!))!;
 
             final entity = confirmPostModel.toConfirmPostEntity(
               doc.reference.id,
-              fanList,
               ownerUserEntity,
             );
 
@@ -190,18 +183,11 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
         fetchResult.docs.map(
           (doc) async {
             final model = FirebaseConfirmPostModel.fromFireStoreDocument(doc);
-            final fanList = await Future.wait(
-              model.fan!
-                  .map(
-                    (userId) async => (await getUserEntityByUserId(userId))!,
-                  )
-                  .toList(),
-            );
+
             final ownerUserEntity =
                 (await getUserEntityByUserId(model.owner!))!;
             final entity = model.toConfirmPostEntity(
               doc.reference.id,
-              fanList,
               ownerUserEntity,
             );
 
@@ -253,18 +239,10 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           fetchResult.docs.first,
         );
 
-        final fanList = await Future.wait(
-          model.fan!
-              .map(
-                (userId) async => (await getUserEntityByUserId(userId))!,
-              )
-              .toList(),
-        );
         final ownerUserEntity = (await getUserEntityByUserId(model.owner!))!;
 
         final entity = model.toConfirmPostEntity(
           fetchResult.docs.first.reference.id,
-          fanList,
           ownerUserEntity,
         );
 
@@ -616,7 +594,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       }
 
       String storagePath =
-          '$getUidResult/confirm_post/_${DateTime.now().toIso8601String()}';
+          FirebaseConfirmPostImagePathName.storagePath(uid: getUidResult);
       final ref = FirebaseStorage.instance.ref(storagePath);
 
       await ref.putFile(File(localFileUrl));

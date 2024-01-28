@@ -14,7 +14,10 @@ _$FirebaseResolutionModelImpl _$$FirebaseResolutionModelImplFromJson(
       isActive: json['isActive'] as bool?,
       actionPerWeek: json['actionPerWeek'] as int?,
       startDate: const TimestampSerializer().fromJson(json['startDate']),
-      fanUserIdList: (json['fanUserIdList'] as List<dynamic>?)
+      shareFriendIdList: (json['shareFriendIdList'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      shareGroupIdList: (json['shareGroupIdList'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
     );
@@ -28,7 +31,8 @@ Map<String, dynamic> _$$FirebaseResolutionModelImplToJson(
       'actionPerWeek': instance.actionPerWeek,
       'startDate': _$JsonConverterToJson<dynamic, DateTime>(
           instance.startDate, const TimestampSerializer().toJson),
-      'fanUserIdList': instance.fanUserIdList,
+      'shareFriendIdList': instance.shareFriendIdList,
+      'shareGroupIdList': instance.shareGroupIdList,
     };
 
 Json? _$JsonConverterToJson<Json, Value>(

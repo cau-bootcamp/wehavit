@@ -16,7 +16,8 @@ class FirebaseResolutionModel with _$FirebaseResolutionModel {
     required bool? isActive,
     required int? actionPerWeek,
     @TimestampSerializer() required DateTime? startDate,
-    required List<String>? fanUserIdList,
+    required List<String>? shareFriendIdList,
+    required List<String>? shareGroupIdList,
   }) = _FirebaseResolutionModel;
 
   factory FirebaseResolutionModel.fromJson(Map<String, dynamic> json) =>

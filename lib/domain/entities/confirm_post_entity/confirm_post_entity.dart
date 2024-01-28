@@ -44,7 +44,6 @@ class ConfirmPostEntity with _$ConfirmPostEntity {
     required String? content,
     required String? imageUrl,
     required String? owner,
-    required List<UserDataEntity>? fan,
     required int? recentStrike,
     required DateTime? createdAt,
     required DateTime? updatedAt,
