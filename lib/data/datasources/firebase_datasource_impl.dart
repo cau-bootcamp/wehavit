@@ -299,7 +299,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
 
       await firestore
           .collection(
-            FirebaseCollectionName.getUserReactionBoxCollectionName(
+            FirebaseCollectionName.getTargetUserReactionBoxCollectionName(
               targetEntity.owner!,
             ),
           )
@@ -538,7 +538,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
 
       final reactions = await firestore
           .collection(
-            FirebaseCollectionName.getUserReactionBoxCollectionName(uid),
+            FirebaseCollectionName.userReactionBox,
           )
           .get();
 
@@ -596,7 +596,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       groupMemberUidList: [groupManagerUid],
     );
 
-    final documentId = (await firestore
+    final groupId = (await firestore
             .collection(FirebaseCollectionName.groups)
             .add(groupModel.toJson()))
         .id;
@@ -607,8 +607,12 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       groupRule: groupModel.groupRule,
       groupManagerUid: groupModel.groupManagerUid,
       groupMemberUidList: groupModel.groupMemberUidList,
-      groupId: documentId,
+      groupId: groupId,
     );
+
+    firestore
+        .collection(FirebaseCollectionName.userGroups)
+        .add({'groupId': groupId});
 
     return Future(() => right(entity));
   }
@@ -679,6 +683,10 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
             .update({
           FirebaseGroupFieldName.memberUidList: FieldValue.arrayUnion([uid]),
         });
+
+        firestore
+            .collection(FirebaseCollectionName.userGroups)
+            .add({'groupId': groupId});
       }
 
       return Future(() => right(null));
@@ -691,6 +699,27 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   EitherFuture<void> withdrawalFromGroup({required String groupId}) async {
     try {
       final myUid = getMyUserId();
+
+      await firestore
+          .collection(FirebaseCollectionName.userGroups)
+          .where('groupId', isEqualTo: groupId)
+          .get()
+          .then((value) {
+        value.docs.firstOption.fold(
+          () => null,
+          (t) => t.reference.delete(),
+        );
+      });
+
+      firestore
+          .collection(FirebaseCollectionName.userGroups)
+          .where('groupId', isEqualTo: groupId)
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.map((doc) {
+          doc.reference.delete();
+        });
+      });
 
       final remainings = await firestore
           .collection(FirebaseCollectionName.groups)
