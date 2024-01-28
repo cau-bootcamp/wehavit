@@ -108,6 +108,75 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
 
       final uid = getMyUserId();
 
+      // 사용자가 속한 그룹의 id List
+      final groupIdList = await firestore
+          .collection(FirebaseCollectionName.userGroups)
+          .get()
+          .then(
+            (result) => result.docs
+                .map((doc) => doc.data()['groupId'] as String)
+                .toList(),
+          );
+
+      // 사용자가 속한 그룹에 속한 멤버들의 uid List
+      final memberListForEachGroup = await Future.wait<List<String>>(
+        groupIdList.map((groupId) async {
+          return await firestore
+              .collection(FirebaseCollectionName.groups)
+              .doc(groupId)
+              .get()
+              .then(
+                (value) => value
+                    .data()?[FirebaseGroupFieldName.memberUidList]
+                    ?.cast<String>(),
+              );
+        }),
+      );
+
+      // 그룹 멤버들이 해당 그룹에 공유한 목표들의 id List
+      final wholeResolutionIdList = (await Future.wait(
+        memberListForEachGroup.mapIndexed((index, list) async {
+          final groupId = groupIdList[index];
+          final uidList = list as List<String>;
+          final resolutionIdList = (await Future.wait(
+            uidList.map((uid) async {
+              final resolutionIdList = await firestore
+                  .collection(
+                    FirebaseCollectionName.getTargetResolutionCollectionName(
+                      uid,
+                    ),
+                  )
+                  .where(
+                    FirebaseResolutionFieldName.resolutionShareGroupIdList,
+                    arrayContains: groupId,
+                  )
+                  .get()
+                  .then(
+                    (result) =>
+                        result.docs.map((doc) => doc.reference.id).toList(),
+                  );
+
+              return resolutionIdList;
+            }),
+          ))
+              .expand((element) => element)
+              .toList();
+          return resolutionIdList;
+        }).toList(),
+      ))
+          .expand((element) => element)
+          .toSet()
+          .toList();
+
+      // TODO: 친구 - 친구로 공유된 목표에 대해서도 공유하는 로직 작성이 필요함
+
+      if (wholeResolutionIdList.isEmpty) {
+        return Future(
+          () => right([]),
+        );
+      }
+
+      print("fetch start");
       final fetchResult = await FirebaseFirestore.instance
           .collection(FirebaseCollectionName.confirmPosts)
           .where(
@@ -116,16 +185,16 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
             isLessThanOrEqualTo: Timestamp.fromDate(endDate),
           )
           .where(
-            // Filter.or(
-            // Filter(
-            //   FirebaseConfirmPostFieldName.fan,
-            //   arrayContains: uid,
-            // ),
-            Filter(
-              FirebaseConfirmPostFieldName.owner,
-              isEqualTo: uid,
+            Filter.or(
+              Filter(
+                FirebaseConfirmPostFieldName.resolutionId,
+                whereIn: wholeResolutionIdList,
+              ),
+              Filter(
+                FirebaseConfirmPostFieldName.owner,
+                isEqualTo: uid,
+              ),
             ),
-            // ),
           )
           .get();
 
@@ -665,7 +734,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           .get()
           .then(
             (data) => data.docs.map(
-              (doc) => firestore
+              (doc) async => await firestore
                   .collection(
                     FirebaseCollectionName.getGroupApplyWaitingCollectionName(
                       groupId,
