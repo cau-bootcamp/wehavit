@@ -338,8 +338,9 @@ class SelectFans extends HookConsumerWidget {
         },
         options: friendListSnapshot.data?.map((e) => e.userName!).toList() ??
             ['친구를 불러오는 중입니다.'],
-        selectedValues:
-            (resolutionState.fanList ?? []).map((e) => e.userName!).toList(),
+        selectedValues: (resolutionState.shareFriendEntityList ?? [])
+            .map((e) => e.userName!)
+            .toList(),
         whenEmpty: '친구를 선택해주세요.',
         // 스타일링을 위한 코드
         selected_values_style: const TextStyle(

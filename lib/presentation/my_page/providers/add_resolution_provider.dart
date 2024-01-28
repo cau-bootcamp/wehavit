@@ -12,7 +12,7 @@ class AddResolutionNotifier extends StateNotifier<ResolutionEntity> {
   late final UploadResolutionUseCase _uploadResolutionUsecase;
 
   void changeFanList(List<UserDataEntity> newFanList) {
-    state = state.copyWith(fanList: newFanList);
+    state = state.copyWith(shareFriendEntityList: newFanList);
   }
 
   void changeActionPerWeekState(int newActionPerWeek) {
@@ -35,7 +35,8 @@ class AddResolutionNotifier extends StateNotifier<ResolutionEntity> {
     return _uploadResolutionUsecase(
       goalStatement: state.goalStatement!,
       actionStatement: state.actionStatement!,
-      fanList: state.fanList!,
+      shareFriendList: [],
+      shareGroupList: [],
       actionPerWeek: state.actionPerWeek!,
     );
   }

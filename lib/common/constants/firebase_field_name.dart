@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart' show immutable;
 @immutable
 class FirebaseUserFieldName {
   const FirebaseUserFieldName._();
-
   //users
   static const displayName = 'displayName';
   static const email = 'email';

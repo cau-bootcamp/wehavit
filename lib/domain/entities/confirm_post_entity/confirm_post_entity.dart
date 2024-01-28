@@ -1,7 +1,6 @@
 // ignore_for_file: invalid_annotation_target
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:wehavit/domain/entities/entities.dart';
 
 part 'confirm_post_entity.freezed.dart';
 part 'confirm_post_entity.g.dart';
@@ -23,7 +22,6 @@ class ConfirmPostEntity with _$ConfirmPostEntity {
   )
   @Assert('createdAt != null', 'createdAt must not be null')
   @Assert('updatedAt != null', 'createdAt must not be null')
-  @Assert('fan != null', 'roles(fan) must not be null')
   @Assert('owner != null', 'roles(owner) must not be null')
   @Assert('attributes != null', 'attribute must not be null')
   @TimestampConverter()

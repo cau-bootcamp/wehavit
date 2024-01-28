@@ -286,7 +286,6 @@ class _$ConfirmPostEntityImpl implements _ConfirmPostEntity {
             'recentStrike must be between b0000000 and b1111111'),
         assert(createdAt != null, 'createdAt must not be null'),
         assert(updatedAt != null, 'createdAt must not be null'),
-        assert(fan != null, 'roles(fan) must not be null'),
         assert(owner != null, 'roles(owner) must not be null'),
         assert(attributes != null, 'attribute must not be null'),
         _attributes = attributes;

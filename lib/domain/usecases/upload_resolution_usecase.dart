@@ -10,14 +10,17 @@ class UploadResolutionUseCase {
   EitherFuture<bool> call({
     required String goalStatement,
     required String actionStatement,
-    required List<UserDataEntity> fanList,
+    required List<UserDataEntity> shareFriendList,
+    required List<GroupEntity> shareGroupList,
     required int actionPerWeek,
   }) async {
     ResolutionEntity entity = ResolutionEntity(
       goalStatement: goalStatement,
       actionStatement: actionStatement,
       startDate: DateTime.now(),
-      fanList: fanList,
+      isActive: true,
+      shareFriendEntityList: shareFriendList,
+      shareGroupEntityList: shareGroupList,
       actionPerWeek: actionPerWeek,
       resolutionId: '',
     );

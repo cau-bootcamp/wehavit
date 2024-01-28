@@ -328,43 +328,56 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     String userId,
   ) async {
     try {
-      final userDocument = await firestore
+      final resolutionList = await firestore
           .collection(
             FirebaseCollectionName.getTargetResolutionCollectionName(userId),
           )
-          .get();
+          .get()
+          .then(
+            (result) => Future.wait(
+              result.docs.map((resolutionDocument) async {
+                final model = FirebaseResolutionModel.fromFireStoreDocument(
+                  resolutionDocument,
+                );
 
-      final fetchResult = await Future.wait(
-        userDocument.docs.map((doc) async {
-          final model = FirebaseResolutionModel.fromFireStoreDocument(
-            doc,
+                final shareFriendEntityList = (await Future.wait(
+                  model.shareFriendIdList!.map((uid) async {
+                    final entity = (await fetchUserDataEntityByUserId(uid))
+                        .fold((failure) => null, (entity) => entity);
+
+                    if (entity != null) {
+                      return entity;
+                    }
+                  }).toList(),
+                ))
+                    .nonNulls
+                    .toList();
+
+                final shareGroupEntityList = (await Future.wait(
+                  model.shareGroupIdList!.map((groupId) async {
+                    final entity = (await fetchGroupEntityByGroupId(groupId))
+                        .fold((failure) => null, (entity) => entity);
+
+                    if (entity != null) {
+                      return entity;
+                    }
+                  }).toList(),
+                ))
+                    .nonNulls
+                    .toList();
+
+                final resolutionEntity = model.toResolutionEntity(
+                  documentId: resolutionDocument.reference.id,
+                  shareFriendEntityList: shareFriendEntityList,
+                  shareGroupEntityList: shareGroupEntityList,
+                );
+
+                return resolutionEntity;
+              }).toList(),
+            ),
           );
 
-          final fetchFanList = await Future.wait(
-            (model.fanUserIdList ?? []).map((userId) async {
-              final fetchResult =
-                  (await fetchUserDataEntityByUserId(userId)).fold(
-                (l) => null,
-                (r) => r,
-              );
-              if (fetchResult != null) {
-                return fetchResult;
-              }
-            }).toList(),
-          );
-
-          final fanUserEntityList = fetchFanList.whereNotNull().toList();
-
-          final entity = model.toResolutionEntity(
-            documentId: doc.reference.id,
-            fanUserEntityList: fanUserEntityList,
-          );
-
-          return entity;
-        }).toList(),
-      );
-
-      return Future(() => right(fetchResult));
+      return Future(() => right(resolutionList));
     } on Exception {
       return Future(
         () =>
@@ -377,15 +390,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   EitherFuture<bool> uploadResolutionEntity(ResolutionEntity entity) async {
     try {
       FirebaseResolutionModel resolutionModel =
-          FirebaseResolutionModel.fromJson(entity.toJson());
-
-      final List<String> fanList =
-          (await firestore.collection(FirebaseCollectionName.friends).get())
-              .docs
-              .map((doc) => doc[FirebaseFriendFieldName.friendUid] as String)
-              .toList();
-
-      resolutionModel = resolutionModel.copyWith(fanUserIdList: fanList);
+          FirebaseResolutionModel.fromEntity(entity);
 
       await firestore
           .collection(FirebaseCollectionName.myResolutions)
@@ -791,5 +796,25 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     }
 
     return Future(() => right(null));
+  }
+
+  EitherFuture<GroupEntity> fetchGroupEntityByGroupId(
+    String targetGroupId,
+  ) async {
+    try {
+      final groupDocument = await firestore
+          .collection(FirebaseCollectionName.groups)
+          .doc(targetGroupId)
+          .get();
+
+      final model = FirebaseGroupModel.fromFireStoreDocument(groupDocument);
+      final entity = model.toGroupEntity(
+        groupId: groupDocument.reference.id,
+      );
+
+      return Future(() => right(entity));
+    } on Exception catch (e) {
+      return Future(() => left(Failure(e.toString())));
+    }
   }
 }
