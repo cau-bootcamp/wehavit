@@ -23,4 +23,6 @@ abstract class GroupRepository {
   });
 
   EitherFuture<void> withdrawalFromGroup({required String groupId});
+
+  EitherFuture<List<GroupEntity>> getGroupEntityList();
 }

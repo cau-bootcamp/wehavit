@@ -137,7 +137,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       final wholeResolutionIdList = (await Future.wait(
         memberListForEachGroup.mapIndexed((index, list) async {
           final groupId = groupIdList[index];
-          final uidList = list as List<String>;
+          final uidList = list;
           final resolutionIdList = (await Future.wait(
             uidList.map((uid) async {
               final resolutionIdList = await firestore
@@ -170,13 +170,13 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
 
       // TODO: 친구 - 친구로 공유된 목표에 대해서도 공유하는 로직 작성이 필요함
 
+      // query에 비어있는 리스트를 전달하면 에러가 발생하여, 예외처리 적용하였음
       if (wholeResolutionIdList.isEmpty) {
         return Future(
           () => right([]),
         );
       }
 
-      print("fetch start");
       final fetchResult = await FirebaseFirestore.instance
           .collection(FirebaseCollectionName.confirmPosts)
           .where(
@@ -603,8 +603,6 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   @override
   EitherFuture<List<ReactionEntity>> getUnreadReactionsAndDelete() async {
     try {
-      final uid = getMyUserId();
-
       final reactions = await firestore
           .collection(
             FirebaseCollectionName.userReactionBox,
@@ -866,6 +864,45 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       return Future(() => right(entity));
     } on Exception catch (e) {
       return Future(() => left(Failure(e.toString())));
+    }
+  }
+
+  @override
+  EitherFuture<List<GroupEntity>> getGroupEntityList() async {
+    try {
+      final groupIdList = await firestore
+          .collection(FirebaseCollectionName.userGroups)
+          .get()
+          .then(
+            (result) => result.docs
+                .map((doc) => doc.data()['groupId'].toString())
+                .toList(),
+          );
+
+      final groupEntityList = (await Future.wait(
+        groupIdList.map(
+          (groupId) async {
+            final fetchResult = await fetchGroupEntityByGroupId(groupId);
+            final entity = fetchResult.fold(
+              (l) => null,
+              (entity) => entity,
+            );
+            if (entity != null) {
+              return entity;
+            }
+          },
+        ),
+      ))
+          .whereNotNull()
+          .toList();
+
+      return Future(() => right(groupEntityList));
+    } on Exception {
+      return Future(
+        () => left(
+          const Failure('catch error on registerFriend'),
+        ),
+      );
     }
   }
 }

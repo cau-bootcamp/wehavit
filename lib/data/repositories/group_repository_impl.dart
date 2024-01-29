@@ -1,4 +1,5 @@
-import 'package:wehavit/common/utils/custom_types.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:wehavit/common/common.dart';
 import 'package:wehavit/data/datasources/datasources.dart';
 import 'package:wehavit/domain/entities/group_entity/group_entity.dart';
 import 'package:wehavit/domain/repositories/group_repository.dart';
@@ -55,5 +56,21 @@ class GroupRepositoryImpl implements GroupRepository {
   @override
   EitherFuture<void> withdrawalFromGroup({required String groupId}) {
     return _wehavitDatasource.withdrawalFromGroup(groupId: groupId);
+  }
+
+  @override
+  EitherFuture<List<GroupEntity>> getGroupEntityList() async {
+    try {
+      final getResult = await _wehavitDatasource.getGroupEntityList();
+
+      return getResult.fold(
+        (failure) => left(failure),
+        (entityList) {
+          return Future(() => right(entityList));
+        },
+      );
+    } on Exception catch (e) {
+      return Future(() => left(Failure(e.toString())));
+    }
   }
 }
