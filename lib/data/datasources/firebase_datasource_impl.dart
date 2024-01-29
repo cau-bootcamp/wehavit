@@ -905,4 +905,39 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       );
     }
   }
+
+  @override
+  EitherFuture<void> changeGroupStateOfResolution({
+    required String repositoryId,
+    required String groupId,
+    required bool toShareState,
+  }) {
+    try {
+      if (toShareState == true) {
+        firestore
+            .collection(FirebaseCollectionName.myResolutions)
+            .doc(repositoryId)
+            .update({
+          FirebaseResolutionFieldName.resolutionShareGroupIdList:
+              FieldValue.arrayUnion([groupId]),
+        });
+      } else {
+        firestore
+            .collection(FirebaseCollectionName.myResolutions)
+            .doc(repositoryId)
+            .update({
+          FirebaseResolutionFieldName.resolutionShareGroupIdList:
+              FieldValue.arrayRemove([groupId]),
+        });
+      }
+
+      return Future(() => right(null));
+    } on Exception {
+      return Future(
+        () => left(
+          const Failure('catch error on changeGroupStateOfResolution'),
+        ),
+      );
+    }
+  }
 }
