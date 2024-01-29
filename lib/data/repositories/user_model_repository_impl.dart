@@ -26,6 +26,6 @@ class UserModelRepositoryImpl implements UserModelRepository {
 
   @override
   EitherFuture<String> getMyUserId() {
-    return _wehavitDatasource.getMyUserId();
+    return Future(() => right(_wehavitDatasource.getMyUserId()));
   }
 }

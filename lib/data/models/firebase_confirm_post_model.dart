@@ -17,7 +17,6 @@ class FirebaseConfirmPostModel with _$FirebaseConfirmPostModel {
     required String? content,
     required String? imageUrl,
     required String? owner,
-    required List<String>? fan,
     required int? recentStrike,
     @TimestampConverter() required DateTime? createdAt,
     @TimestampConverter() required DateTime? updatedAt,
@@ -44,7 +43,6 @@ class FirebaseConfirmPostModel with _$FirebaseConfirmPostModel {
       content: entity.content,
       imageUrl: entity.imageUrl,
       owner: entity.owner,
-      fan: entity.fan!.map((entity) => entity.userId!).toList(),
       recentStrike: entity.recentStrike,
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
@@ -56,7 +54,6 @@ class FirebaseConfirmPostModel with _$FirebaseConfirmPostModel {
 extension FirebaseConfirmPostModelConvert on FirebaseConfirmPostModel {
   ConfirmPostEntity toConfirmPostEntity(
     String postId,
-    List<UserDataEntity> fanList,
     UserDataEntity owner,
   ) {
     return ConfirmPostEntity(
@@ -69,7 +66,6 @@ extension FirebaseConfirmPostModelConvert on FirebaseConfirmPostModel {
       content: content,
       imageUrl: imageUrl,
       owner: owner.userId,
-      fan: fanList,
       recentStrike: recentStrike,
       createdAt: createdAt,
       updatedAt: updatedAt,

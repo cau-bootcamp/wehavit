@@ -1,8 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/dependency/data/repository_dependency.dart';
+import 'package:wehavit/domain/repositories/group_repository.dart';
 import 'package:wehavit/domain/usecases/accept_applying_for_joining_group_usecase.dart';
 import 'package:wehavit/domain/usecases/apply_for_joining_group_usecase.dart';
 import 'package:wehavit/domain/usecases/create_group_usecase.dart';
+import 'package:wehavit/domain/usecases/get_group_list_usecase.dart';
 import 'package:wehavit/domain/usecases/reject_applying_for_joining_group_usecase.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
 import 'package:wehavit/domain/usecases/withdrawal_from_group_usecase.dart';
@@ -171,4 +173,9 @@ final withdrawalFromGroupUsecaseProvider =
     Provider<WithdrawalFromGroupUsecase>((ref) {
   final groupRepository = ref.watch(groupRepositoryProvider);
   return WithdrawalFromGroupUsecase(groupRepository);
+});
+
+final getGroupListUseCaseProvider = Provider<GetGroupListUsecase>((ref) {
+  final groupRepository = ref.watch(groupRepositoryProvider);
+  return GetGroupListUsecase(groupRepository);
 });

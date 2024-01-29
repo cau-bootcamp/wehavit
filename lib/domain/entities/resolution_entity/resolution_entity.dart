@@ -15,7 +15,8 @@ class ResolutionEntity with _$ResolutionEntity {
     bool? isActive,
     int? actionPerWeek,
     DateTime? startDate,
-    List<UserDataEntity>? fanList,
+    List<UserDataEntity>? shareFriendEntityList,
+    List<GroupEntity>? shareGroupEntityList,
   }) = _ResolutionEntity;
 
   factory ResolutionEntity.fromJson(Map<String, dynamic> json) =>

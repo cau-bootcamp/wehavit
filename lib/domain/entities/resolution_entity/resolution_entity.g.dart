@@ -17,8 +17,11 @@ _$ResolutionEntityImpl _$$ResolutionEntityImplFromJson(
       startDate: json['startDate'] == null
           ? null
           : DateTime.parse(json['startDate'] as String),
-      fanList: (json['fanList'] as List<dynamic>?)
+      shareFriendEntityList: (json['shareFriendEntityList'] as List<dynamic>?)
           ?.map((e) => UserDataEntity.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      shareGroupEntityList: (json['shareGroupEntityList'] as List<dynamic>?)
+          ?.map((e) => GroupEntity.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
@@ -31,5 +34,6 @@ Map<String, dynamic> _$$ResolutionEntityImplToJson(
       'isActive': instance.isActive,
       'actionPerWeek': instance.actionPerWeek,
       'startDate': instance.startDate?.toIso8601String(),
-      'fanList': instance.fanList,
+      'shareFriendEntityList': instance.shareFriendEntityList,
+      'shareGroupEntityList': instance.shareGroupEntityList,
     };

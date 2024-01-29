@@ -16,7 +16,8 @@ class FirebaseResolutionModel with _$FirebaseResolutionModel {
     required bool? isActive,
     required int? actionPerWeek,
     @TimestampSerializer() required DateTime? startDate,
-    required List<String>? fanUserIdList,
+    required List<String>? shareFriendIdList,
+    required List<String>? shareGroupIdList,
   }) = _FirebaseResolutionModel;
 
   factory FirebaseResolutionModel.fromJson(Map<String, dynamic> json) =>
@@ -25,15 +26,32 @@ class FirebaseResolutionModel with _$FirebaseResolutionModel {
   factory FirebaseResolutionModel.fromFireStoreDocument(DocumentSnapshot doc) {
     if (doc.data() == null) throw Exception('Document data was null');
 
-    return FirebaseResolutionModel.fromJson(doc.data() as Map<String, Object?>)
-        .copyWith();
+    return FirebaseResolutionModel.fromJson(doc.data() as Map<String, Object?>);
   }
+
+  factory FirebaseResolutionModel.fromEntity(ResolutionEntity entity) =>
+      FirebaseResolutionModel(
+        goalStatement: entity.goalStatement,
+        actionStatement: entity.actionStatement,
+        isActive: entity.isActive,
+        actionPerWeek: entity.actionPerWeek,
+        startDate: entity.startDate,
+        shareFriendIdList: entity.shareFriendEntityList
+                ?.map((friendEntity) => friendEntity.userId!)
+                .toList() ??
+            [],
+        shareGroupIdList: entity.shareGroupEntityList
+                ?.map((groupEntity) => groupEntity.groupId)
+                .toList() ??
+            [],
+      );
 }
 
 extension ConvertFirebaseResolutionModel on FirebaseResolutionModel {
   ResolutionEntity toResolutionEntity({
     required String documentId,
-    required List<UserDataEntity> fanUserEntityList,
+    required List<UserDataEntity> shareFriendEntityList,
+    required List<GroupEntity> shareGroupEntityList,
   }) {
     return ResolutionEntity(
       resolutionId: documentId,
@@ -42,7 +60,8 @@ extension ConvertFirebaseResolutionModel on FirebaseResolutionModel {
       isActive: isActive,
       actionPerWeek: actionPerWeek,
       startDate: startDate,
-      fanList: fanUserEntityList,
+      shareFriendEntityList: shareFriendEntityList,
+      shareGroupEntityList: shareGroupEntityList,
     );
   }
 }

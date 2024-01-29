@@ -27,7 +27,6 @@ mixin _$FirebaseConfirmPostModel {
   String? get content => throw _privateConstructorUsedError;
   String? get imageUrl => throw _privateConstructorUsedError;
   String? get owner => throw _privateConstructorUsedError;
-  List<String>? get fan => throw _privateConstructorUsedError;
   int? get recentStrike => throw _privateConstructorUsedError;
   @TimestampConverter()
   DateTime? get createdAt => throw _privateConstructorUsedError;
@@ -54,7 +53,6 @@ abstract class $FirebaseConfirmPostModelCopyWith<$Res> {
       String? content,
       String? imageUrl,
       String? owner,
-      List<String>? fan,
       int? recentStrike,
       @TimestampConverter() DateTime? createdAt,
       @TimestampConverter() DateTime? updatedAt,
@@ -81,7 +79,6 @@ class _$FirebaseConfirmPostModelCopyWithImpl<$Res,
     Object? content = freezed,
     Object? imageUrl = freezed,
     Object? owner = freezed,
-    Object? fan = freezed,
     Object? recentStrike = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
@@ -112,10 +109,6 @@ class _$FirebaseConfirmPostModelCopyWithImpl<$Res,
           ? _value.owner
           : owner // ignore: cast_nullable_to_non_nullable
               as String?,
-      fan: freezed == fan
-          ? _value.fan
-          : fan // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
       recentStrike: freezed == recentStrike
           ? _value.recentStrike
           : recentStrike // ignore: cast_nullable_to_non_nullable
@@ -152,7 +145,6 @@ abstract class _$$FirebaseConfirmPostModelImplCopyWith<$Res>
       String? content,
       String? imageUrl,
       String? owner,
-      List<String>? fan,
       int? recentStrike,
       @TimestampConverter() DateTime? createdAt,
       @TimestampConverter() DateTime? updatedAt,
@@ -178,7 +170,6 @@ class __$$FirebaseConfirmPostModelImplCopyWithImpl<$Res>
     Object? content = freezed,
     Object? imageUrl = freezed,
     Object? owner = freezed,
-    Object? fan = freezed,
     Object? recentStrike = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
@@ -209,10 +200,6 @@ class __$$FirebaseConfirmPostModelImplCopyWithImpl<$Res>
           ? _value.owner
           : owner // ignore: cast_nullable_to_non_nullable
               as String?,
-      fan: freezed == fan
-          ? _value._fan
-          : fan // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
       recentStrike: freezed == recentStrike
           ? _value.recentStrike
           : recentStrike // ignore: cast_nullable_to_non_nullable
@@ -244,13 +231,11 @@ class _$FirebaseConfirmPostModelImpl implements _FirebaseConfirmPostModel {
       required this.content,
       required this.imageUrl,
       required this.owner,
-      required final List<String>? fan,
       required this.recentStrike,
       @TimestampConverter() required this.createdAt,
       @TimestampConverter() required this.updatedAt,
       required final Map<String, bool>? attributes})
-      : _fan = fan,
-        _attributes = attributes;
+      : _attributes = attributes;
 
   factory _$FirebaseConfirmPostModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$FirebaseConfirmPostModelImplFromJson(json);
@@ -267,16 +252,6 @@ class _$FirebaseConfirmPostModelImpl implements _FirebaseConfirmPostModel {
   final String? imageUrl;
   @override
   final String? owner;
-  final List<String>? _fan;
-  @override
-  List<String>? get fan {
-    final value = _fan;
-    if (value == null) return null;
-    if (_fan is EqualUnmodifiableListView) return _fan;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
-
   @override
   final int? recentStrike;
   @override
@@ -297,7 +272,7 @@ class _$FirebaseConfirmPostModelImpl implements _FirebaseConfirmPostModel {
 
   @override
   String toString() {
-    return 'FirebaseConfirmPostModel(resolutionGoalStatement: $resolutionGoalStatement, resolutionId: $resolutionId, title: $title, content: $content, imageUrl: $imageUrl, owner: $owner, fan: $fan, recentStrike: $recentStrike, createdAt: $createdAt, updatedAt: $updatedAt, attributes: $attributes)';
+    return 'FirebaseConfirmPostModel(resolutionGoalStatement: $resolutionGoalStatement, resolutionId: $resolutionId, title: $title, content: $content, imageUrl: $imageUrl, owner: $owner, recentStrike: $recentStrike, createdAt: $createdAt, updatedAt: $updatedAt, attributes: $attributes)';
   }
 
   @override
@@ -315,7 +290,6 @@ class _$FirebaseConfirmPostModelImpl implements _FirebaseConfirmPostModel {
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
             (identical(other.owner, owner) || other.owner == owner) &&
-            const DeepCollectionEquality().equals(other._fan, _fan) &&
             (identical(other.recentStrike, recentStrike) ||
                 other.recentStrike == recentStrike) &&
             (identical(other.createdAt, createdAt) ||
@@ -336,7 +310,6 @@ class _$FirebaseConfirmPostModelImpl implements _FirebaseConfirmPostModel {
       content,
       imageUrl,
       owner,
-      const DeepCollectionEquality().hash(_fan),
       recentStrike,
       createdAt,
       updatedAt,
@@ -365,7 +338,6 @@ abstract class _FirebaseConfirmPostModel implements FirebaseConfirmPostModel {
           required final String? content,
           required final String? imageUrl,
           required final String? owner,
-          required final List<String>? fan,
           required final int? recentStrike,
           @TimestampConverter() required final DateTime? createdAt,
           @TimestampConverter() required final DateTime? updatedAt,
@@ -387,8 +359,6 @@ abstract class _FirebaseConfirmPostModel implements FirebaseConfirmPostModel {
   String? get imageUrl;
   @override
   String? get owner;
-  @override
-  List<String>? get fan;
   @override
   int? get recentStrike;
   @override

@@ -15,6 +15,7 @@ import 'package:wehavit/domain/entities/entities.dart';
 class FirebaseDatasourceImpl implements WehavitDatasource {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
+  String? myUid = FirebaseAuth.instance.currentUser?.uid;
   int get maxDay => 27;
 
   @override
@@ -105,14 +106,115 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           DateTime(startDate.year, startDate.month, startDate.day)
               .add(const Duration(days: 1));
 
-      final uid = (await getMyUserId()).fold(
-        (l) => null,
-        (uid) => uid,
+      final uid = getMyUserId();
+
+      // 사용자가 속한 그룹의 id List
+      final groupIdList = await firestore
+          .collection(FirebaseCollectionName.userGroups)
+          .get()
+          .then(
+            (result) => result.docs
+                .map((doc) => doc.data()['groupId'] as String)
+                .toList(),
+          );
+
+      // 사용자가 속한 그룹에 속한 멤버들의 uid List
+      final memberListForEachGroup = await Future.wait<List<String>>(
+        groupIdList.map((groupId) async {
+          return await firestore
+              .collection(FirebaseCollectionName.groups)
+              .doc(groupId)
+              .get()
+              .then(
+                (value) => value
+                    .data()?[FirebaseGroupFieldName.memberUidList]
+                    ?.cast<String>(),
+              );
+        }),
       );
 
-      if (uid == null) {
+      // 그룹 멤버들이 해당 그룹에 공유한 목표들의 id List
+      final groupResolutionIdList = (await Future.wait(
+        memberListForEachGroup.mapIndexed((index, list) async {
+          final groupId = groupIdList[index];
+          final uidList = list;
+          final resolutionIdList = (await Future.wait(
+            uidList.map((uid) async {
+              final resolutionIdList = await firestore
+                  .collection(
+                    FirebaseCollectionName.getTargetResolutionCollectionName(
+                      uid,
+                    ),
+                  )
+                  .where(
+                    FirebaseResolutionFieldName.resolutionShareGroupIdList,
+                    arrayContains: groupId,
+                  )
+                  .get()
+                  .then(
+                    (result) =>
+                        result.docs.map((doc) => doc.reference.id).toList(),
+                  );
+
+              return resolutionIdList;
+            }),
+          ))
+              .expand((element) => element)
+              .toList();
+          return resolutionIdList;
+        }).toList(),
+      ))
+          .expand((element) => element)
+          .toSet()
+          .toList();
+
+      // 친구들이 해당 그룹에 공유한 목표들의 id List
+      // 사용자가 속한 그룹의 id List
+      final friendIdList = await firestore
+          .collection(
+            FirebaseCollectionName.getTargetFriendsCollectionName(
+              getMyUserId(),
+            ),
+          )
+          .get()
+          .then(
+            (result) => result.docs
+                .map(
+                  (doc) =>
+                      doc.data()[FirebaseFriendFieldName.friendUid] as String,
+                )
+                .toList(),
+          );
+
+      final friendResolutionIdList = (await Future.wait(
+        friendIdList.map((uid) async {
+          final resolutionIdList = await firestore
+              .collection(
+                  FirebaseCollectionName.getTargetResolutionCollectionName(uid))
+              .where(
+                FirebaseResolutionFieldName.resolutionShareFriendIdList,
+                arrayContains: getMyUserId(),
+              )
+              .get()
+              .then(
+                (result) => result.docs.map((doc) {
+                  return doc.reference.id;
+                }).toList(),
+              );
+          return resolutionIdList;
+        }),
+      ))
+          .expand((element) => element)
+          .toSet()
+          .toList();
+
+      final wholeResolutionIdList =
+          (groupResolutionIdList + friendResolutionIdList).toSet().toList();
+
+      // query에 비어있는 리스트를 전달하면 에러가 발생하여, 예외처리 적용하였음
+      if (wholeResolutionIdList.isEmpty) {
         return Future(
-          () => left(const Failure('unable to get firebase user id')),
+          () => right([]),
         );
       }
 
@@ -126,8 +228,8 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           .where(
             Filter.or(
               Filter(
-                FirebaseConfirmPostFieldName.fan,
-                arrayContains: uid,
+                FirebaseConfirmPostFieldName.resolutionId,
+                whereIn: wholeResolutionIdList,
               ),
               Filter(
                 FirebaseConfirmPostFieldName.owner,
@@ -142,19 +244,12 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           (doc) async {
             final confirmPostModel =
                 FirebaseConfirmPostModel.fromFireStoreDocument(doc);
-            final fanList = await Future.wait(
-              confirmPostModel.fan!
-                  .map(
-                    (userId) async => (await getUserEntityByUserId(userId))!,
-                  )
-                  .toList(),
-            );
+
             final ownerUserEntity =
                 (await getUserEntityByUserId(confirmPostModel.owner!))!;
 
             final entity = confirmPostModel.toConfirmPostEntity(
               doc.reference.id,
-              fanList,
               ownerUserEntity,
             );
 
@@ -190,18 +285,11 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
         fetchResult.docs.map(
           (doc) async {
             final model = FirebaseConfirmPostModel.fromFireStoreDocument(doc);
-            final fanList = await Future.wait(
-              model.fan!
-                  .map(
-                    (userId) async => (await getUserEntityByUserId(userId))!,
-                  )
-                  .toList(),
-            );
+
             final ownerUserEntity =
                 (await getUserEntityByUserId(model.owner!))!;
             final entity = model.toConfirmPostEntity(
               doc.reference.id,
-              fanList,
               ownerUserEntity,
             );
 
@@ -253,18 +341,10 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           fetchResult.docs.first,
         );
 
-        final fanList = await Future.wait(
-          model.fan!
-              .map(
-                (userId) async => (await getUserEntityByUserId(userId))!,
-              )
-              .toList(),
-        );
         final ownerUserEntity = (await getUserEntityByUserId(model.owner!))!;
 
         final entity = model.toConfirmPostEntity(
           fetchResult.docs.first.reference.id,
-          fanList,
           ownerUserEntity,
         );
 
@@ -329,7 +409,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
 
       await firestore
           .collection(
-            FirebaseCollectionName.getUserReactionBoxCollectionName(
+            FirebaseCollectionName.getTargetUserReactionBoxCollectionName(
               targetEntity.owner!,
             ),
           )
@@ -350,43 +430,56 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     String userId,
   ) async {
     try {
-      final userDocument = await firestore
+      final resolutionList = await firestore
           .collection(
             FirebaseCollectionName.getTargetResolutionCollectionName(userId),
           )
-          .get();
+          .get()
+          .then(
+            (result) => Future.wait(
+              result.docs.map((resolutionDocument) async {
+                final model = FirebaseResolutionModel.fromFireStoreDocument(
+                  resolutionDocument,
+                );
 
-      final fetchResult = await Future.wait(
-        userDocument.docs.map((doc) async {
-          final model = FirebaseResolutionModel.fromFireStoreDocument(
-            doc,
+                final shareFriendEntityList = (await Future.wait(
+                  model.shareFriendIdList!.map((uid) async {
+                    final entity = (await fetchUserDataEntityByUserId(uid))
+                        .fold((failure) => null, (entity) => entity);
+
+                    if (entity != null) {
+                      return entity;
+                    }
+                  }).toList(),
+                ))
+                    .nonNulls
+                    .toList();
+
+                final shareGroupEntityList = (await Future.wait(
+                  model.shareGroupIdList!.map((groupId) async {
+                    final entity = (await fetchGroupEntityByGroupId(groupId))
+                        .fold((failure) => null, (entity) => entity);
+
+                    if (entity != null) {
+                      return entity;
+                    }
+                  }).toList(),
+                ))
+                    .nonNulls
+                    .toList();
+
+                final resolutionEntity = model.toResolutionEntity(
+                  documentId: resolutionDocument.reference.id,
+                  shareFriendEntityList: shareFriendEntityList,
+                  shareGroupEntityList: shareGroupEntityList,
+                );
+
+                return resolutionEntity;
+              }).toList(),
+            ),
           );
 
-          final fetchFanList = await Future.wait(
-            (model.fanUserIdList ?? []).map((userId) async {
-              final fetchResult =
-                  (await fetchUserDataEntityByUserId(userId)).fold(
-                (l) => null,
-                (r) => r,
-              );
-              if (fetchResult != null) {
-                return fetchResult;
-              }
-            }).toList(),
-          );
-
-          final fanUserEntityList = fetchFanList.whereNotNull().toList();
-
-          final entity = model.toResolutionEntity(
-            documentId: doc.reference.id,
-            fanUserEntityList: fanUserEntityList,
-          );
-
-          return entity;
-        }).toList(),
-      );
-
-      return Future(() => right(fetchResult));
+      return Future(() => right(resolutionList));
     } on Exception {
       return Future(
         () =>
@@ -399,15 +492,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   EitherFuture<bool> uploadResolutionEntity(ResolutionEntity entity) async {
     try {
       FirebaseResolutionModel resolutionModel =
-          FirebaseResolutionModel.fromJson(entity.toJson());
-
-      final List<String> fanList =
-          (await firestore.collection(FirebaseCollectionName.friends).get())
-              .docs
-              .map((doc) => doc[FirebaseFriendFieldName.friendUid] as String)
-              .toList();
-
-      resolutionModel = resolutionModel.copyWith(fanUserIdList: fanList);
+          FirebaseResolutionModel.fromEntity(entity);
 
       await firestore
           .collection(FirebaseCollectionName.myResolutions)
@@ -496,16 +581,11 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }
 
   @override
-  EitherFuture<String> getMyUserId() {
-    try {
-      final userId = FirebaseAuth.instance.currentUser!.uid;
-
-      return Future(() => right(userId));
-    } on Exception {
-      return Future(
-        () => left(const Failure('catch error on deleteConfirmPost')),
-      );
+  String getMyUserId() {
+    if (myUid == null) {
+      throw Exception('unable to get firebase user id');
     }
+    return myUid!;
   }
 
   @override
@@ -564,20 +644,9 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   @override
   EitherFuture<List<ReactionEntity>> getUnreadReactionsAndDelete() async {
     try {
-      final fetchUid = (await getMyUserId()).fold(
-        (l) => null,
-        (uid) => uid,
-      );
-
-      if (fetchUid == null) {
-        return Future(
-          () => left(const Failure('unable to get firebase user id')),
-        );
-      }
-
       final reactions = await firestore
           .collection(
-            FirebaseCollectionName.getUserReactionBoxCollectionName(fetchUid),
+            FirebaseCollectionName.userReactionBox,
           )
           .get();
 
@@ -606,17 +675,10 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     String localFileUrl,
   ) async {
     try {
-      final getUidResult = (await getMyUserId()).fold(
-        (l) => null,
-        (uid) => uid,
-      );
-
-      if (getUidResult == null) {
-        return Future(() => left(const Failure('cannot get uid')));
-      }
+      final uid = getMyUserId();
 
       String storagePath =
-          '$getUidResult/confirm_post/_${DateTime.now().toIso8601String()}';
+          FirebaseConfirmPostImagePathName.storagePath(uid: uid);
       final ref = FirebaseStorage.instance.ref(storagePath);
 
       await ref.putFile(File(localFileUrl));
@@ -642,7 +704,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       groupMemberUidList: [groupManagerUid],
     );
 
-    final documentId = (await firestore
+    final groupId = (await firestore
             .collection(FirebaseCollectionName.groups)
             .add(groupModel.toJson()))
         .id;
@@ -653,28 +715,25 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       groupRule: groupModel.groupRule,
       groupManagerUid: groupModel.groupManagerUid,
       groupMemberUidList: groupModel.groupMemberUidList,
-      groupId: documentId,
+      groupId: groupId,
     );
+
+    firestore
+        .collection(FirebaseCollectionName.userGroups)
+        .add({'groupId': groupId});
 
     return Future(() => right(entity));
   }
 
   @override
   EitherFuture<void> applyForJoiningGroup(String groupId) async {
-    final getUidResult = (await getMyUserId()).fold(
-      (l) => null,
-      (uid) => uid,
-    );
-
-    if (getUidResult == null) {
-      return Future(() => left(const Failure('cannot get uid')));
-    }
+    final uid = getMyUserId();
 
     await firestore
         .collection(
       FirebaseCollectionName.getGroupApplyWaitingCollectionName(groupId),
     )
-        .add({FirebaseGroupFieldName.applyUid: getUidResult});
+        .add({FirebaseGroupFieldName.applyUid: uid});
 
     return Future(() => right(null));
   }
@@ -686,14 +745,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     required bool isAccepted,
   }) async {
     try {
-      final myUid = (await getMyUserId()).fold(
-        (l) => null,
-        (uid) => uid,
-      );
-
-      if (myUid == null) {
-        return Future(() => left(const Failure('cannot get uid')));
-      }
+      final myUid = getMyUserId();
 
       final isManager = await firestore
           .collection(FirebaseCollectionName.groups)
@@ -721,7 +773,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           .get()
           .then(
             (data) => data.docs.map(
-              (doc) => firestore
+              (doc) async => await firestore
                   .collection(
                     FirebaseCollectionName.getGroupApplyWaitingCollectionName(
                       groupId,
@@ -739,6 +791,10 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
             .update({
           FirebaseGroupFieldName.memberUidList: FieldValue.arrayUnion([uid]),
         });
+
+        firestore
+            .collection(FirebaseCollectionName.userGroups)
+            .add({'groupId': groupId});
       }
 
       return Future(() => right(null));
@@ -750,11 +806,28 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   @override
   EitherFuture<void> withdrawalFromGroup({required String groupId}) async {
     try {
-      final myUid = (await getMyUserId()).fold((l) => null, (uid) => uid);
+      final myUid = getMyUserId();
 
-      if (myUid == null) {
-        return Future(() => left(const Failure('cannot fetch uid')));
-      }
+      await firestore
+          .collection(FirebaseCollectionName.userGroups)
+          .where('groupId', isEqualTo: groupId)
+          .get()
+          .then((value) {
+        value.docs.firstOption.fold(
+          () => null,
+          (t) => t.reference.delete(),
+        );
+      });
+
+      firestore
+          .collection(FirebaseCollectionName.userGroups)
+          .where('groupId', isEqualTo: groupId)
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.map((doc) {
+          doc.reference.delete();
+        });
+      });
 
       final remainings = await firestore
           .collection(FirebaseCollectionName.groups)
@@ -813,5 +886,99 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     }
 
     return Future(() => right(null));
+  }
+
+  EitherFuture<GroupEntity> fetchGroupEntityByGroupId(
+    String targetGroupId,
+  ) async {
+    try {
+      final groupDocument = await firestore
+          .collection(FirebaseCollectionName.groups)
+          .doc(targetGroupId)
+          .get();
+
+      final model = FirebaseGroupModel.fromFireStoreDocument(groupDocument);
+      final entity = model.toGroupEntity(
+        groupId: groupDocument.reference.id,
+      );
+
+      return Future(() => right(entity));
+    } on Exception catch (e) {
+      return Future(() => left(Failure(e.toString())));
+    }
+  }
+
+  @override
+  EitherFuture<List<GroupEntity>> getGroupEntityList() async {
+    try {
+      final groupIdList = await firestore
+          .collection(FirebaseCollectionName.userGroups)
+          .get()
+          .then(
+            (result) => result.docs
+                .map((doc) => doc.data()['groupId'].toString())
+                .toList(),
+          );
+
+      final groupEntityList = (await Future.wait(
+        groupIdList.map(
+          (groupId) async {
+            final fetchResult = await fetchGroupEntityByGroupId(groupId);
+            final entity = fetchResult.fold(
+              (l) => null,
+              (entity) => entity,
+            );
+            if (entity != null) {
+              return entity;
+            }
+          },
+        ),
+      ))
+          .whereNotNull()
+          .toList();
+
+      return Future(() => right(groupEntityList));
+    } on Exception {
+      return Future(
+        () => left(
+          const Failure('catch error on registerFriend'),
+        ),
+      );
+    }
+  }
+
+  @override
+  EitherFuture<void> changeGroupStateOfResolution({
+    required String repositoryId,
+    required String groupId,
+    required bool toShareState,
+  }) {
+    try {
+      if (toShareState == true) {
+        firestore
+            .collection(FirebaseCollectionName.myResolutions)
+            .doc(repositoryId)
+            .update({
+          FirebaseResolutionFieldName.resolutionShareGroupIdList:
+              FieldValue.arrayUnion([groupId]),
+        });
+      } else {
+        firestore
+            .collection(FirebaseCollectionName.myResolutions)
+            .doc(repositoryId)
+            .update({
+          FirebaseResolutionFieldName.resolutionShareGroupIdList:
+              FieldValue.arrayRemove([groupId]),
+        });
+      }
+
+      return Future(() => right(null));
+    } on Exception {
+      return Future(
+        () => left(
+          const Failure('catch error on changeGroupStateOfResolution'),
+        ),
+      );
+    }
   }
 }

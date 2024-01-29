@@ -44,7 +44,7 @@ abstract class WehavitDatasource {
 
   EitherFuture<UserDataEntity> fetchUserDataEntityByUserId(String targetUserId);
 
-  EitherFuture<String> getMyUserId();
+  String getMyUserId();
 
   EitherFuture<String> uploadQuickShotFromLocalUrlToConfirmPost({
     required String localPhotoUrl,
@@ -69,4 +69,12 @@ abstract class WehavitDatasource {
   });
 
   EitherFuture<void> withdrawalFromGroup({required String groupId});
+
+  EitherFuture<List<GroupEntity>> getGroupEntityList();
+
+  EitherFuture<void> changeGroupStateOfResolution({
+    required String repositoryId,
+    required String groupId,
+    required bool toShareState,
+  });
 }

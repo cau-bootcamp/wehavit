@@ -15,7 +15,6 @@ _$FirebaseConfirmPostModelImpl _$$FirebaseConfirmPostModelImplFromJson(
       content: json['content'] as String?,
       imageUrl: json['imageUrl'] as String?,
       owner: json['owner'] as String?,
-      fan: (json['fan'] as List<dynamic>?)?.map((e) => e as String).toList(),
       recentStrike: json['recentStrike'] as int?,
       createdAt: _$JsonConverterFromJson<Timestamp, DateTime>(
           json['createdAt'], const TimestampConverter().fromJson),
@@ -35,7 +34,6 @@ Map<String, dynamic> _$$FirebaseConfirmPostModelImplToJson(
       'content': instance.content,
       'imageUrl': instance.imageUrl,
       'owner': instance.owner,
-      'fan': instance.fan,
       'recentStrike': instance.recentStrike,
       'createdAt': _$JsonConverterToJson<Timestamp, DateTime>(
           instance.createdAt, const TimestampConverter().toJson),

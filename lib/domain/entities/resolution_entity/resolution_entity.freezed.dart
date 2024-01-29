@@ -26,7 +26,10 @@ mixin _$ResolutionEntity {
   bool? get isActive => throw _privateConstructorUsedError;
   int? get actionPerWeek => throw _privateConstructorUsedError;
   DateTime? get startDate => throw _privateConstructorUsedError;
-  List<UserDataEntity>? get fanList => throw _privateConstructorUsedError;
+  List<UserDataEntity>? get shareFriendEntityList =>
+      throw _privateConstructorUsedError;
+  List<GroupEntity>? get shareGroupEntityList =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -47,7 +50,8 @@ abstract class $ResolutionEntityCopyWith<$Res> {
       bool? isActive,
       int? actionPerWeek,
       DateTime? startDate,
-      List<UserDataEntity>? fanList});
+      List<UserDataEntity>? shareFriendEntityList,
+      List<GroupEntity>? shareGroupEntityList});
 }
 
 /// @nodoc
@@ -69,7 +73,8 @@ class _$ResolutionEntityCopyWithImpl<$Res, $Val extends ResolutionEntity>
     Object? isActive = freezed,
     Object? actionPerWeek = freezed,
     Object? startDate = freezed,
-    Object? fanList = freezed,
+    Object? shareFriendEntityList = freezed,
+    Object? shareGroupEntityList = freezed,
   }) {
     return _then(_value.copyWith(
       resolutionId: freezed == resolutionId
@@ -96,10 +101,14 @@ class _$ResolutionEntityCopyWithImpl<$Res, $Val extends ResolutionEntity>
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      fanList: freezed == fanList
-          ? _value.fanList
-          : fanList // ignore: cast_nullable_to_non_nullable
+      shareFriendEntityList: freezed == shareFriendEntityList
+          ? _value.shareFriendEntityList
+          : shareFriendEntityList // ignore: cast_nullable_to_non_nullable
               as List<UserDataEntity>?,
+      shareGroupEntityList: freezed == shareGroupEntityList
+          ? _value.shareGroupEntityList
+          : shareGroupEntityList // ignore: cast_nullable_to_non_nullable
+              as List<GroupEntity>?,
     ) as $Val);
   }
 }
@@ -119,7 +128,8 @@ abstract class _$$ResolutionEntityImplCopyWith<$Res>
       bool? isActive,
       int? actionPerWeek,
       DateTime? startDate,
-      List<UserDataEntity>? fanList});
+      List<UserDataEntity>? shareFriendEntityList,
+      List<GroupEntity>? shareGroupEntityList});
 }
 
 /// @nodoc
@@ -139,7 +149,8 @@ class __$$ResolutionEntityImplCopyWithImpl<$Res>
     Object? isActive = freezed,
     Object? actionPerWeek = freezed,
     Object? startDate = freezed,
-    Object? fanList = freezed,
+    Object? shareFriendEntityList = freezed,
+    Object? shareGroupEntityList = freezed,
   }) {
     return _then(_$ResolutionEntityImpl(
       resolutionId: freezed == resolutionId
@@ -166,10 +177,14 @@ class __$$ResolutionEntityImplCopyWithImpl<$Res>
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      fanList: freezed == fanList
-          ? _value._fanList
-          : fanList // ignore: cast_nullable_to_non_nullable
+      shareFriendEntityList: freezed == shareFriendEntityList
+          ? _value._shareFriendEntityList
+          : shareFriendEntityList // ignore: cast_nullable_to_non_nullable
               as List<UserDataEntity>?,
+      shareGroupEntityList: freezed == shareGroupEntityList
+          ? _value._shareGroupEntityList
+          : shareGroupEntityList // ignore: cast_nullable_to_non_nullable
+              as List<GroupEntity>?,
     ));
   }
 }
@@ -185,8 +200,10 @@ class _$ResolutionEntityImpl implements _ResolutionEntity {
       this.isActive,
       this.actionPerWeek,
       this.startDate,
-      final List<UserDataEntity>? fanList})
-      : _fanList = fanList;
+      final List<UserDataEntity>? shareFriendEntityList,
+      final List<GroupEntity>? shareGroupEntityList})
+      : _shareFriendEntityList = shareFriendEntityList,
+        _shareGroupEntityList = shareGroupEntityList;
 
   factory _$ResolutionEntityImpl.fromJson(Map<String, dynamic> json) =>
       _$$ResolutionEntityImplFromJson(json);
@@ -203,19 +220,31 @@ class _$ResolutionEntityImpl implements _ResolutionEntity {
   final int? actionPerWeek;
   @override
   final DateTime? startDate;
-  final List<UserDataEntity>? _fanList;
+  final List<UserDataEntity>? _shareFriendEntityList;
   @override
-  List<UserDataEntity>? get fanList {
-    final value = _fanList;
+  List<UserDataEntity>? get shareFriendEntityList {
+    final value = _shareFriendEntityList;
     if (value == null) return null;
-    if (_fanList is EqualUnmodifiableListView) return _fanList;
+    if (_shareFriendEntityList is EqualUnmodifiableListView)
+      return _shareFriendEntityList;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  final List<GroupEntity>? _shareGroupEntityList;
+  @override
+  List<GroupEntity>? get shareGroupEntityList {
+    final value = _shareGroupEntityList;
+    if (value == null) return null;
+    if (_shareGroupEntityList is EqualUnmodifiableListView)
+      return _shareGroupEntityList;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(value);
   }
 
   @override
   String toString() {
-    return 'ResolutionEntity(resolutionId: $resolutionId, goalStatement: $goalStatement, actionStatement: $actionStatement, isActive: $isActive, actionPerWeek: $actionPerWeek, startDate: $startDate, fanList: $fanList)';
+    return 'ResolutionEntity(resolutionId: $resolutionId, goalStatement: $goalStatement, actionStatement: $actionStatement, isActive: $isActive, actionPerWeek: $actionPerWeek, startDate: $startDate, shareFriendEntityList: $shareFriendEntityList, shareGroupEntityList: $shareGroupEntityList)';
   }
 
   @override
@@ -235,7 +264,10 @@ class _$ResolutionEntityImpl implements _ResolutionEntity {
                 other.actionPerWeek == actionPerWeek) &&
             (identical(other.startDate, startDate) ||
                 other.startDate == startDate) &&
-            const DeepCollectionEquality().equals(other._fanList, _fanList));
+            const DeepCollectionEquality()
+                .equals(other._shareFriendEntityList, _shareFriendEntityList) &&
+            const DeepCollectionEquality()
+                .equals(other._shareGroupEntityList, _shareGroupEntityList));
   }
 
   @JsonKey(ignore: true)
@@ -248,7 +280,8 @@ class _$ResolutionEntityImpl implements _ResolutionEntity {
       isActive,
       actionPerWeek,
       startDate,
-      const DeepCollectionEquality().hash(_fanList));
+      const DeepCollectionEquality().hash(_shareFriendEntityList),
+      const DeepCollectionEquality().hash(_shareGroupEntityList));
 
   @JsonKey(ignore: true)
   @override
@@ -273,7 +306,8 @@ abstract class _ResolutionEntity implements ResolutionEntity {
       final bool? isActive,
       final int? actionPerWeek,
       final DateTime? startDate,
-      final List<UserDataEntity>? fanList}) = _$ResolutionEntityImpl;
+      final List<UserDataEntity>? shareFriendEntityList,
+      final List<GroupEntity>? shareGroupEntityList}) = _$ResolutionEntityImpl;
 
   factory _ResolutionEntity.fromJson(Map<String, dynamic> json) =
       _$ResolutionEntityImpl.fromJson;
@@ -291,7 +325,9 @@ abstract class _ResolutionEntity implements ResolutionEntity {
   @override
   DateTime? get startDate;
   @override
-  List<UserDataEntity>? get fanList;
+  List<UserDataEntity>? get shareFriendEntityList;
+  @override
+  List<GroupEntity>? get shareGroupEntityList;
   @override
   @JsonKey(ignore: true)
   _$$ResolutionEntityImplCopyWith<_$ResolutionEntityImpl> get copyWith =>

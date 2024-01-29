@@ -36,4 +36,28 @@ class ResolutionRepositoryImpl implements ResolutionRepository {
   ) async {
     return _wehavitDatasource.uploadResolutionEntity(entity);
   }
+
+  @override
+  EitherFuture<void> shareResolutionToGroup(
+    String repositoryId,
+    String groupId,
+  ) {
+    return _wehavitDatasource.changeGroupStateOfResolution(
+      repositoryId: repositoryId,
+      groupId: groupId,
+      toShareState: true,
+    );
+  }
+
+  @override
+  EitherFuture<void> unshareResolutionToGroup(
+    String repositoryId,
+    String groupId,
+  ) {
+    return _wehavitDatasource.changeGroupStateOfResolution(
+      repositoryId: repositoryId,
+      groupId: groupId,
+      toShareState: false,
+    );
+  }
 }

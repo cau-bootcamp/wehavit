@@ -32,7 +32,6 @@ mixin _$ConfirmPostEntity {
   String? get content => throw _privateConstructorUsedError;
   String? get imageUrl => throw _privateConstructorUsedError;
   String? get owner => throw _privateConstructorUsedError;
-  List<UserDataEntity>? get fan => throw _privateConstructorUsedError;
   int? get recentStrike => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
   DateTime? get updatedAt => throw _privateConstructorUsedError;
@@ -61,7 +60,6 @@ abstract class $ConfirmPostEntityCopyWith<$Res> {
       String? content,
       String? imageUrl,
       String? owner,
-      List<UserDataEntity>? fan,
       int? recentStrike,
       DateTime? createdAt,
       DateTime? updatedAt,
@@ -90,7 +88,6 @@ class _$ConfirmPostEntityCopyWithImpl<$Res, $Val extends ConfirmPostEntity>
     Object? content = freezed,
     Object? imageUrl = freezed,
     Object? owner = freezed,
-    Object? fan = freezed,
     Object? recentStrike = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
@@ -133,10 +130,6 @@ class _$ConfirmPostEntityCopyWithImpl<$Res, $Val extends ConfirmPostEntity>
           ? _value.owner
           : owner // ignore: cast_nullable_to_non_nullable
               as String?,
-      fan: freezed == fan
-          ? _value.fan
-          : fan // ignore: cast_nullable_to_non_nullable
-              as List<UserDataEntity>?,
       recentStrike: freezed == recentStrike
           ? _value.recentStrike
           : recentStrike // ignore: cast_nullable_to_non_nullable
@@ -176,7 +169,6 @@ abstract class _$$ConfirmPostEntityImplCopyWith<$Res>
       String? content,
       String? imageUrl,
       String? owner,
-      List<UserDataEntity>? fan,
       int? recentStrike,
       DateTime? createdAt,
       DateTime? updatedAt,
@@ -203,7 +195,6 @@ class __$$ConfirmPostEntityImplCopyWithImpl<$Res>
     Object? content = freezed,
     Object? imageUrl = freezed,
     Object? owner = freezed,
-    Object? fan = freezed,
     Object? recentStrike = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
@@ -246,10 +237,6 @@ class __$$ConfirmPostEntityImplCopyWithImpl<$Res>
           ? _value.owner
           : owner // ignore: cast_nullable_to_non_nullable
               as String?,
-      fan: freezed == fan
-          ? _value._fan
-          : fan // ignore: cast_nullable_to_non_nullable
-              as List<UserDataEntity>?,
       recentStrike: freezed == recentStrike
           ? _value.recentStrike
           : recentStrike // ignore: cast_nullable_to_non_nullable
@@ -286,7 +273,6 @@ class _$ConfirmPostEntityImpl implements _ConfirmPostEntity {
       required this.content,
       required this.imageUrl,
       required this.owner,
-      required final List<UserDataEntity>? fan,
       required this.recentStrike,
       required this.createdAt,
       required this.updatedAt,
@@ -300,10 +286,8 @@ class _$ConfirmPostEntityImpl implements _ConfirmPostEntity {
             'recentStrike must be between b0000000 and b1111111'),
         assert(createdAt != null, 'createdAt must not be null'),
         assert(updatedAt != null, 'createdAt must not be null'),
-        assert(fan != null, 'roles(fan) must not be null'),
         assert(owner != null, 'roles(owner) must not be null'),
         assert(attributes != null, 'attribute must not be null'),
-        _fan = fan,
         _attributes = attributes;
 
   factory _$ConfirmPostEntityImpl.fromJson(Map<String, dynamic> json) =>
@@ -330,16 +314,6 @@ class _$ConfirmPostEntityImpl implements _ConfirmPostEntity {
   final String? imageUrl;
   @override
   final String? owner;
-  final List<UserDataEntity>? _fan;
-  @override
-  List<UserDataEntity>? get fan {
-    final value = _fan;
-    if (value == null) return null;
-    if (_fan is EqualUnmodifiableListView) return _fan;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
-
   @override
   final int? recentStrike;
   @override
@@ -358,7 +332,7 @@ class _$ConfirmPostEntityImpl implements _ConfirmPostEntity {
 
   @override
   String toString() {
-    return 'ConfirmPostEntity(id: $id, userName: $userName, userImageUrl: $userImageUrl, resolutionGoalStatement: $resolutionGoalStatement, resolutionId: $resolutionId, title: $title, content: $content, imageUrl: $imageUrl, owner: $owner, fan: $fan, recentStrike: $recentStrike, createdAt: $createdAt, updatedAt: $updatedAt, attributes: $attributes)';
+    return 'ConfirmPostEntity(id: $id, userName: $userName, userImageUrl: $userImageUrl, resolutionGoalStatement: $resolutionGoalStatement, resolutionId: $resolutionId, title: $title, content: $content, imageUrl: $imageUrl, owner: $owner, recentStrike: $recentStrike, createdAt: $createdAt, updatedAt: $updatedAt, attributes: $attributes)';
   }
 
   @override
@@ -381,7 +355,6 @@ class _$ConfirmPostEntityImpl implements _ConfirmPostEntity {
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
             (identical(other.owner, owner) || other.owner == owner) &&
-            const DeepCollectionEquality().equals(other._fan, _fan) &&
             (identical(other.recentStrike, recentStrike) ||
                 other.recentStrike == recentStrike) &&
             (identical(other.createdAt, createdAt) ||
@@ -405,7 +378,6 @@ class _$ConfirmPostEntityImpl implements _ConfirmPostEntity {
       content,
       imageUrl,
       owner,
-      const DeepCollectionEquality().hash(_fan),
       recentStrike,
       createdAt,
       updatedAt,
@@ -439,7 +411,6 @@ abstract class _ConfirmPostEntity implements ConfirmPostEntity {
       required final String? content,
       required final String? imageUrl,
       required final String? owner,
-      required final List<UserDataEntity>? fan,
       required final int? recentStrike,
       required final DateTime? createdAt,
       required final DateTime? updatedAt,
@@ -469,8 +440,6 @@ abstract class _ConfirmPostEntity implements ConfirmPostEntity {
   String? get imageUrl;
   @override
   String? get owner;
-  @override
-  List<UserDataEntity>? get fan;
   @override
   int? get recentStrike;
   @override

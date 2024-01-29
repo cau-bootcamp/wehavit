@@ -18,7 +18,6 @@ class UploadConfirmPostUseCase {
     required String title,
     required String content,
     required String imageUrl,
-    required List<UserDataEntity> fan,
     required Map<String, bool> attributes,
   }) async {
     final networkImageUrl = (await _confirmPostRepository
@@ -49,7 +48,6 @@ class UploadConfirmPostUseCase {
       content: content,
       imageUrl: networkImageUrl,
       owner: uid,
-      fan: fan,
       recentStrike: 0,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),

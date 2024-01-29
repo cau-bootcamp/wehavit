@@ -35,7 +35,7 @@ class LateWritingViewModelProvider extends StateNotifier<LateWritingViewModel> {
       content: state.contentTextEditingController.text,
       imageUrl: state.imageFileUrl ?? '',
       // will be set in repository impl
-      fan: currentWritingResolutionModel.fanList!,
+      // fan: currentWritingResolutionModel.fanList!,
       attributes: {
         'has_participated_live': false,
         'has_rested': false,
