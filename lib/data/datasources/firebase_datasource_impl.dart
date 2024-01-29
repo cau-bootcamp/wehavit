@@ -134,7 +134,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       );
 
       // 그룹 멤버들이 해당 그룹에 공유한 목표들의 id List
-      final wholeResolutionIdList = (await Future.wait(
+      final groupResolutionIdList = (await Future.wait(
         memberListForEachGroup.mapIndexed((index, list) async {
           final groupId = groupIdList[index];
           final uidList = list;
@@ -168,7 +168,48 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           .toSet()
           .toList();
 
-      // TODO: 친구 - 친구로 공유된 목표에 대해서도 공유하는 로직 작성이 필요함
+      // 친구들이 해당 그룹에 공유한 목표들의 id List
+      // 사용자가 속한 그룹의 id List
+      final friendIdList = await firestore
+          .collection(
+            FirebaseCollectionName.getTargetFriendsCollectionName(
+              getMyUserId(),
+            ),
+          )
+          .get()
+          .then(
+            (result) => result.docs
+                .map(
+                  (doc) =>
+                      doc.data()[FirebaseFriendFieldName.friendUid] as String,
+                )
+                .toList(),
+          );
+
+      final friendResolutionIdList = (await Future.wait(
+        friendIdList.map((uid) async {
+          final resolutionIdList = await firestore
+              .collection(
+                  FirebaseCollectionName.getTargetResolutionCollectionName(uid))
+              .where(
+                FirebaseResolutionFieldName.resolutionShareFriendIdList,
+                arrayContains: getMyUserId(),
+              )
+              .get()
+              .then(
+                (result) => result.docs.map((doc) {
+                  return doc.reference.id;
+                }).toList(),
+              );
+          return resolutionIdList;
+        }),
+      ))
+          .expand((element) => element)
+          .toSet()
+          .toList();
+
+      final wholeResolutionIdList =
+          (groupResolutionIdList + friendResolutionIdList).toSet().toList();
 
       // query에 비어있는 리스트를 전달하면 에러가 발생하여, 예외처리 적용하였음
       if (wholeResolutionIdList.isEmpty) {

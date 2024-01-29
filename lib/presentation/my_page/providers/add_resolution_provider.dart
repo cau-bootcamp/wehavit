@@ -39,8 +39,8 @@ class AddResolutionNotifier extends StateNotifier<ResolutionEntity> {
     return _uploadResolutionUsecase(
       goalStatement: state.goalStatement!,
       actionStatement: state.actionStatement!,
-      shareFriendList: state.shareFriendEntityList!,
-      shareGroupList: state.shareGroupEntityList!,
+      shareFriendList: state.shareFriendEntityList ?? [],
+      shareGroupList: state.shareGroupEntityList ?? [],
       actionPerWeek: state.actionPerWeek!,
     );
   }
