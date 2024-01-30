@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wehavit/domain/entities/group_announcement_entity/group_announcement_entity.dart';
 
 part 'firebase_group_announcement_model.freezed.dart';
 part 'firebase_group_announcement_model.g.dart';
@@ -27,6 +28,19 @@ class FirebaseGroupAnnouncementModel with _$FirebaseGroupAnnouncementModel {
 
     return FirebaseGroupAnnouncementModel.fromJson(
       doc.data() as Map<String, Object?>,
+    );
+  }
+
+  factory FirebaseGroupAnnouncementModel.fromEntity(
+    GroupAnnouncementEntity entity,
+  ) {
+    return FirebaseGroupAnnouncementModel(
+      groupId: entity.groupId,
+      writerUid: entity.writerUid,
+      title: entity.title,
+      content: entity.content,
+      createdAt: entity.createdAt,
+      readByUidList: entity.readByUidList,
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wehavit/domain/entities/group_announcement_entity/group_announcement_entity.dart';
 
 abstract class WehavitDatasource {
   EitherFuture<List<UserDataEntity>> getFriendModelList();
@@ -77,4 +78,6 @@ abstract class WehavitDatasource {
     required String groupId,
     required bool toShareState,
   });
+
+  EitherFuture<void> uploadGroupAnnouncement(GroupAnnouncementEntity entity);
 }

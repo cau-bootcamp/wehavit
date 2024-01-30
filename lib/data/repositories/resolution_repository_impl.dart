@@ -4,6 +4,7 @@ import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/data/datasources/datasources.dart';
 import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wehavit/domain/entities/group_announcement_entity/group_announcement_entity.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
 
 class ResolutionRepositoryImpl implements ResolutionRepository {
@@ -59,5 +60,12 @@ class ResolutionRepositoryImpl implements ResolutionRepository {
       groupId: groupId,
       toShareState: false,
     );
+  }
+
+  @override
+  EitherFuture<void> uploadGroupAnnouncementEntity(
+    GroupAnnouncementEntity entity,
+  ) {
+    return _wehavitDatasource.uploadGroupAnnouncement(entity);
   }
 }

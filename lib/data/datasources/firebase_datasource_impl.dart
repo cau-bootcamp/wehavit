@@ -8,8 +8,10 @@ import 'package:flutter/foundation.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/data/datasources/datasources.dart';
+import 'package:wehavit/data/models/firebase_models/group_announcement_model/firebase_group_announcement_model.dart';
 import 'package:wehavit/data/models/models.dart';
 import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wehavit/domain/entities/group_announcement_entity/group_announcement_entity.dart';
 
 class FirebaseDatasourceImpl implements WehavitDatasource {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -976,6 +978,29 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       return Future(
         () => left(
           const Failure('catch error on changeGroupStateOfResolution'),
+        ),
+      );
+    }
+  }
+
+  @override
+  EitherFuture<void> uploadGroupAnnouncement(GroupAnnouncementEntity entity) {
+    try {
+      final model = FirebaseGroupAnnouncementModel.fromEntity(entity);
+
+      firestore
+          .collection(
+            FirebaseCollectionName.getTargetGroupAnnouncemenetCollectionName(
+              entity.groupId,
+            ),
+          )
+          .add(model.toJson());
+
+      return Future(() => right(null));
+    } on Exception {
+      return Future(
+        () => left(
+          const Failure('catch error on uploadGroupAnnouncement'),
         ),
       );
     }
