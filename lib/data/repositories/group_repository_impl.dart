@@ -1,7 +1,7 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/data/datasources/datasources.dart';
-import 'package:wehavit/domain/entities/group_entity/group_entity.dart';
+import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/repositories/group_repository.dart';
 
 class GroupRepositoryImpl implements GroupRepository {
@@ -72,5 +72,12 @@ class GroupRepositoryImpl implements GroupRepository {
     } on Exception catch (e) {
       return Future(() => left(Failure(e.toString())));
     }
+  }
+
+  @override
+  EitherFuture<void> uploadGroupAnnouncementEntity(
+    GroupAnnouncementEntity entity,
+  ) {
+    return _wehavitDatasource.uploadGroupAnnouncement(entity);
   }
 }

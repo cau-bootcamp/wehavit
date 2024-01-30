@@ -61,11 +61,4 @@ class ResolutionRepositoryImpl implements ResolutionRepository {
       toShareState: false,
     );
   }
-
-  @override
-  EitherFuture<void> uploadGroupAnnouncementEntity(
-    GroupAnnouncementEntity entity,
-  ) {
-    return _wehavitDatasource.uploadGroupAnnouncement(entity);
-  }
 }

@@ -6,6 +6,7 @@ import 'package:wehavit/domain/usecases/apply_for_joining_group_usecase.dart';
 import 'package:wehavit/domain/usecases/create_group_usecase.dart';
 import 'package:wehavit/domain/usecases/get_group_list_usecase.dart';
 import 'package:wehavit/domain/usecases/reject_applying_for_joining_group_usecase.dart';
+import 'package:wehavit/domain/usecases/upload_group_announcement_usecase.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
 import 'package:wehavit/domain/usecases/withdrawal_from_group_usecase.dart';
 
@@ -178,4 +179,11 @@ final withdrawalFromGroupUsecaseProvider =
 final getGroupListUseCaseProvider = Provider<GetGroupListUsecase>((ref) {
   final groupRepository = ref.watch(groupRepositoryProvider);
   return GetGroupListUsecase(groupRepository);
+});
+
+final uploadGroupAnnouncementUsecaseProvider =
+    Provider<UploadGroupAnnouncementUsecase>((ref) {
+  final groupRepository = ref.watch(groupRepositoryProvider);
+  final userModelRepository = ref.watch(userModelRepositoryProvider);
+  return UploadGroupAnnouncementUsecase(groupRepository, userModelRepository);
 });

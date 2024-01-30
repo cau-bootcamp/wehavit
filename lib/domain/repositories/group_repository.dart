@@ -1,5 +1,5 @@
 import 'package:wehavit/common/utils/custom_types.dart';
-import 'package:wehavit/domain/entities/group_entity/group_entity.dart';
+import 'package:wehavit/domain/entities/entity.dart';
 
 abstract class GroupRepository {
   // return groupId
@@ -25,4 +25,8 @@ abstract class GroupRepository {
   EitherFuture<void> withdrawalFromGroup({required String groupId});
 
   EitherFuture<List<GroupEntity>> getGroupEntityList();
+
+  EitherFuture<void> uploadGroupAnnouncementEntity(
+    GroupAnnouncementEntity entity,
+  );
 }

@@ -9,7 +9,7 @@ class UploadGroupAnnouncementUsecase {
     this._userModelRepository,
   );
 
-  final ResolutionRepository _groupRepository;
+  final GroupRepository _groupRepository;
   final UserModelRepository _userModelRepository;
 
   EitherFuture<void> call({
