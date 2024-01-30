@@ -8,7 +8,6 @@ import 'package:flutter/foundation.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/data/datasources/datasources.dart';
-import 'package:wehavit/data/models/firebase_group_model.dart';
 import 'package:wehavit/data/models/models.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 
