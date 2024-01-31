@@ -77,6 +77,19 @@ class _SampleGroupWidgetState extends ConsumerState<SampleGroupWidget> {
                 child: const Text("withdrawal"),
               ),
             ),
+            Center(
+              child: ElevatedButton(
+                onPressed: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AnnouncementGroupSampleView(),
+                    ),
+                  );
+                },
+                child: const Text("announcement"),
+              ),
+            ),
           ],
         ),
       ),
@@ -289,22 +302,94 @@ class _WithdrawalGroupSampleViewState
     return Scaffold(
       appBar: AppBar(title: const Text('withdrawal')),
       body: SafeArea(
-          child: Container(
-        child: Column(
-          children: [
-            TextField(
-              controller: groupIdController,
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                final groupId = groupIdController.text;
-                ref.read(withdrawalFromGroupUsecaseProvider)(groupId);
-              },
-              child: const Text('withdrawal'),
-            ),
-          ],
+        child: Container(
+          child: Column(
+            children: [
+              TextField(
+                controller: groupIdController,
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  final groupId = groupIdController.text;
+                  ref.read(withdrawalFromGroupUsecaseProvider)(groupId);
+                },
+                child: const Text('withdrawal'),
+              ),
+            ],
+          ),
         ),
-      )),
+      ),
+    );
+  }
+}
+
+class AnnouncementGroupSampleView extends ConsumerStatefulWidget {
+  const AnnouncementGroupSampleView({super.key});
+
+  @override
+  ConsumerState<AnnouncementGroupSampleView> createState() =>
+      _AnnouncementGroupSampleViewState();
+}
+
+class _AnnouncementGroupSampleViewState
+    extends ConsumerState<AnnouncementGroupSampleView> {
+  final groupIdController = TextEditingController();
+  List<GroupAnnouncementEntity> groupAnnouncmenetList = [];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('announcement')),
+      body: SafeArea(
+        child: Container(
+          child: Column(
+            children: [
+              TextField(
+                controller: groupIdController,
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  final groupId = groupIdController.text;
+                  ref.read(uploadGroupAnnouncementUsecaseProvider)(
+                    groupId: groupId,
+                    title: 'group announcement title',
+                    content: 'group announcement content',
+                  );
+                },
+                child: const Text('announce'),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  final groupId = groupIdController.text;
+                  groupAnnouncmenetList = await ref
+                      .read(getGroupAnnouncementListUsecaseProvider)
+                      (groupId: groupId)
+                      .then((result) => result.fold((l) => [], (r) => r));
+                  setState(() {});
+                },
+                child: const Text('read'),
+              ),
+              Divider(),
+              Column(
+                children: groupAnnouncmenetList
+                    .map(
+                      (entity) => ElevatedButton(
+                        child: Container(
+                          child: Text(entity.title),
+                        ),
+                        onPressed: () async {
+                          ref.read(readGroupAnnouncementUsecaseProvider)(
+                            entity: entity,
+                          );
+                        },
+                      ),
+                    )
+                    .toList(),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

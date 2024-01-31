@@ -1,13 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/dependency/data/repository_dependency.dart';
-import 'package:wehavit/domain/repositories/group_repository.dart';
-import 'package:wehavit/domain/usecases/accept_applying_for_joining_group_usecase.dart';
-import 'package:wehavit/domain/usecases/apply_for_joining_group_usecase.dart';
-import 'package:wehavit/domain/usecases/create_group_usecase.dart';
-import 'package:wehavit/domain/usecases/get_group_list_usecase.dart';
-import 'package:wehavit/domain/usecases/reject_applying_for_joining_group_usecase.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
-import 'package:wehavit/domain/usecases/withdrawal_from_group_usecase.dart';
 
 final logOutUseCaseProvider = Provider<LogOutUseCase>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
@@ -178,4 +171,23 @@ final withdrawalFromGroupUsecaseProvider =
 final getGroupListUseCaseProvider = Provider<GetGroupListUsecase>((ref) {
   final groupRepository = ref.watch(groupRepositoryProvider);
   return GetGroupListUsecase(groupRepository);
+});
+
+final uploadGroupAnnouncementUsecaseProvider =
+    Provider<UploadGroupAnnouncementUsecase>((ref) {
+  final groupRepository = ref.watch(groupRepositoryProvider);
+  final userModelRepository = ref.watch(userModelRepositoryProvider);
+  return UploadGroupAnnouncementUsecase(groupRepository, userModelRepository);
+});
+
+final getGroupAnnouncementListUsecaseProvider =
+    Provider<GetGroupAnnouncementListUsecase>((ref) {
+  final groupRepository = ref.watch(groupRepositoryProvider);
+  return GetGroupAnnouncementListUsecase(groupRepository);
+});
+
+final readGroupAnnouncementUsecaseProvider =
+    Provider<ReadGroupAnnouncementUsecase>((ref) {
+  final groupRepository = ref.watch(groupRepositoryProvider);
+  return ReadGroupAnnouncementUsecase(groupRepository);
 });

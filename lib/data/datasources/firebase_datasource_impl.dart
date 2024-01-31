@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/data/datasources/datasources.dart';
-import 'package:wehavit/data/models/firebase_group_model.dart';
+import 'package:wehavit/data/models/firebase_models/group_announcement_model/firebase_group_announcement_model.dart';
 import 'package:wehavit/data/models/models.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 
@@ -977,6 +977,146 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       return Future(
         () => left(
           const Failure('catch error on changeGroupStateOfResolution'),
+        ),
+      );
+    }
+  }
+
+  @override
+  EitherFuture<void> uploadGroupAnnouncement(
+    GroupAnnouncementEntity entity,
+  ) async {
+    try {
+      final model = FirebaseGroupAnnouncementModel.fromEntity(entity);
+      final myUid = getMyUserId();
+      final hasPermission = await firestore
+          .collection(FirebaseCollectionName.groups)
+          .doc(entity.groupId)
+          .get()
+          .then((result) {
+        final isMember = (result.data()![FirebaseGroupFieldName.memberUidList]
+                as List<String>)
+            .contains(myUid);
+        final isManager =
+            (result.data()![FirebaseGroupFieldName.managerUid] as String) ==
+                myUid;
+
+        // 공지글 작성 권한을 여기에서 수정할 수 있음!
+        return isMember | isManager;
+      });
+
+      if (hasPermission == false) {
+        return Future(
+          () => left(
+              Failure('User is not the member of group ${entity.groupId}')),
+        );
+      }
+
+      firestore
+          .collection(
+            FirebaseCollectionName.getTargetGroupAnnouncemenetCollectionName(
+              entity.groupId,
+            ),
+          )
+          .add(model.toJson());
+
+      return Future(() => right(null));
+    } on Exception {
+      return Future(
+        () => left(
+          const Failure('catch error on uploadGroupAnnouncement'),
+        ),
+      );
+    }
+  }
+
+  @override
+  EitherFuture<List<GroupAnnouncementEntity>> getGroupAnnouncementEntityList(
+    String groupId,
+  ) async {
+    try {
+      final myUid = getMyUserId();
+      final isMemberOfGroup = await firestore
+          .collection(FirebaseCollectionName.groups)
+          .doc(groupId)
+          .get()
+          .then(
+            (result) => (result.data()![FirebaseGroupFieldName.memberUidList]
+                    as List<String>)
+                .contains(myUid),
+          );
+
+      if (isMemberOfGroup == false) {
+        return Future(
+          () => left(Failure('User is not the member of group $groupId')),
+        );
+      }
+
+      final entityList = await firestore
+          .collection(
+            FirebaseCollectionName.getTargetGroupAnnouncemenetCollectionName(
+              groupId,
+            ),
+          )
+          .get()
+          .then(
+            (result) => result.docs.map((doc) {
+              return FirebaseGroupAnnouncementModel.fromFireStoreDocument(doc)
+                  .toEntity(announcementId: doc.reference.id);
+            }).toList(),
+          );
+      return Future(() => right(entityList));
+    } on Exception {
+      return Future(
+        () => left(
+          const Failure('catch error on getGroupAnnouncementEntityList'),
+        ),
+      );
+    }
+  }
+
+  @override
+  EitherFuture<void> readGroupAnnouncement(
+    GroupAnnouncementEntity entity,
+  ) async {
+    try {
+      final myUid = getMyUserId();
+      final isMemberOfGroup = await firestore
+          .collection(FirebaseCollectionName.groups)
+          .doc(entity.groupId)
+          .get()
+          .then(
+            (result) => (result.data()![FirebaseGroupFieldName.memberUidList]
+                    as List<String>)
+                .contains(myUid),
+          );
+
+      if (isMemberOfGroup == false) {
+        return Future(
+          () => left(
+              Failure('User is not the member of group ${entity.groupId}')),
+        );
+      }
+
+      await firestore
+          .collection(
+            FirebaseCollectionName.getTargetGroupAnnouncemenetCollectionName(
+              entity.groupId,
+            ),
+          )
+          .doc(entity.groupAnnouncementId)
+          .update(
+        {
+          FirebaseGroupAnnouncementFieldName.readByUidList:
+              FieldValue.arrayUnion([getMyUserId()]),
+        },
+      );
+
+      return Future(() => right(null));
+    } on Exception {
+      return Future(
+        () => left(
+          const Failure('catch error on readGroupAnnouncement'),
         ),
       );
     }

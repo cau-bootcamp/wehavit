@@ -64,6 +64,10 @@ class FirebaseCollectionName {
     return '$postOwnerUid/confirm_post/$confirmPostId/_${FirebaseAuth.instance.currentUser!.uid}_${DateTime.now().toIso8601String()}';
   }
 
+  static String getTargetGroupAnnouncemenetCollectionName(String groupId) {
+    return '$groups/$groupId/announcements';
+  }
+
   static final confirmPosts = FirebaseAuth.instance.currentUser != null
       ? 'confirm_posts'
       : 'invalid_address';

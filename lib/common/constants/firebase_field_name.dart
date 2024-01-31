@@ -68,3 +68,12 @@ class FirebaseGroupFieldName {
   static const String managerUid = 'groupManagerUid';
   static const String applyUid = 'uid';
 }
+
+class FirebaseGroupAnnouncementFieldName {
+  static const String content = 'content';
+  static const String createdAt = 'createdAt';
+  static const String groupId = 'groupId';
+  static const String readByUidList = 'readByUidList';
+  static const String title = 'title';
+  static const String writerUid = 'writerUid';
+}
