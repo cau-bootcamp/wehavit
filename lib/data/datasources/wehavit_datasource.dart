@@ -86,4 +86,8 @@ abstract class WehavitDatasource {
   );
 
   EitherFuture<void> readGroupAnnouncement(GroupAnnouncementEntity entity);
+
+  EitherFuture<GroupWeeklyReportEntity> getGroupWeeklyReport(
+    String groupId,
+  );
 }

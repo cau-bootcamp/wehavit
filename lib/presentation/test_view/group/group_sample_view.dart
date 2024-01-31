@@ -369,6 +369,18 @@ class _AnnouncementGroupSampleViewState
                 },
                 child: const Text('read'),
               ),
+              ElevatedButton(
+                onPressed: () async {
+                  final groupId = groupIdController.text;
+                  final report = await ref
+                      .read(getGroupWeeklyReportUsecaseProvider)
+                      .call(groupId: groupId)
+                      .then((value) =>
+                          value.fold((l) => null, (report) => report));
+                  print(report);
+                },
+                child: const Text('report'),
+              ),
               Divider(),
               Column(
                 children: groupAnnouncmenetList

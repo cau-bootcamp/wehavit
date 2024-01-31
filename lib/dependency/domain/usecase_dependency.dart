@@ -191,3 +191,9 @@ final readGroupAnnouncementUsecaseProvider =
   final groupRepository = ref.watch(groupRepositoryProvider);
   return ReadGroupAnnouncementUsecase(groupRepository);
 });
+
+final getGroupWeeklyReportUsecaseProvider =
+    Provider<GetGroupWeeklyReportUsecase>((ref) {
+  final groupRepository = ref.watch(groupRepositoryProvider);
+  return GetGroupWeeklyReportUsecase(groupRepository);
+});
