@@ -80,4 +80,16 @@ class GroupRepositoryImpl implements GroupRepository {
   ) {
     return _wehavitDatasource.uploadGroupAnnouncement(entity);
   }
+
+  @override
+  EitherFuture<List<GroupAnnouncementEntity>> getGroupAnnouncementEntityList(
+    String groupId,
+  ) {
+    return _wehavitDatasource.getGroupAnnouncementEntityList(groupId);
+  }
+
+  @override
+  EitherFuture<void> readGroupAnnouncement(GroupAnnouncementEntity entity) {
+    return _wehavitDatasource.readGroupAnnouncement(entity);
+  }
 }

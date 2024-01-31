@@ -361,9 +361,15 @@ class _AnnouncementGroupSampleViewState
               ElevatedButton(
                 onPressed: () async {
                   final groupId = groupIdController.text;
+                  groupAnnouncmenetList = await ref
+                      .read(getGroupAnnouncementListUsecaseProvider)
+                      (groupId: groupId)
+                      .then((result) => result.fold((l) => [], (r) => r));
+                  setState(() {});
                 },
                 child: const Text('read'),
               ),
+              Divider(),
               Column(
                 children: groupAnnouncmenetList
                     .map(
@@ -371,8 +377,10 @@ class _AnnouncementGroupSampleViewState
                         child: Container(
                           child: Text(entity.title),
                         ),
-                        onPressed: () {
-                          //
+                        onPressed: () async {
+                          ref.read(readGroupAnnouncementUsecaseProvider)(
+                            entity: entity,
+                          );
                         },
                       ),
                     )

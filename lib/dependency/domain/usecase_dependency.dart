@@ -4,6 +4,7 @@ import 'package:wehavit/domain/repositories/group_repository.dart';
 import 'package:wehavit/domain/usecases/accept_applying_for_joining_group_usecase.dart';
 import 'package:wehavit/domain/usecases/apply_for_joining_group_usecase.dart';
 import 'package:wehavit/domain/usecases/create_group_usecase.dart';
+import 'package:wehavit/domain/usecases/get_group_announcement_list_usecase.dart';
 import 'package:wehavit/domain/usecases/get_group_list_usecase.dart';
 import 'package:wehavit/domain/usecases/reject_applying_for_joining_group_usecase.dart';
 import 'package:wehavit/domain/usecases/upload_group_announcement_usecase.dart';
@@ -186,4 +187,16 @@ final uploadGroupAnnouncementUsecaseProvider =
   final groupRepository = ref.watch(groupRepositoryProvider);
   final userModelRepository = ref.watch(userModelRepositoryProvider);
   return UploadGroupAnnouncementUsecase(groupRepository, userModelRepository);
+});
+
+final getGroupAnnouncementListUsecaseProvider =
+    Provider<GetGroupAnnouncementListUsecase>((ref) {
+  final groupRepository = ref.watch(groupRepositoryProvider);
+  return GetGroupAnnouncementListUsecase(groupRepository);
+});
+
+final readGroupAnnouncementUsecaseProvider =
+    Provider<ReadGroupAnnouncementUsecase>((ref) {
+  final groupRepository = ref.watch(groupRepositoryProvider);
+  return ReadGroupAnnouncementUsecase(groupRepository);
 });

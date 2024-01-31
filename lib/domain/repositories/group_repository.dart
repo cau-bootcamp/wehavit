@@ -29,4 +29,10 @@ abstract class GroupRepository {
   EitherFuture<void> uploadGroupAnnouncementEntity(
     GroupAnnouncementEntity entity,
   );
+
+  EitherFuture<List<GroupAnnouncementEntity>> getGroupAnnouncementEntityList(
+    String groupId,
+  );
+
+  EitherFuture<void> readGroupAnnouncement(GroupAnnouncementEntity entity);
 }

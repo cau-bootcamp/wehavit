@@ -80,4 +80,10 @@ abstract class WehavitDatasource {
   });
 
   EitherFuture<void> uploadGroupAnnouncement(GroupAnnouncementEntity entity);
+
+  EitherFuture<List<GroupAnnouncementEntity>> getGroupAnnouncementEntityList(
+    String groupId,
+  );
+
+  EitherFuture<void> readGroupAnnouncement(GroupAnnouncementEntity entity);
 }

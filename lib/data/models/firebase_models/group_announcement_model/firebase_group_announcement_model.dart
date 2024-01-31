@@ -46,4 +46,16 @@ class FirebaseGroupAnnouncementModel with _$FirebaseGroupAnnouncementModel {
 }
 
 extension FirebaseGroupAnnouncementModelConverter
-    on FirebaseGroupAnnouncementModel {}
+    on FirebaseGroupAnnouncementModel {
+  GroupAnnouncementEntity toEntity({required String announcementId}) {
+    return GroupAnnouncementEntity(
+      groupId: groupId,
+      writerUid: writerUid,
+      title: title,
+      content: content,
+      createdAt: createdAt,
+      readByUidList: readByUidList,
+      groupAnnouncementId: announcementId,
+    );
+  }
+}
