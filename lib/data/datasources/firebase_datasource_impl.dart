@@ -1042,7 +1042,8 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           .get()
           .then(
             (result) => (result.data()![FirebaseGroupFieldName.memberUidList]
-                    as List<String>)
+                    as List<dynamic>)
+                .map((e) => e.toString())
                 .contains(myUid),
           );
 
@@ -1087,7 +1088,8 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           .get()
           .then(
             (result) => (result.data()![FirebaseGroupFieldName.memberUidList]
-                    as List<String>)
+                    as List<dynamic>)
+                .map((e) => e.toString())
                 .contains(myUid),
           );
 
@@ -1117,6 +1119,210 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       return Future(
         () => left(
           const Failure('catch error on readGroupAnnouncement'),
+        ),
+      );
+    }
+  }
+
+  @override
+  EitherFuture<GroupWeeklyReportEntity> getGroupWeeklyReport(
+    String groupId,
+  ) async {
+    try {
+      // 현재가 월요일 10일 12:34:56이라면
+      // StartDate 값은  3일 월요일 00:00:00 으로 설정
+      // EndDate   값은 10일 월요일 00:00:00 으로 설정
+      // -> start to end : 가장 최근의 월~일 (오늘이 일요일인 경우에는 이번 주)
+      DateTime endDate;
+      DateTime now = DateTime.now();
+      int difference = now.weekday - DateTime.sunday;
+      // 만약 현재 날짜가 일요일이면 현재 날짜를 반환
+      if (difference == 0) {
+        endDate =
+            DateTime(now.year, now.month, now.day).add(const Duration(days: 2));
+      } else {
+        // 현재 날짜에서 일요일까지의 차이를 뺀 값을 반환
+        final date = now.add(Duration(days: difference));
+        endDate = DateTime(date.year, date.month, date.day)
+            .add(const Duration(days: 2));
+      }
+
+      DateTime startDate = DateTime(endDate.year, endDate.month, endDate.day)
+          .subtract(const Duration(days: 7));
+
+      // 그룹 맴버들에 대해서
+      final memberList = (await firestore
+              .collection(FirebaseCollectionName.groups)
+              .doc(groupId)
+              .get()
+              .then(
+                (result) async => await Future.wait(
+                  (result.data()![FirebaseGroupFieldName.memberUidList]
+                          as List<dynamic>)
+                      .map((e) => e.toString())
+                      .map((targetUid) async {
+                    final fetchUserEntity =
+                        await fetchUserDataEntityByUserId(targetUid).then(
+                      (result) => result.fold(
+                        (l) => null,
+                        (entity) => entity,
+                      ),
+                    );
+
+                    if (fetchUserEntity != null) {
+                      return fetchUserEntity;
+                    }
+                  }).toList(),
+                ),
+              ))
+          .nonNulls
+          .toList();
+
+      // 각 멤버들마다 Report cell을 생성
+      final reportCellList = (await Future.wait(
+        memberList.map((userEntity) async {
+          // 각 멤버들이 이 그룹에 공유하는 목표 리스트를 먼저 가져와서
+          final sharedResolutionList = await firestore
+              .collection(
+                FirebaseCollectionName.getTargetResolutionCollectionName(
+                  userEntity.userId!,
+                ),
+              )
+              .where(
+                FirebaseResolutionFieldName.resolutionShareGroupIdList,
+                arrayContains: groupId,
+              )
+              .get()
+              .then(
+                (result) async => await Future.wait(
+                  result.docs.map((doc) async {
+                    final shareFriendEntityList = (await Future.wait(
+                      (doc.data()[FirebaseResolutionFieldName
+                              .resolutionShareFriendIdList] as List<dynamic>)
+                          .map((e) => e.toString())
+                          .map((uid) async {
+                        final entity = (await fetchUserDataEntityByUserId(uid))
+                            .fold((failure) => null, (entity) => entity);
+
+                        if (entity != null) {
+                          return entity;
+                        }
+                      }).toList(),
+                    ))
+                        .nonNulls
+                        .toList();
+
+                    final shareGroupEntityList = (await Future.wait(
+                      (doc.data()[FirebaseResolutionFieldName
+                              .resolutionShareGroupIdList] as List<dynamic>)
+                          .map((e) => e.toString())
+                          .map((groupId) async {
+                        final entity =
+                            (await fetchGroupEntityByGroupId(groupId))
+                                .fold((failure) => null, (entity) => entity);
+
+                        if (entity != null) {
+                          return entity;
+                        }
+                      }).toList(),
+                    ))
+                        .nonNulls
+                        .toList();
+
+                    return FirebaseResolutionModel.fromFireStoreDocument(doc)
+                        .toResolutionEntity(
+                      documentId: doc.reference.id,
+                      shareFriendEntityList: shareFriendEntityList,
+                      shareGroupEntityList: shareGroupEntityList,
+                    );
+                  }).toList(),
+                ),
+              );
+
+          // 지난 기간동안의 인증글을 가져오기
+          final doneListForWeek = (await Future.wait(
+            sharedResolutionList.map((resolutionEntity) async {
+              List<bool> doneListForWeek = List.generate(7, (_) => false);
+              await firestore
+                  .collection(FirebaseCollectionName.confirmPosts)
+                  // .where(
+                  //   FirebaseConfirmPostFieldName.createdAt,
+                  //   isGreaterThanOrEqualTo: Timestamp.fromDate(startDate),
+                  //   isLessThanOrEqualTo: Timestamp.fromDate(endDate),
+                  // )
+                  .get()
+                  .then(
+                    (result) => result.docs.map(
+                      (doc) {
+                        final weekday =
+                            (doc.data()[FirebaseConfirmPostFieldName.createdAt]
+                                    as Timestamp)
+                                .toDate()
+                                .weekday;
+                        doneListForWeek[weekday] = true;
+                      },
+                    ).toList(),
+                  );
+              return doneListForWeek;
+            }),
+          ))
+              .toList();
+
+          // 각 목표의 달성 여부를 체크하고
+          // {목표Id : T/F} 의 형식으로 map을 만들어 저장
+          final successResolutionList =
+              sharedResolutionList.mapWithIndex((resolution, index) {
+            final numOfActionsForThisWeek = doneListForWeek[index]
+                .where((element) => element == true)
+                .length;
+
+            return ((resolution.actionPerWeek ?? 7) <= numOfActionsForThisWeek)
+                ? true
+                : false;
+          }).toList();
+
+          final successResolutionMap = Map.fromIterables(
+            sharedResolutionList.map((e) => e.resolutionId!),
+            successResolutionList,
+          );
+
+          // 각 요일별로 인증 여부를 체크하고
+          // [[월요일에 인증한 목표Id1, 월요일에 인증한 목표Id2], [화요일에 인증한 목표id3], [] ... ]
+          // 의 형식으로 double list를 만들어 저장
+          List<List<String>> doneResolutionIdListForEachDay =
+              List.generate(7, (_) => []);
+
+          doneListForWeek.mapWithIndex((doneForResolution, index) {
+            doneForResolution.forEachIndexed((jndex, element) {
+              if (element == true) {
+                // doneResolutionIdListForEachDay[jndex]
+                //     .append(sharedResolutionList[index].resolutionId!);
+                doneResolutionIdListForEachDay[jndex]
+                    .add(sharedResolutionList[index].resolutionId!);
+              }
+            });
+          }).toList();
+
+          return GroupWeeklyReportCell(
+            userEntity,
+            sharedResolutionList,
+            successResolutionMap,
+            doneResolutionIdListForEachDay,
+          );
+        }),
+      ))
+          .toList();
+
+      final reportEntity = GroupWeeklyReportEntity(
+        groupId: groupId,
+        groupWeeklyReportCellList: reportCellList,
+      );
+      return Future(() => right(reportEntity));
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+      return Future(
+        () => left(
+          const Failure('catch error on getGroupWeeklyReport'),
         ),
       );
     }

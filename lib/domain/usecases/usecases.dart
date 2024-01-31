@@ -10,6 +10,7 @@ export 'get_confirm_post_list_usecase.dart';
 export 'get_friend_list_usecase.dart';
 export 'get_group_announcement_list_usecase.dart';
 export 'get_group_list_usecase.dart';
+export 'get_group_weekly_report_usecase.dart';
 export 'get_my_resolution_list_usecase.dart';
 export 'get_reaction_list_from_confirm_post_usecase.dart';
 export 'get_resolution_list_by_uid_usecase.dart';
