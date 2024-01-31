@@ -983,9 +983,34 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }
 
   @override
-  EitherFuture<void> uploadGroupAnnouncement(GroupAnnouncementEntity entity) {
+  EitherFuture<void> uploadGroupAnnouncement(
+    GroupAnnouncementEntity entity,
+  ) async {
     try {
       final model = FirebaseGroupAnnouncementModel.fromEntity(entity);
+      final myUid = getMyUserId();
+      final hasPermission = await firestore
+          .collection(FirebaseCollectionName.groups)
+          .doc(entity.groupId)
+          .get()
+          .then((result) {
+        final isMember = (result.data()![FirebaseGroupFieldName.memberUidList]
+                as List<String>)
+            .contains(myUid);
+        final isManager =
+            (result.data()![FirebaseGroupFieldName.managerUid] as String) ==
+                myUid;
+
+        // 공지글 작성 권한을 여기에서 수정할 수 있음!
+        return isMember | isManager;
+      });
+
+      if (hasPermission == false) {
+        return Future(
+          () => left(
+              Failure('User is not the member of group ${entity.groupId}')),
+        );
+      }
 
       firestore
           .collection(
@@ -1010,6 +1035,23 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     String groupId,
   ) async {
     try {
+      final myUid = getMyUserId();
+      final isMemberOfGroup = await firestore
+          .collection(FirebaseCollectionName.groups)
+          .doc(groupId)
+          .get()
+          .then(
+            (result) => (result.data()![FirebaseGroupFieldName.memberUidList]
+                    as List<String>)
+                .contains(myUid),
+          );
+
+      if (isMemberOfGroup == false) {
+        return Future(
+          () => left(Failure('User is not the member of group $groupId')),
+        );
+      }
+
       final entityList = await firestore
           .collection(
             FirebaseCollectionName.getTargetGroupAnnouncemenetCollectionName(
@@ -1038,6 +1080,24 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     GroupAnnouncementEntity entity,
   ) async {
     try {
+      final myUid = getMyUserId();
+      final isMemberOfGroup = await firestore
+          .collection(FirebaseCollectionName.groups)
+          .doc(entity.groupId)
+          .get()
+          .then(
+            (result) => (result.data()![FirebaseGroupFieldName.memberUidList]
+                    as List<String>)
+                .contains(myUid),
+          );
+
+      if (isMemberOfGroup == false) {
+        return Future(
+          () => left(
+              Failure('User is not the member of group ${entity.groupId}')),
+        );
+      }
+
       await firestore
           .collection(
             FirebaseCollectionName.getTargetGroupAnnouncemenetCollectionName(
