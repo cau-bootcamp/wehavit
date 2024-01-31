@@ -1,5 +1,5 @@
 import 'package:wehavit/common/utils/custom_types.dart';
-import 'package:wehavit/domain/entities/entity.dart';
+import 'package:wehavit/domain/entities/entities.dart';
 
 abstract class GroupRepository {
   // return groupId
