@@ -66,6 +66,7 @@ class FirebaseGroupFieldName {
   static const String rule = 'groupRule';
   static const String memberUidList = 'groupMemberUidList';
   static const String managerUid = 'groupManagerUid';
+  static const String color = 'groupColor';
   static const String applyUid = 'uid';
 }
 

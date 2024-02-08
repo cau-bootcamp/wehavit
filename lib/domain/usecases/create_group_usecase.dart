@@ -4,17 +4,18 @@ import 'package:wehavit/domain/entities/group_entity/group_entity.dart';
 import 'package:wehavit/domain/repositories/group_repository.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
 
-class CreateGroupUsecase
-    implements FutureUseCase<void, (String, String, String)> {
+class CreateGroupUsecase {
   CreateGroupUsecase(this._groupRepository, this._userModelRepository);
 
   final GroupRepository _groupRepository;
   final UserModelRepository _userModelRepository;
 
-  @override
-  EitherFuture<GroupEntity> call(
-    params,
-  ) async {
+  EitherFuture<GroupEntity> call({
+    required String groupName,
+    required String groupDescription,
+    required String groupRule,
+    required int groupColor,
+  }) async {
     final fetchUid = (await _userModelRepository.getMyUserId()).fold(
       (l) => null,
       (uid) => uid,
@@ -25,10 +26,11 @@ class CreateGroupUsecase
     }
 
     final groupEntity = (await _groupRepository.createGroup(
-      groupName: params.$1,
-      groupDescription: params.$2,
-      groupRule: params.$3,
+      groupName: groupName,
+      groupDescription: groupDescription,
+      groupRule: groupRule,
       groupManagerUid: fetchUid,
+      groupColor: 0,
     ))
         .fold(
       (l) => null,

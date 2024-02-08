@@ -24,6 +24,7 @@ mixin _$FirebaseGroupModel {
   String get groupDescription => throw _privateConstructorUsedError;
   String get groupRule => throw _privateConstructorUsedError;
   String get groupManagerUid => throw _privateConstructorUsedError;
+  int get groupColor => throw _privateConstructorUsedError;
   List<String> get groupMemberUidList => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -43,6 +44,7 @@ abstract class $FirebaseGroupModelCopyWith<$Res> {
       String groupDescription,
       String groupRule,
       String groupManagerUid,
+      int groupColor,
       List<String> groupMemberUidList});
 }
 
@@ -63,6 +65,7 @@ class _$FirebaseGroupModelCopyWithImpl<$Res, $Val extends FirebaseGroupModel>
     Object? groupDescription = null,
     Object? groupRule = null,
     Object? groupManagerUid = null,
+    Object? groupColor = null,
     Object? groupMemberUidList = null,
   }) {
     return _then(_value.copyWith(
@@ -82,6 +85,10 @@ class _$FirebaseGroupModelCopyWithImpl<$Res, $Val extends FirebaseGroupModel>
           ? _value.groupManagerUid
           : groupManagerUid // ignore: cast_nullable_to_non_nullable
               as String,
+      groupColor: null == groupColor
+          ? _value.groupColor
+          : groupColor // ignore: cast_nullable_to_non_nullable
+              as int,
       groupMemberUidList: null == groupMemberUidList
           ? _value.groupMemberUidList
           : groupMemberUidList // ignore: cast_nullable_to_non_nullable
@@ -103,6 +110,7 @@ abstract class _$$FirebaseGroupModelImplCopyWith<$Res>
       String groupDescription,
       String groupRule,
       String groupManagerUid,
+      int groupColor,
       List<String> groupMemberUidList});
 }
 
@@ -121,6 +129,7 @@ class __$$FirebaseGroupModelImplCopyWithImpl<$Res>
     Object? groupDescription = null,
     Object? groupRule = null,
     Object? groupManagerUid = null,
+    Object? groupColor = null,
     Object? groupMemberUidList = null,
   }) {
     return _then(_$FirebaseGroupModelImpl(
@@ -140,6 +149,10 @@ class __$$FirebaseGroupModelImplCopyWithImpl<$Res>
           ? _value.groupManagerUid
           : groupManagerUid // ignore: cast_nullable_to_non_nullable
               as String,
+      groupColor: null == groupColor
+          ? _value.groupColor
+          : groupColor // ignore: cast_nullable_to_non_nullable
+              as int,
       groupMemberUidList: null == groupMemberUidList
           ? _value._groupMemberUidList
           : groupMemberUidList // ignore: cast_nullable_to_non_nullable
@@ -157,6 +170,7 @@ class _$FirebaseGroupModelImpl implements _FirebaseGroupModel {
       required this.groupDescription,
       required this.groupRule,
       required this.groupManagerUid,
+      required this.groupColor,
       required final List<String> groupMemberUidList})
       : _groupMemberUidList = groupMemberUidList;
 
@@ -171,6 +185,8 @@ class _$FirebaseGroupModelImpl implements _FirebaseGroupModel {
   final String groupRule;
   @override
   final String groupManagerUid;
+  @override
+  final int groupColor;
   final List<String> _groupMemberUidList;
   @override
   List<String> get groupMemberUidList {
@@ -182,7 +198,7 @@ class _$FirebaseGroupModelImpl implements _FirebaseGroupModel {
 
   @override
   String toString() {
-    return 'FirebaseGroupModel(groupName: $groupName, groupDescription: $groupDescription, groupRule: $groupRule, groupManagerUid: $groupManagerUid, groupMemberUidList: $groupMemberUidList)';
+    return 'FirebaseGroupModel(groupName: $groupName, groupDescription: $groupDescription, groupRule: $groupRule, groupManagerUid: $groupManagerUid, groupColor: $groupColor, groupMemberUidList: $groupMemberUidList)';
   }
 
   @override
@@ -198,6 +214,8 @@ class _$FirebaseGroupModelImpl implements _FirebaseGroupModel {
                 other.groupRule == groupRule) &&
             (identical(other.groupManagerUid, groupManagerUid) ||
                 other.groupManagerUid == groupManagerUid) &&
+            (identical(other.groupColor, groupColor) ||
+                other.groupColor == groupColor) &&
             const DeepCollectionEquality()
                 .equals(other._groupMemberUidList, _groupMemberUidList));
   }
@@ -210,6 +228,7 @@ class _$FirebaseGroupModelImpl implements _FirebaseGroupModel {
       groupDescription,
       groupRule,
       groupManagerUid,
+      groupColor,
       const DeepCollectionEquality().hash(_groupMemberUidList));
 
   @JsonKey(ignore: true)
@@ -233,6 +252,7 @@ abstract class _FirebaseGroupModel implements FirebaseGroupModel {
           required final String groupDescription,
           required final String groupRule,
           required final String groupManagerUid,
+          required final int groupColor,
           required final List<String> groupMemberUidList}) =
       _$FirebaseGroupModelImpl;
 
@@ -247,6 +267,8 @@ abstract class _FirebaseGroupModel implements FirebaseGroupModel {
   String get groupRule;
   @override
   String get groupManagerUid;
+  @override
+  int get groupColor;
   @override
   List<String> get groupMemberUidList;
   @override

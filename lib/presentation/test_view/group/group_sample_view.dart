@@ -132,11 +132,12 @@ class CreateGroupSampleViewState extends ConsumerState<CreateGroupSampleView> {
             ElevatedButton(
                 onPressed: () async {
                   final groupEntity =
-                      await ref.read(createGroupUsecaseProvider)((
-                    titleController.text,
-                    descriptionController.text,
-                    ruleController.text
-                  ));
+                      await ref.read(createGroupUsecaseProvider)(
+                    groupName: titleController.text,
+                    groupDescription: descriptionController.text,
+                    groupRule: ruleController.text,
+                    groupColor: 0,
+                  );
                   print(groupEntity);
                 },
                 child: Text("create")),

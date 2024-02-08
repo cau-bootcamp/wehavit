@@ -15,6 +15,7 @@ class GroupEntity with _$GroupEntity {
     required String groupManagerUid,
     required List<String> groupMemberUidList,
     @JsonKey(includeFromJson: true, includeToJson: false)
+    required int groupColor,
     required String groupId,
   }) = _GroupEntity;
 

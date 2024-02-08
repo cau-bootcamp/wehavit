@@ -8,6 +8,7 @@ abstract class GroupRepository {
     required String groupDescription,
     required String groupRule,
     required String groupManagerUid,
+    required int groupColor,
   });
 
   EitherFuture<void> applyForJoiningGroup({required String groupId});

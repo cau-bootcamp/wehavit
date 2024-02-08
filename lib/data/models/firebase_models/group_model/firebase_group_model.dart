@@ -14,6 +14,7 @@ class FirebaseGroupModel with _$FirebaseGroupModel {
     required String groupDescription,
     required String groupRule,
     required String groupManagerUid,
+    required int groupColor,
     required List<String> groupMemberUidList,
   }) = _FirebaseGroupModel;
 
@@ -36,6 +37,7 @@ extension FirebaseGroupModelConverter on FirebaseGroupModel {
       groupManagerUid: groupManagerUid,
       groupMemberUidList: groupMemberUidList,
       groupId: groupId,
+      groupColor: groupColor,
     );
   }
 }
