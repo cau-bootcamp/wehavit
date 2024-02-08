@@ -34,13 +34,13 @@ class CustomColors {
   static const Color whSelectedTextColor = Color(0xff000000);
 }
 
-class GroupColors {
+class PointColors {
   static const Color red = Color(0xffe1392e);
   static const Color orange = Color(0xffe56229);
   static const Color yellow = Color(0xffe6ae1c);
   static const Color green = Color(0xff28a954);
   static const Color blue = Color(0xff2f74db);
-  static const Color purple = Color(0xff704cd9);
+  static const Color purple = Color.fromARGB(255, 136, 98, 253);
   static const Color pink = Color(0xffed7087);
 
   static const List<Color> colorList = [

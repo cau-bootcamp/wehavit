@@ -18,7 +18,7 @@ class GroupListViewCellWidgetModel {
       groupName: '갱생프로젝트',
       groupManagerUid: 'groupManagerUid',
       groupMemberUidList: [],
-      groupColor: 1,
+      groupColor: 5,
       groupId: '12345',
       groupCreatedAt: DateTime.now().subtract(const Duration(days: 3)),
     ),

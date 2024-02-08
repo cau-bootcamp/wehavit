@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/common/constants/app_colors.dart';
-import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/group/viewmodel/viewmodel.dart';
 
 class GroupView extends ConsumerStatefulWidget {
@@ -17,28 +14,34 @@ class _GroupViewState extends ConsumerState<GroupView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: CustomColors.whBlack,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text('참여중인 그룹 목록'),
+        title: const Text(
+          '참여중인 그룹 목록',
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
+            fontSize: 20,
+          ),
+        ),
+        backgroundColor: Colors.transparent,
         centerTitle: false,
       ),
       body: SafeArea(
         minimum: const EdgeInsets.symmetric(horizontal: 16),
-        child: Container(
-          color: Colors.blue,
-          child: ListView.builder(
-            itemCount: 2,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 8,
-                ),
-                child: GroupListViewCellWidget(
-                  cellModel: GroupListViewCellWidgetModel.dummyModel,
-                ),
-              );
-            },
-          ),
+        child: ListView.builder(
+          itemCount: 2,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.only(
+                bottom: 8,
+              ),
+              child: GroupListViewCellWidget(
+                cellModel: GroupListViewCellWidgetModel.dummyModel,
+              ),
+            );
+          },
         ),
       ),
     );
@@ -57,22 +60,23 @@ class GroupListViewCellWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
         color: CustomColors.whGrey,
       ),
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
+            // ignore: lines_longer_than_80_chars
             '함께한 지 ${DateTime.now().difference(cellModel.groupEntity.groupCreatedAt).inDays + 1}일 째',
             style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w400,
+              color: PointColors.colorList[cellModel.groupEntity.groupColor],
+              fontWeight: FontWeight.w500,
               fontSize: 16,
             ),
           ),
           Text(
             cellModel.groupEntity.groupName,
             style: TextStyle(
-              color: Colors.white,
+              color: PointColors.colorList[cellModel.groupEntity.groupColor],
               fontWeight: FontWeight.w700,
               fontSize: 28,
             ),
@@ -83,13 +87,12 @@ class GroupListViewCellWidget extends StatelessWidget {
                 VerticalDivider(
                   thickness: 2,
                   width: 16,
-                  color: Colors.black,
+                  color:
+                      PointColors.colorList[cellModel.groupEntity.groupColor],
                 ),
-                SizedBox(
-                  width: 8,
-                ),
+                const SizedBox(width: 8),
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12.0),
+                  padding: const EdgeInsets.symmetric(vertical: 12.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -97,26 +100,22 @@ class GroupListViewCellWidget extends StatelessWidget {
                         title: '멤버 수',
                         number: cellModel.groupEntity.groupMemberUidList.length,
                       ),
-                      SizedBox(
-                        height: 8,
-                      ),
+                      const SizedBox(height: 8),
                       GroupListCellBulletFutureWidget(
                         title: '함께 도전중인 목표 수',
                         number: cellModel.sharedResolutionCount,
                       ),
-                      SizedBox(
-                        height: 8,
-                      ),
+                      const SizedBox(height: 8),
                       GroupListCellBulletFutureWidget(
                         title: '현재까지 올라운 인증글 수',
                         number: cellModel.sharedPostCount,
-                      )
+                      ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
