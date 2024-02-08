@@ -15,6 +15,7 @@ _$GroupEntityImpl _$$GroupEntityImplFromJson(Map<String, dynamic> json) =>
       groupMemberUidList: (json['groupMemberUidList'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
+      groupCreatedAt: DateTime.parse(json['groupCreatedAt'] as String),
       groupColor: json['groupColor'] as int,
       groupId: json['groupId'] as String,
     );
@@ -26,5 +27,6 @@ Map<String, dynamic> _$$GroupEntityImplToJson(_$GroupEntityImpl instance) =>
       'groupRule': instance.groupRule,
       'groupManagerUid': instance.groupManagerUid,
       'groupMemberUidList': instance.groupMemberUidList,
-      'groupId': instance.groupId,
+      'groupCreatedAt': instance.groupCreatedAt.toIso8601String(),
+      'groupColor': instance.groupColor,
     };

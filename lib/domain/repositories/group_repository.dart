@@ -8,6 +8,7 @@ abstract class GroupRepository {
     required String groupDescription,
     required String groupRule,
     required String groupManagerUid,
+    required DateTime groupCreatedAt,
     required int groupColor,
   });
 

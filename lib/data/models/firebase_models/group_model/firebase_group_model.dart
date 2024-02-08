@@ -16,6 +16,7 @@ class FirebaseGroupModel with _$FirebaseGroupModel {
     required String groupManagerUid,
     required int groupColor,
     required List<String> groupMemberUidList,
+    @TimestampConverter() required DateTime groupCreatedAt,
   }) = _FirebaseGroupModel;
 
   factory FirebaseGroupModel.fromJson(Map<String, dynamic> json) =>
@@ -38,6 +39,7 @@ extension FirebaseGroupModelConverter on FirebaseGroupModel {
       groupMemberUidList: groupMemberUidList,
       groupId: groupId,
       groupColor: groupColor,
+      groupCreatedAt: groupCreatedAt,
     );
   }
 }

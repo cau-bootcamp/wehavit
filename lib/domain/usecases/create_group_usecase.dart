@@ -30,6 +30,7 @@ class CreateGroupUsecase {
       groupDescription: groupDescription,
       groupRule: groupRule,
       groupManagerUid: fetchUid,
+      groupCreatedAt: DateTime.now(),
       groupColor: 0,
     ))
         .fold(

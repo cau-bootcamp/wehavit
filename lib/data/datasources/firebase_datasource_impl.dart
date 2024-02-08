@@ -696,6 +696,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     required String groupRule,
     required String groupManagerUid,
     required int groupColor,
+    required DateTime groupCreatedAt,
   }) async {
     final groupModel = FirebaseGroupModel(
       groupName: groupName,
@@ -704,6 +705,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       groupManagerUid: groupManagerUid,
       groupMemberUidList: [groupManagerUid],
       groupColor: groupColor,
+      groupCreatedAt: groupCreatedAt,
     );
 
     final groupId = (await firestore
@@ -719,6 +721,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       groupMemberUidList: groupModel.groupMemberUidList,
       groupId: groupId,
       groupColor: groupColor,
+      groupCreatedAt: groupCreatedAt,
     );
 
     firestore
