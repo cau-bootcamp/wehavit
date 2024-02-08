@@ -20,4 +20,5 @@ class RouteLocation {
   static const String lateWritingView = '/lateWritingView';
   static const String reactionSampleView = '/reactionSampleView';
   static const String groupSampleView = '/groupSampleView';
+  static const String groupView = '/groupView';
 }

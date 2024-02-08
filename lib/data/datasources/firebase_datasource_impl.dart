@@ -695,6 +695,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     required String groupDescription,
     required String groupRule,
     required String groupManagerUid,
+    required int groupColor,
   }) async {
     final groupModel = FirebaseGroupModel(
       groupName: groupName,
@@ -702,6 +703,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       groupRule: groupRule,
       groupManagerUid: groupManagerUid,
       groupMemberUidList: [groupManagerUid],
+      groupColor: groupColor,
     );
 
     final groupId = (await firestore
@@ -716,6 +718,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       groupManagerUid: groupModel.groupManagerUid,
       groupMemberUidList: groupModel.groupMemberUidList,
       groupId: groupId,
+      groupColor: groupColor,
     );
 
     firestore
@@ -1295,8 +1298,11 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           doneListForWeek.mapWithIndex((doneForResolution, index) {
             doneForResolution.forEachIndexed((jndex, element) {
               if (element == true) {
-                // doneResolutionIdListForEachDay[jndex]
-                //     .append(sharedResolutionList[index].resolutionId!);
+                // 추가 안됨
+                doneResolutionIdListForEachDay[jndex]
+                    .append(sharedResolutionList[index].resolutionId!);
+
+                // 추가 됨
                 doneResolutionIdListForEachDay[jndex]
                     .add(sharedResolutionList[index].resolutionId!);
               }

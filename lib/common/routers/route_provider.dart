@@ -8,6 +8,7 @@ import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/auth/auth.dart';
 import 'package:wehavit/presentation/effects/effects.dart';
 import 'package:wehavit/presentation/friend_list/friend_list.dart';
+import 'package:wehavit/presentation/group/view/group_view.dart';
 import 'package:wehavit/presentation/home/home.dart';
 import 'package:wehavit/presentation/late_writing/late_writing.dart';
 import 'package:wehavit/presentation/my_page/my_page.dart';
@@ -209,6 +210,18 @@ class GroupSampleViewRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const SampleGroupWidget();
+  }
+}
+
+@TypedGoRoute<GroupViewRoute>(path: GroupViewRoute.path)
+class GroupViewRoute extends GoRouteData {
+  const GroupViewRoute();
+
+  static const path = RouteLocation.groupView;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const GroupView();
   }
 }
 
