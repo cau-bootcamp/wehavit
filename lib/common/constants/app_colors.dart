@@ -33,6 +33,16 @@ class CustomColors {
   static const Color whUnSelectedTextColor = Color(0xffA2A2A2);
   static const Color whSelectedTextColor = Color(0xff000000);
   static const Color whPlaceholderGrey = Color(0xffe3e3e3);
+  static const LinearGradient bottomSheetGradient = LinearGradient(
+    begin: Alignment.topRight,
+    end: Alignment.bottomLeft,
+    colors: [
+      Color(0xff606060),
+      Color(
+        0xff201a1a,
+      ),
+    ],
+  );
 }
 
 class PointColors {

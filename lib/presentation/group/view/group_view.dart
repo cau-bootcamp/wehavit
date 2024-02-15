@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
+import 'package:wehavit/presentation/common_components/common_components.dart';
+import 'package:wehavit/presentation/common_components/gradient_bottom_sheet.dart';
 import 'package:wehavit/presentation/group/group.dart';
 
 class GroupView extends ConsumerStatefulWidget {
@@ -11,20 +13,60 @@ class GroupView extends ConsumerStatefulWidget {
 }
 
 class _GroupViewState extends ConsumerState<GroupView> {
-  List<Widget> groupListViewCellList = [
-    GroupListViewCellWidget(
-      cellModel: GroupListViewCellWidgetModel.dummyModel,
-    ),
-    GroupListViewCellWidget(
-      cellModel: GroupListViewCellWidgetModel.dummyModel,
-    ),
-    const GroupListViewAddCellWidget(),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    List<Widget> groupListViewCellList = [
+      GroupListViewCellWidget(
+        cellModel: GroupListViewCellWidgetModel.dummyModel,
+      ),
+      GroupListViewCellWidget(
+        cellModel: GroupListViewCellWidgetModel.dummyModel,
+      ),
+      GroupListViewAddCellWidget(
+        tapAddGroupCallback: () async {
+          showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return GradientBottomSheet(
+                Column(
+                  children: [
+                    SizedBox(
+                      height: 12,
+                    ),
+                    ColoredButton(
+                      buttonTitle: 'hi',
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.amber,
+                      onPressed: () {},
+                      // isDiminished: true,
+                    ),
+                    SizedBox(
+                      height: 12,
+                    ),
+                    ColoredButton(
+                      buttonTitle: 'hello there',
+                      foregroundColor: Colors.white,
+                      onPressed: () {},
+                    ),
+                    SizedBox(
+                      height: 12,
+                    ),
+                    ColoredButton(
+                      buttonTitle: '돌아가기',
+                      onPressed: () {},
+                      isDiminished: true,
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        },
+      ),
+    ];
+
     return Scaffold(
-      backgroundColor: CustomColors.whBlack,
+      backgroundColor: CustomColors.whDarkBlack,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text(
@@ -45,7 +87,7 @@ class _GroupViewState extends ConsumerState<GroupView> {
           itemBuilder: (context, index) {
             return Padding(
               padding: const EdgeInsets.only(
-                bottom: 8,
+                bottom: 12,
               ),
               child: groupListViewCellList[index],
             );

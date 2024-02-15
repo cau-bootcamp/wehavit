@@ -14,10 +14,10 @@ class GroupListViewCellWidget extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        color: CustomColors.whGrey,
+        color: CustomColors.whSemiBlack,
         boxShadow: const [
           BoxShadow(
-            color: CustomColors.whDarkBlack,
+            color: CustomColors.whBlack,
             blurRadius: 4,
             offset: Offset(2, 4),
           ),
@@ -33,7 +33,7 @@ class GroupListViewCellWidget extends StatelessWidget {
             style: TextStyle(
               color: PointColors.colorList[cellModel.groupEntity.groupColor],
               fontWeight: FontWeight.w500,
-              fontSize: 16,
+              fontSize: 14,
             ),
           ),
           Text(
@@ -41,21 +41,24 @@ class GroupListViewCellWidget extends StatelessWidget {
             style: TextStyle(
               color: PointColors.colorList[cellModel.groupEntity.groupColor],
               fontWeight: FontWeight.w700,
-              fontSize: 28,
+              fontSize: 24,
             ),
+          ),
+          const SizedBox(
+            height: 12,
           ),
           IntrinsicHeight(
             child: Row(
               children: [
                 VerticalDivider(
-                  thickness: 2,
+                  thickness: 4,
                   width: 16,
                   color:
                       PointColors.colorList[cellModel.groupEntity.groupColor],
                 ),
                 const SizedBox(width: 8),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12.0),
+                  padding: const EdgeInsets.symmetric(vertical: 0.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -63,12 +66,12 @@ class GroupListViewCellWidget extends StatelessWidget {
                         title: '멤버 수',
                         number: cellModel.groupEntity.groupMemberUidList.length,
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 6),
                       GroupListCellBulletFutureWidget(
                         title: '함께 도전중인 목표 수',
                         number: cellModel.sharedResolutionCount,
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 6),
                       GroupListCellBulletFutureWidget(
                         title: '현재까지 올라운 인증글 수',
                         number: cellModel.sharedPostCount,
@@ -98,10 +101,15 @@ class GroupListCellBulletWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Text(
           title,
-          style: const TextStyle(color: Colors.white, fontSize: 16, height: 1),
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.w300,
+          ),
         ),
         const SizedBox(
           width: 8,
@@ -110,8 +118,9 @@ class GroupListCellBulletWidget extends StatelessWidget {
           number.toString(),
           style: const TextStyle(
             color: Colors.white,
-            fontSize: 28,
-            height: 1,
+            fontSize: 22,
+            fontWeight: FontWeight.w600,
+            height: 0,
           ),
         ),
       ],
@@ -131,50 +140,63 @@ class GroupListCellBulletFutureWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text(
-          title,
-          style: const TextStyle(color: Colors.white, fontSize: 16, height: 1),
-        ),
-        const SizedBox(
-          width: 8,
-        ),
-        FutureBuilder(
-          future: number,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return Text(
-                snapshot.data!.fold((l) => '0', (r) => r.toString()),
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 28,
-                  height: 1,
-                ),
-              );
-            } else {
-              // TODO: 나중에 예쁜걸로 수정하기! ******
-              return const SizedBox(
-                width: 30,
-                height: 20,
-                child: LinearProgressIndicator(),
-              );
-            }
-          },
-        ),
-      ],
+    return Container(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w300,
+            ),
+          ),
+          const SizedBox(
+            width: 8,
+          ),
+          FutureBuilder(
+            future: number,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Text(
+                  snapshot.data!.fold((l) => '0', (r) => r.toString()),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w600,
+                    height: 0,
+                  ),
+                );
+              } else {
+                // TODO: 나중에 예쁜걸로 수정하기! ******
+                return const SizedBox(
+                  width: 30,
+                  height: 20,
+                  child: LinearProgressIndicator(),
+                );
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 }
 
 class GroupListViewAddCellWidget extends StatelessWidget {
-  const GroupListViewAddCellWidget({super.key});
+  const GroupListViewAddCellWidget({
+    super.key,
+    required this.tapAddGroupCallback,
+  });
+
+  final Function tapAddGroupCallback;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTapUp: (details) {
-        debugPrint('tap group add button');
+        tapAddGroupCallback();
       },
       child: DottedBorder(
         strokeWidth: 2,
