@@ -32,7 +32,7 @@ class CustomColors {
   static const Color whRedBright = Color(0xffDA3A3A);
   static const Color whUnSelectedTextColor = Color(0xffA2A2A2);
   static const Color whSelectedTextColor = Color(0xff000000);
-  static const Color whPlaceholderGrey = Color(0xffe3e3e3);
+  static const Color whPlaceholderGrey = Color(0xffC3C2C7);
   static const LinearGradient bottomSheetGradient = LinearGradient(
     begin: Alignment.topRight,
     end: Alignment.bottomLeft,

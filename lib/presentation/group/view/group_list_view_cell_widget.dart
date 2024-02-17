@@ -24,66 +24,78 @@ class GroupListViewCellWidget extends StatelessWidget {
         ],
       ),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            // ignore: lines_longer_than_80_chars
-            '함께한 지 ${DateTime.now().difference(cellModel.groupEntity.groupCreatedAt).inDays + 1}일 째',
-            style: TextStyle(
-              color: PointColors.colorList[cellModel.groupEntity.groupColor],
-              fontWeight: FontWeight.w500,
-              fontSize: 14,
-            ),
-          ),
-          Text(
-            cellModel.groupEntity.groupName,
-            style: TextStyle(
-              color: PointColors.colorList[cellModel.groupEntity.groupColor],
-              fontWeight: FontWeight.w700,
-              fontSize: 24,
-            ),
-          ),
-          const SizedBox(
-            height: 12,
-          ),
-          IntrinsicHeight(
-            child: Row(
-              children: [
-                VerticalDivider(
-                  thickness: 4,
-                  width: 16,
-                  color:
-                      PointColors.colorList[cellModel.groupEntity.groupColor],
-                ),
-                const SizedBox(width: 8),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 0.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      GroupListCellBulletWidget(
-                        title: '멤버 수',
-                        number: cellModel.groupEntity.groupMemberUidList.length,
-                      ),
-                      const SizedBox(height: 6),
-                      GroupListCellBulletFutureWidget(
-                        title: '함께 도전중인 목표 수',
-                        number: cellModel.sharedResolutionCount,
-                      ),
-                      const SizedBox(height: 6),
-                      GroupListCellBulletFutureWidget(
-                        title: '현재까지 올라운 인증글 수',
-                        number: cellModel.sharedPostCount,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+      child: GroupListViewCellContentWidget(
+        cellModel: cellModel,
       ),
+    );
+  }
+}
+
+class GroupListViewCellContentWidget extends StatelessWidget {
+  const GroupListViewCellContentWidget({super.key, required this.cellModel});
+
+  final GroupListViewCellWidgetModel cellModel;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          // ignore: lines_longer_than_80_chars
+          '함께한 지 ${DateTime.now().difference(cellModel.groupEntity.groupCreatedAt).inDays + 1}일 째',
+          style: TextStyle(
+            color: PointColors.colorList[cellModel.groupEntity.groupColor],
+            fontWeight: FontWeight.w500,
+            fontSize: 14,
+          ),
+        ),
+        Text(
+          cellModel.groupEntity.groupName,
+          style: TextStyle(
+            color: PointColors.colorList[cellModel.groupEntity.groupColor],
+            fontWeight: FontWeight.w700,
+            fontSize: 24,
+          ),
+        ),
+        const SizedBox(
+          height: 12,
+        ),
+        IntrinsicHeight(
+          child: Row(
+            children: [
+              VerticalDivider(
+                thickness: 4,
+                width: 16,
+                color: PointColors.colorList[cellModel.groupEntity.groupColor],
+              ),
+              const SizedBox(width: 8),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 0.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GroupListCellBulletWidget(
+                      title: '멤버 수',
+                      number: cellModel.groupEntity.groupMemberUidList.length,
+                    ),
+                    const SizedBox(height: 6),
+                    GroupListCellBulletFutureWidget(
+                      title: '함께 도전중인 목표 수',
+                      number: cellModel.sharedResolutionCount,
+                    ),
+                    const SizedBox(height: 6),
+                    GroupListCellBulletFutureWidget(
+                      title: '현재까지 올라운 인증글 수',
+                      number: cellModel.sharedPostCount,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

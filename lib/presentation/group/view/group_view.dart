@@ -30,25 +30,33 @@ class _GroupViewState extends ConsumerState<GroupView> {
               return GradientBottomSheet(
                 Column(
                   children: [
-                    SizedBox(
-                      height: 12,
-                    ),
                     ColoredButton(
-                      buttonTitle: 'hi',
+                      buttonTitle: '기존 그룹에 참여하기',
                       foregroundColor: Colors.white,
-                      backgroundColor: Colors.amber,
-                      onPressed: () {},
+                      buttonIcon: Icons.search,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            fullscreenDialog: true,
+                            builder: (context) {
+                              return const JoinGroupView();
+                            },
+                          ),
+                        );
+                      },
                       // isDiminished: true,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 12,
                     ),
                     ColoredButton(
-                      buttonTitle: 'hello there',
+                      buttonTitle: '새로운 그룹 만들기',
                       foregroundColor: Colors.white,
+                      buttonIcon: Icons.flag_outlined,
                       onPressed: () {},
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 12,
                     ),
                     ColoredButton(

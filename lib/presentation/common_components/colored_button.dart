@@ -7,26 +7,29 @@ class ColoredButton extends StatelessWidget {
     this.backgroundColor,
     this.foregroundColor = CustomColors.whWhite,
     required this.buttonTitle,
-    this.buttonImage,
-    required this.onPressed,
+    this.buttonIcon,
+    this.onPressed,
     this.isDiminished = false,
   });
 
   final Color? backgroundColor;
   final Color foregroundColor;
   final String buttonTitle;
-  final String? buttonImage;
-  final Function onPressed;
+  final IconData? buttonIcon;
+  final Function? onPressed;
   final bool isDiminished;
 
   @override
   Widget build(BuildContext context) {
     if (isDiminished) {
       return ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pop(context);
+        },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
+          surfaceTintColor: Colors.transparent,
         ),
         child: Container(
           alignment: Alignment.center,
@@ -44,7 +47,11 @@ class ColoredButton extends StatelessWidget {
       );
     } else {
       return ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          if (onPressed != null) {
+            onPressed!();
+          }
+        },
         style: ElevatedButton.styleFrom(
           backgroundColor: backgroundColor ?? Colors.transparent,
           foregroundColor: foregroundColor,
@@ -74,16 +81,13 @@ class ColoredButton extends StatelessWidget {
                 ),
               ),
               Visibility(
-                visible: buttonImage != null,
+                visible: buttonIcon != null,
                 child: Row(
                   children: [
                     const SizedBox(width: 8),
-                    Text(
-                      buttonImage ?? '',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
+                    Icon(
+                      buttonIcon,
+                      size: 20,
                     ),
                   ],
                 ),
