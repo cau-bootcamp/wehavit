@@ -67,3 +67,26 @@ flutter:
   assets:
     - assets/images/emoji_3d/
     - assets/logo/
+    - assets/fonts/
+
+  fonts:
+    - family: SF-Pro
+      fonts:
+        - asset: assets/fonts/SF-Pro-Text-Thin.otf
+          weight: 100
+        - asset: assets/fonts/SF-Pro-Text-Ultralight.otf
+          weight: 200
+        - asset: assets/fonts/SF-Pro-Text-Light.otf
+          weight: 300
+        - asset: assets/fonts/SF-Pro-Text-Regular.otf
+          weight: 400
+        - asset: assets/fonts/SF-Pro-Text-Medium.otf
+          weight: 500
+        - asset: assets/fonts/SF-Pro-Text-SemiBold.otf
+          weight: 600
+        - asset: assets/fonts/SF-Pro-Text-Bold.otf
+          weight: 700
+        - asset: assets/fonts/SF-Pro-Text-Heavy.otf
+          weight: 800
+        - asset: assets/fonts/SF-Pro-Text-Black.otf
+          weight: 900

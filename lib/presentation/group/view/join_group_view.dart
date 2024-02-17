@@ -131,7 +131,7 @@ class JoinGroupView extends StatelessWidget {
                                               ),
                                             ),
                                             Text(
-                                              '그룹 소개',
+                                              '그룹 소개가 이렇게 나옵니다. 호후',
                                               style: TextStyle(
                                                 fontSize: 14.0,
                                                 fontWeight: FontWeight.w300,

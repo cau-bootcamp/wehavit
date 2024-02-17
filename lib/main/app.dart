@@ -34,7 +34,7 @@ class _MyAppState extends ConsumerState<MyApp> {
         return MaterialApp.router(
           debugShowCheckedModeBanner: false,
           title: appTitle,
-          theme: ThemeData.light(),
+          // theme: ThemeData(fontFamily: 'SF-Pro'),
           darkTheme: ThemeData.dark(),
           themeMode: theme,
           routerConfig: routerConfig,
