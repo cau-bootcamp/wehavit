@@ -51,7 +51,7 @@ class JoinGroupView extends StatelessWidget {
                         decoration: const InputDecoration(
                           isCollapsed: true,
                           contentPadding: EdgeInsets.symmetric(vertical: 4.0),
-                          hintText: '그룹 코드',
+                          hintText: '그룹 코드 입력',
                           hintStyle: TextStyle(
                             color: CustomColors.whPlaceholderGrey,
                           ),
@@ -70,7 +70,7 @@ class JoinGroupView extends StatelessWidget {
                         child: IconButton(
                           onPressed: () {},
                           icon: const Icon(
-                            Icons.copy,
+                            Icons.paste,
                             size: 20,
                             color: CustomColors.whWhite,
                           ),
@@ -89,143 +89,222 @@ class JoinGroupView extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(
-              height: 16.0,
-            ),
-            GestureDetector(
-              child: GroupListViewCellWidget(
-                cellModel: GroupListViewCellWidgetModel.dummyModel,
-              ),
-              onTapUp: (details) {
-                showModalBottomSheet(
-                  isScrollControlled: true,
-                  context: context,
-                  builder: (context) {
-                    return GradientBottomSheet(
-                      Container(
-                        height: MediaQuery.sizeOf(context).height * 0.80,
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: SingleChildScrollView(
-                                child: Container(
-                                  width: double.infinity,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      GroupListViewCellContentWidget(
-                                        cellModel: GroupListViewCellWidgetModel
-                                            .dummyModel,
-                                      ),
-                                      const SizedBox(height: 20),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 12.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              '그룹 소개',
-                                              style: TextStyle(
-                                                fontSize: 16.0,
-                                                fontWeight: FontWeight.w500,
-                                                color: CustomColors.whWhite,
-                                              ),
-                                            ),
-                                            Text(
-                                              '그룹 소개가 이렇게 나옵니다. 호후',
-                                              style: TextStyle(
-                                                fontSize: 14.0,
-                                                fontWeight: FontWeight.w300,
-                                                color: CustomColors.whWhite,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 12.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              '그룹 리더',
-                                              style: TextStyle(
-                                                fontSize: 16.0,
-                                                fontWeight: FontWeight.w500,
-                                                color: CustomColors.whWhite,
-                                              ),
-                                            ),
-                                            Text(
-                                              '그룹 리더가 이렇게 보여집니다',
-                                              style: TextStyle(
-                                                fontSize: 14.0,
-                                                fontWeight: FontWeight.w300,
-                                                color: CustomColors.whWhite,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 12.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              '그룹 규칙',
-                                              style: TextStyle(
-                                                fontSize: 16.0,
-                                                fontWeight: FontWeight.w500,
-                                                color: CustomColors.whWhite,
-                                              ),
-                                            ),
-                                            Text(
-                                              '그룹 규칙이 이렇게 작성됩니다.',
-                                              style: TextStyle(
-                                                fontSize: 14.0,
-                                                fontWeight: FontWeight.w300,
-                                                color: CustomColors.whWhite,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Visibility(
-                              visible: false,
-                              replacement: ColoredButton(
-                                buttonTitle: '참여 신청 완료',
-                                foregroundColor: CustomColors.whWhite,
-                                backgroundColor:
-                                    const Color.fromARGB(255, 120, 86, 0),
-                                onPressed: () {},
-                              ),
-                              child: ColoredButton(
-                                buttonTitle: '참여 신청하기',
-                                foregroundColor: CustomColors.whBlack,
-                                backgroundColor: CustomColors.whYellow,
-                                onPressed: () {},
-                              ),
-                            ),
-                          ],
+            Visibility(
+              // TODO : Search에 대한 결과 보여주기
+              visible: false,
+              child: Visibility(
+                // TODO : Search 결과가 없는 경우에 대한 replacement
+                visible: false,
+                replacement: Container(
+                  child: Expanded(
+                    child: Center(
+                        child: Text(
+                      '해당 코드의 그룹을 찾을 수 없어요 🤔',
+                      style: TextStyle(
+                        color: CustomColors.whSemiWhite,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 20.0,
+                      ),
+                    )),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 16.0,
+                      ),
+                      child: const Text(
+                        '참여하려는 그룹을 선택해주세요',
+                        style: TextStyle(
+                          color: CustomColors.whSemiWhite,
+                          fontWeight: FontWeight.w300,
+                          fontSize: 14.0,
                         ),
                       ),
-                    );
-                  },
-                );
-              },
-            )
+                    ),
+                    SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          GestureDetector(
+                            child: GroupListViewCellWidget(
+                              cellModel:
+                                  GroupListViewCellWidgetModel.dummyModel,
+                            ),
+                            onTapUp: (details) {
+                              showModalBottomSheet(
+                                isScrollControlled: true,
+                                context: context,
+                                builder: (context) {
+                                  return GradientBottomSheet(
+                                    Container(
+                                      height:
+                                          MediaQuery.sizeOf(context).height *
+                                              0.80,
+                                      child: Column(
+                                        children: [
+                                          Expanded(
+                                            child: SingleChildScrollView(
+                                              child: Container(
+                                                width: double.infinity,
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    GroupListViewCellContentWidget(
+                                                      cellModel:
+                                                          GroupListViewCellWidgetModel
+                                                              .dummyModel,
+                                                    ),
+                                                    const SizedBox(height: 20),
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          vertical: 12.0),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            '그룹 소개',
+                                                            style: TextStyle(
+                                                              fontSize: 16.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              color:
+                                                                  CustomColors
+                                                                      .whWhite,
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            '그룹 소개가 이렇게 나옵니다. 호후',
+                                                            style: TextStyle(
+                                                              fontSize: 14.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w300,
+                                                              color:
+                                                                  CustomColors
+                                                                      .whWhite,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          vertical: 12.0),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            '그룹 리더',
+                                                            style: TextStyle(
+                                                              fontSize: 16.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              color:
+                                                                  CustomColors
+                                                                      .whWhite,
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            '그룹 리더가 이렇게 보여집니다',
+                                                            style: TextStyle(
+                                                              fontSize: 14.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w300,
+                                                              color:
+                                                                  CustomColors
+                                                                      .whWhite,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          vertical: 12.0),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            '그룹 규칙',
+                                                            style: TextStyle(
+                                                              fontSize: 16.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              color:
+                                                                  CustomColors
+                                                                      .whWhite,
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            '그룹 규칙이 이렇게 작성됩니다.',
+                                                            style: TextStyle(
+                                                              fontSize: 14.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w300,
+                                                              color:
+                                                                  CustomColors
+                                                                      .whWhite,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Visibility(
+                                            visible: false,
+                                            replacement: ColoredButton(
+                                              buttonTitle: '참여 신청 완료',
+                                              foregroundColor:
+                                                  CustomColors.whWhite,
+                                              backgroundColor:
+                                                  const Color.fromARGB(
+                                                      255, 120, 86, 0),
+                                              onPressed: () {},
+                                            ),
+                                            child: ColoredButton(
+                                              buttonTitle: '참여 신청하기',
+                                              foregroundColor:
+                                                  CustomColors.whBlack,
+                                              backgroundColor:
+                                                  CustomColors.whYellow,
+                                              onPressed: () {},
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
