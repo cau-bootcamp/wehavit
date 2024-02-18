@@ -18,6 +18,7 @@ List<RouteBase> get $appRoutes => [
       $reactionSampleViewRoute,
       $lateWritingViewRoute,
       $groupSampleViewRoute,
+      $groupViewRoute,
     ];
 
 RouteBase get $homeRoute => GoRouteData.$route(
@@ -256,6 +257,29 @@ extension $GroupSampleViewRouteExtension on GroupSampleViewRoute {
 
   String get location => GoRouteData.$location(
         '/groupSampleView',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $groupViewRoute => GoRouteData.$route(
+      path: '/groupView',
+      factory: $GroupViewRouteExtension._fromState,
+    );
+
+extension $GroupViewRouteExtension on GroupViewRoute {
+  static GroupViewRoute _fromState(GoRouterState state) =>
+      const GroupViewRoute();
+
+  String get location => GoRouteData.$location(
+        '/groupView',
       );
 
   void go(BuildContext context) => context.go(location);

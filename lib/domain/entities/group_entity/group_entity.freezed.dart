@@ -25,6 +25,8 @@ mixin _$GroupEntity {
   String? get groupRule => throw _privateConstructorUsedError;
   String get groupManagerUid => throw _privateConstructorUsedError;
   List<String> get groupMemberUidList => throw _privateConstructorUsedError;
+  DateTime get groupCreatedAt => throw _privateConstructorUsedError;
+  int get groupColor => throw _privateConstructorUsedError;
   @JsonKey(includeFromJson: true, includeToJson: false)
   String get groupId => throw _privateConstructorUsedError;
 
@@ -46,6 +48,8 @@ abstract class $GroupEntityCopyWith<$Res> {
       String? groupRule,
       String groupManagerUid,
       List<String> groupMemberUidList,
+      DateTime groupCreatedAt,
+      int groupColor,
       @JsonKey(includeFromJson: true, includeToJson: false) String groupId});
 }
 
@@ -67,6 +71,8 @@ class _$GroupEntityCopyWithImpl<$Res, $Val extends GroupEntity>
     Object? groupRule = freezed,
     Object? groupManagerUid = null,
     Object? groupMemberUidList = null,
+    Object? groupCreatedAt = null,
+    Object? groupColor = null,
     Object? groupId = null,
   }) {
     return _then(_value.copyWith(
@@ -90,6 +96,14 @@ class _$GroupEntityCopyWithImpl<$Res, $Val extends GroupEntity>
           ? _value.groupMemberUidList
           : groupMemberUidList // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      groupCreatedAt: null == groupCreatedAt
+          ? _value.groupCreatedAt
+          : groupCreatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      groupColor: null == groupColor
+          ? _value.groupColor
+          : groupColor // ignore: cast_nullable_to_non_nullable
+              as int,
       groupId: null == groupId
           ? _value.groupId
           : groupId // ignore: cast_nullable_to_non_nullable
@@ -112,6 +126,8 @@ abstract class _$$GroupEntityImplCopyWith<$Res>
       String? groupRule,
       String groupManagerUid,
       List<String> groupMemberUidList,
+      DateTime groupCreatedAt,
+      int groupColor,
       @JsonKey(includeFromJson: true, includeToJson: false) String groupId});
 }
 
@@ -131,6 +147,8 @@ class __$$GroupEntityImplCopyWithImpl<$Res>
     Object? groupRule = freezed,
     Object? groupManagerUid = null,
     Object? groupMemberUidList = null,
+    Object? groupCreatedAt = null,
+    Object? groupColor = null,
     Object? groupId = null,
   }) {
     return _then(_$GroupEntityImpl(
@@ -154,6 +172,14 @@ class __$$GroupEntityImplCopyWithImpl<$Res>
           ? _value._groupMemberUidList
           : groupMemberUidList // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      groupCreatedAt: null == groupCreatedAt
+          ? _value.groupCreatedAt
+          : groupCreatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      groupColor: null == groupColor
+          ? _value.groupColor
+          : groupColor // ignore: cast_nullable_to_non_nullable
+              as int,
       groupId: null == groupId
           ? _value.groupId
           : groupId // ignore: cast_nullable_to_non_nullable
@@ -172,6 +198,8 @@ class _$GroupEntityImpl implements _GroupEntity {
       this.groupRule = '',
       required this.groupManagerUid,
       required final List<String> groupMemberUidList,
+      required this.groupCreatedAt,
+      required this.groupColor,
       @JsonKey(includeFromJson: true, includeToJson: false)
       required this.groupId})
       : _groupMemberUidList = groupMemberUidList;
@@ -199,12 +227,16 @@ class _$GroupEntityImpl implements _GroupEntity {
   }
 
   @override
+  final DateTime groupCreatedAt;
+  @override
+  final int groupColor;
+  @override
   @JsonKey(includeFromJson: true, includeToJson: false)
   final String groupId;
 
   @override
   String toString() {
-    return 'GroupEntity(groupName: $groupName, groupDescription: $groupDescription, groupRule: $groupRule, groupManagerUid: $groupManagerUid, groupMemberUidList: $groupMemberUidList, groupId: $groupId)';
+    return 'GroupEntity(groupName: $groupName, groupDescription: $groupDescription, groupRule: $groupRule, groupManagerUid: $groupManagerUid, groupMemberUidList: $groupMemberUidList, groupCreatedAt: $groupCreatedAt, groupColor: $groupColor, groupId: $groupId)';
   }
 
   @override
@@ -222,6 +254,10 @@ class _$GroupEntityImpl implements _GroupEntity {
                 other.groupManagerUid == groupManagerUid) &&
             const DeepCollectionEquality()
                 .equals(other._groupMemberUidList, _groupMemberUidList) &&
+            (identical(other.groupCreatedAt, groupCreatedAt) ||
+                other.groupCreatedAt == groupCreatedAt) &&
+            (identical(other.groupColor, groupColor) ||
+                other.groupColor == groupColor) &&
             (identical(other.groupId, groupId) || other.groupId == groupId));
   }
 
@@ -234,6 +270,8 @@ class _$GroupEntityImpl implements _GroupEntity {
       groupRule,
       groupManagerUid,
       const DeepCollectionEquality().hash(_groupMemberUidList),
+      groupCreatedAt,
+      groupColor,
       groupId);
 
   @JsonKey(ignore: true)
@@ -257,6 +295,8 @@ abstract class _GroupEntity implements GroupEntity {
       final String? groupRule,
       required final String groupManagerUid,
       required final List<String> groupMemberUidList,
+      required final DateTime groupCreatedAt,
+      required final int groupColor,
       @JsonKey(includeFromJson: true, includeToJson: false)
       required final String groupId}) = _$GroupEntityImpl;
 
@@ -273,6 +313,10 @@ abstract class _GroupEntity implements GroupEntity {
   String get groupManagerUid;
   @override
   List<String> get groupMemberUidList;
+  @override
+  DateTime get groupCreatedAt;
+  @override
+  int get groupColor;
   @override
   @JsonKey(includeFromJson: true, includeToJson: false)
   String get groupId;

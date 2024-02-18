@@ -14,6 +14,8 @@ class GroupEntity with _$GroupEntity {
     @Default('') String? groupRule,
     required String groupManagerUid,
     required List<String> groupMemberUidList,
+    required DateTime groupCreatedAt,
+    required int groupColor,
     @JsonKey(includeFromJson: true, includeToJson: false)
     required String groupId,
   }) = _GroupEntity;

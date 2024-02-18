@@ -24,7 +24,10 @@ mixin _$FirebaseGroupModel {
   String get groupDescription => throw _privateConstructorUsedError;
   String get groupRule => throw _privateConstructorUsedError;
   String get groupManagerUid => throw _privateConstructorUsedError;
+  int get groupColor => throw _privateConstructorUsedError;
   List<String> get groupMemberUidList => throw _privateConstructorUsedError;
+  @TimestampConverter()
+  DateTime get groupCreatedAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -43,7 +46,9 @@ abstract class $FirebaseGroupModelCopyWith<$Res> {
       String groupDescription,
       String groupRule,
       String groupManagerUid,
-      List<String> groupMemberUidList});
+      int groupColor,
+      List<String> groupMemberUidList,
+      @TimestampConverter() DateTime groupCreatedAt});
 }
 
 /// @nodoc
@@ -63,7 +68,9 @@ class _$FirebaseGroupModelCopyWithImpl<$Res, $Val extends FirebaseGroupModel>
     Object? groupDescription = null,
     Object? groupRule = null,
     Object? groupManagerUid = null,
+    Object? groupColor = null,
     Object? groupMemberUidList = null,
+    Object? groupCreatedAt = null,
   }) {
     return _then(_value.copyWith(
       groupName: null == groupName
@@ -82,10 +89,18 @@ class _$FirebaseGroupModelCopyWithImpl<$Res, $Val extends FirebaseGroupModel>
           ? _value.groupManagerUid
           : groupManagerUid // ignore: cast_nullable_to_non_nullable
               as String,
+      groupColor: null == groupColor
+          ? _value.groupColor
+          : groupColor // ignore: cast_nullable_to_non_nullable
+              as int,
       groupMemberUidList: null == groupMemberUidList
           ? _value.groupMemberUidList
           : groupMemberUidList // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      groupCreatedAt: null == groupCreatedAt
+          ? _value.groupCreatedAt
+          : groupCreatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
     ) as $Val);
   }
 }
@@ -103,7 +118,9 @@ abstract class _$$FirebaseGroupModelImplCopyWith<$Res>
       String groupDescription,
       String groupRule,
       String groupManagerUid,
-      List<String> groupMemberUidList});
+      int groupColor,
+      List<String> groupMemberUidList,
+      @TimestampConverter() DateTime groupCreatedAt});
 }
 
 /// @nodoc
@@ -121,7 +138,9 @@ class __$$FirebaseGroupModelImplCopyWithImpl<$Res>
     Object? groupDescription = null,
     Object? groupRule = null,
     Object? groupManagerUid = null,
+    Object? groupColor = null,
     Object? groupMemberUidList = null,
+    Object? groupCreatedAt = null,
   }) {
     return _then(_$FirebaseGroupModelImpl(
       groupName: null == groupName
@@ -140,10 +159,18 @@ class __$$FirebaseGroupModelImplCopyWithImpl<$Res>
           ? _value.groupManagerUid
           : groupManagerUid // ignore: cast_nullable_to_non_nullable
               as String,
+      groupColor: null == groupColor
+          ? _value.groupColor
+          : groupColor // ignore: cast_nullable_to_non_nullable
+              as int,
       groupMemberUidList: null == groupMemberUidList
           ? _value._groupMemberUidList
           : groupMemberUidList // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      groupCreatedAt: null == groupCreatedAt
+          ? _value.groupCreatedAt
+          : groupCreatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
     ));
   }
 }
@@ -157,7 +184,9 @@ class _$FirebaseGroupModelImpl implements _FirebaseGroupModel {
       required this.groupDescription,
       required this.groupRule,
       required this.groupManagerUid,
-      required final List<String> groupMemberUidList})
+      required this.groupColor,
+      required final List<String> groupMemberUidList,
+      @TimestampConverter() required this.groupCreatedAt})
       : _groupMemberUidList = groupMemberUidList;
 
   factory _$FirebaseGroupModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -171,6 +200,8 @@ class _$FirebaseGroupModelImpl implements _FirebaseGroupModel {
   final String groupRule;
   @override
   final String groupManagerUid;
+  @override
+  final int groupColor;
   final List<String> _groupMemberUidList;
   @override
   List<String> get groupMemberUidList {
@@ -181,8 +212,12 @@ class _$FirebaseGroupModelImpl implements _FirebaseGroupModel {
   }
 
   @override
+  @TimestampConverter()
+  final DateTime groupCreatedAt;
+
+  @override
   String toString() {
-    return 'FirebaseGroupModel(groupName: $groupName, groupDescription: $groupDescription, groupRule: $groupRule, groupManagerUid: $groupManagerUid, groupMemberUidList: $groupMemberUidList)';
+    return 'FirebaseGroupModel(groupName: $groupName, groupDescription: $groupDescription, groupRule: $groupRule, groupManagerUid: $groupManagerUid, groupColor: $groupColor, groupMemberUidList: $groupMemberUidList, groupCreatedAt: $groupCreatedAt)';
   }
 
   @override
@@ -198,8 +233,12 @@ class _$FirebaseGroupModelImpl implements _FirebaseGroupModel {
                 other.groupRule == groupRule) &&
             (identical(other.groupManagerUid, groupManagerUid) ||
                 other.groupManagerUid == groupManagerUid) &&
+            (identical(other.groupColor, groupColor) ||
+                other.groupColor == groupColor) &&
             const DeepCollectionEquality()
-                .equals(other._groupMemberUidList, _groupMemberUidList));
+                .equals(other._groupMemberUidList, _groupMemberUidList) &&
+            (identical(other.groupCreatedAt, groupCreatedAt) ||
+                other.groupCreatedAt == groupCreatedAt));
   }
 
   @JsonKey(ignore: true)
@@ -210,7 +249,9 @@ class _$FirebaseGroupModelImpl implements _FirebaseGroupModel {
       groupDescription,
       groupRule,
       groupManagerUid,
-      const DeepCollectionEquality().hash(_groupMemberUidList));
+      groupColor,
+      const DeepCollectionEquality().hash(_groupMemberUidList),
+      groupCreatedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -233,7 +274,9 @@ abstract class _FirebaseGroupModel implements FirebaseGroupModel {
           required final String groupDescription,
           required final String groupRule,
           required final String groupManagerUid,
-          required final List<String> groupMemberUidList}) =
+          required final int groupColor,
+          required final List<String> groupMemberUidList,
+          @TimestampConverter() required final DateTime groupCreatedAt}) =
       _$FirebaseGroupModelImpl;
 
   factory _FirebaseGroupModel.fromJson(Map<String, dynamic> json) =
@@ -248,7 +291,12 @@ abstract class _FirebaseGroupModel implements FirebaseGroupModel {
   @override
   String get groupManagerUid;
   @override
+  int get groupColor;
+  @override
   List<String> get groupMemberUidList;
+  @override
+  @TimestampConverter()
+  DateTime get groupCreatedAt;
   @override
   @JsonKey(ignore: true)
   _$$FirebaseGroupModelImplCopyWith<_$FirebaseGroupModelImpl> get copyWith =>

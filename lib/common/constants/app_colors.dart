@@ -27,9 +27,40 @@ class CustomColors {
   static const Color whSemiWhite = Color(0xffEEEEEE);
   static const Color whYellow = Color(0xffFFB800);
   static const Color whYellowBright = Color(0xfffadf92);
-  static const Color whYellowDark = Color(0xff8C6500);
+  static const Color whYellowDark = Color(0xff705100);
   static const Color whRed = Color(0xffA23333);
   static const Color whRedBright = Color(0xffDA3A3A);
   static const Color whUnSelectedTextColor = Color(0xffA2A2A2);
   static const Color whSelectedTextColor = Color(0xff000000);
+  static const Color whPlaceholderGrey = Color(0xffC3C2C7);
+  static const LinearGradient bottomSheetGradient = LinearGradient(
+    begin: Alignment.topRight,
+    end: Alignment.bottomLeft,
+    colors: [
+      Color(0xff606060),
+      Color(
+        0xff201a1a,
+      ),
+    ],
+  );
+}
+
+class PointColors {
+  static const Color red = Color(0xffe1392e);
+  static const Color orange = Color(0xffe56229);
+  static const Color yellow = Color(0xffe6ae1c);
+  static const Color green = Color(0xff28a954);
+  static const Color blue = Color(0xff2f74db);
+  static const Color purple = Color.fromARGB(255, 136, 98, 253);
+  static const Color pink = Color(0xffed7087);
+
+  static const List<Color> colorList = [
+    red,
+    orange,
+    yellow,
+    green,
+    blue,
+    purple,
+    pink,
+  ];
 }

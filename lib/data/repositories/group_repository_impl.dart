@@ -16,12 +16,16 @@ class GroupRepositoryImpl implements GroupRepository {
     required String groupDescription,
     required String groupRule,
     required String groupManagerUid,
+    required DateTime groupCreatedAt,
+    required int groupColor,
   }) {
     return _wehavitDatasource.createGroup(
       groupName: groupName,
       groupDescription: groupDescription,
       groupRule: groupRule,
       groupManagerUid: groupManagerUid,
+      groupColor: groupColor,
+      groupCreatedAt: groupCreatedAt,
     );
   }
 

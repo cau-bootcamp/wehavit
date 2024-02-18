@@ -44,6 +44,12 @@ class TestPage extends ConsumerWidget {
               onPressCallback: () async {
                 context.push(RouteLocation.groupSampleView);
               },
+              buttonText: 'Go to Group Sample View',
+            ),
+            MoveButton(
+              onPressCallback: () async {
+                context.push(RouteLocation.groupView);
+              },
               buttonText: 'Go to Group View',
             ),
             MoveButton(

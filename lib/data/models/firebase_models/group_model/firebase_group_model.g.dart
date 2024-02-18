@@ -13,9 +13,12 @@ _$FirebaseGroupModelImpl _$$FirebaseGroupModelImplFromJson(
       groupDescription: json['groupDescription'] as String,
       groupRule: json['groupRule'] as String,
       groupManagerUid: json['groupManagerUid'] as String,
+      groupColor: json['groupColor'] as int,
       groupMemberUidList: (json['groupMemberUidList'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
+      groupCreatedAt: const TimestampConverter()
+          .fromJson(json['groupCreatedAt'] as Timestamp),
     );
 
 Map<String, dynamic> _$$FirebaseGroupModelImplToJson(
@@ -25,5 +28,8 @@ Map<String, dynamic> _$$FirebaseGroupModelImplToJson(
       'groupDescription': instance.groupDescription,
       'groupRule': instance.groupRule,
       'groupManagerUid': instance.groupManagerUid,
+      'groupColor': instance.groupColor,
       'groupMemberUidList': instance.groupMemberUidList,
+      'groupCreatedAt':
+          const TimestampConverter().toJson(instance.groupCreatedAt),
     };
