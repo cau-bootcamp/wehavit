@@ -12,7 +12,7 @@ class JoinGroupView extends StatelessWidget {
     return Scaffold(
       backgroundColor: CustomColors.whDarkBlack,
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           '그룹에 참여하기',
           style: TextStyle(
             fontSize: 17.0,
@@ -22,7 +22,7 @@ class JoinGroupView extends StatelessWidget {
         ),
         // leadingWidth: 100,
         leading: TextButton(
-          child: Text(
+          child: const Text(
             '취소',
             style: TextStyle(
               fontSize: 17.0,
@@ -93,19 +93,18 @@ class JoinGroupView extends StatelessWidget {
               // TODO : Search에 대한 결과 보여주기
               visible: false,
               child: Visibility(
-                // TODO : Search 결과가 없는 경우에 대한 replacement
+                // TODO : Search 결과가 없는 경우에 대한 replacement 보여주기
                 visible: false,
-                replacement: Container(
-                  child: Expanded(
-                    child: Center(
-                        child: Text(
+                replacement: const Expanded(
+                  child: Center(
+                    child: Text(
                       '해당 코드의 그룹을 찾을 수 없어요 🤔',
                       style: TextStyle(
                         color: CustomColors.whSemiWhite,
                         fontWeight: FontWeight.w600,
                         fontSize: 20.0,
                       ),
-                    )),
+                    ),
                   ),
                 ),
                 child: Column(
@@ -131,13 +130,13 @@ class JoinGroupView extends StatelessWidget {
                               cellModel:
                                   GroupListViewCellWidgetModel.dummyModel,
                             ),
-                            onTapUp: (details) {
+                            onTapUp: (details) async {
                               showModalBottomSheet(
                                 isScrollControlled: true,
                                 context: context,
                                 builder: (context) {
                                   return GradientBottomSheet(
-                                    Container(
+                                    SizedBox(
                                       height:
                                           MediaQuery.sizeOf(context).height *
                                               0.80,
@@ -145,7 +144,7 @@ class JoinGroupView extends StatelessWidget {
                                         children: [
                                           Expanded(
                                             child: SingleChildScrollView(
-                                              child: Container(
+                                              child: SizedBox(
                                                 width: double.infinity,
                                                 child: Column(
                                                   crossAxisAlignment:
@@ -274,11 +273,8 @@ class JoinGroupView extends StatelessWidget {
                                             visible: false,
                                             replacement: ColoredButton(
                                               buttonTitle: '참여 신청 완료',
-                                              foregroundColor:
-                                                  CustomColors.whWhite,
                                               backgroundColor:
-                                                  const Color.fromARGB(
-                                                      255, 120, 86, 0),
+                                                  CustomColors.whYellowDark,
                                               onPressed: () {},
                                             ),
                                             child: ColoredButton(
@@ -300,7 +296,7 @@ class JoinGroupView extends StatelessWidget {
                           ),
                         ],
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),

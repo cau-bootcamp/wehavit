@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
-import 'package:wehavit/presentation/common_components/gradient_bottom_sheet.dart';
 import 'package:wehavit/presentation/group/group.dart';
 
 class GroupView extends ConsumerStatefulWidget {
@@ -33,7 +31,6 @@ class _GroupViewState extends ConsumerState<GroupView> {
                   children: [
                     ColoredButton(
                       buttonTitle: '기존 그룹에 참여하기',
-                      foregroundColor: Colors.white,
                       buttonIcon: Icons.search,
                       onPressed: () {
                         Navigator.push(
@@ -41,7 +38,7 @@ class _GroupViewState extends ConsumerState<GroupView> {
                           MaterialPageRoute(
                             fullscreenDialog: true,
                             builder: (context) {
-                              return JoinGroupView();
+                              return const JoinGroupView();
                             },
                           ),
                         ).then((_) => Navigator.pop(context));
@@ -53,7 +50,6 @@ class _GroupViewState extends ConsumerState<GroupView> {
                     ),
                     ColoredButton(
                       buttonTitle: '새로운 그룹 만들기',
-                      foregroundColor: Colors.white,
                       buttonIcon: Icons.flag_outlined,
                       onPressed: () {
                         Navigator.push(

@@ -13,7 +13,7 @@ class DoneCreatingGroupView extends StatelessWidget {
     return Scaffold(
       backgroundColor: CustomColors.whDarkBlack,
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           '그룹 만들기 완료',
           style: TextStyle(
             fontSize: 17.0,
@@ -23,7 +23,7 @@ class DoneCreatingGroupView extends StatelessWidget {
         ),
         actions: [
           TextButton(
-            child: Text(
+            child: const Text(
               '닫기',
               style: TextStyle(
                 fontSize: 17.0,
@@ -54,7 +54,7 @@ class DoneCreatingGroupView extends StatelessWidget {
                         ),
                         child: Container(
                           width: double.infinity,
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                             vertical: 20,
                             horizontal: 16,
                           ),
@@ -78,7 +78,7 @@ class DoneCreatingGroupView extends StatelessWidget {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
+                                    const Text(
                                       '그룹 소개',
                                       style: TextStyle(
                                         fontSize: 16.0,
@@ -88,7 +88,7 @@ class DoneCreatingGroupView extends StatelessWidget {
                                     ),
                                     Text(
                                       groupEntity.groupDescription ?? '',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 14.0,
                                         fontWeight: FontWeight.w300,
                                         color: CustomColors.whWhite,
@@ -103,7 +103,7 @@ class DoneCreatingGroupView extends StatelessWidget {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
+                                    const Text(
                                       '그룹 리더',
                                       style: TextStyle(
                                         fontSize: 16.0,
@@ -113,7 +113,7 @@ class DoneCreatingGroupView extends StatelessWidget {
                                     ),
                                     Text(
                                       groupEntity.groupManagerUid,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 14.0,
                                         fontWeight: FontWeight.w300,
                                         color: CustomColors.whWhite,
@@ -128,7 +128,7 @@ class DoneCreatingGroupView extends StatelessWidget {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
+                                    const Text(
                                       '그룹 규칙',
                                       style: TextStyle(
                                         fontSize: 16.0,
@@ -138,7 +138,7 @@ class DoneCreatingGroupView extends StatelessWidget {
                                     ),
                                     Text(
                                       groupEntity.groupRule ?? '',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 14.0,
                                         fontWeight: FontWeight.w300,
                                         color: CustomColors.whWhite,
