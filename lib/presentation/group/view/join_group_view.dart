@@ -15,14 +15,18 @@ class JoinGroupView extends StatelessWidget {
         title: Text(
           '그룹에 참여하기',
           style: TextStyle(
+            fontSize: 17.0,
+            fontWeight: FontWeight.w600,
             color: CustomColors.whWhite,
           ),
         ),
-        leadingWidth: 80,
+        // leadingWidth: 100,
         leading: TextButton(
           child: Text(
-            '돌아가기',
+            '취소',
             style: TextStyle(
+              fontSize: 17.0,
+              fontWeight: FontWeight.w400,
               color: CustomColors.whWhite,
             ),
           ),
