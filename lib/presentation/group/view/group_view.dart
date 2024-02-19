@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
+import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/group/group.dart';
 
@@ -14,6 +15,10 @@ class GroupView extends ConsumerStatefulWidget {
 class _GroupViewState extends ConsumerState<GroupView> {
   @override
   Widget build(BuildContext context) {
+    final groupViewModel = ref.watch(groupViewModelProvider);
+
+    // List<Widget>.generate(groupViewModel.myGroupList!.length, (index) => GroupListViewCellWidget(cellModel: groupViewModel.myGroupList![index]))
+
     List<Widget> groupListViewCellList = [
       GroupListViewCellWidget(
         cellModel: GroupListViewCellWidgetModel.dummyModel,
@@ -98,7 +103,7 @@ class _GroupViewState extends ConsumerState<GroupView> {
       body: SafeArea(
         minimum: const EdgeInsets.symmetric(horizontal: 16),
         child: ListView.builder(
-          itemCount: groupListViewCellList.length,
+          itemCount: groupViewModel.myGroupList!.length,
           itemBuilder: (context, index) {
             return Padding(
               padding: const EdgeInsets.only(

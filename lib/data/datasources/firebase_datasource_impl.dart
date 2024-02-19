@@ -1336,4 +1336,114 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       );
     }
   }
+
+  @override
+  EitherFuture<int> getGroupSharedResolutionCount(String groupId) async {
+    try {
+      final groupMemberUidList = await getGroupSharedMemberUidList(groupId);
+
+      int sharedResolutionCounts = 0;
+
+      await Future.wait(
+        groupMemberUidList.map((memberUid) async {
+          await firestore
+              .collection(
+                FirebaseCollectionName.getTargetResolutionCollectionName(
+                  memberUid,
+                ),
+              )
+              .where(
+                FirebaseResolutionFieldName.resolutionShareGroupIdList,
+                arrayContains: groupId,
+              )
+              .get()
+              .then((value) {
+            sharedResolutionCounts += value.docs.length;
+          });
+        }),
+      );
+
+      return Future(() => right(sharedResolutionCounts));
+    } on Exception {
+      return Future(
+        () => left(
+          const Failure('catch error on getGroupSharedResolutionCount'),
+        ),
+      );
+    }
+  }
+
+  @override
+  EitherFuture<int> getGroupSharedPostCount(String groupId) async {
+    try {
+      final groupMemberUidList = await getGroupSharedMemberUidList(groupId);
+
+      int sharedPostCounts = 0;
+
+      await Future.wait(
+        groupMemberUidList.map((memberUid) async {
+          final resolutionIdList = await firestore
+              .collection(
+                FirebaseCollectionName.getTargetResolutionCollectionName(
+                  memberUid,
+                ),
+              )
+              .where(
+                FirebaseResolutionFieldName.resolutionShareGroupIdList,
+                arrayContains: groupId,
+              )
+              .get()
+              .then((result) {
+            return result.docs
+                .map(
+                  (doc) => doc.reference.id,
+                )
+                .toList();
+          });
+
+          if (resolutionIdList.isEmpty) {
+            return;
+          }
+
+          await firestore
+              .collection(FirebaseCollectionName.confirmPosts)
+              .where(
+                FirebaseConfirmPostFieldName.resolutionId,
+                whereIn: resolutionIdList,
+              )
+              .get()
+              .then((value) {
+            sharedPostCounts += value.docs.length;
+          });
+        }),
+      );
+
+      return Future(() => right(sharedPostCounts));
+    } on Exception {
+      return Future(
+        () => left(
+          const Failure('catch error on getGroupSharedPostCount'),
+        ),
+      );
+    }
+  }
+
+  Future<List<String>> getGroupSharedMemberUidList(String groupId) async {
+    try {
+      final groupMemberUidList = firestore
+          .collection(FirebaseCollectionName.groups)
+          .doc(groupId)
+          .get()
+          .then(
+            (result) => (result.data()![FirebaseGroupFieldName.memberUidList]
+                    as List<dynamic>)
+                .map((e) => e.toString())
+                .toList(),
+          );
+
+      return groupMemberUidList;
+    } on Exception {
+      return Future(() => []);
+    }
+  }
 }

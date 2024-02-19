@@ -104,4 +104,15 @@ class GroupRepositoryImpl implements GroupRepository {
   ) {
     return _wehavitDatasource.getGroupWeeklyReport(groupId);
   }
+
+  @override
+  EitherFuture<(EitherFuture<int>, EitherFuture<int>)>
+      getGroupListViewCellModelData(String groupId) {
+    final sharedResolutionsCount =
+        _wehavitDatasource.getGroupSharedResolutionCount(groupId);
+    final sharedPostsCount =
+        _wehavitDatasource.getGroupSharedPostCount(groupId);
+
+    return Future(() => right((sharedResolutionsCount, sharedPostsCount)));
+  }
 }

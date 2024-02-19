@@ -92,4 +92,8 @@ abstract class WehavitDatasource {
   EitherFuture<GroupWeeklyReportEntity> getGroupWeeklyReport(
     String groupId,
   );
+
+  EitherFuture<int> getGroupSharedResolutionCount(String groupId);
+
+  EitherFuture<int> getGroupSharedPostCount(String groupId);
 }

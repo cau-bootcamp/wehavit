@@ -2,7 +2,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:wehavit/common/constants/constants.dart';
 import 'package:wehavit/common/utils/utils.dart';
-import 'package:wehavit/presentation/group/viewmodel/viewmodel.dart';
+import 'package:wehavit/presentation/group/group.dart';
 
 class GroupListViewCellWidget extends StatelessWidget {
   const GroupListViewCellWidget({super.key, required this.cellModel});
@@ -86,7 +86,7 @@ class GroupListViewCellContentWidget extends StatelessWidget {
                     ),
                     const SizedBox(height: 6),
                     GroupListCellBulletFutureWidget(
-                      title: '현재까지 올라운 인증글 수',
+                      title: '현재까지 올라온 인증글 수',
                       number: cellModel.sharedPostCount,
                     ),
                   ],

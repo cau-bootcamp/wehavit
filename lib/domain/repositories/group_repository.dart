@@ -1,5 +1,6 @@
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wehavit/presentation/group/model/group_list_view_cell_widget_model.dart';
 
 abstract class GroupRepository {
   // return groupId
@@ -41,4 +42,7 @@ abstract class GroupRepository {
   EitherFuture<GroupWeeklyReportEntity> getGroupWeeklyReport(
     String groupId,
   );
+
+  EitherFuture<(EitherFuture<int>, EitherFuture<int>)>
+      getGroupListViewCellModelData(String groupId);
 }

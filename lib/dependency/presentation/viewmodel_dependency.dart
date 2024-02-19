@@ -6,10 +6,12 @@ import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/dependency/data/repository_dependency.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wehavit/domain/usecases/get_group_list_view_cell_widget_model_usecase.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
 import 'package:wehavit/presentation/auth/auth.dart';
 import 'package:wehavit/presentation/effects/effects.dart';
 import 'package:wehavit/presentation/friend_list/friend_list.dart';
+import 'package:wehavit/presentation/group/group.dart';
 import 'package:wehavit/presentation/home/home.dart';
 import 'package:wehavit/presentation/late_writing/late_writing.dart';
 import 'package:wehavit/presentation/my_page/my_page.dart';
@@ -94,4 +96,16 @@ final myPageResolutionListProvider = StateNotifierProvider<
 final reactionAnimationWidgetManagerProvider =
     StateNotifierProvider<ReactionAnimationWidgetManager, void>((ref) {
   return ReactionAnimationWidgetManager(ref);
+});
+
+// Group View
+final groupViewModelProvider =
+    StateNotifierProvider<GroupViewModelProvider, GroupViewModel>((ref) {
+  final getGroupListUsecase = ref.watch(getGroupListUseCaseProvider);
+  final getGroupListViewCellWidgetModelUsecase =
+      ref.watch(getGroupListViewCellWidgetModelUsecaseProvider);
+  return GroupViewModelProvider(
+    getGroupListUsecase,
+    getGroupListViewCellWidgetModelUsecase,
+  );
 });
