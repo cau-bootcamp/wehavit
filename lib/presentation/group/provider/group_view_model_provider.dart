@@ -23,12 +23,30 @@ class GroupViewModelProvider extends StateNotifier<GroupViewModel> {
       }),
     );
 
-    state.myGroupList?.map(
-      (groupEntity) async {
-        return await getGroupListViewCellWidgetModelUsecase(
-          groupEntity: groupEntity,
-        );
-      },
-    );
+    if (state.myGroupList == null) {
+      state.groupListViewCellModelList = null;
+      return;
+    }
+
+    state.groupListViewCellModelList = (await Future.wait(
+      state.myGroupList!.map(
+        (groupEntity) async {
+          final groupModel = await getGroupListViewCellWidgetModelUsecase(
+            groupEntity: groupEntity,
+          ).then(
+            (value) => value.fold(
+              (failure) => null,
+              (model) => model,
+            ),
+          );
+
+          if (groupModel != null) {
+            return groupModel;
+          }
+        },
+      ),
+    ))
+        .nonNulls
+        .toList();
   }
 }

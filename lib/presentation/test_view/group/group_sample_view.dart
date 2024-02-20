@@ -491,6 +491,7 @@ class _CellWidgetGroupSampleViewState
                               (model) => model,
                             ),
                           );
+
                       if (groupModel != null) {
                         setState(() {
                           groupListViewCellList = List<Widget>.generate(

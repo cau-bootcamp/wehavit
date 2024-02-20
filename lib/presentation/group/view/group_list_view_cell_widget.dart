@@ -184,7 +184,7 @@ class GroupListCellBulletFutureWidget extends StatelessWidget {
                 // TODO: 나중에 예쁜걸로 수정하기! ******
                 return const SizedBox(
                   width: 30,
-                  height: 20,
+                  height: 15,
                   child: LinearProgressIndicator(),
                 );
               }

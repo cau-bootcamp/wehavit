@@ -43,6 +43,7 @@ abstract class GroupRepository {
     String groupId,
   );
 
+  // 현재 그룹 내에 공유중인 목표 수, 지금까지 그룹 내 인증글 수를 반환
   EitherFuture<(EitherFuture<int>, EitherFuture<int>)>
       getGroupListViewCellModelData(String groupId);
 }
