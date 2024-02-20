@@ -1,11 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
+import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/presentation/common_components/colored_button.dart';
 import 'package:wehavit/presentation/common_components/gradient_bottom_sheet.dart';
 import 'package:wehavit/presentation/group/group.dart';
 
-class JoinGroupView extends StatelessWidget {
+class JoinGroupView extends ConsumerStatefulWidget {
   const JoinGroupView({super.key});
+
+  @override
+  ConsumerState<JoinGroupView> createState() => _JoinGroupViewState();
+}
+
+class _JoinGroupViewState extends ConsumerState<JoinGroupView> {
+  final groupIdController = TextEditingController();
+  List<GroupListViewCellWidgetModel> groupListCellWidgetModelList = [];
+
+  bool isSearchDone = false;
+  bool isSearchSuccessed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -56,45 +70,96 @@ class JoinGroupView extends StatelessWidget {
                             color: CustomColors.whPlaceholderGrey,
                           ),
                         ),
+                        controller: groupIdController,
+                        onChanged: (value) {
+                          setState(() {});
+                        },
                       ),
                       Visibility(
                         replacement: IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            groupIdController.clear();
+                            setState(() {});
+                          },
                           icon: const Icon(
                             Icons.close,
                             size: 24,
                             color: CustomColors.whWhite,
                           ),
                         ),
-                        visible: true,
+                        visible: groupIdController.text.isEmpty,
                         child: IconButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            final clipboardData =
+                                await Clipboard.getData(Clipboard.kTextPlain);
+                            groupIdController.text = clipboardData?.text ?? '';
+                            setState(() {});
+                          },
                           icon: const Icon(
                             Icons.paste,
                             size: 20,
                             color: CustomColors.whWhite,
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
                 IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
+                  onPressed: () async {
+                    if (groupIdController.text.isNotEmpty) {
+                      final groupEntity = await ref
+                          .read(getGroupEntityByIdUsecaseProvider)(
+                            groupId: groupIdController.text,
+                          )
+                          .then(
+                            (result) => result.fold(
+                              (failure) => null,
+                              (entity) => entity,
+                            ),
+                          );
+
+                      if (groupEntity == null) {
+                        // 그룹 정보를 불러올 수 없는 경우 (데이터가 없다거나?)
+                        setState(() {
+                          isSearchSuccessed = false;
+                        });
+                        return;
+                      }
+
+                      groupListCellWidgetModelList = await ref
+                          .read(getGroupListViewCellWidgetModelUsecaseProvider)(
+                            groupEntity: groupEntity,
+                          )
+                          .then(
+                            (result) => result.fold(
+                              (failure) => [],
+                              (model) => [model],
+                            ),
+                          );
+
+                      setState(() {
+                        isSearchSuccessed = true;
+                        isSearchDone = true;
+                      });
+                    }
+                  },
+                  icon: Icon(
                     Icons.search,
                     size: 28,
-                    color: CustomColors.whWhite,
+                    color: groupIdController.text.isEmpty
+                        ? CustomColors.whGrey
+                        : CustomColors.whWhite,
                   ),
                 ),
               ],
             ),
             Visibility(
               // TODO : Search에 대한 결과 보여주기
-              visible: false,
+              visible: isSearchDone,
               child: Visibility(
                 // TODO : Search 결과가 없는 경우에 대한 replacement 보여주기
-                visible: false,
+                visible: isSearchSuccessed,
                 replacement: const Expanded(
                   child: Center(
                     child: Text(
@@ -124,30 +189,31 @@ class JoinGroupView extends StatelessWidget {
                     ),
                     SingleChildScrollView(
                       child: Column(
-                        children: [
-                          GestureDetector(
-                            child: GroupListViewCellWidget(
-                              cellModel:
-                                  GroupListViewCellWidgetModel.dummyModel,
-                            ),
-                            onTapUp: (details) async {
-                              showModalBottomSheet(
-                                isScrollControlled: true,
-                                context: context,
-                                builder: (context) {
-                                  return GradientBottomSheet(
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.sizeOf(context).height *
+                        children: groupListCellWidgetModelList
+                            .map(
+                              (cellModel) => GestureDetector(
+                                child: GroupListViewCellWidget(
+                                  cellModel: cellModel,
+                                ),
+                                onTapUp: (details) async {
+                                  showModalBottomSheet(
+                                    isScrollControlled: true,
+                                    context: context,
+                                    builder: (context) {
+                                      return GradientBottomSheet(
+                                        SizedBox(
+                                          height: MediaQuery.sizeOf(context)
+                                                  .height *
                                               0.80,
-                                      child: JoinGroupIntroduceView(),
-                                    ),
+                                          child: JoinGroupIntroduceView(),
+                                        ),
+                                      );
+                                    },
                                   );
                                 },
-                              );
-                            },
-                          ),
-                        ],
+                              ),
+                            )
+                            .toList(),
                       ),
                     ),
                   ],

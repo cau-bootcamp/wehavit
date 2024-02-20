@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
@@ -18,12 +20,13 @@ class _GroupViewState extends ConsumerState<GroupView> {
   void initState() {
     super.initState();
 
-    loadGroupCellList();
+    unawaited(loadGroupCellList());
   }
 
   @override
   Widget build(BuildContext context) {
     final viewModel = ref.watch(groupViewModelProvider);
+    // ignore: unused_local_variable
     final provider = ref.read(groupViewModelProvider.notifier);
 
     List<Widget> groupListViewCellList = (viewModel.groupListViewCellModelList
@@ -139,7 +142,7 @@ class _GroupViewState extends ConsumerState<GroupView> {
     );
   }
 
-  void loadGroupCellList() {
+  Future<void> loadGroupCellList() async {
     ref
         .read(groupViewModelProvider.notifier)
         .loadMyGroupCellList()

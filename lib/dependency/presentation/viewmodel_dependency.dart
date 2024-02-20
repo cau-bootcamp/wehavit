@@ -6,7 +6,6 @@ import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/dependency/data/repository_dependency.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/domain/usecases/get_group_list_view_cell_widget_model_usecase.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
 import 'package:wehavit/presentation/auth/auth.dart';
 import 'package:wehavit/presentation/effects/effects.dart';

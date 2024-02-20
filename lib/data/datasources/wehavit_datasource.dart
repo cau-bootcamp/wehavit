@@ -96,4 +96,6 @@ abstract class WehavitDatasource {
   EitherFuture<int> getGroupSharedResolutionCount(String groupId);
 
   EitherFuture<int> getGroupSharedPostCount(String groupId);
+
+  EitherFuture<GroupEntity> getGroupEntity({required String groupId});
 }

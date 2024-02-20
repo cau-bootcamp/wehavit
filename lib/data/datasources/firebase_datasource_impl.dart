@@ -1153,6 +1153,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
             .add(const Duration(days: 2));
       }
 
+      // ignore: unused_local_variable
       DateTime startDate = DateTime(endDate.year, endDate.month, endDate.day)
           .subtract(const Duration(days: 7));
 
@@ -1444,6 +1445,26 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       return groupMemberUidList;
     } on Exception {
       return Future(() => []);
+    }
+  }
+
+  @override
+  EitherFuture<GroupEntity> getGroupEntity({required String groupId}) async {
+    try {
+      final groupEntity = await firestore
+          .collection(FirebaseCollectionName.groups)
+          .doc(groupId)
+          .get()
+          .then(
+            (result) =>
+                FirebaseGroupModel.fromFireStoreDocument(result).toGroupEntity(
+              groupId: groupId,
+            ),
+          );
+
+      return Future(() => right(groupEntity));
+    } on Exception {
+      return Future(() => left(const Failure('cannot get group entity')));
     }
   }
 }

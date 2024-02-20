@@ -204,3 +204,9 @@ final getGroupListViewCellWidgetModelUsecaseProvider =
   final groupRepository = ref.watch(groupRepositoryProvider);
   return GetGroupListViewCellWidgetModelUsecase(groupRepository);
 });
+
+final getGroupEntityByIdUsecaseProvider =
+    Provider<GetGroupEntityByIdUsecase>((ref) {
+  final groupRepository = ref.watch(groupRepositoryProvider);
+  return GetGroupEntityByIdUsecase(groupRepository);
+});

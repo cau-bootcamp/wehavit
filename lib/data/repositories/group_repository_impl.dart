@@ -115,4 +115,9 @@ class GroupRepositoryImpl implements GroupRepository {
 
     return Future(() => right((sharedResolutionsCount, sharedPostsCount)));
   }
+
+  @override
+  EitherFuture<GroupEntity> getGroupEntity({required String groupId}) {
+    return _wehavitDatasource.getGroupEntity(groupId: groupId);
+  }
 }
