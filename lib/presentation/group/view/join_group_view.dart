@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:wehavit/common/common.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
-import 'package:wehavit/presentation/common_components/colored_button.dart';
-import 'package:wehavit/presentation/common_components/gradient_bottom_sheet.dart';
+import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/group/group.dart';
 
 class JoinGroupView extends ConsumerStatefulWidget {
@@ -205,7 +209,9 @@ class _JoinGroupViewState extends ConsumerState<JoinGroupView> {
                                           height: MediaQuery.sizeOf(context)
                                                   .height *
                                               0.80,
-                                          child: JoinGroupIntroduceView(),
+                                          child: JoinGroupIntroduceView(
+                                            groupModel: cellModel,
+                                          ),
                                         ),
                                       );
                                     },
@@ -227,11 +233,27 @@ class _JoinGroupViewState extends ConsumerState<JoinGroupView> {
   }
 }
 
-class JoinGroupIntroduceView extends StatelessWidget {
-  const JoinGroupIntroduceView({super.key});
+class JoinGroupIntroduceView extends ConsumerStatefulWidget {
+  const JoinGroupIntroduceView({super.key, required this.groupModel});
+
+  final GroupListViewCellWidgetModel groupModel;
 
   @override
+  ConsumerState<JoinGroupIntroduceView> createState() =>
+      _JoinGroupIntroduceViewState();
+}
+
+class _JoinGroupIntroduceViewState
+    extends ConsumerState<JoinGroupIntroduceView> {
+  @override
   Widget build(BuildContext context) {
+    EitherFuture<UserDataEntity> groupManagerEntity = ref
+        .read(fetchUserDataFromIdUsecaseProvider)
+        (widget.groupModel.groupEntity.groupManagerUid)
+        .whenComplete(() {
+      setState(() {});
+    });
+
     return Column(
       children: [
         Expanded(
@@ -242,7 +264,7 @@ class JoinGroupIntroduceView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   GroupListViewCellContentWidget(
-                    cellModel: GroupListViewCellWidgetModel.dummyModel,
+                    cellModel: widget.groupModel,
                   ),
                   const SizedBox(height: 20),
                   Padding(
@@ -250,7 +272,7 @@ class JoinGroupIntroduceView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           '그룹 소개',
                           style: TextStyle(
                             fontSize: 16.0,
@@ -259,8 +281,8 @@ class JoinGroupIntroduceView extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          '그룹 소개가 이렇게 나옵니다. 호후',
-                          style: TextStyle(
+                          widget.groupModel.groupEntity.groupDescription ?? '',
+                          style: const TextStyle(
                             fontSize: 14.0,
                             fontWeight: FontWeight.w300,
                             color: CustomColors.whWhite,
@@ -274,7 +296,7 @@ class JoinGroupIntroduceView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           '그룹 리더',
                           style: TextStyle(
                             fontSize: 16.0,
@@ -282,14 +304,7 @@ class JoinGroupIntroduceView extends StatelessWidget {
                             color: CustomColors.whWhite,
                           ),
                         ),
-                        Text(
-                          '그룹 리더가 이렇게 보여집니다',
-                          style: TextStyle(
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w300,
-                            color: CustomColors.whWhite,
-                          ),
-                        ),
+                        UserProfileBar(futureUserEntity: groupManagerEntity),
                       ],
                     ),
                   ),
@@ -298,7 +313,7 @@ class JoinGroupIntroduceView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           '그룹 규칙',
                           style: TextStyle(
                             fontSize: 16.0,
@@ -307,8 +322,8 @@ class JoinGroupIntroduceView extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          '그룹 규칙이 이렇게 작성됩니다.',
-                          style: TextStyle(
+                          widget.groupModel.groupEntity.groupRule ?? '',
+                          style: const TextStyle(
                             fontSize: 14.0,
                             fontWeight: FontWeight.w300,
                             color: CustomColors.whWhite,
