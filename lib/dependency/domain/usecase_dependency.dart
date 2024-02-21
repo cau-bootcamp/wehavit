@@ -210,3 +210,15 @@ final getGroupEntityByIdUsecaseProvider =
   final groupRepository = ref.watch(groupRepositoryProvider);
   return GetGroupEntityByIdUsecase(groupRepository);
 });
+
+final checkWhetherAlreadyRegisteredToGroupUsecaseProvider =
+    Provider<CheckWhetherAlreadyRegisteredToGroupUsecase>((ref) {
+  final groupRepository = ref.watch(groupRepositoryProvider);
+  return CheckWhetherAlreadyRegisteredToGroupUsecase(groupRepository);
+});
+
+final checkWhetherAlreadyAppliedToGroupUsecaseProvider =
+    Provider<CheckWhetherAlreadyAppliedToGroupUsecase>((ref) {
+  final groupRepository = ref.watch(groupRepositoryProvider);
+  return CheckWhetherAlreadyAppliedToGroupUsecase(groupRepository);
+});

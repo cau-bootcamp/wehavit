@@ -1467,4 +1467,50 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       return Future(() => left(const Failure('cannot get group entity')));
     }
   }
+
+  @override
+  EitherFuture<bool> checkWhetherAlreadyAppliedToGroup({
+    required String groupId,
+  }) async {
+    try {
+      final uid = getMyUserId();
+
+      final isApplied = await firestore
+          .collection(
+            FirebaseCollectionName.getGroupApplyWaitingCollectionName(
+              groupId,
+            ),
+          )
+          .where(FirebaseGroupFieldName.applyUid, isEqualTo: uid)
+          .get()
+          .then((result) => (result.docs.isNotEmpty ? true : false));
+
+      return Future(() => right(isApplied));
+    } on Exception {
+      return Future(() => left(const Failure('cannot get applied status')));
+    }
+  }
+
+  @override
+  EitherFuture<bool> checkWhetherAlreadyRegisteredToGroup({
+    required String groupId,
+  }) async {
+    try {
+      final uid = getMyUserId();
+
+      final isRegistered = await firestore
+          .collection(FirebaseCollectionName.groups)
+          .doc(groupId)
+          .get()
+          .then((result) {
+        return List.castFrom(
+          result.data()?[FirebaseGroupFieldName.memberUidList] as List,
+        ).contains(uid);
+      });
+
+      return Future(() => right(isRegistered));
+    } on Exception {
+      return Future(() => left(const Failure('cannot get registered status')));
+    }
+  }
 }

@@ -245,15 +245,48 @@ class JoinGroupIntroduceView extends ConsumerStatefulWidget {
 
 class _JoinGroupIntroduceViewState
     extends ConsumerState<JoinGroupIntroduceView> {
+  EitherFuture<UserDataEntity>? groupManagerEntity;
+  Future<bool>? isRegisteredFuture;
+  Future<bool>? isAppliedFuture;
+
   @override
-  Widget build(BuildContext context) {
-    EitherFuture<UserDataEntity> groupManagerEntity = ref
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    groupManagerEntity = ref
         .read(fetchUserDataFromIdUsecaseProvider)
         (widget.groupModel.groupEntity.groupManagerUid)
         .whenComplete(() {
       setState(() {});
     });
 
+    isRegisteredFuture = ref
+        .read(checkWhetherAlreadyRegisteredToGroupUsecaseProvider)(
+          widget.groupModel.groupEntity.groupId,
+        )
+        .then(
+          (value) => value.fold(
+            (failure) => false,
+            (isRegistered) => isRegistered,
+          ),
+        )
+        .whenComplete(() => setState(() {}));
+
+    isAppliedFuture = ref
+        .read(checkWhetherAlreadyAppliedToGroupUsecaseProvider)(
+          widget.groupModel.groupEntity.groupId,
+        )
+        .then(
+          (value) => value.fold(
+            (failure) => false,
+            (isApplied) => isApplied,
+          ),
+        )
+        .whenComplete(() => setState(() {}));
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: [
         Expanded(
@@ -304,7 +337,7 @@ class _JoinGroupIntroduceViewState
                             color: CustomColors.whWhite,
                           ),
                         ),
-                        UserProfileBar(futureUserEntity: groupManagerEntity),
+                        UserProfileBar(futureUserEntity: groupManagerEntity!),
                       ],
                     ),
                   ),
@@ -337,19 +370,91 @@ class _JoinGroupIntroduceViewState
             ),
           ),
         ),
-        Visibility(
-          visible: false,
-          replacement: ColoredButton(
-            buttonTitle: '참여 신청 완료',
-            backgroundColor: CustomColors.whYellowDark,
-            onPressed: () {},
-          ),
-          child: ColoredButton(
-            buttonTitle: '참여 신청하기',
-            foregroundColor: CustomColors.whBlack,
-            backgroundColor: CustomColors.whYellow,
-            onPressed: () {},
-          ),
+        FutureBuilder(
+          future: isRegisteredFuture,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              if (!snapshot.data!) {
+                return FutureBuilder(
+                  future: isAppliedFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Visibility(
+                        visible: !snapshot.data!,
+                        replacement: ColoredButton(
+                          buttonTitle: '참여 신청 완료',
+                          backgroundColor: CustomColors.whYellowDark,
+                          onPressed: () {},
+                        ),
+                        child: ColoredButton(
+                          buttonTitle: '참여 신청하기',
+                          foregroundColor: CustomColors.whBlack,
+                          backgroundColor: CustomColors.whYellow,
+                          onPressed: () async {
+                            ref.read(applyForJoiningGroupUsecaseProvider)(
+                              widget.groupModel.groupEntity.groupId,
+                            );
+                            isAppliedFuture = null;
+                            setState(() {});
+
+                            isAppliedFuture = ref
+                                .read(
+                                    checkWhetherAlreadyAppliedToGroupUsecaseProvider)
+                                (
+                                  widget.groupModel.groupEntity.groupId,
+                                )
+                                .then(
+                                  (value) => value.fold(
+                                    (failure) => false,
+                                    (isApplied) => isApplied,
+                                  ),
+                                )
+                                .whenComplete(() => setState(() {}));
+                          },
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return ColoredButton(
+                        buttonTitle: '신청 여부 조회에 문제가 발생하였습니다',
+                        foregroundColor: CustomColors.whBlack,
+                        backgroundColor: CustomColors.whPlaceholderGrey,
+                      );
+                    } else {
+                      return Container(
+                        width: 30,
+                        height: 30,
+                        margin: const EdgeInsets.all(8.0),
+                        child: const CircularProgressIndicator(
+                          color: CustomColors.whYellow,
+                        ),
+                      );
+                    }
+                  },
+                );
+              } else {
+                return ColoredButton(
+                  buttonTitle: '이미 그룹에 참여중입니다',
+                  foregroundColor: CustomColors.whBlack,
+                  backgroundColor: CustomColors.whPlaceholderGrey,
+                );
+              }
+            } else if (snapshot.hasError) {
+              return ColoredButton(
+                buttonTitle: '가입 여부 조회에 문제가 발생하였습니다',
+                foregroundColor: CustomColors.whBlack,
+                backgroundColor: CustomColors.whPlaceholderGrey,
+              );
+            } else {
+              return Container(
+                width: 30,
+                height: 30,
+                margin: const EdgeInsets.all(8.0),
+                child: const CircularProgressIndicator(
+                  color: CustomColors.whYellow,
+                ),
+              );
+            }
+          },
         ),
       ],
     );

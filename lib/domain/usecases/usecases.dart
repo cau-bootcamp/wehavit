@@ -1,6 +1,8 @@
 export 'accept_applying_for_joining_group_usecase.dart';
 export 'apply_for_joining_group_usecase.dart';
 export 'auth_state_changes_usecase.dart';
+export 'check_whether_already_applied_to_group_usecase.dart';
+export 'check_whether_already_registered_to_group_usecase.dart';
 export 'create_group_usecase.dart';
 export 'email_and_password_login_usecase.dart';
 export 'email_and_password_register_usecase.dart';

@@ -2,7 +2,6 @@ import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/data/datasources/datasources.dart';
 import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/domain/entities/group_weekly_report_entity/group_weekly_resport_entity.dart';
 import 'package:wehavit/domain/repositories/group_repository.dart';
 
 class GroupRepositoryImpl implements GroupRepository {
@@ -119,5 +118,23 @@ class GroupRepositoryImpl implements GroupRepository {
   @override
   EitherFuture<GroupEntity> getGroupEntity({required String groupId}) {
     return _wehavitDatasource.getGroupEntity(groupId: groupId);
+  }
+
+  @override
+  EitherFuture<bool> checkWhetherAlreadyAppliedToGroup({
+    required String groupId,
+  }) {
+    return _wehavitDatasource.checkWhetherAlreadyAppliedToGroup(
+      groupId: groupId,
+    );
+  }
+
+  @override
+  EitherFuture<bool> checkWhetherAlreadyRegisteredToGroup({
+    required String groupId,
+  }) {
+    return _wehavitDatasource.checkWhetherAlreadyRegisteredToGroup(
+      groupId: groupId,
+    );
   }
 }
