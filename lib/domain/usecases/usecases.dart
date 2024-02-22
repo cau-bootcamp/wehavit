@@ -1,6 +1,8 @@
 export 'accept_applying_for_joining_group_usecase.dart';
 export 'apply_for_joining_group_usecase.dart';
 export 'auth_state_changes_usecase.dart';
+export 'check_whether_already_applied_to_group_usecase.dart';
+export 'check_whether_already_registered_to_group_usecase.dart';
 export 'create_group_usecase.dart';
 export 'email_and_password_login_usecase.dart';
 export 'email_and_password_register_usecase.dart';
@@ -9,7 +11,9 @@ export 'get_confirm_post_list_for_resolution_id.dart';
 export 'get_confirm_post_list_usecase.dart';
 export 'get_friend_list_usecase.dart';
 export 'get_group_announcement_list_usecase.dart';
+export 'get_group_entity_by_id_usecase.dart';
 export 'get_group_list_usecase.dart';
+export 'get_group_list_view_cell_widget_model_usecase.dart';
 export 'get_group_weekly_report_usecase.dart';
 export 'get_my_resolution_list_usecase.dart';
 export 'get_reaction_list_from_confirm_post_usecase.dart';

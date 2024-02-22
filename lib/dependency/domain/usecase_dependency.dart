@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/dependency/data/repository_dependency.dart';
+import 'package:wehavit/domain/usecases/get_group_list_view_cell_widget_model_usecase.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
 
 final logOutUseCaseProvider = Provider<LogOutUseCase>((ref) {
@@ -196,4 +197,28 @@ final getGroupWeeklyReportUsecaseProvider =
     Provider<GetGroupWeeklyReportUsecase>((ref) {
   final groupRepository = ref.watch(groupRepositoryProvider);
   return GetGroupWeeklyReportUsecase(groupRepository);
+});
+
+final getGroupListViewCellWidgetModelUsecaseProvider =
+    Provider<GetGroupListViewCellWidgetModelUsecase>((ref) {
+  final groupRepository = ref.watch(groupRepositoryProvider);
+  return GetGroupListViewCellWidgetModelUsecase(groupRepository);
+});
+
+final getGroupEntityByIdUsecaseProvider =
+    Provider<GetGroupEntityByIdUsecase>((ref) {
+  final groupRepository = ref.watch(groupRepositoryProvider);
+  return GetGroupEntityByIdUsecase(groupRepository);
+});
+
+final checkWhetherAlreadyRegisteredToGroupUsecaseProvider =
+    Provider<CheckWhetherAlreadyRegisteredToGroupUsecase>((ref) {
+  final groupRepository = ref.watch(groupRepositoryProvider);
+  return CheckWhetherAlreadyRegisteredToGroupUsecase(groupRepository);
+});
+
+final checkWhetherAlreadyAppliedToGroupUsecaseProvider =
+    Provider<CheckWhetherAlreadyAppliedToGroupUsecase>((ref) {
+  final groupRepository = ref.watch(groupRepositoryProvider);
+  return CheckWhetherAlreadyAppliedToGroupUsecase(groupRepository);
 });

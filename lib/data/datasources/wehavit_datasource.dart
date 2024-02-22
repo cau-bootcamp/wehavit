@@ -92,4 +92,18 @@ abstract class WehavitDatasource {
   EitherFuture<GroupWeeklyReportEntity> getGroupWeeklyReport(
     String groupId,
   );
+
+  EitherFuture<int> getGroupSharedResolutionCount(String groupId);
+
+  EitherFuture<int> getGroupSharedPostCount(String groupId);
+
+  EitherFuture<GroupEntity> getGroupEntity({required String groupId});
+
+  EitherFuture<bool> checkWhetherAlreadyAppliedToGroup({
+    required String groupId,
+  });
+
+  EitherFuture<bool> checkWhetherAlreadyRegisteredToGroup({
+    required String groupId,
+  });
 }

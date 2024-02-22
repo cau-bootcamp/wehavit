@@ -26,6 +26,8 @@ abstract class GroupRepository {
 
   EitherFuture<void> withdrawalFromGroup({required String groupId});
 
+  EitherFuture<GroupEntity> getGroupEntity({required String groupId});
+
   EitherFuture<List<GroupEntity>> getGroupEntityList();
 
   EitherFuture<void> uploadGroupAnnouncementEntity(
@@ -41,4 +43,16 @@ abstract class GroupRepository {
   EitherFuture<GroupWeeklyReportEntity> getGroupWeeklyReport(
     String groupId,
   );
+
+  // 현재 그룹 내에 공유중인 목표 수, 지금까지 그룹 내 인증글 수를 반환
+  EitherFuture<(EitherFuture<int>, EitherFuture<int>)>
+      getGroupListViewCellModelData(String groupId);
+
+  EitherFuture<bool> checkWhetherAlreadyAppliedToGroup({
+    required String groupId,
+  });
+
+  EitherFuture<bool> checkWhetherAlreadyRegisteredToGroup({
+    required String groupId,
+  });
 }

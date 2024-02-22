@@ -13,6 +13,14 @@ class GroupListViewCellWidgetModel {
   final EitherFuture<int> sharedResolutionCount;
   final EitherFuture<int> sharedPostCount;
 
+  // GroupListViewCellWidgetModel fromGroupEntity(GroupEntity entity) {
+  //   return GroupListViewCellWidgetModel(
+  //     groupEntity: entity,
+  //     sharedResolutionCount: sharedResolutionCount,
+  //     sharedPostCount: sharedPostCount,
+  //   );
+  // }
+
   static final dummyModel = GroupListViewCellWidgetModel(
     groupEntity: GroupEntity(
       groupName: '갱생프로젝트',

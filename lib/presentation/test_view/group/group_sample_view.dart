@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wehavit/common/constants/constants.dart';
 import 'package:wehavit/common/utils/firebase_collection_name.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wehavit/presentation/common_components/common_components.dart';
+import 'package:wehavit/presentation/group/group.dart';
 
 class SampleGroupWidget extends ConsumerStatefulWidget {
   const SampleGroupWidget({super.key});
@@ -23,7 +26,6 @@ class _SampleGroupWidgetState extends ConsumerState<SampleGroupWidget> {
       appBar: AppBar(title: const Text('group widget')),
       body: SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Center(
               child: ElevatedButton(
@@ -88,6 +90,19 @@ class _SampleGroupWidgetState extends ConsumerState<SampleGroupWidget> {
                   );
                 },
                 child: const Text("announcement"),
+              ),
+            ),
+            Center(
+              child: ElevatedButton(
+                onPressed: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const CellWidgetGroupSampleView(),
+                    ),
+                  );
+                },
+                child: const Text("check group list"),
               ),
             ),
           ],
@@ -401,6 +416,170 @@ class _AnnouncementGroupSampleViewState
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class CellWidgetGroupSampleView extends ConsumerStatefulWidget {
+  const CellWidgetGroupSampleView({super.key});
+
+  @override
+  ConsumerState<CellWidgetGroupSampleView> createState() =>
+      _CellWidgetGroupSampleViewState();
+}
+
+class _CellWidgetGroupSampleViewState
+    extends ConsumerState<CellWidgetGroupSampleView> {
+  final groupIdController = TextEditingController();
+
+  List<Widget> groupListViewCellList = [
+    GroupListViewCellWidget(
+      cellModel: GroupListViewCellWidgetModel.dummyModel,
+    ),
+    GroupListViewCellWidget(
+      cellModel: GroupListViewCellWidgetModel.dummyModel,
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: CustomColors.whDarkBlack,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: const Text(
+          '참여중인 그룹 목록',
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
+            fontSize: 20,
+          ),
+        ),
+        backgroundColor: Colors.transparent,
+        centerTitle: false,
+      ),
+      body: SafeArea(
+        minimum: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: groupIdController,
+                  ),
+                ),
+                ElevatedButton(
+                    onPressed: () async {
+                      final groupModel = await ref
+                          .watch(getGroupListViewCellWidgetModelUsecaseProvider)
+                          .call(
+                            groupEntity: GroupEntity(
+                              groupName: 'test',
+                              groupManagerUid: '',
+                              groupMemberUidList: [],
+                              groupCreatedAt: DateTime.now(),
+                              groupColor: 0,
+                              groupId: groupIdController.text,
+                            ),
+                          )
+                          .then(
+                            (value) => value.fold(
+                              (failure) => null,
+                              (model) => model,
+                            ),
+                          );
+
+                      if (groupModel != null) {
+                        setState(() {
+                          groupListViewCellList = List<Widget>.generate(
+                            1,
+                            (index) => GroupListViewCellWidget(
+                              cellModel: groupModel,
+                            ),
+                          );
+                        });
+                      }
+                    },
+                    child: Text('enter')),
+              ],
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: groupListViewCellList.length + 1,
+                itemBuilder: (context, index) {
+                  if (index < groupListViewCellList.length) {
+                    return Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: 12,
+                      ),
+                      child: groupListViewCellList[index],
+                    );
+                  } else {
+                    return GroupListViewAddCellWidget(
+                      tapAddGroupCallback: () async {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return GradientBottomSheet(
+                              Column(
+                                children: [
+                                  ColoredButton(
+                                    buttonTitle: '기존 그룹에 참여하기',
+                                    buttonIcon: Icons.search,
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          fullscreenDialog: true,
+                                          builder: (context) {
+                                            return const JoinGroupView();
+                                          },
+                                        ),
+                                      ).then((_) => Navigator.pop(context));
+                                    },
+                                    // isDiminished: true,
+                                  ),
+                                  const SizedBox(
+                                    height: 12,
+                                  ),
+                                  ColoredButton(
+                                    buttonTitle: '새로운 그룹 만들기',
+                                    buttonIcon: Icons.flag_outlined,
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          fullscreenDialog: true,
+                                          builder: (context) {
+                                            return CreateGroupView();
+                                          },
+                                        ),
+                                      ).then((_) => Navigator.pop(context));
+                                    },
+                                  ),
+                                  const SizedBox(
+                                    height: 12,
+                                  ),
+                                  ColoredButton(
+                                    buttonTitle: '돌아가기',
+                                    onPressed: () {},
+                                    isDiminished: true,
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -1153,6 +1153,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
             .add(const Duration(days: 2));
       }
 
+      // ignore: unused_local_variable
       DateTime startDate = DateTime(endDate.year, endDate.month, endDate.day)
           .subtract(const Duration(days: 7));
 
@@ -1334,6 +1335,182 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           const Failure('catch error on getGroupWeeklyReport'),
         ),
       );
+    }
+  }
+
+  @override
+  EitherFuture<int> getGroupSharedResolutionCount(String groupId) async {
+    try {
+      final groupMemberUidList = await getGroupSharedMemberUidList(groupId);
+
+      int sharedResolutionCounts = 0;
+
+      await Future.wait(
+        groupMemberUidList.map((memberUid) async {
+          await firestore
+              .collection(
+                FirebaseCollectionName.getTargetResolutionCollectionName(
+                  memberUid,
+                ),
+              )
+              .where(
+                FirebaseResolutionFieldName.resolutionShareGroupIdList,
+                arrayContains: groupId,
+              )
+              .get()
+              .then((value) {
+            sharedResolutionCounts += value.docs.length;
+          });
+        }),
+      );
+
+      return Future(() => right(sharedResolutionCounts));
+    } on Exception {
+      return Future(
+        () => left(
+          const Failure('catch error on getGroupSharedResolutionCount'),
+        ),
+      );
+    }
+  }
+
+  @override
+  EitherFuture<int> getGroupSharedPostCount(String groupId) async {
+    try {
+      final groupMemberUidList = await getGroupSharedMemberUidList(groupId);
+
+      int sharedPostCounts = 0;
+
+      await Future.wait(
+        groupMemberUidList.map((memberUid) async {
+          final resolutionIdList = await firestore
+              .collection(
+                FirebaseCollectionName.getTargetResolutionCollectionName(
+                  memberUid,
+                ),
+              )
+              .where(
+                FirebaseResolutionFieldName.resolutionShareGroupIdList,
+                arrayContains: groupId,
+              )
+              .get()
+              .then((result) {
+            return result.docs
+                .map(
+                  (doc) => doc.reference.id,
+                )
+                .toList();
+          });
+
+          if (resolutionIdList.isEmpty) {
+            return;
+          }
+
+          await firestore
+              .collection(FirebaseCollectionName.confirmPosts)
+              .where(
+                FirebaseConfirmPostFieldName.resolutionId,
+                whereIn: resolutionIdList,
+              )
+              .get()
+              .then((value) {
+            sharedPostCounts += value.docs.length;
+          });
+        }),
+      );
+
+      return Future(() => right(sharedPostCounts));
+    } on Exception {
+      return Future(
+        () => left(
+          const Failure('catch error on getGroupSharedPostCount'),
+        ),
+      );
+    }
+  }
+
+  Future<List<String>> getGroupSharedMemberUidList(String groupId) async {
+    try {
+      final groupMemberUidList = firestore
+          .collection(FirebaseCollectionName.groups)
+          .doc(groupId)
+          .get()
+          .then(
+            (result) => (result.data()![FirebaseGroupFieldName.memberUidList]
+                    as List<dynamic>)
+                .map((e) => e.toString())
+                .toList(),
+          );
+
+      return groupMemberUidList;
+    } on Exception {
+      return Future(() => []);
+    }
+  }
+
+  @override
+  EitherFuture<GroupEntity> getGroupEntity({required String groupId}) async {
+    try {
+      final groupEntity = await firestore
+          .collection(FirebaseCollectionName.groups)
+          .doc(groupId)
+          .get()
+          .then(
+            (result) =>
+                FirebaseGroupModel.fromFireStoreDocument(result).toGroupEntity(
+              groupId: groupId,
+            ),
+          );
+
+      return Future(() => right(groupEntity));
+    } on Exception {
+      return Future(() => left(const Failure('cannot get group entity')));
+    }
+  }
+
+  @override
+  EitherFuture<bool> checkWhetherAlreadyAppliedToGroup({
+    required String groupId,
+  }) async {
+    try {
+      final uid = getMyUserId();
+
+      final isApplied = await firestore
+          .collection(
+            FirebaseCollectionName.getGroupApplyWaitingCollectionName(
+              groupId,
+            ),
+          )
+          .where(FirebaseGroupFieldName.applyUid, isEqualTo: uid)
+          .get()
+          .then((result) => (result.docs.isNotEmpty ? true : false));
+
+      return Future(() => right(isApplied));
+    } on Exception {
+      return Future(() => left(const Failure('cannot get applied status')));
+    }
+  }
+
+  @override
+  EitherFuture<bool> checkWhetherAlreadyRegisteredToGroup({
+    required String groupId,
+  }) async {
+    try {
+      final uid = getMyUserId();
+
+      final isRegistered = await firestore
+          .collection(FirebaseCollectionName.groups)
+          .doc(groupId)
+          .get()
+          .then((result) {
+        return List.castFrom(
+          result.data()?[FirebaseGroupFieldName.memberUidList] as List,
+        ).contains(uid);
+      });
+
+      return Future(() => right(isRegistered));
+    } on Exception {
+      return Future(() => left(const Failure('cannot get registered status')));
     }
   }
 }
