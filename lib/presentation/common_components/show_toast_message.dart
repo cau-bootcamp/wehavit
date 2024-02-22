@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wehavit/common/constants/constants.dart';
 
-void showToastMessage(BuildContext context, String text, Icon icon) {
+void showToastMessage(
+  BuildContext context, {
+  required String text,
+  required Icon icon,
+}) {
   final fToast = FToast();
   fToast.init(context);
   Widget toast = Container(

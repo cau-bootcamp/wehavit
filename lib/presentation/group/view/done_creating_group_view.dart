@@ -179,8 +179,8 @@ class DoneCreatingGroupView extends StatelessWidget {
 
                     showToastMessage(
                       context,
-                      '복사된 그룹 코드를 공유해보세요',
-                      const Icon(
+                      text: '복사된 그룹 코드를 공유해보세요',
+                      icon: const Icon(
                         Icons.check_circle,
                         color: Colors.green,
                       ),
