@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/colored_button.dart';
@@ -168,6 +169,11 @@ class DoneCreatingGroupView extends StatelessWidget {
                   buttonTitle: '그룹 코드 복사하기',
                   foregroundColor: CustomColors.whBlack,
                   backgroundColor: CustomColors.whYellow,
+                  onPressed: () async {
+                    Clipboard.setData(
+                      ClipboardData(text: groupEntity.groupId),
+                    );
+                  },
                 ),
               ),
             ],
