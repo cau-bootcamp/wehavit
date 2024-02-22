@@ -33,6 +33,16 @@ class CustomColors {
   static const Color whUnSelectedTextColor = Color(0xffA2A2A2);
   static const Color whSelectedTextColor = Color(0xff000000);
   static const Color whPlaceholderGrey = Color(0xffC3C2C7);
+  static const LinearGradient toastMessageGradient = LinearGradient(
+    begin: Alignment.topRight,
+    end: Alignment.bottomLeft,
+    colors: [
+      Color(0xffA37E3A),
+      Color(
+        0xff564626,
+      ),
+    ],
+  );
   static const LinearGradient bottomSheetGradient = LinearGradient(
     begin: Alignment.topRight,
     end: Alignment.bottomLeft,

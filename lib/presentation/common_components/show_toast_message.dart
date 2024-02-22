@@ -10,7 +10,7 @@ void showToastMessage(BuildContext context, String text, Icon icon) {
     padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 20.0),
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(16.0),
-      color: const Color(0xff685F4E),
+      gradient: CustomColors.toastMessageGradient,
       boxShadow: [
         BoxShadow(
           color: CustomColors.whBlack.withAlpha(64),
