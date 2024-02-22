@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/common_components/colored_button.dart';
+import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/group/group.dart';
 
 class CreateGroupView extends ConsumerStatefulWidget {
@@ -20,30 +21,12 @@ class _CreateGroupViewState extends ConsumerState<CreateGroupView> {
 
     return Scaffold(
       backgroundColor: CustomColors.whDarkBlack,
-      appBar: AppBar(
-        title: const Text(
-          '그룹 만들기',
-          style: TextStyle(
-            fontSize: 17.0,
-            fontWeight: FontWeight.w600,
-            color: CustomColors.whWhite,
-          ),
-        ),
-        leadingWidth: 80,
-        leading: TextButton(
-          child: const Text(
-            '취소',
-            style: TextStyle(
-              fontSize: 17.0,
-              fontWeight: FontWeight.w400,
-              color: CustomColors.whWhite,
-            ),
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        backgroundColor: Colors.transparent,
+      appBar: wehavitAppBar(
+        title: '그룹 만들기',
+        leadingTitle: '취소',
+        leadingAction: () {
+          Navigator.pop(context);
+        },
       ),
       body: SafeArea(
         minimum: const EdgeInsets.symmetric(horizontal: 16.0),

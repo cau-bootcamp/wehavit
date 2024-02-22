@@ -27,30 +27,12 @@ class _JoinGroupViewState extends ConsumerState<JoinGroupView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: CustomColors.whDarkBlack,
-      appBar: AppBar(
-        title: const Text(
-          '그룹에 참여하기',
-          style: TextStyle(
-            fontSize: 17.0,
-            fontWeight: FontWeight.w600,
-            color: CustomColors.whWhite,
-          ),
-        ),
-        // leadingWidth: 100,
-        leading: TextButton(
-          child: const Text(
-            '취소',
-            style: TextStyle(
-              fontSize: 17.0,
-              fontWeight: FontWeight.w400,
-              color: CustomColors.whWhite,
-            ),
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        backgroundColor: Colors.transparent,
+      appBar: wehavitAppBar(
+        title: '그룹에 참여하기',
+        leadingTitle: '취소',
+        leadingAction: () {
+          Navigator.pop(context);
+        },
       ),
       body: SafeArea(
         minimum: const EdgeInsets.symmetric(horizontal: 16.0),
