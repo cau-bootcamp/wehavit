@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/presentation/common_components/colored_button.dart';
+import 'package:wehavit/presentation/common_components/common_components.dart';
 
 class DoneCreatingGroupView extends StatelessWidget {
   DoneCreatingGroupView({super.key, required this.groupEntity});
@@ -172,6 +172,15 @@ class DoneCreatingGroupView extends StatelessWidget {
                   onPressed: () async {
                     Clipboard.setData(
                       ClipboardData(text: groupEntity.groupId),
+                    );
+
+                    showToastMessage(
+                      context,
+                      '복사된 그룹 코드를 공유해보세요',
+                      const Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
+                      ),
                     );
                   },
                 ),
