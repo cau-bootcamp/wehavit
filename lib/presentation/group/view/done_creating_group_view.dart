@@ -5,7 +5,7 @@ import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 
 class DoneCreatingGroupView extends StatelessWidget {
-  DoneCreatingGroupView({super.key, required this.groupEntity});
+  const DoneCreatingGroupView({super.key, required this.groupEntity});
 
   final GroupEntity groupEntity;
 
@@ -78,7 +78,8 @@ class DoneCreatingGroupView extends StatelessWidget {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
-                                      vertical: 12.0),
+                                    vertical: 12.0,
+                                  ),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -104,7 +105,8 @@ class DoneCreatingGroupView extends StatelessWidget {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
-                                      vertical: 12.0),
+                                    vertical: 12.0,
+                                  ),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -130,7 +132,8 @@ class DoneCreatingGroupView extends StatelessWidget {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
-                                      vertical: 12.0),
+                                    vertical: 12.0,
+                                  ),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,

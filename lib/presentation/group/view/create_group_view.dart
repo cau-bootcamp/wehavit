@@ -4,8 +4,6 @@ import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/common_components/colored_button.dart';
 import 'package:wehavit/presentation/group/group.dart';
-import 'package:wehavit/presentation/group/model/create_group_view_model.dart';
-import 'package:wehavit/presentation/group/provider/create_group_view_model_provider.dart';
 
 class CreateGroupView extends ConsumerStatefulWidget {
   const CreateGroupView({super.key});
@@ -101,6 +99,7 @@ class _CreateGroupViewState extends ConsumerState<CreateGroupView> {
                     final groupEntity = await provider.createGroup();
 
                     if (groupEntity != null) {
+                      // ignore: use_build_context_synchronously
                       Navigator.push(
                         context,
                         MaterialPageRoute(

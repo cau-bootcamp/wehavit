@@ -397,9 +397,10 @@ class _JoinGroupIntroduceViewState
                             setState(() {});
 
                             isAppliedFuture = ref
+                                // ignore: lines_longer_than_80_chars
                                 .read(
-                                    checkWhetherAlreadyAppliedToGroupUsecaseProvider)
-                                (
+                                  checkWhetherAlreadyAppliedToGroupUsecaseProvider,
+                                )(
                                   widget.groupModel.groupEntity.groupId,
                                 )
                                 .then(
