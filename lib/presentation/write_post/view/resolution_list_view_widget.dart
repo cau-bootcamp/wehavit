@@ -158,57 +158,79 @@ class ResolutionListCellWidget extends StatelessWidget {
                 SizedBox(
                   height: 12,
                 ),
-                Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '이런걸 실천하고 있음',
-                          style: TextStyle(
-                            color: CustomColors.whWhite,
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        Text(
-                          '주 ${3}회 중 ${2}회 실천',
-                          style: TextStyle(
-                            color: CustomColors.whWhite,
-                            fontSize: 12.0,
-                            fontWeight: FontWeight.w300,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 4,
-                    ),
-                    Stack(
-                      alignment: Alignment.centerLeft,
-                      children: [
-                        Container(
-                          height: 7,
-                          width: double.infinity,
-                          color: CustomColors.whDarkBlack,
-                        ),
-                        LayoutBuilder(builder:
-                            (BuildContext context, BoxConstraints constraints) {
-                          return Container(
-                            height: 7,
-                            width: constraints.maxWidth * 0.7,
-                            color: PointColors.red,
-                          );
-                        }),
-                      ],
-                    ),
-                  ],
-                )
+                ResolutionLinearGaugeWidget()
               ],
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class ResolutionLinearGaugeWidget extends StatelessWidget {
+  const ResolutionLinearGaugeWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              '이런걸 실천하고 있음',
+              style: TextStyle(
+                color: CustomColors.whWhite,
+                fontSize: 14.0,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            Text(
+              '주 ${3}회 중 ${2}회 실천',
+              style: TextStyle(
+                color: CustomColors.whWhite,
+                fontSize: 12.0,
+                fontWeight: FontWeight.w300,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 4,
+        ),
+        Stack(
+          alignment: Alignment.centerLeft,
+          children: [
+            Container(
+              height: 7,
+              width: double.infinity,
+              color: CustomColors.whDarkBlack,
+            ),
+            Flex(
+              direction: Axis.horizontal,
+              children: [
+                Flexible(
+                  flex: 2,
+                  child: Container(
+                    height: 7,
+                    color: PointColors.red,
+                  ),
+                ),
+                Flexible(
+                  flex: 3 - 2,
+                  child: Container(
+                    height: 7,
+                    color: Colors.transparent,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

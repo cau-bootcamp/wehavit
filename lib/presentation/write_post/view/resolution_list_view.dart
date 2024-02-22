@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/presentation/presentation.dart';
+import 'package:wehavit/presentation/write_post/view/writing_confirm_post_view.dart';
 
 class ResolutionListView extends StatelessWidget {
   const ResolutionListView({super.key});
@@ -37,9 +38,9 @@ class ResolutionListView extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Container(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 20.0,
-                                ),
+                                // padding: EdgeInsets.symmetric(
+                                //   horizontal: 20.0,
+                                // ),
                                 child: Column(
                                   children: [
                                     Text(
@@ -53,63 +54,7 @@ class ResolutionListView extends StatelessWidget {
                                     SizedBox(
                                       height: 16,
                                     ),
-                                    Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              '이런걸 실천하고 있음',
-                                              style: TextStyle(
-                                                color: CustomColors.whWhite,
-                                                fontSize: 14.0,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                            Text(
-                                              '주 ${3}회 중 ${2}회 실천',
-                                              style: TextStyle(
-                                                color: CustomColors.whWhite,
-                                                fontSize: 12.0,
-                                                fontWeight: FontWeight.w300,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 4,
-                                        ),
-                                        Container(
-                                          height: 7,
-                                          child: LayoutBuilder(
-                                            builder: (
-                                              BuildContext context,
-                                              BoxConstraints constraints,
-                                            ) {
-                                              return Stack(
-                                                alignment: Alignment.centerLeft,
-                                                children: [
-                                                  Container(
-                                                    height: 7,
-                                                    width: double.infinity,
-                                                    color: CustomColors
-                                                        .whDarkBlack,
-                                                  ),
-                                                  Container(
-                                                    height: 7,
-                                                    width:
-                                                        constraints.maxWidth *
-                                                            0.7,
-                                                    color: PointColors.red,
-                                                  ),
-                                                ],
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                    ResolutionLinearGaugeWidget(),
                                   ],
                                 ),
                               ),
@@ -120,7 +65,13 @@ class ResolutionListView extends StatelessWidget {
                                 buttonTitle: '인증글 작성하기',
                                 backgroundColor: CustomColors.whYellow,
                                 foregroundColor: CustomColors.whBlack,
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(context, MaterialPageRoute(
+                                    builder: (context) {
+                                      return WritingConfirmPostView();
+                                    },
+                                  ));
+                                },
                               ),
                               SizedBox(
                                 height: 16.0,
