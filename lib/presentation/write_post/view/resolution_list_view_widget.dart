@@ -150,6 +150,7 @@ class ResolutionListCellWidget extends StatelessWidget {
                     ),
                     Icon(
                       Icons.chevron_right,
+                      size: 32,
                       color: PointColors.red,
                     ),
                   ],
