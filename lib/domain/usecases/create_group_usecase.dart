@@ -1,7 +1,6 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/group_entity/group_entity.dart';
-import 'package:wehavit/domain/repositories/group_repository.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
 
 class CreateGroupUsecase {
@@ -31,7 +30,7 @@ class CreateGroupUsecase {
       groupRule: groupRule,
       groupManagerUid: fetchUid,
       groupCreatedAt: DateTime.now(),
-      groupColor: 0,
+      groupColor: groupColor,
     ))
         .fold(
       (l) => null,

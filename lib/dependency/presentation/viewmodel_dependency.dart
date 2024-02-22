@@ -109,3 +109,9 @@ final groupViewModelProvider =
     getGroupListViewCellWidgetModelUsecase,
   );
 });
+
+final createGroupViewModelProvider = StateNotifierProvider.autoDispose<
+    CreateGroupViewModelProvider, CreateGroupViewModel>((ref) {
+  final createGroupUsecase = ref.watch(createGroupUsecaseProvider);
+  return CreateGroupViewModelProvider(createGroupUsecase);
+});

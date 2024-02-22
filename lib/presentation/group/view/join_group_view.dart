@@ -1,11 +1,9 @@
-import 'dart:io';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
@@ -159,10 +157,8 @@ class _JoinGroupViewState extends ConsumerState<JoinGroupView> {
               ],
             ),
             Visibility(
-              // TODO : Search에 대한 결과 보여주기
               visible: isSearchDone,
               child: Visibility(
-                // TODO : Search 결과가 없는 경우에 대한 replacement 보여주기
                 visible: isSearchSuccessed,
                 replacement: const Expanded(
                   child: Center(
@@ -251,8 +247,11 @@ class _JoinGroupIntroduceViewState
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    unawaited(initializeData());
+  }
+
+  Future<void> initializeData() async {
     groupManagerEntity = ref
         .read(fetchUserDataFromIdUsecaseProvider)
         (widget.groupModel.groupEntity.groupManagerUid)
