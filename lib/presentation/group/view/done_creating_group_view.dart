@@ -15,32 +15,13 @@ class DoneCreatingGroupView extends StatelessWidget {
       canPop: false,
       child: Scaffold(
         backgroundColor: CustomColors.whDarkBlack,
-        appBar: AppBar(
-          title: const Text(
-            '그룹 만들기 완료',
-            style: TextStyle(
-              fontSize: 17.0,
-              fontWeight: FontWeight.w600,
-              color: CustomColors.whWhite,
-            ),
-          ),
-          actions: [
-            TextButton(
-              child: const Text(
-                '닫기',
-                style: TextStyle(
-                  fontSize: 17.0,
-                  fontWeight: FontWeight.w400,
-                  color: CustomColors.whWhite,
-                ),
-              ),
-              onPressed: () {
-                int count = 0;
-                Navigator.of(context).popUntil((_) => count++ >= 2);
-              },
-            ),
-          ],
-          backgroundColor: Colors.transparent,
+        appBar: wehavitAppBar(
+          title: '그룹 만들기 완료',
+          trailingTitle: '닫기',
+          trailingAction: () {
+            int count = 0;
+            Navigator.of(context).popUntil((_) => count++ >= 2);
+          },
         ),
         body: SafeArea(
           minimum: const EdgeInsets.symmetric(horizontal: 16.0),

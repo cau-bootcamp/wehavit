@@ -91,3 +91,10 @@ flutter:
           weight: 800
         - asset: assets/fonts/SF-Pro-Text-Black.otf
           weight: 900
+
+    - family: Giants
+      fonts:
+        - asset: assets/fonts/Giants-Regular.otf
+          weight: 400
+        - asset: assets/fonts/Giants-Bold.otf
+          weight: 700

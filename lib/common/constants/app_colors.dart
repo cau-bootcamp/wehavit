@@ -56,7 +56,7 @@ class CustomColors {
 }
 
 class PointColors {
-  static const Color red = Color(0xffe1392e);
+  static const Color red = Color(0xffF55748);
   static const Color orange = Color(0xffe56229);
   static const Color yellow = Color(0xffe6ae1c);
   static const Color green = Color(0xff28a954);

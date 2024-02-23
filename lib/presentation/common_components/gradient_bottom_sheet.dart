@@ -36,7 +36,7 @@ class GradientBottomSheet extends StatelessWidget {
                       height: 5,
                       width: 72,
                       decoration: const BoxDecoration(
-                        color: CustomColors.whSemiWhite,
+                        color: CustomColors.whPlaceholderGrey,
                         borderRadius: BorderRadius.all(Radius.circular(2.0)),
                       ),
                     ),
