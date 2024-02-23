@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
+import 'package:wehavit/presentation/write_post/view/view.dart';
 
 class WritingConfirmPostView extends StatefulWidget {
   const WritingConfirmPostView({super.key});
@@ -17,15 +18,28 @@ class _WritingConfirmPostViewState extends State<WritingConfirmPostView> {
     return Scaffold(
       backgroundColor: CustomColors.whDarkBlack,
       appBar: wehavitAppBar(
-        title: '인증 남기기',
-        leadingTitle: '목표 선택',
-        leadingIcon: Icons.chevron_left,
-        leadingAction: () {
-          Navigator.pop(context);
-        },
-        trailingTitle: '공유 대상',
-        trailingIcon: Icons.cloud_upload_outlined,
-      ),
+          title: '인증 남기기',
+          leadingTitle: '목표 선택',
+          leadingIcon: Icons.chevron_left,
+          leadingAction: () {
+            Navigator.pop(context);
+          },
+          trailingTitle: '공유 대상',
+          trailingIcon: Icons.cloud_upload_outlined,
+          trailingAction: () async {
+            showModalBottomSheet(
+              isScrollControlled: true,
+              context: context,
+              builder: (context) {
+                return GradientBottomSheet(
+                  SizedBox(
+                    height: MediaQuery.sizeOf(context).height * 0.80,
+                    child: ShareTargetGroupCellWidget(),
+                  ),
+                );
+              },
+            );
+          }),
       body: SafeArea(
         minimum: EdgeInsets.symmetric(
           horizontal: 16.0,
@@ -103,67 +117,75 @@ class _WritingConfirmPostViewState extends State<WritingConfirmPostView> {
                       )),
                 ),
               ),
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: Stack(
-                      alignment: Alignment.topRight,
-                      children: [
-                        Container(
-                          child: Image(
-                              image: AssetImage(
-                                  'assets/images/emoji_3d/beaming_face_with_smiling_eyes_3d.png')),
-                          color: Colors.amber,
-                          width: 90,
-                          height: 90,
-                        ),
-                        GestureDetector(
-                          child: Padding(
-                            padding: const EdgeInsets.all(2.0),
-                            child: Icon(
-                              Icons.cancel,
-                              size: 20,
-                              color: CustomColors.whWhite,
+              Visibility(
+                visible: true,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Stack(
+                          alignment: Alignment.topRight,
+                          children: [
+                            Container(
+                              child: Image(
+                                image: AssetImage(
+                                  'assets/images/emoji_3d/beaming_face_with_smiling_eyes_3d.png',
+                                ),
+                              ),
+                              color: Colors.amber,
+                              width: 90,
+                              height: 90,
                             ),
-                          ),
-                          onTapUp: (details) {
-                            //
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: Stack(
-                      alignment: Alignment.topRight,
-                      children: [
-                        Container(
-                          child: Image(
-                              image: AssetImage(
-                                  'assets/images/emoji_3d/beaming_face_with_smiling_eyes_3d.png')),
-                          color: Colors.amber,
-                          width: 90,
-                          height: 90,
-                        ),
-                        GestureDetector(
-                          child: Padding(
-                            padding: const EdgeInsets.all(2.0),
-                            child: Icon(
-                              Icons.cancel,
-                              size: 20,
-                              color: CustomColors.whWhite,
+                            GestureDetector(
+                              child: Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: Icon(
+                                  Icons.cancel,
+                                  size: 20,
+                                  color: CustomColors.whWhite,
+                                ),
+                              ),
+                              onTapUp: (details) {
+                                //
+                              },
                             ),
-                          ),
-                          onTapUp: (details) {
-                            //
-                          },
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Stack(
+                          alignment: Alignment.topRight,
+                          children: [
+                            Container(
+                              child: Image(
+                                  image: AssetImage(
+                                      'assets/images/emoji_3d/beaming_face_with_smiling_eyes_3d.png')),
+                              color: Colors.amber,
+                              width: 90,
+                              height: 90,
+                            ),
+                            GestureDetector(
+                              child: Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: Icon(
+                                  Icons.cancel,
+                                  size: 20,
+                                  color: CustomColors.whWhite,
+                                ),
+                              ),
+                              onTapUp: (details) {
+                                //
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
               Row(
                 children: [
