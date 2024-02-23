@@ -106,11 +106,11 @@ final getReactionListFromConfirmPostUsecaseProvider =
   return GetReactionListFromConfirmPostUsecase(repository);
 });
 
-final getMyResolutionListByUserIdUsecaseProvider =
-    Provider<GetMyResolutionListByUserIdUsecase>((ref) {
+final getMyResolutionListUsecaseProvider =
+    Provider<GetMyResolutionListUsecase>((ref) {
   final resolutionRepository = ref.watch(resolutionRepositoryProvider);
   final userModelRepository = ref.watch(userModelRepositoryProvider);
-  return GetMyResolutionListByUserIdUsecase(
+  return GetMyResolutionListUsecase(
     resolutionRepository,
     userModelRepository,
   );
@@ -221,4 +221,10 @@ final checkWhetherAlreadyAppliedToGroupUsecaseProvider =
     Provider<CheckWhetherAlreadyAppliedToGroupUsecase>((ref) {
   final groupRepository = ref.watch(groupRepositoryProvider);
   return CheckWhetherAlreadyAppliedToGroupUsecase(groupRepository);
+});
+
+final getTargetResolutionDoneCountForWeekUsecaseProvider =
+    Provider<GetTargetResolutionDoneCountForWeekUsecase>((ref) {
+  final resolutionRepository = ref.watch(resolutionRepositoryProvider);
+  return GetTargetResolutionDoneCountForWeekUsecase(resolutionRepository);
 });

@@ -7,14 +7,7 @@ import 'package:wehavit/dependency/data/repository_dependency.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
-import 'package:wehavit/presentation/auth/auth.dart';
-import 'package:wehavit/presentation/effects/effects.dart';
-import 'package:wehavit/presentation/friend_list/friend_list.dart';
-import 'package:wehavit/presentation/group/group.dart';
-import 'package:wehavit/presentation/home/home.dart';
-import 'package:wehavit/presentation/late_writing/late_writing.dart';
-import 'package:wehavit/presentation/my_page/my_page.dart';
-import 'package:wehavit/presentation/reaction/provider/provider.dart';
+import 'package:wehavit/presentation/presentation.dart';
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   final usecaseGoogleLogIn = ref.watch(googleLogInUseCaseProvider);
@@ -66,7 +59,7 @@ final lateWritingViewModelProvider =
   (ref) {
     final createPostUsecase = ref.watch(uploadConfirmPostUseCaseProvider);
     final getMyResolutionListUsecase =
-        ref.watch(getMyResolutionListByUserIdUsecaseProvider);
+        ref.watch(getMyResolutionListUsecaseProvider);
 
     return LateWritingViewModelProvider(
       createPostUsecase,
@@ -114,4 +107,16 @@ final createGroupViewModelProvider = StateNotifierProvider.autoDispose<
     CreateGroupViewModelProvider, CreateGroupViewModel>((ref) {
   final createGroupUsecase = ref.watch(createGroupUsecaseProvider);
   return CreateGroupViewModelProvider(createGroupUsecase);
+});
+
+final resolutionListViewModelProvider = StateNotifierProvider.autoDispose<
+    ResolutionListViewModelProvider, ResolutionListViewModel>((ref) {
+  final getMyResolutionListUsecase =
+      ref.watch(getMyResolutionListUsecaseProvider);
+  final getTargetResolutionDoneCountForWeekUsecase =
+      ref.watch(getTargetResolutionDoneCountForWeekUsecaseProvider);
+  return ResolutionListViewModelProvider(
+    getMyResolutionListUsecase,
+    getTargetResolutionDoneCountForWeekUsecase,
+  );
 });

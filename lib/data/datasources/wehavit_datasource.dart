@@ -106,4 +106,8 @@ abstract class WehavitDatasource {
   EitherFuture<bool> checkWhetherAlreadyRegisteredToGroup({
     required String groupId,
   });
+
+  EitherFuture<int> getTargetResolutionDoneCountForThisWeek({
+    required String resolutionId,
+  });
 }

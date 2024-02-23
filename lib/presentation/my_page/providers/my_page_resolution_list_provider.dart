@@ -11,14 +11,13 @@ class MyPageResolutionListProvider extends StateNotifier<
   MyPageResolutionListProvider(Ref ref) : super(const Right(([], []))) {
     getResolutionListUsecase =
         ref.watch(getResolutionListByUserIdUsecaseProvider);
-    getMyResolutionListUsecase =
-        ref.watch(getMyResolutionListByUserIdUsecaseProvider);
+    getMyResolutionListUsecase = ref.watch(getMyResolutionListUsecaseProvider);
     getConfirmPostListForResolutionIdUsecase =
         ref.watch(getConfirmPostListForResolutionIdUsecaseProvider);
   }
 
   late final GetResolutionListByUserIdUsecase getResolutionListUsecase;
-  late final GetMyResolutionListByUserIdUsecase getMyResolutionListUsecase;
+  late final GetMyResolutionListUsecase getMyResolutionListUsecase;
   late final GetConfirmPostListForResolutionIdUsecase
       getConfirmPostListForResolutionIdUsecase;
 

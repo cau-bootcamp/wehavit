@@ -11,4 +11,6 @@ abstract class ResolutionRepository {
   EitherFuture<void> shareResolutionToGroup(String $1, String $2);
 
   EitherFuture<void> unshareResolutionToGroup(String $1, String $2);
+
+  EitherFuture<int> getResolutionDoneCountForThisWeek(String resolutionId);
 }

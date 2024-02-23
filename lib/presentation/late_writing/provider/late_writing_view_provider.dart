@@ -15,7 +15,7 @@ class LateWritingViewModelProvider extends StateNotifier<LateWritingViewModel> {
     _initialize();
   }
   final UploadConfirmPostUseCase _createPostUseCase;
-  final GetMyResolutionListByUserIdUsecase _getMyResolutionListUsecase;
+  final GetMyResolutionListUsecase _getMyResolutionListUsecase;
 
   // 비동기적으로 초기화를 진행하는 팩토리 메서드
   Future<void> _initialize() async {
