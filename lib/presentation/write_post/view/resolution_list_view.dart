@@ -41,7 +41,7 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView> {
           child: Column(
             children: [
               ResolutionSummaryCardWidget(
-                totalCount: viewModel.summaryTotalCount,
+                totalCount: viewModel.summaryDoneCount,
                 doneRatio:
                     (viewModel.summaryDoneCount / viewModel.summaryTotalCount)
                         .toDouble(),
@@ -55,85 +55,13 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView> {
                       child: ResolutionListCellWidget(
                         viewModel.resolutionModelList![index],
                       ),
-                      onTapUp: (details) {
+                      onTapUp: (details) async {
                         showModalBottomSheet(
                           context: context,
                           builder: (context) {
-                            return GradientBottomSheet(
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Column(
-                                    children: [
-                                      Text(
-                                        '목표 이름이 이렇게 들어갑니다',
-                                        style: TextStyle(
-                                          color: PointColors.red,
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 16,
-                                      ),
-                                      // ResolutionLinearGaugeWidget(),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 40.0,
-                                  ),
-                                  ColoredButton(
-                                    buttonTitle: '인증글 작성하기',
-                                    backgroundColor: CustomColors.whYellow,
-                                    foregroundColor: CustomColors.whBlack,
-                                    onPressed: () {
-                                      Navigator.push(context, MaterialPageRoute(
-                                        builder: (context) {
-                                          return WritingConfirmPostView();
-                                        },
-                                      ));
-                                    },
-                                  ),
-                                  SizedBox(
-                                    height: 16.0,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        child: Container(
-                                            child: ColoredButton(
-                                          buttonTitle: '반성글 작성하기',
-                                          foregroundColor: Colors.red,
-                                        )),
-                                      ),
-                                      SizedBox(
-                                        width: 8,
-                                      ),
-                                      Expanded(
-                                        child: Container(
-                                            width: 150,
-                                            child: ColoredButton(
-                                              buttonTitle: '완료 표시만 하기',
-                                              foregroundColor:
-                                                  CustomColors.whWhite,
-                                            )),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 16.0,
-                                  ),
-                                  ColoredButton(
-                                    buttonTitle: '돌아가기',
-                                    isDiminished: true,
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                ],
-                              ),
+                            return writingResolutionBottomSheetWidget(
+                              viewModel: viewModel,
+                              index: index,
                             );
                           },
                         );
@@ -145,6 +73,102 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class writingResolutionBottomSheetWidget extends StatelessWidget {
+  const writingResolutionBottomSheetWidget({
+    super.key,
+    required this.viewModel,
+    required this.index,
+  });
+
+  final ResolutionListViewModel viewModel;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    return GradientBottomSheet(
+      Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Column(
+            children: [
+              Text(
+                viewModel.resolutionModelList![index].entity.goalStatement ??
+                    '',
+                style: TextStyle(
+                  color: PointColors.colorList[0],
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              ResolutionLinearGaugeWidget(
+                viewModel.resolutionModelList![index],
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 40.0,
+          ),
+          ColoredButton(
+            buttonTitle: '인증글 작성하기',
+            backgroundColor: CustomColors.whYellow,
+            foregroundColor: CustomColors.whBlack,
+            onPressed: () async {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return WritingConfirmPostView(
+                      entity: viewModel.resolutionModelList![index].entity,
+                    );
+                  },
+                ),
+              );
+            },
+          ),
+          const SizedBox(
+            height: 16.0,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: ColoredButton(
+                  buttonTitle: '반성글 작성하기',
+                  foregroundColor: Colors.red,
+                ),
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              Expanded(
+                child: SizedBox(
+                  width: 150,
+                  child: ColoredButton(
+                    buttonTitle: '완료 표시만 하기',
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 16.0,
+          ),
+          ColoredButton(
+            buttonTitle: '돌아가기',
+            isDiminished: true,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ],
       ),
     );
   }

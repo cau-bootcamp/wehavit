@@ -226,10 +226,10 @@ class ResolutionLinearGaugeWidget extends StatelessWidget {
               direction: Axis.horizontal,
               children: [
                 Flexible(
-                  flex: model.successCount ?? 7,
+                  flex: model.successCount,
                   child: Container(
                     height: 7,
-                    color: PointColors.red,
+                    color: PointColors.colorList[0],
                   ),
                 ),
                 Flexible(

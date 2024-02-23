@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:wehavit/common/common.dart';
+import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/write_post/view/view.dart';
 
 class WritingConfirmPostView extends StatefulWidget {
-  const WritingConfirmPostView({super.key});
+  const WritingConfirmPostView({required this.entity, super.key});
+  final ResolutionEntity entity;
 
   @override
   State<WritingConfirmPostView> createState() => _WritingConfirmPostViewState();

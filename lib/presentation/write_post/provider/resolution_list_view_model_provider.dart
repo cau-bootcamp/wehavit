@@ -51,5 +51,12 @@ class ResolutionListViewModelProvider
     );
 
     state.resolutionModelList = modelList;
+
+    state.summaryDoneCount = 0;
+    state.summaryTotalCount = 0;
+    for (final element in modelList) {
+      state.summaryTotalCount += element.entity.actionPerWeek ?? 7;
+      state.summaryDoneCount += element.successCount;
+    }
   }
 }
