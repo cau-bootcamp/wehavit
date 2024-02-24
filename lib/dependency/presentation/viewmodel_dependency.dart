@@ -120,3 +120,12 @@ final resolutionListViewModelProvider = StateNotifierProvider.autoDispose<
     getTargetResolutionDoneCountForWeekUsecase,
   );
 });
+
+final writingConfirmPostViewModelProvider = StateNotifierProvider.autoDispose<
+    WritingConfirmPostViewModelProvider, WritingConfirmPostViewModel>((ref) {
+  final getMyResolutionListUsecase =
+      ref.watch(getMyResolutionListUsecaseProvider);
+  final getTargetResolutionDoneCountForWeekUsecase =
+      ref.watch(getTargetResolutionDoneCountForWeekUsecaseProvider);
+  return WritingConfirmPostViewModelProvider();
+});

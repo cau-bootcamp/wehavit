@@ -1,22 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:multi_image_picker_plus/multi_image_picker_plus.dart';
 import 'package:wehavit/common/common.dart';
+import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
+import 'package:wehavit/presentation/presentation.dart';
 import 'package:wehavit/presentation/write_post/view/view.dart';
 
-class WritingConfirmPostView extends StatefulWidget {
+class WritingConfirmPostView extends ConsumerStatefulWidget {
   const WritingConfirmPostView({required this.entity, super.key});
   final ResolutionEntity entity;
 
   @override
-  State<WritingConfirmPostView> createState() => _WritingConfirmPostViewState();
+  ConsumerState<WritingConfirmPostView> createState() =>
+      _WritingConfirmPostViewState();
 }
 
-class _WritingConfirmPostViewState extends State<WritingConfirmPostView> {
+class _WritingConfirmPostViewState
+    extends ConsumerState<WritingConfirmPostView> {
   bool isWritingYesterdayPost = true;
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = ref.watch(writingConfirmPostViewModelProvider);
+
     return Scaffold(
       backgroundColor: CustomColors.whDarkBlack,
       appBar: wehavitAppBar(
@@ -192,7 +201,7 @@ class _WritingConfirmPostViewState extends State<WritingConfirmPostView> {
               Row(
                 children: [
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () async {},
                     icon: Icon(
                       Icons.add_photo_alternate_outlined,
                       color: CustomColors.whWhite,
@@ -202,11 +211,11 @@ class _WritingConfirmPostViewState extends State<WritingConfirmPostView> {
                       alignment: Alignment.centerLeft,
                     ),
                   ),
-                  SizedBox(width: 8),
-                  Expanded(
+                  const SizedBox(width: 8),
+                  const Expanded(
                     child: Text(
                       "인증샷은 최대 3장까지 공유할 수 있어요",
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 12.0,
                         fontWeight: FontWeight.w500,
                         color: CustomColors.whPlaceholderGrey,
@@ -222,9 +231,9 @@ class _WritingConfirmPostViewState extends State<WritingConfirmPostView> {
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       alignment: Alignment.centerLeft,
                     ),
-                    child: Text(
+                    child: const Text(
                       '공유하기',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 16.0,
                         fontWeight: FontWeight.w600,
                         color: CustomColors.whYellow,

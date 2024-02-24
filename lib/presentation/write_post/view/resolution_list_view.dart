@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
@@ -14,12 +16,13 @@ class ResolutionListView extends ConsumerStatefulWidget {
 class _ResolutionListViewState extends ConsumerState<ResolutionListView> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    ref
-        .read(resolutionListViewModelProvider.notifier)
-        .loadResolutionModelList()
-        .whenComplete(() => setState(() {}));
+    unawaited(
+      ref
+          .read(resolutionListViewModelProvider.notifier)
+          .loadResolutionModelList()
+          .whenComplete(() => setState(() {})),
+    );
   }
 
   @override
@@ -36,7 +39,7 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView> {
         },
       ),
       body: SafeArea(
-        minimum: EdgeInsets.symmetric(horizontal: 16.0),
+        minimum: const EdgeInsets.symmetric(horizontal: 16.0),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -59,7 +62,7 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView> {
                         showModalBottomSheet(
                           context: context,
                           builder: (context) {
-                            return writingResolutionBottomSheetWidget(
+                            return WritingResolutionBottomSheetWidget(
                               viewModel: viewModel,
                               index: index,
                             );
@@ -78,8 +81,8 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView> {
   }
 }
 
-class writingResolutionBottomSheetWidget extends StatelessWidget {
-  const writingResolutionBottomSheetWidget({
+class WritingResolutionBottomSheetWidget extends StatelessWidget {
+  const WritingResolutionBottomSheetWidget({
     super.key,
     required this.viewModel,
     required this.index,
