@@ -48,6 +48,7 @@ dependencies:
   wheel_chooser: ^1.1.2
   multi_image_picker_plus: ^0.0.4
   fluttertoast: ^8.2.4
+  images_picker: ^1.2.11
 
 
 dev_dependencies:

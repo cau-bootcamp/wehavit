@@ -130,6 +130,9 @@ PODS:
   - GTMSessionFetcher/Core (2.3.0)
   - image_picker_ios (0.0.1):
     - Flutter
+  - images_picker (0.0.1):
+    - Flutter
+    - ZLPhotoBrowser (= 4.2.5)
   - multi_image_picker_plus (0.0.1):
     - BSImagePicker (~> 3.1)
     - Flutter
@@ -147,6 +150,9 @@ PODS:
     - Flutter
     - FlutterMacOS
   - Toast (4.0.0)
+  - ZLPhotoBrowser (4.2.5):
+    - ZLPhotoBrowser/Core (= 4.2.5)
+  - ZLPhotoBrowser/Core (4.2.5)
 
 DEPENDENCIES:
   - camera_avfoundation (from `.symlinks/plugins/camera_avfoundation/ios`)
@@ -162,6 +168,7 @@ DEPENDENCIES:
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/darwin`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
+  - images_picker (from `.symlinks/plugins/images_picker/ios`)
   - multi_image_picker_plus (from `.symlinks/plugins/multi_image_picker_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
@@ -189,6 +196,7 @@ SPEC REPOS:
     - PromisesObjC
     - RecaptchaInterop
     - Toast
+    - ZLPhotoBrowser
 
 EXTERNAL SOURCES:
   camera_avfoundation:
@@ -218,6 +226,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/google_sign_in_ios/darwin"
   image_picker_ios:
     :path: ".symlinks/plugins/image_picker_ios/ios"
+  images_picker:
+    :path: ".symlinks/plugins/images_picker/ios"
   multi_image_picker_plus:
     :path: ".symlinks/plugins/multi_image_picker_plus/ios"
   path_provider_foundation:
@@ -261,6 +271,7 @@ SPEC CHECKSUMS:
   GTMAppAuth: 99fb010047ba3973b7026e45393f51f27ab965ae
   GTMSessionFetcher: 3a63d75eecd6aa32c2fc79f578064e1214dfdec2
   image_picker_ios: 99dfe1854b4fa34d0364e74a78448a0151025425
+  images_picker: fa9364e3a7d3083c49f865fcfb2b9e7cdc574d3a
   multi_image_picker_plus: b95d83279b5019ce4637ef17ca3aa14a557ffea6
   nanopb: d4d75c12cd1316f4a64e3c6963f879ecd4b5e0d5
   path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
@@ -268,6 +279,7 @@ SPEC CHECKSUMS:
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
   shared_preferences_foundation: b4c3b4cddf1c21f02770737f147a3f5da9d39695
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
+  ZLPhotoBrowser: 4bfab86b851042e18d7f413284472aa68759626a
 
 PODFILE CHECKSUM: e5fc8ffa917f1f35f9a98f1d94493deb09dd42f5
 

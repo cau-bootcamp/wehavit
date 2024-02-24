@@ -1,8 +1,8 @@
-import 'package:image_picker/image_picker.dart';
+import 'package:images_picker/images_picker.dart';
 
 class WritingConfirmPostViewModel {
   bool isWritingYesterdayPost = false;
   String postContent = '';
 
-  // List<Asset> images = <Asset>[];
+  List<Media> imageMediaList = [];
 }

@@ -1,13 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:multi_image_picker_plus/multi_image_picker_plus.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/presentation.dart';
-import 'package:wehavit/presentation/write_post/view/view.dart';
 
 class WritingConfirmPostView extends ConsumerStatefulWidget {
   const WritingConfirmPostView({required this.entity, super.key});
@@ -25,6 +23,7 @@ class _WritingConfirmPostViewState
   @override
   Widget build(BuildContext context) {
     final viewModel = ref.watch(writingConfirmPostViewModelProvider);
+    final provider = ref.read(writingConfirmPostViewModelProvider.notifier);
 
     return Scaffold(
       backgroundColor: CustomColors.whDarkBlack,
@@ -129,80 +128,31 @@ class _WritingConfirmPostViewState
                 ),
               ),
               Visibility(
-                visible: true,
+                visible: viewModel.imageMediaList.isNotEmpty,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4.0),
                   child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: Stack(
-                          alignment: Alignment.topRight,
-                          children: [
-                            Container(
-                              child: Image(
-                                image: AssetImage(
-                                  'assets/images/emoji_3d/beaming_face_with_smiling_eyes_3d.png',
-                                ),
-                              ),
-                              color: Colors.amber,
-                              width: 90,
-                              height: 90,
-                            ),
-                            GestureDetector(
-                              child: Padding(
-                                padding: const EdgeInsets.all(2.0),
-                                child: Icon(
-                                  Icons.cancel,
-                                  size: 20,
-                                  color: CustomColors.whWhite,
-                                ),
-                              ),
-                              onTapUp: (details) {
-                                //
-                              },
-                            ),
-                          ],
-                        ),
+                    children: List<Widget>.generate(
+                      viewModel.imageMediaList.length,
+                      (index) => PhotoThumbnailWidget(
+                        viewModel: viewModel,
+                        index: index,
+                        onRemove: () {
+                          viewModel.imageMediaList.removeAt(index);
+                          setState(() {});
+                        },
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: Stack(
-                          alignment: Alignment.topRight,
-                          children: [
-                            Container(
-                              child: Image(
-                                  image: AssetImage(
-                                      'assets/images/emoji_3d/beaming_face_with_smiling_eyes_3d.png')),
-                              color: Colors.amber,
-                              width: 90,
-                              height: 90,
-                            ),
-                            GestureDetector(
-                              child: Padding(
-                                padding: const EdgeInsets.all(2.0),
-                                child: Icon(
-                                  Icons.cancel,
-                                  size: 20,
-                                  color: CustomColors.whWhite,
-                                ),
-                              ),
-                              onTapUp: (details) {
-                                //
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),
               Row(
                 children: [
                   IconButton(
-                    onPressed: () async {},
-                    icon: Icon(
+                    onPressed: () async {
+                      provider.pickPhotos().whenComplete(() => setState(() {}));
+                    },
+                    icon: const Icon(
                       Icons.add_photo_alternate_outlined,
                       color: CustomColors.whWhite,
                     ),
@@ -214,7 +164,7 @@ class _WritingConfirmPostViewState
                   const SizedBox(width: 8),
                   const Expanded(
                     child: Text(
-                      "인증샷은 최대 3장까지 공유할 수 있어요",
+                      '인증샷은 최대 3장까지 공유할 수 있어요',
                       style: TextStyle(
                         fontSize: 12.0,
                         fontWeight: FontWeight.w500,
@@ -239,12 +189,58 @@ class _WritingConfirmPostViewState
                         color: CustomColors.whYellow,
                       ),
                     ),
-                  )
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class PhotoThumbnailWidget extends StatelessWidget {
+  const PhotoThumbnailWidget({
+    super.key,
+    required this.viewModel,
+    required this.index,
+    required this.onRemove,
+  });
+
+  final WritingConfirmPostViewModel viewModel;
+  final int index;
+  final Function onRemove;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 8.0),
+      child: Stack(
+        alignment: Alignment.topRight,
+        children: [
+          SizedBox(
+            width: 90,
+            height: 90,
+            child: Image.file(
+              File(viewModel.imageMediaList[index].path),
+              fit: BoxFit.cover,
+            ),
+          ),
+          GestureDetector(
+            child: const Padding(
+              padding: EdgeInsets.all(4.0),
+              child: Icon(
+                Icons.cancel,
+                size: 20,
+                color: CustomColors.whWhite,
+              ),
+            ),
+            onTapUp: (details) {
+              onRemove();
+            },
+          ),
+        ],
       ),
     );
   }
