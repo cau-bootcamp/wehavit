@@ -14,6 +14,7 @@ class ResolutionEntity with _$ResolutionEntity {
     String? actionStatement,
     bool? isActive,
     int? actionPerWeek,
+    int? colorIndex,
     DateTime? startDate,
     List<UserDataEntity>? shareFriendEntityList,
     List<GroupEntity>? shareGroupEntityList,
