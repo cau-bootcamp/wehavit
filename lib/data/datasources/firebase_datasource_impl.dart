@@ -676,11 +676,9 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   ) async {
     try {
       final uid = getMyUserId();
-
       String storagePath =
           FirebaseConfirmPostImagePathName.storagePath(uid: uid);
       final ref = FirebaseStorage.instance.ref(storagePath);
-
       await ref.putFile(File(localFileUrl));
 
       return Future(() async => right(await ref.getDownloadURL()));

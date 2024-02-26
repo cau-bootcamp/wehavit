@@ -1,17 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:images_picker/images_picker.dart';
-import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
 
 import 'package:wehavit/presentation/write_post/write_post.dart';
 
 class WritingConfirmPostViewModelProvider
     extends StateNotifier<WritingConfirmPostViewModel> {
-  WritingConfirmPostViewModelProvider(this.uploadConfirmPostUseCase)
+  WritingConfirmPostViewModelProvider(this._uploadConfirmPostUseCase)
       : super(WritingConfirmPostViewModel());
 
-  int maxImagesCount = 3;
-  UploadConfirmPostUseCase uploadConfirmPostUseCase;
+  final int maxImagesCount = 3;
+  final UploadConfirmPostUseCase _uploadConfirmPostUseCase;
 
   Future<void> pickPhotos() async {
     List<Media>? photosList = [];
@@ -26,12 +25,12 @@ class WritingConfirmPostViewModelProvider
   }
 
   Future<void> uploadPost() async {
-    uploadConfirmPostUseCase.call(
+    _uploadConfirmPostUseCase(
       resolutionGoalStatement: state.entity?.goalStatement ?? '',
       resolutionId: state.entity?.resolutionId ?? '',
       content: state.postContent,
       localFileUrlList:
-          state.imageMediaList.map((media) => media.path).toList(),
+          state.imageMediaList.map((media) => media.path.toString()).toList(),
       hasRested: false,
     );
   }

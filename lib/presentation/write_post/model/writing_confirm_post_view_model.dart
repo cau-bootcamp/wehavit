@@ -8,4 +8,5 @@ class WritingConfirmPostViewModel {
   String postContent = '';
 
   List<Media> imageMediaList = [];
+  bool isUploading = false;
 }
