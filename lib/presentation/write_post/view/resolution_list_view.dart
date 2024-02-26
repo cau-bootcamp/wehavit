@@ -28,7 +28,6 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView> {
   @override
   Widget build(BuildContext context) {
     final viewModel = ref.watch(resolutionListViewModelProvider);
-    final provider = ref.read(resolutionListViewModelProvider.notifier);
 
     return Scaffold(
       backgroundColor: CustomColors.whDarkBlack,
@@ -68,11 +67,7 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView> {
                               index: index,
                             );
                           },
-                        ).whenComplete(() {
-                          provider
-                              .loadResolutionModelList()
-                              .whenComplete(() => setState(() {}));
-                        });
+                        );
                       },
                     ),
                   ),
