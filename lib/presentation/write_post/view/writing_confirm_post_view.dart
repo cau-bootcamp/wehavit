@@ -54,7 +54,7 @@ class _WritingConfirmPostViewState
                   return GradientBottomSheet(
                     SizedBox(
                       height: MediaQuery.sizeOf(context).height * 0.80,
-                      child: const ShareTargetGroupCellWidget(),
+                      child: ShareTargetGroupCellWidget(widget.entity),
                     ),
                   );
                 },

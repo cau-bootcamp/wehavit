@@ -231,7 +231,7 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
                         // ignore: use_build_context_synchronously
                         showToastMessage(
                           context,
-                          text: '성공적으로 인증글을 공유했어요',
+                          text: '성공적으로 인증을 남겼어요',
                           icon: const Icon(
                             Icons.check_circle,
                             color: CustomColors.whYellow,

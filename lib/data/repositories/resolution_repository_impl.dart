@@ -67,4 +67,11 @@ class ResolutionRepositoryImpl implements ResolutionRepository {
       resolutionId: resolutionId,
     );
   }
+
+  @override
+  EitherFuture<List<GroupEntity>> getResolutionSharingTargetGroupList(
+    String resolutionId,
+  ) {
+    return _wehavitDatasource.getResolutionSharingTargetGroupList(resolutionId);
+  }
 }

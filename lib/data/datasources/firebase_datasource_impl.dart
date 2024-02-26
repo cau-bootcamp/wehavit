@@ -1570,4 +1570,50 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       );
     }
   }
+
+  @override
+  EitherFuture<List<GroupEntity>> getResolutionSharingTargetGroupList(
+    String resolutionId,
+  ) async {
+    try {
+      final fetchResult = await firestore
+          .collection(FirebaseCollectionName.myResolutions)
+          .doc(resolutionId)
+          .get()
+          .then(
+            (result) => result.data()?[FirebaseResolutionFieldName
+                .resolutionShareGroupIdList] as List<dynamic>?,
+          );
+
+      if (fetchResult == null) {
+        return Future(
+          () => left(const Failure('fail to get sharing target group list')),
+        );
+      }
+
+      final groupIdList = fetchResult.map((e) => e.toString()).toList();
+
+      final groupEntityList = (await Future.wait(groupIdList
+              .map(
+                (groupId) async => await getGroupEntity(groupId: groupId).then(
+                  (result) => result.fold(
+                      (failure) => null, (groupEntity) => groupEntity),
+                ),
+              )
+              .toList()))
+          .nonNulls
+          .toList();
+
+      return Future(() => right(groupEntityList));
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+      return Future(
+        () => left(
+          const Failure(
+            'catch error on getResolutionSharingTargetGroupList',
+          ),
+        ),
+      );
+    }
+  }
 }
