@@ -6,16 +6,18 @@ import 'package:wehavit/presentation/write_post/write_post.dart';
 class ResolutionListViewModelProvider
     extends StateNotifier<ResolutionListViewModel> {
   ResolutionListViewModelProvider(
-    this.getMyResolutionListUsecase,
-    this.getTargetResolutionDoneCountForWeekUsecase,
+    this._getMyResolutionListUsecase,
+    this._getTargetResolutionDoneCountForWeekUsecase,
+    this._uploadConfirmPostUseCase,
   ) : super(ResolutionListViewModel());
 
-  GetMyResolutionListUsecase getMyResolutionListUsecase;
-  GetTargetResolutionDoneCountForWeekUsecase
-      getTargetResolutionDoneCountForWeekUsecase;
+  final GetMyResolutionListUsecase _getMyResolutionListUsecase;
+  final GetTargetResolutionDoneCountForWeekUsecase
+      _getTargetResolutionDoneCountForWeekUsecase;
+  final UploadConfirmPostUseCase _uploadConfirmPostUseCase;
 
   Future<void> loadResolutionModelList() async {
-    final resolutionList = await getMyResolutionListUsecase(NoParams()).then(
+    final resolutionList = await _getMyResolutionListUsecase(NoParams()).then(
       (result) => result.fold(
         (failure) => null,
         (result) => result,
@@ -31,7 +33,7 @@ class ResolutionListViewModelProvider
       resolutionList.map((entity) async {
         int successCount = 0;
         if (entity.resolutionId != null) {
-          successCount = await getTargetResolutionDoneCountForWeekUsecase(
+          successCount = await _getTargetResolutionDoneCountForWeekUsecase(
             resolutionId: entity.resolutionId ?? '',
           ).then(
             (result) => result.fold(
@@ -58,5 +60,17 @@ class ResolutionListViewModelProvider
       state.summaryTotalCount += element.entity.actionPerWeek ?? 7;
       state.summaryDoneCount += element.successCount;
     }
+  }
+
+  Future<void> uploadPostWithoutContents({
+    required ResolutionListCellWidgetModel model,
+  }) async {
+    _uploadConfirmPostUseCase(
+      resolutionGoalStatement: model.entity.goalStatement ?? '',
+      resolutionId: model.entity.resolutionId ?? '',
+      content: '',
+      localFileUrlList: [],
+      hasRested: false,
+    );
   }
 }

@@ -14,6 +14,8 @@ class ResolutionListView extends ConsumerStatefulWidget {
 }
 
 class _ResolutionListViewState extends ConsumerState<ResolutionListView> {
+  bool isLoading = true;
+
   @override
   void initState() {
     super.initState();
@@ -21,7 +23,10 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView> {
       ref
           .read(resolutionListViewModelProvider.notifier)
           .loadResolutionModelList()
-          .whenComplete(() => setState(() {})),
+          .whenComplete(() {
+        isLoading = false;
+        setState(() {});
+      }),
     );
   }
 
@@ -50,30 +55,46 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView> {
                     (viewModel.summaryDoneCount / viewModel.summaryTotalCount)
                         .toDouble(),
               ),
-              Column(
-                children: List<Widget>.generate(
-                  viewModel.resolutionModelList?.length ?? 0,
-                  (index) => Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: GestureDetector(
-                      child: ResolutionListCellWidget(
-                        viewModel.resolutionModelList![index],
+              Visibility(
+                visible: !isLoading,
+                replacement: const Padding(
+                  padding: EdgeInsets.only(top: 100.0),
+                  child: Center(
+                    child: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: CircularProgressIndicator(
+                        color: CustomColors.whYellow,
                       ),
-                      onTapUp: (details) async {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            return WritingResolutionBottomSheetWidget(
-                              viewModel: viewModel,
-                              index: index,
-                            );
-                          },
-                        ).whenComplete(() {
-                          provider
-                              .loadResolutionModelList()
-                              .whenComplete(() => setState(() {}));
-                        });
-                      },
+                    ),
+                  ),
+                ),
+                child: Column(
+                  children: List<Widget>.generate(
+                    viewModel.resolutionModelList?.length ?? 0,
+                    (index) => Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: GestureDetector(
+                        child: ResolutionListCellWidget(
+                          viewModel.resolutionModelList![index],
+                        ),
+                        onTapUp: (details) async {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (context) {
+                              return WritingResolutionBottomSheetWidget(
+                                viewModel: viewModel,
+                                provider: provider,
+                                index: index,
+                              );
+                            },
+                          ).whenComplete(() {
+                            provider
+                                .loadResolutionModelList()
+                                .whenComplete(() => setState(() {}));
+                          });
+                        },
+                      ),
                     ),
                   ),
                 ),
@@ -90,10 +111,12 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
   const WritingResolutionBottomSheetWidget({
     super.key,
     required this.viewModel,
+    required this.provider,
     required this.index,
   });
 
   final ResolutionListViewModel viewModel;
+  final ResolutionListViewModelProvider provider;
   final int index;
 
   @override
@@ -161,6 +184,13 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
                   width: 150,
                   child: ColoredButton(
                     buttonTitle: '완료 표시만 하기',
+                    onPressed: () async {
+                      provider
+                          .uploadPostWithoutContents(
+                            model: viewModel.resolutionModelList![index],
+                          )
+                          .whenComplete(() => Navigator.pop(context));
+                    },
                   ),
                 ),
               ),
