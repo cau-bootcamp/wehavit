@@ -148,7 +148,7 @@ class ResolutionListCellWidget extends StatelessWidget {
                     Expanded(
                       child: Text(
                         model.entity.goalStatement ?? '',
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: PointColors.red,
                           fontSize: 16.0,
                           fontWeight: FontWeight.w600,
@@ -158,14 +158,14 @@ class ResolutionListCellWidget extends StatelessWidget {
                     const SizedBox(
                       width: 12,
                     ),
-                    Icon(
+                    const Icon(
                       Icons.chevron_right,
                       size: 32,
                       color: PointColors.red,
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 12,
                 ),
                 ResolutionLinearGaugeWidget(model),
@@ -195,7 +195,7 @@ class ResolutionLinearGaugeWidget extends StatelessWidget {
           children: [
             Text(
               model.entity.actionStatement ?? '',
-              style: TextStyle(
+              style: const TextStyle(
                 color: CustomColors.whWhite,
                 fontSize: 14.0,
                 fontWeight: FontWeight.w500,
@@ -203,7 +203,7 @@ class ResolutionLinearGaugeWidget extends StatelessWidget {
             ),
             Text(
               '주 ${model.entity.actionPerWeek}회 중 ${model.successCount}회 실천',
-              style: TextStyle(
+              style: const TextStyle(
                 color: CustomColors.whWhite,
                 fontSize: 12.0,
                 fontWeight: FontWeight.w300,
@@ -211,7 +211,7 @@ class ResolutionLinearGaugeWidget extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 4,
         ),
         Stack(
