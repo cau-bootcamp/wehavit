@@ -24,14 +24,14 @@ class WritingConfirmPostViewModelProvider
     state.imageMediaList = photosList ?? [];
   }
 
-  Future<void> uploadPost() async {
+  Future<void> uploadPost({required bool hasRested}) async {
     _uploadConfirmPostUseCase(
       resolutionGoalStatement: state.entity?.goalStatement ?? '',
       resolutionId: state.entity?.resolutionId ?? '',
       content: state.postContent,
       localFileUrlList:
           state.imageMediaList.map((media) => media.path.toString()).toList(),
-      hasRested: false,
+      hasRested: hasRested,
     );
   }
 }

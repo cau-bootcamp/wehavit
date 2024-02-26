@@ -158,6 +158,7 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
                   builder: (context) {
                     return WritingConfirmPostView(
                       entity: viewModel.resolutionModelList![index].entity,
+                      hasRested: false,
                     );
                   },
                 ),
@@ -174,6 +175,20 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
                 child: ColoredButton(
                   buttonTitle: '반성글 작성하기',
                   foregroundColor: Colors.red,
+                  onPressed: () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return WritingConfirmPostView(
+                            entity:
+                                viewModel.resolutionModelList![index].entity,
+                            hasRested: true,
+                          );
+                        },
+                      ),
+                    );
+                  },
                 ),
               ),
               const SizedBox(

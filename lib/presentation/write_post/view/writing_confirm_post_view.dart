@@ -7,8 +7,13 @@ import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 class WritingConfirmPostView extends ConsumerStatefulWidget {
-  const WritingConfirmPostView({required this.entity, super.key});
+  const WritingConfirmPostView({
+    required this.entity,
+    required this.hasRested,
+    super.key,
+  });
   final ResolutionEntity entity;
+  final bool hasRested;
 
   @override
   ConsumerState<WritingConfirmPostView> createState() =>
@@ -33,7 +38,7 @@ class _WritingConfirmPostViewState
         Scaffold(
           backgroundColor: CustomColors.whDarkBlack,
           appBar: wehavitAppBar(
-            title: '인증 남기기',
+            title: widget.hasRested ? '반성글 남기기' : '인증 남기기',
             leadingTitle: '목표 선택',
             leadingIcon: Icons.chevron_left,
             leadingAction: () {
@@ -166,13 +171,17 @@ class _WritingConfirmPostViewState
                   children: [
                     IconButton(
                       onPressed: () async {
-                        provider
-                            .pickPhotos()
-                            .whenComplete(() => setState(() {}));
+                        if (!widget.hasRested) {
+                          provider
+                              .pickPhotos()
+                              .whenComplete(() => setState(() {}));
+                        }
                       },
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.add_photo_alternate_outlined,
-                        color: CustomColors.whWhite,
+                        color: widget.hasRested
+                            ? CustomColors.whGrey
+                            : CustomColors.whWhite,
                       ),
                       style: IconButton.styleFrom(
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -180,10 +189,12 @@ class _WritingConfirmPostViewState
                       ),
                     ),
                     const SizedBox(width: 8),
-                    const Expanded(
+                    Expanded(
                       child: Text(
-                        '인증샷은 최대 3장까지 공유할 수 있어요',
-                        style: TextStyle(
+                        widget.hasRested
+                            ? '반성글에서는 인증샷을 공유할 수 없어요'
+                            : '인증샷은 최대 3장까지 공유할 수 있어요',
+                        style: const TextStyle(
                           fontSize: 12.0,
                           fontWeight: FontWeight.w500,
                           color: CustomColors.whPlaceholderGrey,
@@ -195,7 +206,9 @@ class _WritingConfirmPostViewState
                         viewModel.isUploading = true;
                         setState(() {});
 
-                        await provider.uploadPost().whenComplete(() {
+                        await provider
+                            .uploadPost(hasRested: widget.hasRested)
+                            .whenComplete(() {
                           viewModel.isUploading = false;
                           int count = 0;
                           Navigator.of(context).popUntil((_) => count++ >= 2);
