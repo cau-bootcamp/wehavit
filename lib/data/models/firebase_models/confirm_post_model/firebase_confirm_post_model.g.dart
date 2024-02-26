@@ -11,9 +11,10 @@ _$FirebaseConfirmPostModelImpl _$$FirebaseConfirmPostModelImplFromJson(
     _$FirebaseConfirmPostModelImpl(
       resolutionGoalStatement: json['resolutionGoalStatement'] as String?,
       resolutionId: json['resolutionId'] as String?,
-      title: json['title'] as String?,
       content: json['content'] as String?,
-      imageUrl: json['imageUrl'] as String?,
+      imageUrlList: (json['imageUrlList'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       owner: json['owner'] as String?,
       recentStrike: json['recentStrike'] as int?,
       createdAt: _$JsonConverterFromJson<Timestamp, DateTime>(
@@ -30,9 +31,8 @@ Map<String, dynamic> _$$FirebaseConfirmPostModelImplToJson(
     <String, dynamic>{
       'resolutionGoalStatement': instance.resolutionGoalStatement,
       'resolutionId': instance.resolutionId,
-      'title': instance.title,
       'content': instance.content,
-      'imageUrl': instance.imageUrl,
+      'imageUrlList': instance.imageUrlList,
       'owner': instance.owner,
       'recentStrike': instance.recentStrike,
       'createdAt': _$JsonConverterToJson<Timestamp, DateTime>(

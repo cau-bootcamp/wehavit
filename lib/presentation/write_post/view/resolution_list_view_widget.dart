@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:wehavit/common/constants/constants.dart';
+import 'package:wehavit/presentation/write_post/write_post.dart';
 
 class ResolutionSummaryCardWidget extends StatelessWidget {
-  const ResolutionSummaryCardWidget({super.key});
+  const ResolutionSummaryCardWidget({
+    super.key,
+    required this.totalCount,
+    required this.doneRatio,
+  });
+
+  final int totalCount;
+  final double doneRatio;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +25,7 @@ class ResolutionSummaryCardWidget extends StatelessWidget {
       child: Stack(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(
+            padding: const EdgeInsets.symmetric(
               vertical: 16.0,
               horizontal: 20.0,
             ),
@@ -25,15 +33,15 @@ class ResolutionSummaryCardWidget extends StatelessWidget {
               children: [
                 ResolutionSummaryCardTextWidget(
                   title: '이번 주 나의 노력 인증 횟수',
-                  value: 17,
+                  value: totalCount,
                   unit: '회',
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 16,
                 ),
                 ResolutionSummaryCardTextWidget(
                   title: '이번 주 목표 달성 현황',
-                  value: 37,
+                  value: (doneRatio * 100).round(),
                   unit: '%',
                 ),
               ],
@@ -101,7 +109,9 @@ class ResolutionSummaryCardTextWidget extends StatelessWidget {
 }
 
 class ResolutionListCellWidget extends StatelessWidget {
-  const ResolutionListCellWidget({super.key});
+  const ResolutionListCellWidget(this.model, {super.key});
+
+  final ResolutionListCellWidgetModel model;
 
   @override
   Widget build(BuildContext context) {
@@ -137,8 +147,8 @@ class ResolutionListCellWidget extends StatelessWidget {
                     ),
                     Expanded(
                       child: Text(
-                        '목표 이름이 이렇게 들어갑니다',
-                        style: TextStyle(
+                        model.entity.goalStatement ?? '',
+                        style: const TextStyle(
                           color: PointColors.red,
                           fontSize: 16.0,
                           fontWeight: FontWeight.w600,
@@ -148,17 +158,17 @@ class ResolutionListCellWidget extends StatelessWidget {
                     const SizedBox(
                       width: 12,
                     ),
-                    Icon(
+                    const Icon(
                       Icons.chevron_right,
                       size: 32,
                       color: PointColors.red,
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 12,
                 ),
-                ResolutionLinearGaugeWidget()
+                ResolutionLinearGaugeWidget(model),
               ],
             ),
           ),
@@ -169,9 +179,12 @@ class ResolutionListCellWidget extends StatelessWidget {
 }
 
 class ResolutionLinearGaugeWidget extends StatelessWidget {
-  const ResolutionLinearGaugeWidget({
+  const ResolutionLinearGaugeWidget(
+    this.model, {
     super.key,
   });
+
+  final ResolutionListCellWidgetModel model;
 
   @override
   Widget build(BuildContext context) {
@@ -181,16 +194,16 @@ class ResolutionLinearGaugeWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              '이런걸 실천하고 있음',
-              style: TextStyle(
+              model.entity.actionStatement ?? '',
+              style: const TextStyle(
                 color: CustomColors.whWhite,
                 fontSize: 14.0,
                 fontWeight: FontWeight.w500,
               ),
             ),
             Text(
-              '주 ${3}회 중 ${2}회 실천',
-              style: TextStyle(
+              '주 ${model.entity.actionPerWeek}회 중 ${model.successCount}회 실천',
+              style: const TextStyle(
                 color: CustomColors.whWhite,
                 fontSize: 12.0,
                 fontWeight: FontWeight.w300,
@@ -198,7 +211,7 @@ class ResolutionLinearGaugeWidget extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 4,
         ),
         Stack(
@@ -213,14 +226,14 @@ class ResolutionLinearGaugeWidget extends StatelessWidget {
               direction: Axis.horizontal,
               children: [
                 Flexible(
-                  flex: 2,
+                  flex: model.successCount,
                   child: Container(
                     height: 7,
-                    color: PointColors.red,
+                    color: PointColors.colorList[0],
                   ),
                 ),
                 Flexible(
-                  flex: 3 - 2,
+                  flex: model.entity.actionPerWeek ?? 1 - model.successCount,
                   child: Container(
                     height: 7,
                     color: Colors.transparent,

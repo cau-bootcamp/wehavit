@@ -23,7 +23,6 @@ class ConfirmPostEntity with _$ConfirmPostEntity {
   @Assert('createdAt != null', 'createdAt must not be null')
   @Assert('updatedAt != null', 'createdAt must not be null')
   @Assert('owner != null', 'roles(owner) must not be null')
-  @Assert('attributes != null', 'attribute must not be null')
   @TimestampConverter()
   @DocumentReferenceJsonConverter()
   factory ConfirmPostEntity({
@@ -38,14 +37,13 @@ class ConfirmPostEntity with _$ConfirmPostEntity {
     String? userImageUrl,
     required String? resolutionGoalStatement,
     required String? resolutionId,
-    required String? title,
     required String? content,
-    required String? imageUrl,
+    required List<String>? imageUrlList,
     required String? owner,
     required int? recentStrike,
     required DateTime? createdAt,
     required DateTime? updatedAt,
-    required Map<String, bool>? attributes,
+    @Default(false) bool hasRested,
   }) = _ConfirmPostEntity;
 
   factory ConfirmPostEntity.fromJson(Map<String, dynamic> json) =>

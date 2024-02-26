@@ -676,11 +676,9 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   ) async {
     try {
       final uid = getMyUserId();
-
       String storagePath =
           FirebaseConfirmPostImagePathName.storagePath(uid: uid);
       final ref = FirebaseStorage.instance.ref(storagePath);
-
       await ref.putFile(File(localFileUrl));
 
       return Future(() async => right(await ref.getDownloadURL()));
@@ -1511,6 +1509,111 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       return Future(() => right(isRegistered));
     } on Exception {
       return Future(() => left(const Failure('cannot get registered status')));
+    }
+  }
+
+  @override
+  EitherFuture<int> getTargetResolutionDoneCountForThisWeek({
+    required String resolutionId,
+  }) async {
+    try {
+      // 현재가 월요일 10일 12:34:56이라면
+      // StartDate 값은 10일 월요일 00:00:00 으로 설정
+      // EndDate   값은 17일 월요일 00:00:00 으로 설정
+      // -> start to end : 가장 최근의 월~일 (오늘이 일요일인 경우에는 이번 주)
+      DateTime endDate;
+      DateTime now = DateTime.now();
+      int difference = now.weekday - DateTime.sunday;
+
+      // 만약 현재 날짜가 일요일이면 현재 날짜를 반환
+      // 현재 날짜에서 일요일까지의 차이를 뺀 값을 반환
+      final date = now.subtract(Duration(days: difference));
+      endDate = DateTime(date.year, date.month, date.day)
+          .add(const Duration(days: 1));
+
+      // ignore: unused_local_variable
+      DateTime startDate = DateTime(endDate.year, endDate.month, endDate.day)
+          .subtract(const Duration(days: 7));
+
+      final doneCount = await firestore
+          .collection(FirebaseCollectionName.confirmPosts)
+          .where(
+            FirebaseConfirmPostFieldName.resolutionId,
+            isEqualTo: resolutionId,
+          )
+          .where(
+            FirebaseConfirmPostFieldName.createdAt,
+            isGreaterThanOrEqualTo: Timestamp.fromDate(startDate),
+            isLessThanOrEqualTo: Timestamp.fromDate(endDate),
+          )
+          .get()
+          .then(
+            (value) => value.docs
+                .where(
+                  (element) =>
+                      element.data()[FirebaseConfirmPostFieldName.attributes]
+                          [FirebaseConfirmPostFieldName.attributesHasRested] ==
+                      false,
+                )
+                .length,
+          );
+
+      return Future(() => right(doneCount));
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+      return Future(
+        () => left(
+          const Failure(
+            'catch error on getTargetResolutionDoneCountForThisWeek',
+          ),
+        ),
+      );
+    }
+  }
+
+  @override
+  EitherFuture<List<GroupEntity>> getResolutionSharingTargetGroupList(
+    String resolutionId,
+  ) async {
+    try {
+      final fetchResult = await firestore
+          .collection(FirebaseCollectionName.myResolutions)
+          .doc(resolutionId)
+          .get()
+          .then(
+            (result) => result.data()?[FirebaseResolutionFieldName
+                .resolutionShareGroupIdList] as List<dynamic>?,
+          );
+
+      if (fetchResult == null) {
+        return Future(
+          () => left(const Failure('fail to get sharing target group list')),
+        );
+      }
+
+      final groupIdList = fetchResult.map((e) => e.toString()).toList();
+
+      final groupEntityList = (await Future.wait(groupIdList
+              .map(
+                (groupId) async => await getGroupEntity(groupId: groupId).then(
+                  (result) => result.fold(
+                      (failure) => null, (groupEntity) => groupEntity),
+                ),
+              )
+              .toList()))
+          .nonNulls
+          .toList();
+
+      return Future(() => right(groupEntityList));
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+      return Future(
+        () => left(
+          const Failure(
+            'catch error on getResolutionSharingTargetGroupList',
+          ),
+        ),
+      );
     }
   }
 }

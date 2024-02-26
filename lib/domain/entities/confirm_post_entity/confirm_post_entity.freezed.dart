@@ -28,14 +28,13 @@ mixin _$ConfirmPostEntity {
   String? get userImageUrl => throw _privateConstructorUsedError;
   String? get resolutionGoalStatement => throw _privateConstructorUsedError;
   String? get resolutionId => throw _privateConstructorUsedError;
-  String? get title => throw _privateConstructorUsedError;
   String? get content => throw _privateConstructorUsedError;
-  String? get imageUrl => throw _privateConstructorUsedError;
+  List<String>? get imageUrlList => throw _privateConstructorUsedError;
   String? get owner => throw _privateConstructorUsedError;
   int? get recentStrike => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
   DateTime? get updatedAt => throw _privateConstructorUsedError;
-  Map<String, bool>? get attributes => throw _privateConstructorUsedError;
+  bool get hasRested => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -56,14 +55,13 @@ abstract class $ConfirmPostEntityCopyWith<$Res> {
       String? userImageUrl,
       String? resolutionGoalStatement,
       String? resolutionId,
-      String? title,
       String? content,
-      String? imageUrl,
+      List<String>? imageUrlList,
       String? owner,
       int? recentStrike,
       DateTime? createdAt,
       DateTime? updatedAt,
-      Map<String, bool>? attributes});
+      bool hasRested});
 }
 
 /// @nodoc
@@ -84,14 +82,13 @@ class _$ConfirmPostEntityCopyWithImpl<$Res, $Val extends ConfirmPostEntity>
     Object? userImageUrl = freezed,
     Object? resolutionGoalStatement = freezed,
     Object? resolutionId = freezed,
-    Object? title = freezed,
     Object? content = freezed,
-    Object? imageUrl = freezed,
+    Object? imageUrlList = freezed,
     Object? owner = freezed,
     Object? recentStrike = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
-    Object? attributes = freezed,
+    Object? hasRested = null,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -114,18 +111,14 @@ class _$ConfirmPostEntityCopyWithImpl<$Res, $Val extends ConfirmPostEntity>
           ? _value.resolutionId
           : resolutionId // ignore: cast_nullable_to_non_nullable
               as String?,
-      title: freezed == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String?,
       content: freezed == content
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
               as String?,
-      imageUrl: freezed == imageUrl
-          ? _value.imageUrl
-          : imageUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
+      imageUrlList: freezed == imageUrlList
+          ? _value.imageUrlList
+          : imageUrlList // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
       owner: freezed == owner
           ? _value.owner
           : owner // ignore: cast_nullable_to_non_nullable
@@ -142,10 +135,10 @@ class _$ConfirmPostEntityCopyWithImpl<$Res, $Val extends ConfirmPostEntity>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      attributes: freezed == attributes
-          ? _value.attributes
-          : attributes // ignore: cast_nullable_to_non_nullable
-              as Map<String, bool>?,
+      hasRested: null == hasRested
+          ? _value.hasRested
+          : hasRested // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -165,14 +158,13 @@ abstract class _$$ConfirmPostEntityImplCopyWith<$Res>
       String? userImageUrl,
       String? resolutionGoalStatement,
       String? resolutionId,
-      String? title,
       String? content,
-      String? imageUrl,
+      List<String>? imageUrlList,
       String? owner,
       int? recentStrike,
       DateTime? createdAt,
       DateTime? updatedAt,
-      Map<String, bool>? attributes});
+      bool hasRested});
 }
 
 /// @nodoc
@@ -191,14 +183,13 @@ class __$$ConfirmPostEntityImplCopyWithImpl<$Res>
     Object? userImageUrl = freezed,
     Object? resolutionGoalStatement = freezed,
     Object? resolutionId = freezed,
-    Object? title = freezed,
     Object? content = freezed,
-    Object? imageUrl = freezed,
+    Object? imageUrlList = freezed,
     Object? owner = freezed,
     Object? recentStrike = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
-    Object? attributes = freezed,
+    Object? hasRested = null,
   }) {
     return _then(_$ConfirmPostEntityImpl(
       id: freezed == id
@@ -221,18 +212,14 @@ class __$$ConfirmPostEntityImplCopyWithImpl<$Res>
           ? _value.resolutionId
           : resolutionId // ignore: cast_nullable_to_non_nullable
               as String?,
-      title: freezed == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String?,
       content: freezed == content
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
               as String?,
-      imageUrl: freezed == imageUrl
-          ? _value.imageUrl
-          : imageUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
+      imageUrlList: freezed == imageUrlList
+          ? _value._imageUrlList
+          : imageUrlList // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
       owner: freezed == owner
           ? _value.owner
           : owner // ignore: cast_nullable_to_non_nullable
@@ -249,10 +236,10 @@ class __$$ConfirmPostEntityImplCopyWithImpl<$Res>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      attributes: freezed == attributes
-          ? _value._attributes
-          : attributes // ignore: cast_nullable_to_non_nullable
-              as Map<String, bool>?,
+      hasRested: null == hasRested
+          ? _value.hasRested
+          : hasRested // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -269,14 +256,13 @@ class _$ConfirmPostEntityImpl implements _ConfirmPostEntity {
       this.userImageUrl = '',
       required this.resolutionGoalStatement,
       required this.resolutionId,
-      required this.title,
       required this.content,
-      required this.imageUrl,
+      required final List<String>? imageUrlList,
       required this.owner,
       required this.recentStrike,
       required this.createdAt,
       required this.updatedAt,
-      required final Map<String, bool>? attributes})
+      this.hasRested = false})
       : assert(resolutionGoalStatement != null,
             'resolutionGoalStatement must not be null'),
         assert(resolutionGoalStatement!.isNotEmpty,
@@ -287,8 +273,7 @@ class _$ConfirmPostEntityImpl implements _ConfirmPostEntity {
         assert(createdAt != null, 'createdAt must not be null'),
         assert(updatedAt != null, 'createdAt must not be null'),
         assert(owner != null, 'roles(owner) must not be null'),
-        assert(attributes != null, 'attribute must not be null'),
-        _attributes = attributes;
+        _imageUrlList = imageUrlList;
 
   factory _$ConfirmPostEntityImpl.fromJson(Map<String, dynamic> json) =>
       _$$ConfirmPostEntityImplFromJson(json);
@@ -307,11 +292,17 @@ class _$ConfirmPostEntityImpl implements _ConfirmPostEntity {
   @override
   final String? resolutionId;
   @override
-  final String? title;
-  @override
   final String? content;
+  final List<String>? _imageUrlList;
   @override
-  final String? imageUrl;
+  List<String>? get imageUrlList {
+    final value = _imageUrlList;
+    if (value == null) return null;
+    if (_imageUrlList is EqualUnmodifiableListView) return _imageUrlList;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
   final String? owner;
   @override
@@ -320,19 +311,13 @@ class _$ConfirmPostEntityImpl implements _ConfirmPostEntity {
   final DateTime? createdAt;
   @override
   final DateTime? updatedAt;
-  final Map<String, bool>? _attributes;
   @override
-  Map<String, bool>? get attributes {
-    final value = _attributes;
-    if (value == null) return null;
-    if (_attributes is EqualUnmodifiableMapView) return _attributes;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(value);
-  }
+  @JsonKey()
+  final bool hasRested;
 
   @override
   String toString() {
-    return 'ConfirmPostEntity(id: $id, userName: $userName, userImageUrl: $userImageUrl, resolutionGoalStatement: $resolutionGoalStatement, resolutionId: $resolutionId, title: $title, content: $content, imageUrl: $imageUrl, owner: $owner, recentStrike: $recentStrike, createdAt: $createdAt, updatedAt: $updatedAt, attributes: $attributes)';
+    return 'ConfirmPostEntity(id: $id, userName: $userName, userImageUrl: $userImageUrl, resolutionGoalStatement: $resolutionGoalStatement, resolutionId: $resolutionId, content: $content, imageUrlList: $imageUrlList, owner: $owner, recentStrike: $recentStrike, createdAt: $createdAt, updatedAt: $updatedAt, hasRested: $hasRested)';
   }
 
   @override
@@ -350,10 +335,9 @@ class _$ConfirmPostEntityImpl implements _ConfirmPostEntity {
                 other.resolutionGoalStatement == resolutionGoalStatement) &&
             (identical(other.resolutionId, resolutionId) ||
                 other.resolutionId == resolutionId) &&
-            (identical(other.title, title) || other.title == title) &&
             (identical(other.content, content) || other.content == content) &&
-            (identical(other.imageUrl, imageUrl) ||
-                other.imageUrl == imageUrl) &&
+            const DeepCollectionEquality()
+                .equals(other._imageUrlList, _imageUrlList) &&
             (identical(other.owner, owner) || other.owner == owner) &&
             (identical(other.recentStrike, recentStrike) ||
                 other.recentStrike == recentStrike) &&
@@ -361,8 +345,8 @@ class _$ConfirmPostEntityImpl implements _ConfirmPostEntity {
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
                 other.updatedAt == updatedAt) &&
-            const DeepCollectionEquality()
-                .equals(other._attributes, _attributes));
+            (identical(other.hasRested, hasRested) ||
+                other.hasRested == hasRested));
   }
 
   @JsonKey(ignore: true)
@@ -374,14 +358,13 @@ class _$ConfirmPostEntityImpl implements _ConfirmPostEntity {
       userImageUrl,
       resolutionGoalStatement,
       resolutionId,
-      title,
       content,
-      imageUrl,
+      const DeepCollectionEquality().hash(_imageUrlList),
       owner,
       recentStrike,
       createdAt,
       updatedAt,
-      const DeepCollectionEquality().hash(_attributes));
+      hasRested);
 
   @JsonKey(ignore: true)
   @override
@@ -407,14 +390,13 @@ abstract class _ConfirmPostEntity implements ConfirmPostEntity {
       final String? userImageUrl,
       required final String? resolutionGoalStatement,
       required final String? resolutionId,
-      required final String? title,
       required final String? content,
-      required final String? imageUrl,
+      required final List<String>? imageUrlList,
       required final String? owner,
       required final int? recentStrike,
       required final DateTime? createdAt,
       required final DateTime? updatedAt,
-      required final Map<String, bool>? attributes}) = _$ConfirmPostEntityImpl;
+      final bool hasRested}) = _$ConfirmPostEntityImpl;
 
   factory _ConfirmPostEntity.fromJson(Map<String, dynamic> json) =
       _$ConfirmPostEntityImpl.fromJson;
@@ -433,11 +415,9 @@ abstract class _ConfirmPostEntity implements ConfirmPostEntity {
   @override
   String? get resolutionId;
   @override
-  String? get title;
-  @override
   String? get content;
   @override
-  String? get imageUrl;
+  List<String>? get imageUrlList;
   @override
   String? get owner;
   @override
@@ -447,7 +427,7 @@ abstract class _ConfirmPostEntity implements ConfirmPostEntity {
   @override
   DateTime? get updatedAt;
   @override
-  Map<String, bool>? get attributes;
+  bool get hasRested;
   @override
   @JsonKey(ignore: true)
   _$$ConfirmPostEntityImplCopyWith<_$ConfirmPostEntityImpl> get copyWith =>

@@ -14,6 +14,7 @@ _$ResolutionEntityImpl _$$ResolutionEntityImplFromJson(
       actionStatement: json['actionStatement'] as String?,
       isActive: json['isActive'] as bool?,
       actionPerWeek: json['actionPerWeek'] as int?,
+      colorIndex: json['colorIndex'] as int?,
       startDate: json['startDate'] == null
           ? null
           : DateTime.parse(json['startDate'] as String),
@@ -33,6 +34,7 @@ Map<String, dynamic> _$$ResolutionEntityImplToJson(
       'actionStatement': instance.actionStatement,
       'isActive': instance.isActive,
       'actionPerWeek': instance.actionPerWeek,
+      'colorIndex': instance.colorIndex,
       'startDate': instance.startDate?.toIso8601String(),
       'shareFriendEntityList': instance.shareFriendEntityList,
       'shareGroupEntityList': instance.shareGroupEntityList,

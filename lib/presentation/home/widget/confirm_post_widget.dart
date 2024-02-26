@@ -33,9 +33,8 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
   late String? userName = widget.entity.userName;
   late String? userImageUrl = widget.entity.userImageUrl;
   late String? resolutionGoalStatement = widget.entity.resolutionGoalStatement;
-  late String? title = widget.entity.title;
   late String? content = widget.entity.content;
-  late String? contentImageUrl = widget.entity.imageUrl;
+  late String? contentImageUrl = widget.entity.imageUrlList!.first;
   late DateTime? postAt = widget.entity.createdAt;
   late final MainViewModel _mainViewModel;
   late final MainViewModelProvider _mainViewModelProvider;
@@ -146,14 +145,14 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                   ), //goal name
                 ],
               ),
-              const SizedBox(height: 8),
-              Text(
-                title!,
-                style: const TextStyle(
-                  color: CustomColors.whSemiWhite,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              // const SizedBox(height: 8),
+              // Text(
+              //   title!,
+              //   style: const TextStyle(
+              //     color: CustomColors.whSemiWhite,
+              //     fontWeight: FontWeight.bold,
+              //   ),
+              // ),
               const SizedBox(height: 8),
               Container(
                 height: 2,

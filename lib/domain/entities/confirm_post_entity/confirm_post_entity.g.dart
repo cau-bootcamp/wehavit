@@ -11,18 +11,17 @@ _$ConfirmPostEntityImpl _$$ConfirmPostEntityImplFromJson(
     _$ConfirmPostEntityImpl(
       resolutionGoalStatement: json['resolutionGoalStatement'] as String?,
       resolutionId: json['resolutionId'] as String?,
-      title: json['title'] as String?,
       content: json['content'] as String?,
-      imageUrl: json['imageUrl'] as String?,
+      imageUrlList: (json['imageUrlList'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       owner: json['owner'] as String?,
       recentStrike: json['recentStrike'] as int?,
       createdAt: _$JsonConverterFromJson<Timestamp, DateTime>(
           json['createdAt'], const TimestampConverter().fromJson),
       updatedAt: _$JsonConverterFromJson<Timestamp, DateTime>(
           json['updatedAt'], const TimestampConverter().fromJson),
-      attributes: (json['attributes'] as Map<String, dynamic>?)?.map(
-        (k, e) => MapEntry(k, e as bool),
-      ),
+      hasRested: json['hasRested'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$ConfirmPostEntityImplToJson(
@@ -30,16 +29,15 @@ Map<String, dynamic> _$$ConfirmPostEntityImplToJson(
     <String, dynamic>{
       'resolutionGoalStatement': instance.resolutionGoalStatement,
       'resolutionId': instance.resolutionId,
-      'title': instance.title,
       'content': instance.content,
-      'imageUrl': instance.imageUrl,
+      'imageUrlList': instance.imageUrlList,
       'owner': instance.owner,
       'recentStrike': instance.recentStrike,
       'createdAt': _$JsonConverterToJson<Timestamp, DateTime>(
           instance.createdAt, const TimestampConverter().toJson),
       'updatedAt': _$JsonConverterToJson<Timestamp, DateTime>(
           instance.updatedAt, const TimestampConverter().toJson),
-      'attributes': instance.attributes,
+      'hasRested': instance.hasRested,
     };
 
 Value? _$JsonConverterFromJson<Json, Value>(

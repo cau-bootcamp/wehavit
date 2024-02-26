@@ -13,9 +13,8 @@ class FirebaseConfirmPostModel with _$FirebaseConfirmPostModel {
   const factory FirebaseConfirmPostModel({
     required String? resolutionGoalStatement,
     required String? resolutionId,
-    required String? title,
     required String? content,
-    required String? imageUrl,
+    required List<String>? imageUrlList,
     required String? owner,
     required int? recentStrike,
     @TimestampConverter() required DateTime? createdAt,
@@ -39,14 +38,15 @@ class FirebaseConfirmPostModel with _$FirebaseConfirmPostModel {
     return FirebaseConfirmPostModel(
       resolutionGoalStatement: entity.resolutionGoalStatement,
       resolutionId: entity.resolutionId,
-      title: entity.title,
       content: entity.content,
-      imageUrl: entity.imageUrl,
+      imageUrlList: entity.imageUrlList,
       owner: entity.owner,
       recentStrike: entity.recentStrike,
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
-      attributes: entity.attributes,
+      attributes: {
+        FirebaseConfirmPostFieldName.attributesHasRested: entity.hasRested,
+      },
     );
   }
 }
@@ -62,14 +62,15 @@ extension FirebaseConfirmPostModelConvert on FirebaseConfirmPostModel {
       userImageUrl: owner.userImageUrl,
       resolutionGoalStatement: resolutionGoalStatement,
       resolutionId: resolutionId,
-      title: title,
       content: content,
-      imageUrl: imageUrl,
+      imageUrlList: imageUrlList,
       owner: owner.userId,
       recentStrike: recentStrike,
       createdAt: createdAt,
       updatedAt: updatedAt,
-      attributes: attributes,
+      hasRested:
+          attributes?[FirebaseConfirmPostFieldName.attributesHasRested] ??
+              false,
     );
   }
 

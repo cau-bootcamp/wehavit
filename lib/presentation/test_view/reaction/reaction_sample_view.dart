@@ -57,7 +57,7 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
                 ),
                 Text(
                   targetPostEntity != null
-                      ? targetPostEntity!.title!
+                      ? targetPostEntity!.content!
                       : 'no element',
                 ),
               ],

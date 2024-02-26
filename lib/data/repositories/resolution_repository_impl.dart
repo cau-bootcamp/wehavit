@@ -60,4 +60,18 @@ class ResolutionRepositoryImpl implements ResolutionRepository {
       toShareState: false,
     );
   }
+
+  @override
+  EitherFuture<int> getResolutionDoneCountForThisWeek(String resolutionId) {
+    return _wehavitDatasource.getTargetResolutionDoneCountForThisWeek(
+      resolutionId: resolutionId,
+    );
+  }
+
+  @override
+  EitherFuture<List<GroupEntity>> getResolutionSharingTargetGroupList(
+    String resolutionId,
+  ) {
+    return _wehavitDatasource.getResolutionSharingTargetGroupList(resolutionId);
+  }
 }

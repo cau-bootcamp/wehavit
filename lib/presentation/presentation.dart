@@ -4,7 +4,6 @@ export 'effects/effects.dart';
 export 'friend_list/friend_list.dart';
 export 'group/group.dart';
 export 'home/home.dart';
-export 'late_writing/late_writing.dart';
 export 'my_page/my_page.dart';
 export 'reaction/reaction.dart';
 export 'splash/splash.dart';

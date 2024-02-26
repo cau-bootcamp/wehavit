@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/dependency/data/repository_dependency.dart';
 import 'package:wehavit/domain/usecases/get_group_list_view_cell_widget_model_usecase.dart';
+import 'package:wehavit/domain/usecases/get_to_whom_resolution_will_be_shared_usecase.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
 
 final logOutUseCaseProvider = Provider<LogOutUseCase>((ref) {
@@ -106,11 +107,11 @@ final getReactionListFromConfirmPostUsecaseProvider =
   return GetReactionListFromConfirmPostUsecase(repository);
 });
 
-final getMyResolutionListByUserIdUsecaseProvider =
-    Provider<GetMyResolutionListByUserIdUsecase>((ref) {
+final getMyResolutionListUsecaseProvider =
+    Provider<GetMyResolutionListUsecase>((ref) {
   final resolutionRepository = ref.watch(resolutionRepositoryProvider);
   final userModelRepository = ref.watch(userModelRepositoryProvider);
-  return GetMyResolutionListByUserIdUsecase(
+  return GetMyResolutionListUsecase(
     resolutionRepository,
     userModelRepository,
   );
@@ -221,4 +222,16 @@ final checkWhetherAlreadyAppliedToGroupUsecaseProvider =
     Provider<CheckWhetherAlreadyAppliedToGroupUsecase>((ref) {
   final groupRepository = ref.watch(groupRepositoryProvider);
   return CheckWhetherAlreadyAppliedToGroupUsecase(groupRepository);
+});
+
+final getTargetResolutionDoneCountForWeekUsecaseProvider =
+    Provider<GetTargetResolutionDoneCountForWeekUsecase>((ref) {
+  final resolutionRepository = ref.watch(resolutionRepositoryProvider);
+  return GetTargetResolutionDoneCountForWeekUsecase(resolutionRepository);
+});
+
+final getToWhomResolutionWillBeSharedUsecaseProvider =
+    Provider<GetToWhomResolutionWillBeSharedUsecase>((ref) {
+  final resolutionRepository = ref.watch(resolutionRepositoryProvider);
+  return GetToWhomResolutionWillBeSharedUsecase(resolutionRepository);
 });
