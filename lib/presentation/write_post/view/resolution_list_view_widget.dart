@@ -25,7 +25,7 @@ class ResolutionSummaryCardWidget extends StatelessWidget {
       child: Stack(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(
+            padding: const EdgeInsets.symmetric(
               vertical: 16.0,
               horizontal: 20.0,
             ),
@@ -36,12 +36,12 @@ class ResolutionSummaryCardWidget extends StatelessWidget {
                   value: totalCount,
                   unit: '회',
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 16,
                 ),
                 ResolutionSummaryCardTextWidget(
                   title: '이번 주 목표 달성 현황',
-                  value: doneRatio.round(),
+                  value: (doneRatio * 100).round(),
                   unit: '%',
                 ),
               ],
