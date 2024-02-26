@@ -152,7 +152,7 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
             backgroundColor: CustomColors.whYellow,
             foregroundColor: CustomColors.whBlack,
             onPressed: () async {
-              Navigator.push(
+              final bool result = await Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) {
@@ -163,6 +163,17 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
                   },
                 ),
               );
+              if (result == true) {
+                // ignore: use_build_context_synchronously
+                showToastMessage(
+                  context,
+                  text: '성공적으로 인증글을 공유했어요',
+                  icon: const Icon(
+                    Icons.check_circle,
+                    color: CustomColors.whYellow,
+                  ),
+                );
+              }
             },
           ),
           const SizedBox(
@@ -176,7 +187,7 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
                   buttonTitle: '반성글 작성하기',
                   foregroundColor: Colors.red,
                   onPressed: () async {
-                    Navigator.push(
+                    final result = await Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) {
@@ -188,6 +199,17 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
                         },
                       ),
                     );
+                    if (result == true) {
+                      // ignore: use_build_context_synchronously
+                      showToastMessage(
+                        context,
+                        text: '성공적으로 반성글을 공유했어요',
+                        icon: const Icon(
+                          Icons.check_circle,
+                          color: CustomColors.whYellow,
+                        ),
+                      );
+                    }
                   },
                 ),
               ),
@@ -202,9 +224,20 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
                     onPressed: () async {
                       provider
                           .uploadPostWithoutContents(
-                            model: viewModel.resolutionModelList![index],
-                          )
-                          .whenComplete(() => Navigator.pop(context));
+                        model: viewModel.resolutionModelList![index],
+                      )
+                          .whenComplete(() {
+                        Navigator.pop(context);
+                        // ignore: use_build_context_synchronously
+                        showToastMessage(
+                          context,
+                          text: '성공적으로 인증글을 공유했어요',
+                          icon: const Icon(
+                            Icons.check_circle,
+                            color: CustomColors.whYellow,
+                          ),
+                        );
+                      });
                     },
                   ),
                 ),
