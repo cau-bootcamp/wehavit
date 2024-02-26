@@ -39,6 +39,8 @@ class ResolutionListViewModelProvider
               (doneCount) => doneCount,
             ),
           );
+          print(entity.goalStatement);
+          print(successCount);
         } else {
           successCount = 0;
         }

@@ -1518,22 +1518,18 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }) async {
     try {
       // 현재가 월요일 10일 12:34:56이라면
-      // StartDate 값은  3일 월요일 00:00:00 으로 설정
-      // EndDate   값은 10일 월요일 00:00:00 으로 설정
+      // StartDate 값은 10일 월요일 00:00:00 으로 설정
+      // EndDate   값은 17일 월요일 00:00:00 으로 설정
       // -> start to end : 가장 최근의 월~일 (오늘이 일요일인 경우에는 이번 주)
       DateTime endDate;
       DateTime now = DateTime.now();
       int difference = now.weekday - DateTime.sunday;
       // 만약 현재 날짜가 일요일이면 현재 날짜를 반환
-      if (difference == 0) {
-        endDate =
-            DateTime(now.year, now.month, now.day).add(const Duration(days: 2));
-      } else {
-        // 현재 날짜에서 일요일까지의 차이를 뺀 값을 반환
-        final date = now.add(Duration(days: difference));
-        endDate = DateTime(date.year, date.month, date.day)
-            .add(const Duration(days: 2));
-      }
+
+      // 현재 날짜에서 일요일까지의 차이를 뺀 값을 반환
+      final date = now.subtract(Duration(days: difference));
+      endDate = DateTime(date.year, date.month, date.day)
+          .add(const Duration(days: 1));
 
       // ignore: unused_local_variable
       DateTime startDate = DateTime(endDate.year, endDate.month, endDate.day)
@@ -1568,7 +1564,8 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       return Future(
         () => left(
           const Failure(
-              'catch error on getTargetResolutionDoneCountForThisWeek'),
+            'catch error on getTargetResolutionDoneCountForThisWeek',
+          ),
         ),
       );
     }

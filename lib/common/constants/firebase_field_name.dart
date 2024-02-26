@@ -48,7 +48,7 @@ class FirebaseConfirmPostFieldName {
   static const resolutionId = 'resolutionId';
   static const title = 'title';
   static const updatedAt = 'updatedAt';
-  static const attributes = 'attrbutes';
+  static const attributes = 'attributes';
   static const attributesHasRested = 'has_rested';
 }
 

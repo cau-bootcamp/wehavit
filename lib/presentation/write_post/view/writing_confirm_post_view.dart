@@ -195,7 +195,7 @@ class _WritingConfirmPostViewState
                         viewModel.isUploading = true;
                         setState(() {});
 
-                        (await provider.uploadPost()).whenComplete(() {
+                        await provider.uploadPost().whenComplete(() {
                           viewModel.isUploading = false;
                           int count = 0;
                           Navigator.of(context).popUntil((_) => count++ >= 2);
