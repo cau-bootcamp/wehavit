@@ -23,9 +23,8 @@ FirebaseConfirmPostModel _$FirebaseConfirmPostModelFromJson(
 mixin _$FirebaseConfirmPostModel {
   String? get resolutionGoalStatement => throw _privateConstructorUsedError;
   String? get resolutionId => throw _privateConstructorUsedError;
-  String? get title => throw _privateConstructorUsedError;
   String? get content => throw _privateConstructorUsedError;
-  String? get imageUrl => throw _privateConstructorUsedError;
+  List<String>? get imageUrlList => throw _privateConstructorUsedError;
   String? get owner => throw _privateConstructorUsedError;
   int? get recentStrike => throw _privateConstructorUsedError;
   @TimestampConverter()
@@ -49,9 +48,8 @@ abstract class $FirebaseConfirmPostModelCopyWith<$Res> {
   $Res call(
       {String? resolutionGoalStatement,
       String? resolutionId,
-      String? title,
       String? content,
-      String? imageUrl,
+      List<String>? imageUrlList,
       String? owner,
       int? recentStrike,
       @TimestampConverter() DateTime? createdAt,
@@ -75,9 +73,8 @@ class _$FirebaseConfirmPostModelCopyWithImpl<$Res,
   $Res call({
     Object? resolutionGoalStatement = freezed,
     Object? resolutionId = freezed,
-    Object? title = freezed,
     Object? content = freezed,
-    Object? imageUrl = freezed,
+    Object? imageUrlList = freezed,
     Object? owner = freezed,
     Object? recentStrike = freezed,
     Object? createdAt = freezed,
@@ -93,18 +90,14 @@ class _$FirebaseConfirmPostModelCopyWithImpl<$Res,
           ? _value.resolutionId
           : resolutionId // ignore: cast_nullable_to_non_nullable
               as String?,
-      title: freezed == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String?,
       content: freezed == content
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
               as String?,
-      imageUrl: freezed == imageUrl
-          ? _value.imageUrl
-          : imageUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
+      imageUrlList: freezed == imageUrlList
+          ? _value.imageUrlList
+          : imageUrlList // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
       owner: freezed == owner
           ? _value.owner
           : owner // ignore: cast_nullable_to_non_nullable
@@ -141,9 +134,8 @@ abstract class _$$FirebaseConfirmPostModelImplCopyWith<$Res>
   $Res call(
       {String? resolutionGoalStatement,
       String? resolutionId,
-      String? title,
       String? content,
-      String? imageUrl,
+      List<String>? imageUrlList,
       String? owner,
       int? recentStrike,
       @TimestampConverter() DateTime? createdAt,
@@ -166,9 +158,8 @@ class __$$FirebaseConfirmPostModelImplCopyWithImpl<$Res>
   $Res call({
     Object? resolutionGoalStatement = freezed,
     Object? resolutionId = freezed,
-    Object? title = freezed,
     Object? content = freezed,
-    Object? imageUrl = freezed,
+    Object? imageUrlList = freezed,
     Object? owner = freezed,
     Object? recentStrike = freezed,
     Object? createdAt = freezed,
@@ -184,18 +175,14 @@ class __$$FirebaseConfirmPostModelImplCopyWithImpl<$Res>
           ? _value.resolutionId
           : resolutionId // ignore: cast_nullable_to_non_nullable
               as String?,
-      title: freezed == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String?,
       content: freezed == content
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
               as String?,
-      imageUrl: freezed == imageUrl
-          ? _value.imageUrl
-          : imageUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
+      imageUrlList: freezed == imageUrlList
+          ? _value._imageUrlList
+          : imageUrlList // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
       owner: freezed == owner
           ? _value.owner
           : owner // ignore: cast_nullable_to_non_nullable
@@ -227,15 +214,15 @@ class _$FirebaseConfirmPostModelImpl implements _FirebaseConfirmPostModel {
   const _$FirebaseConfirmPostModelImpl(
       {required this.resolutionGoalStatement,
       required this.resolutionId,
-      required this.title,
       required this.content,
-      required this.imageUrl,
+      required final List<String>? imageUrlList,
       required this.owner,
       required this.recentStrike,
       @TimestampConverter() required this.createdAt,
       @TimestampConverter() required this.updatedAt,
       required final Map<String, bool>? attributes})
-      : _attributes = attributes;
+      : _imageUrlList = imageUrlList,
+        _attributes = attributes;
 
   factory _$FirebaseConfirmPostModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$FirebaseConfirmPostModelImplFromJson(json);
@@ -245,11 +232,17 @@ class _$FirebaseConfirmPostModelImpl implements _FirebaseConfirmPostModel {
   @override
   final String? resolutionId;
   @override
-  final String? title;
-  @override
   final String? content;
+  final List<String>? _imageUrlList;
   @override
-  final String? imageUrl;
+  List<String>? get imageUrlList {
+    final value = _imageUrlList;
+    if (value == null) return null;
+    if (_imageUrlList is EqualUnmodifiableListView) return _imageUrlList;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
   final String? owner;
   @override
@@ -272,7 +265,7 @@ class _$FirebaseConfirmPostModelImpl implements _FirebaseConfirmPostModel {
 
   @override
   String toString() {
-    return 'FirebaseConfirmPostModel(resolutionGoalStatement: $resolutionGoalStatement, resolutionId: $resolutionId, title: $title, content: $content, imageUrl: $imageUrl, owner: $owner, recentStrike: $recentStrike, createdAt: $createdAt, updatedAt: $updatedAt, attributes: $attributes)';
+    return 'FirebaseConfirmPostModel(resolutionGoalStatement: $resolutionGoalStatement, resolutionId: $resolutionId, content: $content, imageUrlList: $imageUrlList, owner: $owner, recentStrike: $recentStrike, createdAt: $createdAt, updatedAt: $updatedAt, attributes: $attributes)';
   }
 
   @override
@@ -285,10 +278,9 @@ class _$FirebaseConfirmPostModelImpl implements _FirebaseConfirmPostModel {
                 other.resolutionGoalStatement == resolutionGoalStatement) &&
             (identical(other.resolutionId, resolutionId) ||
                 other.resolutionId == resolutionId) &&
-            (identical(other.title, title) || other.title == title) &&
             (identical(other.content, content) || other.content == content) &&
-            (identical(other.imageUrl, imageUrl) ||
-                other.imageUrl == imageUrl) &&
+            const DeepCollectionEquality()
+                .equals(other._imageUrlList, _imageUrlList) &&
             (identical(other.owner, owner) || other.owner == owner) &&
             (identical(other.recentStrike, recentStrike) ||
                 other.recentStrike == recentStrike) &&
@@ -306,9 +298,8 @@ class _$FirebaseConfirmPostModelImpl implements _FirebaseConfirmPostModel {
       runtimeType,
       resolutionGoalStatement,
       resolutionId,
-      title,
       content,
-      imageUrl,
+      const DeepCollectionEquality().hash(_imageUrlList),
       owner,
       recentStrike,
       createdAt,
@@ -334,9 +325,8 @@ abstract class _FirebaseConfirmPostModel implements FirebaseConfirmPostModel {
   const factory _FirebaseConfirmPostModel(
           {required final String? resolutionGoalStatement,
           required final String? resolutionId,
-          required final String? title,
           required final String? content,
-          required final String? imageUrl,
+          required final List<String>? imageUrlList,
           required final String? owner,
           required final int? recentStrike,
           @TimestampConverter() required final DateTime? createdAt,
@@ -352,11 +342,9 @@ abstract class _FirebaseConfirmPostModel implements FirebaseConfirmPostModel {
   @override
   String? get resolutionId;
   @override
-  String? get title;
-  @override
   String? get content;
   @override
-  String? get imageUrl;
+  List<String>? get imageUrlList;
   @override
   String? get owner;
   @override

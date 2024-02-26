@@ -72,12 +72,12 @@ class TestPage extends ConsumerWidget {
               },
               buttonText: 'Animation Sample View',
             ),
-            MoveButton(
-              onPressCallback: () async {
-                context.push('/lateWritingView');
-              },
-              buttonText: 'Write Confirm Post View',
-            ),
+            // MoveButton(
+            //   onPressCallback: () async {
+            //     context.push('/lateWritingView');
+            //   },
+            //   buttonText: 'Write Confirm Post View',
+            // ),
             MoveButton(
               onPressCallback: () async {
                 context.push(RouteLocation.auth);

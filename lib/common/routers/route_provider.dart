@@ -10,7 +10,6 @@ import 'package:wehavit/presentation/effects/effects.dart';
 import 'package:wehavit/presentation/friend_list/friend_list.dart';
 import 'package:wehavit/presentation/group/view/group_view.dart';
 import 'package:wehavit/presentation/home/home.dart';
-import 'package:wehavit/presentation/late_writing/late_writing.dart';
 import 'package:wehavit/presentation/my_page/my_page.dart';
 import 'package:wehavit/presentation/splash/splash.dart';
 import 'package:wehavit/presentation/test_view/group/group_sample_view.dart';
@@ -186,18 +185,6 @@ class ReactionSampleViewRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const ReactionSampleView();
-  }
-}
-
-@TypedGoRoute<LateWritingViewRoute>(path: LateWritingViewRoute.path)
-class LateWritingViewRoute extends GoRouteData {
-  const LateWritingViewRoute();
-
-  static const path = RouteLocation.lateWritingView;
-
-  @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return const LateWritingView();
   }
 }
 

@@ -15,22 +15,28 @@ class UploadConfirmPostUseCase {
   EitherFuture<bool> call({
     required String resolutionGoalStatement,
     required String resolutionId,
-    required String title,
     required String content,
-    required String imageUrl,
-    required Map<String, bool> attributes,
+    required List<String> localFileUrlList,
+    required bool hasRested,
   }) async {
-    final networkImageUrl = (await _confirmPostRepository
-            .uploadConfirmPostImage(localFileUrl: imageUrl))
-        .fold(
-      (failure) => null,
-      (imageUrl) => imageUrl,
-    );
+    final networkImageUrlList = await Future.wait(
+      localFileUrlList.map((url) async {
+        final networkImageUrl = (await _confirmPostRepository
+                .uploadConfirmPostImage(localFileUrl: url))
+            .fold(
+          (failure) => null,
+          (imageUrl) => imageUrl,
+        );
 
-    if (networkImageUrl == null) {
-      return Future(
-          () => left(const Failure('cannot upload confirm post photo')));
-    }
+        if (networkImageUrl == null) {
+          return Future(
+            () => left(const Failure('cannot upload confirm post photo')),
+          );
+        }
+
+        return networkImageUrl;
+      }).toList(),
+    ) as List<String>;
 
     final uid = (await _userModelRepository.getMyUserId()).fold(
       (failure) => null,
@@ -44,14 +50,13 @@ class UploadConfirmPostUseCase {
     final confirmPost = ConfirmPostEntity(
       resolutionGoalStatement: resolutionGoalStatement,
       resolutionId: resolutionId,
-      title: title,
       content: content,
-      imageUrl: networkImageUrl,
+      imageUrlList: networkImageUrlList,
       owner: uid,
       recentStrike: 0,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
-      attributes: attributes,
+      hasRested: hasRested,
     );
 
     return await _confirmPostRepository.createConfirmPost(confirmPost);

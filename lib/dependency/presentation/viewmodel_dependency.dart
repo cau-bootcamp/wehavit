@@ -54,20 +54,6 @@ final confirmPostListProvider = StateNotifierProvider<ConfirmPostListProvider,
   return ConfirmPostListProvider(ref);
 });
 
-final lateWritingViewModelProvider =
-    StateNotifierProvider<LateWritingViewModelProvider, LateWritingViewModel>(
-  (ref) {
-    final createPostUsecase = ref.watch(uploadConfirmPostUseCaseProvider);
-    final getMyResolutionListUsecase =
-        ref.watch(getMyResolutionListUsecaseProvider);
-
-    return LateWritingViewModelProvider(
-      createPostUsecase,
-      getMyResolutionListUsecase,
-    );
-  },
-);
-
 final addResolutionProvider =
     StateNotifierProvider.autoDispose<AddResolutionNotifier, ResolutionEntity>(
         (ref) {
@@ -123,9 +109,6 @@ final resolutionListViewModelProvider = StateNotifierProvider.autoDispose<
 
 final writingConfirmPostViewModelProvider = StateNotifierProvider.autoDispose<
     WritingConfirmPostViewModelProvider, WritingConfirmPostViewModel>((ref) {
-  final getMyResolutionListUsecase =
-      ref.watch(getMyResolutionListUsecaseProvider);
-  final getTargetResolutionDoneCountForWeekUsecase =
-      ref.watch(getTargetResolutionDoneCountForWeekUsecaseProvider);
-  return WritingConfirmPostViewModelProvider();
+  final uploadConfirmPostUsecase = ref.watch(uploadConfirmPostUseCaseProvider);
+  return WritingConfirmPostViewModelProvider(uploadConfirmPostUsecase);
 });
