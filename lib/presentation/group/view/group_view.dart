@@ -7,6 +7,7 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/group/group.dart';
+import 'package:wehavit/presentation/group_post/group_post.dart';
 
 class GroupView extends ConsumerStatefulWidget {
   const GroupView({super.key});
@@ -26,12 +27,25 @@ class _GroupViewState extends ConsumerState<GroupView> {
   @override
   Widget build(BuildContext context) {
     final viewModel = ref.watch(groupViewModelProvider);
-    // ignore: unused_local_variable
     final provider = ref.read(groupViewModelProvider.notifier);
 
     List<Widget> groupListViewCellList = (viewModel.groupListViewCellModelList
                 ?.map(
-                  (cellModel) => GroupListViewCellWidget(cellModel: cellModel),
+                  (cellModel) => GestureDetector(
+                    onTapUp: (details) async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return GroupPostView(
+                              groupEntity: cellModel.groupEntity,
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    child: GroupListViewCellWidget(cellModel: cellModel),
+                  ),
                 )
                 .toList() ??
             List<Widget>.empty())
