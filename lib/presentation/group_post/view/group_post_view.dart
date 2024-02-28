@@ -20,7 +20,7 @@ class GroupPostView extends StatelessWidget {
         backgroundColor: Colors.transparent,
         title: Text(
           groupEntity.groupName,
-          style: TextStyle(
+          style: const TextStyle(
             color: CustomColors.whWhite,
             fontSize: 20.0,
             fontWeight: FontWeight.w600,
@@ -107,6 +107,7 @@ class ConfirmPostWidget extends ConsumerStatefulWidget {
 
 class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> {
   ResolutionEntity? resEntity;
+  ConfirmPostEntity? confirmPostEntity;
 
   @override
   void didChangeDependencies() {
@@ -116,9 +117,17 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> {
         .watch(getMyResolutionListUsecaseProvider)
         .call(NoParams())
         .then((value) => value.fold((l) => null, (r) => r.first))
-        .then((value) {
+        .then((value) async {
       if (value != null) {
         resEntity = value;
+        confirmPostEntity = await ref
+            .watch(getConfirmPostListForResolutionIdUsecaseProvider)
+            (resEntity!.resolutionId ?? '')
+            .then(
+          (value) {
+            return value.fold((l) => null, (pList) => pList.first);
+          },
+        );
         setState(() {});
       }
     });
@@ -139,124 +148,123 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> {
             ),
             child: Padding(
               padding: const EdgeInsets.all(0.0),
-              child: Container(
-                child: Column(
-                  children: [
-                    Container(
-                      decoration: const BoxDecoration(
-                        color: CustomColors.whGrey,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(16.0),
-                        ),
-                        border: Border(
-                          top: BorderSide(
-                            width: 8.0,
-                            color: CustomColors.whDarkBlack,
-                            strokeAlign: BorderSide.strokeAlignInside,
-                          ),
-                          left: BorderSide(
-                            width: 8.0,
-                            color: CustomColors.whDarkBlack,
-                            strokeAlign: BorderSide.strokeAlignInside,
-                          ),
-                          right: BorderSide(
-                            width: 8.0,
-                            color: CustomColors.whDarkBlack,
-                            strokeAlign: BorderSide.strokeAlignInside,
-                          ),
-                        ),
+              child: Column(
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                      color: CustomColors.whGrey,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(16.0),
                       ),
-                      padding: const EdgeInsets.only(
-                        left: 8.0,
-                        right: 8.0,
-                        top: 4.0,
-                        bottom: 12.0,
-                      ),
-
-                      // height: 200,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Stack(
-                            alignment: Alignment.centerRight,
-                            children: [
-                              UserProfileBar(
-                                futureUserEntity: Future(
-                                    () => right(UserDataEntity.dummyModel)),
-                              ),
-                              Text(
-                                '오전 7시 38분',
-                                style: TextStyle(
-                                  color: CustomColors.whWhite,
-                                ),
-                              ),
-                            ],
-                          ),
-                          // const SizedBox(height: 12.0),
-                          if (resEntity != null)
-                            ResolutionLinearGaugeWidget(
-                              ResolutionListCellWidgetModel(
-                                entity: resEntity!,
-                                successCount: 3,
-                              ),
-                            ),
-                          const SizedBox(height: 12.0),
-                          ConfirmPostContentWidget(),
-                        ],
+                      border: Border(
+                        top: BorderSide(
+                          width: 8.0,
+                          color: CustomColors.whDarkBlack,
+                        ),
+                        left: BorderSide(
+                          width: 8.0,
+                          color: CustomColors.whDarkBlack,
+                        ),
+                        right: BorderSide(
+                          width: 8.0,
+                          color: CustomColors.whDarkBlack,
+                        ),
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    padding: const EdgeInsets.only(
+                      left: 8.0,
+                      right: 8.0,
+                      top: 4.0,
+                      bottom: 12.0,
+                    ),
+
+                    // height: 200,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextButton.icon(
-                          icon: const Icon(
-                            Icons.chat_bubble_outline,
-                            color: CustomColors.whWhite,
-                          ),
-                          label: const Text(
-                            '코멘트',
-                            style: TextStyle(
-                              color: CustomColors.whWhite,
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w300,
+                        Stack(
+                          alignment: Alignment.centerRight,
+                          children: [
+                            UserProfileBar(
+                              futureUserEntity: Future(
+                                () => right(UserDataEntity.dummyModel),
+                              ),
                             ),
-                          ),
-                          onPressed: () {},
+                            Text(
+                              // ignore: lines_longer_than_80_chars
+                              '${confirmPostEntity!.createdAt!.hour > 12 ? '오전' : '오후'} ${confirmPostEntity!.createdAt!.hour > 12 ? confirmPostEntity!.createdAt!.hour - 12 : confirmPostEntity!.createdAt!.hour}시 ${confirmPostEntity!.createdAt!.minute}분',
+                              style: const TextStyle(
+                                color: CustomColors.whWhite,
+                              ),
+                            ),
+                          ],
                         ),
-                        TextButton.icon(
-                          icon: const Icon(
-                            Icons.emoji_emotions_outlined,
-                            color: CustomColors.whWhite,
-                          ),
-                          label: const Text(
-                            '이모지',
-                            style: TextStyle(
-                              color: CustomColors.whWhite,
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w300,
+                        // const SizedBox(height: 12.0),
+                        if (resEntity != null)
+                          ResolutionLinearGaugeWidget(
+                            ResolutionListCellWidgetModel(
+                              entity: resEntity!,
+                              successCount: 3,
                             ),
                           ),
-                          onPressed: () {},
-                        ),
-                        TextButton.icon(
-                          icon: const Icon(
-                            Icons.camera_alt_outlined,
-                            color: CustomColors.whWhite,
-                          ),
-                          label: const Text(
-                            '퀵샷',
-                            style: TextStyle(
-                              color: CustomColors.whWhite,
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w300,
-                            ),
-                          ),
-                          onPressed: () {},
+                        const SizedBox(height: 12.0),
+                        ConfirmPostContentWidget(
+                          confirmPostEntity: confirmPostEntity!,
                         ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      TextButton.icon(
+                        icon: const Icon(
+                          Icons.chat_bubble_outline,
+                          color: CustomColors.whWhite,
+                        ),
+                        label: const Text(
+                          '코멘트',
+                          style: TextStyle(
+                            color: CustomColors.whWhite,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                        onPressed: () {},
+                      ),
+                      TextButton.icon(
+                        icon: const Icon(
+                          Icons.emoji_emotions_outlined,
+                          color: CustomColors.whWhite,
+                        ),
+                        label: const Text(
+                          '이모지',
+                          style: TextStyle(
+                            color: CustomColors.whWhite,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                        onPressed: () {},
+                      ),
+                      TextButton.icon(
+                        icon: const Icon(
+                          Icons.camera_alt_outlined,
+                          color: CustomColors.whWhite,
+                        ),
+                        label: const Text(
+                          '퀵샷',
+                          style: TextStyle(
+                            color: CustomColors.whWhite,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                        onPressed: () {},
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ),
@@ -269,109 +277,233 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> {
 class ConfirmPostContentWidget extends StatelessWidget {
   const ConfirmPostContentWidget({
     super.key,
+    required this.confirmPostEntity,
   });
+  final ConfirmPostEntity confirmPostEntity;
 
   @override
   Widget build(BuildContext context) {
-    if (false) {
+    if (confirmPostEntity.content != null && confirmPostEntity.content! != '') {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: Container(
-              constraints: BoxConstraints(
+              constraints: const BoxConstraints(
                 minHeight: 100,
               ),
               child: Text(
-                '군인은 현역을 면한 후가 아니면 국무위원으로 임명될 수 없다. \n 국가는 사회보장·사회복지의 증진에 노력할 의무를 진다. 정당의 설립은 자유이며, 복수정당제는 보장된다.',
+                confirmPostEntity.content!,
                 textAlign: TextAlign.start,
-                style: TextStyle(
+                style: const TextStyle(
                   color: CustomColors.whWhite,
                 ),
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 4.0,
           ),
-          if (false)
-            Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(
+          if (confirmPostEntity.imageUrlList!.isNotEmpty)
+            Stack(
+              alignment: Alignment.bottomRight,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(20.0),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withAlpha(64),
+                        offset: const Offset(0, 4),
+                        blurRadius: 4,
+                      ),
+                    ],
+                  ),
+                  clipBehavior: Clip.hardEdge,
+                  child: Image(
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) {
+                        return Stack(
+                          children: [
+                            child,
+                            if (confirmPostEntity.imageUrlList!.length > 1)
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  // ignore: lines_longer_than_80_chars
+                                  '+${confirmPostEntity.imageUrlList!.length - 1}',
+                                  style: const TextStyle(
+                                    color: CustomColors.whWhite,
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        );
+                      } else {
+                        return Container(
+                          color: CustomColors.whBlack,
+                          child: const Center(
+                            child: SizedBox(
+                              width: 30,
+                              height: 30,
+                              child: CircularProgressIndicator(
+                                color: CustomColors.whYellow,
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                    fit: BoxFit.cover,
+                    width: 150,
+                    height: 100,
+                    image: NetworkImage(
+                      confirmPostEntity.imageUrlList!.first,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+        ],
+      );
+    } else {
+      if (confirmPostEntity.imageUrlList!.length == 1) {
+        return Column(
+          children: [
+            AspectRatio(
+              aspectRatio: 1.5,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(
                     Radius.circular(20.0),
                   ),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withAlpha(64),
-                      offset: Offset(0, 4),
+                      offset: const Offset(0, 4),
                       blurRadius: 4,
-                    )
-                  ]),
-              clipBehavior: Clip.hardEdge,
-              child: Image(
-                fit: BoxFit.cover,
-                width: 150,
-                height: 100,
-                image: NetworkImage(
-                  'https://mblogthumb-phinf.pstatic.net/MjAxOTEyMDRfMjM0/MDAxNTc1NDI4ODY0MTEy.5DPI5kT24bspmKGFA1J3yDDNhrkmSbSg84VKWO2uegkg.1g5p5XKOvAV5rzm4vcXWoQN0Kkd9fwaUyU34oDev_s4g.PNG.caunselor/1.png?type=w800',
-                ),
-              ),
-            ),
-        ],
-      );
-    } else {
-      if (false) {
-        return Column(
-          children: [
-            Container(
-              child: AspectRatio(
-                aspectRatio: 1.5,
-                child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(20.0),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withAlpha(64),
-                          offset: Offset(0, 4),
-                          blurRadius: 4,
-                        )
-                      ]),
-                  clipBehavior: Clip.hardEdge,
-                  child: Image(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(
-                      'https://mblogthumb-phinf.pstatic.net/MjAxOTEyMDRfMjM0/MDAxNTc1NDI4ODY0MTEy.5DPI5kT24bspmKGFA1J3yDDNhrkmSbSg84VKWO2uegkg.1g5p5XKOvAV5rzm4vcXWoQN0Kkd9fwaUyU34oDev_s4g.PNG.caunselor/1.png?type=w800',
                     ),
+                  ],
+                ),
+                clipBehavior: Clip.hardEdge,
+                child: Image(
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    } else {
+                      return Container(
+                        color: CustomColors.whBlack,
+                        child: const Center(
+                          child: SizedBox(
+                            width: 30,
+                            height: 30,
+                            child: CircularProgressIndicator(
+                              color: CustomColors.whYellow,
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                  fit: BoxFit.cover,
+                  image: NetworkImage(
+                    confirmPostEntity.imageUrlList![0],
                   ),
                 ),
               ),
             ),
-            SizedBox(
+          ],
+        );
+      } else if (confirmPostEntity.imageUrlList!.length == 2) {
+        return Column(
+          children: [
+            AspectRatio(
+              aspectRatio: 1.5,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(20.0),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withAlpha(64),
+                      offset: const Offset(0, 4),
+                      blurRadius: 4,
+                    ),
+                  ],
+                ),
+                clipBehavior: Clip.hardEdge,
+                child: Image(
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    } else {
+                      return Container(
+                        color: CustomColors.whBlack,
+                        child: const Center(
+                          child: SizedBox(
+                            width: 30,
+                            height: 30,
+                            child: CircularProgressIndicator(
+                              color: CustomColors.whYellow,
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                  fit: BoxFit.cover,
+                  image: NetworkImage(
+                    confirmPostEntity.imageUrlList![0],
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(
               height: 8.0,
             ),
-            Container(
-              child: AspectRatio(
-                aspectRatio: 1.5,
-                child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(20.0),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withAlpha(64),
-                          offset: Offset(0, 4),
-                          blurRadius: 4,
-                        )
-                      ]),
-                  clipBehavior: Clip.hardEdge,
-                  child: Image(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(
-                      'https://mblogthumb-phinf.pstatic.net/MjAxOTEyMDRfMjM0/MDAxNTc1NDI4ODY0MTEy.5DPI5kT24bspmKGFA1J3yDDNhrkmSbSg84VKWO2uegkg.1g5p5XKOvAV5rzm4vcXWoQN0Kkd9fwaUyU34oDev_s4g.PNG.caunselor/1.png?type=w800',
+            AspectRatio(
+              aspectRatio: 1.5,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(20.0),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withAlpha(64),
+                      offset: const Offset(0, 4),
+                      blurRadius: 4,
                     ),
+                  ],
+                ),
+                clipBehavior: Clip.hardEdge,
+                child: Image(
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    } else {
+                      return Container(
+                        color: CustomColors.whBlack,
+                        child: const Center(
+                          child: SizedBox(
+                            width: 30,
+                            height: 30,
+                            child: CircularProgressIndicator(
+                              color: CustomColors.whYellow,
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                  fit: BoxFit.cover,
+                  image: NetworkImage(
+                    confirmPostEntity.imageUrlList![1],
                   ),
                 ),
               ),
@@ -386,81 +518,133 @@ class ConfirmPostContentWidget extends StatelessWidget {
                 child: Container(
                   height: double.infinity,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(
+                    borderRadius: const BorderRadius.all(
                       Radius.circular(20.0),
                     ),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withAlpha(64),
-                        offset: Offset(0, 4),
+                        offset: const Offset(0, 4),
                         blurRadius: 4,
-                      )
+                      ),
                     ],
                   ),
                   clipBehavior: Clip.hardEdge,
                   child: Image(
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child;
+                      } else {
+                        return Container(
+                          color: CustomColors.whBlack,
+                          child: const Center(
+                            child: SizedBox(
+                              width: 30,
+                              height: 30,
+                              child: CircularProgressIndicator(
+                                color: CustomColors.whYellow,
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                    },
                     fit: BoxFit.cover,
                     image: NetworkImage(
-                      'https://mblogthumb-phinf.pstatic.net/MjAxOTEyMDRfMjM0/MDAxNTc1NDI4ODY0MTEy.5DPI5kT24bspmKGFA1J3yDDNhrkmSbSg84VKWO2uegkg.1g5p5XKOvAV5rzm4vcXWoQN0Kkd9fwaUyU34oDev_s4g.PNG.caunselor/1.png?type=w800',
+                      confirmPostEntity.imageUrlList![0],
                     ),
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 8.0,
               ),
               Expanded(
                 child: Column(
                   children: [
-                    Container(
-                      child: AspectRatio(
-                        aspectRatio: 1.5,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(20.0),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withAlpha(64),
-                                  offset: Offset(0, 4),
-                                  blurRadius: 4,
-                                )
-                              ]),
-                          clipBehavior: Clip.hardEdge,
-                          child: Image(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(
-                              'https://mblogthumb-phinf.pstatic.net/MjAxOTEyMDRfMjM0/MDAxNTc1NDI4ODY0MTEy.5DPI5kT24bspmKGFA1J3yDDNhrkmSbSg84VKWO2uegkg.1g5p5XKOvAV5rzm4vcXWoQN0Kkd9fwaUyU34oDev_s4g.PNG.caunselor/1.png?type=w800',
+                    AspectRatio(
+                      aspectRatio: 1.5,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(20.0),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withAlpha(64),
+                              offset: const Offset(0, 4),
+                              blurRadius: 4,
                             ),
+                          ],
+                        ),
+                        clipBehavior: Clip.hardEdge,
+                        child: Image(
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) {
+                              return child;
+                            } else {
+                              return Container(
+                                color: CustomColors.whBlack,
+                                child: const Center(
+                                  child: SizedBox(
+                                    width: 30,
+                                    height: 30,
+                                    child: CircularProgressIndicator(
+                                      color: CustomColors.whYellow,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                          fit: BoxFit.cover,
+                          image: NetworkImage(
+                            confirmPostEntity.imageUrlList![1],
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 8.0,
                     ),
-                    Container(
-                      child: AspectRatio(
-                        aspectRatio: 1.5,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(20.0),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withAlpha(64),
-                                  offset: Offset(0, 4),
-                                  blurRadius: 4,
-                                )
-                              ]),
-                          clipBehavior: Clip.hardEdge,
-                          child: Image(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(
-                              'https://mblogthumb-phinf.pstatic.net/MjAxOTEyMDRfMjM0/MDAxNTc1NDI4ODY0MTEy.5DPI5kT24bspmKGFA1J3yDDNhrkmSbSg84VKWO2uegkg.1g5p5XKOvAV5rzm4vcXWoQN0Kkd9fwaUyU34oDev_s4g.PNG.caunselor/1.png?type=w800',
+                    AspectRatio(
+                      aspectRatio: 1.5,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(20.0),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withAlpha(64),
+                              offset: const Offset(0, 4),
+                              blurRadius: 4,
                             ),
+                          ],
+                        ),
+                        clipBehavior: Clip.hardEdge,
+                        child: Image(
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) {
+                              return child;
+                            } else {
+                              return Container(
+                                color: CustomColors.whBlack,
+                                child: const Center(
+                                  child: SizedBox(
+                                    width: 30,
+                                    height: 30,
+                                    child: CircularProgressIndicator(
+                                      color: CustomColors.whYellow,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                          fit: BoxFit.cover,
+                          image: NetworkImage(
+                            confirmPostEntity.imageUrlList![2],
                           ),
                         ),
                       ),
