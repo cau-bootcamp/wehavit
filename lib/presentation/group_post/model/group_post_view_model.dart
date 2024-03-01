@@ -8,6 +8,8 @@ import 'package:wehavit/presentation/effects/effects.dart';
 class GroupPostViewModel {
   CarouselController carouselController = CarouselController();
 
+  ScrollController scrollController = ScrollController();
+
   // Camera Reaction UI Variables
   late CameraController cameraController;
   bool isCameraInitialized = false;

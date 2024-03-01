@@ -67,6 +67,7 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
   Widget build(BuildContext context) {
     final viewModel = ref.watch(groupPostViewModelProvider);
     final provider = ref.read(groupPostViewModelProvider.notifier);
+    final reactionModel = ref.watch(reactionCameraWidgetModelProvider);
 
     return Stack(
       children: [
@@ -250,6 +251,9 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                 Expanded(
                   child: SingleChildScrollView(
                     padding: EdgeInsets.only(bottom: 20.0),
+                    physics: reactionModel.isFocusingMode
+                        ? NeverScrollableScrollPhysics()
+                        : AlwaysScrollableScrollPhysics(),
                     child: Column(
                       children: [
                         ConfirmPostWidget(
@@ -258,6 +262,11 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                           confirmPostEntity: postEntity!,
                         ),
                         SizedBox(height: 12.0),
+                        ConfirmPostWidget(
+                          panEndCallback: endOnCapturingPosition,
+                          panUpdateCallback: updatePanPosition,
+                          confirmPostEntity: postEntity!,
+                        ),
                       ],
                     ),
                   ),
@@ -484,14 +493,42 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> {
                           showEmojiSheet(context);
                         },
                       ),
-                      GestureDetector(
-                        onPanStart: (details) {
+                      Listener(
+                        // behavior: HitTestBehavior.translucent,
+                        // onTapDown: (_) {
+                        //   setState(() {
+                        //     _reactionCameraWidgetModelProvider
+                        //         .setFocusingModeTo(true);
+                        //   });
+                        // },
+                        // onTapUp: (_) {
+                        //   setState(() {
+                        //     _reactionCameraWidgetModelProvider
+                        //         .setFocusingModeTo(false);
+                        //   });
+                        // },
+                        onPointerDown: (event) {
+                          print('pan down');
+                          panningPosition = Point(
+                            event.position.dx,
+                            event.position.dy,
+                          );
+                          widget.panUpdateCallback(panningPosition);
+
+                          _reactionCameraWidgetModel =
+                              _reactionCameraWidgetModel.copyWith(
+                            currentButtonPosition: Point(
+                              event.position.dx,
+                              event.position.dy,
+                            ),
+                          );
+
                           setState(() {
                             _reactionCameraWidgetModelProvider
                                 .setFocusingModeTo(true);
                           });
                         },
-                        onPanEnd: (details) async {
+                        onPointerUp: (_) async {
                           if (_reactionCameraWidgetModelProvider
                               .isPosInCameraAreaOf(panningPosition)) {
                             widget.panEndCallback(
@@ -502,17 +539,18 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> {
                           _reactionCameraWidgetModelProvider
                               .setFocusingModeTo(false);
                         },
-                        onPanUpdate: (details) {
-                          panningPosition = Point(details.globalPosition.dx,
-                              details.globalPosition.dy);
-
+                        onPointerMove: (event) {
+                          panningPosition = Point(
+                            event.position.dx,
+                            event.position.dy,
+                          );
                           widget.panUpdateCallback(panningPosition);
 
                           _reactionCameraWidgetModel =
                               _reactionCameraWidgetModel.copyWith(
                             currentButtonPosition: Point(
-                              details.globalPosition.dx,
-                              details.globalPosition.dy,
+                              event.position.dx,
+                              event.position.dy,
                             ),
                           );
                         },

@@ -17,12 +17,12 @@ class ReactionCameraWidgetModel {
 
   bool isShowingHelpMessage = false;
 
-  double screenWidth = 300;
-  double screenHeight = 800;
+  double screenWidth = 0;
+  double screenHeight = 0;
 
-  double cameraWidgetPositionX = 100;
-  double cameraWidgetPositionY = 100;
-  double cameraWidgetRadius = 50;
+  double cameraWidgetPositionX = 0;
+  double cameraWidgetPositionY = 0;
+  double cameraWidgetRadius = 0;
 
   CameraController? cameraController;
 
