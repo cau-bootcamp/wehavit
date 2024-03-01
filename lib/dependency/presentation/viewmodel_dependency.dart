@@ -7,6 +7,7 @@ import 'package:wehavit/dependency/data/repository_dependency.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
+import 'package:wehavit/presentation/group_post/group_post.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
@@ -113,4 +114,19 @@ final writingConfirmPostViewModelProvider = StateNotifierProvider.autoDispose<
     WritingConfirmPostViewModelProvider, WritingConfirmPostViewModel>((ref) {
   final uploadConfirmPostUsecase = ref.watch(uploadConfirmPostUseCaseProvider);
   return WritingConfirmPostViewModelProvider(uploadConfirmPostUsecase);
+});
+
+final groupPostViewModelProvider = StateNotifierProvider.autoDispose<
+    GroupPostViewModelProvider, GroupPostViewModel>((ref) {
+  final sendEmojiReactionToConfirmPostUsecase =
+      ref.watch(sendEmojiReactionToConfirmPostUsecaseProvider);
+  final sendQuickShotReactionToConfirmPostUsecase =
+      ref.watch(sendQuickShotReactionToConfirmPostUsecaseProvider);
+  final sendCommentReactionToConfirmPostUsecase =
+      ref.watch(sendCommentReactionToConfirmPostUsecaseProvider);
+  return GroupPostViewModelProvider(
+    sendEmojiReactionToConfirmPostUsecase,
+    sendQuickShotReactionToConfirmPostUsecase,
+    sendCommentReactionToConfirmPostUsecase,
+  );
 });
