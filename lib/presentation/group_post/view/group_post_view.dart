@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
@@ -7,10 +8,20 @@ import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/write_post/write_post.dart';
 
-class GroupPostView extends StatelessWidget {
+class GroupPostView extends ConsumerStatefulWidget {
   const GroupPostView({super.key, required this.groupEntity});
 
   final GroupEntity groupEntity;
+
+  @override
+  ConsumerState<GroupPostView> createState() => _GroupPostViewState();
+}
+
+class _GroupPostViewState extends ConsumerState<GroupPostView> {
+  List<DateTime> calendartMondayDateList = [
+    DateTime.now(),
+    DateTime.now().subtract(const Duration(days: 7)),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +30,7 @@ class GroupPostView extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: Text(
-          groupEntity.groupName,
+          widget.groupEntity.groupName,
           style: const TextStyle(
             color: CustomColors.whWhite,
             fontSize: 20.0,
@@ -57,29 +68,139 @@ class GroupPostView extends StatelessWidget {
       ),
       body: SafeArea(
         minimum: EdgeInsets.symmetric(horizontal: 16.0),
+        bottom: false,
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(bottom: 16.0),
-              child: Row(
+              padding: const EdgeInsets.only(bottom: 12.0),
+              child: Column(
                 children: [
-                  Text(
-                    '2024년 2월 27일',
-                    style: TextStyle(
-                      color: CustomColors.whWhite,
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.w600,
-                    ),
+                  Row(
+                    children: [
+                      Text(
+                        '2024년 2월 27일',
+                        style: TextStyle(
+                          color: CustomColors.whWhite,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Icon(
+                        Icons.keyboard_arrow_down,
+                        color: CustomColors.whWhite,
+                      ),
+                    ],
                   ),
-                  Icon(
-                    Icons.keyboard_arrow_down,
-                    color: CustomColors.whWhite,
+                  Visibility(
+                    visible: true,
+                    child: Container(
+                      padding: EdgeInsets.only(top: 12),
+                      child: CarouselSlider.builder(
+                        itemBuilder: (context, index, realIndex) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: List<Widget>.generate(
+                              7,
+                              (jndex) => Expanded(
+                                child: GestureDetector(
+                                  onTapUp: (details) {
+                                    print('tap date');
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.symmetric(horizontal: 4),
+                                    height: 64,
+                                    clipBehavior: Clip.hardEdge,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(14.0),
+                                    ),
+                                    child: Container(
+                                      height: 64,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: CustomColors.whBlack,
+                                          width: 2,
+                                          strokeAlign:
+                                              BorderSide.strokeAlignOutside,
+                                        ),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            blurRadius: 4,
+                                            offset: Offset(0, 0),
+                                            color: CustomColors.whBlack,
+                                          ),
+                                          BoxShadow(
+                                            offset: Offset(0, 4),
+                                            blurRadius: 6,
+                                            color: CustomColors.whYellow,
+                                            // color: CustomColors.whGrey,
+                                            // color: CustomColors.whYellowDark,
+                                          ),
+                                        ],
+                                        borderRadius:
+                                            BorderRadius.circular(14.0),
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            '30',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                              // color: CustomColors.whPlaceholderGrey,
+                                              color: CustomColors.whBlack,
+                                            ),
+                                          ),
+                                          Text(
+                                            index.toString(),
+                                            style: TextStyle(
+                                              height: 1.0,
+                                              fontFamily: 'Giants',
+                                              fontSize: 24,
+                                              fontWeight: FontWeight.w700,
+                                              // color: CustomColors.whPlaceholderGrey,
+                                              color: CustomColors.whBlack,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                        itemCount: calendartMondayDateList.length,
+                        options: CarouselOptions(
+                          height: 64,
+                          viewportFraction: 1.0,
+                          enableInfiniteScroll: false,
+                          reverse: true,
+                          initialPage: calendartMondayDateList.length - 1,
+                          onPageChanged: (index, reason) {
+                            if (index == calendartMondayDateList.length - 1) {
+                              // 마지막 페이지에 도달했을 때 추가 요소를 추가합니다.
+                              calendartMondayDateList.insert(
+                                0,
+                                calendartMondayDateList.first.subtract(
+                                  const Duration(days: 7),
+                                ),
+                              );
+                              setState(() {});
+                            }
+                          },
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
             Expanded(
               child: SingleChildScrollView(
+                padding: EdgeInsets.only(bottom: 20.0),
                 child: const Column(
                   children: [
                     ConfirmPostWidget(),
