@@ -311,13 +311,31 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> {
                                 () => right(UserDataEntity.dummyModel),
                               ),
                             ),
-                            Text(
-                              // ignore: lines_longer_than_80_chars
-                              '${confirmPostEntity!.createdAt!.hour > 12 ? '오전' : '오후'} ${confirmPostEntity!.createdAt!.hour > 12 ? confirmPostEntity!.createdAt!.hour - 12 : confirmPostEntity!.createdAt!.hour}시 ${confirmPostEntity!.createdAt!.minute}분',
-                              style: const TextStyle(
-                                color: CustomColors.whWhite,
+                            if (true)
+                              Text(
+                                // ignore: lines_longer_than_80_chars
+                                '${confirmPostEntity!.createdAt!.hour > 12 ? '오전' : '오후'} ${confirmPostEntity!.createdAt!.hour > 12 ? confirmPostEntity!.createdAt!.hour - 12 : confirmPostEntity!.createdAt!.hour}시 ${confirmPostEntity!.createdAt!.minute}분',
+                                style: const TextStyle(
+                                  color: CustomColors.whWhite,
+                                ),
+                              )
+                            else
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16.0),
+                                  color: CustomColors.whRed,
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 4.0, horizontal: 8.0),
+                                child: Text(
+                                  '오늘 실천 실패 😢',
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.w300,
+                                    color: CustomColors.whWhite,
+                                  ),
+                                ),
                               ),
-                            ),
                           ],
                         ),
                         // const SizedBox(height: 12.0),
@@ -631,7 +649,7 @@ class ConfirmPostContentWidget extends StatelessWidget {
             ),
           ],
         );
-      } else {
+      } else if (confirmPostEntity.imageUrlList!.length == 3) {
         return IntrinsicHeight(
           child: Row(
             children: [
@@ -774,6 +792,20 @@ class ConfirmPostContentWidget extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+        );
+      } else {
+        return Container(
+          constraints: const BoxConstraints(minHeight: 150),
+          child: Center(
+            child: SizedBox(
+              width: 120,
+              height: 120,
+              // TODO: placeholder asset image 설정하기
+              child: Image.asset(
+                'assets/images/emoji_3d/smiling_face_with_heart-eyes_3d.png',
+              ),
+            ),
           ),
         );
       }
