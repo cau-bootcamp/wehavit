@@ -8,7 +8,7 @@ import 'package:wehavit/presentation/effects/emojis/shoot_emoji_widget.dart';
 
 class MainViewModel {
   // Carousel UI Variables
-  CarouselController carouselController = CarouselController();
+
   int _currentCellIndex = 0;
   int get currentCellIndex => _currentCellIndex;
   set currentCellIndex(int newIndex) {
