@@ -202,20 +202,10 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> {
                         },
                       ),
                       Listener(
-                        // behavior: HitTestBehavior.translucent,
-                        // onTapDown: (_) {
-                        //   setState(() {
-                        //     _reactionCameraWidgetModelProvider
-                        //         .setFocusingModeTo(true);
-                        //   });
-                        // },
-                        // onTapUp: (_) {
-                        //   setState(() {
-                        //     _reactionCameraWidgetModelProvider
-                        //         .setFocusingModeTo(false);
-                        //   });
-                        // },
                         onPointerDown: (event) {
+                          if (reactionCameraModel.cameraController == null) {
+                            return;
+                          }
                           print('pan down');
                           panningPosition = Point(
                             event.position.dx,
@@ -235,6 +225,10 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> {
                           });
                         },
                         onPointerUp: (_) async {
+                          if (reactionCameraModel.cameraController == null) {
+                            return;
+                          }
+
                           if (reactionCameraModelProvider
                               .isPosInCameraAreaOf(panningPosition)) {
                             widget.panEndCallback(

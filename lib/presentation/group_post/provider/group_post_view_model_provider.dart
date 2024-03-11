@@ -18,6 +18,7 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
   final SendCommentReactionToConfirmPostUsecase
       _sendCommentReactionToConfirmPostUsecase;
 
+  // Reactions
   Future<bool> initializeCamera() async {
     CameraDescription? description = await availableCameras().then(
       (cameras) {
@@ -38,7 +39,7 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
       state.cameraController =
           CameraController(description, ResolutionPreset.medium);
 
-      await state.cameraController.initialize();
+      await state.cameraController!.initialize();
       state.isCameraInitialized = true;
 
       return Future(() => true);

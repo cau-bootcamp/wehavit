@@ -1,17 +1,17 @@
-import 'dart:ui';
-
 import 'package:camera/camera.dart';
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/effects/effects.dart';
 
 class GroupPostViewModel {
   CarouselController carouselController = CarouselController();
-
   ScrollController scrollController = ScrollController();
 
+  List<ConfirmPostEntity> confirmPostList = [];
+
   // Camera Reaction UI Variables
-  late CameraController cameraController;
+  CameraController? cameraController;
   bool isCameraInitialized = false;
   bool isCameraActivated = false;
   bool isFocusingMode = false;

@@ -282,9 +282,9 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
             ),
           ),
         ),
-        if (viewModel.isCameraInitialized)
+        if (viewModel.isCameraInitialized && viewModel.cameraController != null)
           ReactionCameraWidget(
-            cameraController: viewModel.cameraController,
+            cameraController: viewModel.cameraController!,
             panPosition: panPosition,
           ),
         const ReactionAnimationWidget(),
