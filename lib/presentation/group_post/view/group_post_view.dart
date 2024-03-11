@@ -1,16 +1,15 @@
 import 'dart:math';
 
 import 'package:carousel_slider/carousel_slider.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/effects/effects.dart';
 import 'package:wehavit/presentation/group_post/group_post.dart';
-import 'package:wehavit/presentation/group_post/view/group_post_view_widget.dart';
 import 'package:wehavit/presentation/reaction/reaction.dart';
 
 class GroupPostView extends ConsumerStatefulWidget {
@@ -87,7 +86,7 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
             automaticallyImplyLeading: false,
             actions: [
               IconButton(
-                onPressed: () {},
+                onPressed: () async {},
                 icon: const Icon(
                   Icons.campaign_outlined,
                   color: CustomColors.whWhite,
@@ -108,99 +107,7 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                     isScrollControlled: true,
                     context: context,
                     builder: (context) {
-                      return GradientBottomSheet(
-                        Container(
-                          height: MediaQuery.sizeOf(context).height * 0.80,
-                          padding: EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Column(
-                            children: [
-                              Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  Center(
-                                    child: Text(
-                                      '멤버 목록',
-                                      style: TextStyle(
-                                        color: CustomColors.whWhite,
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    alignment: Alignment.centerRight,
-                                    child: IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(
-                                        Icons.manage_accounts_outlined,
-                                        color: CustomColors.whWhite,
-                                        size: 24.0,
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              SizedBox(
-                                height: 16.0,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  GestureDetector(
-                                    onTapUp: (_) {},
-                                    child: Container(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            '가나다 순',
-                                            style: TextStyle(
-                                              color: CustomColors
-                                                  .whPlaceholderGrey,
-                                              fontSize: 16.0,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                          Icon(
-                                            Icons.keyboard_arrow_down,
-                                            color:
-                                                CustomColors.whPlaceholderGrey,
-                                            size: 20.0,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Text(
-                                    '이번주 목표 달성률',
-                                    style: TextStyle(
-                                      color: CustomColors.whPlaceholderGrey,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 16.0,
-                              ),
-                              Expanded(
-                                child: Column(
-                                  children: List<Widget>.generate(
-                                    7,
-                                    (index) => Padding(
-                                      padding: EdgeInsets.only(bottom: 12.0),
-                                      child: GroupMemberManageListCellWidget(),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
+                      return GroupMemberListBottomSheet();
                     },
                   );
                 },

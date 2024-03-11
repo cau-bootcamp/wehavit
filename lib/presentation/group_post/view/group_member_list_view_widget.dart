@@ -1,5 +1,105 @@
 import 'package:flutter/material.dart';
 import 'package:wehavit/common/constants/constants.dart';
+import 'package:wehavit/presentation/common_components/common_components.dart';
+
+class GroupMemberListBottomSheet extends StatelessWidget {
+  const GroupMemberListBottomSheet({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GradientBottomSheet(
+      Container(
+        height: MediaQuery.sizeOf(context).height * 0.80,
+        padding: EdgeInsets.symmetric(horizontal: 8.0),
+        child: Column(
+          children: [
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                Center(
+                  child: Text(
+                    '멤버 목록',
+                    style: TextStyle(
+                      color: CustomColors.whWhite,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.centerRight,
+                  child: IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.manage_accounts_outlined,
+                      color: CustomColors.whWhite,
+                      size: 24.0,
+                    ),
+                  ),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 16.0,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                  onTapUp: (_) {},
+                  child: Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '가나다 순',
+                          style: TextStyle(
+                            color: CustomColors.whPlaceholderGrey,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Icon(
+                          Icons.keyboard_arrow_down,
+                          color: CustomColors.whPlaceholderGrey,
+                          size: 20.0,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Text(
+                  '이번주 목표 달성률',
+                  style: TextStyle(
+                    color: CustomColors.whPlaceholderGrey,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 16.0,
+            ),
+            Expanded(
+              child: Column(
+                children: List<Widget>.generate(
+                  7,
+                  (index) => Padding(
+                    padding: EdgeInsets.only(bottom: 12.0),
+                    child: GroupMemberManageListCellWidget(),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 class GroupMemberListCellWidget extends StatelessWidget {
   const GroupMemberListCellWidget({
@@ -108,58 +208,16 @@ class GroupMemberApplyListCellWidget extends StatelessWidget {
         ),
         Row(
           children: [
-            TextButton(
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.all(0.0),
-              ),
-              onPressed: () {
-                print('거절');
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20.0),
-                  color: CustomColors.whBrightGrey,
-                ),
-                padding: EdgeInsets.symmetric(
-                  vertical: 8.0,
-                  horizontal: 16.0,
-                ),
-                child: Text(
-                  '거절',
-                  style: TextStyle(
-                    color: CustomColors.whDarkBlack,
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
+            GroupMemberListButtonWidget(
+              label: '거절',
+              color: CustomColors.whBrightGrey,
+              onPressed: () {},
             ),
             SizedBox(width: 4.0),
-            TextButton(
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.all(0.0),
-              ),
-              onPressed: () {
-                print('수락');
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20.0),
-                  color: CustomColors.whYellow,
-                ),
-                padding: EdgeInsets.symmetric(
-                  vertical: 8.0,
-                  horizontal: 16.0,
-                ),
-                child: Text(
-                  '수락',
-                  style: TextStyle(
-                    color: CustomColors.whDarkBlack,
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
+            GroupMemberListButtonWidget(
+              label: '수락',
+              color: CustomColors.whYellow,
+              onPressed: () {},
             ),
           ],
         ),
@@ -220,35 +278,56 @@ class GroupMemberManageListCellWidget extends StatelessWidget {
         ),
         Row(
           children: [
-            TextButton(
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.all(0.0),
-              ),
-              onPressed: () {
-                print('내보내기');
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20.0),
-                  color: CustomColors.whBrightGrey,
-                ),
-                padding: EdgeInsets.symmetric(
-                  vertical: 8.0,
-                  horizontal: 16.0,
-                ),
-                child: Text(
-                  '내보내기',
-                  style: TextStyle(
-                    color: CustomColors.whDarkBlack,
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
+            GroupMemberListButtonWidget(
+              label: '내보내기',
+              color: CustomColors.whBrightGrey,
+              onPressed: () {},
             ),
           ],
         ),
       ],
+    );
+  }
+}
+
+class GroupMemberListButtonWidget extends StatelessWidget {
+  const GroupMemberListButtonWidget({
+    super.key,
+    required this.label,
+    required this.color,
+    required this.onPressed,
+  });
+
+  final String label;
+  final Color color;
+  final Function onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      style: TextButton.styleFrom(
+        padding: EdgeInsets.all(0.0),
+      ),
+      onPressed: onPressed(),
+      child: Container(
+        height: 30,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20.0),
+          color: color,
+        ),
+        padding: EdgeInsets.symmetric(
+          horizontal: 16.0,
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          label,
+          style: TextStyle(
+            color: CustomColors.whDarkBlack,
+            fontSize: 16.0,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
     );
   }
 }

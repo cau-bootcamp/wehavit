@@ -49,6 +49,8 @@ dependencies:
   multi_image_picker_plus: ^0.0.4
   fluttertoast: ^8.2.4
   images_picker: ^1.2.11
+  http: ^1.2.0
+  cp949_dart: ^1.0.0+1
 
 
 dev_dependencies:
