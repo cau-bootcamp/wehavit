@@ -96,11 +96,14 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
   }
 
   @override
-  EitherFuture<List<ConfirmPostEntity>> getConfirmPostEntityListByDate({
+  EitherFuture<List<ConfirmPostEntity>> getGroupConfirmPostEntityListByDate({
+    required String groupId,
     required DateTime selectedDate,
   }) async {
     try {
-      final getResult = await _wehavitDatasource.getConfirmPostEntityListByDate(
+      final getResult =
+          await _wehavitDatasource.getGroupConfirmPostEntityListByDate(
+        groupId,
         selectedDate,
       );
       return getResult;

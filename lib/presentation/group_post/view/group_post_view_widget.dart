@@ -5,8 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/constants/constants.dart';
 import 'package:wehavit/common/utils/emoji_assets.dart';
-import 'package:wehavit/common/utils/utils.dart';
-import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
@@ -31,45 +29,39 @@ class ConfirmPostWidget extends ConsumerStatefulWidget {
 
 class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> {
   ResolutionEntity? resEntity;
-  ConfirmPostEntity? confirmPostEntity;
-
-  @override
-  void didChangeDependencies() {
-    // TODO: 데이터 연결 이후에 삭제하기
-    super.didChangeDependencies();
-    ref
-        .watch(getMyResolutionListUsecaseProvider)
-        .call(NoParams())
-        .then((value) => value.fold((l) => null, (r) => r.first))
-        .then((value) async {
-      if (value != null) {
-        resEntity = value;
-        confirmPostEntity = await ref
-            .watch(getConfirmPostListForResolutionIdUsecaseProvider)
-            (resEntity!.resolutionId ?? '')
-            .then(
-          (value) {
-            return value.fold((l) => null, (pList) => pList.first);
-          },
-        );
-        setState(() {});
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     final viewModel = ref.watch(groupPostViewModelProvider);
     final provider = ref.read(groupPostViewModelProvider.notifier);
 
+    // ref
+    //     .watch(getMyResolutionListUsecaseProvider)
+    //     .call(NoParams())
+    //     .then((value) => value.fold((l) => null, (r) => r.first))
+    //     .then((value) async {
+    //   if (value != null) {
+    //     resEntity = value;
+    //     confirmPostEntity = await ref
+    //         .watch(getConfirmPostListForResolutionIdUsecaseProvider)
+    //         (resEntity!.resolutionId ?? '')
+    //         .then(
+    //       (value) {
+    //         return value.fold((l) => null, (pList) => pList.first);
+    //       },
+    //     );
+    //     setState(() {});
+    //   }
+    // });
+
     ReactionCameraWidgetModel reactionCameraModel =
         ref.watch(reactionCameraWidgetModelProvider);
     ReactionCameraWidgetModelProvider reactionCameraModelProvider =
         ref.read(reactionCameraWidgetModelProvider.notifier);
 
-    Point<double> panningPosition = Point(0, 0);
+    Point<double> panningPosition = const Point(0, 0);
 
-    return Container(
+    return SizedBox(
       width: double.infinity,
       child: Stack(
         children: [
@@ -124,10 +116,10 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> {
                                 () => right(UserDataEntity.dummyModel),
                               ),
                             ),
-                            if (confirmPostEntity!.hasRested == false)
+                            if (widget.confirmPostEntity.hasRested == false)
                               Text(
                                 // ignore: lines_longer_than_80_chars
-                                '${confirmPostEntity!.createdAt!.hour > 12 ? '오전' : '오후'} ${confirmPostEntity!.createdAt!.hour > 12 ? confirmPostEntity!.createdAt!.hour - 12 : confirmPostEntity!.createdAt!.hour}시 ${confirmPostEntity!.createdAt!.minute}분',
+                                '${widget.confirmPostEntity.createdAt!.hour > 12 ? '오전' : '오후'} ${widget.confirmPostEntity.createdAt!.hour > 12 ? widget.confirmPostEntity.createdAt!.hour - 12 : widget.confirmPostEntity.createdAt!.hour}시 ${widget.confirmPostEntity.createdAt!.minute}분',
                                 style: const TextStyle(
                                   color: CustomColors.whWhite,
                                 ),
@@ -161,7 +153,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> {
                           ),
                         const SizedBox(height: 12.0),
                         ConfirmPostContentWidget(
-                          confirmPostEntity: confirmPostEntity!,
+                          confirmPostEntity: widget.confirmPostEntity,
                         ),
                       ],
                     ),
@@ -508,7 +500,7 @@ class ConfirmPostContentWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (confirmPostEntity.content != null && confirmPostEntity.content! != '') {
+    if (confirmPostEntity.content != null && confirmPostEntity.content != '') {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

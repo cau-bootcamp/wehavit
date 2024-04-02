@@ -8,13 +8,13 @@ import 'package:wehavit/domain/usecases/usecases.dart';
 class ConfirmPostListProvider
     extends StateNotifier<Either<Failure, List<ConfirmPostEntity>>> {
   ConfirmPostListProvider(Ref ref) : super(const Right([])) {
-    getConfirmPostListUsecase = ref.watch(getConfirmPostListUsecaseProvider);
+    // getConfirmPostListUsecase = ref.watch(getConfirmPostListUsecaseProvider);
   }
 
-  late final GetConfirmPostListUsecase getConfirmPostListUsecase;
+  // late final GetConfirmPostListUsecase getConfirmPostListUsecase;
 
   Future<void> getConfirmPostList(DateTime selectedDate) async {
-    state = await getConfirmPostListUsecase(selectedDate);
+    // state = await getConfirmPostListUsecase(selectedDate);
   }
 
   void eraseCurrentPostList() {

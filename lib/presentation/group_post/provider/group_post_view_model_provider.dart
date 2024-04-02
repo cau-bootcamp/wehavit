@@ -6,10 +6,14 @@ import 'package:wehavit/presentation/group_post/group_post.dart';
 
 class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
   GroupPostViewModelProvider(
+    this._getGroupConfirmPostListByDateUsecase,
     this._sendEmojiReactionToConfirmPostUsecase,
     this._sendQuickShotReactionToConfirmPostUsecase,
     this._sendCommentReactionToConfirmPostUsecase,
   ) : super(GroupPostViewModel());
+
+  final GetGroupConfirmPostListByDateUsecase
+      _getGroupConfirmPostListByDateUsecase;
 
   final SendEmojiReactionToConfirmPostUsecase
       _sendEmojiReactionToConfirmPostUsecase;
@@ -17,6 +21,22 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
       _sendQuickShotReactionToConfirmPostUsecase;
   final SendCommentReactionToConfirmPostUsecase
       _sendCommentReactionToConfirmPostUsecase;
+
+  Future<void> loadConfirmPostEntityListFor({
+    required DateTime dateTime,
+  }) async {
+    final selectedDate = DateTime(dateTime.year, dateTime.month, dateTime.day);
+
+    final fetchResult = await _getGroupConfirmPostListByDateUsecase
+        .call(state.groupId, selectedDate)
+        .then((result) => result.fold((failure) => null, (list) => list));
+
+    if (fetchResult == null) {
+      return;
+    }
+
+    state.confirmPostList[selectedDate] = fetchResult;
+  }
 
   // Reactions
   Future<bool> initializeCamera() async {
@@ -83,5 +103,9 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
   void setFocusingModeTo(bool enabled) {
     final newState = (state..isFocusingMode = enabled);
     state = newState;
+  }
+
+  void changeSelectedDate({required DateTime to}) {
+    state.selectedDate = to;
   }
 }

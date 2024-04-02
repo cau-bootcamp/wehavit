@@ -9,7 +9,8 @@ abstract class WehavitDatasource {
     String email,
   );
 
-  EitherFuture<List<ConfirmPostEntity>> getConfirmPostEntityListByDate(
+  EitherFuture<List<ConfirmPostEntity>> getGroupConfirmPostEntityListByDate(
+    String groupId,
     DateTime selectedDate,
   );
 

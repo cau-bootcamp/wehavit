@@ -2,17 +2,17 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
 
-class GetConfirmPostListUsecase
-    implements FutureUseCase<List<ConfirmPostEntity>?, DateTime> {
-  GetConfirmPostListUsecase(this._confirmPostRepository);
+class GetGroupConfirmPostListByDateUsecase {
+  GetGroupConfirmPostListByDateUsecase(this._confirmPostRepository);
 
   final ConfirmPostRepository _confirmPostRepository;
 
-  @override
   EitherFuture<List<ConfirmPostEntity>> call(
+    String groupId,
     DateTime selectedDate,
   ) async {
-    return _confirmPostRepository.getConfirmPostEntityListByDate(
+    return _confirmPostRepository.getGroupConfirmPostEntityListByDate(
+      groupId: groupId,
       selectedDate: selectedDate,
     );
   }

@@ -12,13 +12,13 @@ class GroupMemberListBottomSheet extends StatelessWidget {
     return GradientBottomSheet(
       Container(
         height: MediaQuery.sizeOf(context).height * 0.80,
-        padding: EdgeInsets.symmetric(horizontal: 8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Column(
           children: [
             Stack(
               alignment: Alignment.center,
               children: [
-                Center(
+                const Center(
                   child: Text(
                     '멤버 목록',
                     style: TextStyle(
@@ -32,16 +32,16 @@ class GroupMemberListBottomSheet extends StatelessWidget {
                   alignment: Alignment.centerRight,
                   child: IconButton(
                     onPressed: () {},
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.manage_accounts_outlined,
                       color: CustomColors.whWhite,
                       size: 24.0,
                     ),
                   ),
-                )
+                ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 16.0,
             ),
             Row(
@@ -70,7 +70,7 @@ class GroupMemberListBottomSheet extends StatelessWidget {
                     ),
                   ),
                 ),
-                Text(
+                const Text(
                   '이번주 목표 달성률',
                   style: TextStyle(
                     color: CustomColors.whPlaceholderGrey,
@@ -80,7 +80,7 @@ class GroupMemberListBottomSheet extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 16.0,
             ),
             Expanded(

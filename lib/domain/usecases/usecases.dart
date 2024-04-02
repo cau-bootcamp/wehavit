@@ -8,7 +8,7 @@ export 'email_and_password_login_usecase.dart';
 export 'email_and_password_register_usecase.dart';
 export 'fetch_user_data_from_id_usecase.dart';
 export 'get_confirm_post_list_for_resolution_id.dart';
-export 'get_confirm_post_list_usecase.dart';
+export 'get_group_confirm_post_list_by_date_usecase.dart';
 export 'get_friend_list_usecase.dart';
 export 'get_group_announcement_list_usecase.dart';
 export 'get_group_entity_by_id_usecase.dart';
