@@ -9,6 +9,7 @@ import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/effects/effects.dart';
+import 'package:wehavit/presentation/group_post/group_post.dart';
 import 'package:wehavit/presentation/write_post/write_post.dart';
 
 class ConfirmPostWidget extends ConsumerStatefulWidget {
@@ -27,32 +28,16 @@ class ConfirmPostWidget extends ConsumerStatefulWidget {
   ConsumerState<ConfirmPostWidget> createState() => _ConfirmPostWidgetState();
 }
 
-class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> {
+class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
+    with TickerProviderStateMixin {
   ResolutionEntity? resEntity;
+
+  bool isShowingCommentField = false;
 
   @override
   Widget build(BuildContext context) {
     final viewModel = ref.watch(groupPostViewModelProvider);
     final provider = ref.read(groupPostViewModelProvider.notifier);
-
-    // ref
-    //     .watch(getMyResolutionListUsecaseProvider)
-    //     .call(NoParams())
-    //     .then((value) => value.fold((l) => null, (r) => r.first))
-    //     .then((value) async {
-    //   if (value != null) {
-    //     resEntity = value;
-    //     confirmPostEntity = await ref
-    //         .watch(getConfirmPostListForResolutionIdUsecaseProvider)
-    //         (resEntity!.resolutionId ?? '')
-    //         .then(
-    //       (value) {
-    //         return value.fold((l) => null, (pList) => pList.first);
-    //       },
-    //     );
-    //     setState(() {});
-    //   }
-    // });
 
     ReactionCameraWidgetModel reactionCameraModel =
         ref.watch(reactionCameraWidgetModelProvider);
@@ -174,7 +159,9 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> {
                             fontWeight: FontWeight.w300,
                           ),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          isShowingCommentField = !isShowingCommentField;
+                        },
                       ),
                       TextButton.icon(
                         icon: const Icon(
@@ -190,7 +177,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> {
                           ),
                         ),
                         onPressed: () async {
-                          showEmojiSheet(context);
+                          showEmojiSheet(viewModel, provider, context);
                         },
                       ),
                       Listener(
@@ -272,7 +259,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> {
                     ],
                   ),
                   Visibility(
-                    visible: true,
+                    visible: isShowingCommentField,
                     child: Padding(
                       padding: const EdgeInsets.only(
                         left: 8.0,
@@ -327,139 +314,158 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> {
     );
   }
 
-  Future<dynamic> showEmojiSheet(BuildContext context) {
+  Future<dynamic> showEmojiSheet(
+    GroupPostViewModel viewModel,
+    GroupPostViewModelProvider provider,
+    BuildContext context,
+  ) {
+    void disposeWidget(UniqueKey key) {
+      setState(() {
+        viewModel.emojiWidgets.remove(key);
+      });
+    }
+
     return showModalBottomSheet(
       backgroundColor: Colors.transparent,
       clipBehavior: Clip.none,
       elevation: 0,
       context: context,
       builder: (context) {
-        void disposeWidget(UniqueKey key) {
-          // setState(() {
-          //   _mainViewModel.emojiWidgets.remove(key);
-          // });
-        }
-
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
-            return GradientBottomSheet(
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  // Expanded(
-                  //   flex: 2,
-                  //   // padding: const EdgeInsets.only(bottom: 30.0),
-                  //   child:
+            return Stack(
+              alignment: Alignment.center,
+              clipBehavior: Clip.none,
+              children: [
+                Stack(
+                  alignment: Alignment.bottomCenter,
+                  clipBehavior: Clip.none,
+                  children: viewModel.emojiWidgets.values.toList(),
+                ),
+                GradientBottomSheet(
                   Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        alignment: Alignment.center,
-                        height: 70,
-                        // child: Text(
-                        //   _mainViewModel.countSend.toString(),
-                        //   style: TextStyle(
-                        //     fontSize: 40 +
-                        //         24 *
-                        //             min(
-                        //               1,
-                        //               _mainViewModel.countSend / 24,
-                        //             ),
-                        //     color: Color.lerp(
-                        //       CustomColors.whYellow,
-                        //       CustomColors.whRedBright,
-                        //       min(1, _mainV`iewModel.countSend / 24),
-                        //     ),
-                        //     fontWeight: FontWeight.w700,
-                        //     fontStyle: FontStyle.italic,
-                        //   ),
-                        // ),
-                      ),
-                      const Text(
-                        '반응을 보내주세요!',
-                        style: TextStyle(
-                          fontSize: 24,
-                          color: CustomColors.whYellow,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 36.0,
-                      )
-                    ],
-                  ),
-                  // ),
-                  Builder(
-                    builder: (context) {
-                      return SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.8,
-                        child: Column(
-                          children: List<Widget>.generate(
-                            3,
-                            (index) => Row(
-                              children: List<Widget>.generate(5, (jndex) {
-                                final key = UniqueKey();
-                                return Expanded(
-                                  key: key,
-                                  child: GestureDetector(
-                                    onTapDown: (detail) {},
-                                    onTapUp: (detail) {
-                                      shootEmoji(
-                                        setState,
-                                        index,
-                                        jndex,
-                                        detail,
-                                        context,
-                                        disposeWidget,
-                                      );
-                                    },
-                                    child: Stack(
-                                      clipBehavior: Clip.none,
-                                      children: [
-                                        Image(
-                                          image: AssetImage(
-                                            Emojis.emojiList[index * 5 + jndex],
-                                          ),
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            alignment: Alignment.bottomCenter,
+                            margin: const EdgeInsets.only(bottom: 16),
+                            height: 70,
+                            child: Text(
+                              viewModel.countSend.toString(),
+                              style: TextStyle(
+                                fontSize: 40 +
+                                    24 *
+                                        min(
+                                          1,
+                                          viewModel.countSend / 24,
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              }),
+                                color: Color.lerp(
+                                  CustomColors.whYellow,
+                                  CustomColors.whRedBright,
+                                  min(1, viewModel.countSend / 24),
+                                ),
+                                fontWeight: FontWeight.w700,
+                                fontStyle: FontStyle.italic,
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
+                          const Text(
+                            '반응을 보내주세요!',
+                            style: TextStyle(
+                              fontSize: 24,
+                              color: CustomColors.whYellow,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 36.0,
+                          ),
+                        ],
+                      ),
+                      // ),
+                      Builder(
+                        builder: (context) {
+                          return SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            child: Column(
+                              children: List<Widget>.generate(
+                                3,
+                                (index) => Row(
+                                  children: List<Widget>.generate(5, (jndex) {
+                                    final key = UniqueKey();
+                                    return Expanded(
+                                      key: key,
+                                      child: GestureDetector(
+                                        onTapDown: (detail) {},
+                                        onTapUp: (detail) {
+                                          shootEmoji(
+                                            viewModel,
+                                            setState,
+                                            index,
+                                            jndex,
+                                            detail,
+                                            context,
+                                            disposeWidget,
+                                          );
+                                        },
+                                        child: Stack(
+                                          clipBehavior: Clip.none,
+                                          children: [
+                                            Image(
+                                              image: AssetImage(
+                                                Emojis.emojiList[
+                                                    index * 5 + jndex],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  }),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      // Expanded(child: Container()),
+                      // const SizedBox(
+                      //   height: 60,
+                      // ),
+                    ],
                   ),
-                  // Expanded(child: Container()),
-                  // const SizedBox(
-                  //   height: 60,
-                  // ),
-                ],
-              ),
+                ),
+              ],
             );
           },
         );
       },
-    );
+    ).whenComplete(() {
+      viewModel.countSend = 0;
+      provider.resetSendingEmojis();
+      viewModel.emojiWidgets.clear();
+    });
   }
 
-  void setAnimationVariables() {
-    // _mainViewModel.animationController = AnimationController(
-    //   vsync: this,
-    //   duration: const Duration(milliseconds: 200),
-    // );
-    // _mainViewModel.animation = Tween<double>(begin: 0, end: 130).animate(
-    //   CurvedAnimation(
-    //     parent: _mainViewModel.animationController,
-    //     curve: Curves.linear,
-    //   ),
-    // );
-    // _mainViewModel.animationController.value = 1;
+  void setAnimationVariables(GroupPostViewModel viewModel) {
+    viewModel.animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
+    viewModel.animation = Tween<double>(begin: 0, end: 130).animate(
+      CurvedAnimation(
+        parent: viewModel.animationController,
+        curve: Curves.linear,
+      ),
+    );
+    viewModel.animationController.value = 1;
   }
 
   void shootEmoji(
+    GroupPostViewModel viewModel,
     StateSetter setState,
     int index,
     int jndex,
@@ -469,23 +475,23 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> {
   ) {
     return setState(
       () {
-        // _mainViewModel.countSend++;
-        // _mainViewModel.sendingEmojis[index * 5 + jndex] += 1;
-        // final animationWidgetKey = UniqueKey();
-        // _mainViewModel.emojiWidgets.addEntries(
-        //   {
-        //     animationWidgetKey: ShootEmojiWidget(
-        //       key: animationWidgetKey,
-        //       emojiIndex: index * 5 + jndex,
-        //       currentPos: Point(detail.globalPosition.dx, 0),
-        //       targetPos: Point(
-        //         MediaQuery.of(context).size.width / 2,
-        //         MediaQuery.of(context).size.height - 500 + 200,
-        //       ),
-        //       disposeWidgetFromParent: disposeWidget,
-        //     ),
-        //   }.entries,
-        // );
+        viewModel.countSend++;
+        viewModel.sendingEmojis[index * 5 + jndex] += 1;
+        final animationWidgetKey = UniqueKey();
+        viewModel.emojiWidgets.addEntries(
+          {
+            animationWidgetKey: ShootEmojiWidget(
+              key: animationWidgetKey,
+              emojiIndex: index * 5 + jndex,
+              currentPos: Point(detail.globalPosition.dx, 0),
+              targetPos: Point(
+                MediaQuery.of(context).size.width / 2,
+                MediaQuery.of(context).size.height - 500 + 200,
+              ),
+              disposeWidgetFromParent: disposeWidget,
+            ),
+          }.entries,
+        );
       },
     );
   }

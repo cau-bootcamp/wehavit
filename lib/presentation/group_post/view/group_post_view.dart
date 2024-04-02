@@ -106,7 +106,7 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                       Row(
                         children: [
                           Text(
-                            viewModel.todayDateString,
+                            viewModel.selectedDateString,
                             style: TextStyle(
                               color: CustomColors.whWhite,
                               fontSize: 20.0,
@@ -137,9 +137,8 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                           7 * index,
                                     ),
                                   );
-                                  final isFuture = viewModel.todayDate
-                                      // .add(Duration(days: 1))
-                                      .isBefore(cellDate);
+                                  final isFuture =
+                                      viewModel.todayDate.isBefore(cellDate);
 
                                   return Expanded(
                                     child: GestureDetector(
@@ -196,7 +195,9 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                                 MainAxisAlignment.center,
                                             children: [
                                               Text(
-                                                cellDate.day.toString(),
+                                                cellDate.day == 1
+                                                    ? '${cellDate.month}/${cellDate.day}'
+                                                    : cellDate.day.toString(),
                                                 style: TextStyle(
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w500,

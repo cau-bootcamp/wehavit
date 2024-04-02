@@ -22,7 +22,7 @@ class GroupPostViewModel {
     DateTime.now().month,
     DateTime.now().day,
   );
-  String get todayDateString => formatter.format(todayDate);
+  String get selectedDateString => formatter.format(selectedDate);
 
   Map<DateTime, List<ConfirmPostEntity>> confirmPostList = {};
 
@@ -43,6 +43,9 @@ class GroupPostViewModel {
   Map<Key, ShootEmojiWidget> emojiWidgets = {};
   int countSend = 0;
   List<int> sendingEmojis = List<int>.generate(15, (index) => 0);
+
+  late AnimationController animationController;
+  late Animation animation;
 
   // Text Reaction UI Variables
   TextEditingController textEditingController = TextEditingController();

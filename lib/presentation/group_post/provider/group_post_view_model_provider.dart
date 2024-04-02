@@ -108,4 +108,8 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
   void changeSelectedDate({required DateTime to}) {
     state.selectedDate = to;
   }
+
+  void resetSendingEmojis() {
+    state.sendingEmojis = List<int>.generate(15, (index) => 0);
+  }
 }
