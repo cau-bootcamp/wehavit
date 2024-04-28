@@ -244,7 +244,7 @@ class _AcceptGroupSampleViewState extends ConsumerState<AcceptGroupSampleView> {
                   final userList = await Future.wait(
                     acceptList.map((uid) async {
                       final entity = (await ref
-                              .read(fetchUserDataFromIdUsecaseProvider)(uid))
+                              .read(getUserDataFromIdUsecaseProvider)(uid))
                           .fold((l) => null, (entity) => entity);
 
                       if (entity != null) {

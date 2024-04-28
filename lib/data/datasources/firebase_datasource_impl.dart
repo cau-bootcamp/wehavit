@@ -1062,32 +1062,39 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     }
   }
 
+  DateTime getThisMondayDateTime() {
+    // 현재가 월요일 10일 12:34:56이라면
+    // StartDate 값은  3일 월요일 00:00:00 으로 설정
+    // EndDate   값은 10일 월요일 00:00:00 으로 설정
+    // -> start to end : 가장 최근의 월~일 (오늘이 일요일인 경우에는 이번 주)
+    DateTime endDate;
+    DateTime now = DateTime.now();
+    int difference = now.weekday - DateTime.sunday;
+    // 만약 현재 날짜가 일요일이면 현재 날짜를 반환
+    if (difference == 0) {
+      endDate =
+          DateTime(now.year, now.month, now.day).add(const Duration(days: 2));
+    } else {
+      // 현재 날짜에서 일요일까지의 차이를 뺀 값을 반환
+      final date = now.add(Duration(days: difference));
+      endDate = DateTime(date.year, date.month, date.day)
+          .add(const Duration(days: 2));
+    }
+
+    // ignore: unused_local_variable
+    DateTime startDate = DateTime(endDate.year, endDate.month, endDate.day)
+        .subtract(const Duration(days: 7));
+
+    return startDate;
+  }
+
   @override
   EitherFuture<GroupWeeklyReportEntity> getGroupWeeklyReport(
     String groupId,
   ) async {
     try {
-      // 현재가 월요일 10일 12:34:56이라면
-      // StartDate 값은  3일 월요일 00:00:00 으로 설정
-      // EndDate   값은 10일 월요일 00:00:00 으로 설정
-      // -> start to end : 가장 최근의 월~일 (오늘이 일요일인 경우에는 이번 주)
-      DateTime endDate;
-      DateTime now = DateTime.now();
-      int difference = now.weekday - DateTime.sunday;
-      // 만약 현재 날짜가 일요일이면 현재 날짜를 반환
-      if (difference == 0) {
-        endDate =
-            DateTime(now.year, now.month, now.day).add(const Duration(days: 2));
-      } else {
-        // 현재 날짜에서 일요일까지의 차이를 뺀 값을 반환
-        final date = now.add(Duration(days: difference));
-        endDate = DateTime(date.year, date.month, date.day)
-            .add(const Duration(days: 2));
-      }
-
-      // ignore: unused_local_variable
-      DateTime startDate = DateTime(endDate.year, endDate.month, endDate.day)
-          .subtract(const Duration(days: 7));
+      DateTime startDate = getThisMondayDateTime();
+      DateTime endDate = startDate.add(Duration(days: 7));
 
       // 그룹 맴버들에 대해서
       final memberList = (await firestore
@@ -1184,11 +1191,11 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
               List<bool> doneListForWeek = List.generate(7, (_) => false);
               await firestore
                   .collection(FirebaseCollectionName.confirmPosts)
-                  // .where(
-                  //   FirebaseConfirmPostFieldName.createdAt,
-                  //   isGreaterThanOrEqualTo: Timestamp.fromDate(startDate),
-                  //   isLessThanOrEqualTo: Timestamp.fromDate(endDate),
-                  // )
+                  .where(
+                    FirebaseConfirmPostFieldName.createdAt,
+                    isGreaterThanOrEqualTo: Timestamp.fromDate(startDate),
+                    isLessThanOrEqualTo: Timestamp.fromDate(endDate),
+                  )
                   .get()
                   .then(
                     (result) => result.docs.map(
@@ -1527,14 +1534,16 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
 
       final groupIdList = fetchResult.map((e) => e.toString()).toList();
 
-      final groupEntityList = (await Future.wait(groupIdList
-              .map(
-                (groupId) async => await getGroupEntity(groupId: groupId).then(
-                  (result) => result.fold(
-                      (failure) => null, (groupEntity) => groupEntity),
-                ),
-              )
-              .toList()))
+      final groupEntityList = (await Future.wait(
+        groupIdList
+            .map(
+              (groupId) async => await getGroupEntity(groupId: groupId).then(
+                (result) => result.fold(
+                    (failure) => null, (groupEntity) => groupEntity),
+              ),
+            )
+            .toList(),
+      ))
           .nonNulls
           .toList();
 
@@ -1545,6 +1554,87 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
         () => left(
           const Failure(
             'catch error on getResolutionSharingTargetGroupList',
+          ),
+        ),
+      );
+    }
+  }
+
+  @override
+  EitherFuture<List<String>> getGroupAppliedUserIdList({
+    required String groupId,
+  }) async {
+    try {
+      return firestore
+          .collection(
+            FirebaseCollectionName.getGroupApplyWaitingCollectionName(groupId),
+          )
+          .get()
+          .then(
+            (data) => data.docs
+                .map((e) => e.data()[FirebaseGroupFieldName.applyUid] as String)
+                .toList(),
+          )
+          .then((result) {
+        return right(result);
+      });
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+      return Future(
+        () => left(
+          const Failure(
+            'catch error on getGroupAppliedUserIdList',
+          ),
+        ),
+      );
+    }
+  }
+
+  @override
+  EitherFuture<double> getAchievementPercentageForGroupMember({
+    required String groupId,
+    required String userId,
+  }) async {
+    try {
+      double total = 0;
+      double successCount = 0;
+
+      final querySnapshot = await firestore
+          .collection(
+              FirebaseCollectionName.getTargetResolutionCollectionName(userId))
+          .get();
+
+      for (final doc in querySnapshot.docs) {
+        final data = doc.data();
+
+        final sharedGroupList =
+            data[FirebaseResolutionFieldName.resolutionShareGroupIdList];
+
+        if (sharedGroupList == null) {
+          return Future(() => right(0));
+        }
+
+        if (sharedGroupList.contains(groupId)) {
+          final success = await getTargetResolutionDoneCountForThisWeek(
+            resolutionId: doc.reference.id,
+          ).then((value) => value.fold((failure) => -1, (count) => count));
+          successCount += success;
+          total +=
+              data[FirebaseResolutionFieldName.resolutionActionPerWeek] as int;
+        }
+      }
+
+      if (total == 0) {
+        return Future(() => right(0));
+      }
+
+      return Future(() => right(successCount / total));
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+      return Future(
+        () => left(
+          const Failure(
+            'catch error on getAchievementPercentageForGroupMember',
           ),
         ),
       );

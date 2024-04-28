@@ -137,4 +137,22 @@ class GroupRepositoryImpl implements GroupRepository {
       groupId: groupId,
     );
   }
+
+  @override
+  EitherFuture<List<String>> getGroupAppliedUserIdList({
+    required String groupId,
+  }) {
+    return _wehavitDatasource.getGroupAppliedUserIdList(groupId: groupId);
+  }
+
+  @override
+  EitherFuture<double> getAchievementPercentageForGroupMember({
+    required String groupId,
+    required String userId,
+  }) {
+    return _wehavitDatasource.getAchievementPercentageForGroupMember(
+      groupId: groupId,
+      userId: userId,
+    );
+  }
 }

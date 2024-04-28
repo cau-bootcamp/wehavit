@@ -1,6 +1,5 @@
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/domain/entities/group_announcement_entity/group_announcement_entity.dart';
 
 abstract class WehavitDatasource {
   EitherFuture<List<UserDataEntity>> getFriendModelList();
@@ -115,4 +114,13 @@ abstract class WehavitDatasource {
   EitherFuture<List<GroupEntity>> getResolutionSharingTargetGroupList(
     String resolutionId,
   );
+
+  EitherFuture<List<String>> getGroupAppliedUserIdList({
+    required String groupId,
+  });
+
+  EitherFuture<double> getAchievementPercentageForGroupMember({
+    required String groupId,
+    required String userId,
+  });
 }

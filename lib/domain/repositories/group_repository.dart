@@ -55,4 +55,13 @@ abstract class GroupRepository {
   EitherFuture<bool> checkWhetherAlreadyRegisteredToGroup({
     required String groupId,
   });
+
+  EitherFuture<List<String>> getGroupAppliedUserIdList({
+    required String groupId,
+  });
+
+  EitherFuture<double> getAchievementPercentageForGroupMember({
+    required String groupId,
+    required String userId,
+  });
 }

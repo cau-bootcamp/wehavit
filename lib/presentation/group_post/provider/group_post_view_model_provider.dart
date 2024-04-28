@@ -105,11 +105,31 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
     state = newState;
   }
 
-  void changeSelectedDate({required DateTime to}) {
+  Future<void> changeSelectedDate({required DateTime to}) async {
     state.selectedDate = to;
+
+    final fetchResult = await _getGroupConfirmPostListByDateUsecase
+        .call(state.groupId, to)
+        .then((result) => result.fold((failure) => null, (list) => list));
+
+    if (fetchResult == null) {
+      return;
+    }
+
+    state.confirmPostList[to] = fetchResult;
   }
 
   void resetSendingEmojis() {
     state.sendingEmojis = List<int>.generate(15, (index) => 0);
+  }
+
+  Future<void> loadConfirmPostsForWeek(
+      {required DateTime mondayOfTargetWeek}) async {
+    for (int i = 0; i < 7; i++) {
+      await loadConfirmPostEntityListFor(
+        dateTime: mondayOfTargetWeek.add(Duration(days: i)),
+      );
+    }
+    return Future(() => null);
   }
 }

@@ -115,9 +115,11 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                                   borderRadius: BorderRadius.circular(16.0),
                                   color: CustomColors.whRed,
                                 ),
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 4.0, horizontal: 8.0),
-                                child: Text(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 4.0,
+                                  horizontal: 8.0,
+                                ),
+                                child: const Text(
                                   '오늘 실천 실패 😢',
                                   style: TextStyle(
                                     fontSize: 12.0,
@@ -185,7 +187,6 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                           if (reactionCameraModel.cameraController == null) {
                             return;
                           }
-                          print('pan down');
                           panningPosition = Point(
                             event.position.dx,
                             event.position.dy,
@@ -198,10 +199,12 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                               event.position.dy,
                             ),
                           );
-
-                          setState(() {
-                            reactionCameraModelProvider.setFocusingModeTo(true);
-                          });
+                          if (mounted) {
+                            setState(() {
+                              reactionCameraModelProvider
+                                  .setFocusingModeTo(true);
+                            });
+                          }
                         },
                         onPointerUp: (_) async {
                           if (reactionCameraModel.cameraController == null) {
@@ -270,7 +273,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                         alignment: Alignment.centerRight,
                         children: [
                           TextFormField(
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: CustomColors.whWhite,
                               fontSize: 16.0,
                               fontWeight: FontWeight.w300,
@@ -279,7 +282,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                               isDense: true,
                               filled: true,
                               fillColor: CustomColors.whYellowDark,
-                              contentPadding: EdgeInsets.only(
+                              contentPadding: const EdgeInsets.only(
                                 left: 12.0,
                                 right: 44.0,
                                 top: 8.0,
@@ -296,7 +299,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                           ),
                           IconButton(
                             onPressed: () {},
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.send_outlined,
                               color: CustomColors.whWhite,
                             ),
@@ -320,9 +323,11 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
     BuildContext context,
   ) {
     void disposeWidget(UniqueKey key) {
-      setState(() {
-        viewModel.emojiWidgets.remove(key);
-      });
+      if (mounted) {
+        setState(() {
+          viewModel.emojiWidgets.remove(key);
+        });
+      }
     }
 
     return showModalBottomSheet(

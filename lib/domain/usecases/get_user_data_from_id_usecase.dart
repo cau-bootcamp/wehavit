@@ -3,8 +3,8 @@ import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
 
-class FetchUserDataFromIdUsecase extends FutureUseCase<UserDataEntity, String> {
-  FetchUserDataFromIdUsecase(this._userDataEntityFetchRepository);
+class GetUserDataFromIdUsecase extends FutureUseCase<UserDataEntity, String> {
+  GetUserDataFromIdUsecase(this._userDataEntityFetchRepository);
 
   final UserModelRepository _userDataEntityFetchRepository;
   @override
