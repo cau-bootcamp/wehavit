@@ -35,16 +35,19 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
     final provider = ref.read(groupPostViewModelProvider.notifier);
     ref.watch(groupPostViewModelProvider).groupId = widget.groupEntity.groupId;
 
-    unawaited(provider.loadConfirmPostsForWeek(
-      mondayOfTargetWeek:
-          DateTime.now().subtract(Duration(days: DateTime.now().weekday - 1)),
-    ));
+    unawaited(
+      provider
+          .loadConfirmPostsForWeek(
+            mondayOfTargetWeek: DateTime.now()
+                .subtract(Duration(days: DateTime.now().weekday - 1)),
+          )
+          .whenComplete(() => setState(() {})),
+    );
     unawaited(provider.loadConfirmPostEntityListFor(dateTime: DateTime.now()));
   }
 
   @override
   Widget build(BuildContext context) {
-    print("Reload");
     final viewModel = ref.watch(groupPostViewModelProvider);
     final provider = ref.read(groupPostViewModelProvider.notifier);
     final reactionModel = ref.watch(reactionCameraWidgetModelProvider);
@@ -155,12 +158,15 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                     child: GestureDetector(
                                       onTapUp: (details) async {
                                         if (!isFuture) {
-                                          provider.changeSelectedDate(
+                                          provider
+                                              .changeSelectedDate(
                                             to: cellDate,
-                                          );
-                                        }
-                                        if (mounted) {
-                                          setState(() {});
+                                          )
+                                              .then((value) {
+                                            if (mounted) {
+                                              setState(() {});
+                                            }
+                                          });
                                         }
                                       },
                                       child: Container(
@@ -273,14 +279,14 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                     ),
                                   );
 
-                                  provider.loadConfirmPostsForWeek(
+                                  await provider
+                                      .loadConfirmPostsForWeek(
                                     mondayOfTargetWeek:
-                                        viewModel.calendartMondayDateList.first,
-                                  );
-
-                                  if (mounted) {
+                                        viewModel.calendartMondayDateList[0],
+                                  )
+                                      .whenComplete(() {
                                     setState(() {});
-                                  }
+                                  });
                                 }
                               },
                             ),
@@ -291,16 +297,45 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                   ),
                 ),
                 Expanded(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.only(bottom: 20.0),
-                    physics: reactionModel.isFocusingMode
-                        ? const NeverScrollableScrollPhysics()
-                        : const AlwaysScrollableScrollPhysics(),
-                    child: Visibility(
-                      visible:
-                          viewModel.confirmPostList[viewModel.selectedDate] !=
-                              null,
-                      replacement: Container(),
+                  child: Visibility(
+                    visible:
+                        viewModel.confirmPostList[viewModel.selectedDate] !=
+                                null &&
+                            viewModel.confirmPostList[viewModel.selectedDate]!
+                                .isNotEmpty,
+                    replacement: const Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '아무도 인증글을 남기지 않은\n조용한 날이네요',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: CustomColors.whWhite,
+                            ),
+                          ),
+                          Text(
+                            '🤫',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 40,
+                              fontWeight: FontWeight.bold,
+                              color: CustomColors.whWhite,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 60,
+                          ),
+                        ],
+                      ),
+                    ),
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.only(bottom: 20.0),
+                      physics: reactionModel.isFocusingMode
+                          ? const NeverScrollableScrollPhysics()
+                          : const AlwaysScrollableScrollPhysics(),
                       child: Column(
                         children: List<Widget>.generate(
                           viewModel.confirmPostList[viewModel.selectedDate]

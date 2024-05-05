@@ -22,14 +22,21 @@ class GroupPostViewModel {
     DateTime.now().month,
     DateTime.now().day,
   );
+
+  static final mondayOfThisWeek = DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
+  ).subtract(Duration(days: DateTime.now().weekday - 1));
+
   String get selectedDateString => formatter.format(selectedDate);
 
   Map<DateTime, List<ConfirmPostEntity>> confirmPostList = {};
 
   Point<double> panPosition = const Point<double>(0, 0);
   List<DateTime> calendartMondayDateList = [
-    DateTime.now(),
-    DateTime.now().subtract(const Duration(days: 7)),
+    mondayOfThisWeek,
+    mondayOfThisWeek.subtract(const Duration(days: 7)),
   ];
 
   // Camera Reaction UI Variables

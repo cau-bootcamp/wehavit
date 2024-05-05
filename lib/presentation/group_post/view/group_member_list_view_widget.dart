@@ -341,7 +341,6 @@ class _GroupMemberListCellWidgetState
                 label: '수락',
                 color: CustomColors.whYellow,
                 onPressed: () async {
-                  print('DEBUG: accept');
                   await ref
                       .watch(acceptApplyingForJoiningGroupUsecaseProvider)(
                     groupId: widget.groupEntity.groupId,
