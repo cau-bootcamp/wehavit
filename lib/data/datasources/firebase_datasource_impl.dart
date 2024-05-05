@@ -701,7 +701,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
         );
       }
 
-      firestore
+      await firestore
           .collection(
             FirebaseCollectionName.getGroupApplyWaitingCollectionName(
               groupId,
@@ -709,18 +709,14 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           )
           .where(FirebaseGroupFieldName.applyUid, isEqualTo: uid)
           .get()
-          .then(
-            (data) => data.docs.map(
-              (doc) async => await firestore
-                  .collection(
-                    FirebaseCollectionName.getGroupApplyWaitingCollectionName(
-                      groupId,
-                    ),
-                  )
-                  .doc(doc.id)
-                  .delete(),
-            ),
-          );
+          .then((snapshot) async {
+        print(snapshot.docs.length);
+
+        for (var doc in snapshot.docs) {
+          // 각 문서를 삭제합니다.
+          await doc.reference.delete();
+        }
+      });
 
       if (isAccepted) {
         firestore
@@ -731,7 +727,9 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
         });
 
         firestore
-            .collection(FirebaseCollectionName.userGroups)
+            .collection(
+          FirebaseCollectionName.getTargetUserGroupsCollectionName(uid),
+        )
             .add({'groupId': groupId});
       }
 

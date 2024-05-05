@@ -266,24 +266,24 @@ class _AcceptGroupSampleViewState extends ConsumerState<AcceptGroupSampleView> {
                         Text(e.userName!),
                         Spacer(),
                         ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
                               ref.read(
-                                  acceptApplyingForJoiningGroupUsecaseProvider)((
-                                groupIdController.text,
-                                e.userId!,
-                              ));
+                                  acceptApplyingForJoiningGroupUsecaseProvider)(
+                                groupId: groupIdController.text,
+                                userId: e.userId!,
+                              );
 
                               applyList.remove(e);
                               setState(() {});
                             },
                             child: Text("Accept")),
                         ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
                               ref.read(
-                                  rejectApplyingForJoiningGroupUsecaseProvider)((
-                                groupIdController.text,
-                                e.userId!,
-                              ));
+                                  rejectApplyingForJoiningGroupUsecaseProvider)(
+                                groupId: groupIdController.text,
+                                userId: e.userId!,
+                              );
                               applyList.remove(e);
                               setState(() {});
                             },

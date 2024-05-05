@@ -9,7 +9,7 @@ class GroupListViewCellWidgetModel {
     required this.sharedResolutionCount,
   });
 
-  final GroupEntity groupEntity;
+  GroupEntity groupEntity;
   final EitherFuture<int> sharedResolutionCount;
   final EitherFuture<int> sharedPostCount;
 

@@ -13,9 +13,9 @@ import 'package:wehavit/presentation/group_post/group_post.dart';
 import 'package:wehavit/presentation/reaction/reaction.dart';
 
 class GroupPostView extends ConsumerStatefulWidget {
-  const GroupPostView({super.key, required this.groupEntity});
+  GroupPostView({super.key, required this.groupEntity});
 
-  final GroupEntity groupEntity;
+  GroupEntity groupEntity;
 
   @override
   ConsumerState<GroupPostView> createState() => _GroupPostViewState();
@@ -25,33 +25,29 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+
     if (ref.watch(groupPostViewModelProvider).isCameraInitialized == false) {
       unawaited(
         ref.read(groupPostViewModelProvider.notifier).initializeCamera(),
       );
     }
+
+    final provider = ref.read(groupPostViewModelProvider.notifier);
+    ref.watch(groupPostViewModelProvider).groupId = widget.groupEntity.groupId;
+
+    unawaited(provider.loadConfirmPostsForWeek(
+      mondayOfTargetWeek:
+          DateTime.now().subtract(Duration(days: DateTime.now().weekday - 1)),
+    ));
+    unawaited(provider.loadConfirmPostEntityListFor(dateTime: DateTime.now()));
   }
 
   @override
   Widget build(BuildContext context) {
+    print("Reload");
     final viewModel = ref.watch(groupPostViewModelProvider);
     final provider = ref.read(groupPostViewModelProvider.notifier);
     final reactionModel = ref.watch(reactionCameraWidgetModelProvider);
-
-    viewModel.groupId = widget.groupEntity.groupId;
-    unawaited(
-      provider.loadConfirmPostsForWeek(
-        mondayOfTargetWeek:
-            DateTime.now().subtract(Duration(days: DateTime.now().weekday - 1)),
-      ),
-    );
-    unawaited(
-      provider.loadConfirmPostEntityListFor(dateTime: DateTime.now()).then((_) {
-        if (mounted) {
-          setState(() {});
-        }
-      }),
-    );
 
     return Stack(
       children: [
@@ -95,6 +91,7 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                     context: context,
                     builder: (context) {
                       return GroupMemberListBottomSheet(
+                        updateGroupEntity,
                         groupEntity: widget.groupEntity,
                       );
                     },
@@ -355,5 +352,12 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
     ref
         .read(groupPostViewModelProvider.notifier)
         .sendImageReaction(imageFilePath: imageFilePath, entity: entity);
+  }
+
+  Future<void> updateGroupEntity(GroupEntity groupEntity) async {
+    widget.groupEntity = groupEntity;
+    ref
+        .read(groupViewModelProvider.notifier)
+        .updateGroupEntity(forEntity: groupEntity);
   }
 }

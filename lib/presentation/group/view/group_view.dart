@@ -42,6 +42,10 @@ class _GroupViewState extends ConsumerState<GroupView> {
                             );
                           },
                         ),
+                      ).whenComplete(
+                        () => setState(
+                          () {},
+                        ),
                       );
                     },
                     child: GroupListViewCellWidget(cellModel: cellModel),

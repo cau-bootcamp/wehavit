@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/constants/constants.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
@@ -9,12 +10,14 @@ import 'package:wehavit/domain/usecases/usecases.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 
 class GroupMemberListBottomSheet extends ConsumerStatefulWidget {
-  GroupMemberListBottomSheet({
+  GroupMemberListBottomSheet(
+    this.updateParentViewGroupEntity, {
     super.key,
     required this.groupEntity,
   });
 
   GroupEntity groupEntity;
+  final Function(GroupEntity) updateParentViewGroupEntity;
 
   @override
   ConsumerState<GroupMemberListBottomSheet> createState() =>
@@ -28,7 +31,8 @@ class _GroupMemberListBottomSheetState
   List<String> appliedUidList = [];
 
   @override
-  Widget build(BuildContext context) {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     unawaited(
       ref
           .read(checkWeatherUserIsMnagerOfGroupEntityUsecaseProvider)
@@ -38,9 +42,10 @@ class _GroupMemberListBottomSheetState
           return result.fold((failure) => false, (result) => result);
         },
       ).then((result) {
-        isManager = result;
         if (mounted) {
-          setState(() {});
+          setState(() {
+            isManager = result;
+          });
         }
       }).whenComplete(() async {
         if (isManager) {
@@ -56,7 +61,10 @@ class _GroupMemberListBottomSheetState
         }
       }),
     );
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return GradientBottomSheet(
       Container(
         height: MediaQuery.sizeOf(context).height * 0.80,
@@ -110,9 +118,10 @@ class _GroupMemberListBottomSheetState
                           padding: const EdgeInsets.only(bottom: 12.0),
                           child: GroupMemberListCellWidget(
                             memberId: appliedUidList[index],
-                            groupId: widget.groupEntity.groupId,
+                            groupEntity: widget.groupEntity,
                             isManagingMode: isManagingMode,
                             isAppliedUser: true,
+                            updateGroupEntity: updateGroupEntityForApply,
                           ),
                           // child: GroupMemberManageListCellWidget(),
                         ),
@@ -164,9 +173,10 @@ class _GroupMemberListBottomSheetState
                         child: GroupMemberListCellWidget(
                           memberId:
                               widget.groupEntity.groupMemberUidList[index],
-                          groupId: widget.groupEntity.groupId,
+                          groupEntity: widget.groupEntity,
                           isManagingMode: isManagingMode,
                           isAppliedUser: false,
+                          updateGroupEntity: updateGroupEntityForApply,
                         ),
                         // child: GroupMemberManageListCellWidget(),
                       ),
@@ -180,21 +190,34 @@ class _GroupMemberListBottomSheetState
       ),
     );
   }
+
+  void updateGroupEntityForApply(
+    GroupEntity newGroupEntity,
+    String appliedUserId,
+  ) {
+    setState(() {
+      widget.groupEntity = newGroupEntity;
+      appliedUidList.remove(appliedUserId);
+      widget.updateParentViewGroupEntity(newGroupEntity);
+    });
+  }
 }
 
 class GroupMemberListCellWidget extends ConsumerStatefulWidget {
   const GroupMemberListCellWidget({
     super.key,
     required this.memberId,
-    required this.groupId,
+    required this.groupEntity,
     required this.isManagingMode,
     required this.isAppliedUser,
+    required this.updateGroupEntity,
   });
 
   final bool isManagingMode;
   final bool isAppliedUser;
   final String memberId;
-  final String groupId;
+  final GroupEntity groupEntity;
+  final Function(GroupEntity, String) updateGroupEntity;
 
   @override
   ConsumerState<GroupMemberListCellWidget> createState() =>
@@ -297,13 +320,48 @@ class _GroupMemberListCellWidgetState
               GroupMemberListButtonWidget(
                 label: '거절',
                 color: CustomColors.whBrightGrey,
-                onPressed: () {},
+                onPressed: () async {
+                  ref
+                      .watch(rejectApplyingForJoiningGroupUsecaseProvider)(
+                    groupId: widget.groupEntity.groupId,
+                    userId: widget.memberId,
+                  )
+                      .then((result) {
+                    if (result.isRight()) {
+                      widget.updateGroupEntity(
+                        widget.groupEntity,
+                        widget.memberId,
+                      );
+                    }
+                  });
+                },
               ),
               const SizedBox(width: 4.0),
               GroupMemberListButtonWidget(
                 label: '수락',
                 color: CustomColors.whYellow,
-                onPressed: () {},
+                onPressed: () async {
+                  print('DEBUG: accept');
+                  await ref
+                      .watch(acceptApplyingForJoiningGroupUsecaseProvider)(
+                    groupId: widget.groupEntity.groupId,
+                    userId: widget.memberId,
+                  )
+                      .then((result) {
+                    if (result.isRight()) {
+                      final List<String> uidList = widget
+                          .groupEntity.groupMemberUidList
+                          .append(widget.memberId)
+                          .toList();
+
+                      widget.updateGroupEntity(
+                        widget.groupEntity
+                            .copyWith(groupMemberUidList: uidList),
+                        widget.memberId,
+                      );
+                    }
+                  });
+                },
               ),
             ],
           ),
@@ -330,7 +388,7 @@ class _GroupMemberListCellWidgetState
         ref.watch(getAchievementPercentageForGroupMemberUsecaseProvider);
 
     achievePercentage = await getAchievementPercentageForGroupMemberUsecase(
-      groupId: widget.groupId,
+      groupId: widget.groupEntity.groupId,
       userId: widget.memberId,
     ).then(
       (result) => result.fold((failure) => 0.0, (percentage) => percentage),
@@ -351,7 +409,7 @@ class GroupMemberListButtonWidget extends StatelessWidget {
 
   final String label;
   final Color color;
-  final Function onPressed;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -359,7 +417,7 @@ class GroupMemberListButtonWidget extends StatelessWidget {
       style: TextButton.styleFrom(
         padding: const EdgeInsets.all(0.0),
       ),
-      onPressed: onPressed(),
+      onPressed: onPressed,
       child: Container(
         height: 30,
         decoration: BoxDecoration(
