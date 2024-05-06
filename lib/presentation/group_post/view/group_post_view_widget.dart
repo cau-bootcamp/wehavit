@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/constants/constants.dart';
 import 'package:wehavit/common/utils/emoji_assets.dart';
+import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
@@ -14,15 +15,11 @@ import 'package:wehavit/presentation/write_post/write_post.dart';
 
 class ConfirmPostWidget extends ConsumerStatefulWidget {
   const ConfirmPostWidget({
-    required this.panEndCallback,
-    required this.panUpdateCallback,
     required this.confirmPostEntity,
     super.key,
   });
 
   final ConfirmPostEntity confirmPostEntity;
-  final Function panEndCallback;
-  final Function panUpdateCallback;
 
   @override
   ConsumerState<ConfirmPostWidget> createState() => _ConfirmPostWidgetState();
@@ -33,11 +30,12 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
   ResolutionEntity? resEntity;
 
   bool isShowingCommentField = false;
+  TextEditingController commentEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = ref.watch(groupPostViewModelProvider);
-    final provider = ref.read(groupPostViewModelProvider.notifier);
+    var viewModel = ref.watch(groupPostViewModelProvider);
+    var provider = ref.read(groupPostViewModelProvider.notifier);
 
     ReactionCameraWidgetModel reactionCameraModel =
         ref.watch(reactionCameraWidgetModelProvider);
@@ -162,7 +160,9 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                           ),
                         ),
                         onPressed: () {
-                          isShowingCommentField = !isShowingCommentField;
+                          setState(() {
+                            isShowingCommentField = !isShowingCommentField;
+                          });
                         },
                       ),
                       TextButton.icon(
@@ -183,56 +183,56 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                         },
                       ),
                       Listener(
-                        onPointerDown: (event) {
+                        onPointerDown: (event) async {
+                          await reactionCameraModelProvider
+                              .setFocusingModeTo(true);
+
                           if (reactionCameraModel.cameraController == null) {
                             return;
                           }
+
                           panningPosition = Point(
                             event.position.dx,
                             event.position.dy,
                           );
-                          widget.panUpdateCallback(panningPosition);
 
-                          reactionCameraModel = reactionCameraModel.copyWith(
-                            currentButtonPosition: Point(
-                              event.position.dx,
-                              event.position.dy,
-                            ),
-                          );
+                          reactionCameraModelProvider
+                              .updatePanPosition(panningPosition);
+
                           if (mounted) {
-                            setState(() {
-                              reactionCameraModelProvider
-                                  .setFocusingModeTo(true);
-                            });
+                            setState(() {});
                           }
                         },
                         onPointerUp: (_) async {
+                          await reactionCameraModelProvider
+                              .setFocusingModeTo(false);
+
                           if (reactionCameraModel.cameraController == null) {
                             return;
                           }
 
                           if (reactionCameraModelProvider
                               .isPosInCameraAreaOf(panningPosition)) {
-                            widget.panEndCallback(
-                              panningPosition,
-                              widget.confirmPostEntity,
+                            final imageFilePath =
+                                await reactionCameraModelProvider
+                                    .endOnCapturingPosition();
+
+                            await provider.sendImageReaction(
+                              entity: widget.confirmPostEntity,
+                              imageFilePath: imageFilePath,
                             );
                           }
-                          reactionCameraModelProvider.setFocusingModeTo(false);
+
+                          setState(() {});
                         },
                         onPointerMove: (event) {
                           panningPosition = Point(
                             event.position.dx,
                             event.position.dy,
                           );
-                          widget.panUpdateCallback(panningPosition);
 
-                          reactionCameraModel = reactionCameraModel.copyWith(
-                            currentButtonPosition: Point(
-                              event.position.dx,
-                              event.position.dy,
-                            ),
-                          );
+                          reactionCameraModelProvider
+                              .updatePanPosition(panningPosition);
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -273,6 +273,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                         alignment: Alignment.centerRight,
                         children: [
                           TextFormField(
+                            controller: commentEditingController,
                             style: const TextStyle(
                               color: CustomColors.whWhite,
                               fontSize: 16.0,
@@ -298,7 +299,18 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                             ),
                           ),
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              sendMessageReaction(
+                                widget.confirmPostEntity,
+                                commentEditingController.text,
+                              ).whenComplete(() {
+                                commentEditingController.clear();
+
+                                setState(() {
+                                  isShowingCommentField = false;
+                                });
+                              });
+                            },
                             icon: const Icon(
                               Icons.send_outlined,
                               color: CustomColors.whWhite,
@@ -315,6 +327,15 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
         ],
       ),
     );
+  }
+
+  Future<void> sendMessageReaction(
+    ConfirmPostEntity confirmPostEntity,
+    String comment,
+  ) async {
+    await ref
+        .read(sendCommentReactionToConfirmPostUsecaseProvider)
+        .call((confirmPostEntity, comment));
   }
 
   Future<dynamic> showEmojiSheet(
@@ -448,7 +469,9 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
           },
         );
       },
-    ).whenComplete(() {
+    ).whenComplete(() async {
+      await provider.sendEmojiReaction(entity: widget.confirmPostEntity);
+
       viewModel.countSend = 0;
       provider.resetSendingEmojis();
       viewModel.emojiWidgets.clear();

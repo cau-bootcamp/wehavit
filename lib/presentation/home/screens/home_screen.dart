@@ -268,11 +268,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               ],
             ),
           ),
-          if (_mainViewModel.isCameraInitialized)
-            ReactionCameraWidget(
-              cameraController: _mainViewModel.cameraController,
-              panPosition: panPosition,
-            ),
+          // if (_mainViewModel.isCameraInitialized)
+          // ReactionCameraWidget(
+          //   cameraController: _mainViewModel.cameraController,
+          //   panPosition: panPosition,
+          // ),
           const ReactionAnimationWidget(),
         ],
       ),

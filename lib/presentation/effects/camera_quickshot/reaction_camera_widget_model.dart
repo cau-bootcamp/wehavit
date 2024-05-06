@@ -26,18 +26,31 @@ class ReactionCameraWidgetModel {
 
   CameraController? cameraController;
 
+  // Point<double> panPosition = const Point<double>(0, 0);
+
   ReactionCameraWidgetModel copyWith({
     bool? isFocusingMode,
-    CameraController? cameraController,
     Point<double>? currentButtonPosition,
   }) {
     final newModel = ReactionCameraWidgetModel();
-    newModel.isFocusingMode = isFocusingMode ?? newModel.isFocusingMode;
-    newModel.cameraController = cameraController ?? newModel.cameraController;
+
+    newModel.isFocusingMode = isFocusingMode ?? this.isFocusingMode;
     newModel.cameraButtonXOffset =
-        currentButtonPosition?.x ?? newModel.cameraButtonXOffset;
+        currentButtonPosition?.x ?? cameraButtonXOffset;
     newModel.cameraButtonYOffset =
-        currentButtonPosition?.y ?? newModel.cameraButtonYOffset;
+        currentButtonPosition?.y ?? cameraButtonYOffset;
+
+    newModel.repaintBoundaryGlobalKey = repaintBoundaryGlobalKey;
+    newModel.cameraButtonOriginXOffset = cameraButtonOriginXOffset;
+    newModel.cameraButtonOriginYOffset = cameraButtonOriginYOffset;
+    newModel.cameraButtonRadius = cameraButtonRadius;
+    newModel.isShowingHelpMessage = isShowingHelpMessage;
+    newModel.screenHeight = screenHeight;
+    newModel.screenWidth = screenWidth;
+    newModel.cameraWidgetPositionX = cameraButtonOriginXOffset;
+    newModel.cameraWidgetPositionY = cameraWidgetPositionY;
+    newModel.cameraWidgetRadius = cameraWidgetRadius;
+    newModel.cameraController = cameraController;
 
     return newModel;
   }

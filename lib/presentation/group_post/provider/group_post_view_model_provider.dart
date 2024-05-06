@@ -39,35 +39,6 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
   }
 
   // Reactions
-  Future<bool> initializeCamera() async {
-    CameraDescription? description = await availableCameras().then(
-      (cameras) {
-        if (cameras.isEmpty) {
-          return null;
-        }
-
-        return cameras.firstWhere(
-          (camera) => camera.lensDirection == CameraLensDirection.front,
-        );
-      },
-      onError: (onError) {
-        return Future(() => false);
-      },
-    );
-
-    if (!state.isCameraInitialized && description != null) {
-      state.cameraController =
-          CameraController(description, ResolutionPreset.medium);
-
-      await state.cameraController!.initialize();
-      state.isCameraInitialized = true;
-
-      return Future(() => true);
-    }
-
-    return Future(() => false);
-  }
-
   Future<void> sendEmojiReaction({required ConfirmPostEntity entity}) async {
     state.emojiWidgets.clear();
 
@@ -87,7 +58,8 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
     required String imageFilePath,
     required ConfirmPostEntity entity,
   }) async {
-    _sendQuickShotReactionToConfirmPostUsecase((entity, imageFilePath));
+    _sendQuickShotReactionToConfirmPostUsecase((entity, imageFilePath))
+        .then((value) => print(value));
   }
 
   Future<void> sendTextReaction({required ConfirmPostEntity entity}) async {

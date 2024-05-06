@@ -26,12 +26,6 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    if (ref.watch(groupPostViewModelProvider).isCameraInitialized == false) {
-      unawaited(
-        ref.read(groupPostViewModelProvider.notifier).initializeCamera(),
-      );
-    }
-
     final provider = ref.read(groupPostViewModelProvider.notifier);
     ref.watch(groupPostViewModelProvider).groupId = widget.groupEntity.groupId;
 
@@ -50,7 +44,8 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
   Widget build(BuildContext context) {
     final viewModel = ref.watch(groupPostViewModelProvider);
     final provider = ref.read(groupPostViewModelProvider.notifier);
-    final reactionModel = ref.watch(reactionCameraWidgetModelProvider);
+    final reactionCameraViewModel =
+        ref.watch(reactionCameraWidgetModelProvider);
 
     return Stack(
       children: [
@@ -333,7 +328,7 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                     ),
                     child: SingleChildScrollView(
                       padding: const EdgeInsets.only(bottom: 20.0),
-                      physics: reactionModel.isFocusingMode
+                      physics: reactionCameraViewModel.isFocusingMode
                           ? const NeverScrollableScrollPhysics()
                           : const AlwaysScrollableScrollPhysics(),
                       child: Column(
@@ -344,8 +339,6 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                           (index) => Padding(
                             padding: const EdgeInsets.only(bottom: 12.0),
                             child: ConfirmPostWidget(
-                              panEndCallback: endOnCapturingPosition,
-                              panUpdateCallback: updatePanPosition,
                               confirmPostEntity: viewModel.confirmPostList[
                                   viewModel.selectedDate]![index],
                             ),
@@ -359,34 +352,10 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
             ),
           ),
         ),
-        if (viewModel.isCameraInitialized && viewModel.cameraController != null)
-          ReactionCameraWidget(
-            cameraController: viewModel.cameraController!,
-            panPosition: viewModel.panPosition,
-          ),
+        const ReactionCameraWidget(),
         const ReactionAnimationWidget(),
       ],
     );
-  }
-
-  void updatePanPosition(GroupPostViewModel viewModel, Point<double> position) {
-    if (mounted) {
-      setState(() {
-        viewModel.panPosition = position;
-      });
-    }
-  }
-
-  Future<void> endOnCapturingPosition(
-    Point<double> position,
-    ConfirmPostEntity entity,
-  ) async {
-    final imageFilePath =
-        await ref.watch(reactionCameraWidgetModelProvider.notifier).capture();
-
-    ref
-        .read(groupPostViewModelProvider.notifier)
-        .sendImageReaction(imageFilePath: imageFilePath, entity: entity);
   }
 
   Future<void> updateGroupEntity(GroupEntity groupEntity) async {
