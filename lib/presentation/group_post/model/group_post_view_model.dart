@@ -35,8 +35,8 @@ class GroupPostViewModel {
 
   Point<double> panPosition = const Point<double>(0, 0);
   List<DateTime> calendartMondayDateList = [
-    mondayOfThisWeek,
     mondayOfThisWeek.subtract(const Duration(days: 7)),
+    mondayOfThisWeek,
   ];
 
   // Camera Reaction UI Variables

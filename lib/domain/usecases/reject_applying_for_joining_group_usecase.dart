@@ -6,7 +6,6 @@ class RejectApplyingForJoiningGroupUsecase {
 
   final GroupRepository _groupRepository;
 
-  @override
   EitherFuture<void> call({required String groupId, required String userId}) {
     return _groupRepository.rejectApplyingForGroup(
       groupId: groupId,

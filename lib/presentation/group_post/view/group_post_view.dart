@@ -25,18 +25,26 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
+    final viewModel = ref.watch(groupPostViewModelProvider);
     final provider = ref.read(groupPostViewModelProvider.notifier);
     ref.watch(groupPostViewModelProvider).groupId = widget.groupEntity.groupId;
 
     unawaited(
       provider
           .loadConfirmPostsForWeek(
-            mondayOfTargetWeek: DateTime.now()
-                .subtract(Duration(days: DateTime.now().weekday - 1)),
+            mondayOfTargetWeek: viewModel.calendartMondayDateList[0],
           )
           .whenComplete(() => setState(() {})),
     );
+
+    unawaited(
+      provider
+          .loadConfirmPostsForWeek(
+            mondayOfTargetWeek: viewModel.calendartMondayDateList[1],
+          )
+          .whenComplete(() => setState(() {})),
+    );
+
     unawaited(provider.loadConfirmPostEntityListFor(dateTime: DateTime.now()));
   }
 
