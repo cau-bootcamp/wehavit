@@ -71,7 +71,10 @@ abstract class WehavitDatasource {
     required bool isAccepted,
   });
 
-  EitherFuture<void> withdrawalFromGroup({required String groupId});
+  EitherFuture<void> withdrawalFromGroup({
+    required String groupId,
+    required String targetUserId,
+  });
 
   EitherFuture<List<GroupEntity>> getGroupEntityList();
 

@@ -165,9 +165,9 @@ final rejectApplyingForJoiningGroupUsecaseProvider =
 });
 
 final withdrawalFromGroupUsecaseProvider =
-    Provider<WithdrawalFromGroupUsecase>((ref) {
+    Provider<WithdrawalTargetUserFromGroupUsecase>((ref) {
   final groupRepository = ref.watch(groupRepositoryProvider);
-  return WithdrawalFromGroupUsecase(groupRepository);
+  return WithdrawalTargetUserFromGroupUsecase(groupRepository);
 });
 
 final getGroupListUseCaseProvider = Provider<GetGroupListUsecase>((ref) {

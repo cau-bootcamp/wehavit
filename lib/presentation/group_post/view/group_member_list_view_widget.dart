@@ -310,7 +310,27 @@ class _GroupMemberListCellWidgetState
                 GroupMemberListButtonWidget(
                   label: '내보내기',
                   color: CustomColors.whBrightGrey,
-                  onPressed: () {},
+                  onPressed: () async {
+                    await ref
+                        .watch(withdrawalFromGroupUsecaseProvider)(
+                      groupId: widget.groupEntity.groupId,
+                      targetUserId: widget.memberId,
+                    )
+                        .then((result) {
+                      if (result.isRight()) {
+                        final List<String> uidList = widget
+                            .groupEntity.groupMemberUidList
+                            .where((element) => element != widget.memberId)
+                            .toList();
+
+                        widget.updateGroupEntity(
+                          widget.groupEntity
+                              .copyWith(groupMemberUidList: uidList),
+                          widget.memberId,
+                        );
+                      }
+                    });
+                  },
                 ),
               ],
             ),

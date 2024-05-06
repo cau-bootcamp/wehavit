@@ -326,8 +326,8 @@ class _WithdrawalGroupSampleViewState
               ),
               ElevatedButton(
                 onPressed: () async {
-                  final groupId = groupIdController.text;
-                  ref.read(withdrawalFromGroupUsecaseProvider)(groupId);
+                  // final groupId = groupIdController.text;
+                  // ref.read(withdrawalFromGroupUsecaseProvider)(groupId);
                 },
                 child: const Text('withdrawal'),
               ),

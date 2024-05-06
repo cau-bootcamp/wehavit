@@ -740,12 +740,35 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }
 
   @override
-  EitherFuture<void> withdrawalFromGroup({required String groupId}) async {
+  EitherFuture<void> withdrawalFromGroup({
+    required String groupId,
+    required String targetUserId,
+  }) async {
     try {
       final myUid = getMyUserId();
 
+      final isManager = await firestore
+          .collection(FirebaseCollectionName.groups)
+          .doc(groupId)
+          .get()
+          .then(
+            (value) =>
+                value.data()?[FirebaseGroupFieldName.managerUid] == myUid,
+          );
+
+      if (!isManager) {
+        debugPrint('current user is not a group manager');
+        return Future(
+          () => left(const Failure('current user is not a group manager')),
+        );
+      }
+
       await firestore
-          .collection(FirebaseCollectionName.userGroups)
+          .collection(
+            FirebaseCollectionName.getTargetUserGroupsCollectionName(
+              targetUserId,
+            ),
+          )
           .where('groupId', isEqualTo: groupId)
           .get()
           .then((value) {
@@ -756,7 +779,11 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       });
 
       firestore
-          .collection(FirebaseCollectionName.userGroups)
+          .collection(
+            FirebaseCollectionName.getTargetUserGroupsCollectionName(
+              targetUserId,
+            ),
+          )
           .where('groupId', isEqualTo: groupId)
           .get()
           .then((querySnapshot) {
@@ -808,7 +835,8 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
             .collection(FirebaseCollectionName.groups)
             .doc(groupId)
             .update({
-          FirebaseGroupFieldName.memberUidList: FieldValue.arrayRemove([myUid]),
+          FirebaseGroupFieldName.memberUidList:
+              FieldValue.arrayRemove([targetUserId]),
         });
       }
       // 남은 인원이 음수인 경우는 없음

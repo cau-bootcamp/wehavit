@@ -24,7 +24,10 @@ abstract class GroupRepository {
     required String targetUid,
   });
 
-  EitherFuture<void> withdrawalFromGroup({required String groupId});
+  EitherFuture<void> withdrawalTargetUserFromGroup({
+    required String groupId,
+    required String targetUserId,
+  });
 
   EitherFuture<GroupEntity> getGroupEntity({required String groupId});
 
