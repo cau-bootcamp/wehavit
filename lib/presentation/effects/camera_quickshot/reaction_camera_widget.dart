@@ -67,19 +67,6 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
                     ),
                   ),
                   Positioned(
-                    top: 100,
-                    child: Text(
-                      '아래로 손가락을 움직여\n사진으로 격려를 남기세요',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        decoration: TextDecoration.none,
-                        color: CustomColors.whWhite,
-                        fontSize: 24,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                  Positioned(
                     top: _reactionCameraWidgetModel.cameraWidgetPositionY,
                     width: _reactionCameraWidgetModel.cameraWidgetRadius * 2,
                     height: _reactionCameraWidgetModel.cameraWidgetRadius *
@@ -98,7 +85,10 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
                               shape: BoxShape.circle,
                               border: Border.all(
                                 // 테두리 스타일 설정
-                                color: Colors.white, // 테두리 색상
+                                color: _reactionCameraWidgetModel
+                                        .isPosInCapturingArea
+                                    ? Colors.white
+                                    : Colors.transparent, // 테두리 색상
                                 width: 4, // 테두리 두께
                               ),
                             ),
@@ -106,8 +96,6 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  // 테두리 스타일 설정
-                                  color: Colors.black, // 테두리 색상
                                   width: 4, // 테두리 두께
                                 ),
                               ),
@@ -124,6 +112,17 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
                             ),
                           ),
                         ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 0.0,
+                    child: Container(
+                      color: Colors.transparent,
+                      height: 155,
+                      width: MediaQuery.of(context).size.width,
+                      child: CustomPaint(
+                        painter: CurvePainter(),
                       ),
                     ),
                   ),
@@ -145,12 +144,27 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
                     ),
                   ),
                   Positioned(
+                    top: 100,
+                    child: Text(
+                      _reactionCameraWidgetModel.isPosInCapturingArea
+                          ? '손가락을 떼면 격려가 전송됩니다\n📸 바로 지금! 📸'
+                          : '아래로 손가락을 움직여\n사진으로 격려를 남기세요',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        decoration: TextDecoration.none,
+                        color: CustomColors.whWhite,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                  Positioned(
                     width: MediaQuery.of(context).size.width,
                     left: 0,
                     top: _reactionCameraWidgetModel.cameraWidgetPositionY +
                         _reactionCameraWidgetModel.cameraWidgetRadius * 2 +
                         100,
-                    child: Text(
+                    child: const Text(
                       '취소하려면 지금 손가락을 떼세요',
                       style: TextStyle(
                         decoration: TextDecoration.none,
@@ -159,19 +173,6 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
                         fontWeight: FontWeight.w300,
                       ),
                       textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 0.0,
-                    child: Container(
-                      child: Container(
-                        color: Colors.transparent,
-                        height: 155,
-                        width: MediaQuery.of(context).size.width,
-                        child: CustomPaint(
-                          painter: CurvePainter(),
-                        ),
-                      ),
                     ),
                   ),
                 ],

@@ -30,6 +30,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
   ResolutionEntity? resEntity;
 
   bool isShowingCommentField = false;
+  bool isTouchMoved = false;
   TextEditingController commentEditingController = TextEditingController();
 
   @override
@@ -184,8 +185,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                       ),
                       Listener(
                         onPointerDown: (event) async {
-                          await reactionCameraModelProvider
-                              .setFocusingModeTo(true);
+                          isTouchMoved = false;
 
                           if (reactionCameraModel.cameraController == null) {
                             return;
@@ -204,6 +204,15 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                           }
                         },
                         onPointerUp: (_) async {
+                          if (!isTouchMoved) {
+                            showToastMessage(context,
+                                text: '퀵샷 버튼을 누르고 드래그 해주세요!',
+                                icon: const Icon(
+                                  Icons.warning,
+                                  color: CustomColors.whYellow,
+                                ));
+                            return;
+                          }
                           await reactionCameraModelProvider
                               .setFocusingModeTo(false);
 
@@ -211,11 +220,11 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                             return;
                           }
 
-                          if (reactionCameraModelProvider
-                              .isPosInCameraAreaOf(panningPosition)) {
+                          print(reactionCameraModel.isPosInCapturingArea);
+                          if (reactionCameraModel.isPosInCapturingArea) {
                             final imageFilePath =
                                 await reactionCameraModelProvider
-                                    .endOnCapturingPosition();
+                                    .endOnCapturingArea();
 
                             await provider.sendImageReaction(
                               entity: widget.confirmPostEntity,
@@ -223,9 +232,15 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                             );
                           }
 
+                          print(panningPosition);
+
                           setState(() {});
                         },
-                        onPointerMove: (event) {
+                        onPointerMove: (event) async {
+                          isTouchMoved = true;
+                          await reactionCameraModelProvider
+                              .setFocusingModeTo(true);
+
                           panningPosition = Point(
                             event.position.dx,
                             event.position.dy,

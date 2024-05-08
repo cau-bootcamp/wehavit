@@ -73,27 +73,30 @@ class ReactionCameraWidgetModelProvider
   }
 
   void updatePanPosition(Point<double> position) {
-    state = state.copyWith(currentButtonPosition: position);
+    if (checkPosInCapturingArea(position)) {
+      state = state.copyWith(
+        currentButtonPosition: position,
+        isPosInCapturingArea: true,
+      );
+      return;
+    }
+
+    state = state.copyWith(
+      currentButtonPosition: position,
+      isPosInCapturingArea: false,
+    );
   }
 
-  Future<String> endOnCapturingPosition() async {
-    print("DEBUG: end on capture");
-    final imageFilePath = await capture();
-
-    return imageFilePath;
-  }
-
-  bool isPosInCameraAreaOf(Point<double> pos) {
-    if (Point(pos.x, pos.y).distanceTo(
-          Point(
-            state.screenWidth / 2,
-            state.cameraWidgetPositionY + state.cameraWidgetRadius,
-          ),
-        ) <
-        state.cameraWidgetRadius) {
+  bool checkPosInCapturingArea(Point<double> position) {
+    if (state.screenHeight - position.y <= 150) {
       return true;
     }
     return false;
+  }
+
+  Future<String> endOnCapturingArea() async {
+    final imageFilePath = await capture();
+    return imageFilePath;
   }
 
   bool isCameraButtonPanned(Point offset) {

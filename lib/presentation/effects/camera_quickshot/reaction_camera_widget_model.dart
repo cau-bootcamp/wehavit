@@ -14,7 +14,7 @@ class ReactionCameraWidgetModel {
   double cameraButtonRadius = 25;
 
   bool isFocusingMode = false;
-
+  bool isPosInCapturingArea = false;
   bool isShowingHelpMessage = false;
 
   double screenWidth = 0;
@@ -30,11 +30,14 @@ class ReactionCameraWidgetModel {
 
   ReactionCameraWidgetModel copyWith({
     bool? isFocusingMode,
+    bool? isPosInCapturingArea,
     Point<double>? currentButtonPosition,
   }) {
     final newModel = ReactionCameraWidgetModel();
 
     newModel.isFocusingMode = isFocusingMode ?? this.isFocusingMode;
+    newModel.isPosInCapturingArea =
+        isPosInCapturingArea ?? this.isPosInCapturingArea;
     newModel.cameraButtonXOffset =
         currentButtonPosition?.x ?? cameraButtonXOffset;
     newModel.cameraButtonYOffset =
