@@ -50,11 +50,6 @@ final friendListProvider = StateNotifierProvider<FriendListProvider,
   return FriendListProvider(ref);
 });
 
-final confirmPostListProvider = StateNotifierProvider<ConfirmPostListProvider,
-    Either<Failure, List<ConfirmPostEntity>>>((ref) {
-  return ConfirmPostListProvider(ref);
-});
-
 final addResolutionProvider =
     StateNotifierProvider.autoDispose<AddResolutionNotifier, ResolutionEntity>(
         (ref) {

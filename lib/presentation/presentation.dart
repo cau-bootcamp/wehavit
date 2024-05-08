@@ -3,7 +3,6 @@ export 'common_components/common_components.dart';
 export 'effects/effects.dart';
 export 'friend_list/friend_list.dart';
 export 'group/group.dart';
-export 'home/home.dart';
 export 'my_page/my_page.dart';
 export 'reaction/reaction.dart';
 export 'splash/splash.dart';
