@@ -41,7 +41,7 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen> {
           IconButton(
             icon: const Icon(Icons.home, color: CustomColors.whSemiWhite),
             onPressed: () async {
-              context.go(RouteLocation.home);
+              context.go(RouteLocation.main);
             },
           ),
         ],

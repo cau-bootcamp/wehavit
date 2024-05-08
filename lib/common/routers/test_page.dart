@@ -25,6 +25,12 @@ class TestPage extends ConsumerWidget {
           children: [
             MoveButton(
               onPressCallback: () async {
+                context.push(RouteLocation.main);
+              },
+              buttonText: 'Main View',
+            ),
+            MoveButton(
+              onPressCallback: () async {
                 context.push(RouteLocation.myPage);
               },
               buttonText: 'Go to My Page',

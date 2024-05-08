@@ -8,6 +8,7 @@ import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
 import 'package:wehavit/presentation/group_post/group_post.dart';
+import 'package:wehavit/presentation/main/main.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
@@ -127,4 +128,10 @@ final groupPostViewModelProvider = StateNotifierProvider.autoDispose<
     sendQuickShotReactionToConfirmPostUsecase,
     sendCommentReactionToConfirmPostUsecase,
   );
+});
+
+final mainViewModelProvider =
+    StateNotifierProvider.autoDispose<MainViewModelProvider, MainViewModel>(
+        (ref) {
+  return MainViewModelProvider();
 });
