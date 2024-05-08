@@ -88,16 +88,47 @@ class _GroupMemberListBottomSheetState
                   visible: isManager,
                   child: Container(
                     alignment: Alignment.centerRight,
-                    child: IconButton(
-                      onPressed: () {
-                        isManagingMode = !isManagingMode;
-                        setState(() {});
-                      },
-                      icon: const Icon(
-                        Icons.manage_accounts_outlined,
-                        color: CustomColors.whWhite,
-                        size: 24.0,
-                      ),
+                    child: Stack(
+                      alignment: Alignment.topRight,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            setState(() {
+                              isManagingMode = !isManagingMode;
+                            });
+                          },
+                          icon: const Icon(
+                            Icons.manage_accounts_outlined,
+                            color: CustomColors.whWhite,
+                            size: 24.0,
+                          ),
+                        ),
+                        Visibility(
+                          visible: appliedUidList.isNotEmpty,
+                          child: Container(
+                            margin: const EdgeInsets.only(
+                              top: 3,
+                              right: 5,
+                            ),
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: CustomColors.whRed,
+                            ),
+                            width: 18,
+                            height: 18,
+                            alignment: Alignment.center,
+                            child: Text(
+                              appliedUidList.length.toString(),
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: CustomColors.whWhite,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                   ),
                 ),
@@ -110,7 +141,7 @@ class _GroupMemberListBottomSheetState
               child: ListView(
                 children: [
                   Visibility(
-                    visible: appliedUidList.isNotEmpty,
+                    visible: isManagingMode && appliedUidList.isNotEmpty,
                     child: Column(
                       children: List<Widget>.generate(
                         appliedUidList.length,
@@ -277,6 +308,7 @@ class _GroupMemberListCellWidgetState
                   height: 1.0,
                 ),
               ),
+              // 이후에 다시 추가하기
               // Visibility(
               //   visible: !widget.isAppliedUser,
               //   child: Text(

@@ -710,8 +710,6 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           .where(FirebaseGroupFieldName.applyUid, isEqualTo: uid)
           .get()
           .then((snapshot) async {
-        print(snapshot.docs.length);
-
         for (var doc in snapshot.docs) {
           // 각 문서를 삭제합니다.
           await doc.reference.delete();
