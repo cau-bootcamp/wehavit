@@ -23,7 +23,7 @@ class _ReactionAnimationWidgetState
   late TextBubbleAnimationManager _textBubbleAnimationManager;
   late ReactionAnimationWidgetManager _reactionAnimationWidgetManager;
 
-  late FetchUserDataFromIdUsecase _fetchUserDataFromIdUsecase;
+  late GetUserDataFromIdUsecase _fetchUserDataFromIdUsecase;
 
   EmojiFireWorkManager emojiFireWorkManager = EmojiFireWorkManager();
 
@@ -70,7 +70,7 @@ class _ReactionAnimationWidgetState
 
     _reactionAnimationWidgetManager =
         ref.read(reactionAnimationWidgetManagerProvider.notifier);
-    _fetchUserDataFromIdUsecase = ref.watch(fetchUserDataFromIdUsecaseProvider);
+    _fetchUserDataFromIdUsecase = ref.watch(getUserDataFromIdUsecaseProvider);
 
     showUnreadReactions();
   }

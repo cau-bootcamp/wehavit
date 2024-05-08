@@ -542,11 +542,11 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
           });
         },
         onPanEnd: (details) async {
-          if (_reactionCameraWidgetModelProvider
-              .isPosInCameraAreaOf(panningPosition)) {
-            widget.panEndCallback(panningPosition, widget.entity);
-          }
-          _reactionCameraWidgetModelProvider.setFocusingModeTo(false);
+          // if (_reactionCameraWidgetModelProvider
+          //     .isPosInCapturingArea(panningPosition)) {
+          //   widget.panEndCallback(panningPosition, widget.entity);
+          // }
+          // _reactionCameraWidgetModelProvider.setFocusingModeTo(false);
         },
         onPanUpdate: (details) {
           panningPosition =

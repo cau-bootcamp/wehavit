@@ -118,6 +118,8 @@ final writingConfirmPostViewModelProvider = StateNotifierProvider.autoDispose<
 
 final groupPostViewModelProvider = StateNotifierProvider.autoDispose<
     GroupPostViewModelProvider, GroupPostViewModel>((ref) {
+  final getGroupConfirmPostListByDateUsecase =
+      ref.watch(getGroupConfirmPostListByDateUsecaseProvider);
   final sendEmojiReactionToConfirmPostUsecase =
       ref.watch(sendEmojiReactionToConfirmPostUsecaseProvider);
   final sendQuickShotReactionToConfirmPostUsecase =
@@ -125,6 +127,7 @@ final groupPostViewModelProvider = StateNotifierProvider.autoDispose<
   final sendCommentReactionToConfirmPostUsecase =
       ref.watch(sendCommentReactionToConfirmPostUsecaseProvider);
   return GroupPostViewModelProvider(
+    getGroupConfirmPostListByDateUsecase,
     sendEmojiReactionToConfirmPostUsecase,
     sendQuickShotReactionToConfirmPostUsecase,
     sendCommentReactionToConfirmPostUsecase,

@@ -13,7 +13,7 @@ final mainViewModelProvider =
 
 class MainViewModelProvider extends StateNotifier<MainViewModel> {
   MainViewModelProvider(Ref ref) : super(MainViewModel()) {
-    _fetchUserDataFromIdUsecase = ref.watch(fetchUserDataFromIdUsecaseProvider);
+    _fetchUserDataFromIdUsecase = ref.watch(getUserDataFromIdUsecaseProvider);
 
     _sendCommentReactionToConfirmPostUsecase =
         ref.watch(sendCommentReactionToConfirmPostUsecaseProvider);
@@ -26,7 +26,7 @@ class MainViewModelProvider extends StateNotifier<MainViewModel> {
         ref.watch(getConfirmPostListForResolutionIdUsecaseProvider);
   }
 
-  late final FetchUserDataFromIdUsecase _fetchUserDataFromIdUsecase;
+  late final GetUserDataFromIdUsecase _fetchUserDataFromIdUsecase;
   late final SendCommentReactionToConfirmPostUsecase
       _sendCommentReactionToConfirmPostUsecase;
   late final SendEmojiReactionToConfirmPostUsecase

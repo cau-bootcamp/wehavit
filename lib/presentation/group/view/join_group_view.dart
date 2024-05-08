@@ -235,7 +235,7 @@ class _JoinGroupIntroduceViewState
 
   Future<void> initializeData() async {
     groupManagerEntity = ref
-        .read(fetchUserDataFromIdUsecaseProvider)
+        .read(getUserDataFromIdUsecaseProvider)
         (widget.groupModel.groupEntity.groupManagerUid)
         .whenComplete(() {
       setState(() {});

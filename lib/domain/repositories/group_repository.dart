@@ -24,7 +24,10 @@ abstract class GroupRepository {
     required String targetUid,
   });
 
-  EitherFuture<void> withdrawalFromGroup({required String groupId});
+  EitherFuture<void> withdrawalTargetUserFromGroup({
+    required String groupId,
+    required String targetUserId,
+  });
 
   EitherFuture<GroupEntity> getGroupEntity({required String groupId});
 
@@ -54,5 +57,14 @@ abstract class GroupRepository {
 
   EitherFuture<bool> checkWhetherAlreadyRegisteredToGroup({
     required String groupId,
+  });
+
+  EitherFuture<List<String>> getGroupAppliedUserIdList({
+    required String groupId,
+  });
+
+  EitherFuture<double> getAchievementPercentageForGroupMember({
+    required String groupId,
+    required String userId,
   });
 }

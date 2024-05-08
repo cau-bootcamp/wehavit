@@ -8,14 +8,9 @@ import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/presentation/effects/effects.dart';
 
 class ReactionCameraWidget extends ConsumerStatefulWidget {
-  ReactionCameraWidget({
+  const ReactionCameraWidget({
     super.key,
-    required this.cameraController,
-    required this.panPosition,
   });
-
-  final CameraController cameraController;
-  Point<double> panPosition;
 
   @override
   ConsumerState<ReactionCameraWidget> createState() =>
@@ -31,175 +26,159 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
   Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
 
-    _reactionCameraWidgetModelProvider
-        .updateCameraControllerWith(widget.cameraController);
+    _reactionCameraWidgetModel = ref.watch(reactionCameraWidgetModelProvider);
+    _reactionCameraWidgetModelProvider =
+        ref.read(reactionCameraWidgetModelProvider.notifier);
 
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
+    _reactionCameraWidgetModelProvider.initializeCameraWidgetSetting(context);
+    await _reactionCameraWidgetModelProvider.initializeCamera();
   }
 
   @override
   Widget build(BuildContext context) {
     _reactionCameraWidgetModel = ref.watch(reactionCameraWidgetModelProvider);
-    _reactionCameraWidgetModelProvider =
-        ref.read(reactionCameraWidgetModelProvider.notifier);
-
-    _reactionCameraWidgetModel.cameraController = widget.cameraController;
-    // _swipeViewModelProvider = ref.read(swipeViewModelProvider.notifier);
-
-    _reactionCameraWidgetModel.screenWidth = MediaQuery.of(context).size.width;
-    _reactionCameraWidgetModel.screenHeight =
-        MediaQuery.of(context).size.height;
-
-    _reactionCameraWidgetModel.cameraWidgetPositionX =
-        _reactionCameraWidgetModel.screenWidth / 2;
-    _reactionCameraWidgetModel.cameraWidgetPositionY =
-        _reactionCameraWidgetModel.screenHeight / 6;
-    _reactionCameraWidgetModel.cameraWidgetRadius =
-        _reactionCameraWidgetModel.screenWidth / 2.3;
-
-    _reactionCameraWidgetModel.cameraButtonXOffset =
-        _reactionCameraWidgetModel.cameraButtonOriginXOffset;
-    _reactionCameraWidgetModel.cameraButtonYOffset =
-        _reactionCameraWidgetModel.cameraButtonOriginYOffset;
 
     return Visibility(
       visible: _reactionCameraWidgetModel.isFocusingMode,
-      child: Container(
-        constraints: const BoxConstraints.expand(),
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Positioned(
-              child: IgnorePointer(
-                child: Container(
-                  child: new BackdropFilter(
-                    filter: ui.ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-                    child: Container(
-                      decoration: new BoxDecoration(
-                          color: Colors.white.withOpacity(0.0)),
-                    ),
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.black45.withOpacity(
-                      _reactionCameraWidgetModel.isFocusingMode ? 0.7 : 0,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              top: 100,
-              child: Text(
-                '아래로 손가락을 움직여\n사진으로 격려를 남기세요',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  decoration: TextDecoration.none,
-                  color: CustomColors.whWhite,
-                  fontSize: 24,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ),
-            Positioned(
-              top: _reactionCameraWidgetModel.cameraWidgetPositionY,
-              width: _reactionCameraWidgetModel.cameraWidgetRadius * 2,
-              height: _reactionCameraWidgetModel.cameraWidgetRadius *
-                  2 *
-                  widget.cameraController.value.aspectRatio,
-              child: Opacity(
-                opacity: _reactionCameraWidgetModel.isFocusingMode ? 1 : 0,
-                child: RepaintBoundary(
-                  key: _reactionCameraWidgetModel.repaintBoundaryGlobalKey,
-                  child: IgnorePointer(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          // 테두리 스타일 설정
-                          color: Colors.white, // 테두리 색상
-                          width: 4, // 테두리 두께
-                        ),
-                      ),
+      child: _reactionCameraWidgetModel.cameraController != null
+          ? Container(
+              constraints: const BoxConstraints.expand(),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Positioned(
+                    child: IgnorePointer(
                       child: Container(
                         decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            // 테두리 스타일 설정
-                            color: Colors.black, // 테두리 색상
-                            width: 4, // 테두리 두께
+                          color: Colors.black45.withOpacity(
+                            _reactionCameraWidgetModel.isFocusingMode ? 0.7 : 0,
                           ),
                         ),
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.green,
-                            shape: BoxShape.circle, // 원 모양의 테두리 설정
-                          ),
-                          clipBehavior: Clip.hardEdge,
-                          child: CameraPreview(
-                            widget.cameraController,
+                        child: BackdropFilter(
+                          filter:
+                              ui.ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.0),
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ),
-            ),
-            Positioned(
-              left: widget.panPosition.x -
-                  _reactionCameraWidgetModel.cameraButtonRadius,
-              top: widget.panPosition.y -
-                  _reactionCameraWidgetModel.cameraButtonRadius,
-              child: Container(
-                width: _reactionCameraWidgetModel.cameraButtonRadius * 2,
-                height: _reactionCameraWidgetModel.cameraButtonRadius * 2,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: _reactionCameraWidgetModel.isFocusingMode
-                      ? Colors.amber
-                      : Colors.transparent,
-                  // color: Colors.blue,
-                ),
-              ),
-            ),
-            Positioned(
-              width: MediaQuery.of(context).size.width,
-              left: 0,
-              top: _reactionCameraWidgetModel.cameraWidgetPositionY +
-                  _reactionCameraWidgetModel.cameraWidgetRadius * 2 +
-                  100,
-              child: Text(
-                '취소하려면 지금 손가락을 떼세요',
-                style: TextStyle(
-                  decoration: TextDecoration.none,
-                  color: CustomColors.whWhite,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w300,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            Positioned(
-              bottom: 0.0,
-              child: Container(
-                child: Container(
-                  color: Colors.transparent,
-                  height: 155,
-                  width: MediaQuery.of(context).size.width,
-                  child: CustomPaint(
-                    painter: CurvePainter(),
+                  Positioned(
+                    top: _reactionCameraWidgetModel.cameraWidgetPositionY,
+                    width: _reactionCameraWidgetModel.cameraWidgetRadius * 2,
+                    height: _reactionCameraWidgetModel.cameraWidgetRadius *
+                        2 *
+                        _reactionCameraWidgetModel
+                            .cameraController!.value.aspectRatio,
+                    child: Opacity(
+                      opacity:
+                          _reactionCameraWidgetModel.isFocusingMode ? 1 : 0,
+                      child: RepaintBoundary(
+                        key:
+                            _reactionCameraWidgetModel.repaintBoundaryGlobalKey,
+                        child: IgnorePointer(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                // 테두리 스타일 설정
+                                color: _reactionCameraWidgetModel
+                                        .isPosInCapturingArea
+                                    ? Colors.white
+                                    : Colors.transparent, // 테두리 색상
+                                width: 4, // 테두리 두께
+                              ),
+                            ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  width: 4, // 테두리 두께
+                                ),
+                              ),
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  color: Colors.green,
+                                  shape: BoxShape.circle, // 원 모양의 테두리 설정
+                                ),
+                                clipBehavior: Clip.hardEdge,
+                                child: CameraPreview(
+                                  _reactionCameraWidgetModel.cameraController!,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  Positioned(
+                    bottom: 0.0,
+                    child: Container(
+                      color: Colors.transparent,
+                      height: 155,
+                      width: MediaQuery.of(context).size.width,
+                      child: CustomPaint(
+                        painter: CurvePainter(),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: _reactionCameraWidgetModel.cameraButtonXOffset -
+                        _reactionCameraWidgetModel.cameraButtonRadius,
+                    top: _reactionCameraWidgetModel.cameraButtonYOffset -
+                        _reactionCameraWidgetModel.cameraButtonRadius,
+                    child: Container(
+                      width: _reactionCameraWidgetModel.cameraButtonRadius * 2,
+                      height: _reactionCameraWidgetModel.cameraButtonRadius * 2,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: _reactionCameraWidgetModel.isFocusingMode
+                            ? Colors.amber
+                            : Colors.transparent,
+                        // color: Colors.blue,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 100,
+                    child: Text(
+                      _reactionCameraWidgetModel.isPosInCapturingArea
+                          ? '손가락을 떼면 격려가 전송됩니다\n📸 바로 지금! 📸'
+                          : '아래로 손가락을 움직여\n사진으로 격려를 남기세요',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        decoration: TextDecoration.none,
+                        color: CustomColors.whWhite,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    width: MediaQuery.of(context).size.width,
+                    left: 0,
+                    top: _reactionCameraWidgetModel.cameraWidgetPositionY +
+                        _reactionCameraWidgetModel.cameraWidgetRadius * 2 +
+                        100,
+                    child: const Text(
+                      '취소하려면 지금 손가락을 떼세요',
+                      style: TextStyle(
+                        decoration: TextDecoration.none,
+                        color: CustomColors.whWhite,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w300,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
-      ),
+            )
+          : Container(),
     );
   }
 }

@@ -244,7 +244,7 @@ class _AcceptGroupSampleViewState extends ConsumerState<AcceptGroupSampleView> {
                   final userList = await Future.wait(
                     acceptList.map((uid) async {
                       final entity = (await ref
-                              .read(fetchUserDataFromIdUsecaseProvider)(uid))
+                              .read(getUserDataFromIdUsecaseProvider)(uid))
                           .fold((l) => null, (entity) => entity);
 
                       if (entity != null) {
@@ -266,24 +266,24 @@ class _AcceptGroupSampleViewState extends ConsumerState<AcceptGroupSampleView> {
                         Text(e.userName!),
                         Spacer(),
                         ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
                               ref.read(
-                                  acceptApplyingForJoiningGroupUsecaseProvider)((
-                                groupIdController.text,
-                                e.userId!,
-                              ));
+                                  acceptApplyingForJoiningGroupUsecaseProvider)(
+                                groupId: groupIdController.text,
+                                userId: e.userId!,
+                              );
 
                               applyList.remove(e);
                               setState(() {});
                             },
                             child: Text("Accept")),
                         ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
                               ref.read(
-                                  rejectApplyingForJoiningGroupUsecaseProvider)((
-                                groupIdController.text,
-                                e.userId!,
-                              ));
+                                  rejectApplyingForJoiningGroupUsecaseProvider)(
+                                groupId: groupIdController.text,
+                                userId: e.userId!,
+                              );
                               applyList.remove(e);
                               setState(() {});
                             },
@@ -326,8 +326,8 @@ class _WithdrawalGroupSampleViewState
               ),
               ElevatedButton(
                 onPressed: () async {
-                  final groupId = groupIdController.text;
-                  ref.read(withdrawalFromGroupUsecaseProvider)(groupId);
+                  // final groupId = groupIdController.text;
+                  // ref.read(withdrawalFromGroupUsecaseProvider)(groupId);
                 },
                 child: const Text('withdrawal'),
               ),

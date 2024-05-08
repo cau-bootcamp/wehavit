@@ -21,8 +21,8 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
 
   @override
   Widget build(BuildContext context) {
-    final getConfirmPostListUsecase =
-        ref.watch(getConfirmPostListUsecaseProvider);
+    // final getConfirmPostListUsecase =
+    //     ref.watch(getConfirmPostListUsecaseProvider);
     final sendEmojiReactionToConfirmPostUsecase =
         ref.watch(sendEmojiReactionToConfirmPostUsecaseProvider);
     final sendQuickShotReactionToConfirmPostUsecase =
@@ -44,14 +44,14 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
                 const Text('Target Post'),
                 ElevatedButton(
                   onPressed: () async {
-                    final fetchedEntity =
-                        (await getConfirmPostListUsecase(DateTime.now())).fold(
-                      (l) => null,
-                      (r) => r.isEmpty ? null : r.first,
-                    );
-                    setState(() {
-                      targetPostEntity = fetchedEntity;
-                    });
+                    // final fetchedEntity =
+                    //     (await getConfirmPostListUsecase(DateTime.now())).fold(
+                    //   (l) => null,
+                    //   (r) => r.isEmpty ? null : r.first,
+                    // );
+                    // setState(() {
+                    //   targetPostEntity = fetchedEntity;
+                    // });
                   },
                   child: const Text('load element'),
                 ),

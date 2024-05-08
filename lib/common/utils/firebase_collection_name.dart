@@ -47,6 +47,10 @@ class FirebaseCollectionName {
       ? 'users/${FirebaseAuth.instance.currentUser?.uid}/groups'
       : 'invalid_address';
 
+  static String getTargetUserGroupsCollectionName(String targetUid) {
+    return 'users/$targetUid/groups';
+  }
+
   static final confirmPostImageStorageName = FirebaseAuth
               .instance.currentUser !=
           null

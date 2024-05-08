@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:carousel_slider/carousel_slider.dart';
@@ -5,7 +6,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/effects/effects.dart';
@@ -13,59 +13,47 @@ import 'package:wehavit/presentation/group_post/group_post.dart';
 import 'package:wehavit/presentation/reaction/reaction.dart';
 
 class GroupPostView extends ConsumerStatefulWidget {
-  const GroupPostView({super.key, required this.groupEntity});
+  GroupPostView({super.key, required this.groupEntity});
 
-  final GroupEntity groupEntity;
+  GroupEntity groupEntity;
 
   @override
   ConsumerState<GroupPostView> createState() => _GroupPostViewState();
 }
 
 class _GroupPostViewState extends ConsumerState<GroupPostView> {
-  Point<double> panPosition = Point<double>(0, 0);
-  List<DateTime> calendartMondayDateList = [
-    DateTime.now(),
-    DateTime.now().subtract(const Duration(days: 7)),
-  ];
-
-  late final ConfirmPostEntity postEntity;
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
+    final viewModel = ref.watch(groupPostViewModelProvider);
+    final provider = ref.read(groupPostViewModelProvider.notifier);
+    ref.watch(groupPostViewModelProvider).groupId = widget.groupEntity.groupId;
 
-    ref.read(groupPostViewModelProvider.notifier).initializeCamera();
+    unawaited(
+      provider
+          .loadConfirmPostsForWeek(
+            mondayOfTargetWeek: viewModel.calendartMondayDateList[0],
+          )
+          .whenComplete(() => setState(() {})),
+    );
 
-    ref
-        .watch(getMyResolutionListUsecaseProvider)
-        .call(NoParams())
-        .then((value) => value.fold((l) => null, (r) => r.first))
-        .then((value) async {
-      if (value != null) {
-        final resEntity = value;
-        final confirmPostEntity = await ref
-            .watch(getConfirmPostListForResolutionIdUsecaseProvider)
-            (resEntity!.resolutionId ?? '')
-            .then(
-          (value) {
-            return value.fold(
-              (l) => null,
-              (pList) => pList.first,
-            );
-          },
-        );
-        return confirmPostEntity;
-      }
-    }).then((value) {
-      postEntity = value!;
-    }).whenComplete(() => setState(() {}));
+    unawaited(
+      provider
+          .loadConfirmPostsForWeek(
+            mondayOfTargetWeek: viewModel.calendartMondayDateList[1],
+          )
+          .whenComplete(() => setState(() {})),
+    );
+
+    unawaited(provider.loadConfirmPostEntityListFor(dateTime: DateTime.now()));
   }
 
   @override
   Widget build(BuildContext context) {
     final viewModel = ref.watch(groupPostViewModelProvider);
     final provider = ref.read(groupPostViewModelProvider.notifier);
-    final reactionModel = ref.watch(reactionCameraWidgetModelProvider);
+    final reactionCameraViewModel =
+        ref.watch(reactionCameraWidgetModelProvider);
 
     return Stack(
       children: [
@@ -104,10 +92,14 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
               IconButton(
                 onPressed: () async {
                   showModalBottomSheet(
+                    enableDrag: true,
                     isScrollControlled: true,
                     context: context,
                     builder: (context) {
-                      return GroupMemberListBottomSheet();
+                      return GroupMemberListBottomSheet(
+                        updateGroupEntity,
+                        groupEntity: widget.groupEntity,
+                      );
                     },
                   );
                 },
@@ -131,14 +123,14 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                       Row(
                         children: [
                           Text(
-                            '2024년 2월 27일',
-                            style: TextStyle(
+                            viewModel.selectedDateString,
+                            style: const TextStyle(
                               color: CustomColors.whWhite,
                               fontSize: 20.0,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                          Icon(
+                          const Icon(
                             Icons.keyboard_arrow_down,
                             color: CustomColors.whWhite,
                           ),
@@ -147,22 +139,43 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                       Visibility(
                         visible: true,
                         child: Container(
-                          padding: EdgeInsets.only(top: 12),
+                          padding: const EdgeInsets.only(top: 12),
                           child: CarouselSlider.builder(
                             itemBuilder: (context, index, realIndex) {
                               return Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
-                                children: List<Widget>.generate(
-                                  7,
-                                  (jndex) => Expanded(
+                                children: List<Widget>.generate(7, (jndex) {
+                                  final cellDate = viewModel.todayDate.subtract(
+                                    Duration(
+                                      days: viewModel.todayDate.weekday -
+                                          1 -
+                                          jndex +
+                                          7 * index,
+                                    ),
+                                  );
+                                  final isFuture =
+                                      viewModel.todayDate.isBefore(cellDate);
+
+                                  return Expanded(
                                     child: GestureDetector(
-                                      onTapUp: (details) {
-                                        print('tap date');
+                                      onTapUp: (details) async {
+                                        if (!isFuture) {
+                                          provider
+                                              .changeSelectedDate(
+                                            to: cellDate,
+                                          )
+                                              .then((value) {
+                                            if (mounted) {
+                                              setState(() {});
+                                            }
+                                          });
+                                        }
                                       },
                                       child: Container(
-                                        margin:
-                                            EdgeInsets.symmetric(horizontal: 4),
+                                        margin: const EdgeInsets.symmetric(
+                                          horizontal: 4,
+                                        ),
                                         height: 64,
                                         clipBehavior: Clip.hardEdge,
                                         decoration: BoxDecoration(
@@ -179,17 +192,21 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                                   BorderSide.strokeAlignOutside,
                                             ),
                                             boxShadow: [
-                                              BoxShadow(
+                                              const BoxShadow(
                                                 blurRadius: 4,
-                                                offset: Offset(0, 0),
                                                 color: CustomColors.whBlack,
                                               ),
                                               BoxShadow(
-                                                offset: Offset(0, 4),
+                                                offset: const Offset(0, 4),
                                                 blurRadius: 6,
-                                                color: CustomColors.whYellow,
-                                                // color: CustomColors.whGrey,
-                                                // color: CustomColors.whYellowDark,
+                                                color: isFuture
+                                                    ? CustomColors.whGrey
+                                                    : cellDate ==
+                                                            viewModel
+                                                                .selectedDate
+                                                        ? CustomColors.whYellow
+                                                        : CustomColors
+                                                            .whYellowDark,
                                               ),
                                             ],
                                             borderRadius:
@@ -200,23 +217,41 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                                 MainAxisAlignment.center,
                                             children: [
                                               Text(
-                                                '30',
+                                                cellDate.day == 1
+                                                    ? '${cellDate.month}/${cellDate.day}'
+                                                    : cellDate.day.toString(),
                                                 style: TextStyle(
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w500,
-                                                  // color: CustomColors.whPlaceholderGrey,
-                                                  color: CustomColors.whBlack,
+                                                  color: isFuture ||
+                                                          cellDate !=
+                                                              viewModel
+                                                                  .selectedDate
+                                                      ? CustomColors
+                                                          .whPlaceholderGrey
+                                                      : CustomColors.whBlack,
                                                 ),
                                               ),
                                               Text(
-                                                index.toString(),
+                                                isFuture
+                                                    ? '-'
+                                                    : (viewModel.confirmPostList[
+                                                                cellDate] ??
+                                                            [])
+                                                        .length
+                                                        .toString(),
                                                 style: TextStyle(
                                                   height: 1.0,
                                                   fontFamily: 'Giants',
                                                   fontSize: 24,
                                                   fontWeight: FontWeight.w700,
-                                                  // color: CustomColors.whPlaceholderGrey,
-                                                  color: CustomColors.whBlack,
+                                                  color: isFuture ||
+                                                          cellDate !=
+                                                              viewModel
+                                                                  .selectedDate
+                                                      ? CustomColors
+                                                          .whPlaceholderGrey
+                                                      : CustomColors.whBlack,
                                                 ),
                                               ),
                                             ],
@@ -224,28 +259,37 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ),
+                                  );
+                                }),
                               );
                             },
-                            itemCount: calendartMondayDateList.length,
+                            itemCount: viewModel.calendartMondayDateList.length,
                             options: CarouselOptions(
                               height: 64,
                               viewportFraction: 1.0,
                               enableInfiniteScroll: false,
                               reverse: true,
-                              initialPage: calendartMondayDateList.length - 1,
-                              onPageChanged: (index, reason) {
+                              onPageChanged: (index, reason) async {
                                 if (index ==
-                                    calendartMondayDateList.length - 1) {
+                                    viewModel.calendartMondayDateList.length -
+                                        1) {
                                   // 마지막 페이지에 도달했을 때 추가 요소를 추가합니다.
-                                  calendartMondayDateList.insert(
+                                  viewModel.calendartMondayDateList.insert(
                                     0,
-                                    calendartMondayDateList.first.subtract(
+                                    viewModel.calendartMondayDateList.first
+                                        .subtract(
                                       const Duration(days: 7),
                                     ),
                                   );
-                                  setState(() {});
+
+                                  await provider
+                                      .loadConfirmPostsForWeek(
+                                    mondayOfTargetWeek:
+                                        viewModel.calendartMondayDateList[0],
+                                  )
+                                      .whenComplete(() {
+                                    setState(() {});
+                                  });
                                 }
                               },
                             ),
@@ -256,25 +300,59 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                   ),
                 ),
                 Expanded(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.only(bottom: 20.0),
-                    physics: reactionModel.isFocusingMode
-                        ? const NeverScrollableScrollPhysics()
-                        : const AlwaysScrollableScrollPhysics(),
-                    child: Column(
-                      children: [
-                        ConfirmPostWidget(
-                          panEndCallback: endOnCapturingPosition,
-                          panUpdateCallback: updatePanPosition,
-                          confirmPostEntity: postEntity,
+                  child: Visibility(
+                    visible:
+                        viewModel.confirmPostList[viewModel.selectedDate] !=
+                                null &&
+                            viewModel.confirmPostList[viewModel.selectedDate]!
+                                .isNotEmpty,
+                    replacement: const Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '아무도 인증글을 남기지 않은\n조용한 날이네요',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: CustomColors.whWhite,
+                            ),
+                          ),
+                          Text(
+                            '🤫',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 40,
+                              fontWeight: FontWeight.bold,
+                              color: CustomColors.whWhite,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 60,
+                          ),
+                        ],
+                      ),
+                    ),
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.only(bottom: 20.0),
+                      physics: reactionCameraViewModel.isFocusingMode
+                          ? const NeverScrollableScrollPhysics()
+                          : const AlwaysScrollableScrollPhysics(),
+                      child: Column(
+                        children: List<Widget>.generate(
+                          viewModel.confirmPostList[viewModel.selectedDate]
+                                  ?.length ??
+                              0,
+                          (index) => Padding(
+                            padding: const EdgeInsets.only(bottom: 12.0),
+                            child: ConfirmPostWidget(
+                              confirmPostEntity: viewModel.confirmPostList[
+                                  viewModel.selectedDate]![index],
+                            ),
+                          ),
                         ),
-                        const SizedBox(height: 12.0),
-                        ConfirmPostWidget(
-                          panEndCallback: endOnCapturingPosition,
-                          panUpdateCallback: updatePanPosition,
-                          confirmPostEntity: postEntity,
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
@@ -282,31 +360,16 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
             ),
           ),
         ),
-        if (viewModel.isCameraInitialized)
-          ReactionCameraWidget(
-            cameraController: viewModel.cameraController,
-            panPosition: panPosition,
-          ),
+        const ReactionCameraWidget(),
         const ReactionAnimationWidget(),
       ],
     );
   }
 
-  void updatePanPosition(Point<double> position) {
-    setState(() {
-      panPosition = position;
-    });
-  }
-
-  Future<void> endOnCapturingPosition(
-    Point<double> position,
-    ConfirmPostEntity entity,
-  ) async {
-    final imageFilePath =
-        await ref.watch(reactionCameraWidgetModelProvider.notifier).capture();
-
+  Future<void> updateGroupEntity(GroupEntity groupEntity) async {
+    widget.groupEntity = groupEntity;
     ref
-        .read(groupPostViewModelProvider.notifier)
-        .sendImageReaction(imageFilePath: imageFilePath, entity: entity);
+        .read(groupViewModelProvider.notifier)
+        .updateGroupEntity(forEntity: groupEntity);
   }
 }

@@ -122,10 +122,10 @@ final getFriendListUseCaseProvider = Provider<GetFriendListUsecase>((ref) {
   return GetFriendListUsecase(resolutionRepository);
 });
 
-final getConfirmPostListUsecaseProvider =
-    Provider<GetConfirmPostListUsecase>((ref) {
+final getGroupConfirmPostListByDateUsecaseProvider =
+    Provider<GetGroupConfirmPostListByDateUsecase>((ref) {
   final confirmPostRepository = ref.watch(confirmPostRepositoryProvider);
-  return GetConfirmPostListUsecase(confirmPostRepository);
+  return GetGroupConfirmPostListByDateUsecase(confirmPostRepository);
 });
 
 final getConfirmPostListForResolutionIdUsecaseProvider =
@@ -134,10 +134,10 @@ final getConfirmPostListForResolutionIdUsecaseProvider =
   return GetConfirmPostListForResolutionIdUsecase(confirmPostRepository);
 });
 
-final fetchUserDataFromIdUsecaseProvider =
-    Provider<FetchUserDataFromIdUsecase>((ref) {
+final getUserDataFromIdUsecaseProvider =
+    Provider<GetUserDataFromIdUsecase>((ref) {
   final repository = ref.watch(userModelRepositoryProvider);
-  return FetchUserDataFromIdUsecase(repository);
+  return GetUserDataFromIdUsecase(repository);
 });
 
 final createGroupUsecaseProvider = Provider<CreateGroupUsecase>((ref) {
@@ -165,9 +165,9 @@ final rejectApplyingForJoiningGroupUsecaseProvider =
 });
 
 final withdrawalFromGroupUsecaseProvider =
-    Provider<WithdrawalFromGroupUsecase>((ref) {
+    Provider<WithdrawalTargetUserFromGroupUsecase>((ref) {
   final groupRepository = ref.watch(groupRepositoryProvider);
-  return WithdrawalFromGroupUsecase(groupRepository);
+  return WithdrawalTargetUserFromGroupUsecase(groupRepository);
 });
 
 final getGroupListUseCaseProvider = Provider<GetGroupListUsecase>((ref) {
@@ -234,4 +234,24 @@ final getToWhomResolutionWillBeSharedUsecaseProvider =
     Provider<GetToWhomResolutionWillBeSharedUsecase>((ref) {
   final resolutionRepository = ref.watch(resolutionRepositoryProvider);
   return GetToWhomResolutionWillBeSharedUsecase(resolutionRepository);
+});
+
+final checkWeatherUserIsMnagerOfGroupEntityUsecaseProvider =
+    Provider<CheckWeatherUserIsMnagerOfGroupEntityUsecase>((ref) {
+  final userModelRepository = ref.watch(userModelRepositoryProvider);
+  return CheckWeatherUserIsMnagerOfGroupEntityUsecase(
+    userModelRepository,
+  );
+});
+
+final getAppliedUserListForGroupEntityUsecaseProvider =
+    Provider<GetAppliedUserListForGroupEntityUsecase>((ref) {
+  final groupRepository = ref.watch(groupRepositoryProvider);
+  return GetAppliedUserListForGroupEntityUsecase(groupRepository);
+});
+
+final getAchievementPercentageForGroupMemberUsecaseProvider =
+    Provider<GetAchievementPercentageForGroupMemberUsecase>((ref) {
+  final groupRepository = ref.watch(groupRepositoryProvider);
+  return GetAchievementPercentageForGroupMemberUsecase(groupRepository);
 });

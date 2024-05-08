@@ -27,6 +27,10 @@ class BalloonManager extends StateNotifier<Map<Key, BalloonWidget>> {
     required String message,
   }) {
     final balloonWidgetKey = UniqueKey();
+
+    // 이모지 없이 사진만 온 경우에는 하트를 채워서 보여주기
+    emojiReactionCountList = fillEmptyEmojiBalloon(emojiReactionCountList);
+
     final newBalloon = {
       balloonWidgetKey: BalloonWidget(
         key: balloonWidgetKey,
@@ -50,6 +54,14 @@ class BalloonManager extends StateNotifier<Map<Key, BalloonWidget>> {
       ...state,
       ...newBalloon,
     };
+  }
+
+  List<int> fillEmptyEmojiBalloon(List<int> emojiList) {
+    if (emojiList.isEmpty) {
+      emojiList = List<int>.filled(15, 0);
+      emojiList.last = 1;
+    }
+    return emojiList;
   }
 }
 

@@ -6,10 +6,14 @@ import 'package:wehavit/presentation/group_post/group_post.dart';
 
 class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
   GroupPostViewModelProvider(
+    this._getGroupConfirmPostListByDateUsecase,
     this._sendEmojiReactionToConfirmPostUsecase,
     this._sendQuickShotReactionToConfirmPostUsecase,
     this._sendCommentReactionToConfirmPostUsecase,
   ) : super(GroupPostViewModel());
+
+  final GetGroupConfirmPostListByDateUsecase
+      _getGroupConfirmPostListByDateUsecase;
 
   final SendEmojiReactionToConfirmPostUsecase
       _sendEmojiReactionToConfirmPostUsecase;
@@ -18,35 +22,23 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
   final SendCommentReactionToConfirmPostUsecase
       _sendCommentReactionToConfirmPostUsecase;
 
-  Future<bool> initializeCamera() async {
-    CameraDescription? description = await availableCameras().then(
-      (cameras) {
-        if (cameras.isEmpty) {
-          return null;
-        }
+  Future<void> loadConfirmPostEntityListFor({
+    required DateTime dateTime,
+  }) async {
+    final selectedDate = DateTime(dateTime.year, dateTime.month, dateTime.day);
 
-        return cameras.firstWhere(
-          (camera) => camera.lensDirection == CameraLensDirection.front,
-        );
-      },
-      onError: (onError) {
-        return Future(() => false);
-      },
-    );
+    final fetchResult =
+        await _getGroupConfirmPostListByDateUsecase(state.groupId, selectedDate)
+            .then((result) => result.fold((failure) => null, (list) => list));
 
-    if (!state.isCameraInitialized && description != null) {
-      state.cameraController =
-          CameraController(description, ResolutionPreset.medium);
-
-      await state.cameraController.initialize();
-      state.isCameraInitialized = true;
-
-      return Future(() => true);
+    if (fetchResult == null) {
+      return;
     }
 
-    return Future(() => false);
+    state.confirmPostList[selectedDate] = fetchResult;
   }
 
+  // Reactions
   Future<void> sendEmojiReaction({required ConfirmPostEntity entity}) async {
     state.emojiWidgets.clear();
 
@@ -66,7 +58,8 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
     required String imageFilePath,
     required ConfirmPostEntity entity,
   }) async {
-    _sendQuickShotReactionToConfirmPostUsecase((entity, imageFilePath));
+    _sendQuickShotReactionToConfirmPostUsecase((entity, imageFilePath))
+        .then((value) => print(value));
   }
 
   Future<void> sendTextReaction({required ConfirmPostEntity entity}) async {
@@ -82,5 +75,34 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
   void setFocusingModeTo(bool enabled) {
     final newState = (state..isFocusingMode = enabled);
     state = newState;
+  }
+
+  Future<void> changeSelectedDate({required DateTime to}) async {
+    state.selectedDate = to;
+
+    // final fetchResult = await _getGroupConfirmPostListByDateUsecase
+    //     .call(state.groupId, to)
+    //     .then((result) => result.fold((failure) => null, (list) => list));
+
+    // if (fetchResult == null) {
+    //   return;
+    // }
+
+    // state.confirmPostList[to] = fetchResult;
+  }
+
+  void resetSendingEmojis() {
+    state.sendingEmojis = List<int>.generate(15, (index) => 0);
+  }
+
+  Future<void> loadConfirmPostsForWeek({
+    required DateTime mondayOfTargetWeek,
+  }) async {
+    for (int i = 0; i < 7; i++) {
+      await loadConfirmPostEntityListFor(
+        dateTime: mondayOfTargetWeek.add(Duration(days: i)),
+      );
+    }
+    return Future(() => null);
   }
 }

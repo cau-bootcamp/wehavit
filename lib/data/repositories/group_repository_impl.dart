@@ -58,8 +58,14 @@ class GroupRepositoryImpl implements GroupRepository {
   }
 
   @override
-  EitherFuture<void> withdrawalFromGroup({required String groupId}) {
-    return _wehavitDatasource.withdrawalFromGroup(groupId: groupId);
+  EitherFuture<void> withdrawalTargetUserFromGroup({
+    required String groupId,
+    required String targetUserId,
+  }) {
+    return _wehavitDatasource.withdrawalFromGroup(
+      groupId: groupId,
+      targetUserId: targetUserId,
+    );
   }
 
   @override
@@ -135,6 +141,24 @@ class GroupRepositoryImpl implements GroupRepository {
   }) {
     return _wehavitDatasource.checkWhetherAlreadyRegisteredToGroup(
       groupId: groupId,
+    );
+  }
+
+  @override
+  EitherFuture<List<String>> getGroupAppliedUserIdList({
+    required String groupId,
+  }) {
+    return _wehavitDatasource.getGroupAppliedUserIdList(groupId: groupId);
+  }
+
+  @override
+  EitherFuture<double> getAchievementPercentageForGroupMember({
+    required String groupId,
+    required String userId,
+  }) {
+    return _wehavitDatasource.getAchievementPercentageForGroupMember(
+      groupId: groupId,
+      userId: userId,
     );
   }
 }

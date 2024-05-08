@@ -1,6 +1,5 @@
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/domain/entities/group_announcement_entity/group_announcement_entity.dart';
 
 abstract class WehavitDatasource {
   EitherFuture<List<UserDataEntity>> getFriendModelList();
@@ -9,7 +8,8 @@ abstract class WehavitDatasource {
     String email,
   );
 
-  EitherFuture<List<ConfirmPostEntity>> getConfirmPostEntityListByDate(
+  EitherFuture<List<ConfirmPostEntity>> getGroupConfirmPostEntityListByDate(
+    String groupId,
     DateTime selectedDate,
   );
 
@@ -71,7 +71,10 @@ abstract class WehavitDatasource {
     required bool isAccepted,
   });
 
-  EitherFuture<void> withdrawalFromGroup({required String groupId});
+  EitherFuture<void> withdrawalFromGroup({
+    required String groupId,
+    required String targetUserId,
+  });
 
   EitherFuture<List<GroupEntity>> getGroupEntityList();
 
@@ -114,4 +117,13 @@ abstract class WehavitDatasource {
   EitherFuture<List<GroupEntity>> getResolutionSharingTargetGroupList(
     String resolutionId,
   );
+
+  EitherFuture<List<String>> getGroupAppliedUserIdList({
+    required String groupId,
+  });
+
+  EitherFuture<double> getAchievementPercentageForGroupMember({
+    required String groupId,
+    required String userId,
+  });
 }
