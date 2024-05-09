@@ -233,7 +233,7 @@ class ResolutionLinearGaugeWidget extends StatelessWidget {
                   ),
                 ),
                 Flexible(
-                  flex: model.entity.actionPerWeek ?? 1 - model.successCount,
+                  flex: (model.entity.actionPerWeek ?? 1) - model.successCount,
                   child: Container(
                     height: 7,
                     color: Colors.transparent,
