@@ -1641,7 +1641,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
         if (sharedGroupList.contains(groupId)) {
           final success = await getTargetResolutionDoneCountForThisWeek(
             resolutionId: doc.reference.id,
-          ).then((value) => value.fold((failure) => -1, (count) => count));
+          ).then((value) => value.fold((failure) => -1, (scount) => scount));
           successCount += success;
           total +=
               data[FirebaseResolutionFieldName.resolutionActionPerWeek] as int;
@@ -1659,6 +1659,41 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
         () => left(
           const Failure(
             'catch error on getAchievementPercentageForGroupMember',
+          ),
+        ),
+      );
+    }
+  }
+
+  @override
+  EitherFuture<ResolutionEntity> getTargetResolutionEntity({
+    required String targetUserId,
+    required String targetResolutionId,
+  }) {
+    try {
+      return firestore
+          .collection(
+            FirebaseCollectionName.getTargetResolutionCollectionName(
+              targetUserId,
+            ),
+          )
+          .doc(targetResolutionId)
+          .get()
+          .then((result) {
+        if (result.data() != null) {
+          return Future(() => right(ResolutionEntity.fromJson(result.data()!)));
+        } else {
+          return Future(
+            () => left(const Failure('cannot find target resolution')),
+          );
+        }
+      });
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+      return Future(
+        () => left(
+          const Failure(
+            'catch error on getGroupAppliedUserIdList',
           ),
         ),
       );

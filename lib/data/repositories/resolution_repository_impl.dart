@@ -1,6 +1,3 @@
-import 'package:flutter/widgets.dart';
-import 'package:fpdart/fpdart.dart';
-import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/data/datasources/datasources.dart';
 import 'package:wehavit/domain/entities/entities.dart';
@@ -14,20 +11,7 @@ class ResolutionRepositoryImpl implements ResolutionRepository {
   EitherFuture<List<ResolutionEntity>> getActiveResolutionEntityList(
     String userId,
   ) async {
-    try {
-      final getResult =
-          await _wehavitDatasource.getActiveResolutionEntityList(userId);
-
-      return getResult.fold(
-        (failure) => left(failure),
-        (entityList) async {
-          return Future(() => right(entityList));
-        },
-      );
-    } on Exception catch (e) {
-      debugPrint(e.toString());
-      return Future(() => left(Failure(e.toString())));
-    }
+    return _wehavitDatasource.getActiveResolutionEntityList(userId);
   }
 
   @override
@@ -73,5 +57,16 @@ class ResolutionRepositoryImpl implements ResolutionRepository {
     String resolutionId,
   ) {
     return _wehavitDatasource.getResolutionSharingTargetGroupList(resolutionId);
+  }
+
+  @override
+  EitherFuture<ResolutionEntity> getTargetResolutionEntity({
+    required String targetUserId,
+    required String targetResolutionId,
+  }) {
+    return _wehavitDatasource.getTargetResolutionEntity(
+      targetUserId: targetUserId,
+      targetResolutionId: targetResolutionId,
+    );
   }
 }

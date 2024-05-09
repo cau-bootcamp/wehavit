@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/constants/constants.dart';
 import 'package:wehavit/common/utils/emoji_assets.dart';
+import 'package:wehavit/common/utils/utils.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
@@ -27,7 +28,28 @@ class ConfirmPostWidget extends ConsumerStatefulWidget {
 
 class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
     with TickerProviderStateMixin {
-  ResolutionEntity? resEntity;
+  late Future<int> resolutionDoneCountForThisWeek;
+  late EitherFuture<UserDataEntity> futureUserDataEntity;
+  late Future<ResolutionEntity?> futureResolutionEntity;
+
+  @override
+  void initState() {
+    super.initState();
+    futureUserDataEntity = ref.read(getUserDataFromIdUsecaseProvider)(
+        widget.confirmPostEntity.owner!);
+
+    resolutionDoneCountForThisWeek = ref
+        .read(getTargetResolutionDoneCountForWeekUsecaseProvider)
+        .call(resolutionId: widget.confirmPostEntity.resolutionId!)
+        .then((result) => result.fold((failure) => -1, (count) => count));
+
+    futureResolutionEntity = ref
+        .read(getTargetResolutionEntityUsecaseProvider)
+        .call(
+            targetUserId: widget.confirmPostEntity.owner!,
+            targetResolutionId: widget.confirmPostEntity.resolutionId!)
+        .then((result) => result.fold((failure) => null, (entity) => entity));
+  }
 
   bool isShowingCommentField = false;
   bool isTouchMoved = false;
@@ -96,14 +118,12 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                           alignment: Alignment.centerRight,
                           children: [
                             UserProfileBar(
-                              futureUserEntity: Future(
-                                () => right(UserDataEntity.dummyModel),
-                              ),
+                              futureUserEntity: futureUserDataEntity,
                             ),
                             if (widget.confirmPostEntity.hasRested == false)
                               Text(
                                 // ignore: lines_longer_than_80_chars
-                                '${widget.confirmPostEntity.createdAt!.hour > 12 ? '오전' : '오후'} ${widget.confirmPostEntity.createdAt!.hour > 12 ? widget.confirmPostEntity.createdAt!.hour - 12 : widget.confirmPostEntity.createdAt!.hour}시 ${widget.confirmPostEntity.createdAt!.minute}분',
+                                '${widget.confirmPostEntity.createdAt!.hour > 12 ? '오후' : '오전'} ${widget.confirmPostEntity.createdAt!.hour > 12 ? widget.confirmPostEntity.createdAt!.hour - 12 : widget.confirmPostEntity.createdAt!.hour}시 ${widget.confirmPostEntity.createdAt!.minute}분',
                                 style: const TextStyle(
                                   color: CustomColors.whWhite,
                                 ),
@@ -130,13 +150,34 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                           ],
                         ),
                         // const SizedBox(height: 12.0),
-                        if (resEntity != null)
-                          ResolutionLinearGaugeWidget(
-                            ResolutionListCellWidgetModel(
-                              entity: resEntity!,
-                              successCount: 3,
-                            ),
-                          ),
+                        FutureBuilder(
+                          future: Future.wait([
+                            resolutionDoneCountForThisWeek,
+                            futureResolutionEntity,
+                          ]),
+                          builder: (context, snapshot) {
+                            print(snapshot);
+                            if (snapshot.hasData) {
+                              int successCount = snapshot.data![0] as int;
+                              ResolutionEntity? resolutionEntity =
+                                  snapshot.data![1] as ResolutionEntity?;
+
+                              if (resolutionEntity == null) {
+                                return Container();
+                              }
+
+                              return ResolutionLinearGaugeWidget(
+                                ResolutionListCellWidgetModel(
+                                  entity: resolutionEntity,
+                                  successCount: successCount,
+                                ),
+                              );
+                            } else {
+                              return Container();
+                            }
+                          },
+                        ),
+
                         const SizedBox(height: 12.0),
                         ConfirmPostContentWidget(
                           confirmPostEntity: widget.confirmPostEntity,

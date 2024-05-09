@@ -260,3 +260,9 @@ final getAchievementPercentageForGroupMemberUsecaseProvider =
   final groupRepository = ref.watch(groupRepositoryProvider);
   return GetAchievementPercentageForGroupMemberUsecase(groupRepository);
 });
+
+final getTargetResolutionEntityUsecaseProvider =
+    Provider<GetTargetResolutionEntityUsecase>((ref) {
+  final resolutionRepository = ref.watch(resolutionRepositoryProvider);
+  return GetTargetResolutionEntityUsecase(resolutionRepository);
+});

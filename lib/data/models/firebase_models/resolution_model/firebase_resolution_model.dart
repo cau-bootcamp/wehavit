@@ -15,7 +15,7 @@ class FirebaseResolutionModel with _$FirebaseResolutionModel {
     required String? actionStatement,
     required bool? isActive,
     required int? actionPerWeek,
-    @TimestampSerializer() required DateTime? startDate,
+    @TimestampConverter() required DateTime? startDate,
     required List<String>? shareFriendIdList,
     required List<String>? shareGroupIdList,
   }) = _FirebaseResolutionModel;

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 
@@ -7,7 +8,8 @@ part 'resolution_entity.g.dart';
 @freezed
 class ResolutionEntity with _$ResolutionEntity {
   // ignore: invalid_annotation_target
-  @JsonSerializable()
+  @TimestampConverter()
+  @DocumentReferenceJsonConverter()
   const factory ResolutionEntity({
     String? resolutionId,
     String? goalStatement,

@@ -203,8 +203,9 @@ class __$$ResolutionEntityImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
 @JsonSerializable()
+@TimestampConverter()
+@DocumentReferenceJsonConverter()
 class _$ResolutionEntityImpl implements _ResolutionEntity {
   const _$ResolutionEntityImpl(
       {this.resolutionId,

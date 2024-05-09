@@ -126,4 +126,9 @@ abstract class WehavitDatasource {
     required String groupId,
     required String userId,
   });
+
+  EitherFuture<ResolutionEntity> getTargetResolutionEntity({
+    required String targetUserId,
+    required String targetResolutionId,
+  });
 }

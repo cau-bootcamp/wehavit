@@ -13,15 +13,7 @@ class UserModelRepositoryImpl implements UserModelRepository {
   EitherFuture<UserDataEntity> fetchUserDataEntityFromId(
     String targetUserId,
   ) async {
-    final userEntityRequest =
-        await _wehavitDatasource.fetchUserDataEntityByUserId(targetUserId);
-
-    final Either<Failure, UserDataEntity> result = userEntityRequest.fold(
-      (failure) => left(Failure(failure.message)),
-      (entity) => right(entity),
-    );
-
-    return Future(() => result);
+    return _wehavitDatasource.fetchUserDataEntityByUserId(targetUserId);
   }
 
   @override

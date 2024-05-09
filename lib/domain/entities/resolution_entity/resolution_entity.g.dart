@@ -15,9 +15,8 @@ _$ResolutionEntityImpl _$$ResolutionEntityImplFromJson(
       isActive: json['isActive'] as bool?,
       actionPerWeek: json['actionPerWeek'] as int?,
       colorIndex: json['colorIndex'] as int?,
-      startDate: json['startDate'] == null
-          ? null
-          : DateTime.parse(json['startDate'] as String),
+      startDate: _$JsonConverterFromJson<Timestamp, DateTime>(
+          json['startDate'], const TimestampConverter().fromJson),
       shareFriendEntityList: (json['shareFriendEntityList'] as List<dynamic>?)
           ?.map((e) => UserDataEntity.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -35,7 +34,20 @@ Map<String, dynamic> _$$ResolutionEntityImplToJson(
       'isActive': instance.isActive,
       'actionPerWeek': instance.actionPerWeek,
       'colorIndex': instance.colorIndex,
-      'startDate': instance.startDate?.toIso8601String(),
+      'startDate': _$JsonConverterToJson<Timestamp, DateTime>(
+          instance.startDate, const TimestampConverter().toJson),
       'shareFriendEntityList': instance.shareFriendEntityList,
       'shareGroupEntityList': instance.shareGroupEntityList,
     };
+
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) =>
+    json == null ? null : fromJson(json as Json);
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) =>
+    value == null ? null : toJson(value);

@@ -25,7 +25,7 @@ mixin _$FirebaseResolutionModel {
   String? get actionStatement => throw _privateConstructorUsedError;
   bool? get isActive => throw _privateConstructorUsedError;
   int? get actionPerWeek => throw _privateConstructorUsedError;
-  @TimestampSerializer()
+  @TimestampConverter()
   DateTime? get startDate => throw _privateConstructorUsedError;
   List<String>? get shareFriendIdList => throw _privateConstructorUsedError;
   List<String>? get shareGroupIdList => throw _privateConstructorUsedError;
@@ -47,7 +47,7 @@ abstract class $FirebaseResolutionModelCopyWith<$Res> {
       String? actionStatement,
       bool? isActive,
       int? actionPerWeek,
-      @TimestampSerializer() DateTime? startDate,
+      @TimestampConverter() DateTime? startDate,
       List<String>? shareFriendIdList,
       List<String>? shareGroupIdList});
 }
@@ -121,7 +121,7 @@ abstract class _$$FirebaseResolutionModelImplCopyWith<$Res>
       String? actionStatement,
       bool? isActive,
       int? actionPerWeek,
-      @TimestampSerializer() DateTime? startDate,
+      @TimestampConverter() DateTime? startDate,
       List<String>? shareFriendIdList,
       List<String>? shareGroupIdList});
 }
@@ -189,7 +189,7 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
       required this.actionStatement,
       required this.isActive,
       required this.actionPerWeek,
-      @TimestampSerializer() required this.startDate,
+      @TimestampConverter() required this.startDate,
       required final List<String>? shareFriendIdList,
       required final List<String>? shareGroupIdList})
       : _shareFriendIdList = shareFriendIdList,
@@ -207,7 +207,7 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
   @override
   final int? actionPerWeek;
   @override
-  @TimestampSerializer()
+  @TimestampConverter()
   final DateTime? startDate;
   final List<String>? _shareFriendIdList;
   @override
@@ -290,7 +290,7 @@ abstract class _FirebaseResolutionModel implements FirebaseResolutionModel {
           required final String? actionStatement,
           required final bool? isActive,
           required final int? actionPerWeek,
-          @TimestampSerializer() required final DateTime? startDate,
+          @TimestampConverter() required final DateTime? startDate,
           required final List<String>? shareFriendIdList,
           required final List<String>? shareGroupIdList}) =
       _$FirebaseResolutionModelImpl;
@@ -307,7 +307,7 @@ abstract class _FirebaseResolutionModel implements FirebaseResolutionModel {
   @override
   int? get actionPerWeek;
   @override
-  @TimestampSerializer()
+  @TimestampConverter()
   DateTime? get startDate;
   @override
   List<String>? get shareFriendIdList;
