@@ -63,18 +63,8 @@ class _GroupViewState extends ConsumerState<GroupView> {
 
     return Scaffold(
       backgroundColor: CustomColors.whDarkBlack,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text(
-          '참여중인 그룹 목록',
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
-            fontSize: 20,
-          ),
-        ),
-        backgroundColor: Colors.transparent,
-        centerTitle: false,
+      appBar: WehavitAppBar(
+        title: '참여중인 그룹 목록',
       ),
       body: SafeArea(
         minimum: const EdgeInsets.symmetric(horizontal: 16),

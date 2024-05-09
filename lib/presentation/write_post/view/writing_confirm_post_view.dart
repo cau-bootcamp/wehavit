@@ -37,7 +37,7 @@ class _WritingConfirmPostViewState
       children: [
         Scaffold(
           backgroundColor: CustomColors.whDarkBlack,
-          appBar: wehavitAppBar(
+          appBar: WehavitAppBar(
             title: widget.hasRested ? '반성글 남기기' : '인증 남기기',
             leadingTitle: '목표 선택',
             leadingIcon: Icons.chevron_left,

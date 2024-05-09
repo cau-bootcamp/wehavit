@@ -27,7 +27,7 @@ class _JoinGroupViewState extends ConsumerState<JoinGroupView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: CustomColors.whDarkBlack,
-      appBar: wehavitAppBar(
+      appBar: WehavitAppBar(
         title: '그룹에 참여하기',
         leadingTitle: '취소',
         leadingAction: () {

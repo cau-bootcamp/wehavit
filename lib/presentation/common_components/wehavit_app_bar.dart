@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wehavit/common/constants/constants.dart';
 
-AppBar wehavitAppBar({
+AppBar WehavitAppBar({
   required String title,
   String? leadingTitle,
   Function? leadingAction,

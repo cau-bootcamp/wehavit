@@ -37,66 +37,64 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView> {
 
     return Scaffold(
       backgroundColor: CustomColors.whDarkBlack,
-      appBar: wehavitAppBar(
+      appBar: WehavitAppBar(
         title: '인증 남기기',
       ),
       body: SafeArea(
         minimum: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              ResolutionSummaryCardWidget(
-                totalCount: viewModel.summaryDoneCount,
-                doneRatio:
-                    (viewModel.summaryDoneCount / viewModel.summaryTotalCount)
-                        .toDouble(),
-              ),
-              Visibility(
-                visible: !isLoading,
-                replacement: const Padding(
-                  padding: EdgeInsets.only(top: 100.0),
-                  child: Center(
-                    child: SizedBox(
-                      width: 40,
-                      height: 40,
-                      child: CircularProgressIndicator(
-                        color: CustomColors.whYellow,
-                      ),
-                    ),
-                  ),
-                ),
-                child: Column(
-                  children: List<Widget>.generate(
-                    viewModel.resolutionModelList?.length ?? 0,
-                    (index) => Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: GestureDetector(
-                        child: ResolutionListCellWidget(
-                          viewModel.resolutionModelList![index],
-                        ),
-                        onTapUp: (details) async {
-                          showModalBottomSheet(
-                            context: context,
-                            builder: (context) {
-                              return WritingResolutionBottomSheetWidget(
-                                viewModel: viewModel,
-                                provider: provider,
-                                index: index,
-                              );
-                            },
-                          ).whenComplete(() {
-                            provider
-                                .loadResolutionModelList()
-                                .whenComplete(() => setState(() {}));
-                          });
-                        },
-                      ),
+        child: ListView(
+          children: [
+            ResolutionSummaryCardWidget(
+              totalCount: viewModel.summaryDoneCount,
+              doneRatio:
+                  (viewModel.summaryDoneCount / viewModel.summaryTotalCount)
+                      .toDouble(),
+            ),
+            Visibility(
+              visible: !isLoading,
+              replacement: const Padding(
+                padding: EdgeInsets.only(top: 100.0),
+                child: Center(
+                  child: SizedBox(
+                    width: 40,
+                    height: 40,
+                    child: CircularProgressIndicator(
+                      color: CustomColors.whYellow,
                     ),
                   ),
                 ),
               ),
-            ],
-          ),
+              child: Column(
+                children: List<Widget>.generate(
+                  viewModel.resolutionModelList?.length ?? 0,
+                  (index) => Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: GestureDetector(
+                      child: ResolutionListCellWidget(
+                        viewModel.resolutionModelList![index],
+                      ),
+                      onTapUp: (details) async {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return WritingResolutionBottomSheetWidget(
+                              viewModel: viewModel,
+                              provider: provider,
+                              index: index,
+                            );
+                          },
+                        ).whenComplete(() {
+                          provider
+                              .loadResolutionModelList()
+                              .whenComplete(() => setState(() {}));
+                        });
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

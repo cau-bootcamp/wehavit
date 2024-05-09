@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/presentation/effects/effects.dart';
+import 'package:wehavit/presentation/presentation.dart';
 
 class MyPageScreen extends ConsumerStatefulWidget {
   const MyPageScreen({super.key});
@@ -35,17 +35,8 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen> {
     var currentUser = FirebaseAuth.instance.currentUser;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: CustomColors.whBlack,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.home, color: CustomColors.whSemiWhite),
-            onPressed: () async {
-              context.go(RouteLocation.main);
-            },
-          ),
-        ],
-      ),
+      backgroundColor: CustomColors.whDarkBlack,
+      appBar: WehavitAppBar(title: '내 정보'),
       body: Container(
         decoration: const BoxDecoration(
           color: CustomColors.whBlack,
@@ -58,7 +49,8 @@ class _MyPageScreenState extends ConsumerState<MyPageScreen> {
             CheckAllWidget(ref: ref),
             // 내 목표 리스트
             MyResolutionListWidget(
-                resolutionListProvider: resolutionListProvider),
+              resolutionListProvider: resolutionListProvider,
+            ),
           ],
         ),
       ),
