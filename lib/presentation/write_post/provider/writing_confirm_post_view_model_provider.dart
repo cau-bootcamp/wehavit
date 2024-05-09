@@ -32,6 +32,7 @@ class WritingConfirmPostViewModelProvider
       localFileUrlList:
           state.imageMediaList.map((media) => media.path.toString()).toList(),
       hasRested: hasRested,
+      isPostingForYesterday: state.isWritingYesterdayPost,
     );
   }
 }

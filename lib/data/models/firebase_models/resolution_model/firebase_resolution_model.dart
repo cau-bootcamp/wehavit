@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:wehavit/common/utils/timestamp_serializer.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 
 part 'firebase_resolution_model.g.dart';

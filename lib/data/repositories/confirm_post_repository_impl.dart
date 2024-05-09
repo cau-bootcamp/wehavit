@@ -18,8 +18,11 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
   ) async {
     final String resolutionId = confirmPostEntity.resolutionId!;
     try {
-      final existingPost = await _wehavitDatasource
-          .getConfirmPostOfTodayByResolutionGoalId(resolutionId);
+      final existingPost =
+          await _wehavitDatasource.getConfirmPostOfTargetDateByResolutionGoalId(
+        confirmPostEntity.createdAt!,
+        resolutionId,
+      );
 
       existingPost.fold(
         (l) {

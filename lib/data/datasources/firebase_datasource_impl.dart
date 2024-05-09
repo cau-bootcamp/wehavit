@@ -239,17 +239,21 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }
 
   @override
-  EitherFuture<ConfirmPostEntity> getConfirmPostOfTodayByResolutionGoalId(
+  EitherFuture<ConfirmPostEntity> getConfirmPostOfTargetDateByResolutionGoalId(
+    DateTime targetDate,
     String resolutionId,
   ) async {
     try {
-      final DateTime today = DateTime.now();
-
-      Timestamp startDate =
-          Timestamp.fromDate(DateTime(today.year, today.month, today.day));
+      Timestamp startDate = Timestamp.fromDate(
+        DateTime(
+          targetDate.year,
+          targetDate.month,
+          targetDate.day,
+        ),
+      );
 
       Timestamp endDate = Timestamp.fromDate(
-        DateTime(today.year, today.month, today.day)
+        DateTime(targetDate.year, targetDate.month, targetDate.day)
             .add(const Duration(days: 1)),
       );
 
@@ -1679,9 +1683,45 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           )
           .doc(targetResolutionId)
           .get()
-          .then((result) {
+          .then((result) async {
         if (result.data() != null) {
-          return Future(() => right(ResolutionEntity.fromJson(result.data()!)));
+          final model = FirebaseResolutionModel.fromFireStoreDocument(
+            result,
+          );
+
+          final shareFriendEntityList = (await Future.wait(
+            model.shareFriendIdList!.map((uid) async {
+              final entity = (await fetchUserDataEntityByUserId(uid))
+                  .fold((failure) => null, (entity) => entity);
+
+              if (entity != null) {
+                return entity;
+              }
+            }).toList(),
+          ))
+              .nonNulls
+              .toList();
+
+          final shareGroupEntityList = (await Future.wait(
+            model.shareGroupIdList!.map((groupId) async {
+              final entity = (await fetchGroupEntityByGroupId(groupId))
+                  .fold((failure) => null, (entity) => entity);
+
+              if (entity != null) {
+                return entity;
+              }
+            }).toList(),
+          ))
+              .nonNulls
+              .toList();
+
+          final resolutionEntity = model.toResolutionEntity(
+            documentId: result.reference.id,
+            shareFriendEntityList: shareFriendEntityList,
+            shareGroupEntityList: shareGroupEntityList,
+          );
+
+          return Future(() => right(resolutionEntity));
         } else {
           return Future(
             () => left(const Failure('cannot find target resolution')),
