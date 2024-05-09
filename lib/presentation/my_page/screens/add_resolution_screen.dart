@@ -15,11 +15,11 @@ class AddResolutionScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final resolutionProvider = ref.watch(addResolutionProvider);
+    // final resolutionProvider = ref.watch(addResolutionProvider);
 
     // ignore: discarded_futures
-    final friendListFuture = useMemoized(() => getFriendList(ref));
-    final friendListSnapshot = useFuture(friendListFuture);
+    // final friendListFuture = useMemoized(() => getFriendList(ref));
+    // final friendListSnapshot = useFuture(friendListFuture);
 
     return Scaffold(
       // resizeToAvoidBottomInset: false,

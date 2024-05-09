@@ -27,7 +27,7 @@ class _GroupViewState extends ConsumerState<GroupView> {
   @override
   Widget build(BuildContext context) {
     final viewModel = ref.watch(groupViewModelProvider);
-    final provider = ref.read(groupViewModelProvider.notifier);
+    // final provider = ref.read(groupViewModelProvider.notifier);
 
     List<Widget> groupListViewCellList = (viewModel.groupListViewCellModelList
                 ?.map(
