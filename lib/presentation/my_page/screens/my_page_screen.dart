@@ -25,8 +25,8 @@ class MyPageScreen extends ConsumerStatefulWidget {
 class _MyPageScreenState extends ConsumerState<MyPageScreen> {
   @override
   void initState() {
-    ref.read(myPageResolutionListProvider.notifier).getMyActiveResolutionList();
     super.initState();
+    ref.read(myPageResolutionListProvider.notifier).getMyActiveResolutionList();
   }
 
   @override

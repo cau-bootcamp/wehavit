@@ -140,6 +140,11 @@ final getUserDataFromIdUsecaseProvider =
   return GetUserDataFromIdUsecase(repository);
 });
 
+final getMyUserDataUsecaseProvider = Provider<GetMyUserDataUsecase>((ref) {
+  final repository = ref.watch(userModelRepositoryProvider);
+  return GetMyUserDataUsecase(repository);
+});
+
 final createGroupUsecaseProvider = Provider<CreateGroupUsecase>((ref) {
   final groupRepository = ref.watch(groupRepositoryProvider);
   final userModelRepository = ref.watch(userModelRepositoryProvider);

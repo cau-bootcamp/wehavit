@@ -39,10 +39,6 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView> {
       backgroundColor: CustomColors.whDarkBlack,
       appBar: wehavitAppBar(
         title: '인증 남기기',
-        leadingTitle: '닫기',
-        leadingAction: () {
-          Navigator.pop(context);
-        },
       ),
       body: SafeArea(
         minimum: const EdgeInsets.symmetric(horizontal: 16.0),
