@@ -111,8 +111,9 @@ abstract class WehavitDatasource {
     required String groupId,
   });
 
-  EitherFuture<int> getTargetResolutionDoneCountForThisWeek({
+  EitherFuture<int> getTargetResolutionDoneCountForWeek({
     required String resolutionId,
+    required DateTime startMonday,
   });
 
   EitherFuture<List<GroupEntity>> getResolutionSharingTargetGroupList(

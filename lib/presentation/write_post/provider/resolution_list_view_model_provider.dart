@@ -35,6 +35,7 @@ class ResolutionListViewModelProvider
         if (entity.resolutionId != null) {
           successCount = await _getTargetResolutionDoneCountForWeekUsecase(
             resolutionId: entity.resolutionId ?? '',
+            startMonday: DateTime.now().getMondayDateTime(),
           ).then(
             (result) => result.fold(
               (failure) => 0,

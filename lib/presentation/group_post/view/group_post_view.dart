@@ -347,6 +347,7 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                             child: ConfirmPostWidget(
                               confirmPostEntity: viewModel.confirmPostList[
                                   viewModel.selectedDate]![index],
+                              createdDate: viewModel.selectedDate,
                             ),
                           ),
                         ),

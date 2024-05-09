@@ -22,6 +22,7 @@ export 'theme/theme_extension.dart';
 export 'usecases/stream_usecase.dart';
 export 'usecases/usecase.dart';
 export 'utils/custom_types.dart';
+export 'utils/datetime+.dart';
 export 'utils/emoji_assets.dart';
 export 'utils/firebase_collection_name.dart';
 export 'utils/icon_assets.dart';

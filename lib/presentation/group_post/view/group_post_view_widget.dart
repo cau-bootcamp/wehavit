@@ -2,9 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wehavit/common/constants/constants.dart';
-import 'package:wehavit/common/utils/emoji_assets.dart';
-import 'package:wehavit/common/utils/utils.dart';
+import 'package:wehavit/common/common.dart';
+
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
@@ -16,10 +15,12 @@ import 'package:wehavit/presentation/write_post/write_post.dart';
 class ConfirmPostWidget extends ConsumerStatefulWidget {
   const ConfirmPostWidget({
     required this.confirmPostEntity,
+    required this.createdDate,
     super.key,
   });
 
   final ConfirmPostEntity confirmPostEntity;
+  final DateTime createdDate;
 
   @override
   ConsumerState<ConfirmPostWidget> createState() => _ConfirmPostWidgetState();
@@ -27,19 +28,23 @@ class ConfirmPostWidget extends ConsumerStatefulWidget {
 
 class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
     with TickerProviderStateMixin {
-  late Future<int> resolutionDoneCountForThisWeek;
+  late Future<int> resolutionDoneCountForWrittenWeek;
   late EitherFuture<UserDataEntity> futureUserDataEntity;
   late Future<ResolutionEntity?> futureResolutionEntity;
 
   @override
   void initState() {
     super.initState();
+    print(widget.createdDate.getMondayDateTime());
     futureUserDataEntity = ref.read(getUserDataFromIdUsecaseProvider)(
         widget.confirmPostEntity.owner!);
 
-    resolutionDoneCountForThisWeek = ref
+    resolutionDoneCountForWrittenWeek = ref
         .read(getTargetResolutionDoneCountForWeekUsecaseProvider)
-        .call(resolutionId: widget.confirmPostEntity.resolutionId!)
+        .call(
+          resolutionId: widget.confirmPostEntity.resolutionId!,
+          startMonday: widget.createdDate.getMondayDateTime(),
+        )
         .then((result) => result.fold((failure) => -1, (count) => count));
 
     futureResolutionEntity = ref
@@ -151,7 +156,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                         // const SizedBox(height: 12.0),
                         FutureBuilder(
                           future: Future.wait([
-                            resolutionDoneCountForThisWeek,
+                            resolutionDoneCountForWrittenWeek,
                             futureResolutionEntity,
                           ]),
                           builder: (context, snapshot) {
