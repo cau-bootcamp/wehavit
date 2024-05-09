@@ -1,3 +1,11 @@
+export 'providers/add_resolution_provider.dart';
+export 'providers/my_page_resolution_list_provider.dart';
 export 'providers/providers.dart';
+export 'screens/add_resolution_screen.dart';
+export 'screens/my_page_screen.dart';
 export 'screens/screens.dart';
+export 'widgets/resolution_accomplishment_donut_graph_datamodel.dart';
+export 'widgets/resolution_dashboard_widget.dart';
+export 'widgets/resolution_doughnut_graph_widget.dart';
+export 'widgets/resolution_linear_gauge_graph_widget.dart';
 export 'widgets/widgets.dart';

@@ -20,7 +20,7 @@ class _CreateGroupViewState extends ConsumerState<CreateGroupView> {
 
     return Scaffold(
       backgroundColor: CustomColors.whDarkBlack,
-      appBar: wehavitAppBar(
+      appBar: WehavitAppBar(
         title: '그룹 만들기',
         leadingTitle: '취소',
         leadingAction: () {

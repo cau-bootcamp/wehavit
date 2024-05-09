@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wehavit/common/constants/constants.dart';
 
-AppBar wehavitAppBar({
+AppBar WehavitAppBar({
   required String title,
   String? leadingTitle,
   Function? leadingAction,
@@ -14,12 +14,13 @@ AppBar wehavitAppBar({
     title: Text(
       title,
       style: const TextStyle(
-        fontSize: 17.0,
         fontWeight: FontWeight.w600,
-        color: CustomColors.whWhite,
+        color: Colors.white,
+        fontSize: 20,
       ),
     ),
-    leadingWidth: 135,
+    centerTitle: false,
+    leadingWidth: leadingTitle != null ? 135 : 10,
     leading: Visibility(
       visible: leadingTitle != null,
       child: TextButton.icon(

@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
-
 import '../../presentation/write_post/write_post.dart';
 
 class TestPage extends ConsumerWidget {
@@ -26,9 +25,9 @@ class TestPage extends ConsumerWidget {
           children: [
             MoveButton(
               onPressCallback: () async {
-                context.push(RouteLocation.home);
+                context.push(RouteLocation.main);
               },
-              buttonText: 'Go to Main View',
+              buttonText: 'Main View',
             ),
             MoveButton(
               onPressCallback: () async {

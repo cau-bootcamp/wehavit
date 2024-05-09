@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/friend_list/friend_list.dart';
+import 'package:wehavit/presentation/presentation.dart';
 
 class FriendListScreen extends ConsumerStatefulWidget {
   const FriendListScreen({super.key});
@@ -31,19 +32,8 @@ class _FriendListScreenState extends ConsumerState<FriendListScreen> {
     var friendList = ref.watch(friendListProvider);
 
     return Scaffold(
-      backgroundColor: CustomColors.whBlack,
-      appBar: AppBar(
-        backgroundColor: CustomColors.whBlack,
-        actions: [
-          IconButton(
-            color: CustomColors.whWhite,
-            icon: const Icon(Icons.home, color: CustomColors.whSemiWhite),
-            onPressed: () async {
-              context.go(RouteLocation.home);
-            },
-          ),
-        ],
-      ),
+      backgroundColor: CustomColors.whDarkBlack,
+      appBar: WehavitAppBar(title: '친구 목록'),
       body: SafeArea(
         child: Column(
           children: [

@@ -9,7 +9,7 @@ import 'package:wehavit/presentation/auth/auth.dart';
 import 'package:wehavit/presentation/effects/effects.dart';
 import 'package:wehavit/presentation/friend_list/friend_list.dart';
 import 'package:wehavit/presentation/group/view/group_view.dart';
-import 'package:wehavit/presentation/home/home.dart';
+import 'package:wehavit/presentation/main/view/main_view.dart';
 import 'package:wehavit/presentation/my_page/my_page.dart';
 import 'package:wehavit/presentation/splash/splash.dart';
 import 'package:wehavit/presentation/test_view/group/group_sample_view.dart';
@@ -56,11 +56,11 @@ final routerProvider = Provider<GoRouter>(
 class HomeRoute extends GoRouteData {
   const HomeRoute();
 
-  static const path = RouteLocation.home;
+  static const path = RouteLocation.main;
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const HomeScreen();
+    return const MainView();
   }
 }
 

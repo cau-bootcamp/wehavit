@@ -72,6 +72,7 @@ flutter:
   assets:
     - assets/images/emoji_3d/
     - assets/logo/
+    - assets/images/icons/
     - assets/fonts/
 
   fonts:

@@ -1,5 +1,4 @@
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/repositories/group_repository.dart';
 
 class GetAchievementPercentageForGroupMemberUsecase {

@@ -220,7 +220,6 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                             return;
                           }
 
-                          print(reactionCameraModel.isPosInCapturingArea);
                           if (reactionCameraModel.isPosInCapturingArea) {
                             final imageFilePath =
                                 await reactionCameraModelProvider
@@ -231,8 +230,6 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                               imageFilePath: imageFilePath,
                             );
                           }
-
-                          print(panningPosition);
 
                           setState(() {});
                         },

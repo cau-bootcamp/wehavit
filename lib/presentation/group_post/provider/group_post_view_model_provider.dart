@@ -1,4 +1,3 @@
-import 'package:camera/camera.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';

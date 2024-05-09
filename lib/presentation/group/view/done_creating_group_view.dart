@@ -15,7 +15,7 @@ class DoneCreatingGroupView extends StatelessWidget {
       canPop: false,
       child: Scaffold(
         backgroundColor: CustomColors.whDarkBlack,
-        appBar: wehavitAppBar(
+        appBar: WehavitAppBar(
           title: '그룹 만들기 완료',
           trailingTitle: '닫기',
           trailingAction: () {
