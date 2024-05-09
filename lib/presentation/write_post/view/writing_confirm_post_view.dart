@@ -146,6 +146,9 @@ class _WritingConfirmPostViewState
                         color: CustomColors.whPlaceholderGrey.withAlpha(200),
                       ),
                     ),
+                    onChanged: (value) {
+                      viewModel.postContent = value;
+                    },
                   ),
                 ),
                 Visibility(

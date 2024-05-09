@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/widgets.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
@@ -103,25 +102,16 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
     required String groupId,
     required DateTime selectedDate,
   }) async {
-    try {
-      final getResult =
-          await _wehavitDatasource.getGroupConfirmPostEntityListByDate(
-        groupId,
-        selectedDate,
-      );
-      return getResult;
-    } on Exception catch (e) {
-      debugPrint(e.toString());
-      return Future(() => left(Failure(e.toString())));
-    }
+    return _wehavitDatasource.getGroupConfirmPostEntityListByDate(
+      groupId,
+      selectedDate,
+    );
   }
 
   @override
   EitherFuture<String> uploadConfirmPostImage({
     required String localFileUrl,
   }) async {
-    final uploadResult = await _wehavitDatasource
-        .uploadConfirmPostImageFromLocalUrl(localFileUrl);
-    return uploadResult;
+    return _wehavitDatasource.uploadConfirmPostImageFromLocalUrl(localFileUrl);
   }
 }

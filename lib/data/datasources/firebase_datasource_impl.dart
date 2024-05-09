@@ -298,7 +298,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   EitherFuture<bool> uploadConfirmPost(ConfirmPostEntity entity) async {
     try {
       final model = FirebaseConfirmPostModel.fromConfirmPostEntity(entity);
-
+      print(model.content);
       await firestore
           .collection(FirebaseCollectionName.confirmPosts)
           .add(model.toFirestoreMap());

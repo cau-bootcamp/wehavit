@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/constants/constants.dart';
 import 'package:wehavit/common/utils/emoji_assets.dart';
 import 'package:wehavit/common/utils/utils.dart';
@@ -156,7 +155,6 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                             futureResolutionEntity,
                           ]),
                           builder: (context, snapshot) {
-                            print(snapshot);
                             if (snapshot.hasData) {
                               int successCount = snapshot.data![0] as int;
                               ResolutionEntity? resolutionEntity =
