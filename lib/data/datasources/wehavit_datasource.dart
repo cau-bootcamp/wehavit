@@ -17,7 +17,8 @@ abstract class WehavitDatasource {
     String resolutionId,
   );
 
-  EitherFuture<ConfirmPostEntity> getConfirmPostOfTodayByResolutionGoalId(
+  EitherFuture<ConfirmPostEntity> getConfirmPostOfTargetDateByResolutionGoalId(
+    DateTime targetDate,
     String resolutionId,
   );
 

@@ -71,6 +71,7 @@ class ResolutionListViewModelProvider
       content: '',
       localFileUrlList: [],
       hasRested: false,
+      isPostingForYesterday: false,
     );
   }
 }

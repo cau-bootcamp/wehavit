@@ -19,6 +19,7 @@ class UploadConfirmPostUseCase {
     required String content,
     required List<String> localFileUrlList,
     required bool hasRested,
+    required bool isPostingForYesterday,
   }) async {
     try {
       final networkImageUrlList = await Future.wait(
@@ -58,7 +59,8 @@ class UploadConfirmPostUseCase {
         imageUrlList: networkImageUrlList,
         owner: uid,
         recentStrike: 0,
-        createdAt: DateTime.now(),
+        createdAt: DateTime.now()
+            .subtract(Duration(days: isPostingForYesterday ? 1 : 0)),
         updatedAt: DateTime.now(),
         hasRested: hasRested,
       );
