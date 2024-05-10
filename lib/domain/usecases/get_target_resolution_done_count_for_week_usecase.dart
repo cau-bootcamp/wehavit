@@ -10,8 +10,11 @@ class GetTargetResolutionDoneCountForWeekUsecase {
 
   EitherFuture<int> call({
     required String resolutionId,
+    required DateTime startMonday,
   }) {
-    return _resolutionRepository
-        .getResolutionDoneCountForThisWeek(resolutionId);
+    return _resolutionRepository.getResolutionDoneCountForWeek(
+      resolutionId: resolutionId,
+      startMonday: startMonday,
+    );
   }
 }

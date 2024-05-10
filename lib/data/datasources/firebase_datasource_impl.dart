@@ -239,17 +239,21 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }
 
   @override
-  EitherFuture<ConfirmPostEntity> getConfirmPostOfTodayByResolutionGoalId(
+  EitherFuture<ConfirmPostEntity> getConfirmPostOfTargetDateByResolutionGoalId(
+    DateTime targetDate,
     String resolutionId,
   ) async {
     try {
-      final DateTime today = DateTime.now();
-
-      Timestamp startDate =
-          Timestamp.fromDate(DateTime(today.year, today.month, today.day));
+      Timestamp startDate = Timestamp.fromDate(
+        DateTime(
+          targetDate.year,
+          targetDate.month,
+          targetDate.day,
+        ),
+      );
 
       Timestamp endDate = Timestamp.fromDate(
-        DateTime(today.year, today.month, today.day)
+        DateTime(targetDate.year, targetDate.month, targetDate.day)
             .add(const Duration(days: 1)),
       );
 
@@ -294,7 +298,6 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   EitherFuture<bool> uploadConfirmPost(ConfirmPostEntity entity) async {
     try {
       final model = FirebaseConfirmPostModel.fromConfirmPostEntity(entity);
-
       await firestore
           .collection(FirebaseCollectionName.confirmPosts)
           .add(model.toFirestoreMap());
@@ -1478,27 +1481,13 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }
 
   @override
-  EitherFuture<int> getTargetResolutionDoneCountForThisWeek({
+  EitherFuture<int> getTargetResolutionDoneCountForWeek({
     required String resolutionId,
+    required DateTime startMonday,
   }) async {
     try {
-      // 현재가 월요일 10일 12:34:56이라면
-      // StartDate 값은 10일 월요일 00:00:00 으로 설정
-      // EndDate   값은 17일 월요일 00:00:00 으로 설정
-      // -> start to end : 가장 최근의 월~일 (오늘이 일요일인 경우에는 이번 주)
-      DateTime endDate;
-      DateTime now = DateTime.now();
-      int difference = now.weekday - DateTime.sunday;
-
-      // 만약 현재 날짜가 일요일이면 현재 날짜를 반환
-      // 현재 날짜에서 일요일까지의 차이를 뺀 값을 반환
-      final date = now.subtract(Duration(days: difference));
-      endDate = DateTime(date.year, date.month, date.day)
-          .add(const Duration(days: 1));
-
-      // ignore: unused_local_variable
-      DateTime startDate = DateTime(endDate.year, endDate.month, endDate.day)
-          .subtract(const Duration(days: 7));
+      DateTime startDate = startMonday;
+      DateTime endDate = startDate.add(const Duration(days: 7));
 
       final doneCount = await firestore
           .collection(FirebaseCollectionName.confirmPosts)
@@ -1639,8 +1628,9 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
         }
 
         if (sharedGroupList.contains(groupId)) {
-          final success = await getTargetResolutionDoneCountForThisWeek(
+          final success = await getTargetResolutionDoneCountForWeek(
             resolutionId: doc.reference.id,
+            startMonday: getThisMondayDateTime(),
           ).then((value) => value.fold((failure) => -1, (scount) => scount));
           successCount += success;
           total +=
@@ -1679,9 +1669,45 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           )
           .doc(targetResolutionId)
           .get()
-          .then((result) {
+          .then((result) async {
         if (result.data() != null) {
-          return Future(() => right(ResolutionEntity.fromJson(result.data()!)));
+          final model = FirebaseResolutionModel.fromFireStoreDocument(
+            result,
+          );
+
+          final shareFriendEntityList = (await Future.wait(
+            model.shareFriendIdList!.map((uid) async {
+              final entity = (await fetchUserDataEntityByUserId(uid))
+                  .fold((failure) => null, (entity) => entity);
+
+              if (entity != null) {
+                return entity;
+              }
+            }).toList(),
+          ))
+              .nonNulls
+              .toList();
+
+          final shareGroupEntityList = (await Future.wait(
+            model.shareGroupIdList!.map((groupId) async {
+              final entity = (await fetchGroupEntityByGroupId(groupId))
+                  .fold((failure) => null, (entity) => entity);
+
+              if (entity != null) {
+                return entity;
+              }
+            }).toList(),
+          ))
+              .nonNulls
+              .toList();
+
+          final resolutionEntity = model.toResolutionEntity(
+            documentId: result.reference.id,
+            shareFriendEntityList: shareFriendEntityList,
+            shareGroupEntityList: shareGroupEntityList,
+          );
+
+          return Future(() => right(resolutionEntity));
         } else {
           return Future(
             () => left(const Failure('cannot find target resolution')),
