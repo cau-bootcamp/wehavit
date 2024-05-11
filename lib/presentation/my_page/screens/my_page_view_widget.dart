@@ -10,8 +10,14 @@ class MyPageWehavitSummaryWidget extends StatelessWidget {
   });
 
   final EitherFuture<UserDataEntity> dummyFutureUserEntity =
-      Future.delayed(Duration(seconds: 0), () {
+      Future.delayed(Duration(seconds: 2), () {
     return right(UserDataEntity.dummyModel);
+    // return left(Failure("no data"));
+  });
+
+  final EitherFuture<(int, int, int, int)> dummyStatisticsTuple =
+      Future.delayed(Duration(seconds: 2), () {
+    return right((1, 2, 3, 4));
     // return left(Failure("no data"));
   });
 
@@ -41,11 +47,8 @@ class MyPageWehavitSummaryWidget extends StatelessWidget {
                 const SizedBox(
                   height: 16,
                 ),
-                const MySimpleStatisticsWidget(
-                  totalDaysFromSignOn: 12,
-                  totalResolutionsNum: 23,
-                  totalPostsNum: 34,
-                  totalReactionsNum: 45,
+                MySimpleStatisticsWidget(
+                  futureStatisticsTuple: dummyStatisticsTuple,
                 ),
               ],
             ),
@@ -215,66 +218,80 @@ class ProfileImageCircleWidget extends StatelessWidget {
 class MySimpleStatisticsWidget extends StatelessWidget {
   const MySimpleStatisticsWidget({
     super.key,
-    required this.totalDaysFromSignOn,
-    required this.totalResolutionsNum,
-    required this.totalPostsNum,
-    required this.totalReactionsNum,
+    required this.futureStatisticsTuple,
   });
 
-  final int totalDaysFromSignOn;
-  final int totalResolutionsNum;
-  final int totalPostsNum;
-  final int totalReactionsNum;
+  final EitherFuture<(int, int, int, int)> futureStatisticsTuple;
 
   @override
   Widget build(BuildContext context) {
-    return IntrinsicHeight(
-      child: Row(
-        children: [
-          const VerticalDivider(
-              thickness: 4, width: 16, color: CustomColors.whYellow),
-          const SizedBox(width: 8),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SimpleStatisticsBulletWidget(
-                icon: '📆',
-                preText: '위해빗과 함께한 지 ',
-                highlightedText: '$totalDaysFromSignOn일째',
-                postText: '가 되었어요.',
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              SimpleStatisticsBulletWidget(
-                icon: '🕊️',
-                preText: '지금까지 ',
-                highlightedText: '$totalResolutionsNum개',
-                postText: '의 목표에 도전했어요',
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              SimpleStatisticsBulletWidget(
-                icon: '👀',
-                preText: '벌써 ',
-                highlightedText: '$totalPostsNum개',
-                postText: '의 실천을 인증했어요!',
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              SimpleStatisticsBulletWidget(
-                icon: '👏',
-                preText: '그리고 ',
-                highlightedText: '$totalReactionsNum번',
-                postText: '이나 친구들을 응원했어요!',
-              ),
-            ],
-          ),
-        ],
-      ),
+    return FutureBuilder(
+      future: futureStatisticsTuple,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return RefreshProgressIndicator();
+        }
+
+        if (snapshot.hasData && snapshot.data!.isRight()) {
+          return Row(
+            children: [],
+          );
+        }
+        return Row(
+          children: [],
+        );
+      },
     );
+    // return IntrinsicHeight(
+    //   child: Row(
+    //     children: [
+    //       const VerticalDivider(
+    //         thickness: 4,
+    //         width: 16,
+    //         color: CustomColors.whYellow,
+    //       ),
+    //       const SizedBox(width: 8),
+    //       Column(
+    //         crossAxisAlignment: CrossAxisAlignment.start,
+    //         children: [
+    //           SimpleStatisticsBulletWidget(
+    //             icon: '📆',
+    //             preText: '위해빗과 함께한 지 ',
+    //             highlightedText: '${futureStatisticsTuple.$1}일째',
+    //             postText: '가 되었어요.',
+    //           ),
+    //           const SizedBox(
+    //             height: 8,
+    //           ),
+    //           SimpleStatisticsBulletWidget(
+    //             icon: '🕊️',
+    //             preText: '지금까지 ',
+    //             highlightedText: '${futureStatisticsTuple.$2}개',
+    //             postText: '의 목표에 도전했어요',
+    //           ),
+    //           const SizedBox(
+    //             height: 8,
+    //           ),
+    //           SimpleStatisticsBulletWidget(
+    //             icon: '👀',
+    //             preText: '벌써 ',
+    //             highlightedText: '${futureStatisticsTuple.$3}개',
+    //             postText: '의 실천을 인증했어요!',
+    //           ),
+    //           const SizedBox(
+    //             height: 8,
+    //           ),
+    //           SimpleStatisticsBulletWidget(
+    //             icon: '👏',
+    //             preText: '그리고 ',
+    //             highlightedText: '${futureStatisticsTuple.$4}번',
+    //             postText: '이나 친구들을 응원했어요!',
+    //           ),
+    //         ],
+    //       ),
+    //     ],
+    //   ),
+    // );
   }
 }
 
