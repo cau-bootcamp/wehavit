@@ -38,19 +38,11 @@ class _MyPageScreenState extends ConsumerState<MyPageView> {
       backgroundColor: CustomColors.whDarkBlack,
       appBar: WehavitAppBar(title: '내 정보'),
       body: Container(
-        decoration: const BoxDecoration(
-          color: CustomColors.whBlack,
-        ),
-        child: Column(
+        padding: EdgeInsets.symmetric(horizontal: 16.0),
+        child: ListView(
           children: [
             // 내 프로필
-            MyProfile(currentUser: currentUser),
-            // 모든 목표 통계 확인하기
-            CheckAllWidget(ref: ref),
-            // 내 목표 리스트
-            // MyResolutionListWidget(
-            //   resolutionListProvider: resolutionListProvider,
-            // ),
+            MyPageWehavitSummaryWidget(),
           ],
         ),
       ),
