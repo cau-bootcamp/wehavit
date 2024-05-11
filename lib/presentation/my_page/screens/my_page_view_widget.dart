@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
@@ -16,7 +17,7 @@ class MyPageWehavitSummaryWidget extends StatelessWidget {
   });
 
   final EitherFuture<(int, int, int, int)> dummyStatisticsTuple =
-      Future.delayed(Duration(seconds: 2), () {
+      Future.delayed(Duration(seconds: 3), () {
     return right((1, 2, 3, 4));
     // return left(Failure("no data"));
   });
@@ -71,7 +72,7 @@ class MyPageWehavitSummaryWidget extends StatelessWidget {
               '더 많은 통계 보러가기',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 13.0,
+                fontSize: 14.0,
                 fontWeight: FontWeight.w700,
                 color: CustomColors.whWhite,
               ),
@@ -229,69 +230,79 @@ class MySimpleStatisticsWidget extends StatelessWidget {
       future: futureStatisticsTuple,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return RefreshProgressIndicator();
+          return LoadingAnimationWidget.waveDots(
+            color: CustomColors.whBrightGrey,
+            size: 30,
+          );
         }
 
         if (snapshot.hasData && snapshot.data!.isRight()) {
-          return Row(
-            children: [],
+          final statisticsTuple = snapshot.data!.getOrElse(
+            (l) => (0, 0, 0, 0),
+          );
+
+          return IntrinsicHeight(
+            child: Row(
+              children: [
+                const VerticalDivider(
+                  thickness: 4,
+                  width: 2,
+                  color: CustomColors.whYellow,
+                ),
+                const SizedBox(width: 12),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SimpleStatisticsBulletWidget(
+                      icon: '📆',
+                      preText: '위해빗과 함께한 지 ',
+                      highlightedText: '${statisticsTuple.$1}일째',
+                      postText: '가 되었어요.',
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    SimpleStatisticsBulletWidget(
+                      icon: '🕊️',
+                      preText: '지금까지 ',
+                      highlightedText: '${statisticsTuple.$2}개',
+                      postText: '의 목표에 도전했어요',
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    SimpleStatisticsBulletWidget(
+                      icon: '👀',
+                      preText: '벌써 ',
+                      highlightedText: '${statisticsTuple.$3}개',
+                      postText: '의 실천을 인증했어요!',
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    SimpleStatisticsBulletWidget(
+                      icon: '👏',
+                      preText: '그리고 ',
+                      highlightedText: '${statisticsTuple.$4}번',
+                      postText: '이나 친구들을 응원했어요!',
+                    ),
+                  ],
+                ),
+              ],
+            ),
           );
         }
-        return Row(
-          children: [],
+        return const Text(
+          '통계 정보를 가져오지 못했어요 😢',
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w300,
+            color: CustomColors.whWhite,
+            overflow: TextOverflow.ellipsis,
+          ),
         );
       },
     );
-    // return IntrinsicHeight(
-    //   child: Row(
-    //     children: [
-    //       const VerticalDivider(
-    //         thickness: 4,
-    //         width: 16,
-    //         color: CustomColors.whYellow,
-    //       ),
-    //       const SizedBox(width: 8),
-    //       Column(
-    //         crossAxisAlignment: CrossAxisAlignment.start,
-    //         children: [
-    //           SimpleStatisticsBulletWidget(
-    //             icon: '📆',
-    //             preText: '위해빗과 함께한 지 ',
-    //             highlightedText: '${futureStatisticsTuple.$1}일째',
-    //             postText: '가 되었어요.',
-    //           ),
-    //           const SizedBox(
-    //             height: 8,
-    //           ),
-    //           SimpleStatisticsBulletWidget(
-    //             icon: '🕊️',
-    //             preText: '지금까지 ',
-    //             highlightedText: '${futureStatisticsTuple.$2}개',
-    //             postText: '의 목표에 도전했어요',
-    //           ),
-    //           const SizedBox(
-    //             height: 8,
-    //           ),
-    //           SimpleStatisticsBulletWidget(
-    //             icon: '👀',
-    //             preText: '벌써 ',
-    //             highlightedText: '${futureStatisticsTuple.$3}개',
-    //             postText: '의 실천을 인증했어요!',
-    //           ),
-    //           const SizedBox(
-    //             height: 8,
-    //           ),
-    //           SimpleStatisticsBulletWidget(
-    //             icon: '👏',
-    //             preText: '그리고 ',
-    //             highlightedText: '${futureStatisticsTuple.$4}번',
-    //             postText: '이나 친구들을 응원했어요!',
-    //           ),
-    //         ],
-    //       ),
-    //     ],
-    //   ),
-    // );
   }
 }
 
