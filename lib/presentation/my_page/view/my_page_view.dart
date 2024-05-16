@@ -44,7 +44,7 @@ class _MyPageScreenState extends ConsumerState<MyPageView> {
             // 내 프로필
             MyPageWehavitSummaryWidget(),
             SizedBox(
-              height: 12,
+              height: 16,
             ),
             Text(
               "도전중인 목표",
@@ -53,6 +53,9 @@ class _MyPageScreenState extends ConsumerState<MyPageView> {
                 color: Colors.white,
                 fontSize: 20,
               ),
+            ),
+            SizedBox(
+              height: 16,
             ),
             MyPageResolutionListCellWidget(
               resolutionEntity: ResolutionEntity(),

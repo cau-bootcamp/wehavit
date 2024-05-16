@@ -11,13 +11,13 @@ class MyPageWehavitSummaryWidget extends StatelessWidget {
   });
 
   final EitherFuture<UserDataEntity> dummyFutureUserEntity =
-      Future.delayed(Duration(seconds: 0), () {
+      Future.delayed(Duration(seconds: 1), () {
     return right(UserDataEntity.dummyModel);
     // return left(Failure("no data"));
   });
 
   final EitherFuture<(int, int, int, int)> dummyStatisticsTuple =
-      Future.delayed(Duration(seconds: 0), () {
+      Future.delayed(Duration(seconds: 2), () {
     return right((1, 2, 3, 4));
     // return left(Failure("no data"));
   });
@@ -377,7 +377,7 @@ class MyPageResolutionListCellWidget extends StatelessWidget {
             ]));
 
     return Container(
-      margin: EdgeInsets.only(bottom: 12.0),
+      margin: EdgeInsets.only(bottom: 16.0),
       width: double.infinity,
       decoration: const BoxDecoration(
         color: CustomColors.whSemiBlack,
