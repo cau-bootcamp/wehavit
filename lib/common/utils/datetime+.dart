@@ -7,3 +7,13 @@ extension GetMonday on DateTime {
     return startDate;
   }
 }
+
+const List<String> weekdayKorean = [
+  '월',
+  '화',
+  '수',
+  '목',
+  '금',
+  '토',
+  '일',
+];

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:wehavit/common/common.dart';
 import 'package:wehavit/common/constants/constants.dart';
+import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/write_post/write_post.dart';
 
 class ResolutionSummaryCardWidget extends StatelessWidget {
@@ -109,12 +113,17 @@ class ResolutionSummaryCardTextWidget extends StatelessWidget {
 }
 
 class ResolutionListCellWidget extends StatelessWidget {
-  const ResolutionListCellWidget(this.model, {super.key});
+  ResolutionListCellWidget(this.model, {super.key});
 
   final ResolutionListCellWidgetModel model;
+  late EitherFuture<int> futureDoneCount;
 
   @override
   Widget build(BuildContext context) {
+    futureDoneCount = Future.delayed(Duration(seconds: 2), () {
+      // return left(Failure("he"));
+      return right(3);
+    });
     return Container(
       width: double.infinity,
       decoration: const BoxDecoration(
@@ -168,7 +177,10 @@ class ResolutionListCellWidget extends StatelessWidget {
                 const SizedBox(
                   height: 12,
                 ),
-                ResolutionLinearGaugeWidget(model),
+                ResolutionLinearGaugeWidget(
+                  resolutionEntity: model.entity,
+                  futureDoneCount: futureDoneCount,
+                ),
               ],
             ),
           ),
@@ -178,72 +190,141 @@ class ResolutionListCellWidget extends StatelessWidget {
   }
 }
 
-class ResolutionLinearGaugeWidget extends StatelessWidget {
-  const ResolutionLinearGaugeWidget(
-    this.model, {
+class ResolutionLinearGaugeWidget extends ConsumerStatefulWidget {
+  const ResolutionLinearGaugeWidget({
+    required this.resolutionEntity,
+    required this.futureDoneCount,
     super.key,
   });
 
-  final ResolutionListCellWidgetModel model;
+  final ResolutionEntity resolutionEntity;
+  final EitherFuture<int> futureDoneCount;
 
   @override
+  ConsumerState<ResolutionLinearGaugeWidget> createState() =>
+      _ResolutionLinearGaugeWidgetState();
+}
+
+class _ResolutionLinearGaugeWidgetState
+    extends ConsumerState<ResolutionLinearGaugeWidget> {
+  @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              model.entity.actionStatement ?? '',
-              style: const TextStyle(
-                color: CustomColors.whWhite,
-                fontSize: 14.0,
-                fontWeight: FontWeight.w500,
+    return EitherFutureBuilder<int>(
+      target: widget.futureDoneCount,
+      forWaiting: Column(
+        children: [
+          Row(
+            children: [
+              Text(
+                widget.resolutionEntity.actionStatement ?? '',
+                style: const TextStyle(
+                  color: CustomColors.whWhite,
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            ),
-            Text(
-              '주 ${model.entity.actionPerWeek}회 중 ${model.successCount}회 실천',
-              style: const TextStyle(
-                color: CustomColors.whWhite,
-                fontSize: 12.0,
-                fontWeight: FontWeight.w300,
+            ],
+          ),
+          const SizedBox(
+            height: 4,
+          ),
+          LinearProgressIndicator(
+            minHeight: 7,
+            color: PointColors.colorList[0],
+            backgroundColor: CustomColors.whDarkBlack,
+          ),
+        ],
+      ),
+      forFail: Column(
+        children: [
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                '',
+                style: TextStyle(
+                  fontSize: 14.0,
+                ),
               ),
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 4,
-        ),
-        Stack(
-          alignment: Alignment.centerLeft,
+              Text(
+                '정보를 가져오는데 실패했어요',
+                style: TextStyle(
+                  color: CustomColors.whWhite,
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 4,
+          ),
+          Container(
+            height: 7,
+            color: CustomColors.whBrightGrey,
+          ),
+        ],
+      ),
+      mainWidgetCallback: (successCount) {
+        return Column(
           children: [
-            Container(
-              height: 7,
-              width: double.infinity,
-              color: CustomColors.whDarkBlack,
-            ),
-            Flex(
-              direction: Axis.horizontal,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Flexible(
-                  flex: model.successCount,
-                  child: Container(
-                    height: 7,
-                    color: PointColors.colorList[0],
+                Text(
+                  widget.resolutionEntity.actionStatement ?? '',
+                  style: const TextStyle(
+                    color: CustomColors.whWhite,
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
-                Flexible(
-                  flex: (model.entity.actionPerWeek ?? 1) - model.successCount,
-                  child: Container(
-                    height: 7,
-                    color: Colors.transparent,
+                Text(
+                  '주 ${widget.resolutionEntity.actionPerWeek}회 중 $successCount회 실천',
+                  style: const TextStyle(
+                    color: CustomColors.whWhite,
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.w300,
                   ),
                 ),
               ],
             ),
+            const SizedBox(
+              height: 4,
+            ),
+            Stack(
+              alignment: Alignment.centerLeft,
+              children: [
+                Container(
+                  height: 7,
+                  width: double.infinity,
+                  color: CustomColors.whDarkBlack,
+                ),
+                Flex(
+                  direction: Axis.horizontal,
+                  children: [
+                    Flexible(
+                      flex: successCount,
+                      child: Container(
+                        height: 7,
+                        color: PointColors.colorList[0],
+                      ),
+                    ),
+                    Flexible(
+                      flex: (widget.resolutionEntity.actionPerWeek ?? 1) -
+                          successCount,
+                      child: Container(
+                        height: 7,
+                        color: Colors.transparent,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ],
-        ),
-      ],
+        );
+      },
     );
   }
 }

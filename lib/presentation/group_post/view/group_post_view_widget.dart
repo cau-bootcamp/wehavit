@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
 
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
@@ -170,10 +171,9 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                               }
 
                               return ResolutionLinearGaugeWidget(
-                                ResolutionListCellWidgetModel(
-                                  entity: resolutionEntity,
-                                  successCount: successCount,
-                                ),
+                                resolutionEntity: resolutionEntity,
+                                futureDoneCount: Future(
+                                    () => right(snapshot.data![0] as int)),
                               );
                             } else {
                               return Container();

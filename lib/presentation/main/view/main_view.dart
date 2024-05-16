@@ -43,7 +43,7 @@ class _MainViewState extends ConsumerState<MainView>
               ResolutionListView(),
               GroupView(),
               FriendListScreen(),
-              MyPageScreen(),
+              MyPageView(),
             ],
           ),
           SizedBox(
