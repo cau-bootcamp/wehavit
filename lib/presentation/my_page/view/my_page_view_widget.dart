@@ -353,8 +353,13 @@ class SimpleStatisticsBulletWidget extends StatelessWidget {
 }
 
 class MyPageResolutionListCellWidget extends StatelessWidget {
-  const MyPageResolutionListCellWidget({super.key});
+  const MyPageResolutionListCellWidget({
+    super.key,
+    required this.model,
+    required this.showDetails,
+  });
 
+  final ResolutionListCellWidgetModel model;
   final List<bool> doneList = const [
     true,
     true,
@@ -364,14 +369,13 @@ class MyPageResolutionListCellWidget extends StatelessWidget {
     true,
     false,
   ];
-  final bool showDetails = true;
+  final bool showDetails;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(bottom: 12.0),
       width: double.infinity,
-      constraints: const BoxConstraints(minHeight: 150),
       decoration: const BoxDecoration(
         color: CustomColors.whSemiBlack,
         borderRadius: BorderRadius.all(
@@ -385,7 +389,7 @@ class MyPageResolutionListCellWidget extends StatelessWidget {
               top: 20,
               left: 20,
               right: 20,
-              bottom: 20.0,
+              bottom: 20,
             ),
             child: Column(
               children: [
@@ -397,14 +401,9 @@ class MyPageResolutionListCellWidget extends StatelessWidget {
                 const SizedBox(
                   height: 12,
                 ),
-                ResolutionLinearGaugeWidget(
-                  ResolutionListCellWidgetModel(
-                    entity: ResolutionEntity(),
-                    successCount: 0,
-                  ),
-                ),
+                ResolutionLinearGaugeWidget(model),
                 SizedBox(
-                  height: showDetails ? 20 : 0,
+                  height: showDetails ? 20 : 4,
                 ),
                 Visibility(
                   visible: showDetails,
@@ -425,7 +424,7 @@ class MyPageResolutionListCellWidget extends StatelessWidget {
                       )
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),

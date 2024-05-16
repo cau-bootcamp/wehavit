@@ -54,9 +54,21 @@ class _MyPageScreenState extends ConsumerState<MyPageView> {
                 fontSize: 20,
               ),
             ),
-            MyPageResolutionListCellWidget(),
+            MyPageResolutionListCellWidget(
+              model: ResolutionListCellWidgetModel(
+                entity: ResolutionEntity(),
+                successCount: 3,
+              ),
+              showDetails: true,
+            ),
 
-            MyPageResolutionListCellWidget(),
+            MyPageResolutionListCellWidget(
+              model: ResolutionListCellWidgetModel(
+                entity: ResolutionEntity(),
+                successCount: 3,
+              ),
+              showDetails: false,
+            ),
           ],
         ),
       ),
