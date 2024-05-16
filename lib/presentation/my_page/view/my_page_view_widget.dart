@@ -532,7 +532,15 @@ class ResolutionListWeeklyDoneWidget extends StatelessWidget {
           ),
         ),
       ),
-      forFail: Container(),
+      forFail: Row(
+        children: List<Widget>.generate(
+          7,
+          (index) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 2.0),
+            child: ResolutionListWeeklyDoneCellPlaceholderWidget(),
+          ),
+        ),
+      ),
       mainWidgetCallback: (doneList) {
         return Row(
           children: List<Widget>.generate(
