@@ -170,10 +170,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                               }
 
                               return ResolutionLinearGaugeWidget(
-                                ResolutionListCellWidgetModel(
-                                  entity: resolutionEntity,
-                                  successCount: successCount,
-                                ),
+                                resolutionEntity: resolutionEntity,
                               );
                             } else {
                               return Container();

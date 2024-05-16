@@ -55,18 +55,12 @@ class _MyPageScreenState extends ConsumerState<MyPageView> {
               ),
             ),
             MyPageResolutionListCellWidget(
-              model: ResolutionListCellWidgetModel(
-                entity: ResolutionEntity(),
-                successCount: 3,
-              ),
+              resolutionEntity: ResolutionEntity(),
               showDetails: true,
             ),
 
             MyPageResolutionListCellWidget(
-              model: ResolutionListCellWidgetModel(
-                entity: ResolutionEntity(),
-                successCount: 3,
-              ),
+              resolutionEntity: ResolutionEntity(),
               showDetails: false,
             ),
           ],

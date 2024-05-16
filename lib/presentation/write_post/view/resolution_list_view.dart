@@ -134,7 +134,7 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
                 height: 16,
               ),
               ResolutionLinearGaugeWidget(
-                viewModel.resolutionModelList![index],
+                resolutionEntity: viewModel.resolutionModelList![index].entity,
               ),
             ],
           ),

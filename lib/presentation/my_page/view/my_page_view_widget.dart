@@ -355,11 +355,11 @@ class SimpleStatisticsBulletWidget extends StatelessWidget {
 class MyPageResolutionListCellWidget extends StatelessWidget {
   const MyPageResolutionListCellWidget({
     super.key,
-    required this.model,
+    required this.resolutionEntity,
     required this.showDetails,
   });
 
-  final ResolutionListCellWidgetModel model;
+  final ResolutionEntity resolutionEntity;
   final List<bool> doneList = const [
     true,
     true,
@@ -394,14 +394,16 @@ class MyPageResolutionListCellWidget extends StatelessWidget {
             child: Column(
               children: [
                 ResolutionListCellHeadWidget(
-                  goalStatement: "My Goal",
-                  resolutionName: "Resolution Name",
+                  goalStatement: resolutionEntity.goalStatement ?? '',
+                  resolutionName: "resolution Name",
                   showGoalStatement: showDetails,
                 ),
                 const SizedBox(
                   height: 12,
                 ),
-                ResolutionLinearGaugeWidget(model),
+                ResolutionLinearGaugeWidget(
+                  resolutionEntity: resolutionEntity,
+                ),
                 SizedBox(
                   height: showDetails ? 20 : 4,
                 ),
