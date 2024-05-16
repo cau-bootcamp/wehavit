@@ -360,19 +360,22 @@ class MyPageResolutionListCellWidget extends StatelessWidget {
   });
 
   final ResolutionEntity resolutionEntity;
-  final List<bool> doneList = const [
-    true,
-    true,
-    false,
-    false,
-    true,
-    true,
-    false,
-  ];
   final bool showDetails;
 
   @override
   Widget build(BuildContext context) {
+    final EitherFuture<List<bool>> futureDoneList = Future.delayed(
+        Duration(seconds: 2),
+        () => right([
+              true,
+              true,
+              false,
+              false,
+              true,
+              true,
+              false,
+            ]));
+
     return Container(
       margin: EdgeInsets.only(bottom: 12.0),
       width: double.infinity,
@@ -403,6 +406,8 @@ class MyPageResolutionListCellWidget extends StatelessWidget {
                 ),
                 ResolutionLinearGaugeWidget(
                   resolutionEntity: resolutionEntity,
+                  futureDoneCount:
+                      Future.delayed(Duration(seconds: 3), () => right(3)),
                 ),
                 SizedBox(
                   height: showDetails ? 20 : 4,
@@ -413,7 +418,7 @@ class MyPageResolutionListCellWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "32일째 도전 중",
+                        '${DateTime.now().difference(DateTime.now().subtract(Duration(days: 3))).inDays + 1}일째 도전 중',
                         style: const TextStyle(
                           color: CustomColors.whWhite,
                           fontSize: 14.0,
@@ -421,7 +426,7 @@ class MyPageResolutionListCellWidget extends StatelessWidget {
                         ),
                       ),
                       ResolutionListWeeklyDoneWidget(
-                        doneList: doneList,
+                        futureDoneList: futureDoneList,
                         pointColor: PointColors.red,
                       )
                     ],
@@ -507,27 +512,42 @@ class ResolutionListCellHeadWidget extends StatelessWidget {
 class ResolutionListWeeklyDoneWidget extends StatelessWidget {
   const ResolutionListWeeklyDoneWidget({
     super.key,
-    required this.doneList,
+    required this.futureDoneList,
     required this.pointColor,
   });
 
-  final List<bool> doneList;
+  final EitherFuture<List<bool>> futureDoneList;
   final Color pointColor;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: List<Widget>.generate(
-        7,
-        (index) => Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 2.0),
-          child: ResolutionListWeeklyDoneCellWidget(
-            isDone: doneList[index],
-            weekday: index,
-            pointColor: pointColor,
+    return EitherFutureBuilder<List<bool>>(
+      target: futureDoneList,
+      forWaiting: Row(
+        children: List<Widget>.generate(
+          7,
+          (index) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 2.0),
+            child: ResolutionListWeeklyDoneCellPlaceholderWidget(),
           ),
         ),
       ),
+      forFail: Container(),
+      mainWidgetCallback: (doneList) {
+        return Row(
+          children: List<Widget>.generate(
+            7,
+            (index) => Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 2.0),
+              child: ResolutionListWeeklyDoneCellWidget(
+                isDone: doneList[index],
+                weekday: index,
+                pointColor: pointColor,
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -585,6 +605,37 @@ class ResolutionListWeeklyDoneCellWidget extends StatelessWidget {
           size: 22,
           weight: 100,
         ),
+      ),
+    );
+  }
+}
+
+class ResolutionListWeeklyDoneCellPlaceholderWidget extends StatelessWidget {
+  const ResolutionListWeeklyDoneCellPlaceholderWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: CustomColors.whSemiBlack,
+        border: Border.all(
+          color: CustomColors.whBrightGrey,
+          width: 2,
+        ),
+      ),
+      width: 25,
+      height: 25,
+      alignment: Alignment.center,
+      child: Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: CustomColors.whBrightGrey,
+        ),
+        width: 4,
+        height: 4,
       ),
     );
   }

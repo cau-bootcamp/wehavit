@@ -113,12 +113,17 @@ class ResolutionSummaryCardTextWidget extends StatelessWidget {
 }
 
 class ResolutionListCellWidget extends StatelessWidget {
-  const ResolutionListCellWidget(this.model, {super.key});
+  ResolutionListCellWidget(this.model, {super.key});
 
   final ResolutionListCellWidgetModel model;
+  late EitherFuture<int> futureDoneCount;
 
   @override
   Widget build(BuildContext context) {
+    futureDoneCount = Future.delayed(Duration(seconds: 2), () {
+      // return left(Failure("he"));
+      return right(3);
+    });
     return Container(
       width: double.infinity,
       decoration: const BoxDecoration(
@@ -172,7 +177,10 @@ class ResolutionListCellWidget extends StatelessWidget {
                 const SizedBox(
                   height: 12,
                 ),
-                ResolutionLinearGaugeWidget(resolutionEntity: model.entity),
+                ResolutionLinearGaugeWidget(
+                  resolutionEntity: model.entity,
+                  futureDoneCount: futureDoneCount,
+                ),
               ],
             ),
           ),
@@ -185,10 +193,12 @@ class ResolutionListCellWidget extends StatelessWidget {
 class ResolutionLinearGaugeWidget extends ConsumerStatefulWidget {
   const ResolutionLinearGaugeWidget({
     required this.resolutionEntity,
+    required this.futureDoneCount,
     super.key,
   });
 
   final ResolutionEntity resolutionEntity;
+  final EitherFuture<int> futureDoneCount;
 
   @override
   ConsumerState<ResolutionLinearGaugeWidget> createState() =>
@@ -197,22 +207,10 @@ class ResolutionLinearGaugeWidget extends ConsumerStatefulWidget {
 
 class _ResolutionLinearGaugeWidgetState
     extends ConsumerState<ResolutionLinearGaugeWidget> {
-  late EitherFuture<int> futureDoneCount;
-
-  // @override
-  // void didChangeDependencies() {
-
-  // }
-
   @override
   Widget build(BuildContext context) {
-    futureDoneCount = Future.delayed(Duration(seconds: 2), () {
-      // return left(Failure("he"));
-      return right(3);
-    });
-
     return EitherFutureBuilder<int>(
-      target: futureDoneCount,
+      target: widget.futureDoneCount,
       forWaiting: Column(
         children: [
           Row(
