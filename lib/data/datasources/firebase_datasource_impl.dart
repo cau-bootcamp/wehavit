@@ -1481,7 +1481,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }
 
   @override
-  EitherFuture<int> getTargetResolutionDoneCountForWeek({
+  EitherFuture<List<bool>> getTargetResolutionDoneListForWeek({
     required String resolutionId,
     required DateTime startMonday,
   }) async {
@@ -1489,7 +1489,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       DateTime startDate = startMonday;
       DateTime endDate = startDate.add(const Duration(days: 7));
 
-      final doneCount = await firestore
+      final doneList = await firestore
           .collection(FirebaseCollectionName.confirmPosts)
           .where(
             FirebaseConfirmPostFieldName.resolutionId,
@@ -1509,10 +1509,27 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
                           [FirebaseConfirmPostFieldName.attributesHasRested] ==
                       false,
                 )
-                .length,
-          );
+                .toList(),
+          )
+          .then((vList) {
+        final dList = List.generate(7, (index) => false);
 
-      return Future(() => right(doneCount));
+        for (var element in vList) {
+          final docsDate =
+              (element.data()[FirebaseConfirmPostFieldName.createdAt]
+                          as Timestamp)
+                      .toDate()
+                      .weekday -
+                  1;
+          if (docsDate >= 0 && docsDate < 7) {
+            dList[docsDate] = true;
+          }
+        }
+
+        return dList;
+      });
+
+      return Future(() => right(doneList));
     } on Exception catch (e) {
       debugPrint(e.toString());
       return Future(
@@ -1628,10 +1645,15 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
         }
 
         if (sharedGroupList.contains(groupId)) {
-          final success = await getTargetResolutionDoneCountForWeek(
+          final success = await getTargetResolutionDoneListForWeek(
             resolutionId: doc.reference.id,
             startMonday: getThisMondayDateTime(),
-          ).then((value) => value.fold((failure) => -1, (scount) => scount));
+          ).then(
+            (value) => value.fold(
+              (failure) => -1,
+              (sList) => sList.where((element) => element == true).length,
+            ),
+          );
           successCount += success;
           total +=
               data[FirebaseResolutionFieldName.resolutionActionPerWeek] as int;

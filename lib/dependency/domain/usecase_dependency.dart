@@ -229,10 +229,10 @@ final checkWhetherAlreadyAppliedToGroupUsecaseProvider =
   return CheckWhetherAlreadyAppliedToGroupUsecase(groupRepository);
 });
 
-final getTargetResolutionDoneCountForWeekUsecaseProvider =
-    Provider<GetTargetResolutionDoneCountForWeekUsecase>((ref) {
+final getTargetResolutionDoneListForWeekUsecaseProvider =
+    Provider<GetTargetResolutionDoneListForWeekUsecase>((ref) {
   final resolutionRepository = ref.watch(resolutionRepositoryProvider);
-  return GetTargetResolutionDoneCountForWeekUsecase(resolutionRepository);
+  return GetTargetResolutionDoneListForWeekUsecase(resolutionRepository);
 });
 
 final getToWhomResolutionWillBeSharedUsecaseProvider =

@@ -406,8 +406,18 @@ class MyPageResolutionListCellWidget extends StatelessWidget {
                 ),
                 ResolutionLinearGaugeWidget(
                   resolutionEntity: resolutionEntity,
-                  futureDoneCount:
-                      Future.delayed(Duration(seconds: 3), () => right(3)),
+                  futureDoneList: Future.delayed(
+                    Duration(seconds: 3),
+                    () => right([
+                      true,
+                      true,
+                      true,
+                      false,
+                      false,
+                      false,
+                      true,
+                    ]),
+                  ),
                 ),
                 SizedBox(
                   height: showDetails ? 20 : 4,

@@ -97,7 +97,7 @@ final resolutionListViewModelProvider = StateNotifierProvider.autoDispose<
   final getMyResolutionListUsecase =
       ref.watch(getMyResolutionListUsecaseProvider);
   final getTargetResolutionDoneCountForWeekUsecase =
-      ref.watch(getTargetResolutionDoneCountForWeekUsecaseProvider);
+      ref.watch(getTargetResolutionDoneListForWeekUsecaseProvider);
   final uploadConfirmPostUsecase = ref.watch(uploadConfirmPostUseCaseProvider);
   return ResolutionListViewModelProvider(
     getMyResolutionListUsecase,

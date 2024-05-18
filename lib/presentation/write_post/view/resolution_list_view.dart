@@ -25,8 +25,9 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView> {
           .read(resolutionListViewModelProvider.notifier)
           .loadResolutionModelList()
           .whenComplete(() {
-        isLoading = false;
-        setState(() {});
+        setState(() {
+          isLoading = false;
+        });
       }),
     );
   }
@@ -46,10 +47,8 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView> {
         child: ListView(
           children: [
             ResolutionSummaryCardWidget(
-              totalCount: viewModel.summaryDoneCount,
-              doneRatio:
-                  (viewModel.summaryDoneCount / viewModel.summaryTotalCount)
-                      .toDouble(),
+              futureDoneRatio: viewModel.futureDoneRatio,
+              futureDoneCount: viewModel.futureDoneCount,
             ),
             Visibility(
               visible: !isLoading,
@@ -73,6 +72,8 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView> {
                     child: GestureDetector(
                       child: ResolutionListCellWidget(
                         viewModel.resolutionModelList![index],
+                        futureDoneList:
+                            viewModel.resolutionModelList![index].doneList,
                       ),
                       onTapUp: (details) async {
                         showModalBottomSheet(
@@ -136,8 +137,18 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
               ),
               ResolutionLinearGaugeWidget(
                 resolutionEntity: viewModel.resolutionModelList![index].entity,
-                futureDoneCount:
-                    Future.delayed(Duration(seconds: 3), () => right(3)),
+                futureDoneList: Future.delayed(
+                  Duration(seconds: 3),
+                  () => right([
+                    true,
+                    true,
+                    false,
+                    false,
+                    true,
+                    true,
+                    false,
+                  ]),
+                ),
               ),
             ],
           ),

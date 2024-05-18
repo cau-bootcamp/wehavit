@@ -21,7 +21,7 @@ export 'get_my_resolution_list_usecase.dart';
 export 'get_my_user_data_usecase.dart';
 export 'get_reaction_list_from_confirm_post_usecase.dart';
 export 'get_resolution_list_by_uid_usecase.dart';
-export 'get_target_resolution_done_count_for_week_usecase.dart';
+export 'get_target_resolution_done_list_for_week_usecase.dart';
 export 'get_target_resolution_entity_usecase.dart';
 export 'get_to_whom_resolution_will_be_shared_usecase.dart';
 export 'get_unread_reaction_list_usecase.dart';

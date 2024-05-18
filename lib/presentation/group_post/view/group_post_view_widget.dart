@@ -29,7 +29,7 @@ class ConfirmPostWidget extends ConsumerStatefulWidget {
 
 class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
     with TickerProviderStateMixin {
-  late Future<int> resolutionDoneCountForWrittenWeek;
+  late Future<List<bool>> resolutionDoneListForWrittenWeek;
   late EitherFuture<UserDataEntity> futureUserDataEntity;
   late Future<ResolutionEntity?> futureResolutionEntity;
 
@@ -40,13 +40,13 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
     futureUserDataEntity = ref.read(getUserDataFromIdUsecaseProvider)(
         widget.confirmPostEntity.owner!);
 
-    resolutionDoneCountForWrittenWeek = ref
-        .read(getTargetResolutionDoneCountForWeekUsecaseProvider)
+    resolutionDoneListForWrittenWeek = ref
+        .read(getTargetResolutionDoneListForWeekUsecaseProvider)
         .call(
           resolutionId: widget.confirmPostEntity.resolutionId!,
           startMonday: widget.createdDate.getMondayDateTime(),
         )
-        .then((result) => result.fold((failure) => -1, (count) => count));
+        .then((result) => result.fold((failure) => [], (list) => list));
 
     futureResolutionEntity = ref
         .read(getTargetResolutionEntityUsecaseProvider)
@@ -157,12 +157,11 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                         // const SizedBox(height: 12.0),
                         FutureBuilder(
                           future: Future.wait([
-                            resolutionDoneCountForWrittenWeek,
+                            resolutionDoneListForWrittenWeek,
                             futureResolutionEntity,
                           ]),
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
-                              int successCount = snapshot.data![0] as int;
                               ResolutionEntity? resolutionEntity =
                                   snapshot.data![1] as ResolutionEntity?;
 
@@ -172,8 +171,9 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
 
                               return ResolutionLinearGaugeWidget(
                                 resolutionEntity: resolutionEntity,
-                                futureDoneCount: Future(
-                                    () => right(snapshot.data![0] as int)),
+                                futureDoneList: Future(
+                                  () => right(snapshot.data![0] as List<bool>),
+                                ),
                               );
                             } else {
                               return Container();
