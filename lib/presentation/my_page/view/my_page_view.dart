@@ -1,8 +1,8 @@
-import 'package:dotted_border/dotted_border.dart';
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
@@ -26,45 +26,57 @@ class _MyPageScreenState extends ConsumerState<MyPageView> {
   @override
   void initState() {
     super.initState();
-    // ref.read(myPageResolutionListProvider.notifier).getMyActiveResolutionList();
+    unawaited(ref.read(myPageViewModelProvider.notifier).loadData());
   }
 
   @override
   Widget build(BuildContext context) {
-    var resolutionListProvider = ref.watch(myPageResolutionListProvider);
-    var currentUser = FirebaseAuth.instance.currentUser;
+    final viewModel = ref.watch(myPageViewModelProvider);
+    final provider = ref.read(myPageViewModelProvider.notifier);
 
     return Scaffold(
       backgroundColor: CustomColors.whDarkBlack,
       appBar: WehavitAppBar(title: '내 정보'),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: ListView(
           children: [
             // 내 프로필
-            MyPageWehavitSummaryWidget(),
-            SizedBox(
+            MyPageWehavitSummaryWidget(
+              futureUserEntity: viewModel.futureMyUserDataEntity,
+            ),
+            const SizedBox(
               height: 16,
             ),
-            Text(
-              "도전중인 목표",
-              style: const TextStyle(
+            const Text(
+              '도전중인 목표',
+              style: TextStyle(
                 fontWeight: FontWeight.w600,
                 color: Colors.white,
                 fontSize: 20,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
-            MyPageResolutionListCellWidget(
-              resolutionEntity: ResolutionEntity(),
-              showDetails: true,
+            EitherFutureBuilder<List<ResolutionEntity>>(
+              target: viewModel.futureMyyResolutionList,
+              forWaiting: Container(),
+              forFail: Container(),
+              mainWidgetCallback: (resolutionList) {
+                return Column(
+                  children: List<MyPageResolutionListCellWidget>.generate(
+                    resolutionList.length,
+                    (index) => MyPageResolutionListCellWidget(
+                      resolutionEntity: resolutionList[index],
+                      showDetails: true,
+                    ),
+                  ),
+                );
+              },
             ),
-
-            MyPageResolutionListCellWidget(
-              resolutionEntity: ResolutionEntity(),
-              showDetails: false,
+            const SizedBox(
+              height: 40,
             ),
           ],
         ),

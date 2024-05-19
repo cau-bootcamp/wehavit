@@ -1,26 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:wehavit/common/common.dart';
+import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 class MyPageWehavitSummaryWidget extends StatelessWidget {
-  MyPageWehavitSummaryWidget({
+  const MyPageWehavitSummaryWidget({
     super.key,
+    required this.futureUserEntity,
   });
 
-  final EitherFuture<UserDataEntity> dummyFutureUserEntity =
-      Future.delayed(Duration(seconds: 1), () {
-    return right(UserDataEntity.dummyModel);
-    // return left(Failure("no data"));
-  });
-
-  final EitherFuture<(int, int, int, int)> dummyStatisticsTuple =
-      Future.delayed(Duration(seconds: 2), () {
-    return right((1, 2, 3, 4));
-    // return left(Failure("no data"));
-  });
+  final EitherFuture<UserDataEntity>? futureUserEntity;
 
   @override
   Widget build(BuildContext context) {
@@ -44,12 +37,12 @@ class MyPageWehavitSummaryWidget extends StatelessWidget {
             ),
             child: Column(
               children: [
-                MyProfileWidget(futureUserEntity: dummyFutureUserEntity),
+                MyProfileWidget(futureUserEntity: futureUserEntity),
                 const SizedBox(
                   height: 16,
                 ),
                 MySimpleStatisticsWidget(
-                  futureStatisticsTuple: dummyStatisticsTuple,
+                  futureUserEntity: futureUserEntity,
                 ),
               ],
             ),
@@ -87,7 +80,7 @@ class MyPageWehavitSummaryWidget extends StatelessWidget {
 class MyProfileWidget extends StatelessWidget {
   const MyProfileWidget({required this.futureUserEntity, super.key});
 
-  final EitherFuture<UserDataEntity> futureUserEntity;
+  final EitherFuture<UserDataEntity>? futureUserEntity;
 
   @override
   Widget build(BuildContext context) {
@@ -218,15 +211,15 @@ class ProfileImageCircleWidget extends StatelessWidget {
 class MySimpleStatisticsWidget extends StatelessWidget {
   const MySimpleStatisticsWidget({
     super.key,
-    required this.futureStatisticsTuple,
+    required this.futureUserEntity,
   });
 
-  final EitherFuture<(int, int, int, int)> futureStatisticsTuple;
+  final EitherFuture<UserDataEntity>? futureUserEntity;
 
   @override
   Widget build(BuildContext context) {
-    return EitherFutureBuilder<(int, int, int, int)>(
-      target: futureStatisticsTuple,
+    return EitherFutureBuilder<UserDataEntity>(
+      target: futureUserEntity,
       forWaiting: LoadingAnimationWidget.waveDots(
         color: CustomColors.whBrightGrey,
         size: 30,
@@ -240,7 +233,7 @@ class MySimpleStatisticsWidget extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
         ),
       ),
-      mainWidgetCallback: (statisticsTuple) {
+      mainWidgetCallback: (userEntity) {
         return IntrinsicHeight(
           child: Row(
             children: [
@@ -256,7 +249,9 @@ class MySimpleStatisticsWidget extends StatelessWidget {
                   SimpleStatisticsBulletWidget(
                     icon: '📆',
                     preText: '위해빗과 함께한 지 ',
-                    highlightedText: '${statisticsTuple.$1}일째',
+                    highlightedText:
+                        // ignore: lines_longer_than_80_chars
+                        '${DateTime.now().difference(userEntity.createdAt ?? DateTime.now()).inDays + 1}일째',
                     postText: '가 되었어요.',
                   ),
                   const SizedBox(
@@ -265,7 +260,7 @@ class MySimpleStatisticsWidget extends StatelessWidget {
                   SimpleStatisticsBulletWidget(
                     icon: '🕊️',
                     preText: '지금까지 ',
-                    highlightedText: '${statisticsTuple.$2}개',
+                    highlightedText: '${userEntity.cumulativeGoals}개',
                     postText: '의 목표에 도전했어요',
                   ),
                   const SizedBox(
@@ -274,7 +269,7 @@ class MySimpleStatisticsWidget extends StatelessWidget {
                   SimpleStatisticsBulletWidget(
                     icon: '👀',
                     preText: '벌써 ',
-                    highlightedText: '${statisticsTuple.$3}개',
+                    highlightedText: '${userEntity.cumulativePosts}개',
                     postText: '의 실천을 인증했어요!',
                   ),
                   const SizedBox(
@@ -283,7 +278,7 @@ class MySimpleStatisticsWidget extends StatelessWidget {
                   SimpleStatisticsBulletWidget(
                     icon: '👏',
                     preText: '그리고 ',
-                    highlightedText: '${statisticsTuple.$4}번',
+                    highlightedText: '${userEntity.cumulativeReactions}번',
                     postText: '이나 친구들을 응원했어요!',
                   ),
                 ],
@@ -352,7 +347,7 @@ class SimpleStatisticsBulletWidget extends StatelessWidget {
   }
 }
 
-class MyPageResolutionListCellWidget extends StatelessWidget {
+class MyPageResolutionListCellWidget extends ConsumerStatefulWidget {
   const MyPageResolutionListCellWidget({
     super.key,
     required this.resolutionEntity,
@@ -363,21 +358,22 @@ class MyPageResolutionListCellWidget extends StatelessWidget {
   final bool showDetails;
 
   @override
+  ConsumerState<MyPageResolutionListCellWidget> createState() =>
+      _MyPageResolutionListCellWidgetState();
+}
+
+class _MyPageResolutionListCellWidgetState
+    extends ConsumerState<MyPageResolutionListCellWidget> {
+  @override
   Widget build(BuildContext context) {
-    final EitherFuture<List<bool>> futureDoneList = Future.delayed(
-        Duration(seconds: 2),
-        () => right([
-              true,
-              true,
-              false,
-              false,
-              true,
-              true,
-              false,
-            ]));
+    final EitherFuture<List<bool>> futureDoneList =
+        ref.watch(getTargetResolutionDoneListForWeekUsecaseProvider)(
+      resolutionId: widget.resolutionEntity.resolutionId ?? '',
+      startMonday: DateTime.now().getMondayDateTime(),
+    );
 
     return Container(
-      margin: EdgeInsets.only(bottom: 16.0),
+      margin: const EdgeInsets.only(bottom: 16.0),
       width: double.infinity,
       decoration: const BoxDecoration(
         color: CustomColors.whSemiBlack,
@@ -397,38 +393,30 @@ class MyPageResolutionListCellWidget extends StatelessWidget {
             child: Column(
               children: [
                 ResolutionListCellHeadWidget(
-                  goalStatement: resolutionEntity.goalStatement ?? '',
-                  resolutionName: "resolution Name",
-                  showGoalStatement: showDetails,
+                  goalStatement: widget.resolutionEntity.goalStatement ?? '',
+                  resolutionName: 'resolution Name',
+                  showGoalStatement: widget.showDetails,
+                  pointColor: PointColors
+                      .colorList[widget.resolutionEntity.colorIndex ?? 0],
                 ),
                 const SizedBox(
                   height: 12,
                 ),
                 ResolutionLinearGaugeWidget(
-                  resolutionEntity: resolutionEntity,
-                  futureDoneList: Future.delayed(
-                    Duration(seconds: 3),
-                    () => right([
-                      true,
-                      true,
-                      true,
-                      false,
-                      false,
-                      false,
-                      true,
-                    ]),
-                  ),
+                  resolutionEntity: widget.resolutionEntity,
+                  futureDoneList: futureDoneList,
                 ),
                 SizedBox(
-                  height: showDetails ? 20 : 4,
+                  height: widget.showDetails ? 20 : 4,
                 ),
                 Visibility(
-                  visible: showDetails,
+                  visible: widget.showDetails,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '${DateTime.now().difference(DateTime.now().subtract(Duration(days: 3))).inDays + 1}일째 도전 중',
+                        // ignore: lines_longer_than_80_chars
+                        '${DateTime.now().difference(DateTime.now().subtract(const Duration(days: 3))).inDays + 1}일째 도전 중',
                         style: const TextStyle(
                           color: CustomColors.whWhite,
                           fontSize: 14.0,
@@ -437,8 +425,9 @@ class MyPageResolutionListCellWidget extends StatelessWidget {
                       ),
                       ResolutionListWeeklyDoneWidget(
                         futureDoneList: futureDoneList,
-                        pointColor: PointColors.red,
-                      )
+                        pointColor: PointColors
+                            .colorList[widget.resolutionEntity.colorIndex ?? 0],
+                      ),
                     ],
                   ),
                 ),
@@ -457,11 +446,13 @@ class ResolutionListCellHeadWidget extends StatelessWidget {
     required this.resolutionName,
     required this.goalStatement,
     required this.showGoalStatement,
+    required this.pointColor,
   });
 
   final String resolutionName;
   final String goalStatement;
   final bool showGoalStatement;
+  final Color pointColor;
 
   @override
   Widget build(BuildContext context) {
@@ -472,7 +463,7 @@ class ResolutionListCellHeadWidget extends StatelessWidget {
           height: 36,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
-            color: PointColors.red,
+            color: pointColor,
           ),
         ),
         const SizedBox(
@@ -484,8 +475,8 @@ class ResolutionListCellHeadWidget extends StatelessWidget {
             children: [
               Text(
                 resolutionName,
-                style: const TextStyle(
-                  color: PointColors.red,
+                style: TextStyle(
+                  color: pointColor,
                   fontSize: 16.0,
                   fontWeight: FontWeight.w600,
                   height: 1.2,
@@ -509,10 +500,10 @@ class ResolutionListCellHeadWidget extends StatelessWidget {
         const SizedBox(
           width: 12,
         ),
-        const Icon(
+        Icon(
           Icons.chevron_right,
           size: 32,
-          color: PointColors.red,
+          color: pointColor,
         ),
       ],
     );

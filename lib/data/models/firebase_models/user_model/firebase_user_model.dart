@@ -40,6 +40,7 @@ extension ConvertFirebaseUserModel on FirebaseUserModel {
       userImageUrl: imageUrl,
       userName: displayName,
       userId: userId,
+      aboutMe: aboutMe,
       createdAt: createdAt,
       cumulativeGoals: cumulativeGoals,
       cumulativePosts: cumulativePosts,

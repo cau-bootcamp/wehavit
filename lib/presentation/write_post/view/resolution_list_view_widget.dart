@@ -208,7 +208,8 @@ class ResolutionListCellWidget extends StatelessWidget {
                       height: 36,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8.0),
-                        color: PointColors.red,
+                        color:
+                            PointColors.colorList[model.entity.colorIndex ?? 0],
                       ),
                     ),
                     const SizedBox(
@@ -217,8 +218,9 @@ class ResolutionListCellWidget extends StatelessWidget {
                     Expanded(
                       child: Text(
                         model.entity.goalStatement ?? '',
-                        style: const TextStyle(
-                          color: PointColors.red,
+                        style: TextStyle(
+                          color: PointColors
+                              .colorList[model.entity.colorIndex ?? 0],
                           fontSize: 16.0,
                           fontWeight: FontWeight.w600,
                         ),
@@ -227,10 +229,11 @@ class ResolutionListCellWidget extends StatelessWidget {
                     const SizedBox(
                       width: 12,
                     ),
-                    const Icon(
+                    Icon(
                       Icons.chevron_right,
                       size: 32,
-                      color: PointColors.red,
+                      color:
+                          PointColors.colorList[model.entity.colorIndex ?? 0],
                     ),
                   ],
                 ),
@@ -290,7 +293,8 @@ class _ResolutionLinearGaugeWidgetState
           ),
           LinearProgressIndicator(
             minHeight: 7,
-            color: PointColors.colorList[0],
+            color:
+                PointColors.colorList[widget.resolutionEntity.colorIndex ?? 0],
             backgroundColor: CustomColors.whDarkBlack,
           ),
         ],
@@ -370,7 +374,8 @@ class _ResolutionLinearGaugeWidgetState
                       flex: successCount,
                       child: Container(
                         height: 7,
-                        color: PointColors.colorList[0],
+                        color: PointColors
+                            .colorList[widget.resolutionEntity.colorIndex ?? 0],
                       ),
                     ),
                     Flexible(

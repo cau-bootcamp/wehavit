@@ -18,7 +18,7 @@ class ResolutionListViewModelProvider
   final UploadConfirmPostUseCase _uploadConfirmPostUseCase;
 
   Future<void> loadResolutionModelList() async {
-    final resolutionList = await _getMyResolutionListUsecase(NoParams()).then(
+    final resolutionList = await _getMyResolutionListUsecase().then(
       (result) => result.fold(
         (failure) => null,
         (result) => result,

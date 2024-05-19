@@ -3,8 +3,7 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
 
-class GetMyResolutionListUsecase
-    extends FutureUseCase<List<ResolutionEntity>, NoParams> {
+class GetMyResolutionListUsecase {
   GetMyResolutionListUsecase(
     this._resolutionRepository,
     this._userModelRepository,
@@ -13,21 +12,24 @@ class GetMyResolutionListUsecase
   final ResolutionRepository _resolutionRepository;
   final UserModelRepository _userModelRepository;
 
-  @override
-  EitherFuture<List<ResolutionEntity>> call(NoParams params) async {
-    final fetchResult = (await _userModelRepository.getMyUserId()).fold(
-      (l) => null,
-      (uid) => uid,
-    );
-
-    if (fetchResult == null) {
-      return Future(
-        () => left(
-          const Failure('catch error on GetResolutionListByUserIdUsecase'),
-        ),
-      );
-    }
-
-    return _resolutionRepository.getActiveResolutionEntityList(fetchResult);
+  EitherFuture<List<ResolutionEntity>> call() async {
+    return _userModelRepository
+        .getMyUserId()
+        .then(
+          (result) => result.fold(
+            (l) => null,
+            (uid) => uid,
+          ),
+        )
+        .then((fetchResult) {
+      if (fetchResult == null) {
+        return Future(
+          () => left(
+            const Failure('catch error on GetResolutionListByUserIdUsecase'),
+          ),
+        );
+      }
+      return _resolutionRepository.getActiveResolutionEntityList(fetchResult);
+    });
   }
 }

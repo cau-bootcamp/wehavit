@@ -12,6 +12,7 @@ _$FirebaseResolutionModelImpl _$$FirebaseResolutionModelImplFromJson(
       goalStatement: json['goalStatement'] as String?,
       actionStatement: json['actionStatement'] as String?,
       isActive: json['isActive'] as bool?,
+      colorIndex: json['colorIndex'] as int?,
       actionPerWeek: json['actionPerWeek'] as int?,
       startDate: _$JsonConverterFromJson<Timestamp, DateTime>(
           json['startDate'], const TimestampConverter().fromJson),
@@ -29,6 +30,7 @@ Map<String, dynamic> _$$FirebaseResolutionModelImplToJson(
       'goalStatement': instance.goalStatement,
       'actionStatement': instance.actionStatement,
       'isActive': instance.isActive,
+      'colorIndex': instance.colorIndex,
       'actionPerWeek': instance.actionPerWeek,
       'startDate': _$JsonConverterToJson<Timestamp, DateTime>(
           instance.startDate, const TimestampConverter().toJson),

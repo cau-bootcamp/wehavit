@@ -237,8 +237,8 @@ class AddResolutionScreen extends HookConsumerWidget {
                                 );
                               }, (success) {
                                 ref
-                                    .read(myPageResolutionListProvider.notifier)
-                                    .getMyActiveResolutionList();
+                                    .read(myPageViewModelProvider.notifier)
+                                    .loadData();
                                 context.pop();
                               });
                             },
