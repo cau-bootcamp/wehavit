@@ -21,6 +21,7 @@ FirebaseResolutionModel _$FirebaseResolutionModelFromJson(
 
 /// @nodoc
 mixin _$FirebaseResolutionModel {
+  String? get resolutionName => throw _privateConstructorUsedError;
   String? get goalStatement => throw _privateConstructorUsedError;
   String? get actionStatement => throw _privateConstructorUsedError;
   bool? get isActive => throw _privateConstructorUsedError;
@@ -44,7 +45,8 @@ abstract class $FirebaseResolutionModelCopyWith<$Res> {
       _$FirebaseResolutionModelCopyWithImpl<$Res, FirebaseResolutionModel>;
   @useResult
   $Res call(
-      {String? goalStatement,
+      {String? resolutionName,
+      String? goalStatement,
       String? actionStatement,
       bool? isActive,
       int? colorIndex,
@@ -68,6 +70,7 @@ class _$FirebaseResolutionModelCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? resolutionName = freezed,
     Object? goalStatement = freezed,
     Object? actionStatement = freezed,
     Object? isActive = freezed,
@@ -78,6 +81,10 @@ class _$FirebaseResolutionModelCopyWithImpl<$Res,
     Object? shareGroupIdList = freezed,
   }) {
     return _then(_value.copyWith(
+      resolutionName: freezed == resolutionName
+          ? _value.resolutionName
+          : resolutionName // ignore: cast_nullable_to_non_nullable
+              as String?,
       goalStatement: freezed == goalStatement
           ? _value.goalStatement
           : goalStatement // ignore: cast_nullable_to_non_nullable
@@ -124,7 +131,8 @@ abstract class _$$FirebaseResolutionModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? goalStatement,
+      {String? resolutionName,
+      String? goalStatement,
       String? actionStatement,
       bool? isActive,
       int? colorIndex,
@@ -147,6 +155,7 @@ class __$$FirebaseResolutionModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? resolutionName = freezed,
     Object? goalStatement = freezed,
     Object? actionStatement = freezed,
     Object? isActive = freezed,
@@ -157,6 +166,10 @@ class __$$FirebaseResolutionModelImplCopyWithImpl<$Res>
     Object? shareGroupIdList = freezed,
   }) {
     return _then(_$FirebaseResolutionModelImpl(
+      resolutionName: freezed == resolutionName
+          ? _value.resolutionName
+          : resolutionName // ignore: cast_nullable_to_non_nullable
+              as String?,
       goalStatement: freezed == goalStatement
           ? _value.goalStatement
           : goalStatement // ignore: cast_nullable_to_non_nullable
@@ -198,7 +211,8 @@ class __$$FirebaseResolutionModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
   const _$FirebaseResolutionModelImpl(
-      {required this.goalStatement,
+      {required this.resolutionName,
+      required this.goalStatement,
       required this.actionStatement,
       required this.isActive,
       required this.colorIndex,
@@ -212,6 +226,8 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
   factory _$FirebaseResolutionModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$FirebaseResolutionModelImplFromJson(json);
 
+  @override
+  final String? resolutionName;
   @override
   final String? goalStatement;
   @override
@@ -249,7 +265,7 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
 
   @override
   String toString() {
-    return 'FirebaseResolutionModel(goalStatement: $goalStatement, actionStatement: $actionStatement, isActive: $isActive, colorIndex: $colorIndex, actionPerWeek: $actionPerWeek, startDate: $startDate, shareFriendIdList: $shareFriendIdList, shareGroupIdList: $shareGroupIdList)';
+    return 'FirebaseResolutionModel(resolutionName: $resolutionName, goalStatement: $goalStatement, actionStatement: $actionStatement, isActive: $isActive, colorIndex: $colorIndex, actionPerWeek: $actionPerWeek, startDate: $startDate, shareFriendIdList: $shareFriendIdList, shareGroupIdList: $shareGroupIdList)';
   }
 
   @override
@@ -257,6 +273,8 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$FirebaseResolutionModelImpl &&
+            (identical(other.resolutionName, resolutionName) ||
+                other.resolutionName == resolutionName) &&
             (identical(other.goalStatement, goalStatement) ||
                 other.goalStatement == goalStatement) &&
             (identical(other.actionStatement, actionStatement) ||
@@ -279,6 +297,7 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      resolutionName,
       goalStatement,
       actionStatement,
       isActive,
@@ -305,7 +324,8 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
 
 abstract class _FirebaseResolutionModel implements FirebaseResolutionModel {
   const factory _FirebaseResolutionModel(
-          {required final String? goalStatement,
+          {required final String? resolutionName,
+          required final String? goalStatement,
           required final String? actionStatement,
           required final bool? isActive,
           required final int? colorIndex,
@@ -318,6 +338,8 @@ abstract class _FirebaseResolutionModel implements FirebaseResolutionModel {
   factory _FirebaseResolutionModel.fromJson(Map<String, dynamic> json) =
       _$FirebaseResolutionModelImpl.fromJson;
 
+  @override
+  String? get resolutionName;
   @override
   String? get goalStatement;
   @override

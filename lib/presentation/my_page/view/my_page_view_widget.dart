@@ -394,7 +394,7 @@ class _MyPageResolutionListCellWidgetState
               children: [
                 ResolutionListCellHeadWidget(
                   goalStatement: widget.resolutionEntity.goalStatement ?? '',
-                  resolutionName: 'resolution Name',
+                  resolutionName: widget.resolutionEntity.resolutionName ?? '',
                   showGoalStatement: widget.showDetails,
                   pointColor: PointColors
                       .colorList[widget.resolutionEntity.colorIndex ?? 0],

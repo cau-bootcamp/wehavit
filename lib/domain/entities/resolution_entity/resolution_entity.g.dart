@@ -10,6 +10,7 @@ _$ResolutionEntityImpl _$$ResolutionEntityImplFromJson(
         Map<String, dynamic> json) =>
     _$ResolutionEntityImpl(
       resolutionId: json['resolutionId'] as String?,
+      resolutionName: json['resolutionName'] as String?,
       goalStatement: json['goalStatement'] as String?,
       actionStatement: json['actionStatement'] as String?,
       isActive: json['isActive'] as bool?,
@@ -29,6 +30,7 @@ Map<String, dynamic> _$$ResolutionEntityImplToJson(
         _$ResolutionEntityImpl instance) =>
     <String, dynamic>{
       'resolutionId': instance.resolutionId,
+      'resolutionName': instance.resolutionName,
       'goalStatement': instance.goalStatement,
       'actionStatement': instance.actionStatement,
       'isActive': instance.isActive,

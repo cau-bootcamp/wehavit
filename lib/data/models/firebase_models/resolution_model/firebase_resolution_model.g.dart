@@ -9,6 +9,7 @@ part of 'firebase_resolution_model.dart';
 _$FirebaseResolutionModelImpl _$$FirebaseResolutionModelImplFromJson(
         Map<String, dynamic> json) =>
     _$FirebaseResolutionModelImpl(
+      resolutionName: json['resolutionName'] as String?,
       goalStatement: json['goalStatement'] as String?,
       actionStatement: json['actionStatement'] as String?,
       isActive: json['isActive'] as bool?,
@@ -27,6 +28,7 @@ _$FirebaseResolutionModelImpl _$$FirebaseResolutionModelImplFromJson(
 Map<String, dynamic> _$$FirebaseResolutionModelImplToJson(
         _$FirebaseResolutionModelImpl instance) =>
     <String, dynamic>{
+      'resolutionName': instance.resolutionName,
       'goalStatement': instance.goalStatement,
       'actionStatement': instance.actionStatement,
       'isActive': instance.isActive,
