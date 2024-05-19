@@ -13,6 +13,11 @@ class FirebaseUserModel with _$FirebaseUserModel {
     String? email,
     String? displayName,
     String? imageUrl,
+    String? aboutMe,
+    @TimestampConverter() DateTime? createdAt,
+    int? cumulativeGoals,
+    int? cumulativePosts,
+    int? cumulativeReactions,
   }) = _FirebaseUserModel;
 
   factory FirebaseUserModel.fromJson(Map<String, dynamic> json) =>
@@ -35,6 +40,10 @@ extension ConvertFirebaseUserModel on FirebaseUserModel {
       userImageUrl: imageUrl,
       userName: displayName,
       userId: userId,
+      createdAt: createdAt,
+      cumulativeGoals: cumulativeGoals,
+      cumulativePosts: cumulativePosts,
+      cumulativeReactions: cumulativeReactions,
     );
   }
 }

@@ -47,29 +47,6 @@ class ResolutionListViewModelProvider
 
     state.resolutionModelList = modelList;
 
-    // int tempTotalCount = 0;
-    // await Future.wait(
-    //   modelList.map((model) {
-    //     tempTotalCount += model.entity.actionPerWeek ?? 0;
-    //     return model.doneList;
-    //   }).toList(),
-    // ).then(
-    //   (dones) {
-    //     int tempDoneCount = 0;
-    //     for (final doneList in dones) {
-    //       doneList.fold((l) => null, (r) {
-    //         tempDoneCount += r.where((element) => element == true).length;
-    //       });
-    //     }
-    //     return tempDoneCount;
-    //   },
-    // ).then((result) {
-    //   state.futureDoneCount = Future(() => right(result));
-    //   state.futureDoneRatio =
-    //       Future(() => right((result / tempTotalCount * 100).round()));
-    //   print("done");
-    // });
-
     int tempTotalCount = 0;
     state.futureDoneCount = Future(() async {
       final dones = modelList.map((model) {

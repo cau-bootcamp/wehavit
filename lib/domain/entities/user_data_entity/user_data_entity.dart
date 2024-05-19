@@ -12,6 +12,11 @@ class UserDataEntity with _$UserDataEntity {
     String? userId,
     String? userName,
     String? userImageUrl,
+    String? aboutMe,
+    DateTime? createdAt,
+    int? cumulativeGoals,
+    int? cumulativePosts,
+    int? cumulativeReactions,
   }) = _UserDataEntity;
 
   factory UserDataEntity.fromJson(Map<String, dynamic> json) =>
@@ -22,5 +27,10 @@ class UserDataEntity with _$UserDataEntity {
     userEmail: 'dummy@dummy.com',
     userId: '00000000',
     userImageUrl: 'https://www.cau.ac.kr/cau/img/campusinfo/mascot-tab1_01.jpg',
+    aboutMe: 'This is me! Hello world!',
+    createdAt: DateTime.now().subtract(const Duration(days: 31)),
+    cumulativeGoals: 32,
+    cumulativePosts: 21,
+    cumulativeReactions: 10,
   );
 }

@@ -41,6 +41,11 @@ class AuthGoogleDatasourceImpl implements AuthGoogleDatasource {
         FirebaseUserFieldName.displayName: result.user?.displayName,
         FirebaseUserFieldName.email: result.user?.email,
         FirebaseUserFieldName.imageUrl: result.user?.photoURL,
+        FirebaseUserFieldName.createdAt: DateTime.now(),
+        FirebaseUserFieldName.aboutMe: '',
+        FirebaseUserFieldName.cumulativeGoals: 0,
+        FirebaseUserFieldName.cumulativePosts: 0,
+        FirebaseUserFieldName.cumulativeReactions: 0,
       });
 
       return AuthResult.success;

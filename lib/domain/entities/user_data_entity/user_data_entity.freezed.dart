@@ -24,6 +24,11 @@ mixin _$UserDataEntity {
   String? get userId => throw _privateConstructorUsedError;
   String? get userName => throw _privateConstructorUsedError;
   String? get userImageUrl => throw _privateConstructorUsedError;
+  String? get aboutMe => throw _privateConstructorUsedError;
+  DateTime? get createdAt => throw _privateConstructorUsedError;
+  int? get cumulativeGoals => throw _privateConstructorUsedError;
+  int? get cumulativePosts => throw _privateConstructorUsedError;
+  int? get cumulativeReactions => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -41,7 +46,12 @@ abstract class $UserDataEntityCopyWith<$Res> {
       {String? userEmail,
       String? userId,
       String? userName,
-      String? userImageUrl});
+      String? userImageUrl,
+      String? aboutMe,
+      DateTime? createdAt,
+      int? cumulativeGoals,
+      int? cumulativePosts,
+      int? cumulativeReactions});
 }
 
 /// @nodoc
@@ -61,6 +71,11 @@ class _$UserDataEntityCopyWithImpl<$Res, $Val extends UserDataEntity>
     Object? userId = freezed,
     Object? userName = freezed,
     Object? userImageUrl = freezed,
+    Object? aboutMe = freezed,
+    Object? createdAt = freezed,
+    Object? cumulativeGoals = freezed,
+    Object? cumulativePosts = freezed,
+    Object? cumulativeReactions = freezed,
   }) {
     return _then(_value.copyWith(
       userEmail: freezed == userEmail
@@ -79,6 +94,26 @@ class _$UserDataEntityCopyWithImpl<$Res, $Val extends UserDataEntity>
           ? _value.userImageUrl
           : userImageUrl // ignore: cast_nullable_to_non_nullable
               as String?,
+      aboutMe: freezed == aboutMe
+          ? _value.aboutMe
+          : aboutMe // ignore: cast_nullable_to_non_nullable
+              as String?,
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      cumulativeGoals: freezed == cumulativeGoals
+          ? _value.cumulativeGoals
+          : cumulativeGoals // ignore: cast_nullable_to_non_nullable
+              as int?,
+      cumulativePosts: freezed == cumulativePosts
+          ? _value.cumulativePosts
+          : cumulativePosts // ignore: cast_nullable_to_non_nullable
+              as int?,
+      cumulativeReactions: freezed == cumulativeReactions
+          ? _value.cumulativeReactions
+          : cumulativeReactions // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 }
@@ -95,7 +130,12 @@ abstract class _$$UserDataEntityImplCopyWith<$Res>
       {String? userEmail,
       String? userId,
       String? userName,
-      String? userImageUrl});
+      String? userImageUrl,
+      String? aboutMe,
+      DateTime? createdAt,
+      int? cumulativeGoals,
+      int? cumulativePosts,
+      int? cumulativeReactions});
 }
 
 /// @nodoc
@@ -113,6 +153,11 @@ class __$$UserDataEntityImplCopyWithImpl<$Res>
     Object? userId = freezed,
     Object? userName = freezed,
     Object? userImageUrl = freezed,
+    Object? aboutMe = freezed,
+    Object? createdAt = freezed,
+    Object? cumulativeGoals = freezed,
+    Object? cumulativePosts = freezed,
+    Object? cumulativeReactions = freezed,
   }) {
     return _then(_$UserDataEntityImpl(
       userEmail: freezed == userEmail
@@ -131,6 +176,26 @@ class __$$UserDataEntityImplCopyWithImpl<$Res>
           ? _value.userImageUrl
           : userImageUrl // ignore: cast_nullable_to_non_nullable
               as String?,
+      aboutMe: freezed == aboutMe
+          ? _value.aboutMe
+          : aboutMe // ignore: cast_nullable_to_non_nullable
+              as String?,
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      cumulativeGoals: freezed == cumulativeGoals
+          ? _value.cumulativeGoals
+          : cumulativeGoals // ignore: cast_nullable_to_non_nullable
+              as int?,
+      cumulativePosts: freezed == cumulativePosts
+          ? _value.cumulativePosts
+          : cumulativePosts // ignore: cast_nullable_to_non_nullable
+              as int?,
+      cumulativeReactions: freezed == cumulativeReactions
+          ? _value.cumulativeReactions
+          : cumulativeReactions // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -140,7 +205,15 @@ class __$$UserDataEntityImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$UserDataEntityImpl implements _UserDataEntity {
   _$UserDataEntityImpl(
-      {this.userEmail, this.userId, this.userName, this.userImageUrl});
+      {this.userEmail,
+      this.userId,
+      this.userName,
+      this.userImageUrl,
+      this.aboutMe,
+      this.createdAt,
+      this.cumulativeGoals,
+      this.cumulativePosts,
+      this.cumulativeReactions});
 
   factory _$UserDataEntityImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserDataEntityImplFromJson(json);
@@ -153,10 +226,20 @@ class _$UserDataEntityImpl implements _UserDataEntity {
   final String? userName;
   @override
   final String? userImageUrl;
+  @override
+  final String? aboutMe;
+  @override
+  final DateTime? createdAt;
+  @override
+  final int? cumulativeGoals;
+  @override
+  final int? cumulativePosts;
+  @override
+  final int? cumulativeReactions;
 
   @override
   String toString() {
-    return 'UserDataEntity(userEmail: $userEmail, userId: $userId, userName: $userName, userImageUrl: $userImageUrl)';
+    return 'UserDataEntity(userEmail: $userEmail, userId: $userId, userName: $userName, userImageUrl: $userImageUrl, aboutMe: $aboutMe, createdAt: $createdAt, cumulativeGoals: $cumulativeGoals, cumulativePosts: $cumulativePosts, cumulativeReactions: $cumulativeReactions)';
   }
 
   @override
@@ -170,13 +253,31 @@ class _$UserDataEntityImpl implements _UserDataEntity {
             (identical(other.userName, userName) ||
                 other.userName == userName) &&
             (identical(other.userImageUrl, userImageUrl) ||
-                other.userImageUrl == userImageUrl));
+                other.userImageUrl == userImageUrl) &&
+            (identical(other.aboutMe, aboutMe) || other.aboutMe == aboutMe) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.cumulativeGoals, cumulativeGoals) ||
+                other.cumulativeGoals == cumulativeGoals) &&
+            (identical(other.cumulativePosts, cumulativePosts) ||
+                other.cumulativePosts == cumulativePosts) &&
+            (identical(other.cumulativeReactions, cumulativeReactions) ||
+                other.cumulativeReactions == cumulativeReactions));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, userEmail, userId, userName, userImageUrl);
+  int get hashCode => Object.hash(
+      runtimeType,
+      userEmail,
+      userId,
+      userName,
+      userImageUrl,
+      aboutMe,
+      createdAt,
+      cumulativeGoals,
+      cumulativePosts,
+      cumulativeReactions);
 
   @JsonKey(ignore: true)
   @override
@@ -198,7 +299,12 @@ abstract class _UserDataEntity implements UserDataEntity {
       {final String? userEmail,
       final String? userId,
       final String? userName,
-      final String? userImageUrl}) = _$UserDataEntityImpl;
+      final String? userImageUrl,
+      final String? aboutMe,
+      final DateTime? createdAt,
+      final int? cumulativeGoals,
+      final int? cumulativePosts,
+      final int? cumulativeReactions}) = _$UserDataEntityImpl;
 
   factory _UserDataEntity.fromJson(Map<String, dynamic> json) =
       _$UserDataEntityImpl.fromJson;
@@ -211,6 +317,16 @@ abstract class _UserDataEntity implements UserDataEntity {
   String? get userName;
   @override
   String? get userImageUrl;
+  @override
+  String? get aboutMe;
+  @override
+  DateTime? get createdAt;
+  @override
+  int? get cumulativeGoals;
+  @override
+  int? get cumulativePosts;
+  @override
+  int? get cumulativeReactions;
   @override
   @JsonKey(ignore: true)
   _$$UserDataEntityImplCopyWith<_$UserDataEntityImpl> get copyWith =>

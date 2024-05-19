@@ -23,6 +23,12 @@ mixin _$FirebaseUserModel {
   String? get email => throw _privateConstructorUsedError;
   String? get displayName => throw _privateConstructorUsedError;
   String? get imageUrl => throw _privateConstructorUsedError;
+  String? get aboutMe => throw _privateConstructorUsedError;
+  @TimestampConverter()
+  DateTime? get createdAt => throw _privateConstructorUsedError;
+  int? get cumulativeGoals => throw _privateConstructorUsedError;
+  int? get cumulativePosts => throw _privateConstructorUsedError;
+  int? get cumulativeReactions => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -36,7 +42,15 @@ abstract class $FirebaseUserModelCopyWith<$Res> {
           FirebaseUserModel value, $Res Function(FirebaseUserModel) then) =
       _$FirebaseUserModelCopyWithImpl<$Res, FirebaseUserModel>;
   @useResult
-  $Res call({String? email, String? displayName, String? imageUrl});
+  $Res call(
+      {String? email,
+      String? displayName,
+      String? imageUrl,
+      String? aboutMe,
+      @TimestampConverter() DateTime? createdAt,
+      int? cumulativeGoals,
+      int? cumulativePosts,
+      int? cumulativeReactions});
 }
 
 /// @nodoc
@@ -55,6 +69,11 @@ class _$FirebaseUserModelCopyWithImpl<$Res, $Val extends FirebaseUserModel>
     Object? email = freezed,
     Object? displayName = freezed,
     Object? imageUrl = freezed,
+    Object? aboutMe = freezed,
+    Object? createdAt = freezed,
+    Object? cumulativeGoals = freezed,
+    Object? cumulativePosts = freezed,
+    Object? cumulativeReactions = freezed,
   }) {
     return _then(_value.copyWith(
       email: freezed == email
@@ -69,6 +88,26 @@ class _$FirebaseUserModelCopyWithImpl<$Res, $Val extends FirebaseUserModel>
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String?,
+      aboutMe: freezed == aboutMe
+          ? _value.aboutMe
+          : aboutMe // ignore: cast_nullable_to_non_nullable
+              as String?,
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      cumulativeGoals: freezed == cumulativeGoals
+          ? _value.cumulativeGoals
+          : cumulativeGoals // ignore: cast_nullable_to_non_nullable
+              as int?,
+      cumulativePosts: freezed == cumulativePosts
+          ? _value.cumulativePosts
+          : cumulativePosts // ignore: cast_nullable_to_non_nullable
+              as int?,
+      cumulativeReactions: freezed == cumulativeReactions
+          ? _value.cumulativeReactions
+          : cumulativeReactions // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 }
@@ -81,7 +120,15 @@ abstract class _$$FirebaseUserModelImplCopyWith<$Res>
       __$$FirebaseUserModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String? email, String? displayName, String? imageUrl});
+  $Res call(
+      {String? email,
+      String? displayName,
+      String? imageUrl,
+      String? aboutMe,
+      @TimestampConverter() DateTime? createdAt,
+      int? cumulativeGoals,
+      int? cumulativePosts,
+      int? cumulativeReactions});
 }
 
 /// @nodoc
@@ -98,6 +145,11 @@ class __$$FirebaseUserModelImplCopyWithImpl<$Res>
     Object? email = freezed,
     Object? displayName = freezed,
     Object? imageUrl = freezed,
+    Object? aboutMe = freezed,
+    Object? createdAt = freezed,
+    Object? cumulativeGoals = freezed,
+    Object? cumulativePosts = freezed,
+    Object? cumulativeReactions = freezed,
   }) {
     return _then(_$FirebaseUserModelImpl(
       email: freezed == email
@@ -112,6 +164,26 @@ class __$$FirebaseUserModelImplCopyWithImpl<$Res>
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String?,
+      aboutMe: freezed == aboutMe
+          ? _value.aboutMe
+          : aboutMe // ignore: cast_nullable_to_non_nullable
+              as String?,
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      cumulativeGoals: freezed == cumulativeGoals
+          ? _value.cumulativeGoals
+          : cumulativeGoals // ignore: cast_nullable_to_non_nullable
+              as int?,
+      cumulativePosts: freezed == cumulativePosts
+          ? _value.cumulativePosts
+          : cumulativePosts // ignore: cast_nullable_to_non_nullable
+              as int?,
+      cumulativeReactions: freezed == cumulativeReactions
+          ? _value.cumulativeReactions
+          : cumulativeReactions // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -120,7 +192,15 @@ class __$$FirebaseUserModelImplCopyWithImpl<$Res>
 
 @JsonSerializable()
 class _$FirebaseUserModelImpl implements _FirebaseUserModel {
-  const _$FirebaseUserModelImpl({this.email, this.displayName, this.imageUrl});
+  const _$FirebaseUserModelImpl(
+      {this.email,
+      this.displayName,
+      this.imageUrl,
+      this.aboutMe,
+      @TimestampConverter() this.createdAt,
+      this.cumulativeGoals,
+      this.cumulativePosts,
+      this.cumulativeReactions});
 
   factory _$FirebaseUserModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$FirebaseUserModelImplFromJson(json);
@@ -131,10 +211,21 @@ class _$FirebaseUserModelImpl implements _FirebaseUserModel {
   final String? displayName;
   @override
   final String? imageUrl;
+  @override
+  final String? aboutMe;
+  @override
+  @TimestampConverter()
+  final DateTime? createdAt;
+  @override
+  final int? cumulativeGoals;
+  @override
+  final int? cumulativePosts;
+  @override
+  final int? cumulativeReactions;
 
   @override
   String toString() {
-    return 'FirebaseUserModel(email: $email, displayName: $displayName, imageUrl: $imageUrl)';
+    return 'FirebaseUserModel(email: $email, displayName: $displayName, imageUrl: $imageUrl, aboutMe: $aboutMe, createdAt: $createdAt, cumulativeGoals: $cumulativeGoals, cumulativePosts: $cumulativePosts, cumulativeReactions: $cumulativeReactions)';
   }
 
   @override
@@ -146,12 +237,30 @@ class _$FirebaseUserModelImpl implements _FirebaseUserModel {
             (identical(other.displayName, displayName) ||
                 other.displayName == displayName) &&
             (identical(other.imageUrl, imageUrl) ||
-                other.imageUrl == imageUrl));
+                other.imageUrl == imageUrl) &&
+            (identical(other.aboutMe, aboutMe) || other.aboutMe == aboutMe) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.cumulativeGoals, cumulativeGoals) ||
+                other.cumulativeGoals == cumulativeGoals) &&
+            (identical(other.cumulativePosts, cumulativePosts) ||
+                other.cumulativePosts == cumulativePosts) &&
+            (identical(other.cumulativeReactions, cumulativeReactions) ||
+                other.cumulativeReactions == cumulativeReactions));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, email, displayName, imageUrl);
+  int get hashCode => Object.hash(
+      runtimeType,
+      email,
+      displayName,
+      imageUrl,
+      aboutMe,
+      createdAt,
+      cumulativeGoals,
+      cumulativePosts,
+      cumulativeReactions);
 
   @JsonKey(ignore: true)
   @override
@@ -172,7 +281,12 @@ abstract class _FirebaseUserModel implements FirebaseUserModel {
   const factory _FirebaseUserModel(
       {final String? email,
       final String? displayName,
-      final String? imageUrl}) = _$FirebaseUserModelImpl;
+      final String? imageUrl,
+      final String? aboutMe,
+      @TimestampConverter() final DateTime? createdAt,
+      final int? cumulativeGoals,
+      final int? cumulativePosts,
+      final int? cumulativeReactions}) = _$FirebaseUserModelImpl;
 
   factory _FirebaseUserModel.fromJson(Map<String, dynamic> json) =
       _$FirebaseUserModelImpl.fromJson;
@@ -183,6 +297,17 @@ abstract class _FirebaseUserModel implements FirebaseUserModel {
   String? get displayName;
   @override
   String? get imageUrl;
+  @override
+  String? get aboutMe;
+  @override
+  @TimestampConverter()
+  DateTime? get createdAt;
+  @override
+  int? get cumulativeGoals;
+  @override
+  int? get cumulativePosts;
+  @override
+  int? get cumulativeReactions;
   @override
   @JsonKey(ignore: true)
   _$$FirebaseUserModelImplCopyWith<_$FirebaseUserModelImpl> get copyWith =>
