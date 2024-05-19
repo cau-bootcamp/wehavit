@@ -65,9 +65,9 @@ class _MyPageScreenState extends ConsumerState<MyPageView> {
               forFail: Container(),
               mainWidgetCallback: (resolutionList) {
                 return Column(
-                  children: List<MyPageResolutionListCellWidget>.generate(
+                  children: List<ResolutionListCellWidget>.generate(
                     resolutionList.length,
-                    (index) => MyPageResolutionListCellWidget(
+                    (index) => ResolutionListCellWidget(
                       resolutionEntity: resolutionList[index],
                       showDetails: true,
                     ),

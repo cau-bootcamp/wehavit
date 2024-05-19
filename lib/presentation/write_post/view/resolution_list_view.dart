@@ -50,6 +50,9 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView> {
               futureDoneRatio: viewModel.futureDoneRatio,
               futureDoneCount: viewModel.futureDoneCount,
             ),
+            const SizedBox(
+              height: 16.0,
+            ),
             Visibility(
               visible: !isLoading,
               replacement: const Padding(
@@ -67,31 +70,28 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView> {
               child: Column(
                 children: List<Widget>.generate(
                   viewModel.resolutionModelList?.length ?? 0,
-                  (index) => Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: GestureDetector(
-                      child: ResolutionListCellWidget(
-                        viewModel.resolutionModelList![index],
-                        futureDoneList:
-                            viewModel.resolutionModelList![index].doneList,
-                      ),
-                      onTapUp: (details) async {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            return WritingResolutionBottomSheetWidget(
-                              viewModel: viewModel,
-                              provider: provider,
-                              index: index,
-                            );
-                          },
-                        ).whenComplete(() {
-                          provider
-                              .loadResolutionModelList()
-                              .whenComplete(() => setState(() {}));
-                        });
-                      },
+                  (index) => GestureDetector(
+                    child: ResolutionListCellWidget(
+                      resolutionEntity:
+                          viewModel.resolutionModelList![index].entity,
+                      showDetails: false,
                     ),
+                    onTapUp: (details) async {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return WritingResolutionBottomSheetWidget(
+                            viewModel: viewModel,
+                            provider: provider,
+                            index: index,
+                          );
+                        },
+                      ).whenComplete(() {
+                        provider
+                            .loadResolutionModelList()
+                            .whenComplete(() => setState(() {}));
+                      });
+                    },
                   ),
                 ),
               ),
