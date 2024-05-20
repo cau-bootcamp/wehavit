@@ -16,7 +16,7 @@ export 'repositories/photo_repository.dart';
 export 'repositories/reaction_repository.dart';
 export 'repositories/repositories.dart';
 export 'repositories/resolution_repository.dart';
-export 'repositories/user_model_fetch_repository.dart';
+export 'repositories/user_model_repository.dart';
 export 'usecases/accept_applying_for_joining_group_usecase.dart';
 export 'usecases/apply_for_joining_group_usecase.dart';
 export 'usecases/auth_state_changes_usecase.dart';

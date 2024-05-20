@@ -5,4 +5,8 @@ abstract class UserModelRepository {
   EitherFuture<String> getMyUserId();
 
   EitherFuture<UserDataEntity> fetchUserDataEntityFromId(String targetUserId);
+
+  Future<void> incrementUserDataCounter({
+    required UserIncrementalDataType type,
+  });
 }

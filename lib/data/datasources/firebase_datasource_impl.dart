@@ -1747,4 +1747,40 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       );
     }
   }
+
+  @override
+  Future<void> incrementUserDataCounter({
+    required UserIncrementalDataType type,
+  }) {
+    try {
+      String targetFieldName;
+      switch (type) {
+        case UserIncrementalDataType.goal:
+          targetFieldName = FirebaseUserFieldName.cumulativeGoals;
+        case UserIncrementalDataType.post:
+          targetFieldName = FirebaseUserFieldName.cumulativePosts;
+        case UserIncrementalDataType.reaction:
+          targetFieldName = FirebaseUserFieldName.cumulativeReactions;
+      }
+
+      firestore
+          .collection(FirebaseCollectionName.users)
+          .doc(myUid)
+          .get()
+          .then((result) {
+        return (result.data()?[targetFieldName] as int) + 1;
+      }).then((newValue) {
+        firestore
+            .collection(FirebaseCollectionName.users)
+            .doc(myUid)
+            .update({targetFieldName: newValue});
+      });
+
+      return Future(() => right(null));
+    } on Exception catch (e) {
+      return Future(
+        () => left(Failure(e.toString())),
+      );
+    }
+  }
 }

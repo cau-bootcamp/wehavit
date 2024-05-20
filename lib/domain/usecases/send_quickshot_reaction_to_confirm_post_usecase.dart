@@ -48,9 +48,15 @@ class SendQuickShotReactionToConfirmPostUsecase
       quickShotUrl: uploadedImageUrl,
     );
 
-    return _reactionRepository.addReactionToConfirmPost(
+    return _reactionRepository
+        .addReactionToConfirmPost(
       params.$1,
       reactionEntity,
-    );
+    )
+        .whenComplete(() {
+      _userModelRepository.incrementUserDataCounter(
+        type: UserIncrementalDataType.reaction,
+      );
+    });
   }
 }

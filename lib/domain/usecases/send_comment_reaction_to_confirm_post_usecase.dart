@@ -29,9 +29,15 @@ class SendCommentReactionToConfirmPostUsecase
       comment: params.$2,
     );
 
-    return _reactionRepository.addReactionToConfirmPost(
+    return _reactionRepository
+        .addReactionToConfirmPost(
       params.$1,
       reactionEntity,
-    );
+    )
+        .whenComplete(() {
+      _userModelRepository.incrementUserDataCounter(
+        type: UserIncrementalDataType.reaction,
+      );
+    });
   }
 }

@@ -34,3 +34,9 @@ class UserDataEntity with _$UserDataEntity {
     cumulativeReactions: 10,
   );
 }
+
+enum UserIncrementalDataType {
+  goal,
+  post,
+  reaction,
+}

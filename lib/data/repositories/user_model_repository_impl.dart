@@ -20,4 +20,11 @@ class UserModelRepositoryImpl implements UserModelRepository {
   EitherFuture<String> getMyUserId() {
     return Future(() => right(_wehavitDatasource.getMyUserId()));
   }
+
+  @override
+  Future<void> incrementUserDataCounter({
+    required UserIncrementalDataType type,
+  }) {
+    return _wehavitDatasource.incrementUserDataCounter(type: type);
+  }
 }

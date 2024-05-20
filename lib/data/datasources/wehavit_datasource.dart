@@ -133,4 +133,8 @@ abstract class WehavitDatasource {
     required String targetUserId,
     required String targetResolutionId,
   });
+
+  Future<void> incrementUserDataCounter({
+    required UserIncrementalDataType type,
+  });
 }

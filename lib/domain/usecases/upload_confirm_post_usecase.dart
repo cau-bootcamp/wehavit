@@ -65,7 +65,13 @@ class UploadConfirmPostUseCase {
         hasRested: hasRested,
       );
 
-      return await _confirmPostRepository.createConfirmPost(confirmPost);
+      return await _confirmPostRepository
+          .createConfirmPost(confirmPost)
+          .whenComplete(() {
+        _userModelRepository.incrementUserDataCounter(
+          type: UserIncrementalDataType.post,
+        );
+      });
     } on Exception catch (e) {
       return Future(() => left(Failure(e.toString())));
     }

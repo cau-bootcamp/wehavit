@@ -40,8 +40,12 @@ final authStateChangesUseCaseProvider = Provider<AuthStateChangesUseCase>(
 
 final uploadResolutionUsecaseProvider =
     Provider<UploadResolutionUseCase>((ref) {
+  final userModelRepository = ref.watch(userModelRepositoryProvider);
   final resolutionRepository = ref.watch(resolutionRepositoryProvider);
-  return UploadResolutionUseCase(resolutionRepository);
+  return UploadResolutionUseCase(
+    resolutionRepository,
+    userModelRepository,
+  );
 });
 
 final registerFriendUsecaseProvider = Provider<RegisterFriendUsecase>((ref) {

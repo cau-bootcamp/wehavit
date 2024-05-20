@@ -3,9 +3,13 @@ import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
 
 class UploadResolutionUseCase {
-  UploadResolutionUseCase(this._resolutionRepository);
+  UploadResolutionUseCase(
+    this._resolutionRepository,
+    this._userModelRepository,
+  );
 
   final ResolutionRepository _resolutionRepository;
+  final UserModelRepository _userModelRepository;
 
   EitherFuture<bool> call({
     required String goalStatement,
@@ -25,6 +29,12 @@ class UploadResolutionUseCase {
       resolutionId: '',
     );
 
-    return _resolutionRepository.uploadResolutionEntity(entity);
+    return _resolutionRepository
+        .uploadResolutionEntity(entity)
+        .whenComplete(() {
+      _userModelRepository.incrementUserDataCounter(
+        type: UserIncrementalDataType.goal,
+      );
+    });
   }
 }
