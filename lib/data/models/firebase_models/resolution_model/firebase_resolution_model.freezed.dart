@@ -21,9 +21,11 @@ FirebaseResolutionModel _$FirebaseResolutionModelFromJson(
 
 /// @nodoc
 mixin _$FirebaseResolutionModel {
+  String? get resolutionName => throw _privateConstructorUsedError;
   String? get goalStatement => throw _privateConstructorUsedError;
   String? get actionStatement => throw _privateConstructorUsedError;
   bool? get isActive => throw _privateConstructorUsedError;
+  int? get colorIndex => throw _privateConstructorUsedError;
   int? get actionPerWeek => throw _privateConstructorUsedError;
   @TimestampConverter()
   DateTime? get startDate => throw _privateConstructorUsedError;
@@ -43,9 +45,11 @@ abstract class $FirebaseResolutionModelCopyWith<$Res> {
       _$FirebaseResolutionModelCopyWithImpl<$Res, FirebaseResolutionModel>;
   @useResult
   $Res call(
-      {String? goalStatement,
+      {String? resolutionName,
+      String? goalStatement,
       String? actionStatement,
       bool? isActive,
+      int? colorIndex,
       int? actionPerWeek,
       @TimestampConverter() DateTime? startDate,
       List<String>? shareFriendIdList,
@@ -66,15 +70,21 @@ class _$FirebaseResolutionModelCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? resolutionName = freezed,
     Object? goalStatement = freezed,
     Object? actionStatement = freezed,
     Object? isActive = freezed,
+    Object? colorIndex = freezed,
     Object? actionPerWeek = freezed,
     Object? startDate = freezed,
     Object? shareFriendIdList = freezed,
     Object? shareGroupIdList = freezed,
   }) {
     return _then(_value.copyWith(
+      resolutionName: freezed == resolutionName
+          ? _value.resolutionName
+          : resolutionName // ignore: cast_nullable_to_non_nullable
+              as String?,
       goalStatement: freezed == goalStatement
           ? _value.goalStatement
           : goalStatement // ignore: cast_nullable_to_non_nullable
@@ -87,6 +97,10 @@ class _$FirebaseResolutionModelCopyWithImpl<$Res,
           ? _value.isActive
           : isActive // ignore: cast_nullable_to_non_nullable
               as bool?,
+      colorIndex: freezed == colorIndex
+          ? _value.colorIndex
+          : colorIndex // ignore: cast_nullable_to_non_nullable
+              as int?,
       actionPerWeek: freezed == actionPerWeek
           ? _value.actionPerWeek
           : actionPerWeek // ignore: cast_nullable_to_non_nullable
@@ -117,9 +131,11 @@ abstract class _$$FirebaseResolutionModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? goalStatement,
+      {String? resolutionName,
+      String? goalStatement,
       String? actionStatement,
       bool? isActive,
+      int? colorIndex,
       int? actionPerWeek,
       @TimestampConverter() DateTime? startDate,
       List<String>? shareFriendIdList,
@@ -139,15 +155,21 @@ class __$$FirebaseResolutionModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? resolutionName = freezed,
     Object? goalStatement = freezed,
     Object? actionStatement = freezed,
     Object? isActive = freezed,
+    Object? colorIndex = freezed,
     Object? actionPerWeek = freezed,
     Object? startDate = freezed,
     Object? shareFriendIdList = freezed,
     Object? shareGroupIdList = freezed,
   }) {
     return _then(_$FirebaseResolutionModelImpl(
+      resolutionName: freezed == resolutionName
+          ? _value.resolutionName
+          : resolutionName // ignore: cast_nullable_to_non_nullable
+              as String?,
       goalStatement: freezed == goalStatement
           ? _value.goalStatement
           : goalStatement // ignore: cast_nullable_to_non_nullable
@@ -160,6 +182,10 @@ class __$$FirebaseResolutionModelImplCopyWithImpl<$Res>
           ? _value.isActive
           : isActive // ignore: cast_nullable_to_non_nullable
               as bool?,
+      colorIndex: freezed == colorIndex
+          ? _value.colorIndex
+          : colorIndex // ignore: cast_nullable_to_non_nullable
+              as int?,
       actionPerWeek: freezed == actionPerWeek
           ? _value.actionPerWeek
           : actionPerWeek // ignore: cast_nullable_to_non_nullable
@@ -185,9 +211,11 @@ class __$$FirebaseResolutionModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
   const _$FirebaseResolutionModelImpl(
-      {required this.goalStatement,
+      {required this.resolutionName,
+      required this.goalStatement,
       required this.actionStatement,
       required this.isActive,
+      required this.colorIndex,
       required this.actionPerWeek,
       @TimestampConverter() required this.startDate,
       required final List<String>? shareFriendIdList,
@@ -199,11 +227,15 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
       _$$FirebaseResolutionModelImplFromJson(json);
 
   @override
+  final String? resolutionName;
+  @override
   final String? goalStatement;
   @override
   final String? actionStatement;
   @override
   final bool? isActive;
+  @override
+  final int? colorIndex;
   @override
   final int? actionPerWeek;
   @override
@@ -233,7 +265,7 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
 
   @override
   String toString() {
-    return 'FirebaseResolutionModel(goalStatement: $goalStatement, actionStatement: $actionStatement, isActive: $isActive, actionPerWeek: $actionPerWeek, startDate: $startDate, shareFriendIdList: $shareFriendIdList, shareGroupIdList: $shareGroupIdList)';
+    return 'FirebaseResolutionModel(resolutionName: $resolutionName, goalStatement: $goalStatement, actionStatement: $actionStatement, isActive: $isActive, colorIndex: $colorIndex, actionPerWeek: $actionPerWeek, startDate: $startDate, shareFriendIdList: $shareFriendIdList, shareGroupIdList: $shareGroupIdList)';
   }
 
   @override
@@ -241,12 +273,16 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$FirebaseResolutionModelImpl &&
+            (identical(other.resolutionName, resolutionName) ||
+                other.resolutionName == resolutionName) &&
             (identical(other.goalStatement, goalStatement) ||
                 other.goalStatement == goalStatement) &&
             (identical(other.actionStatement, actionStatement) ||
                 other.actionStatement == actionStatement) &&
             (identical(other.isActive, isActive) ||
                 other.isActive == isActive) &&
+            (identical(other.colorIndex, colorIndex) ||
+                other.colorIndex == colorIndex) &&
             (identical(other.actionPerWeek, actionPerWeek) ||
                 other.actionPerWeek == actionPerWeek) &&
             (identical(other.startDate, startDate) ||
@@ -261,9 +297,11 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      resolutionName,
       goalStatement,
       actionStatement,
       isActive,
+      colorIndex,
       actionPerWeek,
       startDate,
       const DeepCollectionEquality().hash(_shareFriendIdList),
@@ -286,9 +324,11 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
 
 abstract class _FirebaseResolutionModel implements FirebaseResolutionModel {
   const factory _FirebaseResolutionModel(
-          {required final String? goalStatement,
+          {required final String? resolutionName,
+          required final String? goalStatement,
           required final String? actionStatement,
           required final bool? isActive,
+          required final int? colorIndex,
           required final int? actionPerWeek,
           @TimestampConverter() required final DateTime? startDate,
           required final List<String>? shareFriendIdList,
@@ -299,11 +339,15 @@ abstract class _FirebaseResolutionModel implements FirebaseResolutionModel {
       _$FirebaseResolutionModelImpl.fromJson;
 
   @override
+  String? get resolutionName;
+  @override
   String? get goalStatement;
   @override
   String? get actionStatement;
   @override
   bool? get isActive;
+  @override
+  int? get colorIndex;
   @override
   int? get actionPerWeek;
   @override

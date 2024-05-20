@@ -21,6 +21,7 @@ ResolutionEntity _$ResolutionEntityFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ResolutionEntity {
   String? get resolutionId => throw _privateConstructorUsedError;
+  String? get resolutionName => throw _privateConstructorUsedError;
   String? get goalStatement => throw _privateConstructorUsedError;
   String? get actionStatement => throw _privateConstructorUsedError;
   bool? get isActive => throw _privateConstructorUsedError;
@@ -46,6 +47,7 @@ abstract class $ResolutionEntityCopyWith<$Res> {
   @useResult
   $Res call(
       {String? resolutionId,
+      String? resolutionName,
       String? goalStatement,
       String? actionStatement,
       bool? isActive,
@@ -70,6 +72,7 @@ class _$ResolutionEntityCopyWithImpl<$Res, $Val extends ResolutionEntity>
   @override
   $Res call({
     Object? resolutionId = freezed,
+    Object? resolutionName = freezed,
     Object? goalStatement = freezed,
     Object? actionStatement = freezed,
     Object? isActive = freezed,
@@ -83,6 +86,10 @@ class _$ResolutionEntityCopyWithImpl<$Res, $Val extends ResolutionEntity>
       resolutionId: freezed == resolutionId
           ? _value.resolutionId
           : resolutionId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      resolutionName: freezed == resolutionName
+          ? _value.resolutionName
+          : resolutionName // ignore: cast_nullable_to_non_nullable
               as String?,
       goalStatement: freezed == goalStatement
           ? _value.goalStatement
@@ -130,6 +137,7 @@ abstract class _$$ResolutionEntityImplCopyWith<$Res>
   @useResult
   $Res call(
       {String? resolutionId,
+      String? resolutionName,
       String? goalStatement,
       String? actionStatement,
       bool? isActive,
@@ -152,6 +160,7 @@ class __$$ResolutionEntityImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? resolutionId = freezed,
+    Object? resolutionName = freezed,
     Object? goalStatement = freezed,
     Object? actionStatement = freezed,
     Object? isActive = freezed,
@@ -165,6 +174,10 @@ class __$$ResolutionEntityImplCopyWithImpl<$Res>
       resolutionId: freezed == resolutionId
           ? _value.resolutionId
           : resolutionId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      resolutionName: freezed == resolutionName
+          ? _value.resolutionName
+          : resolutionName // ignore: cast_nullable_to_non_nullable
               as String?,
       goalStatement: freezed == goalStatement
           ? _value.goalStatement
@@ -209,6 +222,7 @@ class __$$ResolutionEntityImplCopyWithImpl<$Res>
 class _$ResolutionEntityImpl implements _ResolutionEntity {
   const _$ResolutionEntityImpl(
       {this.resolutionId,
+      this.resolutionName,
       this.goalStatement,
       this.actionStatement,
       this.isActive,
@@ -225,6 +239,8 @@ class _$ResolutionEntityImpl implements _ResolutionEntity {
 
   @override
   final String? resolutionId;
+  @override
+  final String? resolutionName;
   @override
   final String? goalStatement;
   @override
@@ -261,7 +277,7 @@ class _$ResolutionEntityImpl implements _ResolutionEntity {
 
   @override
   String toString() {
-    return 'ResolutionEntity(resolutionId: $resolutionId, goalStatement: $goalStatement, actionStatement: $actionStatement, isActive: $isActive, actionPerWeek: $actionPerWeek, colorIndex: $colorIndex, startDate: $startDate, shareFriendEntityList: $shareFriendEntityList, shareGroupEntityList: $shareGroupEntityList)';
+    return 'ResolutionEntity(resolutionId: $resolutionId, resolutionName: $resolutionName, goalStatement: $goalStatement, actionStatement: $actionStatement, isActive: $isActive, actionPerWeek: $actionPerWeek, colorIndex: $colorIndex, startDate: $startDate, shareFriendEntityList: $shareFriendEntityList, shareGroupEntityList: $shareGroupEntityList)';
   }
 
   @override
@@ -271,6 +287,8 @@ class _$ResolutionEntityImpl implements _ResolutionEntity {
             other is _$ResolutionEntityImpl &&
             (identical(other.resolutionId, resolutionId) ||
                 other.resolutionId == resolutionId) &&
+            (identical(other.resolutionName, resolutionName) ||
+                other.resolutionName == resolutionName) &&
             (identical(other.goalStatement, goalStatement) ||
                 other.goalStatement == goalStatement) &&
             (identical(other.actionStatement, actionStatement) ||
@@ -294,6 +312,7 @@ class _$ResolutionEntityImpl implements _ResolutionEntity {
   int get hashCode => Object.hash(
       runtimeType,
       resolutionId,
+      resolutionName,
       goalStatement,
       actionStatement,
       isActive,
@@ -321,6 +340,7 @@ class _$ResolutionEntityImpl implements _ResolutionEntity {
 abstract class _ResolutionEntity implements ResolutionEntity {
   const factory _ResolutionEntity(
       {final String? resolutionId,
+      final String? resolutionName,
       final String? goalStatement,
       final String? actionStatement,
       final bool? isActive,
@@ -335,6 +355,8 @@ abstract class _ResolutionEntity implements ResolutionEntity {
 
   @override
   String? get resolutionId;
+  @override
+  String? get resolutionName;
   @override
   String? get goalStatement;
   @override

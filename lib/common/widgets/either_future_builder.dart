@@ -10,7 +10,7 @@ class EitherFutureBuilder<T> extends StatelessWidget {
     super.key,
   });
 
-  final EitherFuture target;
+  final EitherFuture? target;
   final Widget forWaiting;
   final Widget Function(T) mainWidgetCallback;
   final Widget forFail;

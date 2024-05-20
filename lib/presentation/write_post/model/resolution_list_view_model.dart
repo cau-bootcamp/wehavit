@@ -1,7 +1,8 @@
+import 'package:wehavit/common/common.dart';
 import 'package:wehavit/presentation/write_post/write_post.dart';
 
 class ResolutionListViewModel {
   List<ResolutionListCellWidgetModel>? resolutionModelList;
-  int summaryDoneCount = 0;
-  int summaryTotalCount = 1;
+  EitherFuture<int>? futureDoneCount;
+  EitherFuture<int>? futureDoneRatio;
 }

@@ -111,7 +111,7 @@ abstract class WehavitDatasource {
     required String groupId,
   });
 
-  EitherFuture<int> getTargetResolutionDoneCountForWeek({
+  EitherFuture<List<bool>> getTargetResolutionDoneListForWeek({
     required String resolutionId,
     required DateTime startMonday,
   });
@@ -133,4 +133,10 @@ abstract class WehavitDatasource {
     required String targetUserId,
     required String targetResolutionId,
   });
+
+  EitherFuture<void> incrementUserDataCounter({
+    required UserIncrementalDataType type,
+  });
+
+  EitherFuture<void> updateAboutMe({required String newAboutMe});
 }

@@ -40,8 +40,12 @@ final authStateChangesUseCaseProvider = Provider<AuthStateChangesUseCase>(
 
 final uploadResolutionUsecaseProvider =
     Provider<UploadResolutionUseCase>((ref) {
+  final userModelRepository = ref.watch(userModelRepositoryProvider);
   final resolutionRepository = ref.watch(resolutionRepositoryProvider);
-  return UploadResolutionUseCase(resolutionRepository);
+  return UploadResolutionUseCase(
+    resolutionRepository,
+    userModelRepository,
+  );
 });
 
 final registerFriendUsecaseProvider = Provider<RegisterFriendUsecase>((ref) {
@@ -229,10 +233,10 @@ final checkWhetherAlreadyAppliedToGroupUsecaseProvider =
   return CheckWhetherAlreadyAppliedToGroupUsecase(groupRepository);
 });
 
-final getTargetResolutionDoneCountForWeekUsecaseProvider =
-    Provider<GetTargetResolutionDoneCountForWeekUsecase>((ref) {
+final getTargetResolutionDoneListForWeekUsecaseProvider =
+    Provider<GetTargetResolutionDoneListForWeekUsecase>((ref) {
   final resolutionRepository = ref.watch(resolutionRepositoryProvider);
-  return GetTargetResolutionDoneCountForWeekUsecase(resolutionRepository);
+  return GetTargetResolutionDoneListForWeekUsecase(resolutionRepository);
 });
 
 final getToWhomResolutionWillBeSharedUsecaseProvider =
@@ -265,4 +269,9 @@ final getTargetResolutionEntityUsecaseProvider =
     Provider<GetTargetResolutionEntityUsecase>((ref) {
   final resolutionRepository = ref.watch(resolutionRepositoryProvider);
   return GetTargetResolutionEntityUsecase(resolutionRepository);
+});
+
+final updateAboutMeUsecaseProvider = Provider<UpdateAboutMeUsecase>((ref) {
+  final userModelRepository = ref.watch(userModelRepositoryProvider);
+  return UpdateAboutMeUsecase(userModelRepository);
 });

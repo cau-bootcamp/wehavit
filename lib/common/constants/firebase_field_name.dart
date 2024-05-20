@@ -7,6 +7,11 @@ class FirebaseUserFieldName {
   static const displayName = 'displayName';
   static const email = 'email';
   static const imageUrl = 'imageUrl';
+  static const createdAt = 'createdAt';
+  static const cumulativeGoals = 'cumulativeGoals';
+  static const cumulativePosts = 'cumulativePosts';
+  static const cumulativeReactions = 'cumulativeReactions';
+  static const aboutMe = 'aboutMe';
 }
 
 @immutable

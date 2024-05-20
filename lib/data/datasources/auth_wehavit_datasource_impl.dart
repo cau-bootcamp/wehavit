@@ -54,6 +54,11 @@ class AuthWehavitDataSourceImpl implements AuthWehavitDataSource {
         FirebaseUserFieldName.displayName: name,
         FirebaseUserFieldName.email: email,
         FirebaseUserFieldName.imageUrl: photoUrl,
+        FirebaseUserFieldName.createdAt: DateTime.now(),
+        FirebaseUserFieldName.aboutMe: '',
+        FirebaseUserFieldName.cumulativeGoals: 0,
+        FirebaseUserFieldName.cumulativePosts: 0,
+        FirebaseUserFieldName.cumulativeReactions: 0,
       });
 
       return AuthResult.success;
@@ -84,6 +89,10 @@ class AuthWehavitDataSourceImpl implements AuthWehavitDataSource {
           FirebaseUserFieldName.email: email,
           FirebaseUserFieldName.imageUrl:
               result.user!.photoURL ?? 'https://picsum.photos/80',
+          FirebaseUserFieldName.createdAt: DateTime.now(),
+          FirebaseUserFieldName.cumulativeGoals: 0,
+          FirebaseUserFieldName.cumulativePosts: 0,
+          FirebaseUserFieldName.cumulativeReactions: 0,
         },
         SetOptions(merge: true),
       );

@@ -7,8 +7,7 @@ import 'package:wehavit/dependency/data/repository_dependency.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
-import 'package:wehavit/presentation/group_post/group_post.dart';
-import 'package:wehavit/presentation/main/main.dart';
+import 'package:wehavit/presentation/my_page/model/my_page_view_model.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
@@ -57,15 +56,16 @@ final addResolutionProvider =
   return AddResolutionNotifier(ref);
 });
 
-final myPageResolutionListProvider = StateNotifierProvider<
-    MyPageResolutionListProvider,
-    Either<
-        Failure,
-        (
-          List<ResolutionEntity>,
-          List<Future<List<ConfirmPostEntity>>>
-        )>>((ref) {
-  return MyPageResolutionListProvider(ref);
+final myPageViewModelProvider =
+    StateNotifierProvider<MyPageViewModelProvider, MyPageViewModel>((ref) {
+  final getMyResolutionListUsecase =
+      ref.watch(getMyResolutionListUsecaseProvider);
+  final getMyUserDataUsecase = ref.watch(getMyUserDataUsecaseProvider);
+
+  return MyPageViewModelProvider(
+    getMyResolutionListUsecase,
+    getMyUserDataUsecase,
+  );
 });
 
 final reactionAnimationWidgetManagerProvider =
@@ -97,7 +97,7 @@ final resolutionListViewModelProvider = StateNotifierProvider.autoDispose<
   final getMyResolutionListUsecase =
       ref.watch(getMyResolutionListUsecaseProvider);
   final getTargetResolutionDoneCountForWeekUsecase =
-      ref.watch(getTargetResolutionDoneCountForWeekUsecaseProvider);
+      ref.watch(getTargetResolutionDoneListForWeekUsecaseProvider);
   final uploadConfirmPostUsecase = ref.watch(uploadConfirmPostUseCaseProvider);
   return ResolutionListViewModelProvider(
     getMyResolutionListUsecase,

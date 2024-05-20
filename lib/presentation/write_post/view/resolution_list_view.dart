@@ -20,13 +20,15 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView> {
   @override
   void initState() {
     super.initState();
+
     unawaited(
       ref
           .read(resolutionListViewModelProvider.notifier)
           .loadResolutionModelList()
           .whenComplete(() {
-        isLoading = false;
-        setState(() {});
+        setState(() {
+          isLoading = false;
+        });
       }),
     );
   }
@@ -46,10 +48,11 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView> {
         child: ListView(
           children: [
             ResolutionSummaryCardWidget(
-              totalCount: viewModel.summaryDoneCount,
-              doneRatio:
-                  (viewModel.summaryDoneCount / viewModel.summaryTotalCount)
-                      .toDouble(),
+              futureDoneRatio: viewModel.futureDoneRatio,
+              futureDoneCount: viewModel.futureDoneCount,
+            ),
+            const SizedBox(
+              height: 16.0,
             ),
             Visibility(
               visible: !isLoading,
@@ -68,29 +71,28 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView> {
               child: Column(
                 children: List<Widget>.generate(
                   viewModel.resolutionModelList?.length ?? 0,
-                  (index) => Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: GestureDetector(
-                      child: ResolutionListCellWidget(
-                        viewModel.resolutionModelList![index],
-                      ),
-                      onTapUp: (details) async {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            return WritingResolutionBottomSheetWidget(
-                              viewModel: viewModel,
-                              provider: provider,
-                              index: index,
-                            );
-                          },
-                        ).whenComplete(() {
-                          provider
-                              .loadResolutionModelList()
-                              .whenComplete(() => setState(() {}));
-                        });
-                      },
+                  (index) => GestureDetector(
+                    child: ResolutionListCellWidget(
+                      resolutionEntity:
+                          viewModel.resolutionModelList![index].entity,
+                      showDetails: false,
                     ),
+                    onTapUp: (details) async {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return WritingResolutionBottomSheetWidget(
+                            viewModel: viewModel,
+                            provider: provider,
+                            index: index,
+                          );
+                        },
+                      ).whenComplete(() {
+                        provider
+                            .loadResolutionModelList()
+                            .whenComplete(() => setState(() {}));
+                      });
+                    },
                   ),
                 ),
               ),
@@ -136,8 +138,7 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
               ),
               ResolutionLinearGaugeWidget(
                 resolutionEntity: viewModel.resolutionModelList![index].entity,
-                futureDoneCount:
-                    Future.delayed(Duration(seconds: 3), () => right(3)),
+                futureDoneList: viewModel.resolutionModelList![index].doneList,
               ),
             ],
           ),

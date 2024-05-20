@@ -46,11 +46,11 @@ class ResolutionRepositoryImpl implements ResolutionRepository {
   }
 
   @override
-  EitherFuture<int> getResolutionDoneCountForWeek({
+  EitherFuture<List<bool>> getResolutionDoneListForWeek({
     required String resolutionId,
     required DateTime startMonday,
   }) {
-    return _wehavitDatasource.getTargetResolutionDoneCountForWeek(
+    return _wehavitDatasource.getTargetResolutionDoneListForWeek(
       resolutionId: resolutionId,
       startMonday: startMonday,
     );

@@ -1,7 +1,6 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 
@@ -92,34 +91,20 @@ class TabBarProfileImageButton extends StatelessWidget {
               // 테두리 스타일 설정
               color: isSelected ? CustomColors.whYellow : Colors.transparent,
               width: 3, // 테두리 두께
+              strokeAlign: BorderSide.strokeAlignOutside,
             ),
+            color: CustomColors.whBrightGrey,
           ),
-          child: FutureBuilder<Either<Failure, UserDataEntity>>(
-            future: futureUserDataEntity,
-            builder: (context, snapshot) {
-              if (!snapshot.hasData ||
-                  snapshot.hasError ||
-                  snapshot.data!.isLeft()) {
-                return Container(
-                  color: CustomColors.whBrightGrey,
-                );
-              }
-
-              return snapshot.data!.fold(
-                (failure) => Container(
-                  color: CustomColors.whBrightGrey,
-                ),
-                (entity) => Container(
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  clipBehavior: Clip.hardEdge,
-                  child: Image.network(
-                    entity.userImageUrl ??
-                        'https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSAOnLXSaPbc4K0IId0dSTI050OfwusYAyfQzMiCF6mrwNPVdmN',
-                    fit: BoxFit.cover,
-                  ),
-                ),
+          clipBehavior: Clip.hardEdge,
+          child: EitherFutureBuilder<UserDataEntity>(
+            target: futureUserDataEntity,
+            forFail: Container(),
+            forWaiting: Container(),
+            mainWidgetCallback: (entity) {
+              return Image.network(
+                entity.userImageUrl ??
+                    'https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSAOnLXSaPbc4K0IId0dSTI050OfwusYAyfQzMiCF6mrwNPVdmN',
+                fit: BoxFit.cover,
               );
             },
           ),

@@ -10,9 +10,11 @@ class FirebaseResolutionModel with _$FirebaseResolutionModel {
   // ignore: invalid_annotation_target
   @JsonSerializable()
   const factory FirebaseResolutionModel({
+    required String? resolutionName,
     required String? goalStatement,
     required String? actionStatement,
     required bool? isActive,
+    required int? colorIndex,
     required int? actionPerWeek,
     @TimestampConverter() required DateTime? startDate,
     required List<String>? shareFriendIdList,
@@ -30,11 +32,13 @@ class FirebaseResolutionModel with _$FirebaseResolutionModel {
 
   factory FirebaseResolutionModel.fromEntity(ResolutionEntity entity) =>
       FirebaseResolutionModel(
+        resolutionName: entity.resolutionName,
         goalStatement: entity.goalStatement,
         actionStatement: entity.actionStatement,
         isActive: entity.isActive,
         actionPerWeek: entity.actionPerWeek,
         startDate: entity.startDate,
+        colorIndex: entity.colorIndex,
         shareFriendIdList: entity.shareFriendEntityList
                 ?.map((friendEntity) => friendEntity.userId!)
                 .toList() ??
@@ -53,10 +57,12 @@ extension ConvertFirebaseResolutionModel on FirebaseResolutionModel {
     required List<GroupEntity> shareGroupEntityList,
   }) {
     return ResolutionEntity(
+      resolutionName: resolutionName,
       resolutionId: documentId,
       goalStatement: goalStatement,
       actionStatement: actionStatement,
       isActive: isActive,
+      colorIndex: colorIndex,
       actionPerWeek: actionPerWeek,
       startDate: startDate,
       shareFriendEntityList: shareFriendEntityList,

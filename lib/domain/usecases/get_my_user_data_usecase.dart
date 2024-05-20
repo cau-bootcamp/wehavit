@@ -19,14 +19,6 @@ class GetMyUserDataUsecase {
       return Future(() => const Left(Failure('unable to get my id')));
     }
 
-    final entity = await _userModelRepository
-        .fetchUserDataEntityFromId(uid)
-        .then((result) => result.fold((failure) => null, (entity) => entity));
-
-    if (entity == null) {
-      return Future(() => const Left(Failure('unable to get my entity')));
-    }
-
-    return Future(() => right(entity));
+    return _userModelRepository.fetchUserDataEntityFromId(uid);
   }
 }

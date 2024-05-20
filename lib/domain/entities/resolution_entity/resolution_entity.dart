@@ -12,6 +12,7 @@ class ResolutionEntity with _$ResolutionEntity {
   @DocumentReferenceJsonConverter()
   const factory ResolutionEntity({
     String? resolutionId,
+    String? resolutionName,
     String? goalStatement,
     String? actionStatement,
     bool? isActive,

@@ -1,11 +1,12 @@
+import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 
 class ResolutionListCellWidgetModel {
   ResolutionListCellWidgetModel({
     required this.entity,
-    required this.successCount,
+    required this.doneList,
   });
 
   ResolutionEntity entity;
-  int successCount;
+  EitherFuture<List<bool>> doneList;
 }

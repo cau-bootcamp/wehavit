@@ -12,7 +12,7 @@ abstract class ResolutionRepository {
 
   EitherFuture<void> unshareResolutionToGroup(String $1, String $2);
 
-  EitherFuture<int> getResolutionDoneCountForWeek({
+  EitherFuture<List<bool>> getResolutionDoneListForWeek({
     required String resolutionId,
     required DateTime startMonday,
   });
