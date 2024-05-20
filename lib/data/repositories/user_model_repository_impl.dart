@@ -22,9 +22,14 @@ class UserModelRepositoryImpl implements UserModelRepository {
   }
 
   @override
-  Future<void> incrementUserDataCounter({
+  EitherFuture<void> incrementUserDataCounter({
     required UserIncrementalDataType type,
   }) {
     return _wehavitDatasource.incrementUserDataCounter(type: type);
+  }
+
+  @override
+  EitherFuture<void> updateAmoutMe({required String newAboutMe}) {
+    return _wehavitDatasource.updateAboutMe(newAboutMe: newAboutMe);
   }
 }

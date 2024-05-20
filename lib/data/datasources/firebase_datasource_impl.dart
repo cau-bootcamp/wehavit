@@ -1749,7 +1749,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }
 
   @override
-  Future<void> incrementUserDataCounter({
+  EitherFuture<void> incrementUserDataCounter({
     required UserIncrementalDataType type,
   }) {
     try {
@@ -1775,6 +1775,22 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
             .doc(myUid)
             .update({targetFieldName: newValue});
       });
+
+      return Future(() => right(null));
+    } on Exception catch (e) {
+      return Future(
+        () => left(Failure(e.toString())),
+      );
+    }
+  }
+
+  @override
+  EitherFuture<void> updateAboutMe({required String newAboutMe}) {
+    try {
+      firestore
+          .collection(FirebaseCollectionName.users)
+          .doc(myUid)
+          .update({FirebaseUserFieldName.aboutMe: newAboutMe});
 
       return Future(() => right(null));
     } on Exception catch (e) {

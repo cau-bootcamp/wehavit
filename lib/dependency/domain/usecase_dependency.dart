@@ -270,3 +270,8 @@ final getTargetResolutionEntityUsecaseProvider =
   final resolutionRepository = ref.watch(resolutionRepositoryProvider);
   return GetTargetResolutionEntityUsecase(resolutionRepository);
 });
+
+final updateAboutMeUsecaseProvider = Provider<UpdateAboutMeUsecase>((ref) {
+  final userModelRepository = ref.watch(userModelRepositoryProvider);
+  return UpdateAboutMeUsecase(userModelRepository);
+});

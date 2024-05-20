@@ -134,7 +134,9 @@ abstract class WehavitDatasource {
     required String targetResolutionId,
   });
 
-  Future<void> incrementUserDataCounter({
+  EitherFuture<void> incrementUserDataCounter({
     required UserIncrementalDataType type,
   });
+
+  EitherFuture<void> updateAboutMe({required String newAboutMe});
 }
