@@ -42,7 +42,7 @@ class _MainViewState extends ConsumerState<MainView>
             children: const [
               ResolutionListView(),
               GroupView(),
-              FriendListScreen(),
+              FriendListView(),
               MyPageView(),
             ],
           ),

@@ -31,6 +31,3 @@ export 'utils/platform_types.dart';
 export 'utils/shared_prefs.dart';
 export 'utils/timestamp_serializer.dart';
 export 'utils/utils.dart';
-export 'widgets/loading_widget.dart';
-export 'widgets/my_profile.dart';
-export 'widgets/widgets.dart';
