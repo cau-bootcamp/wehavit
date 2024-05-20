@@ -1,7 +1,6 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 
@@ -89,10 +88,11 @@ class TabBarProfileImageButton extends StatelessWidget {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(
-                // 테두리 스타일 설정
-                color: isSelected ? CustomColors.whYellow : Colors.transparent,
-                width: 3, // 테두리 두께
-                strokeAlign: BorderSide.strokeAlignOutside),
+              // 테두리 스타일 설정
+              color: isSelected ? CustomColors.whYellow : Colors.transparent,
+              width: 3, // 테두리 두께
+              strokeAlign: BorderSide.strokeAlignOutside,
+            ),
             color: CustomColors.whBrightGrey,
           ),
           clipBehavior: Clip.hardEdge,

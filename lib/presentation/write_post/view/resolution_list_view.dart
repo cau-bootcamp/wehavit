@@ -20,6 +20,7 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView> {
   @override
   void initState() {
     super.initState();
+
     unawaited(
       ref
           .read(resolutionListViewModelProvider.notifier)
@@ -137,18 +138,7 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
               ),
               ResolutionLinearGaugeWidget(
                 resolutionEntity: viewModel.resolutionModelList![index].entity,
-                futureDoneList: Future.delayed(
-                  Duration(seconds: 3),
-                  () => right([
-                    true,
-                    true,
-                    false,
-                    false,
-                    true,
-                    true,
-                    false,
-                  ]),
-                ),
+                futureDoneList: viewModel.resolutionModelList![index].doneList,
               ),
             ],
           ),
