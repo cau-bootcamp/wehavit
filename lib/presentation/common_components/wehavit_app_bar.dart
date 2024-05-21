@@ -71,17 +71,17 @@ AppBar WehavitAppBar({
                 Icon(
                   trailingIcon,
                   color: CustomColors.whWhite,
-                  size: trailingIcon != null ? 24.0 : 0,
+                  size: trailingIcon != null ? 28.0 : 0,
                 ),
                 if (trailingIconBadgeCount != null &&
                     trailingIconBadgeCount > 0)
                   Positioned(
-                    right: -2,
-                    top: -2,
+                    right: -6,
+                    top: -4,
                     child: Container(
                       alignment: Alignment.center,
-                      width: 12,
-                      height: 12,
+                      width: 17,
+                      height: 17,
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                         color: CustomColors.whRed,
@@ -89,7 +89,7 @@ AppBar WehavitAppBar({
                       child: Text(
                         trailingIconBadgeCount.toString(),
                         style: const TextStyle(
-                          fontSize: 9.0,
+                          fontSize: 12.0,
                           fontWeight: FontWeight.w800,
                           color: CustomColors.whWhite,
                           height: 0.2,
