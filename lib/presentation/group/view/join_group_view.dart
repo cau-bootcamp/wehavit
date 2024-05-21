@@ -362,12 +362,12 @@ class _JoinGroupIntroduceViewState
                     if (snapshot.hasData) {
                       return Visibility(
                         visible: !snapshot.data!,
-                        replacement: ColoredButton(
+                        replacement: WideColoredButton(
                           buttonTitle: '참여 신청 완료',
                           backgroundColor: CustomColors.whYellowDark,
                           onPressed: () {},
                         ),
-                        child: ColoredButton(
+                        child: WideColoredButton(
                           buttonTitle: '참여 신청하기',
                           foregroundColor: CustomColors.whBlack,
                           backgroundColor: CustomColors.whYellow,
@@ -396,7 +396,7 @@ class _JoinGroupIntroduceViewState
                         ),
                       );
                     } else if (snapshot.hasError) {
-                      return ColoredButton(
+                      return WideColoredButton(
                         buttonTitle: '신청 여부 조회에 문제가 발생하였습니다',
                         foregroundColor: CustomColors.whBlack,
                         backgroundColor: CustomColors.whPlaceholderGrey,
@@ -414,14 +414,14 @@ class _JoinGroupIntroduceViewState
                   },
                 );
               } else {
-                return ColoredButton(
+                return WideColoredButton(
                   buttonTitle: '이미 그룹에 참여중입니다',
                   foregroundColor: CustomColors.whBlack,
                   backgroundColor: CustomColors.whPlaceholderGrey,
                 );
               }
             } else if (snapshot.hasError) {
-              return ColoredButton(
+              return WideColoredButton(
                 buttonTitle: '가입 여부 조회에 문제가 발생하였습니다',
                 foregroundColor: CustomColors.whBlack,
                 backgroundColor: CustomColors.whPlaceholderGrey,

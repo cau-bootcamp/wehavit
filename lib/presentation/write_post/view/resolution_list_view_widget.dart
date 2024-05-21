@@ -1,11 +1,6 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
-import 'package:wehavit/presentation/write_post/write_post.dart';
 
 class ResolutionSummaryCardWidget extends StatelessWidget {
   const ResolutionSummaryCardWidget({

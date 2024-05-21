@@ -101,7 +101,7 @@ class _GroupViewState extends ConsumerState<GroupView> {
         return GradientBottomSheet(
           Column(
             children: [
-              ColoredButton(
+              WideColoredButton(
                 buttonTitle: '기존 그룹에 참여하기',
                 buttonIcon: Icons.search,
                 onPressed: () {
@@ -120,7 +120,7 @@ class _GroupViewState extends ConsumerState<GroupView> {
               const SizedBox(
                 height: 12,
               ),
-              ColoredButton(
+              WideColoredButton(
                 buttonTitle: '새로운 그룹 만들기',
                 buttonIcon: Icons.flag_outlined,
                 onPressed: () {
@@ -138,7 +138,7 @@ class _GroupViewState extends ConsumerState<GroupView> {
               const SizedBox(
                 height: 12,
               ),
-              ColoredButton(
+              WideColoredButton(
                 buttonTitle: '돌아가기',
                 onPressed: () {},
                 isDiminished: true,

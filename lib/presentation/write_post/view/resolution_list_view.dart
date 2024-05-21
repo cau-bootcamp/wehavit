@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/presentation.dart';
@@ -145,7 +144,7 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
           const SizedBox(
             height: 40.0,
           ),
-          ColoredButton(
+          WideColoredButton(
             buttonTitle: '인증글 작성하기',
             backgroundColor: CustomColors.whYellow,
             foregroundColor: CustomColors.whBlack,
@@ -181,7 +180,7 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: ColoredButton(
+                child: WideColoredButton(
                   buttonTitle: '반성글 작성하기',
                   foregroundColor: Colors.red,
                   onPressed: () async {
@@ -217,7 +216,7 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
               Expanded(
                 child: SizedBox(
                   width: 150,
-                  child: ColoredButton(
+                  child: WideColoredButton(
                     buttonTitle: '완료 표시만 하기',
                     onPressed: () async {
                       provider
@@ -245,7 +244,7 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
           const SizedBox(
             height: 16.0,
           ),
-          ColoredButton(
+          WideColoredButton(
             buttonTitle: '돌아가기',
             isDiminished: true,
             onPressed: () {
