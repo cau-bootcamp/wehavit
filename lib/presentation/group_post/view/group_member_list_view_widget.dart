@@ -339,9 +339,9 @@ class _GroupMemberListCellWidgetState
             ),
             child: Row(
               children: [
-                GroupMemberListButtonWidget(
-                  label: '내보내기',
-                  color: CustomColors.whBrightGrey,
+                SmallColoredButtonWidget(
+                  buttonLabel: '내보내기',
+                  backgroundColor: CustomColors.whBrightGrey,
                   onPressed: () async {
                     await ref
                         .watch(withdrawalFromGroupUsecaseProvider)(
@@ -369,9 +369,9 @@ class _GroupMemberListCellWidgetState
           ),
           child: Row(
             children: [
-              GroupMemberListButtonWidget(
-                label: '거절',
-                color: CustomColors.whBrightGrey,
+              SmallColoredButtonWidget(
+                buttonLabel: '거절',
+                backgroundColor: CustomColors.whBrightGrey,
                 onPressed: () async {
                   ref
                       .watch(rejectApplyingForJoiningGroupUsecaseProvider)(
@@ -389,9 +389,9 @@ class _GroupMemberListCellWidgetState
                 },
               ),
               const SizedBox(width: 4.0),
-              GroupMemberListButtonWidget(
-                label: '수락',
-                color: CustomColors.whYellow,
+              SmallColoredButtonWidget(
+                buttonLabel: '수락',
+                backgroundColor: CustomColors.whYellow,
                 onPressed: () async {
                   await ref
                       .watch(acceptApplyingForJoiningGroupUsecaseProvider)(
@@ -447,47 +447,5 @@ class _GroupMemberListCellWidgetState
     if (mounted) {
       setState(() {});
     }
-  }
-}
-
-class GroupMemberListButtonWidget extends StatelessWidget {
-  const GroupMemberListButtonWidget({
-    super.key,
-    required this.label,
-    required this.color,
-    required this.onPressed,
-  });
-
-  final String label;
-  final Color color;
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      style: TextButton.styleFrom(
-        padding: const EdgeInsets.all(0.0),
-      ),
-      onPressed: onPressed,
-      child: Container(
-        height: 30,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20.0),
-          color: color,
-        ),
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16.0,
-        ),
-        alignment: Alignment.center,
-        child: Text(
-          label,
-          style: const TextStyle(
-            color: CustomColors.whDarkBlack,
-            fontSize: 16.0,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
-    );
   }
 }

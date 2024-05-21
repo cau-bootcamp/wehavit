@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:wehavit/common/constants/constants.dart';
 
-class ColoredButton extends StatelessWidget {
-  ColoredButton({
+class WideColoredButton extends StatelessWidget {
+  const WideColoredButton({
     super.key,
     this.backgroundColor,
     this.foregroundColor = CustomColors.whWhite,
@@ -91,7 +91,7 @@ class ColoredButton extends StatelessWidget {
                     ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),

@@ -149,7 +149,7 @@ class DoneCreatingGroupView extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: ColoredButton(
+                child: WideColoredButton(
                   buttonTitle: '그룹 코드 복사하기',
                   foregroundColor: CustomColors.whBlack,
                   backgroundColor: CustomColors.whYellow,

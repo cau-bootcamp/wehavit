@@ -6,5 +6,6 @@ export 'my_profile.dart';
 export 'profile_image_circle.dart';
 export 'resolution_list_cell_widget.dart';
 export 'show_toast_message.dart';
+export 'small_colored_button.dart';
 export 'user_profile_bar.dart';
 export 'wehavit_app_bar.dart';

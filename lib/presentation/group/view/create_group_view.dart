@@ -69,11 +69,11 @@ class _CreateGroupViewState extends ConsumerState<CreateGroupView> {
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Visibility(
                 visible: provider.isComplete(),
-                replacement: ColoredButton(
+                replacement: WideColoredButton(
                   buttonTitle: '그룹 만들기',
                   backgroundColor: CustomColors.whGrey,
                 ),
-                child: ColoredButton(
+                child: WideColoredButton(
                   buttonTitle: '그룹 만들기',
                   foregroundColor: CustomColors.whBlack,
                   backgroundColor: CustomColors.whYellow,

@@ -1,26 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/friend_list/friend_list.dart';
+import 'package:wehavit/presentation/friend_list/view/view.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
-class FriendListScreen extends ConsumerStatefulWidget {
-  const FriendListScreen({super.key});
+class FriendListView extends ConsumerStatefulWidget {
+  const FriendListView({super.key});
 
-  static FriendListScreen builder(
+  static FriendListView builder(
     BuildContext context,
     GoRouterState state,
   ) =>
-      const FriendListScreen();
+      const FriendListView();
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
       _FriendListScreenState();
 }
 
-class _FriendListScreenState extends ConsumerState<FriendListScreen> {
+class _FriendListScreenState extends ConsumerState<FriendListView> {
   @override
   Future<void> didChangeDependencies() async {
     ref.read(friendListProvider.notifier).getFriendList();
@@ -35,6 +37,7 @@ class _FriendListScreenState extends ConsumerState<FriendListScreen> {
       backgroundColor: CustomColors.whDarkBlack,
       appBar: WehavitAppBar(title: '친구 목록'),
       body: SafeArea(
+        minimum: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           children: [
             const AddFriendTextFieldWidget(),
@@ -52,14 +55,44 @@ class _FriendListScreenState extends ConsumerState<FriendListScreen> {
             ),
             // 친구 리스트
             friendList.fold(
-              (left) => Placeholder(),
-              (right) => Expanded(
+              (left) => const Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '친구들에 대한 정보를\n불러오지 못했어요',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: CustomColors.whWhite,
+                      ),
+                    ),
+                    Text(
+                      '😭',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold,
+                        color: CustomColors.whWhite,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 100,
+                    ),
+                  ],
+                ),
+              ),
+              (v) => Expanded(
                 child: ListView.builder(
-                  itemCount: right.length,
+                  itemCount: v.length,
                   itemBuilder: (context, index) {
-                    return FriendElementWidget(
-                      key: ValueKey(right[index].userEmail),
-                      model: right[index],
+                    return FriendListCellWidget(
+                      futureUserEntity: Future.delayed(
+                        const Duration(seconds: 2),
+                        () => right(v[index]),
+                      ),
+                      cellState: FriendListCellState.normal,
                     );
                   },
                 ),
