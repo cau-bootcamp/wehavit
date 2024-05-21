@@ -73,37 +73,13 @@ class _FriendListScreenState extends ConsumerState<FriendListView> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16.0),
                   ),
-                  padding: EdgeInsets.symmetric(vertical: 16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      MyProfileWidget(
-                        futureUserEntity: Future.delayed(
-                          Duration(seconds: 1),
-                          () => right(UserDataEntity.dummyModel),
-                        ),
-                      ),
-                      Column(
-                        children: [
-                          Image.asset(
-                            CustomIconImage.linkIcon,
-                            width: 20,
-                            height: 20,
-                          ),
-                          SizedBox(
-                            height: 4,
-                          ),
-                          Text(
-                            "복사하기",
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w700,
-                              color: CustomColors.whWhite,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: FriendListMyProfileWidget(
+                    futureUserEntity: Future.delayed(
+                      Duration(seconds: 1),
+                      () => right(UserDataEntity.dummyModel),
+                      // () => left(Failure("HE")),
+                    ),
                   ),
                 ),
               ),

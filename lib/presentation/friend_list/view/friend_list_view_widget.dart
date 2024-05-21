@@ -236,3 +236,121 @@ class FriendListTextFieldWidget extends StatelessWidget {
     );
   }
 }
+
+///fdsa
+class FriendListMyProfileWidget extends StatelessWidget {
+  const FriendListMyProfileWidget({required this.futureUserEntity, super.key});
+
+  final EitherFuture<UserDataEntity>? futureUserEntity;
+
+  @override
+  Widget build(BuildContext context) {
+    return EitherFutureBuilder<UserDataEntity>(
+      target: futureUserEntity,
+      forWaiting: Row(
+        children: [
+          Container(
+            width: 50,
+            height: 50,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: CustomColors.whBrightGrey,
+            ),
+          ),
+          const SizedBox(
+            width: 12,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: 20,
+                width: 200,
+                decoration: BoxDecoration(
+                  color: CustomColors.whBrightGrey,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+              const SizedBox(height: 4),
+              Container(
+                height: 20,
+                width: 90,
+                decoration: BoxDecoration(
+                  color: CustomColors.whBrightGrey,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+      forFail: Container(
+        width: double.infinity,
+        child: const Text(
+          '정보를 가져오지 못했어요\n잠시 후 다시 시도해주세요',
+          style: TextStyle(
+            color: CustomColors.whWhite,
+            fontSize: 16,
+            height: 1.4,
+          ),
+        ),
+      ),
+      mainWidgetCallback: (userEntity) {
+        return Row(
+          children: [
+            ProfileImageCircleWidget(
+              url: userEntity.userImageUrl ?? '',
+              size: 50,
+            ),
+            const SizedBox(width: 16.0),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    userEntity.userName ?? '',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: CustomColors.whWhite,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Text(
+                    userEntity.aboutMe ?? '',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w300,
+                      color: CustomColors.whWhite,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Column(
+              children: [
+                Image.asset(
+                  CustomIconImage.linkIcon,
+                  width: 20,
+                  height: 20,
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                const Text(
+                  '복사하기',
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.w700,
+                    color: CustomColors.whWhite,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
