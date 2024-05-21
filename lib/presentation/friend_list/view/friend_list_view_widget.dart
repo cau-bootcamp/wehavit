@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/entities.dart';
@@ -7,7 +7,7 @@ import 'package:wehavit/presentation/common_components/common_components.dart';
 enum FriendListCellState { normal, applied, managing, toApply }
 
 class FriendListCellWidget extends StatelessWidget {
-  FriendListCellWidget({
+  const FriendListCellWidget({
     super.key,
     required this.futureUserEntity,
     required this.cellState,
@@ -136,6 +136,102 @@ class FriendListCellWidget extends StatelessWidget {
             ],
           );
         },
+      ),
+    );
+  }
+}
+
+class FriendListFailPlaceholderWidget extends StatelessWidget {
+  const FriendListFailPlaceholderWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return const Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            '친구들에 대한 정보를\n불러오지 못했어요',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: CustomColors.whWhite,
+            ),
+          ),
+          Text(
+            '😭',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 40,
+              fontWeight: FontWeight.bold,
+              color: CustomColors.whWhite,
+            ),
+          ),
+          SizedBox(
+            height: 100,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class FriendListTextFieldWidget extends StatelessWidget {
+  const FriendListTextFieldWidget({
+    super.key,
+    required this.searchCallback,
+  });
+
+  final Function(String?) searchCallback;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 40,
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(12)),
+        color: CustomColors.whGrey,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Container(
+              padding: const EdgeInsets.only(
+                left: 8.0,
+              ),
+            ),
+            Expanded(
+              child: TextFormField(
+                onFieldSubmitted: (value) {
+                  searchCallback(value);
+                },
+                keyboardType: TextInputType.text,
+                decoration: const InputDecoration(
+                  icon: Icon(Icons.search),
+                  iconColor: CustomColors.whWhite,
+                  hintText: '닉네임으로 친구 찾기',
+                  hintStyle: TextStyle(
+                    color: CustomColors.whWhite,
+                    fontSize: 16,
+                    height: 1.4,
+                  ),
+                  floatingLabelAlignment: FloatingLabelAlignment.center,
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 8, horizontal: -8),
+                  border: InputBorder.none,
+                ),
+                style: const TextStyle(
+                  color: CustomColors.whWhite,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

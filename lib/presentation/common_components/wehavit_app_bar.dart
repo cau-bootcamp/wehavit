@@ -9,6 +9,7 @@ AppBar WehavitAppBar({
   String? trailingTitle,
   Function? trailingAction,
   IconData? trailingIcon,
+  int? trailingIconBadgeCount,
 }) {
   return AppBar(
     title: Text(
@@ -20,7 +21,7 @@ AppBar WehavitAppBar({
       ),
     ),
     centerTitle: false,
-    leadingWidth: leadingTitle != null ? 135 : 10,
+    leadingWidth: leadingTitle != null ? 135 : 0,
     leading: Visibility(
       visible: leadingTitle != null,
       child: TextButton.icon(
@@ -53,7 +54,7 @@ AppBar WehavitAppBar({
     ),
     actions: [
       Visibility(
-        visible: trailingTitle != null,
+        visible: trailingTitle != null || trailingIcon != null,
         child: Directionality(
           textDirection: TextDirection.rtl,
           child: TextButton.icon(
@@ -64,10 +65,39 @@ AppBar WehavitAppBar({
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               alignment: Alignment.centerLeft,
             ),
-            icon: Icon(
-              trailingIcon,
-              color: CustomColors.whWhite,
-              size: trailingIcon != null ? 24.0 : 0,
+            icon: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Icon(
+                  trailingIcon,
+                  color: CustomColors.whWhite,
+                  size: trailingIcon != null ? 24.0 : 0,
+                ),
+                if (trailingIconBadgeCount != null &&
+                    trailingIconBadgeCount > 0)
+                  Positioned(
+                    right: -2,
+                    top: -2,
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: 12,
+                      height: 12,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: CustomColors.whRed,
+                      ),
+                      child: Text(
+                        trailingIconBadgeCount.toString(),
+                        style: const TextStyle(
+                          fontSize: 9.0,
+                          fontWeight: FontWeight.w800,
+                          color: CustomColors.whWhite,
+                          height: 0.2,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
             ),
             label: Text(
               trailingTitle ?? '',

@@ -1,4 +1,4 @@
-export 'colored_button.dart';
+export 'wide_colored_button.dart';
 export 'either_future_builder.dart';
 export 'gradient_bottom_sheet.dart';
 export 'loading_widget.dart';
