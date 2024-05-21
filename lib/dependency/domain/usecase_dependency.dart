@@ -275,3 +275,15 @@ final updateAboutMeUsecaseProvider = Provider<UpdateAboutMeUsecase>((ref) {
   final userModelRepository = ref.watch(userModelRepositoryProvider);
   return UpdateAboutMeUsecase(userModelRepository);
 });
+
+final getAppliedUserListForFriendUsecaseProvider =
+    Provider<GetAppliedUserListForFriendUsecase>((ref) {
+  final userModelRepository = ref.watch(userModelRepositoryProvider);
+  return GetAppliedUserListForFriendUsecase(userModelRepository);
+});
+
+final applyForUserFriendUsecaseProvider =
+    Provider<ApplyForUserFriendUsecase>((ref) {
+  final userModelRepository = ref.watch(userModelRepositoryProvider);
+  return ApplyForUserFriendUsecase(userModelRepository);
+});

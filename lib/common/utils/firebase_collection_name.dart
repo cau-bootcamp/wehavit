@@ -57,6 +57,10 @@ class FirebaseCollectionName {
       ? '${FirebaseAuth.instance.currentUser?.uid}/confirm_post/_${DateTime.now().toIso8601String()}'
       : 'invalid_address';
 
+  static String getUserApplyWaitingCollectionName(String userId) {
+    return '$users/$userId/apply_waiting';
+  }
+
   static String getGroupApplyWaitingCollectionName(String groupId) {
     return '$groups/$groupId/apply_waiting';
   }

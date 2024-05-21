@@ -139,4 +139,15 @@ abstract class WehavitDatasource {
   });
 
   EitherFuture<void> updateAboutMe({required String newAboutMe});
+
+  EitherFuture<void> applyForFriend({required String of});
+
+  EitherFuture<List<EitherFuture<UserDataEntity>>> getAppliedUserList({
+    required String forUser,
+  });
+
+  EitherFuture<void> handleFriendJoinRequest({
+    required String targetUid,
+    required bool isAccept,
+  });
 }

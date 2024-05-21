@@ -30,7 +30,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       List<UserDataEntity?> fetchResult = await Future.wait(
         friendDocument.docs.map((doc) async {
           return getUserEntityByUserId(
-            doc.data()[FirebaseFriendFieldName.friendUid],
+            doc.data()[FirebaseUserFieldName.friendUid],
           );
         }),
       );
@@ -70,8 +70,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       if (!isFriendAlreadyRegistered) {
         await firestore.collection(FirebaseCollectionName.friends).add(
           {
-            FirebaseFriendFieldName.friendUid: friendUid,
-            FirebaseFriendFieldName.friendState: '0',
+            FirebaseUserFieldName.friendUid: friendUid,
           },
         );
 
@@ -484,7 +483,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   Future<bool> checkIsAlreadyFriend(String friendUid) async {
     final result = await FirebaseFirestore.instance
         .collection(FirebaseCollectionName.friends)
-        .where(FirebaseFriendFieldName.friendUid, isEqualTo: friendUid)
+        .where(FirebaseUserFieldName.friendUid, isEqualTo: friendUid)
         .get()
         .then((value) => value.size)
         .then(
@@ -1797,6 +1796,96 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       return Future(
         () => left(Failure(e.toString())),
       );
+    }
+  }
+
+  @override
+  EitherFuture<void> applyForFriend({required String of}) {
+    try {
+      final myUid = getMyUserId();
+
+      firestore
+          .collection(
+        FirebaseCollectionName.getUserApplyWaitingCollectionName(of),
+      )
+          .add({FirebaseUserFieldName.applyUid: myUid});
+
+      return Future(() => right(null));
+    } on Exception catch (e) {
+      return Future(
+        () => left(Failure(e.toString())),
+      );
+    }
+  }
+
+  @override
+  EitherFuture<List<EitherFuture<UserDataEntity>>> getAppliedUserList({
+    required String forUser,
+  }) {
+    try {
+      final myUid = getMyUserId();
+
+      return firestore
+          .collection(
+            FirebaseCollectionName.getUserApplyWaitingCollectionName(myUid),
+          )
+          .get()
+          .then(
+        (result) {
+          final uidList = result.docs
+              .map((doc) {
+                final uid =
+                    doc.data()[FirebaseUserFieldName.applyUid] as String?;
+
+                if (uid != null) return uid;
+              })
+              .toSet()
+              .toList();
+
+          return right(
+            uidList.map((uid) => fetchUserDataEntityByUserId(uid!)).toList(),
+          );
+        },
+      );
+    } on Exception catch (e) {
+      return Future(
+        () => left(Failure(e.toString())),
+      );
+    }
+  }
+
+  @override
+  EitherFuture<void> handleFriendJoinRequest({
+    required String targetUid,
+    required bool isAccept,
+  }) {
+    try {
+      final myUid = getMyUserId();
+
+      firestore
+          .collection(
+            FirebaseCollectionName.getUserApplyWaitingCollectionName(myUid),
+          )
+          .where(FirebaseUserFieldName.applyUid, isEqualTo: targetUid)
+          .get()
+          .then((snapshot) async {
+        for (var doc in snapshot.docs) {
+          // 각 문서를 삭제합니다.
+          await doc.reference.delete();
+        }
+      });
+
+      if (isAccept) {
+        firestore
+            .collection(
+          FirebaseCollectionName.getTargetFriendsCollectionName(myUid),
+        )
+            .add({FirebaseUserFieldName.friendUid: targetUid});
+      }
+
+      return Future(() => right(null));
+    } on Exception catch (e) {
+      return Future(() => left(Failure(e.toString())));
     }
   }
 }

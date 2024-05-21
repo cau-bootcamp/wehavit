@@ -32,4 +32,27 @@ class UserModelRepositoryImpl implements UserModelRepository {
   EitherFuture<void> updateAmoutMe({required String newAboutMe}) {
     return _wehavitDatasource.updateAboutMe(newAboutMe: newAboutMe);
   }
+
+  @override
+  EitherFuture<void> applyForFriend({required String of}) {
+    return _wehavitDatasource.applyForFriend(of: of);
+  }
+
+  @override
+  EitherFuture<List<EitherFuture<UserDataEntity>>> getAppliedUserList({
+    required String forUser,
+  }) {
+    return _wehavitDatasource.getAppliedUserList(forUser: forUser);
+  }
+
+  @override
+  EitherFuture<void> handleFriendJoinRequest({
+    required String targetUid,
+    required bool isAccept,
+  }) {
+    return _wehavitDatasource.handleFriendJoinRequest(
+      targetUid: targetUid,
+      isAccept: isAccept,
+    );
+  }
 }
