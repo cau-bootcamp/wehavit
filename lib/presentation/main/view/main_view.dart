@@ -33,6 +33,7 @@ class _MainViewState extends ConsumerState<MainView>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         alignment: Alignment.bottomCenter,
         children: [
