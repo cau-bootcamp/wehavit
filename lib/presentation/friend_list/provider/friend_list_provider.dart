@@ -1,19 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
-import 'package:wehavit/common/common.dart';
-import 'package:wehavit/dependency/domain/usecase_dependency.dart';
-import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
+import 'package:wehavit/presentation/friend_list/model/friend_list_view_model.dart';
 
-class FriendListProvider
-    extends StateNotifier<Either<Failure, List<UserDataEntity>>> {
-  FriendListProvider(Ref ref) : super(const Right([])) {
-    getFriendListUsecase = ref.watch(getFriendListUseCaseProvider);
-  }
+class FriendListViewModelProvider extends StateNotifier<FriendListViewModel> {
+  FriendListViewModelProvider(this.getFriendListUsecase)
+      : super(FriendListViewModel());
 
-  late final GetFriendListUsecase getFriendListUsecase;
+  final GetFriendListUsecase getFriendListUsecase;
 
   Future<void> getFriendList() async {
-    state = await getFriendListUsecase(NoParams());
+    state.futureFriendList = getFriendListUsecase();
   }
 }

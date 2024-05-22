@@ -25,15 +25,15 @@ class FriendListView extends ConsumerStatefulWidget {
 class _FriendListScreenState extends ConsumerState<FriendListView> {
   @override
   Future<void> didChangeDependencies() async {
-    ref.read(friendListProvider.notifier).getFriendList();
     super.didChangeDependencies();
+    ref.read(friendListViewModelProvider.notifier).getFriendList();
   }
 
   bool isManagingMode = false;
 
   @override
   Widget build(BuildContext context) {
-    var friendList = ref.watch(friendListProvider);
+    final viewModel = ref.watch(friendListViewModelProvider);
 
     return Scaffold(
       backgroundColor: CustomColors.whDarkBlack,
@@ -60,9 +60,7 @@ class _FriendListScreenState extends ConsumerState<FriendListView> {
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      16.0,
-                    ),
+                    borderRadius: BorderRadius.circular(16.0),
                   ),
                   backgroundColor: CustomColors.whGrey,
                   shadowColor: Colors.transparent,
@@ -86,32 +84,43 @@ class _FriendListScreenState extends ConsumerState<FriendListView> {
               const SizedBox(
                 height: 32.0,
               ),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: const Text(
-                  '내 친구들 (17)',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w600,
-                    color: CustomColors.whWhite,
-                  ),
-                ),
-              ),
-              // 친구 리스트
-              friendList.fold(
-                (left) => const FriendListFailPlaceholderWidget(),
-                (v) => Expanded(
-                  child: ListView.builder(
-                    itemCount: v.length,
-                    itemBuilder: (context, index) {
-                      return FriendListCellWidget(
-                        futureUserEntity: Future(
-                          () => right(v[index]),
+              Expanded(
+                child: EitherFutureBuilder<List<EitherFuture<UserDataEntity>>>(
+                  target: viewModel.futureFriendList,
+                  forFail: const FriendListFailPlaceholderWidget(),
+                  forWaiting: Container(),
+                  mainWidgetCallback: (list) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            '내 친구들 (${list.length})',
+                            style: const TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w600,
+                              color: CustomColors.whWhite,
+                            ),
+                          ),
                         ),
-                        cellState: FriendListCellState.normal,
-                      );
-                    },
-                  ),
+                        const SizedBox(
+                          height: 16.0,
+                        ),
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: list.length,
+                            itemBuilder: (context, index) {
+                              return FriendListCellWidget(
+                                futureUserEntity: list[index],
+                                cellState: FriendListCellState.normal,
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ),
             ],

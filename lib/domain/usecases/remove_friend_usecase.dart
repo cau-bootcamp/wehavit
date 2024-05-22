@@ -7,6 +7,6 @@ class RemoveFriendUsecase {
   final UserModelRepository _userModelRepository;
 
   EitherFuture<void> call({required String targetUid}) {
-    return _userModelRepository.removeFriend(target: targetUid);
+    return _userModelRepository.removeFriend(targetUid: targetUid);
   }
 }
