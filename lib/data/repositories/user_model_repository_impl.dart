@@ -55,4 +55,9 @@ class UserModelRepositoryImpl implements UserModelRepository {
       isAccept: isAccept,
     );
   }
+
+  @override
+  EitherFuture<void> removeFriend({required String targetUid}) {
+    return _wehavitDatasource.removeFriend(targetUid: targetUid);
+  }
 }

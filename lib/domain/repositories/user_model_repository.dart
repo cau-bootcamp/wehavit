@@ -24,4 +24,6 @@ abstract class UserModelRepository {
     required String targetUid,
     required bool isAccept,
   });
+
+  EitherFuture<void> removeFriend({required String targetUid});
 }

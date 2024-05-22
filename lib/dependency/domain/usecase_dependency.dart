@@ -287,3 +287,8 @@ final applyForUserFriendUsecaseProvider =
   final userModelRepository = ref.watch(userModelRepositoryProvider);
   return ApplyForUserFriendUsecase(userModelRepository);
 });
+
+final removeFriendUsecaseProvider = Provider<RemoveFriendUsecase>((ref) {
+  final userModelRepository = ref.watch(userModelRepositoryProvider);
+  return RemoveFriendUsecase(userModelRepository);
+});

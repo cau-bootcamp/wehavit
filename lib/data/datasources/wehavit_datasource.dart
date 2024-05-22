@@ -150,4 +150,6 @@ abstract class WehavitDatasource {
     required String targetUid,
     required bool isAccept,
   });
+
+  EitherFuture<void> removeFriend({required String targetUid});
 }

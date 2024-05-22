@@ -1888,4 +1888,29 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       return Future(() => left(Failure(e.toString())));
     }
   }
+
+  @override
+  EitherFuture<void> removeFriend({required String targetUid}) {
+    try {
+      final myUid = getMyUserId();
+
+      firestore
+          .collection(
+            FirebaseCollectionName.getTargetFriendsCollectionName(
+              myUid,
+            ),
+          )
+          .where(FirebaseUserFieldName.friendUid, isEqualTo: targetUid)
+          .get()
+          .then((result) {
+        for (var element in result.docs) {
+          element.reference.delete();
+        }
+      });
+    } on Exception catch (e) {
+      return Future(() => left(Failure(e.toString())));
+    }
+
+    return Future(() => right(null));
+  }
 }
