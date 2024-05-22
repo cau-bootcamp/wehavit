@@ -56,9 +56,7 @@ class _FriendListScreenState extends ConsumerState<FriendListView> {
           replacement: Column(
             children: [
               ElevatedButton(
-                onPressed: () {
-                  print("HE");
-                },
+                onPressed: () {},
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16.0),
@@ -126,6 +124,7 @@ class _FriendListScreenState extends ConsumerState<FriendListView> {
               ),
             ],
           ),
+          // in managing mode
           child: ListView(
             children: [
               Column(
@@ -144,7 +143,7 @@ class _FriendListScreenState extends ConsumerState<FriendListView> {
                   ),
                   FriendListTextFieldWidget(
                     searchCallback: (searchNickname) async {
-                      if (searchNickname != null) {
+                      if (searchNickname != null && searchNickname.isNotEmpty) {
                         provider
                             .searchUserByNickname(
                               nickname: searchNickname,
@@ -152,9 +151,6 @@ class _FriendListScreenState extends ConsumerState<FriendListView> {
                             .whenComplete(() => setState(() {}));
                       }
                     },
-                  ),
-                  const SizedBox(
-                    height: 12.0,
                   ),
                   EitherFutureBuilder<List<EitherFuture<UserDataEntity>>>(
                     target: viewModel.searchedUserList,
@@ -177,67 +173,75 @@ class _FriendListScreenState extends ConsumerState<FriendListView> {
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 32,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    '새로운 친구 요청',
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w600,
-                      color: CustomColors.whWhite,
-                    ),
-                  ),
-                  Column(
-                    children: List<Widget>.generate(
-                      3,
-                      (index) => Container(
-                        margin: const EdgeInsets.only(top: 12),
-                        child: FriendListCellWidget(
-                          futureUserEntity: Future.delayed(
-                            const Duration(seconds: 2),
-                            () => right(UserDataEntity.dummyModel),
-                          ),
-                          cellState: FriendListCellState.applied,
+              EitherFutureBuilder<List<EitherFuture<UserDataEntity>>>(
+                target: viewModel.appliedUserList,
+                forWaiting: Container(),
+                forFail: Container(),
+                mainWidgetCallback: (futureUserList) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 32,
+                      ),
+                      Text(
+                        '새로운 친구 요청 (${futureUserList.length})',
+                        style: const TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w600,
+                          color: CustomColors.whWhite,
                         ),
                       ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 32,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    '내 친구들',
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w600,
-                      color: CustomColors.whWhite,
-                    ),
-                  ),
-                  Column(
-                    children: List<Widget>.generate(
-                      3,
-                      (index) => Container(
-                        margin: const EdgeInsets.only(top: 12),
-                        child: FriendListCellWidget(
-                          futureUserEntity: Future.delayed(
-                            const Duration(seconds: 2),
-                            () => right(UserDataEntity.dummyModel),
+                      Column(
+                        children: List<Widget>.generate(
+                          futureUserList.length,
+                          (index) => Container(
+                            margin: const EdgeInsets.only(top: 12),
+                            child: FriendListCellWidget(
+                              futureUserEntity: futureUserList[index],
+                              cellState: FriendListCellState.applied,
+                            ),
                           ),
-                          cellState: FriendListCellState.managing,
                         ),
                       ),
-                    ),
-                  ),
-                ],
+                    ],
+                  );
+                },
+              ),
+              EitherFutureBuilder<List<EitherFuture<UserDataEntity>>>(
+                target: viewModel.futureFriendList,
+                forWaiting: Container(),
+                forFail: Container(),
+                mainWidgetCallback: (futureUserList) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 32,
+                      ),
+                      Text(
+                        '내 친구들 (${futureUserList.length})',
+                        style: const TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w600,
+                          color: CustomColors.whWhite,
+                        ),
+                      ),
+                      Column(
+                        children: List<Widget>.generate(
+                          futureUserList.length,
+                          (index) => Container(
+                            margin: const EdgeInsets.only(top: 12),
+                            child: FriendListCellWidget(
+                              futureUserEntity: futureUserList[index],
+                              cellState: FriendListCellState.managing,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
               const SizedBox(height: 60),
             ],

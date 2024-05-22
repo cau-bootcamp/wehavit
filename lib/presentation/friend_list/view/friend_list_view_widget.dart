@@ -51,55 +51,58 @@ class FriendListCellWidget extends StatelessWidget {
         postfixButtonWidget = Container();
     }
 
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 6),
-      child: EitherFutureBuilder<UserDataEntity>(
-        target: futureUserEntity,
-        forWaiting: Row(
-          children: [
-            Container(
-              width: 60,
-              height: 60,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: CustomColors.whBlack,
-              ),
+    return EitherFutureBuilder<UserDataEntity>(
+      target: futureUserEntity,
+      forWaiting: Row(
+        children: [
+          Container(
+            width: 60,
+            height: 60,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: CustomColors.whBlack,
             ),
-            const SizedBox(
-              width: 12,
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    height: 20,
-                    width: 200,
-                    decoration: BoxDecoration(
-                      color: CustomColors.whBlack,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
+          ),
+          const SizedBox(
+            width: 12,
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  height: 20,
+                  width: 200,
+                  decoration: BoxDecoration(
+                    color: CustomColors.whBlack,
+                    borderRadius: BorderRadius.circular(4),
                   ),
-                  const SizedBox(height: 4),
-                  Container(
-                    height: 20,
-                    width: 90,
-                    decoration: BoxDecoration(
-                      color: CustomColors.whBlack,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
+                ),
+                const SizedBox(height: 4),
+                Container(
+                  height: 20,
+                  width: 90,
+                  decoration: BoxDecoration(
+                    color: CustomColors.whBlack,
+                    borderRadius: BorderRadius.circular(4),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            // ColoredButton(buttonTitle: "Hi"),
-          ],
-        ),
-        forFail: Container(),
-        mainWidgetCallback: (userEntity) {
-          return Row(
+          ),
+          // ColoredButton(buttonTitle: "Hi"),
+        ],
+      ),
+      forFail: Container(),
+      mainWidgetCallback: (userEntity) {
+        return Container(
+          margin: const EdgeInsets.symmetric(vertical: 6),
+          child: Row(
             children: [
-              ProfileImageCircleWidget(size: 60, url: userEntity.userImageUrl),
+              ProfileImageCircleWidget(
+                size: 60,
+                url: userEntity.userImageUrl,
+              ),
               const SizedBox(
                 width: 12,
               ),
@@ -133,9 +136,9 @@ class FriendListCellWidget extends StatelessWidget {
               ),
               postfixButtonWidget,
             ],
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

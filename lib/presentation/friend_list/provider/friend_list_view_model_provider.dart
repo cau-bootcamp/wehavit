@@ -17,7 +17,6 @@ class FriendListViewModelProvider extends StateNotifier<FriendListViewModel> {
   }
 
   Future<void> searchUserByNickname({required String nickname}) async {
-    print("n: $nickname");
     state.searchedUserList = _searchUserDataListByNicknameUsecase(
       nickname: nickname,
     );
