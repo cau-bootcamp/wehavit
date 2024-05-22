@@ -34,6 +34,7 @@ class _FriendListScreenState extends ConsumerState<FriendListView> {
   @override
   Widget build(BuildContext context) {
     final viewModel = ref.watch(friendListViewModelProvider);
+    final provider = ref.read(friendListViewModelProvider.notifier);
 
     return Scaffold(
       backgroundColor: CustomColors.whDarkBlack,
@@ -142,20 +143,37 @@ class _FriendListScreenState extends ConsumerState<FriendListView> {
                     height: 12.0,
                   ),
                   FriendListTextFieldWidget(
-                    searchCallback: (searchNickname) {
-                      // viewModel 통해 search 하기
-                      print(searchNickname);
+                    searchCallback: (searchNickname) async {
+                      if (searchNickname != null) {
+                        provider
+                            .searchUserByNickname(
+                              nickname: searchNickname,
+                            )
+                            .whenComplete(() => setState(() {}));
+                      }
                     },
                   ),
                   const SizedBox(
                     height: 12.0,
                   ),
-                  FriendListCellWidget(
-                    futureUserEntity: Future.delayed(
-                      Duration(seconds: 2),
-                      () => right(UserDataEntity.dummyModel),
-                    ),
-                    cellState: FriendListCellState.toApply,
+                  EitherFutureBuilder<List<EitherFuture<UserDataEntity>>>(
+                    target: viewModel.searchedUserList,
+                    forWaiting: Container(),
+                    forFail: Container(),
+                    mainWidgetCallback: (futureUserList) {
+                      return Column(
+                        children: List<Widget>.generate(
+                          futureUserList.length,
+                          (index) => Container(
+                            margin: const EdgeInsets.only(top: 12),
+                            child: FriendListCellWidget(
+                              futureUserEntity: futureUserList[index],
+                              cellState: FriendListCellState.toApply,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),

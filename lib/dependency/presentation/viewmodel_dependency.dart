@@ -47,7 +47,12 @@ final friendListViewModelProvider =
     StateNotifierProvider<FriendListViewModelProvider, FriendListViewModel>(
         (ref) {
   final getFriendListUsecase = ref.read(getFriendListUseCaseProvider);
-  return FriendListViewModelProvider(getFriendListUsecase);
+  final searchUserDataListByNicknameUsecase =
+      ref.read(searchUserDataListByNicknameUsecaseProvider);
+  return FriendListViewModelProvider(
+    getFriendListUsecase,
+    searchUserDataListByNicknameUsecase,
+  );
 });
 
 final addResolutionProvider =

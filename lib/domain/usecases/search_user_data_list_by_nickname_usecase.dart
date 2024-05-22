@@ -9,7 +9,7 @@ class SearchUserDataListByNicknameUsecase {
 
   EitherFuture<List<EitherFuture<UserDataEntity>>> call({
     required String nickname,
-  }) {
+  }) async {
     return _userModelRepository.getUserDataListByNickname(nickname: nickname);
   }
 }

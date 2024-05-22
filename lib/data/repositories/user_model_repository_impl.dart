@@ -64,7 +64,7 @@ class UserModelRepositoryImpl implements UserModelRepository {
   @override
   EitherFuture<List<EitherFuture<UserDataEntity>>> getUserDataListByNickname({
     required String nickname,
-  }) {
+  }) async {
     return _wehavitDatasource.getUserDataListByNickname(nickname: nickname);
   }
 }

@@ -1915,8 +1915,10 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   @override
   EitherFuture<List<EitherFuture<UserDataEntity>>> getUserDataListByNickname({
     required String nickname,
-  }) {
+  }) async {
     // users에서 내 user 정보 접근해서 friends 리스트 받아오기
+    final myUid = getMyUserId();
+
     try {
       return firestore
           .collection(FirebaseCollectionName.users)
@@ -1927,23 +1929,46 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           .limit(6)
           .get()
           .then((users) {
-        return right(
-          users.docs.map((doc) {
-            return Future(
-              () => right(
-                FirebaseUserModel.fromFireStoreDocument(doc)
-                    .toUserDataEntity(userId: doc.reference.id),
-              ),
-            ) as EitherFuture<UserDataEntity>;
-          }).toList(),
-        );
+        List<EitherFuture<UserDataEntity>> userFutureList =
+            users.docs.map((doc) {
+          return Future<Either<Failure, UserDataEntity>>(() {
+            try {
+              if (doc.reference.id == myUid) {
+                return Future(
+                  () => left(
+                    const Failure('my profile is searched'),
+                  ),
+                );
+              }
+
+              UserDataEntity userDataEntity =
+                  FirebaseUserModel.fromFireStoreDocument(doc)
+                      .toUserDataEntity(userId: doc.reference.id);
+
+              if ((userDataEntity.userName ?? '').startsWith(nickname)) {
+                return Future(() => right(userDataEntity));
+              } else {
+                return Future(
+                  () => left(
+                    const Failure('doesn\'t match paatern'),
+                  ),
+                );
+                // return Future(() => right(userDataEntity));
+              }
+            } on Exception catch (e) {
+              return Future(
+                () => left(
+                  Failure('Error processing document: ${e.toString()}'),
+                ),
+              );
+            }
+          });
+        }).toList();
+        return right(userFutureList);
       });
     } on Exception catch (e) {
-      return Future(
-        () => left(
-          Failure('catch error on registerFriend : ${e.toString()}'),
-        ),
-      );
+      return Future.value(
+          left(Failure('catch error on registerFriend : ${e.toString()}')));
     }
   }
 }
