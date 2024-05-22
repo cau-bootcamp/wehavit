@@ -292,3 +292,9 @@ final removeFriendUsecaseProvider = Provider<RemoveFriendUsecase>((ref) {
   final userModelRepository = ref.watch(userModelRepositoryProvider);
   return RemoveFriendUsecase(userModelRepository);
 });
+
+final searchUserDataListByNicknameUsecaseProvider =
+    Provider<SearchUserDataListByNicknameUsecase>((ref) {
+  final userModelRepository = ref.watch(userModelRepositoryProvider);
+  return SearchUserDataListByNicknameUsecase(userModelRepository);
+});

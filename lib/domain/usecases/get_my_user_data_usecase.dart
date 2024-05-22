@@ -19,6 +19,6 @@ class GetMyUserDataUsecase {
       return Future(() => const Left(Failure('unable to get my id')));
     }
 
-    return _userModelRepository.fetchUserDataEntityFromId(uid);
+    return _userModelRepository.getUserDataEntityById(uid);
   }
 }

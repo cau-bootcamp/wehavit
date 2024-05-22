@@ -9,6 +9,6 @@ class GetUserDataFromIdUsecase extends FutureUseCase<UserDataEntity, String> {
   final UserModelRepository _userDataEntityFetchRepository;
   @override
   EitherFuture<UserDataEntity> call(String params) {
-    return _userDataEntityFetchRepository.fetchUserDataEntityFromId(params);
+    return _userDataEntityFetchRepository.getUserDataEntityById(params);
   }
 }

@@ -1911,4 +1911,39 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
 
     return Future(() => right(null));
   }
+
+  @override
+  EitherFuture<List<EitherFuture<UserDataEntity>>> getUserDataListByNickname({
+    required String nickname,
+  }) {
+    // users에서 내 user 정보 접근해서 friends 리스트 받아오기
+    try {
+      return firestore
+          .collection(FirebaseCollectionName.users)
+          .where(
+            FirebaseUserFieldName.displayName,
+            isGreaterThanOrEqualTo: nickname,
+          )
+          .limit(6)
+          .get()
+          .then((users) {
+        return right(
+          users.docs.map((doc) {
+            return Future(
+              () => right(
+                FirebaseUserModel.fromFireStoreDocument(doc)
+                    .toUserDataEntity(userId: doc.reference.id),
+              ),
+            ) as EitherFuture<UserDataEntity>;
+          }).toList(),
+        );
+      });
+    } on Exception catch (e) {
+      return Future(
+        () => left(
+          Failure('catch error on registerFriend : ${e.toString()}'),
+        ),
+      );
+    }
+  }
 }

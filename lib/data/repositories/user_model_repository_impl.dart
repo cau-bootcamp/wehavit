@@ -10,7 +10,7 @@ class UserModelRepositoryImpl implements UserModelRepository {
   final WehavitDatasource _wehavitDatasource;
 
   @override
-  EitherFuture<UserDataEntity> fetchUserDataEntityFromId(
+  EitherFuture<UserDataEntity> getUserDataEntityById(
     String targetUserId,
   ) async {
     return _wehavitDatasource.fetchUserDataEntityByUserId(targetUserId);
@@ -59,5 +59,12 @@ class UserModelRepositoryImpl implements UserModelRepository {
   @override
   EitherFuture<void> removeFriend({required String targetUid}) {
     return _wehavitDatasource.removeFriend(targetUid: targetUid);
+  }
+
+  @override
+  EitherFuture<List<EitherFuture<UserDataEntity>>> getUserDataListByNickname({
+    required String nickname,
+  }) {
+    return _wehavitDatasource.getUserDataListByNickname(nickname: nickname);
   }
 }

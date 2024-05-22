@@ -152,4 +152,8 @@ abstract class WehavitDatasource {
   });
 
   EitherFuture<void> removeFriend({required String targetUid});
+
+  EitherFuture<List<EitherFuture<UserDataEntity>>> getUserDataListByNickname({
+    required String nickname,
+  });
 }

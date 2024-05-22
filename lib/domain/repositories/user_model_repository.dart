@@ -4,7 +4,7 @@ import 'package:wehavit/domain/entities/entities.dart';
 abstract class UserModelRepository {
   EitherFuture<String> getMyUserId();
 
-  EitherFuture<UserDataEntity> fetchUserDataEntityFromId(String targetUserId);
+  EitherFuture<UserDataEntity> getUserDataEntityById(String targetUserId);
 
   EitherFuture<void> incrementUserDataCounter({
     required UserIncrementalDataType type,
@@ -26,4 +26,8 @@ abstract class UserModelRepository {
   });
 
   EitherFuture<void> removeFriend({required String targetUid});
+
+  EitherFuture<List<EitherFuture<UserDataEntity>>> getUserDataListByNickname({
+    required String nickname,
+  });
 }
