@@ -11,14 +11,15 @@ class GetMyUserDataUsecase {
   final UserModelRepository _userModelRepository;
 
   EitherFuture<UserDataEntity> call() async {
-    final uid = await _userModelRepository
+    return _userModelRepository
         .getMyUserId()
-        .then((result) => result.fold((failure) => null, (uid) => uid));
+        .then((result) => result.fold((failure) => null, (uid) => uid))
+        .then((uid) {
+      if (uid == null) {
+        return Future(() => const Left(Failure('unable to get my id')));
+      }
 
-    if (uid == null) {
-      return Future(() => const Left(Failure('unable to get my id')));
-    }
-
-    return _userModelRepository.getUserDataEntityById(uid);
+      return _userModelRepository.getUserDataEntityById(uid);
+    });
   }
 }

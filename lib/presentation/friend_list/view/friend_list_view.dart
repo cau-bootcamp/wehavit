@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/presentation/friend_list/view/view.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 class FriendListView extends ConsumerStatefulWidget {
@@ -27,6 +26,8 @@ class _FriendListScreenState extends ConsumerState<FriendListView> {
   Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
     ref.read(friendListViewModelProvider.notifier).getFriendList();
+    ref.read(friendListViewModelProvider.notifier).getAppliedFriendList();
+    ref.read(friendListViewModelProvider.notifier).getMyUserDataEntity();
   }
 
   bool isManagingMode = false;
@@ -72,11 +73,7 @@ class _FriendListScreenState extends ConsumerState<FriendListView> {
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: FriendListMyProfileWidget(
-                    futureUserEntity: Future.delayed(
-                      Duration(seconds: 1),
-                      () => right(UserDataEntity.dummyModel),
-                      // () => left(Failure("HE")),
-                    ),
+                    futureUserEntity: viewModel.futureMyUserDataEntity,
                   ),
                 ),
               ),
@@ -153,7 +150,7 @@ class _FriendListScreenState extends ConsumerState<FriendListView> {
                     },
                   ),
                   EitherFutureBuilder<List<EitherFuture<UserDataEntity>>>(
-                    target: viewModel.searchedUserList,
+                    target: viewModel.futureSearchedUserList,
                     forWaiting: Container(),
                     forFail: Container(),
                     mainWidgetCallback: (futureUserList) {
@@ -174,7 +171,7 @@ class _FriendListScreenState extends ConsumerState<FriendListView> {
                 ],
               ),
               EitherFutureBuilder<List<EitherFuture<UserDataEntity>>>(
-                target: viewModel.appliedUserList,
+                target: viewModel.futureAppliedUserList,
                 forWaiting: Container(),
                 forFail: Container(),
                 mainWidgetCallback: (futureUserList) {

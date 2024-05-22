@@ -1953,7 +1953,6 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
                     const Failure('doesn\'t match paatern'),
                   ),
                 );
-                // return Future(() => right(userDataEntity));
               }
             } on Exception catch (e) {
               return Future(

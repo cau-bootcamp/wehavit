@@ -49,9 +49,14 @@ final friendListViewModelProvider =
   final getFriendListUsecase = ref.read(getFriendListUseCaseProvider);
   final searchUserDataListByNicknameUsecase =
       ref.read(searchUserDataListByNicknameUsecaseProvider);
+  final getMyUserDataUsecase = ref.read(getMyUserDataUsecaseProvider);
+  final getAppliedUserListForFriendUsecase =
+      ref.read(getAppliedUserListForFriendUsecaseProvider);
   return FriendListViewModelProvider(
     getFriendListUsecase,
     searchUserDataListByNicknameUsecase,
+    getMyUserDataUsecase,
+    getAppliedUserListForFriendUsecase,
   );
 });
 
