@@ -1,8 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
-import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/dependency/data/repository_dependency.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
@@ -45,9 +43,36 @@ final addFriendProvider =
   return AddFriendNotifier(ref);
 });
 
-final friendListProvider = StateNotifierProvider<FriendListProvider,
-    Either<Failure, List<UserDataEntity>>>((ref) {
-  return FriendListProvider(ref);
+final friendListViewModelProvider =
+    StateNotifierProvider<FriendListViewModelProvider, FriendListViewModel>(
+        (ref) {
+  final getFriendListUsecase = ref.read(getFriendListUseCaseProvider);
+  final searchUserDataListByNicknameUsecase =
+      ref.read(searchUserDataListByNicknameUsecaseProvider);
+  final getMyUserDataUsecase = ref.read(getMyUserDataUsecaseProvider);
+  final getAppliedUserListForFriendUsecase =
+      ref.read(getAppliedUserListForFriendUsecaseProvider);
+  final AcceptApplyingForFriendUsecase acceptApplyingForFriendUsecase =
+      ref.read(acceptApplyingForFriendUsecaseProvider);
+  final RejectApplyingForFriendUsecase rejectApplyingForFriendUsecase =
+      ref.read(rejectApplyingForFriendUsecaseProvider);
+  final RemoveFriendUsecase removeFriendUsecase =
+      ref.read(removeFriendUsecaseProvider);
+  final ApplyForUserFriendUsecase applyForUserFriendUsecase =
+      ref.read(applyForUserFriendUsecaseProvider);
+  final GetUserDataFromIdUsecase getUserDataFromIdUsecase =
+      ref.read(getUserDataFromIdUsecaseProvider);
+  return FriendListViewModelProvider(
+    getFriendListUsecase,
+    searchUserDataListByNicknameUsecase,
+    getMyUserDataUsecase,
+    getAppliedUserListForFriendUsecase,
+    acceptApplyingForFriendUsecase,
+    rejectApplyingForFriendUsecase,
+    removeFriendUsecase,
+    applyForUserFriendUsecase,
+    getUserDataFromIdUsecase,
+  );
 });
 
 final addResolutionProvider =

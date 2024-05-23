@@ -12,6 +12,8 @@ class FirebaseUserFieldName {
   static const cumulativePosts = 'cumulativePosts';
   static const cumulativeReactions = 'cumulativeReactions';
   static const aboutMe = 'aboutMe';
+  static const applyUid = 'uid';
+  static const friendUid = 'userId';
 }
 
 @immutable
@@ -35,12 +37,12 @@ class FirebaseReactionFieldName {
   static const reactionType = 'reactionType';
 }
 
-@immutable
-class FirebaseFriendFieldName {
-  //friend
-  static const friendUid = 'userId';
-  static const friendState = 'friendState';
-}
+// @immutable
+// class FirebaseFriendFieldName {
+//   //friend
+//   static const friendUid = 'userId';
+//   static const friendState = 'friendState';
+// }
 
 @immutable
 class FirebaseConfirmPostFieldName {

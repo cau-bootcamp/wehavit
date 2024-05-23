@@ -1,3 +1,10 @@
+export 'model/friend_list_view_model.dart';
+export 'provider/add_friend_provider.dart';
+export 'provider/friend_list_view_model_provider.dart';
 export 'provider/providers.dart';
+export 'view/friend_list_view.dart';
+export 'view/friend_list_view_widget.dart';
 export 'view/screens.dart';
+export 'view/view.dart';
+export 'widgets/friend_element_widget.dart';
 export 'widgets/widgets.dart';

@@ -208,8 +208,8 @@ class AddResolutionScreen extends HookConsumerWidget {
                           ),
                         ),
                       ),
-                      const SelectFans(),
-                      const SelectGroups(),
+                      // const SelectFans(),
+                      // const SelectGroups(),
                     ],
                   ),
                 ),
@@ -265,130 +265,122 @@ class AddResolutionScreen extends HookConsumerWidget {
   }
 }
 
-class SelectFans extends HookConsumerWidget {
-  const SelectFans({super.key});
+// class SelectFans extends HookConsumerWidget {
+//   const SelectFans({super.key});
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final resolutionState = ref.watch(addResolutionProvider);
-    // ignore: discarded_futures
-    final friendListFuture = useMemoized(() => getFriendList(ref));
-    final friendListSnapshot = useFuture(friendListFuture);
+//   @override
+//   Widget build(BuildContext context, WidgetRef ref) {
+//     final resolutionState = ref.watch(addResolutionProvider);
+//     // ignore: discarded_futures
+//     final friendListFuture = useMemoized(() => getFriendList(ref));
+//     final friendListSnapshot = useFuture(friendListFuture);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: DropDownMultiSelect<String>(
-        onChanged: (currentSelected) {
-          final friendList = friendListSnapshot.data
-              ?.where((element) => currentSelected.contains(element.userName))
-              .toList();
-          ref
-              .read(addResolutionProvider.notifier)
-              .changeFanList(friendList ?? []);
-        },
-        options: friendListSnapshot.data?.map((e) => e.userName!).toList() ??
-            ['친구를 불러오는 중입니다.'],
-        selectedValues: (resolutionState.shareFriendEntityList ?? [])
-            .map((e) => e.userName!)
-            .toList(),
-        whenEmpty: '친구를 선택해주세요.',
-        // 스타일링을 위한 코드
-        selected_values_style: const TextStyle(
-            color: CustomColors.whBlack,
-            fontSize: 16.0,
-            fontWeight: FontWeight.w500),
-        decoration: InputDecoration(
-          fillColor: CustomColors.whYellow,
-          // 배경 색상
-          filled: true,
-          contentPadding: const EdgeInsets.all(10),
-          // 패딩
-          border: OutlineInputBorder(
-            // 테두리 설정
-            borderRadius: BorderRadius.circular(36), // 둥근 테두리
-            borderSide: const BorderSide(
-              color: CustomColors.whYellow, // 테두리 색상
-              width: 2, // 테두리 두께
-            ),
-          ),
-          // 선택된 아이템의 스타일 변경 (옵션)
-          labelStyle: const TextStyle(
-            color: CustomColors.whWhite, // 레이블 글자 색상
-            fontWeight: FontWeight.bold, // 레이블 글자 굵기
-          ),
-        ),
-      ),
-    );
-  }
-}
+//     return Padding(
+//       padding: const EdgeInsets.symmetric(vertical: 8.0),
+//       child: DropDownMultiSelect<String>(
+//         onChanged: (currentSelected) {
+//           final friendList = friendListSnapshot.data
+//               ?.where((element) => currentSelected.contains(element.userName))
+//               .toList();
+//           ref
+//               .read(addResolutionProvider.notifier)
+//               .changeFanList(friendList ?? []);
+//         },
+//         options: friendListSnapshot.data?.map((e) => e.userName!).toList() ??
+//             ['친구를 불러오는 중입니다.'],
+//         selectedValues: (resolutionState.shareFriendEntityList ?? [])
+//             .map((e) => e.userName!)
+//             .toList(),
+//         whenEmpty: '친구를 선택해주세요.',
+//         // 스타일링을 위한 코드
+//         selected_values_style: const TextStyle(
+//             color: CustomColors.whBlack,
+//             fontSize: 16.0,
+//             fontWeight: FontWeight.w500),
+//         decoration: InputDecoration(
+//           fillColor: CustomColors.whYellow,
+//           // 배경 색상
+//           filled: true,
+//           contentPadding: const EdgeInsets.all(10),
+//           // 패딩
+//           border: OutlineInputBorder(
+//             // 테두리 설정
+//             borderRadius: BorderRadius.circular(36), // 둥근 테두리
+//             borderSide: const BorderSide(
+//               color: CustomColors.whYellow, // 테두리 색상
+//               width: 2, // 테두리 두께
+//             ),
+//           ),
+//           // 선택된 아이템의 스타일 변경 (옵션)
+//           labelStyle: const TextStyle(
+//             color: CustomColors.whWhite, // 레이블 글자 색상
+//             fontWeight: FontWeight.bold, // 레이블 글자 굵기
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
 
-class SelectGroups extends HookConsumerWidget {
-  const SelectGroups({super.key});
+// class SelectGroups extends HookConsumerWidget {
+//   const SelectGroups({super.key});
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final resolutionState = ref.watch(addResolutionProvider);
-    // ignore: discarded_futures
-    final groupListFuture = useMemoized(() => getGroupList(ref));
-    final groupListSnapshot = useFuture(groupListFuture);
+//   @override
+//   Widget build(BuildContext context, WidgetRef ref) {
+//     final resolutionState = ref.watch(addResolutionProvider);
+//     // ignore: discarded_futures
+//     final groupListFuture = useMemoized(() => getGroupList(ref));
+//     final groupListSnapshot = useFuture(groupListFuture);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: DropDownMultiSelect<String>(
-        onChanged: (currentSelected) {
-          final groupList = groupListSnapshot.data
-              ?.where((element) => currentSelected.contains(element.groupName))
-              .toList();
-          ref
-              .read(addResolutionProvider.notifier)
-              .changeGroupList(groupList ?? []);
-        },
-        options: groupListSnapshot.data?.map((e) => e.groupName).toList() ??
-            ['그룹을 불러오는 중입니다.'],
-        selectedValues: (resolutionState.shareGroupEntityList ?? [])
-            .map((e) => e.groupName)
-            .toList(),
-        whenEmpty: '그룹을 선택해주세요.',
-        // 스타일링을 위한 코드
-        selected_values_style: const TextStyle(
-            color: CustomColors.whBlack,
-            fontSize: 16.0,
-            fontWeight: FontWeight.w500),
-        decoration: InputDecoration(
-          fillColor: CustomColors.whYellow,
-          // 배경 색상
-          filled: true,
-          contentPadding: const EdgeInsets.all(10),
-          // 패딩
-          border: OutlineInputBorder(
-            // 테두리 설정
-            borderRadius: BorderRadius.circular(36), // 둥근 테두리
-            borderSide: const BorderSide(
-              color: CustomColors.whYellow, // 테두리 색상
-              width: 2, // 테두리 두께
-            ),
-          ),
-          // 선택된 아이템의 스타일 변경 (옵션)
-          labelStyle: const TextStyle(
-            color: CustomColors.whWhite, // 레이블 글자 색상
-            fontWeight: FontWeight.bold, // 레이블 글자 굵기
-          ),
-        ),
-      ),
-    );
-  }
-}
+//     return Padding(
+//       padding: const EdgeInsets.symmetric(vertical: 8.0),
+//       child: DropDownMultiSelect<String>(
+//         onChanged: (currentSelected) {
+//           final groupList = groupListSnapshot.data
+//               ?.where((element) => currentSelected.contains(element.groupName))
+//               .toList();
+//           ref
+//               .read(addResolutionProvider.notifier)
+//               .changeGroupList(groupList ?? []);
+//         },
+//         options: groupListSnapshot.data?.map((e) => e.groupName).toList() ??
+//             ['그룹을 불러오는 중입니다.'],
+//         selectedValues: (resolutionState.shareGroupEntityList ?? [])
+//             .map((e) => e.groupName)
+//             .toList(),
+//         whenEmpty: '그룹을 선택해주세요.',
+//         // 스타일링을 위한 코드
+//         selected_values_style: const TextStyle(
+//             color: CustomColors.whBlack,
+//             fontSize: 16.0,
+//             fontWeight: FontWeight.w500),
+//         decoration: InputDecoration(
+//           fillColor: CustomColors.whYellow,
+//           // 배경 색상
+//           filled: true,
+//           contentPadding: const EdgeInsets.all(10),
+//           // 패딩
+//           border: OutlineInputBorder(
+//             // 테두리 설정
+//             borderRadius: BorderRadius.circular(36), // 둥근 테두리
+//             borderSide: const BorderSide(
+//               color: CustomColors.whYellow, // 테두리 색상
+//               width: 2, // 테두리 두께
+//             ),
+//           ),
+//           // 선택된 아이템의 스타일 변경 (옵션)
+//           labelStyle: const TextStyle(
+//             color: CustomColors.whWhite, // 레이블 글자 색상
+//             fontWeight: FontWeight.bold, // 레이블 글자 굵기
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
 
-Future<List<UserDataEntity>> getFriendList(WidgetRef ref) {
-  return ref.read(getFriendListUseCaseProvider)(NoParams()).then(
-    (result) {
-      return result.fold((failure) {
-        return [];
-      }, (success) {
-        return success;
-      });
-    },
-  );
+EitherFuture<List<EitherFuture<UserDataEntity>>> getFriendList(WidgetRef ref) {
+  return ref.read(getFriendListUseCaseProvider)();
 }
 
 Future<List<GroupEntity>> getGroupList(WidgetRef ref) {

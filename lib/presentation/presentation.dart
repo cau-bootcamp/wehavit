@@ -27,7 +27,7 @@ export 'effects/emojis/text_animation/text_bubble_manager.dart';
 export 'effects/emojis/text_animation/text_bubble_widget.dart';
 export 'friend_list/friend_list.dart';
 export 'friend_list/provider/add_friend_provider.dart';
-export 'friend_list/provider/friend_list_provider.dart';
+export 'friend_list/provider/friend_list_view_model_provider.dart';
 export 'friend_list/provider/providers.dart';
 export 'friend_list/view/friend_list_view.dart';
 export 'friend_list/view/screens.dart';

@@ -275,3 +275,37 @@ final updateAboutMeUsecaseProvider = Provider<UpdateAboutMeUsecase>((ref) {
   final userModelRepository = ref.watch(userModelRepositoryProvider);
   return UpdateAboutMeUsecase(userModelRepository);
 });
+
+final getAppliedUserListForFriendUsecaseProvider =
+    Provider<GetAppliedUserListForFriendUsecase>((ref) {
+  final userModelRepository = ref.watch(userModelRepositoryProvider);
+  return GetAppliedUserListForFriendUsecase(userModelRepository);
+});
+
+final applyForUserFriendUsecaseProvider =
+    Provider<ApplyForUserFriendUsecase>((ref) {
+  final userModelRepository = ref.watch(userModelRepositoryProvider);
+  return ApplyForUserFriendUsecase(userModelRepository);
+});
+
+final removeFriendUsecaseProvider = Provider<RemoveFriendUsecase>((ref) {
+  final userModelRepository = ref.watch(userModelRepositoryProvider);
+  return RemoveFriendUsecase(userModelRepository);
+});
+
+final searchUserDataListByNicknameUsecaseProvider =
+    Provider<SearchUserDataListByNicknameUsecase>((ref) {
+  final userModelRepository = ref.watch(userModelRepositoryProvider);
+  return SearchUserDataListByNicknameUsecase(userModelRepository);
+});
+final acceptApplyingForFriendUsecaseProvider =
+    Provider<AcceptApplyingForFriendUsecase>((ref) {
+  final userModelRepository = ref.watch(userModelRepositoryProvider);
+  return AcceptApplyingForFriendUsecase(userModelRepository);
+});
+
+final rejectApplyingForFriendUsecaseProvider =
+    Provider<RejectApplyingForFriendUsecase>((ref) {
+  final userModelRepository = ref.watch(userModelRepositoryProvider);
+  return RejectApplyingForFriendUsecase(userModelRepository);
+});

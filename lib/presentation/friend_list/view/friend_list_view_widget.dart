@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
+import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
+import 'package:wehavit/presentation/friend_list/view/friend_list_view.dart';
 
 enum FriendListCellState { normal, applied, managing, toApply }
 
-class FriendListCellWidget extends StatelessWidget {
+class FriendListCellWidget extends ConsumerStatefulWidget {
   const FriendListCellWidget({
     super.key,
     required this.futureUserEntity,
@@ -17,90 +19,65 @@ class FriendListCellWidget extends StatelessWidget {
   final FriendListCellState cellState;
 
   @override
-  Widget build(BuildContext context) {
-    Widget postfixButtonWidget = Container();
-    switch (cellState) {
-      case FriendListCellState.applied:
-        postfixButtonWidget = Row(
-          children: [
-            SmallColoredButtonWidget(
-              buttonLabel: '수락',
-              onPressed: () {},
-            ),
-            const SizedBox(
-              width: 8,
-            ),
-            SmallColoredButtonWidget(
-              buttonLabel: '거절',
-              backgroundColor: CustomColors.whBrightGrey,
-              onPressed: () {},
-            ),
-          ],
-        );
-      case FriendListCellState.managing:
-        postfixButtonWidget = SmallColoredButtonWidget(
-          buttonLabel: '삭제',
-          backgroundColor: CustomColors.whBrightGrey,
-          onPressed: () {},
-        );
-      case FriendListCellState.toApply:
-        postfixButtonWidget = SmallColoredButtonWidget(
-          buttonLabel: '요청',
-          onPressed: () {},
-        );
-      default:
-        postfixButtonWidget = Container();
-    }
+  ConsumerState<FriendListCellWidget> createState() =>
+      _FriendListCellWidgetState();
+}
 
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 6),
-      child: EitherFutureBuilder<UserDataEntity>(
-        target: futureUserEntity,
-        forWaiting: Row(
-          children: [
-            Container(
-              width: 60,
-              height: 60,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: CustomColors.whBlack,
-              ),
+class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return EitherFutureBuilder<UserDataEntity>(
+      target: widget.futureUserEntity,
+      forWaiting: Row(
+        children: [
+          Container(
+            width: 60,
+            height: 60,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: CustomColors.whBlack,
             ),
-            const SizedBox(
-              width: 12,
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    height: 20,
-                    width: 200,
-                    decoration: BoxDecoration(
-                      color: CustomColors.whBlack,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
+          ),
+          const SizedBox(
+            width: 12,
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  height: 20,
+                  width: 200,
+                  decoration: BoxDecoration(
+                    color: CustomColors.whBlack,
+                    borderRadius: BorderRadius.circular(4),
                   ),
-                  const SizedBox(height: 4),
-                  Container(
-                    height: 20,
-                    width: 90,
-                    decoration: BoxDecoration(
-                      color: CustomColors.whBlack,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
+                ),
+                const SizedBox(height: 4),
+                Container(
+                  height: 20,
+                  width: 90,
+                  decoration: BoxDecoration(
+                    color: CustomColors.whBlack,
+                    borderRadius: BorderRadius.circular(4),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            // ColoredButton(buttonTitle: "Hi"),
-          ],
-        ),
-        forFail: Container(),
-        mainWidgetCallback: (userEntity) {
-          return Row(
+          ),
+          // ColoredButton(buttonTitle: "Hi"),
+        ],
+      ),
+      forFail: Container(),
+      mainWidgetCallback: (userEntity) {
+        return Container(
+          margin: const EdgeInsets.only(top: 12),
+          child: Row(
             children: [
-              ProfileImageCircleWidget(size: 60, url: userEntity.userImageUrl),
+              ProfileImageCircleWidget(
+                size: 60,
+                url: userEntity.userImageUrl,
+              ),
               const SizedBox(
                 width: 12,
               ),
@@ -132,12 +109,109 @@ class FriendListCellWidget extends StatelessWidget {
                   ],
                 ),
               ),
-              postfixButtonWidget,
+              postfixButtonWidget(userEntity, ref),
             ],
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
+  }
+
+  Widget postfixButtonWidget(UserDataEntity entity, WidgetRef ref) {
+    final provider = ref.read(friendListViewModelProvider.notifier);
+    switch (widget.cellState) {
+      case FriendListCellState.applied:
+        return Row(
+          children: [
+            SmallColoredButtonWidget(
+              buttonLabel: '수락',
+              onPressed: () async {
+                if (entity.userId != null) {
+                  final parentState =
+                      context.findAncestorStateOfType<FriendListScreenState>();
+
+                  await provider.acceptToBeFriendWith(
+                    targetUid: entity.userId!,
+                  );
+
+                  if (mounted) {
+                    parentState?.setState(() {});
+                  }
+                }
+              },
+            ),
+            const SizedBox(
+              width: 8,
+            ),
+            SmallColoredButtonWidget(
+              buttonLabel: '거절',
+              backgroundColor: CustomColors.whBrightGrey,
+              onPressed: () async {
+                if (entity.userId != null) {
+                  final parentState =
+                      context.findAncestorStateOfType<FriendListScreenState>();
+
+                  await provider.rejectToBeFriendWith(
+                    targetUid: entity.userId!,
+                  );
+
+                  if (mounted) {
+                    parentState?.setState(() {});
+                  }
+                }
+              },
+            ),
+          ],
+        );
+      case FriendListCellState.managing:
+        return SmallColoredButtonWidget(
+          buttonLabel: '삭제',
+          backgroundColor: CustomColors.whBrightGrey,
+          onPressed: () async {
+            if (entity.userId != null) {
+              final parentState =
+                  context.findAncestorStateOfType<FriendListScreenState>();
+
+              await provider.removeFromFriendList(targetUid: entity.userId!);
+
+              if (mounted) {
+                parentState?.setState(() {});
+              }
+            }
+          },
+        );
+      case FriendListCellState.toApply:
+        return SmallColoredButtonWidget(
+          buttonLabel: '요청',
+          onPressed: () async {
+            if (entity.userId != null) {
+              final parentState =
+                  context.findAncestorStateOfType<FriendListScreenState>();
+
+              await provider
+                  .applyToBeFriendWith(targetUid: entity.userId!)
+                  .then((result) {
+                if (result.isRight()) {
+                  showToastMessage(
+                    context,
+                    text: '친구 신청을 보냈어요',
+                    icon: const Icon(
+                      Icons.mail,
+                      color: CustomColors.whWhite,
+                    ),
+                  );
+                }
+              });
+
+              if (mounted) {
+                parentState?.setState(() {});
+              }
+            }
+          },
+        );
+      default:
+        return Container();
+    }
   }
 }
 
