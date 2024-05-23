@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
-import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 class FriendListView extends ConsumerStatefulWidget {
@@ -18,16 +16,20 @@ class FriendListView extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
-      _FriendListScreenState();
+      FriendListScreenState();
 }
 
-class _FriendListScreenState extends ConsumerState<FriendListView> {
+class FriendListScreenState extends ConsumerState<FriendListView> {
   @override
   Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
-    ref.read(friendListViewModelProvider.notifier).getFriendList();
-    ref.read(friendListViewModelProvider.notifier).getAppliedFriendList();
+
     ref.read(friendListViewModelProvider.notifier).getMyUserDataEntity();
+    ref.read(friendListViewModelProvider.notifier).getAppliedFriendList();
+    ref
+        .read(friendListViewModelProvider.notifier)
+        .getFriendList()
+        .whenComplete(() => setState(() {}));
   }
 
   bool isManagingMode = false;
@@ -80,48 +82,46 @@ class _FriendListScreenState extends ConsumerState<FriendListView> {
               const SizedBox(
                 height: 32.0,
               ),
-              Expanded(
-                child: EitherFutureBuilder<List<EitherFuture<UserDataEntity>>>(
-                  target: viewModel.futureFriendList,
-                  forFail: const FriendListFailPlaceholderWidget(),
-                  forWaiting: Container(),
-                  mainWidgetCallback: (list) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            '내 친구들 (${list.length})',
-                            style: const TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w600,
-                              color: CustomColors.whWhite,
-                            ),
+              if (viewModel.futureFriendList == null)
+                const FriendListFailPlaceholderWidget()
+              else
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '내 친구들 (${viewModel.futureFriendList!.length})',
+                          style: const TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600,
+                            color: CustomColors.whWhite,
                           ),
                         ),
-                        const SizedBox(
-                          height: 16.0,
+                      ),
+                      const SizedBox(
+                        height: 16.0,
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: viewModel.futureFriendList!.length,
+                          itemBuilder: (context, index) {
+                            return FriendListCellWidget(
+                              futureUserEntity:
+                                  viewModel.futureFriendList![index],
+                              cellState: FriendListCellState.normal,
+                            );
+                          },
                         ),
-                        Expanded(
-                          child: ListView.builder(
-                            itemCount: list.length,
-                            itemBuilder: (context, index) {
-                              return FriendListCellWidget(
-                                futureUserEntity: list[index],
-                                cellState: FriendListCellState.normal,
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    );
-                  },
+                      ),
+                    ],
+                  ),
                 ),
-              ),
             ],
           ),
           // in managing mode
+          // child: Container(),
           child: ListView(
             children: [
               Column(
@@ -149,97 +149,80 @@ class _FriendListScreenState extends ConsumerState<FriendListView> {
                       }
                     },
                   ),
-                  EitherFutureBuilder<List<EitherFuture<UserDataEntity>>>(
-                    target: viewModel.futureSearchedUserList,
-                    forWaiting: Container(),
-                    forFail: Container(),
-                    mainWidgetCallback: (futureUserList) {
-                      return Column(
-                        children: List<Widget>.generate(
-                          futureUserList.length,
-                          (index) => Container(
-                            margin: const EdgeInsets.only(top: 12),
-                            child: FriendListCellWidget(
-                              futureUserEntity: futureUserList[index],
-                              cellState: FriendListCellState.toApply,
-                            ),
-                          ),
+                  if (viewModel.futureSearchedUserList == null)
+                    Container()
+                  else
+                    Column(
+                      children: List<Widget>.generate(
+                        viewModel.futureSearchedUserList!.length,
+                        (index) => FriendListCellWidget(
+                          futureUserEntity:
+                              viewModel.futureSearchedUserList![index],
+                          cellState: FriendListCellState.toApply,
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    ),
                 ],
               ),
-              EitherFutureBuilder<List<EitherFuture<UserDataEntity>>>(
-                target: viewModel.futureAppliedUserList,
-                forWaiting: Container(),
-                forFail: Container(),
-                mainWidgetCallback: (futureUserList) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 32,
+              if (viewModel.futureAppliedUserList == null ||
+                  viewModel.futureAppliedUserList!.isEmpty)
+                Container()
+              else
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 32,
+                    ),
+                    Text(
+                      '새로운 친구 요청 (${viewModel.futureAppliedUserList!.length})',
+                      style: const TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w600,
+                        color: CustomColors.whWhite,
                       ),
-                      Text(
-                        '새로운 친구 요청 (${futureUserList.length})',
-                        style: const TextStyle(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w600,
-                          color: CustomColors.whWhite,
+                    ),
+                    Column(
+                      children: List<Widget>.generate(
+                        viewModel.futureAppliedUserList!.length,
+                        (index) => FriendListCellWidget(
+                          futureUserEntity:
+                              viewModel.futureAppliedUserList![index],
+                          cellState: FriendListCellState.applied,
                         ),
                       ),
-                      Column(
-                        children: List<Widget>.generate(
-                          futureUserList.length,
-                          (index) => Container(
-                            margin: const EdgeInsets.only(top: 12),
-                            child: FriendListCellWidget(
-                              futureUserEntity: futureUserList[index],
-                              cellState: FriendListCellState.applied,
-                            ),
-                          ),
+                    ),
+                  ],
+                ),
+              if (viewModel.futureFriendList == null ||
+                  viewModel.futureFriendList!.isEmpty)
+                Container()
+              else
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 32,
+                    ),
+                    Text(
+                      '내 친구들 (${viewModel.futureFriendList!.length})',
+                      style: const TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w600,
+                        color: CustomColors.whWhite,
+                      ),
+                    ),
+                    Column(
+                      children: List<Widget>.generate(
+                        viewModel.futureFriendList!.length,
+                        (index) => FriendListCellWidget(
+                          futureUserEntity: viewModel.futureFriendList![index],
+                          cellState: FriendListCellState.managing,
                         ),
                       ),
-                    ],
-                  );
-                },
-              ),
-              EitherFutureBuilder<List<EitherFuture<UserDataEntity>>>(
-                target: viewModel.futureFriendList,
-                forWaiting: Container(),
-                forFail: Container(),
-                mainWidgetCallback: (futureUserList) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 32,
-                      ),
-                      Text(
-                        '내 친구들 (${futureUserList.length})',
-                        style: const TextStyle(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w600,
-                          color: CustomColors.whWhite,
-                        ),
-                      ),
-                      Column(
-                        children: List<Widget>.generate(
-                          futureUserList.length,
-                          (index) => Container(
-                            margin: const EdgeInsets.only(top: 12),
-                            child: FriendListCellWidget(
-                              futureUserEntity: futureUserList[index],
-                              cellState: FriendListCellState.managing,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
+                    ),
+                  ],
+                ),
               const SizedBox(height: 60),
             ],
           ),

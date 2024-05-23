@@ -59,9 +59,6 @@ AppBar WehavitAppBar({
           textDirection: TextDirection.rtl,
           child: TextButton.icon(
             style: TextButton.styleFrom(
-              padding: const EdgeInsets.only(
-                right: 10,
-              ),
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               alignment: Alignment.centerLeft,
             ),

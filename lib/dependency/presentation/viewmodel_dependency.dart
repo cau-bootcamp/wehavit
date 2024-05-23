@@ -52,11 +52,26 @@ final friendListViewModelProvider =
   final getMyUserDataUsecase = ref.read(getMyUserDataUsecaseProvider);
   final getAppliedUserListForFriendUsecase =
       ref.read(getAppliedUserListForFriendUsecaseProvider);
+  final AcceptApplyingForFriendUsecase acceptApplyingForFriendUsecase =
+      ref.read(acceptApplyingForFriendUsecaseProvider);
+  final RejectApplyingForFriendUsecase rejectApplyingForFriendUsecase =
+      ref.read(rejectApplyingForFriendUsecaseProvider);
+  final RemoveFriendUsecase removeFriendUsecase =
+      ref.read(removeFriendUsecaseProvider);
+  final ApplyForUserFriendUsecase applyForUserFriendUsecase =
+      ref.read(applyForUserFriendUsecaseProvider);
+  final GetUserDataFromIdUsecase getUserDataFromIdUsecase =
+      ref.read(getUserDataFromIdUsecaseProvider);
   return FriendListViewModelProvider(
     getFriendListUsecase,
     searchUserDataListByNicknameUsecase,
     getMyUserDataUsecase,
     getAppliedUserListForFriendUsecase,
+    acceptApplyingForFriendUsecase,
+    rejectApplyingForFriendUsecase,
+    removeFriendUsecase,
+    applyForUserFriendUsecase,
+    getUserDataFromIdUsecase,
   );
 });
 
