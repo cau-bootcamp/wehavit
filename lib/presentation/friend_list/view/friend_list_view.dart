@@ -45,7 +45,8 @@ class FriendListScreenState extends ConsumerState<FriendListView> {
         title: '친구 목록',
         trailingTitle: isManagingMode ? '완료' : null,
         trailingIcon: isManagingMode ? null : Icons.manage_accounts_outlined,
-        trailingIconBadgeCount: isManagingMode ? null : 3,
+        trailingIconBadgeCount:
+            isManagingMode ? null : viewModel.futureAppliedUserList?.length,
         trailingAction: () {
           setState(() {
             isManagingMode = !isManagingMode;

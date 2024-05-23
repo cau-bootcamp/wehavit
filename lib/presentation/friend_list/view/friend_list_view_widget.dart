@@ -163,24 +163,6 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
             ),
           ],
         );
-      // case FriendListCellState.managing:
-      //   return SmallColoredButtonWidget(
-      //     buttonLabel: '삭제',
-      //     backgroundColor: CustomColors.whBrightGrey,
-      //     onPressed: () async {
-      //       if (entity.userId != null) {
-      //         if (mounted) {
-      //           await provider.removeFromFriendList(targetUid: entity.userId!);
-      //           context
-      //               .findAncestorStateOfType<FriendListScreenState>()
-      //               ?.setState(() {
-      //           });
-      //         } else {
-      //           print("unmounted");
-      //         }
-      //       }
-      //     },
-      //   );
       case FriendListCellState.managing:
         return SmallColoredButtonWidget(
           buttonLabel: '삭제',
@@ -206,7 +188,20 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
               final parentState =
                   context.findAncestorStateOfType<FriendListScreenState>();
 
-              await provider.applyToBeFriendWith(targetUid: entity.userId!);
+              await provider
+                  .applyToBeFriendWith(targetUid: entity.userId!)
+                  .then((result) {
+                if (result.isRight()) {
+                  showToastMessage(
+                    context,
+                    text: '친구 신청을 보냈어요',
+                    icon: const Icon(
+                      Icons.mail,
+                      color: CustomColors.whWhite,
+                    ),
+                  );
+                }
+              });
 
               if (mounted) {
                 parentState?.setState(() {});

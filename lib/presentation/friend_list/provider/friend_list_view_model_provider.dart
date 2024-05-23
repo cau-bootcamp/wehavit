@@ -108,8 +108,8 @@ class FriendListViewModelProvider extends StateNotifier<FriendListViewModel> {
     }
   }
 
-  Future<void> applyToBeFriendWith({required String targetUid}) async {
-    await _applyForUserFriendUsecase(targetUserId: targetUid);
+  EitherFuture<void> applyToBeFriendWith({required String targetUid}) async {
+    return await _applyForUserFriendUsecase(targetUserId: targetUid);
   }
 
   Future<void> removeFromFriendList({required String targetUid}) async {
@@ -119,7 +119,5 @@ class FriendListViewModelProvider extends StateNotifier<FriendListViewModel> {
       target: targetUid,
       from: state.futureFriendList,
     );
-
-    print('remove');
   }
 }
