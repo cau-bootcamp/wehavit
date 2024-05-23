@@ -29,7 +29,7 @@ class FriendListViewModelProvider extends StateNotifier<FriendListViewModel> {
   final GetUserDataFromIdUsecase _getUserDataFromIdUsecase;
 
   Future<void> getFriendList() async {
-    state.futureFriendList = await _getFriendListUsecase().then(
+    state.friendFutureUserList = await _getFriendListUsecase().then(
       (result) => result.fold(
         (failure) => null,
         (list) => list,
@@ -38,7 +38,7 @@ class FriendListViewModelProvider extends StateNotifier<FriendListViewModel> {
   }
 
   Future<void> searchUserByNickname({required String nickname}) async {
-    state.futureSearchedUserList = await _searchUserDataListByNicknameUsecase(
+    state.searchedFutureUserList = await _searchUserDataListByNicknameUsecase(
       nickname: nickname,
     ).then(
       (result) => result.fold(
@@ -49,7 +49,7 @@ class FriendListViewModelProvider extends StateNotifier<FriendListViewModel> {
   }
 
   Future<void> getAppliedFriendList() async {
-    state.futureAppliedUserList =
+    state.appliedFutureUserList =
         await _getAppliedUserListForFriendUsecase().then(
       (result) => result.fold(
         (failure) => null,
@@ -67,7 +67,7 @@ class FriendListViewModelProvider extends StateNotifier<FriendListViewModel> {
 
     await removeTargetUserFrom(
       target: targetUid,
-      from: state.futureAppliedUserList,
+      from: state.appliedFutureUserList,
     );
   }
 
@@ -76,10 +76,10 @@ class FriendListViewModelProvider extends StateNotifier<FriendListViewModel> {
 
     await removeTargetUserFrom(
       target: targetUid,
-      from: state.futureAppliedUserList,
+      from: state.appliedFutureUserList,
     );
 
-    state.futureFriendList?.add(_getUserDataFromIdUsecase(targetUid));
+    state.friendFutureUserList?.add(_getUserDataFromIdUsecase(targetUid));
   }
 
   Future<void> removeTargetUserFrom({
@@ -117,7 +117,7 @@ class FriendListViewModelProvider extends StateNotifier<FriendListViewModel> {
 
     await removeTargetUserFrom(
       target: targetUid,
-      from: state.futureFriendList,
+      from: state.friendFutureUserList,
     );
   }
 }

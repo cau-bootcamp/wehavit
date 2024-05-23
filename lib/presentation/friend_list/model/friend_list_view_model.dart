@@ -4,9 +4,9 @@ import 'package:wehavit/domain/entities/entities.dart';
 class FriendListViewModel {
   EitherFuture<UserDataEntity>? futureMyUserDataEntity;
 
-  List<EitherFuture<UserDataEntity>>? futureFriendList;
+  List<EitherFuture<UserDataEntity>>? friendFutureUserList;
 
-  List<EitherFuture<UserDataEntity>>? futureSearchedUserList;
+  List<EitherFuture<UserDataEntity>>? searchedFutureUserList;
 
-  List<EitherFuture<UserDataEntity>>? futureAppliedUserList;
+  List<EitherFuture<UserDataEntity>>? appliedFutureUserList;
 }

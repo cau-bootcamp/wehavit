@@ -46,7 +46,7 @@ class FriendListScreenState extends ConsumerState<FriendListView> {
         trailingTitle: isManagingMode ? '완료' : null,
         trailingIcon: isManagingMode ? null : Icons.manage_accounts_outlined,
         trailingIconBadgeCount:
-            isManagingMode ? null : viewModel.futureAppliedUserList?.length,
+            isManagingMode ? null : viewModel.appliedFutureUserList?.length,
         trailingAction: () {
           setState(() {
             isManagingMode = !isManagingMode;
@@ -83,7 +83,7 @@ class FriendListScreenState extends ConsumerState<FriendListView> {
               const SizedBox(
                 height: 32.0,
               ),
-              if (viewModel.futureFriendList == null)
+              if (viewModel.friendFutureUserList == null)
                 const FriendListFailPlaceholderWidget()
               else
                 Expanded(
@@ -93,7 +93,7 @@ class FriendListScreenState extends ConsumerState<FriendListView> {
                       Container(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          '내 친구들 (${viewModel.futureFriendList!.length})',
+                          '내 친구들 (${viewModel.friendFutureUserList!.length})',
                           style: const TextStyle(
                             fontSize: 16.0,
                             fontWeight: FontWeight.w600,
@@ -106,11 +106,11 @@ class FriendListScreenState extends ConsumerState<FriendListView> {
                       ),
                       Expanded(
                         child: ListView.builder(
-                          itemCount: viewModel.futureFriendList!.length,
+                          itemCount: viewModel.friendFutureUserList!.length,
                           itemBuilder: (context, index) {
                             return FriendListCellWidget(
                               futureUserEntity:
-                                  viewModel.futureFriendList![index],
+                                  viewModel.friendFutureUserList![index],
                               cellState: FriendListCellState.normal,
                             );
                           },
@@ -150,23 +150,23 @@ class FriendListScreenState extends ConsumerState<FriendListView> {
                       }
                     },
                   ),
-                  if (viewModel.futureSearchedUserList == null)
+                  if (viewModel.searchedFutureUserList == null)
                     Container()
                   else
                     Column(
                       children: List<Widget>.generate(
-                        viewModel.futureSearchedUserList!.length,
+                        viewModel.searchedFutureUserList!.length,
                         (index) => FriendListCellWidget(
                           futureUserEntity:
-                              viewModel.futureSearchedUserList![index],
+                              viewModel.searchedFutureUserList![index],
                           cellState: FriendListCellState.toApply,
                         ),
                       ),
                     ),
                 ],
               ),
-              if (viewModel.futureAppliedUserList == null ||
-                  viewModel.futureAppliedUserList!.isEmpty)
+              if (viewModel.appliedFutureUserList == null ||
+                  viewModel.appliedFutureUserList!.isEmpty)
                 Container()
               else
                 Column(
@@ -176,7 +176,7 @@ class FriendListScreenState extends ConsumerState<FriendListView> {
                       height: 32,
                     ),
                     Text(
-                      '새로운 친구 요청 (${viewModel.futureAppliedUserList!.length})',
+                      '새로운 친구 요청 (${viewModel.appliedFutureUserList!.length})',
                       style: const TextStyle(
                         fontSize: 16.0,
                         fontWeight: FontWeight.w600,
@@ -185,18 +185,18 @@ class FriendListScreenState extends ConsumerState<FriendListView> {
                     ),
                     Column(
                       children: List<Widget>.generate(
-                        viewModel.futureAppliedUserList!.length,
+                        viewModel.appliedFutureUserList!.length,
                         (index) => FriendListCellWidget(
                           futureUserEntity:
-                              viewModel.futureAppliedUserList![index],
+                              viewModel.appliedFutureUserList![index],
                           cellState: FriendListCellState.applied,
                         ),
                       ),
                     ),
                   ],
                 ),
-              if (viewModel.futureFriendList == null ||
-                  viewModel.futureFriendList!.isEmpty)
+              if (viewModel.friendFutureUserList == null ||
+                  viewModel.friendFutureUserList!.isEmpty)
                 Container()
               else
                 Column(
@@ -206,7 +206,7 @@ class FriendListScreenState extends ConsumerState<FriendListView> {
                       height: 32,
                     ),
                     Text(
-                      '내 친구들 (${viewModel.futureFriendList!.length})',
+                      '내 친구들 (${viewModel.friendFutureUserList!.length})',
                       style: const TextStyle(
                         fontSize: 16.0,
                         fontWeight: FontWeight.w600,
@@ -215,9 +215,10 @@ class FriendListScreenState extends ConsumerState<FriendListView> {
                     ),
                     Column(
                       children: List<Widget>.generate(
-                        viewModel.futureFriendList!.length,
+                        viewModel.friendFutureUserList!.length,
                         (index) => FriendListCellWidget(
-                          futureUserEntity: viewModel.futureFriendList![index],
+                          futureUserEntity:
+                              viewModel.friendFutureUserList![index],
                           cellState: FriendListCellState.managing,
                         ),
                       ),
