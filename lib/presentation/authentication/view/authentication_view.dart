@@ -7,14 +7,14 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 
-class AuthScreen extends HookConsumerWidget {
-  const AuthScreen({super.key});
+class AuthenticationView extends HookConsumerWidget {
+  const AuthenticationView({super.key});
 
-  static AuthScreen builder(
+  static AuthenticationView builder(
     BuildContext context,
     GoRouterState state,
   ) =>
-      const AuthScreen();
+      const AuthenticationView();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -44,62 +44,61 @@ class AuthScreen extends HookConsumerWidget {
           Padding(
             padding: Dimensions.kPaddingAllLarge,
             child: SafeArea(
-              child: Expanded(
-                child: Container(
-                  alignment: Alignment.center,
-                  child: SingleChildScrollView(
-                    padding: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).viewInsets.bottom),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 40.0),
-                          child: Image(
-                            image: AssetImage(
-                              'assets/logo/wehavit_text_image.png',
-                            ),
+              child: Container(
+                alignment: Alignment.center,
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 40.0),
+                        child: Image(
+                          image: AssetImage(
+                            'assets/logo/wehavit_text_image.png',
                           ),
                         ),
-                        Dimensions.kVerticalSpaceLarge,
-                        AuthField(
-                          hintText: 'Email',
-                          controller: emailTextFieldController,
-                        ),
-                        Dimensions.kVerticalSpaceSmall,
-                        AuthField(
-                          hintText: 'Password',
-                          hasObscureText: true,
-                          controller: passwordTextFieldController,
-                        ),
-                        Dimensions.kVerticalSpaceSmall,
-                        LogInWithGoogleButton(textTheme: textTheme),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Expanded(
-                              child: EmailLogInButton(
-                                emailTextFieldController:
-                                    emailTextFieldController,
-                                passwordTextFieldController:
-                                    passwordTextFieldController,
-                                textTheme: textTheme,
-                              ),
+                      ),
+                      Dimensions.kVerticalSpaceLarge,
+                      AuthField(
+                        hintText: 'Email',
+                        controller: emailTextFieldController,
+                      ),
+                      Dimensions.kVerticalSpaceSmall,
+                      AuthField(
+                        hintText: 'Password',
+                        hasObscureText: true,
+                        controller: passwordTextFieldController,
+                      ),
+                      Dimensions.kVerticalSpaceSmall,
+                      LogInWithGoogleButton(textTheme: textTheme),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            child: EmailLogInButton(
+                              emailTextFieldController:
+                                  emailTextFieldController,
+                              passwordTextFieldController:
+                                  passwordTextFieldController,
+                              textTheme: textTheme,
                             ),
-                            const SizedBox(width: 20),
-                            Expanded(
-                              child: EmailRegisterButton(
-                                emailTextFieldController:
-                                    emailTextFieldController,
-                                passwordTextFieldController:
-                                    passwordTextFieldController,
-                                textTheme: textTheme,
-                              ),
+                          ),
+                          const SizedBox(width: 20),
+                          Expanded(
+                            child: EmailRegisterButton(
+                              emailTextFieldController:
+                                  emailTextFieldController,
+                              passwordTextFieldController:
+                                  passwordTextFieldController,
+                              textTheme: textTheme,
                             ),
-                          ],
-                        )
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),

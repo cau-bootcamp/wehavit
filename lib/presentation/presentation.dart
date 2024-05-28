@@ -1,9 +1,9 @@
-export 'auth/auth.dart';
-export 'auth/providers/auth_notifier.dart';
-export 'auth/providers/auth_state.dart';
-export 'auth/providers/providers.dart';
-export 'auth/screens/auth_screen.dart';
-export 'auth/screens/screens.dart';
+export 'authentication/auth.dart';
+export 'authentication/providers/auth_notifier.dart';
+export 'authentication/providers/auth_state.dart';
+export 'authentication/providers/providers.dart';
+export 'authentication/view/authentication_view.dart';
+export 'authentication/view/view.dart';
 export 'common_components/common_components.dart';
 export 'common_components/gradient_bottom_sheet.dart';
 export 'common_components/show_toast_message.dart';

@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
-import 'package:wehavit/presentation/auth/auth.dart';
+import 'package:wehavit/presentation/authentication/auth.dart';
 import 'package:wehavit/presentation/effects/effects.dart';
 import 'package:wehavit/presentation/friend_list/friend_list.dart';
 import 'package:wehavit/presentation/group/view/group_view.dart';
@@ -112,7 +112,7 @@ class AuthRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const AuthScreen();
+    return const AuthenticationView();
   }
 }
 
