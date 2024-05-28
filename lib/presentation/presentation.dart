@@ -1,7 +1,7 @@
 export 'authentication/auth.dart';
-export 'authentication/providers/auth_notifier.dart';
-export 'authentication/providers/auth_state.dart';
-export 'authentication/providers/providers.dart';
+export 'authentication/provider/auth_notifier.dart';
+export 'authentication/provider/auth_state.dart';
+export 'authentication/provider/providers.dart';
 export 'authentication/view/authentication_view.dart';
 export 'authentication/view/view.dart';
 export 'common_components/common_components.dart';

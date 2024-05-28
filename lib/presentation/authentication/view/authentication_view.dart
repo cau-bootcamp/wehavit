@@ -1,11 +1,17 @@
+import 'dart:async';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wehavit/presentation/common_components/common_components.dart';
+import 'package:wehavit/presentation/effects/effects.dart';
 
 class AuthenticationView extends HookConsumerWidget {
   const AuthenticationView({super.key});
@@ -19,8 +25,8 @@ class AuthenticationView extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = context.textTheme;
-    final emailTextFieldController = useTextEditingController();
-    final passwordTextFieldController = useTextEditingController();
+    // final emailTextFieldController = useTextEditingController();
+    // final passwordTextFieldController = useTextEditingController();
 
     ref.listen(authProvider, (previous, next) {
       if (next.authResult == AuthResult.success) {
@@ -44,63 +50,37 @@ class AuthenticationView extends HookConsumerWidget {
           Padding(
             padding: Dimensions.kPaddingAllLarge,
             child: SafeArea(
-              child: Container(
-                alignment: Alignment.center,
-                child: SingleChildScrollView(
-                  padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 40.0),
-                        child: Image(
-                          image: AssetImage(
-                            'assets/logo/wehavit_text_image.png',
-                          ),
+              child: Stack(
+                children: [
+                  const AutoEmojiFireworkView(),
+                  const Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        bottom: 100.0,
+                        left: 40,
+                        right: 40,
+                      ),
+                      child: Image(
+                        image: AssetImage(
+                          'assets/logo/wehavit_text_image.png',
                         ),
                       ),
-                      Dimensions.kVerticalSpaceLarge,
-                      AuthField(
-                        hintText: 'Email',
-                        controller: emailTextFieldController,
-                      ),
-                      Dimensions.kVerticalSpaceSmall,
-                      AuthField(
-                        hintText: 'Password',
-                        hasObscureText: true,
-                        controller: passwordTextFieldController,
-                      ),
-                      Dimensions.kVerticalSpaceSmall,
-                      LogInWithGoogleButton(textTheme: textTheme),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Expanded(
-                            child: EmailLogInButton(
-                              emailTextFieldController:
-                                  emailTextFieldController,
-                              passwordTextFieldController:
-                                  passwordTextFieldController,
-                              textTheme: textTheme,
-                            ),
-                          ),
-                          const SizedBox(width: 20),
-                          Expanded(
-                            child: EmailRegisterButton(
-                              emailTextFieldController:
-                                  emailTextFieldController,
-                              passwordTextFieldController:
-                                  passwordTextFieldController,
-                              textTheme: textTheme,
-                            ),
-                          ),
-                        ],
+                    ),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      WideColoredButton(
+                        buttonTitle: '시작하기',
+                        foregroundColor: CustomColors.whBlack,
+                        backgroundColor: CustomColors.whYellow,
+                        onPressed: () {
+                          // view 이동하기
+                        },
                       ),
                     ],
                   ),
-                ),
+                ],
               ),
             ),
           ),
@@ -273,6 +253,83 @@ class AuthField extends HookConsumerWidget {
             width: 3.0,
           ),
         ),
+      ),
+    );
+  }
+}
+
+class AutoEmojiFireworkView extends ConsumerStatefulWidget {
+  const AutoEmojiFireworkView({super.key});
+
+  @override
+  ConsumerState<AutoEmojiFireworkView> createState() =>
+      _AutoEmojiFireworkViewState();
+}
+
+class _AutoEmojiFireworkViewState extends ConsumerState<AutoEmojiFireworkView> {
+  EmojiFireWorkManager emojiFireWorkManager = EmojiFireWorkManager();
+
+  @override
+  void initState() {
+    super.initState();
+
+    addRandomFireworkShoot();
+
+    Timer.periodic(const Duration(seconds: 3), (Timer timer) {
+      setState(() {
+        addRandomFireworkShoot();
+      });
+    });
+  }
+
+  void addRandomFireworkShoot() {
+    List<int> emojiCountList = List.generate(
+      Emojis.emojiList.length,
+      (index) => 0,
+    );
+
+    for (int i = 0; i < 3; i++) {
+      int randomIndex = Random().nextInt(Emojis.emojiList.length);
+      emojiCountList[randomIndex] += 3;
+    }
+
+    emojiFireWorkManager.addFireworkWidget(
+      offset: Offset(
+        50 + Random().nextDouble() * 200,
+        250 + Random().nextDouble() * 200,
+      ),
+      emojiReactionCountList: emojiCountList,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: const BoxConstraints.expand(),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Positioned(
+            top: 100,
+            child: Container(
+              color: Colors.black26,
+            ),
+          ),
+          Container(
+            constraints: const BoxConstraints.expand(),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                IgnorePointer(
+                  child: Stack(
+                    children:
+                        emojiFireWorkManager.fireworkWidgets.values.toList(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
