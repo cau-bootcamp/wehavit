@@ -112,7 +112,7 @@ class AuthRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const AuthenticationView();
+    return const EntranceView();
   }
 }
 

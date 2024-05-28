@@ -2,7 +2,7 @@ export 'authentication/auth.dart';
 export 'authentication/provider/auth_notifier.dart';
 export 'authentication/provider/auth_state.dart';
 export 'authentication/provider/providers.dart';
-export 'authentication/view/authentication_view.dart';
+export 'authentication/view/entrance_view.dart';
 export 'authentication/view/view.dart';
 export 'common_components/common_components.dart';
 export 'common_components/gradient_bottom_sheet.dart';

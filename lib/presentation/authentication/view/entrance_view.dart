@@ -2,29 +2,35 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wehavit/presentation/authentication/auth.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/effects/effects.dart';
 
-class AuthenticationView extends HookConsumerWidget {
-  const AuthenticationView({super.key});
+class EntranceView extends StatefulHookConsumerWidget {
+  const EntranceView({super.key});
 
-  static AuthenticationView builder(
+  static EntranceView builder(
     BuildContext context,
     GoRouterState state,
   ) =>
-      const AuthenticationView();
+      const EntranceView();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final textTheme = context.textTheme;
+  ConsumerState<EntranceView> createState() => _EntranceViewState();
+}
+
+class _EntranceViewState extends ConsumerState<EntranceView> {
+  AutoEmojiFireworkView? fireworkWidget = const AutoEmojiFireworkView();
+
+  @override
+  Widget build(BuildContext context) {
+    // final textTheme = context.textTheme;
     // final emailTextFieldController = useTextEditingController();
     // final passwordTextFieldController = useTextEditingController();
 
@@ -52,7 +58,7 @@ class AuthenticationView extends HookConsumerWidget {
             child: SafeArea(
               child: Stack(
                 children: [
-                  const AutoEmojiFireworkView(),
+                  fireworkWidget ?? Container(),
                   const Center(
                     child: Padding(
                       padding: EdgeInsets.only(
@@ -74,14 +80,122 @@ class AuthenticationView extends HookConsumerWidget {
                         buttonTitle: '시작하기',
                         foregroundColor: CustomColors.whBlack,
                         backgroundColor: CustomColors.whYellow,
-                        onPressed: () {
+                        onPressed: () async {
                           // view 이동하기
+                          setState(() {
+                            fireworkWidget = null;
+                          });
+
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return const LogInView();
+                              },
+                            ),
+                          ).whenComplete(() {
+                            setState(() {
+                              fireworkWidget = const AutoEmojiFireworkView();
+                            });
+                          });
                         },
                       ),
                     ],
                   ),
                 ],
               ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class AutoEmojiFireworkView extends StatefulWidget {
+  const AutoEmojiFireworkView({
+    super.key,
+  });
+
+  @override
+  State<AutoEmojiFireworkView> createState() => _AutoEmojiFireworkViewState();
+}
+
+class _AutoEmojiFireworkViewState extends State<AutoEmojiFireworkView> {
+  EmojiFireWorkManager emojiFireWorkManager = EmojiFireWorkManager();
+  Timer? _timer;
+
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
+      setState(() {
+        addRandomFireworkShoot();
+      });
+    });
+  }
+
+  void _stopTimer() {
+    _timer?.cancel();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    addRandomFireworkShoot();
+    _startTimer();
+  }
+
+  @override
+  void dispose() {
+    _stopTimer();
+    super.dispose();
+  }
+
+  void addRandomFireworkShoot() {
+    List<int> emojiCountList = List.generate(
+      Emojis.emojiList.length,
+      (index) => 0,
+    );
+
+    for (int i = 0; i < 3; i++) {
+      int randomIndex = Random().nextInt(Emojis.emojiList.length);
+      emojiCountList[randomIndex] += 3;
+    }
+
+    emojiFireWorkManager.addFireworkWidget(
+      offset: Offset(
+        50 + Random().nextDouble() * 200,
+        250 + Random().nextDouble() * 200,
+      ),
+      emojiReactionCountList: emojiCountList,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: const BoxConstraints.expand(),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Positioned(
+            top: 100,
+            child: Container(
+              color: Colors.black26,
+            ),
+          ),
+          Container(
+            constraints: const BoxConstraints.expand(),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                IgnorePointer(
+                  child: Stack(
+                    children:
+                        emojiFireWorkManager.fireworkWidgets.values.toList(),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -253,83 +367,6 @@ class AuthField extends HookConsumerWidget {
             width: 3.0,
           ),
         ),
-      ),
-    );
-  }
-}
-
-class AutoEmojiFireworkView extends ConsumerStatefulWidget {
-  const AutoEmojiFireworkView({super.key});
-
-  @override
-  ConsumerState<AutoEmojiFireworkView> createState() =>
-      _AutoEmojiFireworkViewState();
-}
-
-class _AutoEmojiFireworkViewState extends ConsumerState<AutoEmojiFireworkView> {
-  EmojiFireWorkManager emojiFireWorkManager = EmojiFireWorkManager();
-
-  @override
-  void initState() {
-    super.initState();
-
-    addRandomFireworkShoot();
-
-    Timer.periodic(const Duration(seconds: 3), (Timer timer) {
-      setState(() {
-        addRandomFireworkShoot();
-      });
-    });
-  }
-
-  void addRandomFireworkShoot() {
-    List<int> emojiCountList = List.generate(
-      Emojis.emojiList.length,
-      (index) => 0,
-    );
-
-    for (int i = 0; i < 3; i++) {
-      int randomIndex = Random().nextInt(Emojis.emojiList.length);
-      emojiCountList[randomIndex] += 3;
-    }
-
-    emojiFireWorkManager.addFireworkWidget(
-      offset: Offset(
-        50 + Random().nextDouble() * 200,
-        250 + Random().nextDouble() * 200,
-      ),
-      emojiReactionCountList: emojiCountList,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      constraints: const BoxConstraints.expand(),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Positioned(
-            top: 100,
-            child: Container(
-              color: Colors.black26,
-            ),
-          ),
-          Container(
-            constraints: const BoxConstraints.expand(),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                IgnorePointer(
-                  child: Stack(
-                    children:
-                        emojiFireWorkManager.fireworkWidgets.values.toList(),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

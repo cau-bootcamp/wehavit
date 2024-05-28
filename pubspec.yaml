@@ -52,6 +52,7 @@ dependencies:
   http: ^1.2.0
   cp949_dart: ^1.0.0+1
   loading_animation_widget: ^1.2.1
+  visibility_detector: ^0.4.0+2
 
 
 dev_dependencies:
