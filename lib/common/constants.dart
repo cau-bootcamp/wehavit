@@ -24,7 +24,6 @@ class Application {
 
   static String environment = String.fromEnvironment(
     'ENVIRONMENT',
-    defaultValue: Environment.development.toString(),
+    defaultValue: Environment.production.toString(),
   );
 }
-

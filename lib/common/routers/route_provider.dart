@@ -44,7 +44,7 @@ final routerProvider = Provider<GoRouter>(
             debugPrint('Redirect to TestScreen on development');
             return RouteLocation.testPage;
           }
-          return RouteLocation.myPage;
+          return RouteLocation.main;
         }
         return null;
       },
@@ -93,7 +93,7 @@ class SplashRoute extends GoRouteData {
         return RouteLocation.testPage;
       }
 
-      return RouteLocation.myPage;
+      return RouteLocation.main;
     }
     return null;
   }

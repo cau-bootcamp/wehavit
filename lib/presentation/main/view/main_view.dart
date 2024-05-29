@@ -58,7 +58,7 @@ class _MainViewState extends ConsumerState<MainView>
                     onTap: (value) {
                       setState(() {});
                     },
-                    dividerHeight: 0,
+                    // dividerHeight: 0,
                     indicatorColor: Colors.transparent,
                     labelColor: CustomColors.whYellow,
                     controller: tabController,

@@ -36,7 +36,7 @@ class _EntranceViewState extends ConsumerState<EntranceView> {
 
     ref.listen(authProvider, (previous, next) {
       if (next.authResult == AuthResult.success) {
-        context.go(RouteLocation.myPage);
+        context.go(RouteLocation.main);
       } else {
         context.go(RouteLocation.auth);
       }

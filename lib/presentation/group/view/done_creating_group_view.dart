@@ -11,8 +11,11 @@ class DoneCreatingGroupView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
+    return WillPopScope(
+      // canPop: false,
+      onWillPop: () async {
+        return false;
+      },
       child: Scaffold(
         backgroundColor: CustomColors.whDarkBlack,
         appBar: WehavitAppBar(

@@ -1,12 +1,20 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart';
 import 'package:wehavit/common/common.dart';
+import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
+import 'package:wehavit/presentation/entrance/auth.dart';
 
-class LogInView extends StatelessWidget {
+class LogInView extends ConsumerStatefulWidget {
   const LogInView({super.key});
 
+  @override
+  ConsumerState<LogInView> createState() => _LogInViewState();
+}
+
+class _LogInViewState extends ConsumerState<LogInView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,7 +134,16 @@ class LogInView extends StatelessWidget {
                         style: TextButton.styleFrom(
                           padding: const EdgeInsets.all(0),
                         ),
-                        onPressed: () {},
+                        onPressed: () async {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return SignUpAuthDataView();
+                              },
+                            ),
+                          );
+                        },
                         child: Container(
                           alignment: Alignment.center,
                           child: const Text(
@@ -183,10 +200,21 @@ class LogInView extends StatelessWidget {
                           height: 45,
                           decoration: const BoxDecoration(
                             shape: BoxShape.circle,
-                            color: CustomColors.whPlaceholderGrey,
+                            color: CustomColors.whDarkBlack,
                           ),
-                          child: Image.asset(
-                            CustomIconImage.googleLogInLogoIcon,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.transparent,
+                              padding: const EdgeInsets.all(0),
+                            ),
+                            onPressed: () async {
+                              await ref
+                                  .read(authProvider.notifier)
+                                  .googleLogIn();
+                            },
+                            child: Image.asset(
+                              CustomIconImage.googleLogInLogoIcon,
+                            ),
                           ),
                         ),
                         const SizedBox(
