@@ -218,8 +218,15 @@ class SignUpAuthDataView extends StatelessWidget {
   }
 }
 
-class SignUpUserDetailView extends StatelessWidget {
+class SignUpUserDetailView extends StatefulWidget {
   const SignUpUserDetailView({super.key});
+
+  @override
+  State<SignUpUserDetailView> createState() => _SignUpUserDetailViewState();
+}
+
+class _SignUpUserDetailViewState extends State<SignUpUserDetailView> {
+  File? myFile;
 
   @override
   Widget build(BuildContext context) {
@@ -240,13 +247,18 @@ class SignUpUserDetailView extends StatelessWidget {
         child: Column(
           children: [
             TextButton(
+              style: TextButton.styleFrom(
+                overlayColor: CustomColors.whYellow,
+              ),
               onPressed: () async {
                 final picker = ImagePicker();
                 final pickedFile =
                     await picker.pickImage(source: ImageSource.gallery);
 
                 if (pickedFile != null) {
-                  File(pickedFile.path);
+                  setState(() {
+                    myFile = File(pickedFile.path);
+                  });
                 }
               },
               child: Stack(
@@ -257,13 +269,25 @@ class SignUpUserDetailView extends StatelessWidget {
                     height: 85,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: CustomColors.whPlaceholderGrey,
+                      color: CustomColors.whGrey,
                     ),
+                    clipBehavior: Clip.hardEdge,
+                    child: myFile != null
+                        ? Image.file(
+                            myFile!,
+                            fit: BoxFit.cover,
+                          )
+                        : Container(),
                   ),
                   Positioned(
                     bottom: 0,
                     right: -5,
                     child: Container(
+                      child: Icon(
+                        Icons.photo_camera,
+                        color: CustomColors.whBlack,
+                        size: 18.0,
+                      ),
                       width: 25,
                       height: 25,
                       decoration: BoxDecoration(

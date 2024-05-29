@@ -37,16 +37,23 @@ class AuthGoogleDatasourceImpl implements AuthGoogleDatasource {
         oauthCredentials,
       );
 
-      await _usersCollectionRef().doc(result.user?.uid).set({
-        FirebaseUserFieldName.displayName: result.user?.displayName,
-        FirebaseUserFieldName.email: result.user?.email,
-        FirebaseUserFieldName.imageUrl: result.user?.photoURL,
-        FirebaseUserFieldName.createdAt: DateTime.now(),
-        FirebaseUserFieldName.aboutMe: result.user,
-        FirebaseUserFieldName.cumulativeGoals: 0,
-        FirebaseUserFieldName.cumulativePosts: 0,
-        FirebaseUserFieldName.cumulativeReactions: 0,
-      });
+      final isUserAlreadyExist = await _usersCollectionRef()
+          .doc(result.user?.uid)
+          .get()
+          .then((result) => result.exists);
+
+      if (!isUserAlreadyExist) {
+        await _usersCollectionRef().doc(result.user?.uid).set({
+          FirebaseUserFieldName.displayName: result.user?.displayName,
+          FirebaseUserFieldName.email: result.user?.email,
+          FirebaseUserFieldName.imageUrl: result.user?.photoURL,
+          FirebaseUserFieldName.createdAt: DateTime.now(),
+          FirebaseUserFieldName.aboutMe: result.user,
+          FirebaseUserFieldName.cumulativeGoals: 0,
+          FirebaseUserFieldName.cumulativePosts: 0,
+          FirebaseUserFieldName.cumulativeReactions: 0,
+        });
+      }
 
       return AuthResult.success;
     } on FirebaseAuthException {
