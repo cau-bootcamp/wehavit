@@ -1,3 +1,5 @@
+// ignore_for_file: lines_longer_than_80_chars
+
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -55,8 +57,10 @@ class EmojiFireWorkManager {
   final double emojiSize;
 
   // methods
-  void addFireworkWidget(
-      {required Offset offset, required List<int> emojiReactionCountList}) {
+  void addFireworkWidget({
+    required Offset offset,
+    required List<int> emojiReactionCountList,
+  }) {
     final fireworkWidgetKey = UniqueKey();
     fireworkWidgets.addEntries(
       <Key, FireworkWidget>{
@@ -80,6 +84,12 @@ class EmojiFireWorkManager {
         ),
       }.entries,
     );
+  }
+
+  void disposeWidget() {
+    fireworkWidgets.forEach((key, value) {
+      value.notifyWidgetIsDisposed();
+    });
   }
 }
 
@@ -125,7 +135,7 @@ class _FireworkWidgetState extends State<FireworkWidget>
   late List<(String, int)> emojiCountList;
 
   // 3가지 움직임을 위해, 3가지 AnimationController를 선언
-  late final AnimationController emojiAnimationShootController,
+  AnimationController? emojiAnimationShootController,
       emojiAnimationFloatController,
       emojiAnimationLifeTimeController;
 
@@ -153,6 +163,14 @@ class _FireworkWidgetState extends State<FireworkWidget>
     // emojiWidgetList = setEmojis();
 
     startAnimation();
+  }
+
+  @override
+  void dispose() {
+    emojiAnimationShootController?.dispose();
+    emojiAnimationFloatController?.dispose();
+    emojiAnimationLifeTimeController?.dispose();
+    super.dispose();
   }
 
   @override
@@ -214,10 +232,12 @@ extension _FireworkWidgetStateAnimations on _FireworkWidgetState {
       vsync: this,
       duration: _emojiShootDuration,
     );
-    emojiShootAnimation = Tween(begin: 0.0, end: 100.0).animate(CurvedAnimation(
-      parent: emojiAnimationShootController,
-      curve: Curves.easeOutCubic,
-    ));
+    emojiShootAnimation = Tween(begin: 0.0, end: 100.0).animate(
+      CurvedAnimation(
+        parent: emojiAnimationShootController!,
+        curve: Curves.easeOutCubic,
+      ),
+    );
     emojiShootAnimation.addListener(() {
       // ignore: invalid_use_of_protected_member
       setState(() {});
@@ -226,17 +246,18 @@ extension _FireworkWidgetStateAnimations on _FireworkWidgetState {
     // 이모지가 하늘로 날아가는 Animation 관련 값 초기화
     // 가로 움직임과 세로 움직임이 별개이기 때문에, Animation을 X와 Y로 분리하였음
     emojiAnimationFloatController = AnimationController(
-        vsync: this,
-        duration: Duration(seconds: _emojiLifetimeDuration.inSeconds));
+      vsync: this,
+      duration: Duration(seconds: _emojiLifetimeDuration.inSeconds),
+    );
     emojiFloatXAnimation = Tween(begin: 0.0, end: 10.0).animate(
       CurvedAnimation(
-        parent: emojiAnimationFloatController,
+        parent: emojiAnimationFloatController!,
         curve: Curves.linear,
       ),
     );
     emojiFloatYAnimation = Tween(begin: -50.0, end: 2000.0).animate(
       CurvedAnimation(
-        parent: emojiAnimationFloatController,
+        parent: emojiAnimationFloatController!,
         curve: Curves.easeIn,
       ),
     );
@@ -255,7 +276,7 @@ extension _FireworkWidgetStateAnimations on _FireworkWidgetState {
         AnimationController(vsync: this, duration: _emojiLifetimeDuration);
     emojiLifeTimeAnimation = Tween(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
-        parent: emojiAnimationLifeTimeController,
+        parent: emojiAnimationLifeTimeController!,
         curve: Curves.linear,
       ),
     );
@@ -265,9 +286,13 @@ extension _FireworkWidgetStateAnimations on _FireworkWidgetState {
     });
     emojiLifeTimeAnimation.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        emojiAnimationShootController.dispose();
-        emojiAnimationFloatController.dispose();
-        emojiAnimationLifeTimeController.dispose();
+        emojiAnimationShootController?.dispose();
+        emojiAnimationFloatController?.dispose();
+        emojiAnimationLifeTimeController?.dispose();
+
+        emojiAnimationShootController = null;
+        emojiAnimationFloatController = null;
+        emojiAnimationLifeTimeController = null;
 
         widget.notifyWidgetIsDisposed(widget.key);
       }
@@ -275,9 +300,9 @@ extension _FireworkWidgetStateAnimations on _FireworkWidgetState {
   }
 
   void startAnimation() {
-    emojiAnimationShootController.forward(from: 0.0);
-    emojiAnimationFloatController.forward(from: 0.0);
-    emojiAnimationLifeTimeController.forward(from: 0.0);
+    emojiAnimationShootController?.forward(from: 0.0);
+    emojiAnimationFloatController?.forward(from: 0.0);
+    emojiAnimationLifeTimeController?.forward(from: 0.0);
   }
 }
 
@@ -366,8 +391,9 @@ class EmojiWidgetState extends State<EmojiWidget> {
         widget.offset.dy + emojiAnimationShootY + emojiAnimationFloatY;
 
     var emojiScale = sin(
-                (widget.emojiLifeTimeAnimation.value + distinctiveRandomSeed) *
-                    10) *
+              (widget.emojiLifeTimeAnimation.value + distinctiveRandomSeed) *
+                  10,
+            ) *
             emojiSizeDeltaScale +
         1;
     bool isEmojiTransparent =

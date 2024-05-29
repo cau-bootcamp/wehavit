@@ -67,34 +67,28 @@ class _CreateGroupViewState extends ConsumerState<CreateGroupView> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Visibility(
-                visible: provider.isComplete(),
-                replacement: WideColoredButton(
-                  buttonTitle: '그룹 만들기',
-                  backgroundColor: CustomColors.whGrey,
-                ),
-                child: WideColoredButton(
-                  buttonTitle: '그룹 만들기',
-                  foregroundColor: CustomColors.whBlack,
-                  backgroundColor: CustomColors.whYellow,
-                  onPressed: () async {
-                    final groupEntity = await provider.createGroup();
+              child: WideColoredButton(
+                buttonTitle: '그룹 만들기',
+                isDiminished: !provider.isComplete(),
+                foregroundColor: CustomColors.whBlack,
+                backgroundColor: CustomColors.whYellow,
+                onPressed: () async {
+                  final groupEntity = await provider.createGroup();
 
-                    if (groupEntity != null) {
-                      // ignore: use_build_context_synchronously
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return DoneCreatingGroupView(
-                              groupEntity: groupEntity,
-                            );
-                          },
-                        ),
-                      );
-                    }
-                  },
-                ),
+                  if (groupEntity != null) {
+                    // ignore: use_build_context_synchronously
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return DoneCreatingGroupView(
+                            groupEntity: groupEntity,
+                          );
+                        },
+                      ),
+                    );
+                  }
+                },
               ),
             ),
           ],

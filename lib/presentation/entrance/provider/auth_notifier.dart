@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/utils/no_params.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
-import 'package:wehavit/presentation/auth/auth.dart';
+import 'package:wehavit/presentation/entrance/auth.dart';
 
 class AuthNotifier extends StateNotifier<AuthState> {
   AuthNotifier(

@@ -24,7 +24,7 @@ class WideColoredButton extends StatelessWidget {
     if (isDiminished) {
       return ElevatedButton(
         onPressed: () {
-          Navigator.pop(context);
+          // Navigator.pop(context);
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.transparent,

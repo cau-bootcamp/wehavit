@@ -60,7 +60,10 @@ class FriendListScreenState extends ConsumerState<FriendListView> {
           replacement: Column(
             children: [
               ElevatedButton(
-                onPressed: () {},
+                // 수정 필요함!
+                onPressed: () async {
+                  ref.read(authProvider.notifier).logOut();
+                },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16.0),
