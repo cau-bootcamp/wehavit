@@ -67,7 +67,7 @@ class AuthRepositoryImpl implements AuthRepository {
             password: password,
           );
         } catch (e) {
-          return left(Failure(AuthResult.failure.name));
+          return left(Failure(e.toString()));
         }
 
       case LogInType.google:

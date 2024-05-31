@@ -309,3 +309,9 @@ final rejectApplyingForFriendUsecaseProvider =
   final userModelRepository = ref.watch(userModelRepositoryProvider);
   return RejectApplyingForFriendUsecase(userModelRepository);
 });
+
+final signUpWithEmailAndPasswordUsecase =
+    Provider<SignUpWithEmailAndPasswordUsecase>((ref) {
+  final authRepository = ref.watch(authRepositoryProvider);
+  return SignUpWithEmailAndPasswordUsecase(authRepository);
+});

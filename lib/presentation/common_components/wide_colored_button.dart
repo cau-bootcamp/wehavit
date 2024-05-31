@@ -27,7 +27,12 @@ class WideColoredButton extends StatelessWidget {
           // Navigator.pop(context);
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.transparent,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(20.0),
+            ),
+          ),
+          backgroundColor: CustomColors.whGrey,
           shadowColor: Colors.transparent,
           surfaceTintColor: Colors.transparent,
         ),

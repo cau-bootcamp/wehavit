@@ -37,7 +37,7 @@ class AuthWehavitDataSourceImpl implements AuthDataSource {
       );
 
       if (result.user == null) {
-        return left(Failure(AuthResult.failure.name));
+        return left(const Failure("user doesn't created"));
       }
 
       // Email 가입 시에는 displayName과 photoUrl이 없기 때문에 추가해준다.
@@ -50,8 +50,8 @@ class AuthWehavitDataSourceImpl implements AuthDataSource {
       // Firestore에 사용자 정보 저장
 
       return right(AuthResult.success);
-    } on FirebaseAuthException {
-      return left(Failure(AuthResult.failure.name));
+    } on FirebaseAuthException catch (exception) {
+      return left(Failure(exception.code));
     }
   }
 

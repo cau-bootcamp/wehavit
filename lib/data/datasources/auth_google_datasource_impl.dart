@@ -41,8 +41,8 @@ class AuthGoogleDatasourceImpl implements AuthGoogleDatasource {
       );
 
       return right(AuthResult.success);
-    } on FirebaseAuthException {
-      return left(Failure(AuthResult.failure.name));
+    } on FirebaseAuthException catch (exception) {
+      return left(Failure(exception.code));
     }
   }
 

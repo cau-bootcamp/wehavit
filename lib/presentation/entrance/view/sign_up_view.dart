@@ -1,11 +1,15 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/dependency/data/repository_dependency.dart';
+import 'package:wehavit/dependency/domain/usecase_dependency.dart';
+import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
+import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
+import 'package:wehavit/presentation/entrance/entrance.dart';
 
 class SignUpAuthDataView extends ConsumerStatefulWidget {
   const SignUpAuthDataView({super.key});
@@ -17,6 +21,9 @@ class SignUpAuthDataView extends ConsumerStatefulWidget {
 class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
   @override
   Widget build(BuildContext context) {
+    final viewmodel = ref.watch(signUpAuthDataViewModelProvider);
+    final provider = ref.read(signUpAuthDataViewModelProvider.notifier);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: CustomColors.whDarkBlack,
@@ -25,7 +32,6 @@ class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
         leadingTitle: '',
         leadingIcon: Icons.chevron_left,
         leadingAction: () async {
-          print(await ref.read(userModelRepositoryProvider).getMyUserId());
           Navigator.pop(context);
         },
       ),
@@ -49,6 +55,10 @@ class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
                   height: 8.0,
                 ),
                 TextFormField(
+                  controller: viewmodel.emailInputController,
+                  onChanged: (value) {
+                    provider.checkEmailEntered();
+                  },
                   cursorColor: CustomColors.whWhite,
                   textAlignVertical: TextAlignVertical.center,
                   style: const TextStyle(
@@ -97,6 +107,17 @@ class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
                   height: 8.0,
                 ),
                 TextFormField(
+                  controller: viewmodel.passwordInputController,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(
+                      RegExp(r'[0-9a-zA-Z!@#$%^&*(),.?":{}|<>]'),
+                    ),
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      provider.checkPasswordValidity();
+                    });
+                  },
                   cursorColor: CustomColors.whWhite,
                   textAlignVertical: TextAlignVertical.center,
                   style: const TextStyle(
@@ -130,11 +151,15 @@ class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
                 ),
                 Container(
                   padding: const EdgeInsets.only(left: 8),
-                  child: const Text(
-                    '알파벳과 숫자로 구성된 6~18자리 비밀번호같은 느낌',
+                  child: Text(
+                    '6자리 이상의 알파벳, 숫자, 특수문자로 구성',
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
-                      color: CustomColors.whPlaceholderGrey,
+                      color: viewmodel.isPasswordValid != null
+                          ? (viewmodel.isPasswordValid!
+                              ? PointColors.green
+                              : PointColors.red)
+                          : CustomColors.whPlaceholderGrey,
                       fontSize: 14,
                     ),
                   ),
@@ -159,6 +184,15 @@ class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
                   height: 8.0,
                 ),
                 TextFormField(
+                  controller: viewmodel.passwordValidatorInputController,
+                  onChanged: (value) {
+                    setState(() {
+                      provider.matchPasswordAndValidator();
+                      print(viewmodel.isEmailEntered &
+                          (viewmodel.isPasswordValid ?? false) &
+                          viewmodel.isPasswordMatched);
+                    });
+                  },
                   cursorColor: CustomColors.whWhite,
                   textAlignVertical: TextAlignVertical.center,
                   style: const TextStyle(
@@ -192,11 +226,13 @@ class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
                 ),
                 Container(
                   padding: const EdgeInsets.only(left: 8),
-                  child: const Text(
-                    '잘했어요!',
+                  child: Text(
+                    viewmodel.isPasswordMatched ? '일치합니다' : '비밀번호와 일치하지 않습니다',
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
-                      color: PointColors.green,
+                      color: viewmodel.isPasswordMatched
+                          ? PointColors.green
+                          : PointColors.red,
                       fontSize: 14,
                     ),
                   ),
@@ -205,18 +241,77 @@ class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
             ),
             Expanded(child: Container()),
             WideColoredButton(
-              buttonTitle: "다음",
+              isDiminished: !(viewmodel.isEmailEntered &
+                      (viewmodel.isPasswordValid ?? false) &
+                      viewmodel.isPasswordMatched) |
+                  viewmodel.isProcessing,
+              buttonTitle: viewmodel.isProcessing ? '처리 중' : '다음',
               backgroundColor: CustomColors.whYellow,
               foregroundColor: CustomColors.whBlack,
               onPressed: () async {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return SignUpUserDetailView();
-                    },
-                  ),
-                );
+                setState(() {
+                  viewmodel.isProcessing = true;
+                });
+
+                ref
+                    .read(signUpWithEmailAndPasswordUsecase)
+                    .call(
+                      viewmodel.emailInputController.text,
+                      viewmodel.passwordInputController.text,
+                    )
+                    .then((result) {
+                  setState(() {
+                    viewmodel.isProcessing = false;
+                  });
+
+                  return result.fold((failure) {
+                    viewmodel.registerFailReason =
+                        RegisterFailReasonConverter.fromExceptionCode(
+                      failure.message,
+                    );
+
+                    String alertMessage;
+
+                    switch (viewmodel.registerFailReason) {
+                      case RegisterFailReason.emailFormatIsInvalid:
+                        alertMessage = '이메일의 형식이 올바르지 않아요';
+                      case RegisterFailReason.passwordIsWeak:
+                        alertMessage = '비밀번호가 올바르지 않아요';
+                      case RegisterFailReason.emailIsAlreadyTaken:
+                        alertMessage = '이미 사용 중인 이메일이예요';
+                      default:
+                        alertMessage = '잠시 후 다시 시도해주세요';
+                    }
+
+                    showToastMessage(
+                      context,
+                      text: alertMessage,
+                      icon: const Icon(
+                        Icons.warning,
+                        color: CustomColors.whYellow,
+                      ),
+                    );
+
+                    return false;
+                  }, (result) {
+                    if (result == AuthResult.success) {
+                      return true;
+                    }
+
+                    return false;
+                  });
+                }).then((canMoveToNextStep) {
+                  if (canMoveToNextStep) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return const SignUpUserDetailView();
+                        },
+                      ),
+                    );
+                  }
+                });
               },
             ),
           ],

@@ -160,3 +160,8 @@ final mainViewModelProvider =
         (ref) {
   return MainViewModelProvider();
 });
+
+final signUpAuthDataViewModelProvider = StateNotifierProvider.autoDispose<
+    SignUpAuthDataViewModelProvider, SignUpAuthDataViewModel>((ref) {
+  return SignUpAuthDataViewModelProvider();
+});
