@@ -65,13 +65,6 @@ class FirebaseCollectionName {
     return '$groups/$groupId/apply_waiting';
   }
 
-  static String getConfirmPostQuickShotReactionStorageName(
-    String postOwnerUid,
-    String confirmPostId,
-  ) {
-    return '$postOwnerUid/confirm_post/$confirmPostId/_${FirebaseAuth.instance.currentUser!.uid}_${DateTime.now().toIso8601String()}';
-  }
-
   static String getTargetGroupAnnouncemenetCollectionName(String groupId) {
     return '$groups/$groupId/announcements';
   }

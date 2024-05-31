@@ -13,8 +13,71 @@ class AuthRepositoryImpl implements AuthRepository {
     this._googleAuthDataSource,
   );
 
-  final AuthWehavitDataSource _authDataSource;
+  final AuthDataSource _authDataSource;
   final AuthGoogleDatasource _googleAuthDataSource;
+
+  @override
+  EitherFuture<AuthResult> logIn({
+    required LogInType type,
+    String? email,
+    String? password,
+  }) async {
+    switch (type) {
+      case LogInType.wehavit:
+        try {
+          final result = await _authDataSource.logInWithEmailAndPassword(
+            email: email,
+            password: password,
+          );
+
+          return result;
+        } catch (e) {
+          return const Left(Failure('something went wrong'));
+        }
+      case LogInType.google:
+        try {
+          final result = await _googleAuthDataSource.googleLogInAndSignUp();
+          return Right(result);
+        } catch (e) {
+          return const Left(Failure('something went wrong'));
+        }
+      default:
+    }
+
+    return left(Failure(AuthResult.failure.name));
+  }
+
+  @override
+  EitherFuture<AuthResult> signUp({
+    required LogInType type,
+    String? email,
+    String? password,
+  }) async {
+    switch (type) {
+      case LogInType.wehavit:
+        try {
+          final result = await _authDataSource.signUpWithEmailAndPassword(
+            email: email,
+            password: password,
+          );
+
+          return result;
+        } catch (e) {
+          return const Left(Failure('something went wrong'));
+        }
+
+      case LogInType.google:
+        try {
+          final result = await _googleAuthDataSource.googleLogInAndSignUp();
+          return Right(result);
+        } catch (e) {
+          return const Left(Failure('something went wrong'));
+        }
+      default:
+    }
+
+    return left(Failure(AuthResult.failure.name));
+  }
 
   @override
   Stream<User?> authStateChanges() {
@@ -27,56 +90,8 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  EitherFuture<AuthResult> logInWithGoogle() async {
-    try {
-      final result = await _googleAuthDataSource.googleLogIn();
-      return Right(result);
-    } catch (e) {
-      return const Left(Failure('something went wrong'));
-    }
-  }
-
-  @override
   Future<void> logOut() async {
-    return await _authDataSource.logOut();
-  }
-
-  @override
-  Future<void> googleLogOut() async {
-    return await _googleAuthDataSource.googleLogOut();
-  }
-
-  @override
-  EitherFuture<AuthResult> registerWithEmailAndPassword(
-    String email,
-    String password,
-  ) async {
-    try {
-      final result = await _authDataSource.registerWithEmailAndPassword(
-        email,
-        password,
-      );
-
-      return Right(result);
-    } catch (e) {
-      return const Left(Failure('something went wrong'));
-    }
-  }
-
-  @override
-  EitherFuture<AuthResult> logInWithEmailAndPassword(
-    String email,
-    String password,
-  ) async {
-    try {
-      final result = await _authDataSource.logInWithEmailAndPassword(
-        email,
-        password,
-      );
-
-      return Right(result);
-    } catch (e) {
-      return const Left(Failure('something went wrong'));
-    }
+    await _authDataSource.logOut();
+    await _googleAuthDataSource.googleLogOut();
   }
 }

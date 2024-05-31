@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 
@@ -29,5 +31,13 @@ abstract class UserModelRepository {
 
   EitherFuture<List<EitherFuture<UserDataEntity>>> getUserDataListByNickname({
     required String nickname,
+  });
+
+  EitherFuture<void> registerUserData({
+    required String uid,
+    required String name,
+    required File userImageFile,
+    required String aboutMe,
+    required String handle,
   });
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wehavit/common/common.dart';
+import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
@@ -62,7 +63,7 @@ class FriendListScreenState extends ConsumerState<FriendListView> {
               ElevatedButton(
                 // 수정 필요함!
                 onPressed: () async {
-                  ref.read(authProvider.notifier).logOut();
+                  ref.read(logOutUseCaseProvider).call();
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(

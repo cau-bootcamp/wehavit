@@ -53,57 +53,55 @@ class _EntranceViewState extends ConsumerState<EntranceView> {
               image: AssetImage('assets/logo/login_background.png'),
             ),
           ),
-          Padding(
-            padding: Dimensions.kPaddingAllLarge,
-            child: SafeArea(
-              child: Stack(
-                children: [
-                  fireworkWidget ?? Container(),
-                  const Center(
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                        bottom: 100.0,
-                        left: 40,
-                        right: 40,
-                      ),
-                      child: Image(
-                        image: AssetImage(
-                          'assets/logo/wehavit_text_image.png',
-                        ),
+          SafeArea(
+            minimum: EdgeInsets.symmetric(horizontal: 16.0),
+            child: Stack(
+              children: [
+                fireworkWidget ?? Container(),
+                const Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      bottom: 100.0,
+                      left: 40,
+                      right: 40,
+                    ),
+                    child: Image(
+                      image: AssetImage(
+                        'assets/logo/wehavit_text_image.png',
                       ),
                     ),
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      WideColoredButton(
-                        buttonTitle: '시작하기',
-                        foregroundColor: CustomColors.whBlack,
-                        backgroundColor: CustomColors.whYellow,
-                        onPressed: () async {
-                          // view 이동하기
-                          setState(() {
-                            fireworkWidget = null;
-                          });
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    WideColoredButton(
+                      buttonTitle: '시작하기',
+                      foregroundColor: CustomColors.whBlack,
+                      backgroundColor: CustomColors.whYellow,
+                      onPressed: () async {
+                        // view 이동하기
+                        setState(() {
+                          fireworkWidget = null;
+                        });
 
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return const LogInView();
-                              },
-                            ),
-                          ).whenComplete(() {
-                            setState(() {
-                              fireworkWidget = const AutoEmojiFireworkView();
-                            });
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return const LogInView();
+                            },
+                          ),
+                        ).whenComplete(() {
+                          setState(() {
+                            fireworkWidget = const AutoEmojiFireworkView();
                           });
-                        },
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ],

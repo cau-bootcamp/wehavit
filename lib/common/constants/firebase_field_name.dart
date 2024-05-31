@@ -5,7 +5,7 @@ class FirebaseUserFieldName {
   const FirebaseUserFieldName._();
   //users
   static const displayName = 'displayName';
-  static const email = 'email';
+  static const handle = 'handle';
   static const imageUrl = 'imageUrl';
   static const createdAt = 'createdAt';
   static const cumulativeGoals = 'cumulativeGoals';

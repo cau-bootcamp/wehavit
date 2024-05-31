@@ -3,7 +3,6 @@ import 'package:wehavit/data/datasources/datasources.dart';
 import 'package:wehavit/data/repositories/group_repository_impl.dart';
 import 'package:wehavit/data/repositories/repositories.dart';
 import 'package:wehavit/dependency/data/datasource_dependency.dart';
-import 'package:wehavit/domain/repositories/group_repository.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {

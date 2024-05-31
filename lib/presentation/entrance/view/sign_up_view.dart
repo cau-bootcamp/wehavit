@@ -1,13 +1,20 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wehavit/common/common.dart';
+import 'package:wehavit/dependency/data/repository_dependency.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 
-class SignUpAuthDataView extends StatelessWidget {
+class SignUpAuthDataView extends ConsumerStatefulWidget {
   const SignUpAuthDataView({super.key});
 
+  @override
+  ConsumerState<SignUpAuthDataView> createState() => _SignUpAuthDataViewState();
+}
+
+class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +24,8 @@ class SignUpAuthDataView extends StatelessWidget {
         title: '회원가입',
         leadingTitle: '',
         leadingIcon: Icons.chevron_left,
-        leadingAction: () {
+        leadingAction: () async {
+          print(await ref.read(userModelRepositoryProvider).getMyUserId());
           Navigator.pop(context);
         },
       ),

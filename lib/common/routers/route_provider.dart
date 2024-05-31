@@ -23,7 +23,6 @@ final routerProvider = Provider<GoRouter>(
     final authState = ref.watch(authStateChangesProvider);
 
     return GoRouter(
-      initialLocation: RouteLocation.splash,
       navigatorKey: navigationKey,
       debugLogDiagnostics: true,
       routes: $appRoutes,
@@ -34,16 +33,14 @@ final routerProvider = Provider<GoRouter>(
           loading: () => false,
           error: (error, stackTrace) => false,
         );
-        final isLoggingIn = state.matchedLocation == RouteLocation.auth;
 
-        if (!isLoggedIn && !isLoggingIn) return RouteLocation.auth;
-        if (isLoggedIn && isLoggingIn) {
+        if (!isLoggedIn) return RouteLocation.auth;
+        if (isLoggedIn) {
           // Redirect to TestScreen if environment is development
           if (Application.environment == Environment.development.toString()) {
             debugPrint('Redirect to TestScreen on development');
             return RouteLocation.testPage;
           }
-          return RouteLocation.main;
         }
         return null;
       },
@@ -69,33 +66,32 @@ class SplashRoute extends GoRouteData {
 
   static const path = RouteLocation.splash;
 
-  @override
-  FutureOr<String?> redirect(BuildContext context, GoRouterState state) {
-    final authState = ProviderScope.containerOf(context).read(
-      authStateChangesProvider,
-    );
+  // @override
+  // FutureOr<String?> redirect(BuildContext context, GoRouterState state) {
+  //   final authState = ProviderScope.containerOf(context).read(
+  //     authStateChangesProvider,
+  //   );
 
-    final isLoggedIn = authState.when(
-      data: (value) => value != null,
-      loading: () => false,
-      error: (error, stackTrace) => false,
-    );
-    final isLoggingIn = state.matchedLocation == RouteLocation.auth;
-    if (!isLoggedIn && !isLoggingIn) {
-      return RouteLocation.auth;
-    }
+  //   final isLoggedIn = authState.when(
+  //     data: (value) => value != null,
+  //     loading: () => false,
+  //     error: (error, stackTrace) => false,
+  //   );
+  //   final isLoggingIn = state.matchedLocation == RouteLocation.auth;
 
-    if (isLoggedIn) {
-      // Redirect to TestScreen if environment is development
-      if (Application.environment == Environment.development.toString()) {
-        debugPrint('Redirects to TestScreen on development');
-        return RouteLocation.testPage;
-      }
+  //   if (!isLoggedIn && !isLoggingIn) {
+  //     return RouteLocation.auth;
+  //   }
 
-      return RouteLocation.main;
-    }
-    return null;
-  }
+  //   if (isLoggedIn) {
+  //     // Redirect to TestScreen if environment is development
+  //     if (Application.environment == Environment.development.toString()) {
+  //       debugPrint('Redirects to TestScreen on development');
+  //       return RouteLocation.testPage;
+  //     }
+  //   }
+  //   return null;
+  // }
 
   @override
   Widget build(BuildContext context, GoRouterState state) {

@@ -44,13 +44,13 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }
 
   @override
-  EitherFuture<bool> registerFriend(String email) async {
+  EitherFuture<bool> registerFriend(String handle) async {
     try {
       FirebaseFirestore firestore = FirebaseFirestore.instance;
 
       final friendDocument = await firestore
           .collection(FirebaseCollectionName.users)
-          .where(FirebaseUserFieldName.email, isEqualTo: email)
+          .where(FirebaseUserFieldName.handle, isEqualTo: handle)
           .get();
 
       if (friendDocument.size == 0) {
@@ -529,7 +529,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }) async {
     try {
       String storagePath =
-          FirebaseCollectionName.getConfirmPostQuickShotReactionStorageName(
+          FirebaseStorageName.getConfirmPostQuickShotReactionStorageName(
         entity.owner!,
         entity.id!,
       );
@@ -1967,7 +1967,52 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       });
     } on Exception catch (e) {
       return Future.value(
-          left(Failure('catch error on registerFriend : ${e.toString()}')));
+        left(Failure('catch error on registerFriend : ${e.toString()}')),
+      );
     }
+  }
+
+  @override
+  EitherFuture<void> registerUserData({
+    required String uid,
+    required String name,
+    required String handle,
+    required File userImageFile,
+    required String aboutMe,
+  }) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection(
+            FirebaseCollectionName.users,
+          )
+          .doc(uid)
+          .set({
+        FirebaseUserFieldName.displayName: name,
+        FirebaseUserFieldName.handle: handle,
+        FirebaseUserFieldName.imageUrl: 'NO_IMAGE_URL',
+        FirebaseUserFieldName.createdAt: DateTime.now(),
+        FirebaseUserFieldName.aboutMe: '',
+        FirebaseUserFieldName.cumulativeGoals: 0,
+        FirebaseUserFieldName.cumulativePosts: 0,
+        FirebaseUserFieldName.cumulativeReactions: 0,
+      });
+
+      return right(null);
+    } on Exception catch (exception) {
+      return left(Failure(exception.toString()));
+    }
+  }
+
+  EitherFuture<String> uploadUserProfilePhoto({
+    required String userId,
+    required File userImageFile,
+  }) async {
+    String storagePath =
+        FirebaseStorageName.getUserProfilePhotoStorageName(userId);
+    final ref = FirebaseStorage.instance.ref(storagePath);
+
+    await ref.putFile(userImageFile);
+    final downloadUrl = await ref.getDownloadURL();
+    return Future(() => right(downloadUrl));
   }
 }

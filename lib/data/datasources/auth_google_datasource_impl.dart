@@ -1,10 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:wehavit/common/constants.dart';
-import 'package:wehavit/common/constants/firebase_field_name.dart';
-import 'package:wehavit/common/utils/firebase_collection_name.dart';
 import 'package:wehavit/data/datasources/datasources.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 
@@ -14,13 +11,14 @@ final googleAuthDatasourceProvider = Provider<AuthGoogleDatasource>((ref) {
 
 class AuthGoogleDatasourceImpl implements AuthGoogleDatasource {
   @override
-  Future<AuthResult> googleLogIn() async {
+  Future<AuthResult> googleLogInAndSignUp() async {
     final GoogleSignIn googleSignIn = GoogleSignIn(
       scopes: [
         AppKeys.emailScope,
       ],
     );
 
+    // 로그인 통해서 유저 정보 받아옴
     final signInAccount = await googleSignIn.signIn();
     if (signInAccount == null) {
       return AuthResult.aborted;
@@ -33,38 +31,16 @@ class AuthGoogleDatasourceImpl implements AuthGoogleDatasource {
     );
 
     try {
-      final result = await FirebaseAuth.instance.signInWithCredential(
+      // 여기에서 firebase Auth에 사용자 데이터 추가됨
+      // authState 상태 변경까지 진행하는 코드
+      await FirebaseAuth.instance.signInWithCredential(
         oauthCredentials,
       );
-
-      final isUserAlreadyExist = await _usersCollectionRef()
-          .doc(result.user?.uid)
-          .get()
-          .then((result) => result.exists);
-
-      if (!isUserAlreadyExist) {
-        await _usersCollectionRef().doc(result.user?.uid).set({
-          FirebaseUserFieldName.displayName: result.user?.displayName,
-          FirebaseUserFieldName.email: result.user?.email,
-          FirebaseUserFieldName.imageUrl: result.user?.photoURL,
-          FirebaseUserFieldName.createdAt: DateTime.now(),
-          FirebaseUserFieldName.aboutMe: result.user,
-          FirebaseUserFieldName.cumulativeGoals: 0,
-          FirebaseUserFieldName.cumulativePosts: 0,
-          FirebaseUserFieldName.cumulativeReactions: 0,
-        });
-      }
 
       return AuthResult.success;
     } on FirebaseAuthException {
       return AuthResult.failure;
     }
-  }
-
-  CollectionReference _usersCollectionRef() {
-    return FirebaseFirestore.instance.collection(
-      FirebaseCollectionName.users,
-    );
   }
 
   @override

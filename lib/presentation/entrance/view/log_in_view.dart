@@ -6,6 +6,7 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/entrance/auth.dart';
+import 'package:wehavit/presentation/main/view/main_view.dart';
 
 class LogInView extends ConsumerStatefulWidget {
   const LogInView({super.key});
@@ -208,9 +209,33 @@ class _LogInViewState extends ConsumerState<LogInView> {
                               padding: const EdgeInsets.all(0),
                             ),
                             onPressed: () async {
-                              await ref
+                              final bool isLogInSuccess = await ref
                                   .read(authProvider.notifier)
-                                  .googleLogIn();
+                                  .googleLogIn()
+                                  .then((result) {
+                                return result.fold(
+                                  (failure) {
+                                    print("failure");
+                                    print(failure);
+                                    return false;
+                                  },
+                                  (success) {
+                                    print(success);
+                                    return true;
+                                  },
+                                );
+                              });
+
+                              if (isLogInSuccess) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return MainView();
+                                    },
+                                  ),
+                                );
+                              }
                             },
                             child: Image.asset(
                               CustomIconImage.googleLogInLogoIcon,
