@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:wehavit/common/common.dart';
 import 'package:wehavit/common/constants.dart';
 import 'package:wehavit/data/datasources/datasources.dart';
 import 'package:wehavit/domain/entities/entities.dart';
@@ -12,7 +14,7 @@ final googleAuthDatasourceProvider = Provider<AuthGoogleDatasource>((ref) {
 
 class AuthGoogleDatasourceImpl implements AuthGoogleDatasource {
   @override
-  Future<AuthResult> googleLogInAndSignUp() async {
+  EitherFuture<AuthResult> googleLogInAndSignUp() async {
     final GoogleSignIn googleSignIn = GoogleSignIn(
       scopes: [
         AppKeys.emailScope,
@@ -22,10 +24,8 @@ class AuthGoogleDatasourceImpl implements AuthGoogleDatasource {
     // 로그인 통해서 유저 정보 받아옴
     final signInAccount = await googleSignIn.signIn();
     if (signInAccount == null) {
-      return AuthResult.aborted;
+      return left(Failure(AuthResult.aborted.name));
     }
-
-    print(signInAccount);
 
     final googleAuth = await signInAccount.authentication;
     final oauthCredentials = GoogleAuthProvider.credential(
@@ -40,9 +40,9 @@ class AuthGoogleDatasourceImpl implements AuthGoogleDatasource {
         oauthCredentials,
       );
 
-      return AuthResult.success;
+      return right(AuthResult.success);
     } on FirebaseAuthException {
-      return AuthResult.failure;
+      return left(Failure(AuthResult.failure.name));
     }
   }
 
@@ -50,7 +50,5 @@ class AuthGoogleDatasourceImpl implements AuthGoogleDatasource {
   Future<void> googleLogOut() async {
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
-
-    print(FirebaseAuth.instance.currentUser?.uid ?? "no user");
   }
 }

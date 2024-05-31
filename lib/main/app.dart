@@ -5,6 +5,7 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/common/notification/set_firebase_cloud_messaging.dart';
 import 'package:wehavit/common/theme/providers/theme_provider.dart';
 import 'package:wehavit/presentation/entrance/auth.dart';
+import 'package:wehavit/presentation/presentation.dart';
 
 class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
@@ -27,7 +28,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   Widget build(BuildContext context) {
     // final routerConfig = ref.watch(routerProvider);
-    final theme = ref.watch(themeProvider);
+    // final theme = ref.watch(themeProvider);
 
     // return ScreenUtilInit(
     //   designSize: const Size(375, 812),
@@ -44,7 +45,26 @@ class _MyAppState extends ConsumerState<MyApp> {
     // );
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: EntranceView(),
+      home: const EntranceView(),
+      onGenerateRoute: (RouteSettings settings) {
+        WidgetBuilder _builder;
+        switch (settings.name) {
+          case '/main':
+            _builder = (context) => const MainView();
+            break;
+          case '/entrance':
+            _builder = (context) => const EntranceView();
+            break;
+          default:
+            throw Exception("Invalid Route : ${settings.name}");
+        }
+        return PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              _builder(context),
+          transitionDuration: Duration.zero,
+          reverseTransitionDuration: Duration.zero,
+        );
+      },
     );
   }
 }

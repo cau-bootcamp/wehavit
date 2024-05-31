@@ -257,7 +257,6 @@ class _LogInViewState extends ConsumerState<LogInView> {
                                     (failure) => Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        fullscreenDialog: true,
                                         builder: (context) {
                                           return const SignUpUserDetailView();
                                         },

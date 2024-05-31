@@ -65,13 +65,7 @@ class FriendListScreenState extends ConsumerState<FriendListView> {
                 onPressed: () async {
                   await ref.read(logOutUseCaseProvider).call();
                   if (mounted) {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        fullscreenDialog: true,
-                        builder: (context) => const EntranceView(),
-                      ),
-                    );
+                    Navigator.pushReplacementNamed(context, '/entrance');
                   }
                 },
                 style: ElevatedButton.styleFrom(
