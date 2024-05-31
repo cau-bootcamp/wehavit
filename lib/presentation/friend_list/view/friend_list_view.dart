@@ -63,7 +63,16 @@ class FriendListScreenState extends ConsumerState<FriendListView> {
               ElevatedButton(
                 // 수정 필요함!
                 onPressed: () async {
-                  ref.read(logOutUseCaseProvider).call();
+                  await ref.read(logOutUseCaseProvider).call();
+                  if (mounted) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        fullscreenDialog: true,
+                        builder: (context) => const EntranceView(),
+                      ),
+                    );
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(

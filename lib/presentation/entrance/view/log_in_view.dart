@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart';
 import 'package:wehavit/common/common.dart';
+import 'package:wehavit/dependency/data/repository_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
+import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/entrance/auth.dart';
 import 'package:wehavit/presentation/main/view/main_view.dart';
@@ -187,10 +189,19 @@ class _LogInViewState extends ConsumerState<LogInView> {
                           height: 45,
                           decoration: const BoxDecoration(
                             shape: BoxShape.circle,
-                            color: CustomColors.whPlaceholderGrey,
+                            color: CustomColors.whDarkBlack,
                           ),
-                          child: Image.asset(
-                            CustomIconImage.kakaoLogInLogoIcon,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              ref.read(authRepositoryProvider).logOut();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.transparent,
+                              padding: const EdgeInsets.all(0),
+                            ),
+                            child: Image.asset(
+                              CustomIconImage.kakaoLogInLogoIcon,
+                            ),
                           ),
                         ),
                         const SizedBox(
@@ -209,32 +220,62 @@ class _LogInViewState extends ConsumerState<LogInView> {
                               padding: const EdgeInsets.all(0),
                             ),
                             onPressed: () async {
-                              final bool isLogInSuccess = await ref
+                              final String? userId = await ref
                                   .read(authProvider.notifier)
                                   .googleLogIn()
                                   .then((result) {
                                 return result.fold(
                                   (failure) {
-                                    print("failure");
-                                    print(failure);
-                                    return false;
+                                    return null;
                                   },
-                                  (success) {
-                                    print(success);
-                                    return true;
+                                  (authResult) async {
+                                    if (authResult == AuthResult.aborted) {
+                                      return null;
+                                    }
+
+                                    return await ref
+                                        .read(userModelRepositoryProvider)
+                                        .getMyUserId()
+                                        .then((result) {
+                                      return result.fold(
+                                        (failure) => null,
+                                        (uid) => uid,
+                                      );
+                                    });
                                   },
                                 );
                               });
 
-                              if (isLogInSuccess) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return MainView();
-                                    },
-                                  ),
-                                );
+                              print(userId);
+
+                              if (userId != null) {
+                                ref
+                                    .read(userModelRepositoryProvider)
+                                    .getUserDataEntityById(userId)
+                                    .then((result) {
+                                  result.fold(
+                                    (failure) => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        fullscreenDialog: true,
+                                        builder: (context) {
+                                          return const SignUpUserDetailView();
+                                        },
+                                      ),
+                                    ).whenComplete(() {
+                                      ref.read(authRepositoryProvider).logOut();
+                                    }),
+                                    (userData) => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        fullscreenDialog: true,
+                                        builder: (context) {
+                                          return const MainView();
+                                        },
+                                      ),
+                                    ),
+                                  );
+                                });
                               }
                             },
                             child: Image.asset(

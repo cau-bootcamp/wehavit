@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:wehavit/common/constants.dart';
@@ -24,6 +25,8 @@ class AuthGoogleDatasourceImpl implements AuthGoogleDatasource {
       return AuthResult.aborted;
     }
 
+    print(signInAccount);
+
     final googleAuth = await signInAccount.authentication;
     final oauthCredentials = GoogleAuthProvider.credential(
       idToken: googleAuth.idToken,
@@ -47,5 +50,7 @@ class AuthGoogleDatasourceImpl implements AuthGoogleDatasource {
   Future<void> googleLogOut() async {
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
+
+    print(FirebaseAuth.instance.currentUser?.uid ?? "no user");
   }
 }

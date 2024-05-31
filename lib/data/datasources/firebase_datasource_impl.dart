@@ -15,7 +15,6 @@ import 'package:wehavit/domain/entities/entities.dart';
 class FirebaseDatasourceImpl implements WehavitDatasource {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  String? myUid = FirebaseAuth.instance.currentUser?.uid;
   int get maxDay => 27;
 
   @override
@@ -516,10 +515,11 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
 
   @override
   String getMyUserId() {
+    String? myUid = FirebaseAuth.instance.currentUser?.uid;
     if (myUid == null) {
       throw Exception('unable to get firebase user id');
     }
-    return myUid!;
+    return myUid;
   }
 
   @override
@@ -1750,6 +1750,8 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     required UserIncrementalDataType type,
   }) {
     try {
+      final myUid = getMyUserId();
+
       String targetFieldName;
       switch (type) {
         case UserIncrementalDataType.goal:
@@ -1784,6 +1786,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   @override
   EitherFuture<void> updateAboutMe({required String newAboutMe}) {
     try {
+      final myUid = getMyUserId();
       firestore
           .collection(FirebaseCollectionName.users)
           .doc(myUid)
