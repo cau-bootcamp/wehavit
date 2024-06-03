@@ -106,6 +106,8 @@ class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
                 ),
                 TextFormField(
                   controller: viewmodel.passwordInputController,
+                  obscureText: true,
+                  obscuringCharacter: '*',
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(
                       RegExp(r'[0-9a-zA-Z!@#$%^&*(),.?":{}|<>]'),
@@ -183,6 +185,8 @@ class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
                 ),
                 TextFormField(
                   controller: viewmodel.passwordValidatorInputController,
+                  obscureText: true,
+                  obscuringCharacter: '*',
                   onChanged: (value) {
                     setState(() {
                       provider.matchPasswordAndValidator();
@@ -471,6 +475,11 @@ class _SignUpUserDetailViewState extends ConsumerState<SignUpUserDetailView> {
                   },
                   cursorColor: CustomColors.whWhite,
                   textAlignVertical: TextAlignVertical.center,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(
+                      RegExp(r'[0-9a-zA-Z!@#$%^&*(),.?":{}|<>]'),
+                    ),
+                  ],
                   style: const TextStyle(
                     color: CustomColors.whWhite,
                     fontSize: 16.0,

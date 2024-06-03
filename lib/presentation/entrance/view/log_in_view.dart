@@ -98,6 +98,8 @@ class _LogInViewState extends ConsumerState<LogInView> {
                         color: CustomColors.whWhite,
                         fontSize: 16.0,
                       ),
+                      obscureText: true,
+                      obscuringCharacter: '*',
                       decoration: InputDecoration(
                         hintText: '비밀번호',
                         hintStyle: const TextStyle(
