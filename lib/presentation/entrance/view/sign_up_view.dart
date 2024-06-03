@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
@@ -189,9 +188,6 @@ class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
                   onChanged: (value) {
                     setState(() {
                       provider.matchPasswordAndValidator();
-                      print(viewmodel.isEmailEntered &
-                          (viewmodel.isPasswordValid ?? false) &
-                          viewmodel.isPasswordMatched);
                     });
                   },
                   cursorColor: CustomColors.whWhite,
@@ -345,6 +341,7 @@ class _SignUpUserDetailViewState extends ConsumerState<SignUpUserDetailView> {
         leadingIcon: Icons.chevron_left,
         leadingAction: () async {
           await provider.removeUserData();
+          // ignore: use_build_context_synchronously
           Navigator.pop(context);
         },
       ),
@@ -420,6 +417,7 @@ class _SignUpUserDetailViewState extends ConsumerState<SignUpUserDetailView> {
                 TextFormField(
                   onChanged: (value) {
                     provider.setName(value);
+                    setState(() {});
                   },
                   cursorColor: CustomColors.whWhite,
                   textAlignVertical: TextAlignVertical.center,
@@ -471,6 +469,7 @@ class _SignUpUserDetailViewState extends ConsumerState<SignUpUserDetailView> {
                 TextFormField(
                   onChanged: (value) {
                     provider.setHandle(value);
+                    setState(() {});
                   },
                   cursorColor: CustomColors.whWhite,
                   textAlignVertical: TextAlignVertical.center,
@@ -522,6 +521,7 @@ class _SignUpUserDetailViewState extends ConsumerState<SignUpUserDetailView> {
                 TextFormField(
                   onChanged: (value) {
                     provider.setAboutMe(value);
+                    setState(() {});
                   },
                   cursorColor: CustomColors.whWhite,
                   textAlignVertical: TextAlignVertical.center,
@@ -556,6 +556,10 @@ class _SignUpUserDetailViewState extends ConsumerState<SignUpUserDetailView> {
             Expanded(child: Container()),
             WideColoredButton(
               onPressed: () async {
+                setState(() {
+                  viewmodel.isProcessing = true;
+                });
+
                 provider.registerUserData().then(
                       (result) => result.fold(
                         (failure) {
@@ -595,8 +599,15 @@ class _SignUpUserDetailViewState extends ConsumerState<SignUpUserDetailView> {
                         },
                       ),
                     );
+                setState(() {
+                  viewmodel.isProcessing = false;
+                });
               },
-              buttonTitle: '완료',
+              isDiminished:
+                  !((viewmodel.name.isNotEmpty & viewmodel.handle.isNotEmpty) &
+                          (viewmodel.profileImageFile != null)) |
+                      viewmodel.isProcessing,
+              buttonTitle: viewmodel.isProcessing ? '처리 중' : '완료',
               backgroundColor: CustomColors.whYellow,
               foregroundColor: CustomColors.whBlack,
             ),

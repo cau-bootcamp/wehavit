@@ -7,4 +7,6 @@ class SignUpUserDataViewModel {
   String name = '';
   String handle = '';
   String aboutMe = '';
+
+  bool isProcessing = false;
 }
