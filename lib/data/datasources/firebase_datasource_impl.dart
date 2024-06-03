@@ -1984,17 +1984,49 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     required String aboutMe,
   }) async {
     try {
-      await FirebaseFirestore.instance
+      final myUid = getMyUserId();
+
+      final handleAvailable = await firestore
+          .collection(FirebaseCollectionName.users)
+          .where(FirebaseUserFieldName.handle, isEqualTo: handle)
+          .get()
+          .then((result) {
+        if (result.docs.isNotEmpty) {
+          return false;
+        } else {
+          return true;
+        }
+      });
+
+      if (!handleAvailable) {
+        return left(const Failure('handle-already-exist'));
+      }
+
+      final imageUrl = await uploadUserProfilePhoto(
+        userId: uid,
+        userImageFile: userImageFile,
+      ).then(
+        (result) => result.fold(
+          (failure) => null,
+          (imageUrl) => imageUrl,
+        ),
+      );
+
+      if (imageUrl == null) {
+        return left(const Failure('profile-image-upload-fail'));
+      }
+
+      await firestore
           .collection(
             FirebaseCollectionName.users,
           )
-          .doc(uid)
+          .doc(myUid)
           .set({
         FirebaseUserFieldName.displayName: name,
         FirebaseUserFieldName.handle: handle,
-        FirebaseUserFieldName.imageUrl: 'NO_IMAGE_URL',
+        FirebaseUserFieldName.imageUrl: imageUrl,
         FirebaseUserFieldName.createdAt: DateTime.now(),
-        FirebaseUserFieldName.aboutMe: '',
+        FirebaseUserFieldName.aboutMe: aboutMe,
         FirebaseUserFieldName.cumulativeGoals: 0,
         FirebaseUserFieldName.cumulativePosts: 0,
         FirebaseUserFieldName.cumulativeReactions: 0,

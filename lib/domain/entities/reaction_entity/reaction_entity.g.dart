@@ -9,11 +9,11 @@ part of 'reaction_entity.dart';
 _$ReactionEntityImpl _$$ReactionEntityImplFromJson(Map<String, dynamic> json) =>
     _$ReactionEntityImpl(
       complimenterUid: json['complimenterUid'] as String,
-      reactionType: json['reactionType'] as int,
+      reactionType: (json['reactionType'] as num).toInt(),
       quickShotUrl: json['quickShotUrl'] as String? ?? '',
       comment: json['comment'] as String? ?? '',
       emoji: (json['emoji'] as Map<String, dynamic>?)?.map(
-            (k, e) => MapEntry(k, e as int),
+            (k, e) => MapEntry(k, (e as num).toInt()),
           ) ??
           const {},
     );

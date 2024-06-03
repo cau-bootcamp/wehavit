@@ -63,12 +63,18 @@ class ResolutionListViewModelProvider
 
       return Future(() => right(tempDoneCount));
     });
+
     state.futureDoneRatio = Future(() async {
       return state.futureDoneCount!.then(
         (result) => result.fold(
           (failure) => Future(() => left(const Failure(''))),
           (doneCount) => Future(
-            () => right((doneCount / tempTotalCount * 100).round()),
+            () {
+              if (tempTotalCount == 0) {
+                return left(const Failure('total post count of week is 0'));
+              }
+              return right((doneCount / tempTotalCount * 100).round());
+            },
           ),
         ),
       );

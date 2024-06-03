@@ -13,8 +13,8 @@ _$FirebaseResolutionModelImpl _$$FirebaseResolutionModelImplFromJson(
       goalStatement: json['goalStatement'] as String?,
       actionStatement: json['actionStatement'] as String?,
       isActive: json['isActive'] as bool?,
-      colorIndex: json['colorIndex'] as int?,
-      actionPerWeek: json['actionPerWeek'] as int?,
+      colorIndex: (json['colorIndex'] as num?)?.toInt(),
+      actionPerWeek: (json['actionPerWeek'] as num?)?.toInt(),
       startDate: _$JsonConverterFromJson<Timestamp, DateTime>(
           json['startDate'], const TimestampConverter().fromJson),
       shareFriendIdList: (json['shareFriendIdList'] as List<dynamic>?)

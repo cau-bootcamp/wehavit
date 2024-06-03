@@ -9,21 +9,21 @@ part of 'firebase_user_model.dart';
 _$FirebaseUserModelImpl _$$FirebaseUserModelImplFromJson(
         Map<String, dynamic> json) =>
     _$FirebaseUserModelImpl(
-      email: json['email'] as String?,
+      handle: json['handle'] as String?,
       displayName: json['displayName'] as String?,
       imageUrl: json['imageUrl'] as String?,
       aboutMe: json['aboutMe'] as String?,
       createdAt: _$JsonConverterFromJson<Timestamp, DateTime>(
           json['createdAt'], const TimestampConverter().fromJson),
-      cumulativeGoals: json['cumulativeGoals'] as int?,
-      cumulativePosts: json['cumulativePosts'] as int?,
-      cumulativeReactions: json['cumulativeReactions'] as int?,
+      cumulativeGoals: (json['cumulativeGoals'] as num?)?.toInt(),
+      cumulativePosts: (json['cumulativePosts'] as num?)?.toInt(),
+      cumulativeReactions: (json['cumulativeReactions'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$FirebaseUserModelImplToJson(
         _$FirebaseUserModelImpl instance) =>
     <String, dynamic>{
-      'email': instance.email,
+      'handle': instance.handle,
       'displayName': instance.displayName,
       'imageUrl': instance.imageUrl,
       'aboutMe': instance.aboutMe,

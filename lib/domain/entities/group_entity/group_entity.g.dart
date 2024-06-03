@@ -16,7 +16,7 @@ _$GroupEntityImpl _$$GroupEntityImplFromJson(Map<String, dynamic> json) =>
           .map((e) => e as String)
           .toList(),
       groupCreatedAt: DateTime.parse(json['groupCreatedAt'] as String),
-      groupColor: json['groupColor'] as int,
+      groupColor: (json['groupColor'] as num).toInt(),
       groupId: json['groupId'] as String,
     );
 

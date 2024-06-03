@@ -8,7 +8,7 @@ part of 'user_data_entity.dart';
 
 _$UserDataEntityImpl _$$UserDataEntityImplFromJson(Map<String, dynamic> json) =>
     _$UserDataEntityImpl(
-      userEmail: json['userEmail'] as String?,
+      handle: json['handle'] as String?,
       userId: json['userId'] as String?,
       userName: json['userName'] as String?,
       userImageUrl: json['userImageUrl'] as String?,
@@ -16,15 +16,15 @@ _$UserDataEntityImpl _$$UserDataEntityImplFromJson(Map<String, dynamic> json) =>
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),
-      cumulativeGoals: json['cumulativeGoals'] as int?,
-      cumulativePosts: json['cumulativePosts'] as int?,
-      cumulativeReactions: json['cumulativeReactions'] as int?,
+      cumulativeGoals: (json['cumulativeGoals'] as num?)?.toInt(),
+      cumulativePosts: (json['cumulativePosts'] as num?)?.toInt(),
+      cumulativeReactions: (json['cumulativeReactions'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$UserDataEntityImplToJson(
         _$UserDataEntityImpl instance) =>
     <String, dynamic>{
-      'userEmail': instance.userEmail,
+      'handle': instance.handle,
       'userId': instance.userId,
       'userName': instance.userName,
       'userImageUrl': instance.userImageUrl,

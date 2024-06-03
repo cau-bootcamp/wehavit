@@ -10,7 +10,7 @@ _$FirebaseReactionModelImpl _$$FirebaseReactionModelImplFromJson(
         Map<String, dynamic> json) =>
     _$FirebaseReactionModelImpl(
       complimenterUid: json['complimenterUid'] as String,
-      reactionType: json['reactionType'] as int,
+      reactionType: (json['reactionType'] as num).toInt(),
       quickShotUrl: json['quickShotUrl'] as String,
       comment: json['comment'] as String,
       emoji: Map<String, int>.from(json['emoji'] as Map),

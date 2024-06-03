@@ -10,6 +10,7 @@ import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/entrance/entrance.dart';
+import 'package:wehavit/presentation/main/main.dart';
 
 class SignUpAuthDataView extends ConsumerStatefulWidget {
   const SignUpAuthDataView({super.key});
@@ -254,7 +255,7 @@ class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
                 });
 
                 ref
-                    .read(signUpWithEmailAndPasswordUsecase)
+                    .read(signUpWithEmailAndPasswordUsecaseProvider)
                     .call(
                       viewmodel.emailInputController.text,
                       viewmodel.passwordInputController.text,
@@ -321,18 +322,20 @@ class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
   }
 }
 
-class SignUpUserDetailView extends StatefulWidget {
+class SignUpUserDetailView extends ConsumerStatefulWidget {
   const SignUpUserDetailView({super.key});
 
   @override
-  State<SignUpUserDetailView> createState() => _SignUpUserDetailViewState();
+  ConsumerState<SignUpUserDetailView> createState() =>
+      _SignUpUserDetailViewState();
 }
 
-class _SignUpUserDetailViewState extends State<SignUpUserDetailView> {
-  File? myFile;
-
+class _SignUpUserDetailViewState extends ConsumerState<SignUpUserDetailView> {
   @override
   Widget build(BuildContext context) {
+    final viewmodel = ref.watch(signUpUserDataViewModelProvider);
+    final provider = ref.read(signUpUserDataViewModelProvider.notifier);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: CustomColors.whDarkBlack,
@@ -354,15 +357,9 @@ class _SignUpUserDetailViewState extends State<SignUpUserDetailView> {
                 overlayColor: CustomColors.whYellow,
               ),
               onPressed: () async {
-                final picker = ImagePicker();
-                final pickedFile =
-                    await picker.pickImage(source: ImageSource.gallery);
-
-                if (pickedFile != null) {
-                  setState(() {
-                    myFile = File(pickedFile.path);
-                  });
-                }
+                provider.pickProfileImage().whenComplete(
+                      () => setState(() {}),
+                    );
               },
               child: Stack(
                 clipBehavior: Clip.none,
@@ -370,14 +367,14 @@ class _SignUpUserDetailViewState extends State<SignUpUserDetailView> {
                   Container(
                     width: 85,
                     height: 85,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                       color: CustomColors.whGrey,
                     ),
                     clipBehavior: Clip.hardEdge,
-                    child: myFile != null
+                    child: viewmodel.profileImageFile != null
                         ? Image.file(
-                            myFile!,
+                            viewmodel.profileImageFile!,
                             fit: BoxFit.cover,
                           )
                         : Container(),
@@ -386,16 +383,16 @@ class _SignUpUserDetailViewState extends State<SignUpUserDetailView> {
                     bottom: 0,
                     right: -5,
                     child: Container(
-                      child: Icon(
+                      width: 25,
+                      height: 25,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: CustomColors.whWhite,
+                      ),
+                      child: const Icon(
                         Icons.photo_camera,
                         color: CustomColors.whBlack,
                         size: 18.0,
-                      ),
-                      width: 25,
-                      height: 25,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: CustomColors.whWhite,
                       ),
                     ),
                   ),
@@ -420,6 +417,9 @@ class _SignUpUserDetailViewState extends State<SignUpUserDetailView> {
                   height: 8.0,
                 ),
                 TextFormField(
+                  onChanged: (value) {
+                    provider.setName(value);
+                  },
                   cursorColor: CustomColors.whWhite,
                   textAlignVertical: TextAlignVertical.center,
                   style: const TextStyle(
@@ -468,6 +468,9 @@ class _SignUpUserDetailViewState extends State<SignUpUserDetailView> {
                   height: 8.0,
                 ),
                 TextFormField(
+                  onChanged: (value) {
+                    provider.setHandle(value);
+                  },
                   cursorColor: CustomColors.whWhite,
                   textAlignVertical: TextAlignVertical.center,
                   style: const TextStyle(
@@ -516,6 +519,9 @@ class _SignUpUserDetailViewState extends State<SignUpUserDetailView> {
                   height: 8.0,
                 ),
                 TextFormField(
+                  onChanged: (value) {
+                    provider.setAboutMe(value);
+                  },
                   cursorColor: CustomColors.whWhite,
                   textAlignVertical: TextAlignVertical.center,
                   style: const TextStyle(
@@ -548,7 +554,48 @@ class _SignUpUserDetailViewState extends State<SignUpUserDetailView> {
             ),
             Expanded(child: Container()),
             WideColoredButton(
-              buttonTitle: "완료",
+              onPressed: () async {
+                provider.registerUserData().then(
+                      (result) => result.fold(
+                        (failure) {
+                          String toastMessage = '';
+                          switch (failure.message) {
+                            case 'handle-already-exist':
+                              toastMessage = '이미 사용중인 ID예요';
+                              break;
+                            case 'no-image-file':
+                              toastMessage = '프로필 이미지를 업로드해주세요';
+                              break;
+                            case 'no-handle':
+                              toastMessage = '사용자 ID를 업로드해주세요';
+                              break;
+                            default:
+                              toastMessage = '잠시 후 다시 시도해주세요';
+                              break;
+                          }
+
+                          showToastMessage(
+                            context,
+                            text: '이미 사용중인 ID예요',
+                            icon: const Icon(
+                              Icons.not_interested,
+                              color: PointColors.red,
+                            ),
+                          );
+                        },
+                        (success) async {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              fullscreenDialog: true,
+                              builder: (context) => const MainView(),
+                            ),
+                          );
+                        },
+                      ),
+                    );
+              },
+              buttonTitle: '완료',
               backgroundColor: CustomColors.whYellow,
               foregroundColor: CustomColors.whBlack,
             ),

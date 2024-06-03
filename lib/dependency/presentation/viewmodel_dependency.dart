@@ -165,3 +165,10 @@ final signUpAuthDataViewModelProvider = StateNotifierProvider.autoDispose<
     SignUpAuthDataViewModelProvider, SignUpAuthDataViewModel>((ref) {
   return SignUpAuthDataViewModelProvider();
 });
+
+final signUpUserDataViewModelProvider = StateNotifierProvider.autoDispose<
+    SignUpUserDataViewModelProvider, SignUpUserDataViewModel>((ref) {
+  UploadUserDataUsecase uploadUserDataUsecase =
+      ref.watch(uploadUserDataUsecaseProvider);
+  return SignUpUserDataViewModelProvider(uploadUserDataUsecase);
+});
