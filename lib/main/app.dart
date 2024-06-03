@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/common/notification/set_firebase_cloud_messaging.dart';
-import 'package:wehavit/common/theme/providers/theme_provider.dart';
-import 'package:wehavit/presentation/entrance/auth.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 class MyApp extends ConsumerStatefulWidget {
@@ -47,20 +44,20 @@ class _MyAppState extends ConsumerState<MyApp> {
       debugShowCheckedModeBanner: false,
       home: const EntranceView(),
       onGenerateRoute: (RouteSettings settings) {
-        WidgetBuilder _builder;
+        WidgetBuilder builder;
         switch (settings.name) {
           case '/main':
-            _builder = (context) => const MainView();
+            builder = (context) => const MainView();
             break;
           case '/entrance':
-            _builder = (context) => const EntranceView();
+            builder = (context) => const EntranceView();
             break;
           default:
-            throw Exception("Invalid Route : ${settings.name}");
+            throw Exception('Invalid Route : ${settings.name}');
         }
         return PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) =>
-              _builder(context),
+              builder(context),
           transitionDuration: Duration.zero,
           reverseTransitionDuration: Duration.zero,
         );

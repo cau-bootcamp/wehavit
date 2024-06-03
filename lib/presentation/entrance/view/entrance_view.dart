@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,12 +30,11 @@ class _EntranceViewState extends ConsumerState<EntranceView> {
   AutoEmojiFireworkView? fireworkWidget = const AutoEmojiFireworkView();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  bool _isLoggedIn = false;
 
   @override
   void initState() {
     super.initState();
-    checkLoginState();
+    unawaited(checkLoginState());
   }
 
   @override
@@ -131,14 +129,14 @@ class _EntranceViewState extends ConsumerState<EntranceView> {
           Navigator.pushReplacementNamed(context, '/main');
         });
       } else {
-        setState(() {
-          _isLoggedIn = false;
-        });
+        // setState(() {
+        //   _isLoggedIn = false;
+        // });
       }
     } else {
-      setState(() {
-        _isLoggedIn = false;
-      });
+      // setState(() {
+      //   _isLoggedIn = false;
+      // });
     }
   }
 }

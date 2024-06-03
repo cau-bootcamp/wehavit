@@ -1,7 +1,6 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:path/path.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/data/repository_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
@@ -242,7 +241,7 @@ class _LogInViewState extends ConsumerState<LogInView> {
                             color: CustomColors.whDarkBlack,
                           ),
                           child: ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
                               ref.read(authRepositoryProvider).logOut();
                             },
                             style: ElevatedButton.styleFrom(
@@ -345,7 +344,7 @@ class _LogInViewState extends ConsumerState<LogInView> {
                           ),
                         ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),
