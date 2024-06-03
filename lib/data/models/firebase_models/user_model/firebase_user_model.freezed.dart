@@ -12,7 +12,7 @@ part of 'firebase_user_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 FirebaseUserModel _$FirebaseUserModelFromJson(Map<String, dynamic> json) {
   return _FirebaseUserModel.fromJson(json);
@@ -20,7 +20,7 @@ FirebaseUserModel _$FirebaseUserModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$FirebaseUserModel {
-  String? get email => throw _privateConstructorUsedError;
+  String? get handle => throw _privateConstructorUsedError;
   String? get displayName => throw _privateConstructorUsedError;
   String? get imageUrl => throw _privateConstructorUsedError;
   String? get aboutMe => throw _privateConstructorUsedError;
@@ -43,7 +43,7 @@ abstract class $FirebaseUserModelCopyWith<$Res> {
       _$FirebaseUserModelCopyWithImpl<$Res, FirebaseUserModel>;
   @useResult
   $Res call(
-      {String? email,
+      {String? handle,
       String? displayName,
       String? imageUrl,
       String? aboutMe,
@@ -66,7 +66,7 @@ class _$FirebaseUserModelCopyWithImpl<$Res, $Val extends FirebaseUserModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? email = freezed,
+    Object? handle = freezed,
     Object? displayName = freezed,
     Object? imageUrl = freezed,
     Object? aboutMe = freezed,
@@ -76,9 +76,9 @@ class _$FirebaseUserModelCopyWithImpl<$Res, $Val extends FirebaseUserModel>
     Object? cumulativeReactions = freezed,
   }) {
     return _then(_value.copyWith(
-      email: freezed == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
+      handle: freezed == handle
+          ? _value.handle
+          : handle // ignore: cast_nullable_to_non_nullable
               as String?,
       displayName: freezed == displayName
           ? _value.displayName
@@ -121,7 +121,7 @@ abstract class _$$FirebaseUserModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? email,
+      {String? handle,
       String? displayName,
       String? imageUrl,
       String? aboutMe,
@@ -142,7 +142,7 @@ class __$$FirebaseUserModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? email = freezed,
+    Object? handle = freezed,
     Object? displayName = freezed,
     Object? imageUrl = freezed,
     Object? aboutMe = freezed,
@@ -152,9 +152,9 @@ class __$$FirebaseUserModelImplCopyWithImpl<$Res>
     Object? cumulativeReactions = freezed,
   }) {
     return _then(_$FirebaseUserModelImpl(
-      email: freezed == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
+      handle: freezed == handle
+          ? _value.handle
+          : handle // ignore: cast_nullable_to_non_nullable
               as String?,
       displayName: freezed == displayName
           ? _value.displayName
@@ -193,7 +193,7 @@ class __$$FirebaseUserModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$FirebaseUserModelImpl implements _FirebaseUserModel {
   const _$FirebaseUserModelImpl(
-      {this.email,
+      {this.handle,
       this.displayName,
       this.imageUrl,
       this.aboutMe,
@@ -206,7 +206,7 @@ class _$FirebaseUserModelImpl implements _FirebaseUserModel {
       _$$FirebaseUserModelImplFromJson(json);
 
   @override
-  final String? email;
+  final String? handle;
   @override
   final String? displayName;
   @override
@@ -225,7 +225,7 @@ class _$FirebaseUserModelImpl implements _FirebaseUserModel {
 
   @override
   String toString() {
-    return 'FirebaseUserModel(email: $email, displayName: $displayName, imageUrl: $imageUrl, aboutMe: $aboutMe, createdAt: $createdAt, cumulativeGoals: $cumulativeGoals, cumulativePosts: $cumulativePosts, cumulativeReactions: $cumulativeReactions)';
+    return 'FirebaseUserModel(handle: $handle, displayName: $displayName, imageUrl: $imageUrl, aboutMe: $aboutMe, createdAt: $createdAt, cumulativeGoals: $cumulativeGoals, cumulativePosts: $cumulativePosts, cumulativeReactions: $cumulativeReactions)';
   }
 
   @override
@@ -233,7 +233,7 @@ class _$FirebaseUserModelImpl implements _FirebaseUserModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$FirebaseUserModelImpl &&
-            (identical(other.email, email) || other.email == email) &&
+            (identical(other.handle, handle) || other.handle == handle) &&
             (identical(other.displayName, displayName) ||
                 other.displayName == displayName) &&
             (identical(other.imageUrl, imageUrl) ||
@@ -253,7 +253,7 @@ class _$FirebaseUserModelImpl implements _FirebaseUserModel {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      email,
+      handle,
       displayName,
       imageUrl,
       aboutMe,
@@ -279,7 +279,7 @@ class _$FirebaseUserModelImpl implements _FirebaseUserModel {
 
 abstract class _FirebaseUserModel implements FirebaseUserModel {
   const factory _FirebaseUserModel(
-      {final String? email,
+      {final String? handle,
       final String? displayName,
       final String? imageUrl,
       final String? aboutMe,
@@ -292,7 +292,7 @@ abstract class _FirebaseUserModel implements FirebaseUserModel {
       _$FirebaseUserModelImpl.fromJson;
 
   @override
-  String? get email;
+  String? get handle;
   @override
   String? get displayName;
   @override

@@ -13,7 +13,7 @@ _$FirebaseGroupModelImpl _$$FirebaseGroupModelImplFromJson(
       groupDescription: json['groupDescription'] as String,
       groupRule: json['groupRule'] as String,
       groupManagerUid: json['groupManagerUid'] as String,
-      groupColor: json['groupColor'] as int,
+      groupColor: (json['groupColor'] as num).toInt(),
       groupMemberUidList: (json['groupMemberUidList'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),

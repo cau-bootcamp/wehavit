@@ -14,8 +14,8 @@ _$ResolutionEntityImpl _$$ResolutionEntityImplFromJson(
       goalStatement: json['goalStatement'] as String?,
       actionStatement: json['actionStatement'] as String?,
       isActive: json['isActive'] as bool?,
-      actionPerWeek: json['actionPerWeek'] as int?,
-      colorIndex: json['colorIndex'] as int?,
+      actionPerWeek: (json['actionPerWeek'] as num?)?.toInt(),
+      colorIndex: (json['colorIndex'] as num?)?.toInt(),
       startDate: _$JsonConverterFromJson<Timestamp, DateTime>(
           json['startDate'], const TimestampConverter().fromJson),
       shareFriendEntityList: (json['shareFriendEntityList'] as List<dynamic>?)

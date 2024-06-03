@@ -1,16 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wehavit/common/constants/firebase_field_name.dart';
-import 'package:wehavit/common/utils/firebase_collection_name.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:wehavit/common/common.dart';
 import 'package:wehavit/data/datasources/datasources.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 
-final wehavitAuthDatasourceProvider = Provider<AuthWehavitDataSource>((ref) {
+final wehavitAuthDatasourceProvider = Provider<AuthDataSource>((ref) {
   return AuthWehavitDataSourceImpl();
 });
 
-class AuthWehavitDataSourceImpl implements AuthWehavitDataSource {
+class AuthWehavitDataSourceImpl implements AuthDataSource {
   @override
   Stream<User?> authStateChanges() async* {
     yield* FirebaseAuth.instance.authStateChanges();
@@ -21,25 +21,23 @@ class AuthWehavitDataSourceImpl implements AuthWehavitDataSource {
     await FirebaseAuth.instance.signOut();
   }
 
-  CollectionReference _usersCollectionRef() {
-    return FirebaseFirestore.instance.collection(
-      FirebaseCollectionName.users,
-    );
-  }
-
   @override
-  Future<AuthResult> registerWithEmailAndPassword(
-    String email,
-    String password,
-  ) async {
+  EitherFuture<AuthResult> signUpWithEmailAndPassword({
+    String? email,
+    String? password,
+  }) async {
     try {
+      if (email == null || password == null) {
+        return left(Failure(AuthResult.failure.name));
+      }
+
       final result = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
       if (result.user == null) {
-        return AuthResult.failure;
+        return left(const Failure("user doesn't created"));
       }
 
       // Email 가입 시에는 displayName과 photoUrl이 없기 때문에 추가해준다.
@@ -50,56 +48,64 @@ class AuthWehavitDataSourceImpl implements AuthWehavitDataSource {
       await result.user!.updatePhotoURL(photoUrl);
 
       // Firestore에 사용자 정보 저장
-      await _usersCollectionRef().doc(result.user?.uid).set({
-        FirebaseUserFieldName.displayName: name,
-        FirebaseUserFieldName.email: email,
-        FirebaseUserFieldName.imageUrl: photoUrl,
-        FirebaseUserFieldName.createdAt: DateTime.now(),
-        FirebaseUserFieldName.aboutMe: '',
-        FirebaseUserFieldName.cumulativeGoals: 0,
-        FirebaseUserFieldName.cumulativePosts: 0,
-        FirebaseUserFieldName.cumulativeReactions: 0,
-      });
 
-      return AuthResult.success;
-    } on FirebaseAuthException {
-      return AuthResult.failure;
+      return right(AuthResult.success);
+    } on FirebaseAuthException catch (exception) {
+      return left(Failure(exception.code));
     }
   }
 
   @override
-  Future<AuthResult> logInWithEmailAndPassword(
-    String email,
-    String password,
-  ) async {
+  EitherFuture<AuthResult> logInWithEmailAndPassword({
+    String? email,
+    String? password,
+  }) async {
     try {
+      if (email == null || password == null) {
+        return left(Failure(AuthResult.failure.name));
+      }
+
       final result = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
 
       if (result.user == null) {
-        return AuthResult.failure;
+        return left(const Failure('user-not-found'));
       }
 
-      // 혹시라도 없는 경우, 로그인 시 Firestore에 사용자 정보 저장
-      await _usersCollectionRef().doc(result.user?.uid).set(
-        {
-          FirebaseUserFieldName.displayName: email.split('@').first,
-          FirebaseUserFieldName.email: email,
-          FirebaseUserFieldName.imageUrl:
-              result.user!.photoURL ?? 'https://picsum.photos/80',
-          FirebaseUserFieldName.createdAt: DateTime.now(),
-          FirebaseUserFieldName.cumulativeGoals: 0,
-          FirebaseUserFieldName.cumulativePosts: 0,
-          FirebaseUserFieldName.cumulativeReactions: 0,
-        },
-        SetOptions(merge: true),
-      );
-
-      return AuthResult.success;
-    } on FirebaseAuthException {
-      return AuthResult.failure;
+      return right(AuthResult.success);
+    } on FirebaseAuthException catch (e) {
+      return left(Failure(e.code));
     }
+  }
+
+  Future<void> createUserDataInUserCollection({
+    required String uid,
+    String? name,
+    String? email,
+    String? imageUrl,
+  }) async {
+    await FirebaseFirestore.instance
+        .collection(
+          FirebaseCollectionName.users,
+        )
+        .doc(uid)
+        .set({
+      FirebaseUserFieldName.displayName: name ?? 'NO_NAME',
+      FirebaseUserFieldName.imageUrl: 'NO_IMAGE_URL',
+      FirebaseUserFieldName.createdAt: DateTime.now(),
+      FirebaseUserFieldName.aboutMe: '',
+      FirebaseUserFieldName.cumulativeGoals: 0,
+      FirebaseUserFieldName.cumulativePosts: 0,
+      FirebaseUserFieldName.cumulativeReactions: 0,
+    });
+  }
+
+  @override
+  EitherFuture<void> removeCurrentUserData() async {
+    await FirebaseAuth.instance.currentUser?.delete();
+
+    return Future(() => right(null));
   }
 }

@@ -14,29 +14,29 @@ final googleLogOutUseCaseProvider = Provider<GoogleLogOutUseCase>((ref) {
   return GoogleLogOutUseCase(authRepository);
 });
 
-final googleLogInUseCaseProvider = Provider<GoogleLogInUseCase>((ref) {
+final googleLogInUseCaseProvider = Provider<LogInWithGoogleUsecase>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
-  return GoogleLogInUseCase(authRepository);
+  return LogInWithGoogleUsecase(authRepository);
 });
 
 final emailAndPasswordRegisterUseCaseProvider =
-    Provider<EmailAndPasswordRegisterUseCase>((ref) {
+    Provider<SignUpWithEmailAndPasswordUsecase>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
-  return EmailAndPasswordRegisterUseCase(authRepository);
+  return SignUpWithEmailAndPasswordUsecase(authRepository);
 });
 
 final emailAndPasswordLogInUseCaseProvider =
-    Provider<EmailAndPasswordLogInUseCase>((ref) {
+    Provider<LogInWithEmailAndPasswordUsecase>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
-  return EmailAndPasswordLogInUseCase(authRepository);
+  return LogInWithEmailAndPasswordUsecase(authRepository);
 });
 
-final authStateChangesUseCaseProvider = Provider<AuthStateChangesUseCase>(
-  (ref) {
-    final authRepository = ref.watch(authRepositoryProvider);
-    return AuthStateChangesUseCase(authRepository);
-  },
-);
+// final authStateChangesUseCaseProvider = Provider<AuthStateChangesUseCase>(
+//   (ref) {
+//     final authRepository = ref.watch(authRepositoryProvider);
+//     return AuthStateChangesUseCase(authRepository);
+//   },
+// );
 
 final uploadResolutionUsecaseProvider =
     Provider<UploadResolutionUseCase>((ref) {
@@ -308,4 +308,27 @@ final rejectApplyingForFriendUsecaseProvider =
     Provider<RejectApplyingForFriendUsecase>((ref) {
   final userModelRepository = ref.watch(userModelRepositoryProvider);
   return RejectApplyingForFriendUsecase(userModelRepository);
+});
+
+final signUpWithEmailAndPasswordUsecaseProvider =
+    Provider<SignUpWithEmailAndPasswordUsecase>((ref) {
+  final authRepository = ref.watch(authRepositoryProvider);
+  return SignUpWithEmailAndPasswordUsecase(authRepository);
+});
+
+final uploadUserDataUsecaseProvider = Provider<UploadUserDataUsecase>((ref) {
+  final userModelRepository = ref.watch(userModelRepositoryProvider);
+  return UploadUserDataUsecase(userModelRepository);
+});
+
+final removeCurrentUserDataUsecaseProvider =
+    Provider<RemoveCurrentUserDataUsecase>((ref) {
+  final userModelRepository = ref.watch(userModelRepositoryProvider);
+  return RemoveCurrentUserDataUsecase(userModelRepository);
+});
+
+final logInWithEmailAndPasswordUsecaseProvider =
+    Provider<LogInWithEmailAndPasswordUsecase>((ref) {
+  final authRepository = ref.watch(authRepositoryProvider);
+  return LogInWithEmailAndPasswordUsecase(authRepository);
 });

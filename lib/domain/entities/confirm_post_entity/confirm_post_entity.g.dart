@@ -16,7 +16,7 @@ _$ConfirmPostEntityImpl _$$ConfirmPostEntityImplFromJson(
           ?.map((e) => e as String)
           .toList(),
       owner: json['owner'] as String?,
-      recentStrike: json['recentStrike'] as int?,
+      recentStrike: (json['recentStrike'] as num?)?.toInt(),
       createdAt: _$JsonConverterFromJson<Timestamp, DateTime>(
           json['createdAt'], const TimestampConverter().fromJson),
       updatedAt: _$JsonConverterFromJson<Timestamp, DateTime>(

@@ -2,6 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/data/datasources/datasources.dart';
 import 'package:wehavit/domain/entities/entities.dart';
@@ -13,8 +14,74 @@ class AuthRepositoryImpl implements AuthRepository {
     this._googleAuthDataSource,
   );
 
-  final AuthWehavitDataSource _authDataSource;
+  final AuthDataSource _authDataSource;
   final AuthGoogleDatasource _googleAuthDataSource;
+
+  @override
+  EitherFuture<AuthResult> logIn({
+    required LogInType type,
+    String? email,
+    String? password,
+  }) async {
+    EitherFuture<AuthResult> futureResult;
+
+    switch (type) {
+      case LogInType.wehavit:
+        try {
+          futureResult = _authDataSource.logInWithEmailAndPassword(
+            email: email,
+            password: password,
+          );
+        } catch (e) {
+          return left(Failure(AuthResult.failure.name));
+        }
+      case LogInType.google:
+        try {
+          futureResult = _googleAuthDataSource.googleLogInAndSignUp();
+        } catch (e) {
+          return left(Failure(AuthResult.failure.name));
+        }
+      default:
+        return left(Failure(AuthResult.failure.name));
+    }
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isLoggedIn', true);
+
+    return futureResult;
+  }
+
+  @override
+  EitherFuture<AuthResult> signUp({
+    required LogInType type,
+    String? email,
+    String? password,
+  }) async {
+    EitherFuture<AuthResult> futureResult;
+
+    switch (type) {
+      case LogInType.wehavit:
+        try {
+          futureResult = _authDataSource.signUpWithEmailAndPassword(
+            email: email,
+            password: password,
+          );
+        } catch (e) {
+          return left(Failure(e.toString()));
+        }
+
+      case LogInType.google:
+        try {
+          futureResult = _googleAuthDataSource.googleLogInAndSignUp();
+        } catch (e) {
+          return left(Failure(AuthResult.failure.name));
+        }
+      default:
+        return left(Failure(AuthResult.failure.name));
+    }
+
+    return futureResult;
+  }
 
   @override
   Stream<User?> authStateChanges() {
@@ -27,56 +94,11 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  EitherFuture<AuthResult> logInWithGoogle() async {
-    try {
-      final result = await _googleAuthDataSource.googleLogIn();
-      return Right(result);
-    } catch (e) {
-      return const Left(Failure('something went wrong'));
-    }
-  }
-
-  @override
   Future<void> logOut() async {
-    return await _authDataSource.logOut();
-  }
+    await _authDataSource.logOut();
+    await _googleAuthDataSource.googleLogOut();
 
-  @override
-  Future<void> googleLogOut() async {
-    return await _googleAuthDataSource.googleLogOut();
-  }
-
-  @override
-  EitherFuture<AuthResult> registerWithEmailAndPassword(
-    String email,
-    String password,
-  ) async {
-    try {
-      final result = await _authDataSource.registerWithEmailAndPassword(
-        email,
-        password,
-      );
-
-      return Right(result);
-    } catch (e) {
-      return const Left(Failure('something went wrong'));
-    }
-  }
-
-  @override
-  EitherFuture<AuthResult> logInWithEmailAndPassword(
-    String email,
-    String password,
-  ) async {
-    try {
-      final result = await _authDataSource.logInWithEmailAndPassword(
-        email,
-        password,
-      );
-
-      return Right(result);
-    } catch (e) {
-      return const Left(Failure('something went wrong'));
-    }
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isLoggedIn', false);
   }
 }

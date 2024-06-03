@@ -8,7 +8,7 @@ class UserDataEntity with _$UserDataEntity {
   // ignore: invalid_annotation_target
   @JsonSerializable()
   factory UserDataEntity({
-    String? userEmail,
+    String? handle,
     String? userId,
     String? userName,
     String? userImageUrl,
@@ -24,7 +24,7 @@ class UserDataEntity with _$UserDataEntity {
 
   static UserDataEntity dummyModel = UserDataEntity(
     userName: 'dummy user',
-    userEmail: 'dummy@dummy.com',
+    handle: 'dummy@dummy.com',
     userId: '00000000',
     userImageUrl: 'https://www.cau.ac.kr/cau/img/campusinfo/mascot-tab1_01.jpg',
     aboutMe: 'This is me! Hello world!',

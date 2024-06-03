@@ -15,7 +15,6 @@ import 'package:wehavit/domain/entities/entities.dart';
 class FirebaseDatasourceImpl implements WehavitDatasource {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  String? myUid = FirebaseAuth.instance.currentUser?.uid;
   int get maxDay => 27;
 
   @override
@@ -44,13 +43,13 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }
 
   @override
-  EitherFuture<bool> registerFriend(String email) async {
+  EitherFuture<bool> registerFriend(String handle) async {
     try {
       FirebaseFirestore firestore = FirebaseFirestore.instance;
 
       final friendDocument = await firestore
           .collection(FirebaseCollectionName.users)
-          .where(FirebaseUserFieldName.email, isEqualTo: email)
+          .where(FirebaseUserFieldName.handle, isEqualTo: handle)
           .get();
 
       if (friendDocument.size == 0) {
@@ -516,10 +515,11 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
 
   @override
   String getMyUserId() {
+    String? myUid = FirebaseAuth.instance.currentUser?.uid;
     if (myUid == null) {
       throw Exception('unable to get firebase user id');
     }
-    return myUid!;
+    return myUid;
   }
 
   @override
@@ -529,7 +529,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }) async {
     try {
       String storagePath =
-          FirebaseCollectionName.getConfirmPostQuickShotReactionStorageName(
+          FirebaseStorageName.getConfirmPostQuickShotReactionStorageName(
         entity.owner!,
         entity.id!,
       );
@@ -970,7 +970,8 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       if (hasPermission == false) {
         return Future(
           () => left(
-              Failure('User is not the member of group ${entity.groupId}')),
+            Failure('User is not the member of group ${entity.groupId}'),
+          ),
         );
       }
 
@@ -1058,7 +1059,8 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       if (isMemberOfGroup == false) {
         return Future(
           () => left(
-              Failure('User is not the member of group ${entity.groupId}')),
+            Failure('User is not the member of group ${entity.groupId}'),
+          ),
         );
       }
 
@@ -1118,7 +1120,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   ) async {
     try {
       DateTime startDate = getThisMondayDateTime();
-      DateTime endDate = startDate.add(Duration(days: 7));
+      DateTime endDate = startDate.add(const Duration(days: 7));
 
       // 그룹 맴버들에 대해서
       final memberList = (await firestore
@@ -1566,7 +1568,9 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
             .map(
               (groupId) async => await getGroupEntity(groupId: groupId).then(
                 (result) => result.fold(
-                    (failure) => null, (groupEntity) => groupEntity),
+                  (failure) => null,
+                  (groupEntity) => groupEntity,
+                ),
               ),
             )
             .toList(),
@@ -1628,7 +1632,8 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
 
       final querySnapshot = await firestore
           .collection(
-              FirebaseCollectionName.getTargetResolutionCollectionName(userId))
+            FirebaseCollectionName.getTargetResolutionCollectionName(userId),
+          )
           .get();
 
       for (final doc in querySnapshot.docs) {
@@ -1750,6 +1755,8 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     required UserIncrementalDataType type,
   }) {
     try {
+      final myUid = getMyUserId();
+
       String targetFieldName;
       switch (type) {
         case UserIncrementalDataType.goal:
@@ -1784,6 +1791,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   @override
   EitherFuture<void> updateAboutMe({required String newAboutMe}) {
     try {
+      final myUid = getMyUserId();
       firestore
           .collection(FirebaseCollectionName.users)
           .doc(myUid)
@@ -1967,7 +1975,84 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       });
     } on Exception catch (e) {
       return Future.value(
-          left(Failure('catch error on registerFriend : ${e.toString()}')));
+        left(Failure('catch error on registerFriend : ${e.toString()}')),
+      );
     }
+  }
+
+  @override
+  EitherFuture<void> registerUserData({
+    required String uid,
+    required String name,
+    required String handle,
+    required File userImageFile,
+    required String aboutMe,
+  }) async {
+    try {
+      final myUid = getMyUserId();
+
+      final handleAvailable = await firestore
+          .collection(FirebaseCollectionName.users)
+          .where(FirebaseUserFieldName.handle, isEqualTo: handle)
+          .get()
+          .then((result) {
+        if (result.docs.isNotEmpty) {
+          return false;
+        } else {
+          return true;
+        }
+      });
+
+      if (!handleAvailable) {
+        return left(const Failure('handle-already-exist'));
+      }
+
+      final imageUrl = await uploadUserProfilePhoto(
+        userId: uid,
+        userImageFile: userImageFile,
+      ).then(
+        (result) => result.fold(
+          (failure) => null,
+          (imageUrl) => imageUrl,
+        ),
+      );
+
+      if (imageUrl == null) {
+        return left(const Failure('profile-image-upload-fail'));
+      }
+
+      await firestore
+          .collection(
+            FirebaseCollectionName.users,
+          )
+          .doc(myUid)
+          .set({
+        FirebaseUserFieldName.displayName: name,
+        FirebaseUserFieldName.handle: handle,
+        FirebaseUserFieldName.imageUrl: imageUrl,
+        FirebaseUserFieldName.createdAt: DateTime.now(),
+        FirebaseUserFieldName.aboutMe: aboutMe,
+        FirebaseUserFieldName.cumulativeGoals: 0,
+        FirebaseUserFieldName.cumulativePosts: 0,
+        FirebaseUserFieldName.cumulativeReactions: 0,
+      });
+
+      return right(null);
+    } on Exception catch (exception) {
+      return left(Failure(exception.toString()));
+    }
+  }
+
+  EitherFuture<String> uploadUserProfilePhoto({
+    required String userId,
+    required File userImageFile,
+  }) async {
+    String storagePath =
+        FirebaseStorageName.getUserProfilePhotoStorageName(userId);
+    final ref = FirebaseStorage.instance.ref(storagePath);
+
+    await ref.putFile(userImageFile);
+    final downloadUrl = await ref.getDownloadURL();
+    return Future(() => right(downloadUrl));
   }
 }

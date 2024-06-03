@@ -10,7 +10,7 @@ class FirebaseUserModel with _$FirebaseUserModel {
   // ignore: invalid_annotation_target
   @JsonSerializable()
   const factory FirebaseUserModel({
-    String? email,
+    String? handle,
     String? displayName,
     String? imageUrl,
     String? aboutMe,
@@ -36,7 +36,7 @@ extension ConvertFirebaseUserModel on FirebaseUserModel {
     required String userId,
   }) {
     return UserDataEntity(
-      userEmail: email,
+      handle: handle,
       userImageUrl: imageUrl,
       userName: displayName,
       userId: userId,

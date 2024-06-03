@@ -5,7 +5,6 @@ import 'package:wehavit/dependency/data/repository_dependency.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
-import 'package:wehavit/presentation/my_page/model/my_page_view_model.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
@@ -159,4 +158,32 @@ final mainViewModelProvider =
     StateNotifierProvider.autoDispose<MainViewModelProvider, MainViewModel>(
         (ref) {
   return MainViewModelProvider();
+});
+
+final signUpAuthDataViewModelProvider = StateNotifierProvider.autoDispose<
+    SignUpAuthDataViewModelProvider, SignUpAuthDataViewModel>((ref) {
+  return SignUpAuthDataViewModelProvider();
+});
+
+final signUpUserDataViewModelProvider = StateNotifierProvider.autoDispose<
+    SignUpUserDataViewModelProvider, SignUpUserDataViewModel>((ref) {
+  UploadUserDataUsecase uploadUserDataUsecase =
+      ref.watch(uploadUserDataUsecaseProvider);
+  RemoveCurrentUserDataUsecase removeCurrentUserDataUsecase =
+      ref.watch(removeCurrentUserDataUsecaseProvider);
+  LogOutUseCase logOutUseCase = ref.watch(logOutUseCaseProvider);
+  return SignUpUserDataViewModelProvider(
+    uploadUserDataUsecase,
+    removeCurrentUserDataUsecase,
+    logOutUseCase,
+  );
+});
+
+final logInViewModelProvider =
+    StateNotifierProvider.autoDispose<LogInViewModelProvider, LogInViewModel>(
+        (ref) {
+  LogInWithEmailAndPasswordUsecase logInWithEmailAndPasswordUsecase =
+      ref.watch(logInWithEmailAndPasswordUsecaseProvider);
+
+  return LogInViewModelProvider(logInWithEmailAndPasswordUsecase);
 });

@@ -1,11 +1,13 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:path/path.dart';
 import 'package:wehavit/common/common.dart';
+import 'package:wehavit/dependency/data/repository_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
+import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/entrance/auth.dart';
+import 'package:wehavit/presentation/main/view/main_view.dart';
 
 class LogInView extends ConsumerStatefulWidget {
   const LogInView({super.key});
@@ -16,7 +18,18 @@ class LogInView extends ConsumerStatefulWidget {
 
 class _LogInViewState extends ConsumerState<LogInView> {
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    ref.watch(logInViewModelProvider).emailEditingController.clear();
+    ref.watch(logInViewModelProvider).passwordEditingController.clear();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final viewmodel = ref.watch(logInViewModelProvider);
+    final provider = ref.read(logInViewModelProvider.notifier);
+
     return Scaffold(
       backgroundColor: CustomColors.whDarkBlack,
       appBar: WehavitAppBar(
@@ -53,6 +66,7 @@ class _LogInViewState extends ConsumerState<LogInView> {
                       height: 16.0,
                     ),
                     TextFormField(
+                      controller: viewmodel.emailEditingController,
                       cursorColor: CustomColors.whWhite,
                       textAlignVertical: TextAlignVertical.center,
                       style: const TextStyle(
@@ -85,12 +99,15 @@ class _LogInViewState extends ConsumerState<LogInView> {
                       height: 12.0,
                     ),
                     TextFormField(
+                      controller: viewmodel.passwordEditingController,
                       cursorColor: CustomColors.whWhite,
                       textAlignVertical: TextAlignVertical.center,
                       style: const TextStyle(
                         color: CustomColors.whWhite,
                         fontSize: 16.0,
                       ),
+                      obscureText: true,
+                      obscuringCharacter: '*',
                       decoration: InputDecoration(
                         hintText: '비밀번호',
                         hintStyle: const TextStyle(
@@ -118,7 +135,52 @@ class _LogInViewState extends ConsumerState<LogInView> {
                 const SizedBox(
                   height: 40,
                 ),
-                const WideColoredButton(
+                WideColoredButton(
+                  onPressed: () async {
+                    provider.logIn().then((result) {
+                      result.fold(
+                        (failure) {
+                          String toastMessage = '';
+                          switch (failure.message) {
+                            case 'invalid-email':
+                              toastMessage = '이메일의 형식이 올바르지 않아요';
+                              break;
+                            case 'user-disabled':
+                              toastMessage = '비활성화된 계정이예요';
+                              break;
+                            case 'user-not-found':
+                              toastMessage = '사용자 정보를 찾을 수 없어요';
+                              break;
+                            case 'wrong-password':
+                              toastMessage = '비밀번호를 잘못 입력했어요';
+                              break;
+                            case 'invalid-credential':
+                              toastMessage = '비밀번호를 잘못 입력했어요';
+                              break;
+                            default:
+                              toastMessage = '잠시 후 다시 시도해주세요';
+                          }
+                          showToastMessage(
+                            context,
+                            text: toastMessage,
+                            icon: const Icon(
+                              Icons.not_interested,
+                              color: PointColors.red,
+                            ),
+                          );
+                        },
+                        (success) => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            fullscreenDialog: true,
+                            builder: (context) {
+                              return const MainView();
+                            },
+                          ),
+                        ),
+                      );
+                    });
+                  },
                   buttonTitle: '로그인하기',
                   backgroundColor: CustomColors.whYellow,
                   foregroundColor: CustomColors.whBlack,
@@ -139,10 +201,13 @@ class _LogInViewState extends ConsumerState<LogInView> {
                             context,
                             MaterialPageRoute(
                               builder: (context) {
-                                return SignUpAuthDataView();
+                                return const SignUpAuthDataView();
                               },
                             ),
-                          );
+                          ).whenComplete(() {
+                            viewmodel.emailEditingController.clear();
+                            viewmodel.passwordEditingController.clear();
+                          });
                         },
                         child: Container(
                           alignment: Alignment.center,
@@ -186,10 +251,19 @@ class _LogInViewState extends ConsumerState<LogInView> {
                           height: 45,
                           decoration: const BoxDecoration(
                             shape: BoxShape.circle,
-                            color: CustomColors.whPlaceholderGrey,
+                            color: CustomColors.whDarkBlack,
                           ),
-                          child: Image.asset(
-                            CustomIconImage.kakaoLogInLogoIcon,
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              ref.read(authRepositoryProvider).logOut();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.transparent,
+                              padding: const EdgeInsets.all(0),
+                            ),
+                            child: Image.asset(
+                              CustomIconImage.kakaoLogInLogoIcon,
+                            ),
                           ),
                         ),
                         const SizedBox(
@@ -208,9 +282,62 @@ class _LogInViewState extends ConsumerState<LogInView> {
                               padding: const EdgeInsets.all(0),
                             ),
                             onPressed: () async {
-                              await ref
+                              final String? userId = await ref
                                   .read(authProvider.notifier)
-                                  .googleLogIn();
+                                  .googleLogIn()
+                                  .then((result) {
+                                return result.fold(
+                                  (failure) {
+                                    return null;
+                                  },
+                                  (authResult) async {
+                                    if (authResult == AuthResult.aborted) {
+                                      return null;
+                                    }
+
+                                    return await ref
+                                        .read(userModelRepositoryProvider)
+                                        .getMyUserId()
+                                        .then((result) {
+                                      return result.fold(
+                                        (failure) => null,
+                                        (uid) => uid,
+                                      );
+                                    });
+                                  },
+                                );
+                              });
+
+                              if (userId != null) {
+                                ref
+                                    .read(userModelRepositoryProvider)
+                                    .getUserDataEntityById(userId)
+                                    .then((result) {
+                                  result.fold(
+                                    // 기존에 사용자에 대한 데이터가 없는 경우에는
+                                    // 회원가입으로 이동
+                                    (failure) => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          return const SignUpUserDetailView();
+                                        },
+                                      ),
+                                    ),
+                                    // 사용자가 이미 가입을 했으면
+                                    // 메인 뷰로 이동
+                                    (userData) => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        fullscreenDialog: true,
+                                        builder: (context) {
+                                          return const MainView();
+                                        },
+                                      ),
+                                    ),
+                                  );
+                                });
+                              }
                             },
                             child: Image.asset(
                               CustomIconImage.googleLogInLogoIcon,
@@ -232,7 +359,7 @@ class _LogInViewState extends ConsumerState<LogInView> {
                           ),
                         ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),

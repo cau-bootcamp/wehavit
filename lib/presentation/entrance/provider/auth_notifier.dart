@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wehavit/common/utils/no_params.dart';
+import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
-import 'package:wehavit/presentation/entrance/auth.dart';
+import 'package:wehavit/presentation/entrance/entrance.dart';
 
 class AuthNotifier extends StateNotifier<AuthState> {
   AuthNotifier(
@@ -12,30 +12,14 @@ class AuthNotifier extends StateNotifier<AuthState> {
     this._googleLogOut,
     this._logOut,
   ) : super(const AuthState.initial());
-  final GoogleLogInUseCase _googleLogInUseCase;
-  final EmailAndPasswordRegisterUseCase _emailAndPasswordRegisterUseCase;
-  final EmailAndPasswordLogInUseCase _emailAndPasswordLogInUseCase;
+  final LogInWithGoogleUsecase _googleLogInUseCase;
+  final SignUpWithEmailAndPasswordUsecase _emailAndPasswordRegisterUseCase;
+  final LogInWithEmailAndPasswordUsecase _emailAndPasswordLogInUseCase;
   final GoogleLogOutUseCase _googleLogOut;
   final LogOutUseCase _logOut;
 
-  Future<void> googleLogIn() async {
-    state.copyWith(isLoading: true);
-    final result = await _googleLogInUseCase(NoParams());
-    // print('googleLogIn');
-    state = result.fold(
-      (failure) => state.copyWith(
-        isLoading: false,
-        authResult: AuthResult.failure,
-        authType: AuthType.google,
-      ),
-      (authResult) {
-        return state.copyWith(
-          isLoading: false,
-          authResult: authResult,
-          authType: AuthType.google,
-        );
-      },
-    );
+  EitherFuture<AuthResult> googleLogIn() async {
+    return _googleLogInUseCase();
   }
 
   Future<void> emailAndPasswordRegister(String email, String password) async {

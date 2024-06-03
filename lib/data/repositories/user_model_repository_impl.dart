@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/data/datasources/datasources.dart';
@@ -5,9 +7,13 @@ import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
 
 class UserModelRepositoryImpl implements UserModelRepository {
-  UserModelRepositoryImpl(this._wehavitDatasource);
+  UserModelRepositoryImpl(
+    this._wehavitDatasource,
+    this._authDataSource,
+  );
 
   final WehavitDatasource _wehavitDatasource;
+  final AuthDataSource _authDataSource;
 
   @override
   EitherFuture<UserDataEntity> getUserDataEntityById(
@@ -66,5 +72,27 @@ class UserModelRepositoryImpl implements UserModelRepository {
     required String nickname,
   }) async {
     return _wehavitDatasource.getUserDataListByNickname(nickname: nickname);
+  }
+
+  @override
+  EitherFuture<void> registerUserData({
+    required String uid,
+    required String name,
+    required File userImageFile,
+    required String aboutMe,
+    required String handle,
+  }) {
+    return _wehavitDatasource.registerUserData(
+      uid: uid,
+      name: name,
+      userImageFile: userImageFile,
+      aboutMe: aboutMe,
+      handle: handle,
+    );
+  }
+
+  @override
+  EitherFuture<void> removeCurrentUserData() {
+    return _authDataSource.removeCurrentUserData();
   }
 }

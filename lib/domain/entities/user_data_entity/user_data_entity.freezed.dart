@@ -12,7 +12,7 @@ part of 'user_data_entity.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 UserDataEntity _$UserDataEntityFromJson(Map<String, dynamic> json) {
   return _UserDataEntity.fromJson(json);
@@ -20,7 +20,7 @@ UserDataEntity _$UserDataEntityFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$UserDataEntity {
-  String? get userEmail => throw _privateConstructorUsedError;
+  String? get handle => throw _privateConstructorUsedError;
   String? get userId => throw _privateConstructorUsedError;
   String? get userName => throw _privateConstructorUsedError;
   String? get userImageUrl => throw _privateConstructorUsedError;
@@ -43,7 +43,7 @@ abstract class $UserDataEntityCopyWith<$Res> {
       _$UserDataEntityCopyWithImpl<$Res, UserDataEntity>;
   @useResult
   $Res call(
-      {String? userEmail,
+      {String? handle,
       String? userId,
       String? userName,
       String? userImageUrl,
@@ -67,7 +67,7 @@ class _$UserDataEntityCopyWithImpl<$Res, $Val extends UserDataEntity>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? userEmail = freezed,
+    Object? handle = freezed,
     Object? userId = freezed,
     Object? userName = freezed,
     Object? userImageUrl = freezed,
@@ -78,9 +78,9 @@ class _$UserDataEntityCopyWithImpl<$Res, $Val extends UserDataEntity>
     Object? cumulativeReactions = freezed,
   }) {
     return _then(_value.copyWith(
-      userEmail: freezed == userEmail
-          ? _value.userEmail
-          : userEmail // ignore: cast_nullable_to_non_nullable
+      handle: freezed == handle
+          ? _value.handle
+          : handle // ignore: cast_nullable_to_non_nullable
               as String?,
       userId: freezed == userId
           ? _value.userId
@@ -127,7 +127,7 @@ abstract class _$$UserDataEntityImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? userEmail,
+      {String? handle,
       String? userId,
       String? userName,
       String? userImageUrl,
@@ -149,7 +149,7 @@ class __$$UserDataEntityImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? userEmail = freezed,
+    Object? handle = freezed,
     Object? userId = freezed,
     Object? userName = freezed,
     Object? userImageUrl = freezed,
@@ -160,9 +160,9 @@ class __$$UserDataEntityImplCopyWithImpl<$Res>
     Object? cumulativeReactions = freezed,
   }) {
     return _then(_$UserDataEntityImpl(
-      userEmail: freezed == userEmail
-          ? _value.userEmail
-          : userEmail // ignore: cast_nullable_to_non_nullable
+      handle: freezed == handle
+          ? _value.handle
+          : handle // ignore: cast_nullable_to_non_nullable
               as String?,
       userId: freezed == userId
           ? _value.userId
@@ -205,7 +205,7 @@ class __$$UserDataEntityImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$UserDataEntityImpl implements _UserDataEntity {
   _$UserDataEntityImpl(
-      {this.userEmail,
+      {this.handle,
       this.userId,
       this.userName,
       this.userImageUrl,
@@ -219,7 +219,7 @@ class _$UserDataEntityImpl implements _UserDataEntity {
       _$$UserDataEntityImplFromJson(json);
 
   @override
-  final String? userEmail;
+  final String? handle;
   @override
   final String? userId;
   @override
@@ -239,7 +239,7 @@ class _$UserDataEntityImpl implements _UserDataEntity {
 
   @override
   String toString() {
-    return 'UserDataEntity(userEmail: $userEmail, userId: $userId, userName: $userName, userImageUrl: $userImageUrl, aboutMe: $aboutMe, createdAt: $createdAt, cumulativeGoals: $cumulativeGoals, cumulativePosts: $cumulativePosts, cumulativeReactions: $cumulativeReactions)';
+    return 'UserDataEntity(handle: $handle, userId: $userId, userName: $userName, userImageUrl: $userImageUrl, aboutMe: $aboutMe, createdAt: $createdAt, cumulativeGoals: $cumulativeGoals, cumulativePosts: $cumulativePosts, cumulativeReactions: $cumulativeReactions)';
   }
 
   @override
@@ -247,8 +247,7 @@ class _$UserDataEntityImpl implements _UserDataEntity {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$UserDataEntityImpl &&
-            (identical(other.userEmail, userEmail) ||
-                other.userEmail == userEmail) &&
+            (identical(other.handle, handle) || other.handle == handle) &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.userName, userName) ||
                 other.userName == userName) &&
@@ -269,7 +268,7 @@ class _$UserDataEntityImpl implements _UserDataEntity {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      userEmail,
+      handle,
       userId,
       userName,
       userImageUrl,
@@ -296,7 +295,7 @@ class _$UserDataEntityImpl implements _UserDataEntity {
 
 abstract class _UserDataEntity implements UserDataEntity {
   factory _UserDataEntity(
-      {final String? userEmail,
+      {final String? handle,
       final String? userId,
       final String? userName,
       final String? userImageUrl,
@@ -310,7 +309,7 @@ abstract class _UserDataEntity implements UserDataEntity {
       _$UserDataEntityImpl.fromJson;
 
   @override
-  String? get userEmail;
+  String? get handle;
   @override
   String? get userId;
   @override

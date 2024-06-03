@@ -16,6 +16,6 @@ class GoogleLogOutUseCase {
   final AuthRepository _repository;
 
   Future<void> call() async {
-    return await _repository.googleLogOut();
+    return await _repository.logOut();
   }
 }

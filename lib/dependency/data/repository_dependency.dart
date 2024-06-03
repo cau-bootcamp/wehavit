@@ -3,7 +3,6 @@ import 'package:wehavit/data/datasources/datasources.dart';
 import 'package:wehavit/data/repositories/group_repository_impl.dart';
 import 'package:wehavit/data/repositories/repositories.dart';
 import 'package:wehavit/dependency/data/datasource_dependency.dart';
-import 'package:wehavit/domain/repositories/group_repository.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
@@ -48,7 +47,13 @@ final resolutionRepositoryProvider = Provider<ResolutionRepository>((ref) {
 final userModelRepositoryProvider = Provider<UserModelRepository>((ref) {
   final WehavitDatasource wehavitDatasource =
       ref.watch(wehavitDatasourceProvider);
-  return UserModelRepositoryImpl(wehavitDatasource);
+  final AuthDataSource wehavitAuthDatasource =
+      ref.watch(wehavitAuthDatasourceProvider);
+
+  return UserModelRepositoryImpl(
+    wehavitDatasource,
+    wehavitAuthDatasource,
+  );
 });
 
 final groupRepositoryProvider = Provider<GroupRepository>((ref) {
