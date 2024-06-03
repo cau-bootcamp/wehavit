@@ -101,4 +101,11 @@ class AuthWehavitDataSourceImpl implements AuthDataSource {
       FirebaseUserFieldName.cumulativeReactions: 0,
     });
   }
+
+  @override
+  EitherFuture<void> removeCurrentUserData() async {
+    await FirebaseAuth.instance.currentUser?.delete();
+
+    return Future(() => right(null));
+  }
 }

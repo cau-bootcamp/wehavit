@@ -40,4 +40,6 @@ abstract class UserModelRepository {
     required String aboutMe,
     required String handle,
   });
+
+  EitherFuture<void> removeCurrentUserData();
 }

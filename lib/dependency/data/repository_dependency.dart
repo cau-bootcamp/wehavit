@@ -47,7 +47,13 @@ final resolutionRepositoryProvider = Provider<ResolutionRepository>((ref) {
 final userModelRepositoryProvider = Provider<UserModelRepository>((ref) {
   final WehavitDatasource wehavitDatasource =
       ref.watch(wehavitDatasourceProvider);
-  return UserModelRepositoryImpl(wehavitDatasource);
+  final AuthDataSource wehavitAuthDatasource =
+      ref.watch(wehavitAuthDatasourceProvider);
+
+  return UserModelRepositoryImpl(
+    wehavitDatasource,
+    wehavitAuthDatasource,
+  );
 });
 
 final groupRepositoryProvider = Provider<GroupRepository>((ref) {

@@ -11,9 +11,11 @@ class SignUpUserDataViewModelProvider
     extends StateNotifier<SignUpUserDataViewModel> {
   SignUpUserDataViewModelProvider(
     this.uploadUserDataUsecase,
+    this.removeCurrentUserDataUsecase,
   ) : super(SignUpUserDataViewModel());
 
   UploadUserDataUsecase uploadUserDataUsecase;
+  RemoveCurrentUserDataUsecase removeCurrentUserDataUsecase;
 
   Future<void> pickProfileImage() async {
     final picker = ImagePicker();
@@ -56,5 +58,9 @@ class SignUpUserDataViewModelProvider
         (success) => right(null),
       );
     });
+  }
+
+  EitherFuture<void> removeUserData() async {
+    return removeCurrentUserDataUsecase.call();
   }
 }

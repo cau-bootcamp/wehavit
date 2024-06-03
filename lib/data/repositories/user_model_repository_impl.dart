@@ -7,9 +7,13 @@ import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
 
 class UserModelRepositoryImpl implements UserModelRepository {
-  UserModelRepositoryImpl(this._wehavitDatasource);
+  UserModelRepositoryImpl(
+    this._wehavitDatasource,
+    this._authDataSource,
+  );
 
   final WehavitDatasource _wehavitDatasource;
+  final AuthDataSource _authDataSource;
 
   @override
   EitherFuture<UserDataEntity> getUserDataEntityById(
@@ -85,5 +89,10 @@ class UserModelRepositoryImpl implements UserModelRepository {
       aboutMe: aboutMe,
       handle: handle,
     );
+  }
+
+  @override
+  EitherFuture<void> removeCurrentUserData() {
+    return _authDataSource.removeCurrentUserData();
   }
 }

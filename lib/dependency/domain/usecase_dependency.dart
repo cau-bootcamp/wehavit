@@ -320,3 +320,9 @@ final uploadUserDataUsecaseProvider = Provider<UploadUserDataUsecase>((ref) {
   final userModelRepository = ref.watch(userModelRepositoryProvider);
   return UploadUserDataUsecase(userModelRepository);
 });
+
+final removeCurrentUserDataUsecaseProvider =
+    Provider<RemoveCurrentUserDataUsecase>((ref) {
+  final userModelRepository = ref.watch(userModelRepositoryProvider);
+  return RemoveCurrentUserDataUsecase(userModelRepository);
+});

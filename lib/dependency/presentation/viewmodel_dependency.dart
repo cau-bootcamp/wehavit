@@ -170,5 +170,10 @@ final signUpUserDataViewModelProvider = StateNotifierProvider.autoDispose<
     SignUpUserDataViewModelProvider, SignUpUserDataViewModel>((ref) {
   UploadUserDataUsecase uploadUserDataUsecase =
       ref.watch(uploadUserDataUsecaseProvider);
-  return SignUpUserDataViewModelProvider(uploadUserDataUsecase);
+  RemoveCurrentUserDataUsecase removeCurrentUserDataUsecase =
+      ref.watch(removeCurrentUserDataUsecaseProvider);
+  return SignUpUserDataViewModelProvider(
+    uploadUserDataUsecase,
+    removeCurrentUserDataUsecase,
+  );
 });

@@ -343,7 +343,8 @@ class _SignUpUserDetailViewState extends ConsumerState<SignUpUserDetailView> {
         title: '회원가입',
         leadingTitle: '',
         leadingIcon: Icons.chevron_left,
-        leadingAction: () {
+        leadingAction: () async {
+          await provider.removeUserData();
           Navigator.pop(context);
         },
       ),
@@ -576,7 +577,7 @@ class _SignUpUserDetailViewState extends ConsumerState<SignUpUserDetailView> {
 
                           showToastMessage(
                             context,
-                            text: '이미 사용중인 ID예요',
+                            text: toastMessage,
                             icon: const Icon(
                               Icons.not_interested,
                               color: PointColors.red,

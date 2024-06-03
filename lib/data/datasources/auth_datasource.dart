@@ -17,4 +17,6 @@ abstract class AuthDataSource {
   Future<void> logOut();
 
   Stream<User?> authStateChanges();
+
+  EitherFuture<void> removeCurrentUserData();
 }
