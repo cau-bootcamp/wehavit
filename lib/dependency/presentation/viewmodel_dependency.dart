@@ -187,3 +187,8 @@ final logInViewModelProvider =
 
   return LogInViewModelProvider(logInWithEmailAndPasswordUsecase);
 });
+
+final addResolutionViewModelProvider = StateNotifierProvider.autoDispose<
+    AddResolutionViewModelProvider, AddResolutionViewModel>((ref) {
+  return AddResolutionViewModelProvider();
+});
