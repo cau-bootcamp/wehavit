@@ -5,7 +5,6 @@ import 'package:wehavit/dependency/data/repository_dependency.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
-import 'package:wehavit/presentation/my_page/model/my_page_view_model.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
@@ -172,9 +171,11 @@ final signUpUserDataViewModelProvider = StateNotifierProvider.autoDispose<
       ref.watch(uploadUserDataUsecaseProvider);
   RemoveCurrentUserDataUsecase removeCurrentUserDataUsecase =
       ref.watch(removeCurrentUserDataUsecaseProvider);
+  LogOutUseCase logOutUseCase = ref.watch(logOutUseCaseProvider);
   return SignUpUserDataViewModelProvider(
     uploadUserDataUsecase,
     removeCurrentUserDataUsecase,
+    logOutUseCase,
   );
 });
 

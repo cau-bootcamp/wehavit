@@ -314,6 +314,8 @@ class _LogInViewState extends ConsumerState<LogInView> {
                                     .getUserDataEntityById(userId)
                                     .then((result) {
                                   result.fold(
+                                    // 기존에 사용자에 대한 데이터가 없는 경우에는
+                                    // 회원가입으로 이동
                                     (failure) => Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -321,9 +323,9 @@ class _LogInViewState extends ConsumerState<LogInView> {
                                           return const SignUpUserDetailView();
                                         },
                                       ),
-                                    ).whenComplete(() {
-                                      ref.read(authRepositoryProvider).logOut();
-                                    }),
+                                    ),
+                                    // 사용자가 이미 가입을 했으면
+                                    // 메인 뷰로 이동
                                     (userData) => Navigator.push(
                                       context,
                                       MaterialPageRoute(

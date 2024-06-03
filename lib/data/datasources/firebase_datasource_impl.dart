@@ -970,7 +970,8 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       if (hasPermission == false) {
         return Future(
           () => left(
-              Failure('User is not the member of group ${entity.groupId}')),
+            Failure('User is not the member of group ${entity.groupId}'),
+          ),
         );
       }
 
@@ -1058,7 +1059,8 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       if (isMemberOfGroup == false) {
         return Future(
           () => left(
-              Failure('User is not the member of group ${entity.groupId}')),
+            Failure('User is not the member of group ${entity.groupId}'),
+          ),
         );
       }
 
@@ -1118,7 +1120,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   ) async {
     try {
       DateTime startDate = getThisMondayDateTime();
-      DateTime endDate = startDate.add(Duration(days: 7));
+      DateTime endDate = startDate.add(const Duration(days: 7));
 
       // 그룹 맴버들에 대해서
       final memberList = (await firestore
@@ -1566,7 +1568,9 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
             .map(
               (groupId) async => await getGroupEntity(groupId: groupId).then(
                 (result) => result.fold(
-                    (failure) => null, (groupEntity) => groupEntity),
+                  (failure) => null,
+                  (groupEntity) => groupEntity,
+                ),
               ),
             )
             .toList(),
@@ -1628,7 +1632,8 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
 
       final querySnapshot = await firestore
           .collection(
-              FirebaseCollectionName.getTargetResolutionCollectionName(userId))
+            FirebaseCollectionName.getTargetResolutionCollectionName(userId),
+          )
           .get();
 
       for (final doc in querySnapshot.docs) {

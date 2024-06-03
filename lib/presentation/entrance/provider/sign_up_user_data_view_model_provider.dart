@@ -12,10 +12,12 @@ class SignUpUserDataViewModelProvider
   SignUpUserDataViewModelProvider(
     this.uploadUserDataUsecase,
     this.removeCurrentUserDataUsecase,
+    this.logOutUseCase,
   ) : super(SignUpUserDataViewModel());
 
   UploadUserDataUsecase uploadUserDataUsecase;
   RemoveCurrentUserDataUsecase removeCurrentUserDataUsecase;
+  LogOutUseCase logOutUseCase;
 
   Future<void> pickProfileImage() async {
     final picker = ImagePicker();
@@ -62,5 +64,9 @@ class SignUpUserDataViewModelProvider
 
   EitherFuture<void> removeUserData() async {
     return removeCurrentUserDataUsecase.call();
+  }
+
+  Future<void> logOut() {
+    return logOutUseCase.call();
   }
 }
