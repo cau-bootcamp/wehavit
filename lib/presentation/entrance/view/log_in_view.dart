@@ -18,6 +18,14 @@ class LogInView extends ConsumerStatefulWidget {
 
 class _LogInViewState extends ConsumerState<LogInView> {
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    ref.watch(logInViewModelProvider).emailEditingController.clear();
+    ref.watch(logInViewModelProvider).passwordEditingController.clear();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final viewmodel = ref.watch(logInViewModelProvider);
     final provider = ref.read(logInViewModelProvider.notifier);
@@ -196,7 +204,10 @@ class _LogInViewState extends ConsumerState<LogInView> {
                                 return const SignUpAuthDataView();
                               },
                             ),
-                          );
+                          ).whenComplete(() {
+                            viewmodel.emailEditingController.clear();
+                            viewmodel.passwordEditingController.clear();
+                          });
                         },
                         child: Container(
                           alignment: Alignment.center,

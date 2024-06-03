@@ -18,6 +18,18 @@ class SignUpAuthDataView extends ConsumerStatefulWidget {
 
 class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    ref.watch(signUpAuthDataViewModelProvider).emailInputController.clear();
+    ref.watch(signUpAuthDataViewModelProvider).passwordInputController.clear();
+    ref
+        .watch(signUpAuthDataViewModelProvider)
+        .passwordValidatorInputController
+        .clear();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final viewmodel = ref.watch(signUpAuthDataViewModelProvider);
     final provider = ref.read(signUpAuthDataViewModelProvider.notifier);
