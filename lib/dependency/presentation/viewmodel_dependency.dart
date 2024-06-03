@@ -177,3 +177,12 @@ final signUpUserDataViewModelProvider = StateNotifierProvider.autoDispose<
     removeCurrentUserDataUsecase,
   );
 });
+
+final logInViewModelProvider =
+    StateNotifierProvider.autoDispose<LogInViewModelProvider, LogInViewModel>(
+        (ref) {
+  LogInWithEmailAndPasswordUsecase logInWithEmailAndPasswordUsecase =
+      ref.watch(logInWithEmailAndPasswordUsecaseProvider);
+
+  return LogInViewModelProvider(logInWithEmailAndPasswordUsecase);
+});

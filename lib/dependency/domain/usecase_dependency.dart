@@ -326,3 +326,9 @@ final removeCurrentUserDataUsecaseProvider =
   final userModelRepository = ref.watch(userModelRepositoryProvider);
   return RemoveCurrentUserDataUsecase(userModelRepository);
 });
+
+final logInWithEmailAndPasswordUsecaseProvider =
+    Provider<LogInWithEmailAndPasswordUsecase>((ref) {
+  final authRepository = ref.watch(authRepositoryProvider);
+  return LogInWithEmailAndPasswordUsecase(authRepository);
+});

@@ -71,12 +71,12 @@ class AuthWehavitDataSourceImpl implements AuthDataSource {
       );
 
       if (result.user == null) {
-        return left(Failure(AuthResult.failure.name));
+        return left(const Failure('user-not-found'));
       }
 
       return right(AuthResult.success);
-    } on FirebaseAuthException {
-      return left(Failure(AuthResult.failure.name));
+    } on FirebaseAuthException catch (e) {
+      return left(Failure(e.code));
     }
   }
 

@@ -20,6 +20,9 @@ class LogInView extends ConsumerStatefulWidget {
 class _LogInViewState extends ConsumerState<LogInView> {
   @override
   Widget build(BuildContext context) {
+    final viewmodel = ref.watch(logInViewModelProvider);
+    final provider = ref.read(logInViewModelProvider.notifier);
+
     return Scaffold(
       backgroundColor: CustomColors.whDarkBlack,
       appBar: WehavitAppBar(
@@ -56,6 +59,7 @@ class _LogInViewState extends ConsumerState<LogInView> {
                       height: 16.0,
                     ),
                     TextFormField(
+                      controller: viewmodel.emailEditingController,
                       cursorColor: CustomColors.whWhite,
                       textAlignVertical: TextAlignVertical.center,
                       style: const TextStyle(
@@ -88,6 +92,7 @@ class _LogInViewState extends ConsumerState<LogInView> {
                       height: 12.0,
                     ),
                     TextFormField(
+                      controller: viewmodel.passwordEditingController,
                       cursorColor: CustomColors.whWhite,
                       textAlignVertical: TextAlignVertical.center,
                       style: const TextStyle(
@@ -121,7 +126,52 @@ class _LogInViewState extends ConsumerState<LogInView> {
                 const SizedBox(
                   height: 40,
                 ),
-                const WideColoredButton(
+                WideColoredButton(
+                  onPressed: () async {
+                    provider.logIn().then((result) {
+                      result.fold(
+                        (failure) {
+                          String toastMessage = '';
+                          switch (failure.message) {
+                            case 'invalid-email':
+                              toastMessage = '이메일의 형식이 올바르지 않아요';
+                              break;
+                            case 'user-disabled':
+                              toastMessage = '비활성화된 계정이예요';
+                              break;
+                            case 'user-not-found':
+                              toastMessage = '사용자 정보를 찾을 수 없어요';
+                              break;
+                            case 'wrong-password':
+                              toastMessage = '비밀번호를 잘못 입력했어요';
+                              break;
+                            case 'invalid-credential':
+                              toastMessage = '비밀번호를 잘못 입력했어요';
+                              break;
+                            default:
+                              toastMessage = '잠시 후 다시 시도해주세요';
+                          }
+                          showToastMessage(
+                            context,
+                            text: toastMessage,
+                            icon: const Icon(
+                              Icons.not_interested,
+                              color: PointColors.red,
+                            ),
+                          );
+                        },
+                        (success) => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            fullscreenDialog: true,
+                            builder: (context) {
+                              return const MainView();
+                            },
+                          ),
+                        ),
+                      );
+                    });
+                  },
                   buttonTitle: '로그인하기',
                   backgroundColor: CustomColors.whYellow,
                   foregroundColor: CustomColors.whBlack,
@@ -142,7 +192,7 @@ class _LogInViewState extends ConsumerState<LogInView> {
                             context,
                             MaterialPageRoute(
                               builder: (context) {
-                                return SignUpAuthDataView();
+                                return const SignUpAuthDataView();
                               },
                             ),
                           );
@@ -245,8 +295,6 @@ class _LogInViewState extends ConsumerState<LogInView> {
                                   },
                                 );
                               });
-
-                              print(userId);
 
                               if (userId != null) {
                                 ref
