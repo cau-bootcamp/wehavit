@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/presentation.dart';
+import 'package:wehavit/presentation/write_post/view/add_resolution_view.dart';
 
 class ResolutionListView extends ConsumerStatefulWidget {
   const ResolutionListView({super.key});
@@ -95,6 +96,16 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView> {
                   ),
                 ),
               ),
+            ),
+            AddResolutionCellWidget(
+              tapAddResolutionCallback: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AddResolutionView(),
+                  ),
+                );
+              },
             ),
           ],
         ),

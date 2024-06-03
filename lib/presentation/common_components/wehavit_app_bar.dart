@@ -12,6 +12,7 @@ AppBar WehavitAppBar({
   int? trailingIconBadgeCount,
 }) {
   return AppBar(
+    elevation: 0,
     title: Text(
       title,
       style: const TextStyle(
@@ -20,15 +21,15 @@ AppBar WehavitAppBar({
         fontSize: 20,
       ),
     ),
-    centerTitle: false,
-    leadingWidth: leadingTitle != null ? 135 : 0,
+    centerTitle: leadingTitle != null ? true : false,
+    leadingWidth: leadingTitle != null ? 100 : 0,
     leading: Visibility(
       visible: leadingTitle != null,
       child: TextButton.icon(
         style: TextButton.styleFrom(
           padding: const EdgeInsets.only(
-            left: 10,
-          ),
+              // left: 0,
+              ),
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           alignment: Alignment.centerLeft,
         ),
