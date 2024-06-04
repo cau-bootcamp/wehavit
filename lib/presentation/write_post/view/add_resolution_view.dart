@@ -13,9 +13,7 @@ class AddResolutionView extends ConsumerStatefulWidget {
 }
 
 class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
-  FocusNode nameFocusNode = FocusNode();
-  FocusNode goalFocusNode = FocusNode();
-  FocusNode actionFocusNode = FocusNode();
+  List<FocusNode> focuseNodeList = [FocusNode(), FocusNode(), FocusNode()];
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +44,7 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                     ScrollViewKeyboardDismissBehavior.onDrag,
                 children: [
                   Visibility(
+                    maintainState: true,
                     visible: viewmodel.currentStep >= 0,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,7 +64,7 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                           ),
                         ),
                         TextFormField(
-                          focusNode: nameFocusNode,
+                          focusNode: focuseNodeList[0],
                           onChanged: (value) {
                             setState(() {
                               provider.setNameString(value);
@@ -77,6 +76,7 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                             color: CustomColors.whWhite,
                             fontSize: 16.0,
                           ),
+                          autofocus: true,
                           decoration: InputDecoration(
                             hintText: '나의 새로운 도전',
                             hintStyle: const TextStyle(
@@ -106,6 +106,7 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                     ),
                   ),
                   Visibility(
+                    maintainState: true,
                     visible: viewmodel.currentStep >= 1,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,7 +126,7 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                           ),
                         ),
                         TextFormField(
-                          focusNode: goalFocusNode,
+                          focusNode: focuseNodeList[1],
                           onChanged: (value) {
                             setState(() {
                               provider.setGoalString(value);
@@ -166,6 +167,7 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                     ),
                   ),
                   Visibility(
+                    maintainState: true,
                     visible: viewmodel.currentStep >= 2,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,7 +187,7 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                           ),
                         ),
                         TextFormField(
-                          focusNode: actionFocusNode,
+                          focusNode: focuseNodeList[2],
                           onChanged: (value) {
                             setState(() {
                               provider.setActionString(value);
@@ -377,7 +379,20 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                       provider.setFocusedStep(viewmodel.currentStep);
                       provider.checkIsMovableToNextStep();
                     });
+
+                    if (viewmodel.currentStep < 3) {
+                      FocusScope.of(context).requestFocus(
+                        focuseNodeList[viewmodel.currentStep],
+                      );
+                    } else {
+                      focuseNodeList[0].unfocus();
+                      focuseNodeList[1].unfocus();
+                      focuseNodeList[2].unfocus();
+                    }
+
+                    setState(() {});
                   }
+
                   // 모든 데이터 다 채웠음
                   else {
                     // navigate
@@ -407,20 +422,20 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
   void initState() {
     super.initState();
 
-    nameFocusNode.addListener(() => _onFocusChange(nameFocusNode));
-    goalFocusNode.addListener(() => _onFocusChange(goalFocusNode));
-    actionFocusNode.addListener(() => _onFocusChange(actionFocusNode));
+    focuseNodeList[0].addListener(() => _onFocusChange(focuseNodeList[0]));
+    focuseNodeList[1].addListener(() => _onFocusChange(focuseNodeList[1]));
+    focuseNodeList[2].addListener(() => _onFocusChange(focuseNodeList[2]));
   }
 
   @override
   void dispose() {
-    nameFocusNode.removeListener(() => _onFocusChange(nameFocusNode));
-    goalFocusNode.removeListener(() => _onFocusChange(goalFocusNode));
-    actionFocusNode.removeListener(() => _onFocusChange(actionFocusNode));
+    focuseNodeList[0].removeListener(() => _onFocusChange(focuseNodeList[0]));
+    focuseNodeList[1].removeListener(() => _onFocusChange(focuseNodeList[1]));
+    focuseNodeList[2].removeListener(() => _onFocusChange(focuseNodeList[2]));
 
-    nameFocusNode.dispose();
-    goalFocusNode.dispose();
-    actionFocusNode.dispose();
+    focuseNodeList[0].dispose();
+    focuseNodeList[1].dispose();
+    focuseNodeList[2].dispose();
     super.dispose();
   }
 
@@ -433,15 +448,15 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
   void _handleTextFieldTapped(FocusNode focusNode) {
     final provider = ref.read(addResolutionViewModelProvider.notifier);
 
-    if (focusNode == nameFocusNode) {
+    if (focusNode == focuseNodeList[0]) {
       setState(() {
         provider.setFocusedStep(0);
       });
-    } else if (focusNode == goalFocusNode) {
+    } else if (focusNode == focuseNodeList[1]) {
       setState(() {
         provider.setFocusedStep(1);
       });
-    } else if (focusNode == actionFocusNode) {
+    } else if (focusNode == focuseNodeList[2]) {
       setState(() {
         provider.setFocusedStep(2);
       });
