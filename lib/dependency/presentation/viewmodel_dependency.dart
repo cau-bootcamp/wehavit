@@ -197,5 +197,16 @@ final addResolutionViewModelProvider = StateNotifierProvider.autoDispose<
 
 final addResolutionDoneViewModelProvider = StateNotifierProvider.autoDispose<
     AddResolutionDoneViewModelProvider, AddResolutionDoneViewModel>((ref) {
-  return AddResolutionDoneViewModelProvider();
+  GetFriendListUsecase getFriendListUsecase =
+      ref.watch(getFriendListUseCaseProvider);
+  GetGroupListUsecase getGroupListUsecase =
+      ref.watch(getGroupListUseCaseProvider);
+  GetGroupListViewCellWidgetModelUsecase
+      getGroupListViewCellWidgetModelUsecase =
+      ref.watch(getGroupListViewCellWidgetModelUsecaseProvider);
+  return AddResolutionDoneViewModelProvider(
+    getFriendListUsecase,
+    getGroupListUsecase,
+    getGroupListViewCellWidgetModelUsecase,
+  );
 });

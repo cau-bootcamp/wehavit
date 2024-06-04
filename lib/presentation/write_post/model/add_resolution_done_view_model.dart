@@ -16,7 +16,7 @@ class AddResolutionDoneViewModel {
     false,
   ];
 
-  List<GroupListViewCellWidgetModel> groupModelList = [
+  List<GroupListViewCellWidgetModel>? groupModelList = [
     GroupListViewCellWidgetModel.dummyModel,
   ];
 

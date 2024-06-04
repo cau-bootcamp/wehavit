@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
@@ -16,6 +18,18 @@ class AddResolutionDoneView extends ConsumerStatefulWidget {
 }
 
 class _AddResolutionDoneViewState extends ConsumerState<AddResolutionDoneView> {
+  @override
+  void initState() {
+    super.initState();
+
+    unawaited(
+      ref.read(addResolutionDoneViewModelProvider.notifier).loadFriendList(),
+    );
+    unawaited(
+      ref.read(addResolutionDoneViewModelProvider.notifier).loadGroupList(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final viewmodel = ref.watch(addResolutionDoneViewModelProvider);
@@ -279,7 +293,7 @@ class _ShareResolutionToGroupBottomSheetWidgetState
         Expanded(
           child: ListView(
             children: List<Widget>.generate(
-              viewmodel.groupModelList.length,
+              viewmodel.groupModelList?.length ?? 0,
               (index) => Container(
                 margin: const EdgeInsets.only(bottom: 16.0),
                 child: TextButton(
@@ -304,7 +318,7 @@ class _ShareResolutionToGroupBottomSheetWidgetState
                     alignment: Alignment.topRight,
                     children: [
                       GroupListViewCellWidget(
-                        cellModel: viewmodel.groupModelList[index],
+                        cellModel: viewmodel.groupModelList![index],
                       ),
                       Container(
                         margin: const EdgeInsets.only(
