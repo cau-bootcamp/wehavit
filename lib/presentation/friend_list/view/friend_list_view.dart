@@ -115,10 +115,13 @@ class FriendListScreenState extends ConsumerState<FriendListView> {
                         child: ListView.builder(
                           itemCount: viewModel.friendFutureUserList!.length,
                           itemBuilder: (context, index) {
-                            return FriendListCellWidget(
-                              futureUserEntity:
-                                  viewModel.friendFutureUserList![index],
-                              cellState: FriendListCellState.normal,
+                            return Container(
+                              margin: const EdgeInsets.only(bottom: 12),
+                              child: FriendListCellWidget(
+                                futureUserEntity:
+                                    viewModel.friendFutureUserList![index],
+                                cellState: FriendListCellState.normal,
+                              ),
                             );
                           },
                         ),
