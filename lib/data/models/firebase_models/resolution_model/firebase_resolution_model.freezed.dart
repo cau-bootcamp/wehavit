@@ -26,6 +26,7 @@ mixin _$FirebaseResolutionModel {
   String? get actionStatement => throw _privateConstructorUsedError;
   bool? get isActive => throw _privateConstructorUsedError;
   int? get colorIndex => throw _privateConstructorUsedError;
+  int? get iconIndex => throw _privateConstructorUsedError;
   int? get actionPerWeek => throw _privateConstructorUsedError;
   @TimestampConverter()
   DateTime? get startDate => throw _privateConstructorUsedError;
@@ -50,6 +51,7 @@ abstract class $FirebaseResolutionModelCopyWith<$Res> {
       String? actionStatement,
       bool? isActive,
       int? colorIndex,
+      int? iconIndex,
       int? actionPerWeek,
       @TimestampConverter() DateTime? startDate,
       List<String>? shareFriendIdList,
@@ -75,6 +77,7 @@ class _$FirebaseResolutionModelCopyWithImpl<$Res,
     Object? actionStatement = freezed,
     Object? isActive = freezed,
     Object? colorIndex = freezed,
+    Object? iconIndex = freezed,
     Object? actionPerWeek = freezed,
     Object? startDate = freezed,
     Object? shareFriendIdList = freezed,
@@ -100,6 +103,10 @@ class _$FirebaseResolutionModelCopyWithImpl<$Res,
       colorIndex: freezed == colorIndex
           ? _value.colorIndex
           : colorIndex // ignore: cast_nullable_to_non_nullable
+              as int?,
+      iconIndex: freezed == iconIndex
+          ? _value.iconIndex
+          : iconIndex // ignore: cast_nullable_to_non_nullable
               as int?,
       actionPerWeek: freezed == actionPerWeek
           ? _value.actionPerWeek
@@ -136,6 +143,7 @@ abstract class _$$FirebaseResolutionModelImplCopyWith<$Res>
       String? actionStatement,
       bool? isActive,
       int? colorIndex,
+      int? iconIndex,
       int? actionPerWeek,
       @TimestampConverter() DateTime? startDate,
       List<String>? shareFriendIdList,
@@ -160,6 +168,7 @@ class __$$FirebaseResolutionModelImplCopyWithImpl<$Res>
     Object? actionStatement = freezed,
     Object? isActive = freezed,
     Object? colorIndex = freezed,
+    Object? iconIndex = freezed,
     Object? actionPerWeek = freezed,
     Object? startDate = freezed,
     Object? shareFriendIdList = freezed,
@@ -185,6 +194,10 @@ class __$$FirebaseResolutionModelImplCopyWithImpl<$Res>
       colorIndex: freezed == colorIndex
           ? _value.colorIndex
           : colorIndex // ignore: cast_nullable_to_non_nullable
+              as int?,
+      iconIndex: freezed == iconIndex
+          ? _value.iconIndex
+          : iconIndex // ignore: cast_nullable_to_non_nullable
               as int?,
       actionPerWeek: freezed == actionPerWeek
           ? _value.actionPerWeek
@@ -216,6 +229,7 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
       required this.actionStatement,
       required this.isActive,
       required this.colorIndex,
+      required this.iconIndex,
       required this.actionPerWeek,
       @TimestampConverter() required this.startDate,
       required final List<String>? shareFriendIdList,
@@ -236,6 +250,8 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
   final bool? isActive;
   @override
   final int? colorIndex;
+  @override
+  final int? iconIndex;
   @override
   final int? actionPerWeek;
   @override
@@ -265,7 +281,7 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
 
   @override
   String toString() {
-    return 'FirebaseResolutionModel(resolutionName: $resolutionName, goalStatement: $goalStatement, actionStatement: $actionStatement, isActive: $isActive, colorIndex: $colorIndex, actionPerWeek: $actionPerWeek, startDate: $startDate, shareFriendIdList: $shareFriendIdList, shareGroupIdList: $shareGroupIdList)';
+    return 'FirebaseResolutionModel(resolutionName: $resolutionName, goalStatement: $goalStatement, actionStatement: $actionStatement, isActive: $isActive, colorIndex: $colorIndex, iconIndex: $iconIndex, actionPerWeek: $actionPerWeek, startDate: $startDate, shareFriendIdList: $shareFriendIdList, shareGroupIdList: $shareGroupIdList)';
   }
 
   @override
@@ -283,6 +299,8 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
                 other.isActive == isActive) &&
             (identical(other.colorIndex, colorIndex) ||
                 other.colorIndex == colorIndex) &&
+            (identical(other.iconIndex, iconIndex) ||
+                other.iconIndex == iconIndex) &&
             (identical(other.actionPerWeek, actionPerWeek) ||
                 other.actionPerWeek == actionPerWeek) &&
             (identical(other.startDate, startDate) ||
@@ -302,6 +320,7 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
       actionStatement,
       isActive,
       colorIndex,
+      iconIndex,
       actionPerWeek,
       startDate,
       const DeepCollectionEquality().hash(_shareFriendIdList),
@@ -329,6 +348,7 @@ abstract class _FirebaseResolutionModel implements FirebaseResolutionModel {
           required final String? actionStatement,
           required final bool? isActive,
           required final int? colorIndex,
+          required final int? iconIndex,
           required final int? actionPerWeek,
           @TimestampConverter() required final DateTime? startDate,
           required final List<String>? shareFriendIdList,
@@ -348,6 +368,8 @@ abstract class _FirebaseResolutionModel implements FirebaseResolutionModel {
   bool? get isActive;
   @override
   int? get colorIndex;
+  @override
+  int? get iconIndex;
   @override
   int? get actionPerWeek;
   @override

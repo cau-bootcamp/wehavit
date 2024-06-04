@@ -1,3 +1,5 @@
+import 'package:fpdart/fpdart.dart';
+import 'package:wehavit/common/errors/failure.dart';
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
@@ -11,14 +13,18 @@ class UploadResolutionUseCase {
   final ResolutionRepository _resolutionRepository;
   final UserModelRepository _userModelRepository;
 
-  EitherFuture<bool> call({
+  EitherFuture<ResolutionEntity?> call({
+    required String resolutionName,
     required String goalStatement,
     required String actionStatement,
     required List<UserDataEntity> shareFriendList,
     required List<GroupEntity> shareGroupList,
     required int actionPerWeek,
+    required int colorIndex,
+    required int iconIndex,
   }) async {
     ResolutionEntity entity = ResolutionEntity(
+      resolutionName: resolutionName,
       goalStatement: goalStatement,
       actionStatement: actionStatement,
       startDate: DateTime.now(),
@@ -26,15 +32,17 @@ class UploadResolutionUseCase {
       shareFriendEntityList: shareFriendList,
       shareGroupEntityList: shareGroupList,
       actionPerWeek: actionPerWeek,
+      colorIndex: colorIndex,
+      iconIndex: iconIndex,
       resolutionId: '',
     );
 
-    return _resolutionRepository
-        .uploadResolutionEntity(entity)
-        .whenComplete(() {
-      _userModelRepository.incrementUserDataCounter(
-        type: UserIncrementalDataType.goal,
-      );
-    });
+    return _resolutionRepository.uploadResolutionEntity(entity).then(
+          (result) => result.fold(
+            (failure) => left(const Failure("can't get resolution entity id")),
+            (resolutionId) =>
+                right(entity.copyWith(resolutionId: resolutionId)),
+          ),
+        );
   }
 }

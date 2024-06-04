@@ -422,16 +422,15 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }
 
   @override
-  EitherFuture<bool> uploadResolutionEntity(ResolutionEntity entity) async {
+  EitherFuture<String> uploadResolutionEntity(ResolutionEntity entity) async {
     try {
       FirebaseResolutionModel resolutionModel =
           FirebaseResolutionModel.fromEntity(entity);
 
-      await firestore
+      return firestore
           .collection(FirebaseCollectionName.myResolutions)
-          .add(resolutionModel.toJson());
-
-      return Future(() => right(true));
+          .add(resolutionModel.toJson())
+          .then((reference) => right(reference.id));
     } on Exception catch (e) {
       debugPrint(e.toString());
       return Future(

@@ -328,7 +328,7 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                                 onPressed: () {
                                   setState(() {
                                     provider.setFocusedStep(4);
-                                    provider.setIconIndex(index);
+                                    provider.setColorIndex(index);
                                   });
                                 },
                                 child: Container(
@@ -342,7 +342,7 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                                     shape: BoxShape.circle,
                                   ),
                                   child: Visibility(
-                                    visible: viewmodel.iconIndex == index,
+                                    visible: viewmodel.pointColorIndex == index,
                                     child: Container(
                                       alignment: Alignment.center,
                                       child: const Icon(
@@ -395,13 +395,25 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
 
                   // 모든 데이터 다 채웠음
                   else {
+                    provider.uploadResolution().then((resolutionEntity) {
+                      if (resolutionEntity != null) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddResolutionDoneView(
+                              resolutionEntity: resolutionEntity,
+                            ),
+                          ),
+                        );
+                      } else {
+                        showToastMessage(
+                          context,
+                          text: '잠시 후 다시 시도해주세요',
+                          icon: const Icon(Icons.not_interested),
+                        );
+                      }
+                    });
                     // navigate
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const AddResolutionDoneView(),
-                      ),
-                    );
                   }
                 },
                 buttonTitle: viewmodel.currentStep != 4

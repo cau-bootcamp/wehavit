@@ -6,7 +6,9 @@ import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 class AddResolutionDoneView extends ConsumerStatefulWidget {
-  const AddResolutionDoneView({super.key});
+  const AddResolutionDoneView({required this.resolutionEntity, super.key});
+
+  final ResolutionEntity resolutionEntity;
 
   @override
   ConsumerState<AddResolutionDoneView> createState() =>
@@ -44,8 +46,8 @@ class _AddResolutionDoneViewState extends ConsumerState<AddResolutionDoneView> {
             children: [
               Container(
                 margin: const EdgeInsets.only(top: 16.0),
-                child: const ResolutionListCellWidget(
-                  resolutionEntity: ResolutionEntity(),
+                child: ResolutionListCellWidget(
+                  resolutionEntity: widget.resolutionEntity,
                   showDetails: true,
                 ),
               ),

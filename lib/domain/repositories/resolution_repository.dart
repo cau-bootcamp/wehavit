@@ -6,7 +6,7 @@ abstract class ResolutionRepository {
     String userId,
   );
 
-  EitherFuture<bool> uploadResolutionEntity(ResolutionEntity model);
+  EitherFuture<String> uploadResolutionEntity(ResolutionEntity model);
 
   EitherFuture<void> shareResolutionToGroup(String $1, String $2);
 

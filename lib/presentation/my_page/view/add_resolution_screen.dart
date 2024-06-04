@@ -226,23 +226,23 @@ class AddResolutionScreen extends HookConsumerWidget {
                           backgroundColor: CustomColors.whYellow,
                         ),
                         onPressed: () async {
-                          ref
-                              .read(addResolutionProvider.notifier)
-                              .uploadResolutionEntity()
-                              .then(
-                            (result) {
-                              result.fold((failure) {
-                                debugPrint(
-                                  'DEBUG : UPLOAD FAILED - ${failure.message}',
-                                );
-                              }, (success) {
-                                ref
-                                    .read(myPageViewModelProvider.notifier)
-                                    .loadData();
-                                context.pop();
-                              });
-                            },
-                          );
+                          // ref
+                          //     .read(addResolutionProvider.notifier)
+                          //     .uploadResolutionEntity()
+                          //     .then(
+                          //   (result) {
+                          //     result.fold((failure) {
+                          //       debugPrint(
+                          //         'DEBUG : UPLOAD FAILED - ${failure.message}',
+                          //       );
+                          //     }, (success) {
+                          //       ref
+                          //           .read(myPageViewModelProvider.notifier)
+                          //           .loadData();
+                          //       context.pop();
+                          //     });
+                          //   },
+                          // );
                         },
                         child: const Text(
                           '기록 남기기',

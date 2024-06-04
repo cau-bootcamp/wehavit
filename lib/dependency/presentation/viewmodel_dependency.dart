@@ -190,7 +190,9 @@ final logInViewModelProvider =
 
 final addResolutionViewModelProvider = StateNotifierProvider.autoDispose<
     AddResolutionViewModelProvider, AddResolutionViewModel>((ref) {
-  return AddResolutionViewModelProvider();
+  UploadResolutionUseCase uploadResolutionUseCase =
+      ref.watch(uploadResolutionUsecaseProvider);
+  return AddResolutionViewModelProvider(uploadResolutionUseCase);
 });
 
 final addResolutionDoneViewModelProvider = StateNotifierProvider.autoDispose<

@@ -30,6 +30,11 @@ class _MyPageResolutionListCellWidgetState
       startMonday: DateTime.now().getMondayDateTime(),
     );
 
+    final daysSinceFirstDay = DateTime.now()
+            .difference(widget.resolutionEntity.startDate ?? DateTime.now())
+            .inDays +
+        1;
+
     return Container(
       margin: const EdgeInsets.only(bottom: 16.0),
       width: double.infinity,
@@ -73,8 +78,9 @@ class _MyPageResolutionListCellWidgetState
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        // ignore: lines_longer_than_80_chars
-                        '${DateTime.now().difference(DateTime.now().subtract(const Duration(days: 3))).inDays + 1}일째 도전 중',
+                        daysSinceFirstDay == 1
+                            ? '오늘부터 도전'
+                            : '$daysSinceFirstDay일째 도전 중',
                         style: const TextStyle(
                           color: CustomColors.whWhite,
                           fontSize: 14.0,

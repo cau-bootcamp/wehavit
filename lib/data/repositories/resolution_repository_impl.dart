@@ -15,7 +15,7 @@ class ResolutionRepositoryImpl implements ResolutionRepository {
   }
 
   @override
-  EitherFuture<bool> uploadResolutionEntity(
+  EitherFuture<String> uploadResolutionEntity(
     ResolutionEntity entity,
   ) async {
     return _wehavitDatasource.uploadResolutionEntity(entity);
