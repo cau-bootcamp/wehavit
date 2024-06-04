@@ -71,7 +71,7 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
       forFail: Container(),
       mainWidgetCallback: (userEntity) {
         return Container(
-          margin: const EdgeInsets.only(top: 12),
+          // margin: const EdgeInsets.only(top: 12),
           child: Row(
             children: [
               ProfileImageCircleWidget(

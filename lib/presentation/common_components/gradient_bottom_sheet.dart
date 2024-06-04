@@ -41,7 +41,7 @@ class GradientBottomSheet extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(
-                      height: 32,
+                      height: 16,
                     ),
                     content,
                   ],

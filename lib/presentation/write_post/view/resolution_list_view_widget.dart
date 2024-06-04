@@ -1,3 +1,4 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
@@ -164,6 +165,59 @@ class _ResolutionSummaryCardTextWidgetState
           },
         ),
       ],
+    );
+  }
+}
+
+class AddResolutionCellWidget extends StatelessWidget {
+  const AddResolutionCellWidget({
+    super.key,
+    required this.tapAddResolutionCallback,
+  });
+
+  final Function tapAddResolutionCallback;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapUp: (details) {
+        tapAddResolutionCallback();
+      },
+      child: DottedBorder(
+        strokeWidth: 2,
+        color: CustomColors.whPlaceholderGrey.withAlpha(160),
+        borderType: BorderType.RRect,
+        radius: const Radius.circular(10),
+        dashPattern: const [15, 12],
+        child: const SizedBox(
+          height: 84,
+          width: double.infinity,
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '도전 추가하기',
+                  style: TextStyle(
+                    color: CustomColors.whPlaceholderGrey,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    height: 1,
+                  ),
+                ),
+                SizedBox(
+                  width: 4,
+                ),
+                Icon(
+                  Icons.add_circle_outline,
+                  size: 16,
+                  color: CustomColors.whPlaceholderGrey,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

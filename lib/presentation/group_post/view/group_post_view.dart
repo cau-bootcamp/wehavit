@@ -90,7 +90,6 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
               IconButton(
                 onPressed: () async {
                   showModalBottomSheet(
-                    enableDrag: true,
                     isScrollControlled: true,
                     context: context,
                     builder: (context) {
