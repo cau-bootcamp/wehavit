@@ -3,8 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/presentation/common_components/common_components.dart';
-import 'package:wehavit/presentation/friend_list/friend_list.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 class AddResolutionDoneView extends ConsumerStatefulWidget {
@@ -29,6 +27,7 @@ class _AddResolutionDoneViewState extends ConsumerState<AddResolutionDoneView> {
         leadingTitle: '',
         trailingTitle: '닫기',
         trailingAction: () {
+          // TODO: 개선하기
           Navigator.pop(context);
           Navigator.pop(context);
         },
@@ -278,7 +277,7 @@ class _ShareResolutionToGroupBottomSheetWidgetState
         Expanded(
           child: ListView(
             children: List<Widget>.generate(
-              viewmodel.groupModelList!.length,
+              viewmodel.groupModelList.length,
               (index) => Container(
                 margin: const EdgeInsets.only(bottom: 16.0),
                 child: TextButton(

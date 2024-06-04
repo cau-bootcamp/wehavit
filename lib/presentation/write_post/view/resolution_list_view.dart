@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/presentation.dart';
-import 'package:wehavit/presentation/write_post/view/add_resolution_view.dart';
 
 class ResolutionListView extends ConsumerStatefulWidget {
   const ResolutionListView({super.key});
@@ -94,19 +94,20 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView> {
                       });
                     },
                   ),
-                ),
-              ),
-            ),
-            AddResolutionCellWidget(
-              tapAddResolutionCallback: () async {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    fullscreenDialog: true,
-                    builder: (context) => const AddResolutionView(),
+                ).append(
+                  AddResolutionCellWidget(
+                    tapAddResolutionCallback: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          fullscreenDialog: true,
+                          builder: (context) => const AddResolutionView(),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
+                ).toList(),
+              ),
             ),
           ],
         ),
@@ -173,8 +174,8 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
                 ),
               );
               if (result == true) {
-                // ignore: use_build_context_synchronously
                 showToastMessage(
+                  // ignore: use_build_context_synchronously
                   context,
                   text: '성공적으로 인증글을 공유했어요',
                   icon: const Icon(
@@ -209,8 +210,8 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
                       ),
                     );
                     if (result == true) {
-                      // ignore: use_build_context_synchronously
                       showToastMessage(
+                        // ignore: use_build_context_synchronously
                         context,
                         text: '성공적으로 반성글을 공유했어요',
                         icon: const Icon(

@@ -1,7 +1,3 @@
-import 'package:fpdart/fpdart.dart';
-import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/entities/entities.dart';
-
 class AddResolutionViewModel {
   int focusedStep = 0;
   int currentStep = 0;
