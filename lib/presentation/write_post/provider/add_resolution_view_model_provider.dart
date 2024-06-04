@@ -58,4 +58,8 @@ class AddResolutionViewModelProvider
         .sublist(0, state.currentStep + 1)
         .reduce((value, element) => value & element);
   }
+
+  void setFocusedStep(int value) {
+    state.focusedStep = value;
+  }
 }
