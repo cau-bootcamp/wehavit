@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
+import 'package:wehavit/presentation/write_post/write_post.dart';
 
 class AddResolutionView extends ConsumerStatefulWidget {
   const AddResolutionView({super.key});
@@ -345,7 +346,7 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                 top: 12.0,
               ),
               child: WideColoredButton(
-                onPressed: () {
+                onPressed: () async {
                   // 데이터 채우기
                   if (viewmodel.currentStep != 4) {
                     setState(() {
@@ -356,6 +357,12 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                   // 모든 데이터 다 채웠음
                   else {
                     // navigate
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AddResolutionDoneView(),
+                      ),
+                    );
                   }
                 },
                 buttonTitle: viewmodel.currentStep != 4

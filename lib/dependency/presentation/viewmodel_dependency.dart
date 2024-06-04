@@ -192,3 +192,8 @@ final addResolutionViewModelProvider = StateNotifierProvider.autoDispose<
     AddResolutionViewModelProvider, AddResolutionViewModel>((ref) {
   return AddResolutionViewModelProvider();
 });
+
+final addResolutionDoneViewModelProvider = StateNotifierProvider.autoDispose<
+    AddResolutionDoneViewModelProvider, AddResolutionDoneViewModel>((ref) {
+  return AddResolutionDoneViewModelProvider();
+});

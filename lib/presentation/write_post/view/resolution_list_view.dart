@@ -102,6 +102,7 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
+                    fullscreenDialog: true,
                     builder: (context) => const AddResolutionView(),
                   ),
                 );

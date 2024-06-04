@@ -1,3 +1,4 @@
+export 'add_resolution_done_view_model.dart';
 export 'add_resolution_view_model.dart';
 export 'resolution_list_cell_widget_model.dart';
 export 'resolution_list_view_model.dart';

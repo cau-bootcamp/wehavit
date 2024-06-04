@@ -1,12 +1,12 @@
+import 'package:fpdart/fpdart.dart';
+import 'package:wehavit/common/common.dart';
+import 'package:wehavit/domain/entities/entities.dart';
+
 class AddResolutionViewModel {
   int focusedStep = 0;
   int currentStep = 0;
 
   List<bool> inputConditions = [false, false, false, true, true];
-
-  // TextEditingController nameController = TextEditingController();
-  // TextEditingController goalController = TextEditingController();
-  // TextEditingController actionController = TextEditingController();
 
   String name = '';
   String goal = '';
