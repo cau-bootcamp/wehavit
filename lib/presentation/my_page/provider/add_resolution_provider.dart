@@ -35,13 +35,13 @@ class AddResolutionNotifier extends StateNotifier<ResolutionEntity> {
     // state = state.copyWith(oathStatement: newStatement);
   }
 
-  EitherFuture<bool> uploadResolutionEntity() {
-    return _uploadResolutionUsecase(
-      goalStatement: state.goalStatement!,
-      actionStatement: state.actionStatement!,
-      shareFriendList: state.shareFriendEntityList ?? [],
-      shareGroupList: state.shareGroupEntityList ?? [],
-      actionPerWeek: state.actionPerWeek!,
-    );
-  }
+  // EitherFuture<bool> uploadResolutionEntity() {
+  // return _uploadResolutionUsecase(
+  //   goalStatement: state.goalStatement!,
+  //   actionStatement: state.actionStatement!,
+  //   shareFriendList: state.shareFriendEntityList ?? [],
+  //   shareGroupList: state.shareGroupEntityList ?? [],
+  //   actionPerWeek: state.actionPerWeek!,
+  // );
+  // }
 }

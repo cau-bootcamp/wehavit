@@ -1,18 +1,18 @@
 import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
 
-class ShareResolutionToGroupUsecase {
-  ShareResolutionToGroupUsecase(this._resolutionRepository);
+class ShareResolutionToFriendUsecase {
+  ShareResolutionToFriendUsecase(this._resolutionRepository);
 
   final ResolutionRepository _resolutionRepository;
 
   EitherFuture<void> call({
     required String resolutionId,
-    required String groupId,
+    required String friendId,
   }) async {
-    return await _resolutionRepository.shareResolutionToGroup(
+    return await _resolutionRepository.shareResolutionToFriend(
       resolutionId,
-      groupId,
+      friendId,
     );
   }
 }

@@ -16,6 +16,7 @@ _$ResolutionEntityImpl _$$ResolutionEntityImplFromJson(
       isActive: json['isActive'] as bool?,
       actionPerWeek: (json['actionPerWeek'] as num?)?.toInt(),
       colorIndex: (json['colorIndex'] as num?)?.toInt(),
+      iconIndex: (json['iconIndex'] as num?)?.toInt(),
       startDate: _$JsonConverterFromJson<Timestamp, DateTime>(
           json['startDate'], const TimestampConverter().fromJson),
       shareFriendEntityList: (json['shareFriendEntityList'] as List<dynamic>?)
@@ -36,6 +37,7 @@ Map<String, dynamic> _$$ResolutionEntityImplToJson(
       'isActive': instance.isActive,
       'actionPerWeek': instance.actionPerWeek,
       'colorIndex': instance.colorIndex,
+      'iconIndex': instance.iconIndex,
       'startDate': _$JsonConverterToJson<Timestamp, DateTime>(
           instance.startDate, const TimestampConverter().toJson),
       'shareFriendEntityList': instance.shareFriendEntityList,

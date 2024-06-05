@@ -1,8 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
-import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 class AddResolutionDoneView extends ConsumerStatefulWidget {
@@ -14,6 +15,18 @@ class AddResolutionDoneView extends ConsumerStatefulWidget {
 }
 
 class _AddResolutionDoneViewState extends ConsumerState<AddResolutionDoneView> {
+  @override
+  void initState() {
+    super.initState();
+
+    unawaited(
+      ref.read(addResolutionDoneViewModelProvider.notifier).loadFriendList(),
+    );
+    unawaited(
+      ref.read(addResolutionDoneViewModelProvider.notifier).loadGroupList(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final viewmodel = ref.watch(addResolutionDoneViewModelProvider);
@@ -27,7 +40,6 @@ class _AddResolutionDoneViewState extends ConsumerState<AddResolutionDoneView> {
         leadingTitle: '',
         trailingTitle: '닫기',
         trailingAction: () {
-          // TODO: 개선하기
           Navigator.pop(context);
           Navigator.pop(context);
         },
@@ -44,8 +56,8 @@ class _AddResolutionDoneViewState extends ConsumerState<AddResolutionDoneView> {
             children: [
               Container(
                 margin: const EdgeInsets.only(top: 16.0),
-                child: const ResolutionListCellWidget(
-                  resolutionEntity: ResolutionEntity(),
+                child: ResolutionListCellWidget(
+                  resolutionEntity: viewmodel.resolutionEntity!,
                   showDetails: true,
                 ),
               ),
@@ -58,6 +70,7 @@ class _AddResolutionDoneViewState extends ConsumerState<AddResolutionDoneView> {
                 ),
                 child: WideColoredButton(
                   onPressed: () async {
+                    provider.resetTempFriendList();
                     showModalBottomSheet(
                       isScrollControlled: true,
                       context: context,
@@ -80,8 +93,11 @@ class _AddResolutionDoneViewState extends ConsumerState<AddResolutionDoneView> {
                 ),
                 child: WideColoredButton(
                   onPressed: () async {
+                    await provider.resetTempGroupList();
+
                     showModalBottomSheet(
                       isScrollControlled: true,
+                      // ignore: use_build_context_synchronously
                       context: context,
                       builder: (context) => GradientBottomSheet(
                         SizedBox(
@@ -137,8 +153,10 @@ class _ShareResolutionToFriendBottomSheetWidgetState
             Align(
               alignment: Alignment.topRight,
               child: TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
+                onPressed: () async {
+                  provider.applyChangedSharingOfFriends().whenComplete(() {
+                    Navigator.pop(context);
+                  });
                 },
                 child: const Text(
                   '공유',
@@ -194,7 +212,7 @@ class _ShareResolutionToFriendBottomSheetWidgetState
                         height: 24,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: viewmodel.selectedFriendList![index]
+                          color: viewmodel.tempSelectedFriendList![index]
                               ? CustomColors.whYellow
                               : Colors.transparent,
                           border: Border.all(
@@ -202,7 +220,7 @@ class _ShareResolutionToFriendBottomSheetWidgetState
                           ),
                         ),
                         child: Visibility(
-                          visible: viewmodel.selectedFriendList![index],
+                          visible: viewmodel.tempSelectedFriendList![index],
                           child: const Icon(
                             Icons.check,
                             color: CustomColors.whWhite,
@@ -256,8 +274,10 @@ class _ShareResolutionToGroupBottomSheetWidgetState
             Align(
               alignment: Alignment.topRight,
               child: TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
+                onPressed: () async {
+                  provider.applyChangedSharingOfGroups().whenComplete(() {
+                    Navigator.pop(context);
+                  });
                 },
                 child: const Text(
                   '공유',
@@ -277,7 +297,7 @@ class _ShareResolutionToGroupBottomSheetWidgetState
         Expanded(
           child: ListView(
             children: List<Widget>.generate(
-              viewmodel.groupModelList.length,
+              viewmodel.groupModelList?.length ?? 0,
               (index) => Container(
                 margin: const EdgeInsets.only(bottom: 16.0),
                 child: TextButton(
@@ -302,7 +322,7 @@ class _ShareResolutionToGroupBottomSheetWidgetState
                     alignment: Alignment.topRight,
                     children: [
                       GroupListViewCellWidget(
-                        cellModel: viewmodel.groupModelList[index],
+                        cellModel: viewmodel.groupModelList![index],
                       ),
                       Container(
                         margin: const EdgeInsets.only(
@@ -313,7 +333,7 @@ class _ShareResolutionToGroupBottomSheetWidgetState
                         height: 24,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: viewmodel.selectedGroupList![index]
+                          color: viewmodel.tempSelectedGroupList![index]
                               ? CustomColors.whYellow
                               : Colors.transparent,
                           border: Border.all(
@@ -321,7 +341,7 @@ class _ShareResolutionToGroupBottomSheetWidgetState
                           ),
                         ),
                         child: Visibility(
-                          visible: viewmodel.selectedGroupList![index],
+                          visible: viewmodel.tempSelectedGroupList![index],
                           child: const Icon(
                             Icons.check,
                             color: CustomColors.whWhite,

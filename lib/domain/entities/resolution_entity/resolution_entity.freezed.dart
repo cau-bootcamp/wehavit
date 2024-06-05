@@ -27,6 +27,7 @@ mixin _$ResolutionEntity {
   bool? get isActive => throw _privateConstructorUsedError;
   int? get actionPerWeek => throw _privateConstructorUsedError;
   int? get colorIndex => throw _privateConstructorUsedError;
+  int? get iconIndex => throw _privateConstructorUsedError;
   DateTime? get startDate => throw _privateConstructorUsedError;
   List<UserDataEntity>? get shareFriendEntityList =>
       throw _privateConstructorUsedError;
@@ -53,6 +54,7 @@ abstract class $ResolutionEntityCopyWith<$Res> {
       bool? isActive,
       int? actionPerWeek,
       int? colorIndex,
+      int? iconIndex,
       DateTime? startDate,
       List<UserDataEntity>? shareFriendEntityList,
       List<GroupEntity>? shareGroupEntityList});
@@ -78,6 +80,7 @@ class _$ResolutionEntityCopyWithImpl<$Res, $Val extends ResolutionEntity>
     Object? isActive = freezed,
     Object? actionPerWeek = freezed,
     Object? colorIndex = freezed,
+    Object? iconIndex = freezed,
     Object? startDate = freezed,
     Object? shareFriendEntityList = freezed,
     Object? shareGroupEntityList = freezed,
@@ -111,6 +114,10 @@ class _$ResolutionEntityCopyWithImpl<$Res, $Val extends ResolutionEntity>
           ? _value.colorIndex
           : colorIndex // ignore: cast_nullable_to_non_nullable
               as int?,
+      iconIndex: freezed == iconIndex
+          ? _value.iconIndex
+          : iconIndex // ignore: cast_nullable_to_non_nullable
+              as int?,
       startDate: freezed == startDate
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
@@ -143,6 +150,7 @@ abstract class _$$ResolutionEntityImplCopyWith<$Res>
       bool? isActive,
       int? actionPerWeek,
       int? colorIndex,
+      int? iconIndex,
       DateTime? startDate,
       List<UserDataEntity>? shareFriendEntityList,
       List<GroupEntity>? shareGroupEntityList});
@@ -166,6 +174,7 @@ class __$$ResolutionEntityImplCopyWithImpl<$Res>
     Object? isActive = freezed,
     Object? actionPerWeek = freezed,
     Object? colorIndex = freezed,
+    Object? iconIndex = freezed,
     Object? startDate = freezed,
     Object? shareFriendEntityList = freezed,
     Object? shareGroupEntityList = freezed,
@@ -199,6 +208,10 @@ class __$$ResolutionEntityImplCopyWithImpl<$Res>
           ? _value.colorIndex
           : colorIndex // ignore: cast_nullable_to_non_nullable
               as int?,
+      iconIndex: freezed == iconIndex
+          ? _value.iconIndex
+          : iconIndex // ignore: cast_nullable_to_non_nullable
+              as int?,
       startDate: freezed == startDate
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
@@ -228,6 +241,7 @@ class _$ResolutionEntityImpl implements _ResolutionEntity {
       this.isActive,
       this.actionPerWeek,
       this.colorIndex,
+      this.iconIndex,
       this.startDate,
       final List<UserDataEntity>? shareFriendEntityList,
       final List<GroupEntity>? shareGroupEntityList})
@@ -251,6 +265,8 @@ class _$ResolutionEntityImpl implements _ResolutionEntity {
   final int? actionPerWeek;
   @override
   final int? colorIndex;
+  @override
+  final int? iconIndex;
   @override
   final DateTime? startDate;
   final List<UserDataEntity>? _shareFriendEntityList;
@@ -277,7 +293,7 @@ class _$ResolutionEntityImpl implements _ResolutionEntity {
 
   @override
   String toString() {
-    return 'ResolutionEntity(resolutionId: $resolutionId, resolutionName: $resolutionName, goalStatement: $goalStatement, actionStatement: $actionStatement, isActive: $isActive, actionPerWeek: $actionPerWeek, colorIndex: $colorIndex, startDate: $startDate, shareFriendEntityList: $shareFriendEntityList, shareGroupEntityList: $shareGroupEntityList)';
+    return 'ResolutionEntity(resolutionId: $resolutionId, resolutionName: $resolutionName, goalStatement: $goalStatement, actionStatement: $actionStatement, isActive: $isActive, actionPerWeek: $actionPerWeek, colorIndex: $colorIndex, iconIndex: $iconIndex, startDate: $startDate, shareFriendEntityList: $shareFriendEntityList, shareGroupEntityList: $shareGroupEntityList)';
   }
 
   @override
@@ -299,6 +315,8 @@ class _$ResolutionEntityImpl implements _ResolutionEntity {
                 other.actionPerWeek == actionPerWeek) &&
             (identical(other.colorIndex, colorIndex) ||
                 other.colorIndex == colorIndex) &&
+            (identical(other.iconIndex, iconIndex) ||
+                other.iconIndex == iconIndex) &&
             (identical(other.startDate, startDate) ||
                 other.startDate == startDate) &&
             const DeepCollectionEquality()
@@ -318,6 +336,7 @@ class _$ResolutionEntityImpl implements _ResolutionEntity {
       isActive,
       actionPerWeek,
       colorIndex,
+      iconIndex,
       startDate,
       const DeepCollectionEquality().hash(_shareFriendEntityList),
       const DeepCollectionEquality().hash(_shareGroupEntityList));
@@ -346,6 +365,7 @@ abstract class _ResolutionEntity implements ResolutionEntity {
       final bool? isActive,
       final int? actionPerWeek,
       final int? colorIndex,
+      final int? iconIndex,
       final DateTime? startDate,
       final List<UserDataEntity>? shareFriendEntityList,
       final List<GroupEntity>? shareGroupEntityList}) = _$ResolutionEntityImpl;
@@ -367,6 +387,8 @@ abstract class _ResolutionEntity implements ResolutionEntity {
   int? get actionPerWeek;
   @override
   int? get colorIndex;
+  @override
+  int? get iconIndex;
   @override
   DateTime? get startDate;
   @override

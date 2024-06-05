@@ -28,8 +28,8 @@ AppBar WehavitAppBar({
       child: TextButton.icon(
         style: TextButton.styleFrom(
           padding: const EdgeInsets.only(
-              // left: 0,
-              ),
+            left: 8,
+          ),
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           alignment: Alignment.centerLeft,
         ),

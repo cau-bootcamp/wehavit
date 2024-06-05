@@ -44,7 +44,7 @@ abstract class WehavitDatasource {
     String userId,
   );
 
-  EitherFuture<bool> uploadResolutionEntity(ResolutionEntity entity);
+  EitherFuture<String> uploadResolutionEntity(ResolutionEntity entity);
 
   EitherFuture<UserDataEntity> fetchUserDataEntityByUserId(String targetUserId);
 
@@ -81,9 +81,15 @@ abstract class WehavitDatasource {
 
   EitherFuture<List<GroupEntity>> getGroupEntityList();
 
-  EitherFuture<void> changeGroupStateOfResolution({
-    required String repositoryId,
+  EitherFuture<void> changeResolutionShareStateOfGroup({
+    required String resolutionId,
     required String groupId,
+    required bool toShareState,
+  });
+
+  EitherFuture<void> changeResolutionShareStateOfFriend({
+    required resolutionId,
+    required friendId,
     required bool toShareState,
   });
 

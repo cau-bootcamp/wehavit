@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
+import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/write_post/write_post.dart';
 
@@ -13,6 +14,8 @@ class AddResolutionView extends ConsumerStatefulWidget {
 }
 
 class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
+  List<FocusNode> focuseNodeList = [FocusNode(), FocusNode(), FocusNode()];
+
   @override
   Widget build(BuildContext context) {
     final viewmodel = ref.watch(addResolutionViewModelProvider);
@@ -42,23 +45,27 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                     ScrollViewKeyboardDismissBehavior.onDrag,
                 children: [
                   Visibility(
+                    maintainState: true,
                     visible: viewmodel.currentStep >= 0,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          '도전의 이름을 지어주세요',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: CustomColors.whWhite,
-                            fontSize: 20,
+                        Visibility(
+                          visible: viewmodel.focusedStep == 0,
+                          child: Container(
+                            margin: const EdgeInsets.only(bottom: 8),
+                            child: const Text(
+                              '도전의 이름을 지어주세요',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                color: CustomColors.whWhite,
+                                fontSize: 20,
+                              ),
+                            ),
                           ),
                         ),
-                        Container(
-                          height: 8.0,
-                        ),
                         TextFormField(
-                          // controller: viewmodel.nameController,
+                          focusNode: focuseNodeList[0],
                           onChanged: (value) {
                             setState(() {
                               provider.setNameString(value);
@@ -70,6 +77,7 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                             color: CustomColors.whWhite,
                             fontSize: 16.0,
                           ),
+                          autofocus: true,
                           decoration: InputDecoration(
                             hintText: '나의 새로운 도전',
                             hintStyle: const TextStyle(
@@ -99,23 +107,27 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                     ),
                   ),
                   Visibility(
+                    maintainState: true,
                     visible: viewmodel.currentStep >= 1,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          '달성하려는 목표는 무엇인가요?',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: CustomColors.whWhite,
-                            fontSize: 20,
+                        Visibility(
+                          visible: viewmodel.focusedStep == 1,
+                          child: Container(
+                            margin: const EdgeInsets.only(bottom: 8),
+                            child: const Text(
+                              '달성하려는 목표는 무엇인가요?',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                color: CustomColors.whWhite,
+                                fontSize: 20,
+                              ),
+                            ),
                           ),
                         ),
-                        Container(
-                          height: 8.0,
-                        ),
                         TextFormField(
-                          // controller: viewmodel.goalController,
+                          focusNode: focuseNodeList[1],
                           onChanged: (value) {
                             setState(() {
                               provider.setGoalString(value);
@@ -156,23 +168,27 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                     ),
                   ),
                   Visibility(
+                    maintainState: true,
                     visible: viewmodel.currentStep >= 2,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          '어떤 노력을 지속하실 건가요?',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: CustomColors.whWhite,
-                            fontSize: 20,
+                        Visibility(
+                          visible: viewmodel.focusedStep == 2,
+                          child: Container(
+                            margin: const EdgeInsets.only(bottom: 8),
+                            child: const Text(
+                              '어떤 노력을 지속하실 건가요?',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                color: CustomColors.whWhite,
+                                fontSize: 20,
+                              ),
+                            ),
                           ),
                         ),
-                        Container(
-                          height: 8.0,
-                        ),
                         TextFormField(
-                          // controller: viewmodel.actionController,
+                          focusNode: focuseNodeList[2],
                           onChanged: (value) {
                             setState(() {
                               provider.setActionString(value);
@@ -217,12 +233,15 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          '일주일에 몇 번 실천하실건가요?',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: CustomColors.whWhite,
-                            fontSize: 20,
+                        Visibility(
+                          visible: viewmodel.focusedStep == 3,
+                          child: const Text(
+                            '일주일에 몇 번 실천하실건가요?',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: CustomColors.whWhite,
+                              fontSize: 20,
+                            ),
                           ),
                         ),
                         Container(
@@ -256,6 +275,9 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                             min: 1,
                             max: 7,
                             value: viewmodel.timesTemp,
+                            onChangeStart: (_) {
+                              provider.setFocusedStep(3);
+                            },
                             onChanged: (value) {
                               setState(() {
                                 provider.setTimes(value);
@@ -279,12 +301,15 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          '도전의 색상을 골라주세요',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: CustomColors.whWhite,
-                            fontSize: 20,
+                        Visibility(
+                          visible: viewmodel.focusedStep == 4,
+                          child: const Text(
+                            '도전의 색상을 골라주세요',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: CustomColors.whWhite,
+                              fontSize: 20,
+                            ),
                           ),
                         ),
                         Container(
@@ -303,7 +328,8 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                                 ),
                                 onPressed: () {
                                   setState(() {
-                                    provider.setIconIndex(index);
+                                    provider.setFocusedStep(4);
+                                    provider.setColorIndex(index);
                                   });
                                 },
                                 child: Container(
@@ -317,7 +343,7 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                                     shape: BoxShape.circle,
                                   ),
                                   child: Visibility(
-                                    visible: viewmodel.iconIndex == index,
+                                    visible: viewmodel.pointColorIndex == index,
                                     child: Container(
                                       alignment: Alignment.center,
                                       child: const Icon(
@@ -351,18 +377,46 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                   if (viewmodel.currentStep != 4) {
                     setState(() {
                       viewmodel.currentStep += 1;
+                      provider.setFocusedStep(viewmodel.currentStep);
                       provider.checkIsMovableToNextStep();
                     });
+
+                    if (viewmodel.currentStep < 3) {
+                      FocusScope.of(context).requestFocus(
+                        focuseNodeList[viewmodel.currentStep],
+                      );
+                    } else {
+                      focuseNodeList[0].unfocus();
+                      focuseNodeList[1].unfocus();
+                      focuseNodeList[2].unfocus();
+                    }
+
+                    setState(() {});
                   }
+
                   // 모든 데이터 다 채웠음
                   else {
+                    provider.uploadResolution().then((resolutionEntity) {
+                      if (resolutionEntity != null) {
+                        updateResolutionEntity(resolutionEntity)
+                            .whenComplete(() {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const AddResolutionDoneView(),
+                            ),
+                          );
+                        });
+                      } else {
+                        showToastMessage(
+                          context,
+                          text: '잠시 후 다시 시도해주세요',
+                          icon: const Icon(Icons.not_interested),
+                        );
+                      }
+                    });
                     // navigate
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const AddResolutionDoneView(),
-                      ),
-                    );
                   }
                 },
                 buttonTitle: viewmodel.currentStep != 4
@@ -377,5 +431,55 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    focuseNodeList[0].addListener(() => _onFocusChange(focuseNodeList[0]));
+    focuseNodeList[1].addListener(() => _onFocusChange(focuseNodeList[1]));
+    focuseNodeList[2].addListener(() => _onFocusChange(focuseNodeList[2]));
+  }
+
+  @override
+  void dispose() {
+    focuseNodeList[0].removeListener(() => _onFocusChange(focuseNodeList[0]));
+    focuseNodeList[1].removeListener(() => _onFocusChange(focuseNodeList[1]));
+    focuseNodeList[2].removeListener(() => _onFocusChange(focuseNodeList[2]));
+
+    focuseNodeList[0].dispose();
+    focuseNodeList[1].dispose();
+    focuseNodeList[2].dispose();
+    super.dispose();
+  }
+
+  void _onFocusChange(FocusNode focusNode) {
+    if (focusNode.hasFocus) {
+      _handleTextFieldTapped(focusNode);
+    }
+  }
+
+  void _handleTextFieldTapped(FocusNode focusNode) {
+    final provider = ref.read(addResolutionViewModelProvider.notifier);
+
+    if (focusNode == focuseNodeList[0]) {
+      setState(() {
+        provider.setFocusedStep(0);
+      });
+    } else if (focusNode == focuseNodeList[1]) {
+      setState(() {
+        provider.setFocusedStep(1);
+      });
+    } else if (focusNode == focuseNodeList[2]) {
+      setState(() {
+        provider.setFocusedStep(2);
+      });
+    }
+  }
+
+  Future<void> updateResolutionEntity(ResolutionEntity resolutionEntity) async {
+    ref.watch(addResolutionDoneViewModelProvider).resolutionEntity =
+        resolutionEntity;
   }
 }

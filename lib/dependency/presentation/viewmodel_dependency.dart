@@ -190,10 +190,36 @@ final logInViewModelProvider =
 
 final addResolutionViewModelProvider = StateNotifierProvider.autoDispose<
     AddResolutionViewModelProvider, AddResolutionViewModel>((ref) {
-  return AddResolutionViewModelProvider();
+  UploadResolutionUseCase uploadResolutionUseCase =
+      ref.watch(uploadResolutionUsecaseProvider);
+  return AddResolutionViewModelProvider(uploadResolutionUseCase);
 });
 
 final addResolutionDoneViewModelProvider = StateNotifierProvider.autoDispose<
     AddResolutionDoneViewModelProvider, AddResolutionDoneViewModel>((ref) {
-  return AddResolutionDoneViewModelProvider();
+  GetFriendListUsecase getFriendListUsecase =
+      ref.watch(getFriendListUseCaseProvider);
+  GetGroupListUsecase getGroupListUsecase =
+      ref.watch(getGroupListUseCaseProvider);
+  GetGroupListViewCellWidgetModelUsecase
+      getGroupListViewCellWidgetModelUsecase =
+      ref.watch(getGroupListViewCellWidgetModelUsecaseProvider);
+  ShareResolutionToFriendUsecase shareResolutionToFriendUsecase =
+      ref.watch(shareResolutionToFriendUsecaseProvider);
+  UnshareResolutionToFriendUsecase unshareResolutionToFriendUsecase =
+      ref.watch(unshareResolutionToFriendUsecaseProvider);
+  ShareResolutionToGroupUsecase shareResolutionToGroupdUsecase =
+      ref.watch(shareResolutionToGroupUsecaseProvider);
+  UnshareResolutionToGroupUsecase unshareResolutionToGroupdUsecase =
+      ref.watch(unshareResolutionToGroupUsecaseProvider);
+
+  return AddResolutionDoneViewModelProvider(
+    getFriendListUsecase,
+    getGroupListUsecase,
+    getGroupListViewCellWidgetModelUsecase,
+    shareResolutionToFriendUsecase,
+    unshareResolutionToFriendUsecase,
+    shareResolutionToGroupdUsecase,
+    unshareResolutionToGroupdUsecase,
+  );
 });

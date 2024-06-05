@@ -422,16 +422,15 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }
 
   @override
-  EitherFuture<bool> uploadResolutionEntity(ResolutionEntity entity) async {
+  EitherFuture<String> uploadResolutionEntity(ResolutionEntity entity) async {
     try {
       FirebaseResolutionModel resolutionModel =
           FirebaseResolutionModel.fromEntity(entity);
 
-      await firestore
+      return firestore
           .collection(FirebaseCollectionName.myResolutions)
-          .add(resolutionModel.toJson());
-
-      return Future(() => right(true));
+          .add(resolutionModel.toJson())
+          .then((reference) => right(reference.id));
     } on Exception catch (e) {
       debugPrint(e.toString());
       return Future(
@@ -910,8 +909,8 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }
 
   @override
-  EitherFuture<void> changeGroupStateOfResolution({
-    required String repositoryId,
+  EitherFuture<void> changeResolutionShareStateOfGroup({
+    required String resolutionId,
     required String groupId,
     required bool toShareState,
   }) {
@@ -919,7 +918,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       if (toShareState == true) {
         firestore
             .collection(FirebaseCollectionName.myResolutions)
-            .doc(repositoryId)
+            .doc(resolutionId)
             .update({
           FirebaseResolutionFieldName.resolutionShareGroupIdList:
               FieldValue.arrayUnion([groupId]),
@@ -927,7 +926,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       } else {
         firestore
             .collection(FirebaseCollectionName.myResolutions)
-            .doc(repositoryId)
+            .doc(resolutionId)
             .update({
           FirebaseResolutionFieldName.resolutionShareGroupIdList:
               FieldValue.arrayRemove([groupId]),
@@ -938,7 +937,42 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     } on Exception {
       return Future(
         () => left(
-          const Failure('catch error on changeGroupStateOfResolution'),
+          const Failure('catch error on changeResolutionShareStateOfGroup'),
+        ),
+      );
+    }
+  }
+
+  @override
+  EitherFuture<void> changeResolutionShareStateOfFriend({
+    required resolutionId,
+    required friendId,
+    required bool toShareState,
+  }) {
+    try {
+      if (toShareState == true) {
+        firestore
+            .collection(FirebaseCollectionName.myResolutions)
+            .doc(resolutionId)
+            .update({
+          FirebaseResolutionFieldName.resolutionShareFriendIdList:
+              FieldValue.arrayUnion([friendId]),
+        });
+      } else {
+        firestore
+            .collection(FirebaseCollectionName.myResolutions)
+            .doc(resolutionId)
+            .update({
+          FirebaseResolutionFieldName.resolutionShareFriendIdList:
+              FieldValue.arrayRemove([friendId]),
+        });
+      }
+
+      return Future(() => right(null));
+    } on Exception {
+      return Future(
+        () => left(
+          const Failure('catch error on changeResolutionShareStateOfFriend'),
         ),
       );
     }

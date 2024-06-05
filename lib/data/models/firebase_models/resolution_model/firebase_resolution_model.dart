@@ -15,6 +15,7 @@ class FirebaseResolutionModel with _$FirebaseResolutionModel {
     required String? actionStatement,
     required bool? isActive,
     required int? colorIndex,
+    required int? iconIndex,
     required int? actionPerWeek,
     @TimestampConverter() required DateTime? startDate,
     required List<String>? shareFriendIdList,
@@ -39,6 +40,7 @@ class FirebaseResolutionModel with _$FirebaseResolutionModel {
         actionPerWeek: entity.actionPerWeek,
         startDate: entity.startDate,
         colorIndex: entity.colorIndex,
+        iconIndex: entity.iconIndex,
         shareFriendIdList: entity.shareFriendEntityList
                 ?.map((friendEntity) => friendEntity.userId!)
                 .toList() ??
@@ -63,6 +65,7 @@ extension ConvertFirebaseResolutionModel on FirebaseResolutionModel {
       actionStatement: actionStatement,
       isActive: isActive,
       colorIndex: colorIndex,
+      iconIndex: iconIndex,
       actionPerWeek: actionPerWeek,
       startDate: startDate,
       shareFriendEntityList: shareFriendEntityList,
