@@ -12,6 +12,7 @@ AppBar WehavitAppBar({
   int? trailingIconBadgeCount,
 }) {
   return AppBar(
+    scrolledUnderElevation: 0,
     elevation: 0,
     title: Text(
       title,
