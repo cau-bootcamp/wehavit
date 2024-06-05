@@ -1,9 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wehavit/common/utils/custom_types.dart';
+import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
 import 'package:wehavit/presentation/write_post/write_post.dart';
-
-import '../../../domain/entities/resolution_entity/resolution_entity.dart';
 
 class AddResolutionViewModelProvider
     extends StateNotifier<AddResolutionViewModel> {

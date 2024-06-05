@@ -38,11 +38,9 @@ final emailAndPasswordLogInUseCaseProvider =
 
 final uploadResolutionUsecaseProvider =
     Provider<UploadResolutionUseCase>((ref) {
-  final userModelRepository = ref.watch(userModelRepositoryProvider);
   final resolutionRepository = ref.watch(resolutionRepositoryProvider);
   return UploadResolutionUseCase(
     resolutionRepository,
-    userModelRepository,
   );
 });
 

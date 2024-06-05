@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
+import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/write_post/write_post.dart';
 
@@ -397,14 +398,16 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                   else {
                     provider.uploadResolution().then((resolutionEntity) {
                       if (resolutionEntity != null) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AddResolutionDoneView(
-                              resolutionEntity: resolutionEntity,
+                        updateResolutionEntity(resolutionEntity)
+                            .whenComplete(() {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const AddResolutionDoneView(),
                             ),
-                          ),
-                        );
+                          );
+                        });
                       } else {
                         showToastMessage(
                           context,
@@ -473,5 +476,10 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
         provider.setFocusedStep(2);
       });
     }
+  }
+
+  Future<void> updateResolutionEntity(ResolutionEntity resolutionEntity) async {
+    ref.watch(addResolutionDoneViewModelProvider).resolutionEntity =
+        resolutionEntity;
   }
 }

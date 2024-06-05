@@ -4,13 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
-import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 class AddResolutionDoneView extends ConsumerStatefulWidget {
-  const AddResolutionDoneView({required this.resolutionEntity, super.key});
-
-  final ResolutionEntity resolutionEntity;
+  const AddResolutionDoneView({super.key});
 
   @override
   ConsumerState<AddResolutionDoneView> createState() =>
@@ -43,7 +40,6 @@ class _AddResolutionDoneViewState extends ConsumerState<AddResolutionDoneView> {
         leadingTitle: '',
         trailingTitle: '닫기',
         trailingAction: () {
-          // TODO: 개선하기
           Navigator.pop(context);
           Navigator.pop(context);
         },
@@ -61,7 +57,7 @@ class _AddResolutionDoneViewState extends ConsumerState<AddResolutionDoneView> {
               Container(
                 margin: const EdgeInsets.only(top: 16.0),
                 child: ResolutionListCellWidget(
-                  resolutionEntity: widget.resolutionEntity,
+                  resolutionEntity: viewmodel.resolutionEntity!,
                   showDetails: true,
                 ),
               ),
@@ -74,6 +70,7 @@ class _AddResolutionDoneViewState extends ConsumerState<AddResolutionDoneView> {
                 ),
                 child: WideColoredButton(
                   onPressed: () async {
+                    provider.resetTempFriendList();
                     showModalBottomSheet(
                       isScrollControlled: true,
                       context: context,
@@ -96,8 +93,11 @@ class _AddResolutionDoneViewState extends ConsumerState<AddResolutionDoneView> {
                 ),
                 child: WideColoredButton(
                   onPressed: () async {
+                    await provider.resetTempGroupList();
+
                     showModalBottomSheet(
                       isScrollControlled: true,
+                      // ignore: use_build_context_synchronously
                       context: context,
                       builder: (context) => GradientBottomSheet(
                         SizedBox(
@@ -153,8 +153,10 @@ class _ShareResolutionToFriendBottomSheetWidgetState
             Align(
               alignment: Alignment.topRight,
               child: TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
+                onPressed: () async {
+                  provider.applyChangedSharingOfFriends().whenComplete(() {
+                    Navigator.pop(context);
+                  });
                 },
                 child: const Text(
                   '공유',
@@ -210,7 +212,7 @@ class _ShareResolutionToFriendBottomSheetWidgetState
                         height: 24,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: viewmodel.selectedFriendList![index]
+                          color: viewmodel.tempSelectedFriendList![index]
                               ? CustomColors.whYellow
                               : Colors.transparent,
                           border: Border.all(
@@ -218,7 +220,7 @@ class _ShareResolutionToFriendBottomSheetWidgetState
                           ),
                         ),
                         child: Visibility(
-                          visible: viewmodel.selectedFriendList![index],
+                          visible: viewmodel.tempSelectedFriendList![index],
                           child: const Icon(
                             Icons.check,
                             color: CustomColors.whWhite,
@@ -272,8 +274,10 @@ class _ShareResolutionToGroupBottomSheetWidgetState
             Align(
               alignment: Alignment.topRight,
               child: TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
+                onPressed: () async {
+                  provider.applyChangedSharingOfGroups().whenComplete(() {
+                    Navigator.pop(context);
+                  });
                 },
                 child: const Text(
                   '공유',
@@ -329,7 +333,7 @@ class _ShareResolutionToGroupBottomSheetWidgetState
                         height: 24,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: viewmodel.selectedGroupList![index]
+                          color: viewmodel.tempSelectedGroupList![index]
                               ? CustomColors.whYellow
                               : Colors.transparent,
                           border: Border.all(
@@ -337,7 +341,7 @@ class _ShareResolutionToGroupBottomSheetWidgetState
                           ),
                         ),
                         child: Visibility(
-                          visible: viewmodel.selectedGroupList![index],
+                          visible: viewmodel.tempSelectedGroupList![index],
                           child: const Icon(
                             Icons.check,
                             color: CustomColors.whWhite,

@@ -10,7 +10,7 @@ class UnshareResolutionToFriendUsecase {
     required String resolutionId,
     required String friendId,
   }) async {
-    return await _resolutionRepository.unshareResolutionToGroup(
+    return await _resolutionRepository.unshareResolutionToFriend(
       resolutionId,
       friendId,
     );

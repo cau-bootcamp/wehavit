@@ -204,9 +204,22 @@ final addResolutionDoneViewModelProvider = StateNotifierProvider.autoDispose<
   GetGroupListViewCellWidgetModelUsecase
       getGroupListViewCellWidgetModelUsecase =
       ref.watch(getGroupListViewCellWidgetModelUsecaseProvider);
+  ShareResolutionToFriendUsecase shareResolutionToFriendUsecase =
+      ref.watch(shareResolutionToFriendUsecaseProvider);
+  UnshareResolutionToFriendUsecase unshareResolutionToFriendUsecase =
+      ref.watch(unshareResolutionToFriendUsecaseProvider);
+  ShareResolutionToGroupUsecase shareResolutionToGroupdUsecase =
+      ref.watch(shareResolutionToGroupUsecaseProvider);
+  UnshareResolutionToGroupUsecase unshareResolutionToGroupdUsecase =
+      ref.watch(unshareResolutionToGroupUsecaseProvider);
+
   return AddResolutionDoneViewModelProvider(
     getFriendListUsecase,
     getGroupListUsecase,
     getGroupListViewCellWidgetModelUsecase,
+    shareResolutionToFriendUsecase,
+    unshareResolutionToFriendUsecase,
+    shareResolutionToGroupdUsecase,
+    unshareResolutionToGroupdUsecase,
   );
 });

@@ -7,11 +7,9 @@ import 'package:wehavit/domain/repositories/repositories.dart';
 class UploadResolutionUseCase {
   UploadResolutionUseCase(
     this._resolutionRepository,
-    this._userModelRepository,
   );
 
   final ResolutionRepository _resolutionRepository;
-  final UserModelRepository _userModelRepository;
 
   EitherFuture<ResolutionEntity?> call({
     required String resolutionName,
