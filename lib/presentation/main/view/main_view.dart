@@ -88,6 +88,7 @@ class _MainViewState extends ConsumerState<MainView>
               ],
             ),
           ),
+          const ReactionAnimationWidget(),
         ],
       ),
     );
