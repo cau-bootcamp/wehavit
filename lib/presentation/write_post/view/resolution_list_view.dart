@@ -14,9 +14,8 @@ class ResolutionListView extends ConsumerStatefulWidget {
   ConsumerState<ResolutionListView> createState() => _ResolutionListViewState();
 }
 
-class _ResolutionListViewState extends ConsumerState<ResolutionListView> {
-  bool isLoading = true;
-
+class _ResolutionListViewState extends ConsumerState<ResolutionListView>
+    with AutomaticKeepAliveClientMixin<ResolutionListView> {
   @override
   void initState() {
     super.initState();
@@ -27,7 +26,7 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView> {
           .loadResolutionModelList()
           .whenComplete(() {
         setState(() {
-          isLoading = false;
+          ref.watch(resolutionListViewModelProvider).isLoadingView = false;
         });
       }),
     );
@@ -35,6 +34,7 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final viewModel = ref.watch(resolutionListViewModelProvider);
     final provider = ref.read(resolutionListViewModelProvider.notifier);
 
@@ -45,75 +45,88 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView> {
       ),
       body: SafeArea(
         minimum: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: ListView(
-          children: [
-            ResolutionSummaryCardWidget(
-              futureDoneRatio: viewModel.futureDoneRatio,
-              futureDoneCount: viewModel.futureDoneCount,
-            ),
-            const SizedBox(
-              height: 16.0,
-            ),
-            Visibility(
-              visible: !isLoading,
-              replacement: const Padding(
-                padding: EdgeInsets.only(top: 100.0),
-                child: Center(
-                  child: SizedBox(
-                    width: 40,
-                    height: 40,
-                    child: CircularProgressIndicator(
-                      color: CustomColors.whYellow,
+        child: RefreshIndicator(
+          onRefresh: () async {
+            provider
+                .loadResolutionModelList()
+                .whenComplete(() => setState(() {}));
+          },
+          child: ListView(
+            children: [
+              ResolutionSummaryCardWidget(
+                futureDoneRatio: viewModel.futureDoneRatio,
+                futureDoneCount: viewModel.futureDoneCount,
+              ),
+              const SizedBox(
+                height: 16.0,
+              ),
+              Visibility(
+                visible: !viewModel.isLoadingView,
+                replacement: const Padding(
+                  padding: EdgeInsets.only(top: 100.0),
+                  child: Center(
+                    child: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: CircularProgressIndicator(
+                        color: CustomColors.whYellow,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              child: Column(
-                children: List<Widget>.generate(
-                  viewModel.resolutionModelList?.length ?? 0,
-                  (index) => GestureDetector(
-                    child: ResolutionListCellWidget(
-                      resolutionEntity:
-                          viewModel.resolutionModelList![index].entity,
-                      showDetails: false,
+                child: Column(
+                  children: List<Widget>.generate(
+                    viewModel.resolutionModelList?.length ?? 0,
+                    (index) => GestureDetector(
+                      child: ResolutionListCellWidget(
+                        resolutionEntity:
+                            viewModel.resolutionModelList![index].entity,
+                        showDetails: false,
+                      ),
+                      onTapUp: (details) async {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return WritingResolutionBottomSheetWidget(
+                              viewModel: viewModel,
+                              provider: provider,
+                              index: index,
+                            );
+                          },
+                        ).whenComplete(() {
+                          provider
+                              .loadResolutionModelList()
+                              .whenComplete(() => setState(() {}));
+                        });
+                      },
                     ),
-                    onTapUp: (details) async {
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (context) {
-                          return WritingResolutionBottomSheetWidget(
-                            viewModel: viewModel,
-                            provider: provider,
-                            index: index,
-                          );
-                        },
-                      ).whenComplete(() {
-                        provider
-                            .loadResolutionModelList()
-                            .whenComplete(() => setState(() {}));
-                      });
-                    },
-                  ),
-                ).append(
-                  AddResolutionCellWidget(
-                    tapAddResolutionCallback: () async {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          fullscreenDialog: true,
-                          builder: (context) => const AddResolutionView(),
-                        ),
-                      );
-                    },
-                  ),
-                ).toList(),
+                  ).append(
+                    AddResolutionCellWidget(
+                      tapAddResolutionCallback: () async {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            fullscreenDialog: true,
+                            builder: (context) => const AddResolutionView(),
+                          ),
+                        );
+                      },
+                    ),
+                  ).toList(),
+                ),
               ),
-            ),
-          ],
+              Container(
+                height: 80,
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class WritingResolutionBottomSheetWidget extends StatelessWidget {

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -22,15 +24,29 @@ class FriendListView extends ConsumerStatefulWidget {
 
 class FriendListScreenState extends ConsumerState<FriendListView> {
   @override
+  void initState() {
+    super.initState();
+
+    unawaited(
+      ref.read(friendListViewModelProvider.notifier).getMyUserDataEntity(),
+    );
+    unawaited(
+      ref
+          .read(friendListViewModelProvider.notifier)
+          .getAppliedFriendList()
+          .whenComplete(() => setState(() {})),
+    );
+    unawaited(
+      ref
+          .read(friendListViewModelProvider.notifier)
+          .getFriendList()
+          .whenComplete(() => setState(() {})),
+    );
+  }
+
+  @override
   Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
-
-    ref.read(friendListViewModelProvider.notifier).getMyUserDataEntity();
-    ref.read(friendListViewModelProvider.notifier).getAppliedFriendList();
-    ref
-        .read(friendListViewModelProvider.notifier)
-        .getFriendList()
-        .whenComplete(() => setState(() {}));
   }
 
   bool isManagingMode = false;
@@ -112,18 +128,29 @@ class FriendListScreenState extends ConsumerState<FriendListView> {
                         height: 16.0,
                       ),
                       Expanded(
-                        child: ListView.builder(
-                          itemCount: viewModel.friendFutureUserList!.length,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              margin: const EdgeInsets.only(bottom: 12),
-                              child: FriendListCellWidget(
-                                futureUserEntity:
-                                    viewModel.friendFutureUserList![index],
-                                cellState: FriendListCellState.normal,
-                              ),
+                        child: RefreshIndicator(
+                          onRefresh: () async {
+                            unawaited(
+                              ref
+                                  .read(friendListViewModelProvider.notifier)
+                                  .getAppliedFriendList()
+                                  .whenComplete(() => setState(() {})),
                             );
                           },
+                          child: ListView.builder(
+                            padding: const EdgeInsets.only(bottom: 64),
+                            itemCount: viewModel.friendFutureUserList!.length,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                margin: const EdgeInsets.only(bottom: 12),
+                                child: FriendListCellWidget(
+                                  futureUserEntity:
+                                      viewModel.friendFutureUserList![index],
+                                  cellState: FriendListCellState.normal,
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ],
@@ -133,110 +160,137 @@ class FriendListScreenState extends ConsumerState<FriendListView> {
           ),
           // in managing mode
           // child: Container(),
-          child: ListView(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    '친구 신청',
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w600,
-                      color: CustomColors.whWhite,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 12.0,
-                  ),
-                  FriendListTextFieldWidget(
-                    searchCallback: (searchNickname) async {
-                      if (searchNickname != null && searchNickname.isNotEmpty) {
-                        provider
-                            .searchUserByNickname(
-                              nickname: searchNickname,
-                            )
-                            .whenComplete(() => setState(() {}));
-                      }
-                    },
-                  ),
-                  if (viewModel.searchedFutureUserList == null)
-                    Container()
-                  else
-                    Column(
-                      children: List<Widget>.generate(
-                        viewModel.searchedFutureUserList!.length,
-                        (index) => FriendListCellWidget(
-                          futureUserEntity:
-                              viewModel.searchedFutureUserList![index],
-                          cellState: FriendListCellState.toApply,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-              if (viewModel.appliedFutureUserList == null ||
-                  viewModel.appliedFutureUserList!.isEmpty)
-                Container()
-              else
+          child: RefreshIndicator(
+            onRefresh: () async {
+              unawaited(
+                ref
+                    .read(friendListViewModelProvider.notifier)
+                    .getAppliedFriendList()
+                    .whenComplete(() => setState(() {})),
+              );
+              unawaited(
+                ref
+                    .read(friendListViewModelProvider.notifier)
+                    .getFriendList()
+                    .whenComplete(() => setState(() {})),
+              );
+            },
+            child: ListView(
+              children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(
-                      height: 32,
-                    ),
-                    Text(
-                      '새로운 친구 요청 (${viewModel.appliedFutureUserList!.length})',
-                      style: const TextStyle(
+                    const Text(
+                      '친구 신청',
+                      style: TextStyle(
                         fontSize: 16.0,
                         fontWeight: FontWeight.w600,
                         color: CustomColors.whWhite,
                       ),
                     ),
-                    Column(
-                      children: List<Widget>.generate(
-                        viewModel.appliedFutureUserList!.length,
-                        (index) => FriendListCellWidget(
-                          futureUserEntity:
-                              viewModel.appliedFutureUserList![index],
-                          cellState: FriendListCellState.applied,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              if (viewModel.friendFutureUserList == null ||
-                  viewModel.friendFutureUserList!.isEmpty)
-                Container()
-              else
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
                     const SizedBox(
-                      height: 32,
+                      height: 12.0,
                     ),
-                    Text(
-                      '내 친구들 (${viewModel.friendFutureUserList!.length})',
-                      style: const TextStyle(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w600,
-                        color: CustomColors.whWhite,
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 4.0),
+                      child: FriendListTextFieldWidget(
+                        searchCallback: (searchNickname) async {
+                          if (searchNickname != null &&
+                              searchNickname.isNotEmpty) {
+                            provider
+                                .searchUserByNickname(
+                                  nickname: searchNickname,
+                                )
+                                .whenComplete(() => setState(() {}));
+                          }
+                        },
                       ),
                     ),
-                    Column(
-                      children: List<Widget>.generate(
-                        viewModel.friendFutureUserList!.length,
-                        (index) => FriendListCellWidget(
-                          futureUserEntity:
-                              viewModel.friendFutureUserList![index],
-                          cellState: FriendListCellState.managing,
+                    if (viewModel.searchedFutureUserList == null)
+                      Container()
+                    else
+                      Column(
+                        children: List<Widget>.generate(
+                          viewModel.searchedFutureUserList!.length,
+                          (index) => Container(
+                            margin: const EdgeInsets.only(top: 12.0),
+                            child: FriendListCellWidget(
+                              futureUserEntity:
+                                  viewModel.searchedFutureUserList![index],
+                              cellState: FriendListCellState.toApply,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
                   ],
                 ),
-              const SizedBox(height: 60),
-            ],
+                if (viewModel.appliedFutureUserList == null ||
+                    viewModel.appliedFutureUserList!.isEmpty)
+                  Container()
+                else
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 32,
+                      ),
+                      Text(
+                        // ignore: lines_longer_than_80_chars
+                        '새로운 친구 요청 (${viewModel.appliedFutureUserList!.length})',
+                        style: const TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w600,
+                          color: CustomColors.whWhite,
+                        ),
+                      ),
+                      Column(
+                        children: List<Widget>.generate(
+                          viewModel.appliedFutureUserList!.length,
+                          (index) => FriendListCellWidget(
+                            futureUserEntity:
+                                viewModel.appliedFutureUserList![index],
+                            cellState: FriendListCellState.applied,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                if (viewModel.friendFutureUserList == null ||
+                    viewModel.friendFutureUserList!.isEmpty)
+                  Container()
+                else
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 32,
+                      ),
+                      Text(
+                        '내 친구들 (${viewModel.friendFutureUserList!.length})',
+                        style: const TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w600,
+                          color: CustomColors.whWhite,
+                        ),
+                      ),
+                      Column(
+                        children: List<Widget>.generate(
+                          viewModel.friendFutureUserList!.length,
+                          (index) => Container(
+                            margin: const EdgeInsets.only(top: 12.0),
+                            child: FriendListCellWidget(
+                              futureUserEntity:
+                                  viewModel.friendFutureUserList![index],
+                              cellState: FriendListCellState.managing,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                const SizedBox(height: 60),
+              ],
+            ),
           ),
         ),
       ),
