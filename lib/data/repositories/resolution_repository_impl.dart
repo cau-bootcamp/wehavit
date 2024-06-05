@@ -23,11 +23,11 @@ class ResolutionRepositoryImpl implements ResolutionRepository {
 
   @override
   EitherFuture<void> shareResolutionToGroup(
-    String repositoryId,
+    String resolutionId,
     String groupId,
   ) {
-    return _wehavitDatasource.changeGroupStateOfResolution(
-      repositoryId: repositoryId,
+    return _wehavitDatasource.changeResolutionShareStateOfGroup(
+      resolutionId: resolutionId,
       groupId: groupId,
       toShareState: true,
     );
@@ -35,12 +35,36 @@ class ResolutionRepositoryImpl implements ResolutionRepository {
 
   @override
   EitherFuture<void> unshareResolutionToGroup(
-    String repositoryId,
+    String resolutionId,
     String groupId,
   ) {
-    return _wehavitDatasource.changeGroupStateOfResolution(
-      repositoryId: repositoryId,
+    return _wehavitDatasource.changeResolutionShareStateOfGroup(
+      resolutionId: resolutionId,
       groupId: groupId,
+      toShareState: false,
+    );
+  }
+
+  @override
+  EitherFuture<void> shareResolutionToFriend(
+    String resolutionId,
+    String friendId,
+  ) {
+    return _wehavitDatasource.changeResolutionShareStateOfFriend(
+      resolutionId: resolutionId,
+      friendId: friendId,
+      toShareState: true,
+    );
+  }
+
+  @override
+  EitherFuture<void> unshareResolutionToFriend(
+    String resolutionId,
+    String friendId,
+  ) {
+    return _wehavitDatasource.changeResolutionShareStateOfFriend(
+      resolutionId: resolutionId,
+      friendId: friendId,
       toShareState: false,
     );
   }

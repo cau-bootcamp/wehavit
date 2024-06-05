@@ -8,9 +8,25 @@ abstract class ResolutionRepository {
 
   EitherFuture<String> uploadResolutionEntity(ResolutionEntity model);
 
-  EitherFuture<void> shareResolutionToGroup(String $1, String $2);
+  EitherFuture<void> shareResolutionToGroup(
+    String resolutionId,
+    String groupId,
+  );
 
-  EitherFuture<void> unshareResolutionToGroup(String $1, String $2);
+  EitherFuture<void> unshareResolutionToGroup(
+    String resolutionId,
+    String groupId,
+  );
+
+  EitherFuture<void> shareResolutionToFriend(
+    String resolutionId,
+    String friendId,
+  );
+
+  EitherFuture<void> unshareResolutionToFriend(
+    String resolutionId,
+    String friendId,
+  );
 
   EitherFuture<List<bool>> getResolutionDoneListForWeek({
     required String resolutionId,

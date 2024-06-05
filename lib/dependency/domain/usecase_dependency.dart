@@ -1,7 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/dependency/data/repository_dependency.dart';
-import 'package:wehavit/domain/usecases/get_group_list_view_cell_widget_model_usecase.dart';
-import 'package:wehavit/domain/usecases/get_to_whom_resolution_will_be_shared_usecase.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
 
 final logOutUseCaseProvider = Provider<LogOutUseCase>((ref) {
@@ -331,4 +329,28 @@ final logInWithEmailAndPasswordUsecaseProvider =
     Provider<LogInWithEmailAndPasswordUsecase>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
   return LogInWithEmailAndPasswordUsecase(authRepository);
+});
+
+final shareResolutionToGroupUsecaseProvider =
+    Provider<ShareResolutionToGroupUsecase>((ref) {
+  final resolutionRepository = ref.watch(resolutionRepositoryProvider);
+  return ShareResolutionToGroupUsecase(resolutionRepository);
+});
+
+final unshareResolutionToGroupUsecaseProvider =
+    Provider<UnshareResolutionToGroupUsecase>((ref) {
+  final resolutionRepository = ref.watch(resolutionRepositoryProvider);
+  return UnshareResolutionToGroupUsecase(resolutionRepository);
+});
+
+final shareResolutionToFriendUsecaseProvider =
+    Provider<ShareResolutionToFriendUsecase>((ref) {
+  final resolutionRepository = ref.watch(resolutionRepositoryProvider);
+  return ShareResolutionToFriendUsecase(resolutionRepository);
+});
+
+final unshareResolutionToFriendUsecaseProvider =
+    Provider<UnshareResolutionToFriendUsecase>((ref) {
+  final resolutionRepository = ref.watch(resolutionRepositoryProvider);
+  return UnshareResolutionToFriendUsecase(resolutionRepository);
 });
