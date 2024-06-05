@@ -31,6 +31,7 @@ class _LogInViewState extends ConsumerState<LogInView> {
     final provider = ref.read(logInViewModelProvider.notifier);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: CustomColors.whDarkBlack,
       appBar: WehavitAppBar(
         title: 'WeHavit',
