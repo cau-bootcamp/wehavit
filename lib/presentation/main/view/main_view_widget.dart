@@ -19,8 +19,8 @@ class TabBarIconLabelButton extends StatelessWidget {
   final IconData? iconData;
   final String label;
 
-  final double iconWidth = 32;
-  final double iconHeight = 32;
+  final double iconWidth = 28;
+  final double iconHeight = 28;
 
   @override
   Widget build(BuildContext context) {
@@ -84,8 +84,8 @@ class TabBarProfileImageButton extends StatelessWidget {
     return Column(
       children: [
         Container(
-          width: 45,
-          height: 45,
+          width: 40,
+          height: 40,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(
@@ -131,8 +131,15 @@ class TabBarBackgroundBlurWidget extends StatelessWidget {
         child: BackdropFilter(
           filter: ui.ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
           child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.0),
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.transparent,
+                  CustomColors.whDarkBlack,
+                ],
+              ),
             ),
           ),
         ),
