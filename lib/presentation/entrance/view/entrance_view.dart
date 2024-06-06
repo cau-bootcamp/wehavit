@@ -63,7 +63,11 @@ class _EntranceViewState extends ConsumerState<EntranceView> {
             ),
           ),
           SafeArea(
-            minimum: const EdgeInsets.symmetric(horizontal: 16.0),
+            minimum: const EdgeInsets.only(
+              left: 16.0,
+              right: 16.0,
+              bottom: 16.0,
+            ),
             child: Stack(
               children: [
                 fireworkWidget ?? Container(),
@@ -124,20 +128,16 @@ class _EntranceViewState extends ConsumerState<EntranceView> {
 
     if (isLoggedIn) {
       User? user = _auth.currentUser;
+
       if (user != null) {
         setState(() {
           Navigator.pushReplacementNamed(context, '/main');
         });
-      } else {
-        // setState(() {
-        //   _isLoggedIn = false;
-        // });
       }
-    } else {
-      // setState(() {
-      //   _isLoggedIn = false;
-      // });
     }
+
+    ref.invalidate(mainViewModelProvider);
+    ref.invalidate(friendListViewModelProvider);
   }
 }
 

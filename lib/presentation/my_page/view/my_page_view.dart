@@ -21,7 +21,8 @@ class MyPageView extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => _MyPageScreenState();
 }
 
-class _MyPageScreenState extends ConsumerState<MyPageView> {
+class _MyPageScreenState extends ConsumerState<MyPageView>
+    with AutomaticKeepAliveClientMixin<MyPageView> {
   @override
   void initState() {
     super.initState();
@@ -38,95 +39,54 @@ class _MyPageScreenState extends ConsumerState<MyPageView> {
       appBar: WehavitAppBar(title: '내 정보'),
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: ListView(
-          children: [
-            // 내 프로필
-            MyPageWehavitSummaryWidget(
-              futureUserEntity: viewModel.futureMyUserDataEntity,
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            const Text(
-              '도전중인 목표',
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-                fontSize: 20,
+        child: RefreshIndicator(
+          onRefresh: () async {
+            ref.read(myPageViewModelProvider.notifier).loadData();
+          },
+          child: ListView(
+            padding: const EdgeInsets.only(bottom: 64.0),
+            children: [
+              // 내 프로필
+              MyPageWehavitSummaryWidget(
+                futureUserEntity: viewModel.futureMyUserDataEntity,
               ),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            EitherFutureBuilder<List<ResolutionEntity>>(
-              target: viewModel.futureMyyResolutionList,
-              forWaiting: Container(),
-              forFail: Container(),
-              mainWidgetCallback: (resolutionList) {
-                return Column(
-                  children: List<ResolutionListCellWidget>.generate(
-                    resolutionList.length,
-                    (index) => ResolutionListCellWidget(
-                      resolutionEntity: resolutionList[index],
-                      showDetails: true,
+              const SizedBox(
+                height: 16,
+              ),
+              const Text(
+                '도전중인 목표',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                  fontSize: 20,
+                ),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              EitherFutureBuilder<List<ResolutionEntity>>(
+                target: viewModel.futureMyyResolutionList,
+                forWaiting: Container(),
+                forFail: Container(),
+                mainWidgetCallback: (resolutionList) {
+                  return Column(
+                    children: List<ResolutionListCellWidget>.generate(
+                      resolutionList.length,
+                      (index) => ResolutionListCellWidget(
+                        resolutionEntity: resolutionList[index],
+                        showDetails: true,
+                      ),
                     ),
-                  ),
-                );
-              },
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-          ],
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
-
-// class CheckAllWidget extends StatelessWidget {
-//   const CheckAllWidget({
-//     super.key,
-//     required this.ref,
-//   });
-
-//   final WidgetRef ref;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Row(
-//       children: [
-//         Expanded(
-//           child: Container(
-//             margin: const EdgeInsets.only(
-//               top: 12,
-//               left: 16,
-//               right: 16,
-//               bottom: 12,
-//             ),
-//             child: TextButton(
-//               onPressed: () async {
-//                 await ref
-//                     .read(myPageResolutionListProvider.notifier)
-//                     .getMyActiveResolutionList();
-//               },
-//               style: TextButton.styleFrom(
-//                 backgroundColor: CustomColors.whYellowDark,
-//                 shape: RoundedRectangleBorder(
-//                   borderRadius: BorderRadius.circular(10), // 모서리 둥글게
-//                 ),
-//               ),
-//               child: const Text(
-//                 '전체 통계 확인하기',
-//                 style: TextStyle(
-//                   color: CustomColors.whSemiWhite,
-//                   fontWeight: FontWeight.bold,
-//                 ),
-//               ),
-//             ),
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }

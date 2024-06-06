@@ -8,7 +8,6 @@ import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/effects/effects.dart';
 import 'package:wehavit/presentation/group_post/group_post.dart';
-import 'package:wehavit/presentation/reaction/reaction.dart';
 
 class GroupPostView extends ConsumerStatefulWidget {
   GroupPostView({super.key, required this.groupEntity});
@@ -359,7 +358,6 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
           ),
         ),
         const ReactionCameraWidget(),
-        const ReactionAnimationWidget(),
       ],
     );
   }

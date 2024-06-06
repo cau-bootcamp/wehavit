@@ -5,4 +5,6 @@ class ResolutionListViewModel {
   List<ResolutionListCellWidgetModel>? resolutionModelList;
   EitherFuture<int>? futureDoneCount;
   EitherFuture<int>? futureDoneRatio;
+
+  bool isLoadingView = true;
 }

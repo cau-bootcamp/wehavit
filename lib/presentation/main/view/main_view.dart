@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
@@ -34,53 +36,63 @@ class _MainViewState extends ConsumerState<MainView>
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      backgroundColor: CustomColors.whDarkBlack,
       body: Stack(
-        alignment: Alignment.bottomCenter,
         children: [
-          TabBarView(
-            controller: tabController,
-            physics: const NeverScrollableScrollPhysics(),
-            children: const [
-              ResolutionListView(),
-              GroupView(),
-              FriendListView(),
-              MyPageView(),
-            ],
-          ),
-          SizedBox(
-            height: 85,
+          SafeArea(
             child: Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.bottomCenter,
               children: [
-                const TabBarBackgroundBlurWidget(),
-                Padding(
-                  padding: const EdgeInsets.only(top: 12),
-                  child: TabBar(
-                    onTap: (value) {
-                      setState(() {});
-                    },
-                    // dividerHeight: 0,
-                    indicatorColor: Colors.transparent,
-                    labelColor: CustomColors.whYellow,
-                    controller: tabController,
-                    tabs: [
-                      TabBarIconLabelButton(
-                        isSelected: tabController.index == 0,
-                        iconImageName: CustomIconImage.approvalIcon,
-                        label: '인증하기',
-                      ),
-                      TabBarIconLabelButton(
-                        isSelected: tabController.index == 1,
-                        iconData: Icons.outlined_flag_rounded,
-                        label: '그룹',
-                      ),
-                      TabBarIconLabelButton(
-                        isSelected: tabController.index == 2,
-                        iconData: Icons.people_alt_outlined,
-                        label: '친구',
-                      ),
-                      TabBarProfileImageButton(
-                        isSelected: tabController.index == 3,
-                        futureUserDataEntity: userDataEntity,
+                TabBarView(
+                  controller: tabController,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: const [
+                    ResolutionListView(),
+                    GroupView(),
+                    FriendListView(),
+                    MyPageView(),
+                  ],
+                ),
+                SizedBox(
+                  height: 64,
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      const TabBarBackgroundBlurWidget(),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: TabBar(
+                          onTap: (value) {
+                            setState(() {});
+                          },
+                          // dividerHeight: 0,
+                          indicatorColor: Colors.transparent,
+                          labelColor: CustomColors.whYellow,
+                          controller: tabController,
+                          dividerColor: Colors.transparent,
+                          tabs: [
+                            TabBarIconLabelButton(
+                              isSelected: tabController.index == 0,
+                              iconImageName: CustomIconImage.approvalIcon,
+                              label: '인증하기',
+                            ),
+                            TabBarIconLabelButton(
+                              isSelected: tabController.index == 1,
+                              iconData: Icons.outlined_flag_rounded,
+                              label: '그룹',
+                            ),
+                            TabBarIconLabelButton(
+                              isSelected: tabController.index == 2,
+                              iconData: Icons.people_alt_outlined,
+                              label: '친구',
+                            ),
+                            TabBarProfileImageButton(
+                              isSelected: tabController.index == 3,
+                              futureUserDataEntity: userDataEntity,
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -88,6 +100,7 @@ class _MainViewState extends ConsumerState<MainView>
               ],
             ),
           ),
+          const ReactionAnimationWidget(),
         ],
       ),
     );

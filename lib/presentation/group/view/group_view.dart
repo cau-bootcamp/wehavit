@@ -16,7 +16,8 @@ class GroupView extends ConsumerStatefulWidget {
   ConsumerState<GroupView> createState() => _GroupViewState();
 }
 
-class _GroupViewState extends ConsumerState<GroupView> {
+class _GroupViewState extends ConsumerState<GroupView>
+    with AutomaticKeepAliveClientMixin<GroupView> {
   @override
   void initState() {
     super.initState();
@@ -26,6 +27,7 @@ class _GroupViewState extends ConsumerState<GroupView> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final viewModel = ref.watch(groupViewModelProvider);
     // final provider = ref.read(groupViewModelProvider.notifier);
 
@@ -76,16 +78,23 @@ class _GroupViewState extends ConsumerState<GroupView> {
           child: Visibility(
             visible: viewModel.groupListViewCellModelList != null,
             child: viewModel.groupListViewCellModelList != null
-                ? ListView.builder(
-                    itemCount: viewModel.groupListViewCellModelList!.length + 1,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(
-                          bottom: 12,
-                        ),
-                        child: groupListViewCellList[index],
-                      );
+                ? RefreshIndicator(
+                    onRefresh: () async {
+                      unawaited(loadGroupCellList());
                     },
+                    child: ListView.builder(
+                      padding: const EdgeInsets.only(bottom: 60.0),
+                      itemCount:
+                          viewModel.groupListViewCellModelList!.length + 1,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                            bottom: 12,
+                          ),
+                          child: groupListViewCellList[index],
+                        );
+                      },
+                    ),
                   )
                 : Container(), // 빈 컨테이너 반환
           ),
@@ -156,4 +165,7 @@ class _GroupViewState extends ConsumerState<GroupView> {
         .loadMyGroupCellList()
         .whenComplete(() => setState(() {}));
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

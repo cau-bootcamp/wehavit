@@ -12,6 +12,7 @@ AppBar WehavitAppBar({
   int? trailingIconBadgeCount,
 }) {
   return AppBar(
+    scrolledUnderElevation: 0,
     elevation: 0,
     title: Text(
       title,
@@ -56,60 +57,63 @@ AppBar WehavitAppBar({
     actions: [
       Visibility(
         visible: trailingTitle != null || trailingIcon != null,
-        child: Directionality(
-          textDirection: TextDirection.rtl,
-          child: TextButton.icon(
-            style: TextButton.styleFrom(
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              alignment: Alignment.centerLeft,
-            ),
-            icon: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Icon(
-                  trailingIcon,
-                  color: CustomColors.whWhite,
-                  size: trailingIcon != null ? 28.0 : 0,
-                ),
-                if (trailingIconBadgeCount != null &&
-                    trailingIconBadgeCount > 0)
-                  Positioned(
-                    right: -6,
-                    top: -4,
-                    child: Container(
-                      alignment: Alignment.center,
-                      width: 17,
-                      height: 17,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: CustomColors.whRed,
-                      ),
-                      child: Text(
-                        trailingIconBadgeCount.toString(),
-                        style: const TextStyle(
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.w800,
-                          color: CustomColors.whWhite,
-                          height: 0.2,
+        child: Container(
+          margin: const EdgeInsets.only(right: 8.0),
+          child: Directionality(
+            textDirection: TextDirection.rtl,
+            child: TextButton.icon(
+              style: TextButton.styleFrom(
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                alignment: Alignment.centerLeft,
+              ),
+              icon: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Icon(
+                    trailingIcon,
+                    color: CustomColors.whWhite,
+                    size: trailingIcon != null ? 28.0 : 0,
+                  ),
+                  if (trailingIconBadgeCount != null &&
+                      trailingIconBadgeCount > 0)
+                    Positioned(
+                      right: -6,
+                      top: -4,
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: 17,
+                        height: 17,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: CustomColors.whRed,
+                        ),
+                        child: Text(
+                          trailingIconBadgeCount.toString(),
+                          style: const TextStyle(
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.w800,
+                            color: CustomColors.whWhite,
+                            height: 0.2,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-              ],
-            ),
-            label: Text(
-              trailingTitle ?? '',
-              style: const TextStyle(
-                fontSize: 17.0,
-                fontWeight: FontWeight.w400,
-                color: CustomColors.whWhite,
+                ],
               ),
+              label: Text(
+                trailingTitle ?? '',
+                style: const TextStyle(
+                  fontSize: 17.0,
+                  fontWeight: FontWeight.w400,
+                  color: CustomColors.whWhite,
+                ),
+              ),
+              onPressed: () {
+                if (trailingAction != null) {
+                  trailingAction();
+                }
+              },
             ),
-            onPressed: () {
-              if (trailingAction != null) {
-                trailingAction();
-              }
-            },
           ),
         ),
       ),
