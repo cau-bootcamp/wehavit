@@ -11,18 +11,11 @@ import 'package:wehavit/presentation/presentation.dart';
 class FriendListView extends ConsumerStatefulWidget {
   const FriendListView({super.key});
 
-  static FriendListView builder(
-    BuildContext context,
-    GoRouterState state,
-  ) =>
-      const FriendListView();
-
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      FriendListScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() => FrinedListViewState();
 }
 
-class FriendListScreenState extends ConsumerState<FriendListView> {
+class FrinedListViewState extends ConsumerState<FriendListView> {
   @override
   void initState() {
     super.initState();
@@ -42,11 +35,6 @@ class FriendListScreenState extends ConsumerState<FriendListView> {
           .getFriendList()
           .whenComplete(() => setState(() {})),
     );
-  }
-
-  @override
-  Future<void> didChangeDependencies() async {
-    super.didChangeDependencies();
   }
 
   bool isManagingMode = false;

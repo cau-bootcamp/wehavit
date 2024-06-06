@@ -128,7 +128,7 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
               onPressed: () async {
                 if (entity.userId != null) {
                   final parentState =
-                      context.findAncestorStateOfType<FriendListScreenState>();
+                      context.findAncestorStateOfType<FrinedListViewState>();
 
                   await provider.acceptToBeFriendWith(
                     targetUid: entity.userId!,
@@ -149,7 +149,7 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
               onPressed: () async {
                 if (entity.userId != null) {
                   final parentState =
-                      context.findAncestorStateOfType<FriendListScreenState>();
+                      context.findAncestorStateOfType<FrinedListViewState>();
 
                   await provider.rejectToBeFriendWith(
                     targetUid: entity.userId!,
@@ -170,7 +170,7 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
           onPressed: () async {
             if (entity.userId != null) {
               final parentState =
-                  context.findAncestorStateOfType<FriendListScreenState>();
+                  context.findAncestorStateOfType<FrinedListViewState>();
 
               await provider.removeFromFriendList(targetUid: entity.userId!);
 
@@ -186,7 +186,7 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
           onPressed: () async {
             if (entity.userId != null) {
               final parentState =
-                  context.findAncestorStateOfType<FriendListScreenState>();
+                  context.findAncestorStateOfType<FrinedListViewState>();
 
               await provider
                   .applyToBeFriendWith(targetUid: entity.userId!)
