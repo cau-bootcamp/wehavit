@@ -8,11 +8,11 @@ class FirebaseCollectionName {
   static const users = 'users';
   static const groups = 'groups';
 
-  static final myResolutions = FirebaseAuth.instance.currentUser != null
+  static String get myResolutions => FirebaseAuth.instance.currentUser != null
       ? 'users/${FirebaseAuth.instance.currentUser?.uid}/resolutions'
       : 'invalid_address';
 
-  static final friends = FirebaseAuth.instance.currentUser != null
+  static String get friends => FirebaseAuth.instance.currentUser != null
       ? 'users/${FirebaseAuth.instance.currentUser?.uid}/friends'
       : 'invalid_address';
 
@@ -38,12 +38,12 @@ class FirebaseCollectionName {
     return 'users/$targetUid/received_reactions';
   }
 
-  static final userReactionBox = FirebaseAuth.instance.currentUser != null
+  static String get userReactionBox => FirebaseAuth.instance.currentUser != null
       ? 'users/${FirebaseAuth.instance.currentUser?.uid}/received_reactions'
       : 'invalid_address';
 
   /// 사용자가 속해있는 팀에 대한 collection
-  static final userGroups = FirebaseAuth.instance.currentUser != null
+  static String get userGroups => FirebaseAuth.instance.currentUser != null
       ? 'users/${FirebaseAuth.instance.currentUser?.uid}/groups'
       : 'invalid_address';
 
@@ -51,7 +51,7 @@ class FirebaseCollectionName {
     return 'users/$targetUid/groups';
   }
 
-  static final confirmPostImageStorageName = FirebaseAuth
+  static String get confirmPostImageStorageName => FirebaseAuth
               .instance.currentUser !=
           null
       ? '${FirebaseAuth.instance.currentUser?.uid}/confirm_post/_${DateTime.now().toIso8601String()}'

@@ -21,12 +21,14 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   EitherFuture<List<EitherFuture<UserDataEntity>>> getFriendModelList() {
     // users에서 내 user 정보 접근해서 friends 리스트 받아오기
     try {
+      print(FirebaseCollectionName.friends);
       return firestore
           .collection(FirebaseCollectionName.friends)
           .get()
           .then((friendDocument) {
         return right(
           friendDocument.docs.map((doc) {
+            print(doc.data());
             return fetchUserDataEntityByUserId(
               doc.data()[FirebaseUserFieldName.friendUid],
             );

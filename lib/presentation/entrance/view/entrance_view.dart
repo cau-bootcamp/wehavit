@@ -128,20 +128,16 @@ class _EntranceViewState extends ConsumerState<EntranceView> {
 
     if (isLoggedIn) {
       User? user = _auth.currentUser;
+
       if (user != null) {
         setState(() {
           Navigator.pushReplacementNamed(context, '/main');
         });
-      } else {
-        // setState(() {
-        //   _isLoggedIn = false;
-        // });
       }
-    } else {
-      // setState(() {
-      //   _isLoggedIn = false;
-      // });
     }
+
+    ref.invalidate(mainViewModelProvider);
+    ref.invalidate(friendListViewModelProvider);
   }
 }
 
