@@ -71,7 +71,7 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.chevron_left,
                 color: CustomColors.whWhite,
                 size: 36.0,
@@ -139,16 +139,29 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                          const Icon(
-                            Icons.keyboard_arrow_down,
-                            color: CustomColors.whWhite,
+                          IconButton(
+                            style: IconButton.styleFrom(
+                              padding: EdgeInsets.all(0),
+                              side: BorderSide.none,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                viewModel.isShowingCalendar =
+                                    !viewModel.isShowingCalendar;
+                              });
+                            },
+                            icon: const Icon(
+                              Icons.keyboard_arrow_down,
+                              color: CustomColors.whWhite,
+                            ),
                           ),
                         ],
                       ),
-                      Visibility(
-                        visible: true,
-                        child: Container(
-                          padding: const EdgeInsets.only(top: 12),
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 250),
+                        curve: Curves.fastOutSlowIn,
+                        height: viewModel.isShowingCalendar ? 64 : 0,
+                        child: ProviderScope(
                           child: CarouselSlider.builder(
                             itemBuilder: (context, index, realIndex) {
                               return Row(
@@ -183,23 +196,22 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                       },
                                       child: Container(
                                         margin: const EdgeInsets.symmetric(
-                                          horizontal: 4,
+                                          horizontal: 4.0,
                                         ),
-                                        height: 64,
                                         clipBehavior: Clip.hardEdge,
                                         decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(14.0),
+                                          border: Border.all(
+                                            color: CustomColors.whBlack,
+                                            width: 2,
+                                            strokeAlign:
+                                                BorderSide.strokeAlignOutside,
+                                          ),
+                                          borderRadius: BorderRadius.circular(
+                                            14.0,
+                                          ),
                                         ),
                                         child: Container(
-                                          height: 64,
                                           decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: CustomColors.whBlack,
-                                              width: 2,
-                                              strokeAlign:
-                                                  BorderSide.strokeAlignOutside,
-                                            ),
                                             boxShadow: [
                                               const BoxShadow(
                                                 blurRadius: 4,
@@ -218,49 +230,62 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                                             .whYellowDark,
                                               ),
                                             ],
-                                            borderRadius:
-                                                BorderRadius.circular(14.0),
                                           ),
                                           child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [
-                                              Text(
-                                                cellDate.day == 1
-                                                    ? '${cellDate.month}/${cellDate.day}'
-                                                    : cellDate.day.toString(),
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: isFuture ||
-                                                          cellDate !=
-                                                              viewModel
-                                                                  .selectedDate
-                                                      ? CustomColors
-                                                          .whPlaceholderGrey
-                                                      : CustomColors.whBlack,
+                                              Flexible(
+                                                child: FittedBox(
+                                                  fit: BoxFit.scaleDown,
+                                                  child: Text(
+                                                    cellDate.day == 1
+                                                        ? '${cellDate.month}/${cellDate.day}'
+                                                        : cellDate.day
+                                                            .toString(),
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: isFuture ||
+                                                              cellDate !=
+                                                                  viewModel
+                                                                      .selectedDate
+                                                          ? CustomColors
+                                                              .whPlaceholderGrey
+                                                          : CustomColors
+                                                              .whBlack,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
-                                              Text(
-                                                isFuture
-                                                    ? '-'
-                                                    : (viewModel.confirmPostList[
-                                                                cellDate] ??
-                                                            [])
-                                                        .length
-                                                        .toString(),
-                                                style: TextStyle(
-                                                  height: 1.0,
-                                                  fontFamily: 'Giants',
-                                                  fontSize: 24,
-                                                  fontWeight: FontWeight.w700,
-                                                  color: isFuture ||
-                                                          cellDate !=
-                                                              viewModel
-                                                                  .selectedDate
-                                                      ? CustomColors
-                                                          .whPlaceholderGrey
-                                                      : CustomColors.whBlack,
+                                              Flexible(
+                                                child: FittedBox(
+                                                  fit: BoxFit.scaleDown,
+                                                  child: Text(
+                                                    isFuture
+                                                        ? '-'
+                                                        : (viewModel.confirmPostList[
+                                                                    cellDate] ??
+                                                                [])
+                                                            .length
+                                                            .toString(),
+                                                    style: TextStyle(
+                                                      height: 1.0,
+                                                      fontFamily: 'Giants',
+                                                      fontSize: 24,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      color: isFuture ||
+                                                              cellDate !=
+                                                                  viewModel
+                                                                      .selectedDate
+                                                          ? CustomColors
+                                                              .whPlaceholderGrey
+                                                          : CustomColors
+                                                              .whBlack,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                             ],

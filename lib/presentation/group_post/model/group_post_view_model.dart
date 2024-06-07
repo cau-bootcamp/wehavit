@@ -14,6 +14,8 @@ class GroupPostViewModel {
   ScrollController scrollController = ScrollController();
 
   String groupId = '';
+
+  bool isShowingCalendar = true;
   DateTime selectedDate =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
