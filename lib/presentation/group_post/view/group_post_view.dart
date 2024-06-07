@@ -67,42 +67,55 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            centerTitle: false,
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(
+                Icons.chevron_left,
+                color: CustomColors.whWhite,
+                size: 36.0,
+              ),
+            ),
+            centerTitle: true,
             automaticallyImplyLeading: false,
             actions: [
-              IconButton(
-                onPressed: () async {},
-                icon: const Icon(
-                  Icons.campaign_outlined,
-                  color: CustomColors.whWhite,
-                  size: 30,
-                ),
-              ),
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.error_outline,
-                  color: CustomColors.whWhite,
-                  size: 30,
-                ),
-              ),
-              IconButton(
-                onPressed: () async {
-                  showModalBottomSheet(
-                    isScrollControlled: true,
-                    context: context,
-                    builder: (context) {
-                      return GroupMemberListBottomSheet(
-                        updateGroupEntity,
-                        groupEntity: widget.groupEntity,
-                      );
-                    },
-                  );
-                },
-                icon: const Icon(
-                  Icons.people_outline,
-                  color: CustomColors.whWhite,
-                  size: 30,
+              // IconButton(
+              //   onPressed: () async {},
+              //   icon: const Icon(
+              //     Icons.campaign_outlined,
+              //     color: CustomColors.whWhite,
+              //     size: 30,
+              //   ),
+              // ),
+              // IconButton(
+              //   onPressed: () {},
+              //   icon: const Icon(
+              //     Icons.error_outline,
+              //     color: CustomColors.whWhite,
+              //     size: 30,
+              //   ),
+              // ),
+              Container(
+                margin: const EdgeInsets.only(right: 12.0),
+                child: IconButton(
+                  onPressed: () async {
+                    showModalBottomSheet(
+                      isScrollControlled: true,
+                      context: context,
+                      builder: (context) {
+                        return GroupMemberListBottomSheet(
+                          updateGroupEntity,
+                          groupEntity: widget.groupEntity,
+                        );
+                      },
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.people_outline,
+                    color: CustomColors.whWhite,
+                    size: 30,
+                  ),
                 ),
               ),
             ],
