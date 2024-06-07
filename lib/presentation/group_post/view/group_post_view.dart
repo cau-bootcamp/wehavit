@@ -1,3 +1,5 @@
+// ignore_for_file: lines_longer_than_80_chars
+
 import 'dart:async';
 
 import 'package:carousel_slider/carousel_slider.dart';
@@ -6,8 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/presentation/effects/effects.dart';
-import 'package:wehavit/presentation/group_post/group_post.dart';
+import 'package:wehavit/presentation/presentation.dart';
 
 class GroupPostView extends ConsumerStatefulWidget {
   GroupPostView({super.key, required this.groupEntity});
@@ -140,10 +141,6 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                             ),
                           ),
                           IconButton(
-                            style: IconButton.styleFrom(
-                              padding: EdgeInsets.all(0),
-                              side: BorderSide.none,
-                            ),
                             onPressed: () {
                               setState(() {
                                 viewModel.isShowingCalendar =
@@ -262,28 +259,62 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                               Flexible(
                                                 child: FittedBox(
                                                   fit: BoxFit.scaleDown,
-                                                  child: Text(
-                                                    isFuture
-                                                        ? '-'
-                                                        : (viewModel.confirmPostList[
-                                                                    cellDate] ??
-                                                                [])
-                                                            .length
+                                                  child: Visibility(
+                                                    visible: !isFuture,
+                                                    replacement: Text(
+                                                      '-',
+                                                      style: TextStyle(
+                                                        height: 1.0,
+                                                        fontFamily: 'Giants',
+                                                        fontSize: 24,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        color: isFuture ||
+                                                                cellDate !=
+                                                                    viewModel
+                                                                        .selectedDate
+                                                            ? CustomColors
+                                                                .whPlaceholderGrey
+                                                            : CustomColors
+                                                                .whBlack,
+                                                      ),
+                                                    ),
+                                                    child: EitherFutureBuilder<
+                                                        List<
+                                                            ConfirmPostEntity>>(
+                                                      target: viewModel
+                                                              .confirmPostList[
+                                                          cellDate],
+                                                      forWaiting: const Padding(
+                                                        padding:
+                                                            EdgeInsets.all(2.0),
+                                                        child:
+                                                            CircularProgressIndicator(
+                                                          color: CustomColors
+                                                              .whBrightGrey,
+                                                        ),
+                                                      ),
+                                                      forFail: const Text('-'),
+                                                      mainWidgetCallback:
+                                                          (entityList) => Text(
+                                                        entityList.length
                                                             .toString(),
-                                                    style: TextStyle(
-                                                      height: 1.0,
-                                                      fontFamily: 'Giants',
-                                                      fontSize: 24,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      color: isFuture ||
-                                                              cellDate !=
-                                                                  viewModel
-                                                                      .selectedDate
-                                                          ? CustomColors
-                                                              .whPlaceholderGrey
-                                                          : CustomColors
-                                                              .whBlack,
+                                                        style: TextStyle(
+                                                          height: 1.0,
+                                                          fontFamily: 'Giants',
+                                                          fontSize: 24,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          color: isFuture ||
+                                                                  cellDate !=
+                                                                      viewModel
+                                                                          .selectedDate
+                                                              ? CustomColors
+                                                                  .whPlaceholderGrey
+                                                              : CustomColors
+                                                                  .whBlack,
+                                                        ),
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
@@ -334,13 +365,18 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                   ),
                 ),
                 Expanded(
-                  child: Visibility(
-                    visible:
-                        viewModel.confirmPostList[viewModel.selectedDate] !=
-                                null &&
-                            viewModel.confirmPostList[viewModel.selectedDate]!
-                                .isNotEmpty,
-                    replacement: const Center(
+                  child: EitherFutureBuilder<List<ConfirmPostEntity>>(
+                    target: viewModel.confirmPostList[viewModel.selectedDate],
+                    forWaiting: const Center(
+                      child: SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: CircularProgressIndicator(
+                          color: CustomColors.whBrightGrey,
+                        ),
+                      ),
+                    ),
+                    forFail: const Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -368,27 +404,57 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                         ],
                       ),
                     ),
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.only(bottom: 20.0),
-                      physics: reactionCameraViewModel.isFocusingMode
-                          ? const NeverScrollableScrollPhysics()
-                          : const AlwaysScrollableScrollPhysics(),
-                      child: Column(
-                        children: List<Widget>.generate(
-                          viewModel.confirmPostList[viewModel.selectedDate]
-                                  ?.length ??
-                              0,
-                          (index) => Padding(
-                            padding: const EdgeInsets.only(bottom: 12.0),
-                            child: ConfirmPostWidget(
-                              confirmPostEntity: viewModel.confirmPostList[
-                                  viewModel.selectedDate]![index],
-                              createdDate: viewModel.selectedDate,
+                    mainWidgetCallback: (entityList) {
+                      return Visibility(
+                        visible: entityList.isNotEmpty,
+                        replacement: const Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '아무도 인증글을 남기지 않은\n조용한 날이네요',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: CustomColors.whWhite,
+                                ),
+                              ),
+                              Text(
+                                '🤫',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 40,
+                                  fontWeight: FontWeight.bold,
+                                  color: CustomColors.whWhite,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 60,
+                              ),
+                            ],
+                          ),
+                        ),
+                        child: SingleChildScrollView(
+                          padding: const EdgeInsets.only(bottom: 20.0),
+                          physics: reactionCameraViewModel.isFocusingMode
+                              ? const NeverScrollableScrollPhysics()
+                              : const AlwaysScrollableScrollPhysics(),
+                          child: Column(
+                            children: List<Widget>.generate(
+                              entityList.length,
+                              (index) => Padding(
+                                padding: const EdgeInsets.only(bottom: 12.0),
+                                child: ConfirmPostWidget(
+                                  confirmPostEntity: entityList[index],
+                                  createdDate: viewModel.selectedDate,
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
+                      );
+                    },
                   ),
                 ),
               ],
