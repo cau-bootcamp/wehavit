@@ -1,8 +1,9 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
+import 'package:path/path.dart';
 import 'package:wehavit/common/common.dart';
 
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
@@ -11,7 +12,6 @@ import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/effects/effects.dart';
 import 'package:wehavit/presentation/group_post/group_post.dart';
-import 'package:wehavit/presentation/write_post/write_post.dart';
 
 class ConfirmPostWidget extends ConsumerStatefulWidget {
   const ConfirmPostWidget({
@@ -29,31 +29,36 @@ class ConfirmPostWidget extends ConsumerStatefulWidget {
 
 class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
     with TickerProviderStateMixin {
-  late Future<List<bool>> resolutionDoneListForWrittenWeek;
+  late EitherFuture<List<bool>> resolutionDoneListForWrittenWeek;
   late EitherFuture<UserDataEntity> futureUserDataEntity;
-  late Future<ResolutionEntity?> futureResolutionEntity;
+  late EitherFuture<ResolutionEntity> futureResolutionEntity;
+
+  late ReactionCameraWidgetModel reactionCameraModel =
+      ref.watch(reactionCameraWidgetModelProvider);
+  late ReactionCameraWidgetModelProvider reactionCameraModelProvider =
+      ref.read(reactionCameraWidgetModelProvider.notifier);
 
   @override
   void initState() {
     super.initState();
-    print(widget.createdDate.getMondayDateTime());
+    unawaited(loadData());
+  }
+
+  Future<void> loadData() async {
     futureUserDataEntity = ref.read(getUserDataFromIdUsecaseProvider)(
-        widget.confirmPostEntity.owner!);
+      widget.confirmPostEntity.owner!,
+    );
 
-    resolutionDoneListForWrittenWeek = ref
-        .read(getTargetResolutionDoneListForWeekUsecaseProvider)
-        .call(
-          resolutionId: widget.confirmPostEntity.resolutionId!,
-          startMonday: widget.createdDate.getMondayDateTime(),
-        )
-        .then((result) => result.fold((failure) => [], (list) => list));
+    resolutionDoneListForWrittenWeek =
+        ref.read(getTargetResolutionDoneListForWeekUsecaseProvider).call(
+              resolutionId: widget.confirmPostEntity.resolutionId!,
+              startMonday: widget.createdDate.getMondayDateTime(),
+            );
 
-    futureResolutionEntity = ref
-        .read(getTargetResolutionEntityUsecaseProvider)
-        .call(
-            targetUserId: widget.confirmPostEntity.owner!,
-            targetResolutionId: widget.confirmPostEntity.resolutionId!)
-        .then((result) => result.fold((failure) => null, (entity) => entity));
+    futureResolutionEntity = ref.read(getTargetResolutionEntityUsecaseProvider)(
+      targetUserId: widget.confirmPostEntity.owner!,
+      targetResolutionId: widget.confirmPostEntity.resolutionId!,
+    );
   }
 
   bool isShowingCommentField = false;
@@ -62,235 +67,97 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
 
   @override
   Widget build(BuildContext context) {
-    var viewModel = ref.watch(groupPostViewModelProvider);
-    var provider = ref.read(groupPostViewModelProvider.notifier);
-
-    ReactionCameraWidgetModel reactionCameraModel =
-        ref.watch(reactionCameraWidgetModelProvider);
-    ReactionCameraWidgetModelProvider reactionCameraModelProvider =
-        ref.read(reactionCameraWidgetModelProvider.notifier);
+    final viewModel = ref.watch(groupPostViewModelProvider);
+    final provider = ref.read(groupPostViewModelProvider.notifier);
 
     Point<double> panningPosition = const Point(0, 0);
 
-    return SizedBox(
-      width: double.infinity,
-      child: Stack(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              color: CustomColors.whDarkBlack,
-              borderRadius: BorderRadius.all(
-                Radius.circular(16.0),
+    return EitherFutureBuilder<ResolutionEntity>(
+      target: futureResolutionEntity,
+      forFail: Container(),
+      forWaiting: SizedBox(
+        width: double.infinity,
+        child: Stack(
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                color: CustomColors.whDarkBlack,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(16.0),
+                ),
               ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(0.0),
-              child: Column(
-                children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                      color: CustomColors.whGrey,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(16.0),
+              child: Padding(
+                padding: const EdgeInsets.all(0.0),
+                child: Column(
+                  children: [
+                    Container(
+                      decoration: const BoxDecoration(
+                        color: CustomColors.whGrey,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(16.0),
+                        ),
+                        border: Border(
+                          top: BorderSide(
+                            width: 8.0,
+                            color: CustomColors.whDarkBlack,
+                          ),
+                          left: BorderSide(
+                            width: 8.0,
+                            color: CustomColors.whDarkBlack,
+                          ),
+                          right: BorderSide(
+                            width: 8.0,
+                            color: CustomColors.whDarkBlack,
+                          ),
+                        ),
                       ),
-                      border: Border(
-                        top: BorderSide(
-                          width: 8.0,
-                          color: CustomColors.whDarkBlack,
-                        ),
-                        left: BorderSide(
-                          width: 8.0,
-                          color: CustomColors.whDarkBlack,
-                        ),
-                        right: BorderSide(
-                          width: 8.0,
-                          color: CustomColors.whDarkBlack,
+                      padding: const EdgeInsets.only(
+                        left: 8.0,
+                        right: 8.0,
+                        top: 4.0,
+                        bottom: 12.0,
+                      ),
+                      height: 244,
+                      child: const Center(
+                        child: CircularProgressIndicator(
+                          color: CustomColors.whYellow,
                         ),
                       ),
                     ),
-                    padding: const EdgeInsets.only(
-                      left: 8.0,
-                      right: 8.0,
-                      top: 4.0,
-                      bottom: 12.0,
-                    ),
-
-                    // height: 200,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Stack(
-                          alignment: Alignment.centerRight,
-                          children: [
-                            UserProfileBar(
-                              futureUserEntity: futureUserDataEntity,
+                        TextButton.icon(
+                          icon: const Icon(
+                            Icons.chat_bubble_outline,
+                            color: CustomColors.whWhite,
+                          ),
+                          label: const Text(
+                            '코멘트',
+                            style: TextStyle(
+                              color: CustomColors.whWhite,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w300,
                             ),
-                            if (widget.confirmPostEntity.hasRested == false)
-                              Text(
-                                // ignore: lines_longer_than_80_chars
-                                '${widget.confirmPostEntity.createdAt!.hour > 12 ? '오후' : '오전'} ${widget.confirmPostEntity.createdAt!.hour > 12 ? widget.confirmPostEntity.createdAt!.hour - 12 : widget.confirmPostEntity.createdAt!.hour}시 ${widget.confirmPostEntity.createdAt!.minute}분',
-                                style: const TextStyle(
-                                  color: CustomColors.whWhite,
-                                ),
-                              )
-                            else
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16.0),
-                                  color: CustomColors.whRed,
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 4.0,
-                                  horizontal: 8.0,
-                                ),
-                                child: const Text(
-                                  '오늘 실천 실패 😢',
-                                  style: TextStyle(
-                                    fontSize: 12.0,
-                                    fontWeight: FontWeight.w300,
-                                    color: CustomColors.whWhite,
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                        // const SizedBox(height: 12.0),
-                        FutureBuilder(
-                          future: Future.wait([
-                            resolutionDoneListForWrittenWeek,
-                            futureResolutionEntity,
-                          ]),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              ResolutionEntity? resolutionEntity =
-                                  snapshot.data![1] as ResolutionEntity?;
-
-                              if (resolutionEntity == null) {
-                                return Container();
-                              }
-
-                              return ResolutionLinearGaugeWidget(
-                                resolutionEntity: resolutionEntity,
-                                futureDoneList: Future(
-                                  () => right(snapshot.data![0] as List<bool>),
-                                ),
-                              );
-                            } else {
-                              return Container();
-                            }
-                          },
-                        ),
-
-                        const SizedBox(height: 12.0),
-                        ConfirmPostContentWidget(
-                          confirmPostEntity: widget.confirmPostEntity,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      TextButton.icon(
-                        icon: const Icon(
-                          Icons.chat_bubble_outline,
-                          color: CustomColors.whWhite,
-                        ),
-                        label: const Text(
-                          '코멘트',
-                          style: TextStyle(
-                            color: CustomColors.whWhite,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w300,
                           ),
+                          onPressed: () {},
                         ),
-                        onPressed: () {
-                          setState(() {
-                            isShowingCommentField = !isShowingCommentField;
-                          });
-                        },
-                      ),
-                      TextButton.icon(
-                        icon: const Icon(
-                          Icons.emoji_emotions_outlined,
-                          color: CustomColors.whWhite,
-                        ),
-                        label: const Text(
-                          '이모지',
-                          style: TextStyle(
+                        TextButton.icon(
+                          icon: const Icon(
+                            Icons.emoji_emotions_outlined,
                             color: CustomColors.whWhite,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w300,
                           ),
+                          label: const Text(
+                            '이모지',
+                            style: TextStyle(
+                              color: CustomColors.whWhite,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                          onPressed: () async {},
                         ),
-                        onPressed: () async {
-                          showEmojiSheet(viewModel, provider, context);
-                        },
-                      ),
-                      Listener(
-                        onPointerDown: (event) async {
-                          isTouchMoved = false;
-
-                          if (reactionCameraModel.cameraController == null) {
-                            return;
-                          }
-
-                          panningPosition = Point(
-                            event.position.dx,
-                            event.position.dy,
-                          );
-
-                          reactionCameraModelProvider
-                              .updatePanPosition(panningPosition);
-
-                          if (mounted) {
-                            setState(() {});
-                          }
-                        },
-                        onPointerUp: (_) async {
-                          if (!isTouchMoved) {
-                            showToastMessage(context,
-                                text: '퀵샷 버튼을 누르고 드래그 해주세요!',
-                                icon: const Icon(
-                                  Icons.warning,
-                                  color: CustomColors.whYellow,
-                                ));
-                            return;
-                          }
-                          await reactionCameraModelProvider
-                              .setFocusingModeTo(false);
-
-                          if (reactionCameraModel.cameraController == null) {
-                            return;
-                          }
-
-                          if (reactionCameraModel.isPosInCapturingArea) {
-                            final imageFilePath =
-                                await reactionCameraModelProvider
-                                    .endOnCapturingArea();
-
-                            await provider.sendImageReaction(
-                              entity: widget.confirmPostEntity,
-                              imageFilePath: imageFilePath,
-                            );
-                          }
-
-                          setState(() {});
-                        },
-                        onPointerMove: (event) async {
-                          isTouchMoved = true;
-                          await reactionCameraModelProvider
-                              .setFocusingModeTo(true);
-
-                          panningPosition = Point(
-                            event.position.dx,
-                            event.position.dy,
-                          );
-
-                          reactionCameraModelProvider
-                              .updatePanPosition(panningPosition);
-                        },
-                        child: Container(
+                        Container(
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           child: const Row(
                             mainAxisSize: MainAxisSize.min,
@@ -314,73 +181,309 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                             ],
                           ),
                         ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      mainWidgetCallback: (resolutionEntity) => SizedBox(
+        width: double.infinity,
+        child: Stack(
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                color: CustomColors.whDarkBlack,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(16.0),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(0.0),
+                child: Column(
+                  children: [
+                    Container(
+                      decoration: const BoxDecoration(
+                        color: CustomColors.whGrey,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(16.0),
+                        ),
+                        border: Border(
+                          top: BorderSide(
+                            width: 8.0,
+                            color: CustomColors.whDarkBlack,
+                          ),
+                          left: BorderSide(
+                            width: 8.0,
+                            color: CustomColors.whDarkBlack,
+                          ),
+                          right: BorderSide(
+                            width: 8.0,
+                            color: CustomColors.whDarkBlack,
+                          ),
+                        ),
                       ),
-                    ],
-                  ),
-                  Visibility(
-                    visible: isShowingCommentField,
-                    child: Padding(
                       padding: const EdgeInsets.only(
                         left: 8.0,
                         right: 8.0,
-                        bottom: 8.0,
+                        top: 4.0,
+                        bottom: 12.0,
                       ),
-                      child: Stack(
-                        alignment: Alignment.centerRight,
-                        children: [
-                          TextFormField(
-                            controller: commentEditingController,
-                            style: const TextStyle(
-                              color: CustomColors.whWhite,
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w300,
-                            ),
-                            decoration: InputDecoration(
-                              isDense: true,
-                              filled: true,
-                              fillColor: CustomColors.whYellowDark,
-                              contentPadding: const EdgeInsets.only(
-                                left: 12.0,
-                                right: 44.0,
-                                top: 8.0,
-                                bottom: 8.0,
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(
-                                  width: 0,
-                                  style: BorderStyle.none,
-                                ),
-                              ),
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () async {
-                              sendMessageReaction(
-                                widget.confirmPostEntity,
-                                commentEditingController.text,
-                              ).whenComplete(() {
-                                commentEditingController.clear();
 
-                                setState(() {
-                                  isShowingCommentField = false;
-                                });
-                              });
-                            },
-                            icon: const Icon(
-                              Icons.send_outlined,
-                              color: CustomColors.whWhite,
-                            ),
+                      // height: 200,
+
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Stack(
+                            alignment: Alignment.centerRight,
+                            children: [
+                              UserProfileBar(
+                                futureUserEntity: futureUserDataEntity,
+                              ),
+                              if (widget.confirmPostEntity.hasRested == false)
+                                Text(
+                                  // ignore: lines_longer_than_80_chars
+                                  '${widget.confirmPostEntity.createdAt!.hour > 12 ? '오후' : '오전'} ${widget.confirmPostEntity.createdAt!.hour > 12 ? widget.confirmPostEntity.createdAt!.hour - 12 : widget.confirmPostEntity.createdAt!.hour}시 ${widget.confirmPostEntity.createdAt!.minute}분',
+                                  style: const TextStyle(
+                                    color: CustomColors.whWhite,
+                                  ),
+                                )
+                              else
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(16.0),
+                                    color: CustomColors.whRed,
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 4.0,
+                                    horizontal: 8.0,
+                                  ),
+                                  child: const Text(
+                                    '오늘 실천 실패 😢',
+                                    style: TextStyle(
+                                      fontSize: 12.0,
+                                      fontWeight: FontWeight.w300,
+                                      color: CustomColors.whWhite,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                          // const SizedBox(height: 12.0),
+
+                          ResolutionLinearGaugeWidget(
+                            resolutionEntity: resolutionEntity,
+                            futureDoneList: resolutionDoneListForWrittenWeek,
+                          ),
+
+                          const SizedBox(height: 12.0),
+                          ConfirmPostContentWidget(
+                            confirmPostEntity: widget.confirmPostEntity,
                           ),
                         ],
                       ),
                     ),
-                  ),
-                ],
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        TextButton.icon(
+                          icon: const Icon(
+                            Icons.chat_bubble_outline,
+                            color: CustomColors.whWhite,
+                          ),
+                          label: const Text(
+                            '코멘트',
+                            style: TextStyle(
+                              color: CustomColors.whWhite,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              isShowingCommentField = !isShowingCommentField;
+                            });
+                          },
+                        ),
+                        TextButton.icon(
+                          icon: const Icon(
+                            Icons.emoji_emotions_outlined,
+                            color: CustomColors.whWhite,
+                          ),
+                          label: const Text(
+                            '이모지',
+                            style: TextStyle(
+                              color: CustomColors.whWhite,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                          onPressed: () async {
+                            showEmojiSheet(viewModel, provider, context);
+                          },
+                        ),
+                        Listener(
+                          onPointerDown: (event) async {
+                            isTouchMoved = false;
+
+                            if (reactionCameraModel.cameraController == null) {
+                              return;
+                            }
+
+                            panningPosition = Point(
+                              event.position.dx,
+                              event.position.dy,
+                            );
+
+                            reactionCameraModelProvider
+                                .updatePanPosition(panningPosition);
+
+                            if (mounted) {
+                              setState(() {});
+                            }
+                          },
+                          onPointerUp: (_) async {
+                            if (!isTouchMoved) {
+                              showToastMessage(
+                                context,
+                                text: '퀵샷 버튼을 누르고 드래그 해주세요!',
+                                icon: const Icon(
+                                  Icons.warning,
+                                  color: CustomColors.whYellow,
+                                ),
+                              );
+                              return;
+                            }
+                            await reactionCameraModelProvider
+                                .setFocusingModeTo(false);
+
+                            if (reactionCameraModel.cameraController == null) {
+                              return;
+                            }
+
+                            if (reactionCameraModel.isPosInCapturingArea) {
+                              final imageFilePath =
+                                  await reactionCameraModelProvider
+                                      .endOnCapturingArea();
+
+                              await provider.sendImageReaction(
+                                entity: widget.confirmPostEntity,
+                                imageFilePath: imageFilePath,
+                              );
+                            }
+
+                            // setState(() {});
+                          },
+                          onPointerMove: (event) async {
+                            isTouchMoved = true;
+                            await reactionCameraModelProvider
+                                .setFocusingModeTo(true);
+
+                            panningPosition = Point(
+                              event.position.dx,
+                              event.position.dy,
+                            );
+
+                            reactionCameraModelProvider
+                                .updatePanPosition(panningPosition);
+                          },
+                          child: Container(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.camera_alt_outlined,
+                                  color: CustomColors.whWhite,
+                                ),
+                                SizedBox(
+                                  width: 8.0,
+                                ),
+                                Text(
+                                  '퀵샷',
+                                  style: TextStyle(
+                                    color: CustomColors.whWhite,
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Visibility(
+                      visible: isShowingCommentField,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          left: 8.0,
+                          right: 8.0,
+                          bottom: 8.0,
+                        ),
+                        child: Stack(
+                          alignment: Alignment.centerRight,
+                          children: [
+                            TextFormField(
+                              controller: commentEditingController,
+                              style: const TextStyle(
+                                color: CustomColors.whWhite,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w300,
+                              ),
+                              decoration: InputDecoration(
+                                isDense: true,
+                                filled: true,
+                                fillColor: CustomColors.whYellowDark,
+                                contentPadding: const EdgeInsets.only(
+                                  left: 12.0,
+                                  right: 44.0,
+                                  top: 8.0,
+                                  bottom: 8.0,
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: const BorderSide(
+                                    width: 0,
+                                    style: BorderStyle.none,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () async {
+                                sendMessageReaction(
+                                  widget.confirmPostEntity,
+                                  commentEditingController.text,
+                                ).whenComplete(() {
+                                  commentEditingController.clear();
+
+                                  setState(() {
+                                    isShowingCommentField = false;
+                                  });
+                                });
+                              },
+                              icon: const Icon(
+                                Icons.send_outlined,
+                                color: CustomColors.whWhite,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -401,9 +504,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
   ) {
     void disposeWidget(UniqueKey key) {
       if (mounted) {
-        setState(() {
-          viewModel.emojiWidgets.remove(key);
-        });
+        viewModel.emojiWidgets.remove(key);
       }
     }
 

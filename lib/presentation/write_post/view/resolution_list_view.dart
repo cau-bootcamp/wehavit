@@ -19,6 +19,7 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
   @override
   void initState() {
     super.initState();
+
     unawaited(
       ref
           .read(resolutionListViewModelProvider.notifier)

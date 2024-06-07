@@ -22,13 +22,25 @@ class ResolutionListCellWidget extends ConsumerStatefulWidget {
 
 class _MyPageResolutionListCellWidgetState
     extends ConsumerState<ResolutionListCellWidget> {
+  late EitherFuture<List<bool>> futureDoneList =
+      ref.watch(getTargetResolutionDoneListForWeekUsecaseProvider)(
+    resolutionId: widget.resolutionEntity.resolutionId ?? '',
+    startMonday: DateTime.now().getMondayDateTime(),
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    // final EitherFuture<List<bool>> futureDoneList =
+    //     ref.watch(getTargetResolutionDoneListForWeekUsecaseProvider)(
+    //   resolutionId: widget.resolutionEntity.resolutionId ?? '',
+    //   startMonday: DateTime.now().getMondayDateTime(),
+    // );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final EitherFuture<List<bool>> futureDoneList =
-        ref.watch(getTargetResolutionDoneListForWeekUsecaseProvider)(
-      resolutionId: widget.resolutionEntity.resolutionId ?? '',
-      startMonday: DateTime.now().getMondayDateTime(),
-    );
+    print("BUILD");
 
     final daysSinceFirstDay = DateTime.now()
             .difference(widget.resolutionEntity.startDate ?? DateTime.now())
@@ -314,33 +326,26 @@ class ResolutionListWeeklyDoneCellPlaceholderWidget extends StatelessWidget {
   }
 }
 
-class ResolutionLinearGaugeWidget extends ConsumerStatefulWidget {
+class ResolutionLinearGaugeWidget extends StatelessWidget {
   const ResolutionLinearGaugeWidget({
     required this.resolutionEntity,
     required this.futureDoneList,
     super.key,
   });
 
-  final ResolutionEntity resolutionEntity;
+  final ResolutionEntity? resolutionEntity;
   final EitherFuture<List<bool>> futureDoneList;
 
   @override
-  ConsumerState<ResolutionLinearGaugeWidget> createState() =>
-      _ResolutionLinearGaugeWidgetState();
-}
-
-class _ResolutionLinearGaugeWidgetState
-    extends ConsumerState<ResolutionLinearGaugeWidget> {
-  @override
   Widget build(BuildContext context) {
     return EitherFutureBuilder<List<bool>>(
-      target: widget.futureDoneList,
+      target: futureDoneList,
       forWaiting: Column(
         children: [
           Row(
             children: [
               Text(
-                widget.resolutionEntity.actionStatement ?? '',
+                resolutionEntity?.actionStatement ?? '',
                 style: const TextStyle(
                   color: CustomColors.whWhite,
                   fontSize: 14.0,
@@ -354,8 +359,7 @@ class _ResolutionLinearGaugeWidgetState
           ),
           LinearProgressIndicator(
             minHeight: 7,
-            color:
-                PointColors.colorList[widget.resolutionEntity.colorIndex ?? 0],
+            color: PointColors.colorList[resolutionEntity?.colorIndex ?? 0],
             backgroundColor: CustomColors.whDarkBlack,
           ),
         ],
@@ -399,7 +403,7 @@ class _ResolutionLinearGaugeWidgetState
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  widget.resolutionEntity.actionStatement ?? '',
+                  resolutionEntity?.actionStatement ?? '',
                   style: const TextStyle(
                     color: CustomColors.whWhite,
                     fontSize: 14.0,
@@ -408,7 +412,7 @@ class _ResolutionLinearGaugeWidgetState
                 ),
                 Text(
                   // ignore: lines_longer_than_80_chars
-                  '주 ${widget.resolutionEntity.actionPerWeek}회 중 $successCount회 실천',
+                  '주 ${resolutionEntity?.actionPerWeek ?? '-'}회 중 $successCount회 실천',
                   style: const TextStyle(
                     color: CustomColors.whWhite,
                     fontSize: 12.0,
@@ -436,12 +440,12 @@ class _ResolutionLinearGaugeWidgetState
                       child: Container(
                         height: 7,
                         color: PointColors
-                            .colorList[widget.resolutionEntity.colorIndex ?? 0],
+                            .colorList[resolutionEntity?.colorIndex ?? 0],
                       ),
                     ),
                     Flexible(
-                      flex: (widget.resolutionEntity.actionPerWeek ?? 1) -
-                          successCount,
+                      flex:
+                          (resolutionEntity?.actionPerWeek ?? 1) - successCount,
                       child: Container(
                         height: 7,
                         color: Colors.transparent,
