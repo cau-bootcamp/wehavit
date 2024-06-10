@@ -26,15 +26,8 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
   }) async {
     final selectedDate = DateTime(dateTime.year, dateTime.month, dateTime.day);
 
-    final fetchResult =
-        await _getGroupConfirmPostListByDateUsecase(state.groupId, selectedDate)
-            .then((result) => result.fold((failure) => null, (list) => list));
-
-    if (fetchResult == null) {
-      return;
-    }
-
-    state.confirmPostList[selectedDate] = fetchResult;
+    state.confirmPostList[selectedDate] =
+        _getGroupConfirmPostListByDateUsecase(state.groupId, selectedDate);
   }
 
   // Reactions

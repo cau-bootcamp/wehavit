@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/effects/effects.dart';
 
@@ -14,6 +15,8 @@ class GroupPostViewModel {
   ScrollController scrollController = ScrollController();
 
   String groupId = '';
+
+  bool isShowingCalendar = true;
   DateTime selectedDate =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
@@ -31,7 +34,7 @@ class GroupPostViewModel {
 
   String get selectedDateString => formatter.format(selectedDate);
 
-  Map<DateTime, List<ConfirmPostEntity>> confirmPostList = {};
+  Map<DateTime, EitherFuture<List<ConfirmPostEntity>>> confirmPostList = {};
 
   Point<double> panPosition = const Point<double>(0, 0);
   List<DateTime> calendartMondayDateList = [

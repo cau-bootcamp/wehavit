@@ -127,7 +127,7 @@ class _GroupMemberListBottomSheetState
                               ),
                             ),
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -149,6 +149,7 @@ class _GroupMemberListBottomSheetState
                           padding: const EdgeInsets.only(bottom: 12.0),
                           child: GroupMemberListCellWidget(
                             memberId: appliedUidList[index],
+                            groupManagerUid: widget.groupEntity.groupManagerUid,
                             groupEntity: widget.groupEntity,
                             isManagingMode: isManagingMode,
                             isAppliedUser: true,
@@ -164,23 +165,32 @@ class _GroupMemberListBottomSheetState
                     children: [
                       GestureDetector(
                         onTapUp: (_) {},
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              '가나다 순',
-                              style: TextStyle(
-                                color: CustomColors.whPlaceholderGrey,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            Icon(
-                              Icons.keyboard_arrow_down,
-                              color: CustomColors.whPlaceholderGrey,
-                              size: 20.0,
-                            ),
-                          ],
+                        // child: const Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //   children: [
+                        //     Text(
+                        //       '가나다 순',
+                        //       style: TextStyle(
+                        //         color: CustomColors.whPlaceholderGrey,
+                        //         fontSize: 16.0,
+                        //         fontWeight: FontWeight.w600,
+                        //       ),
+                        //     ),
+                        //     Icon(
+                        //       Icons.keyboard_arrow_down,
+                        //       color: CustomColors.whPlaceholderGrey,
+                        //       size: 20.0,
+                        //     ),
+                        //   ],
+                        // ),
+                        child: Text(
+                          // ignore: lines_longer_than_80_chars
+                          '멤버 (${widget.groupEntity.groupMemberUidList.length})',
+                          style: const TextStyle(
+                            color: CustomColors.whPlaceholderGrey,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                       Text(
@@ -204,6 +214,7 @@ class _GroupMemberListBottomSheetState
                         child: GroupMemberListCellWidget(
                           memberId:
                               widget.groupEntity.groupMemberUidList[index],
+                          groupManagerUid: widget.groupEntity.groupManagerUid,
                           groupEntity: widget.groupEntity,
                           isManagingMode: isManagingMode,
                           isAppliedUser: false,
@@ -238,6 +249,7 @@ class GroupMemberListCellWidget extends ConsumerStatefulWidget {
   const GroupMemberListCellWidget({
     super.key,
     required this.memberId,
+    required this.groupManagerUid,
     required this.groupEntity,
     required this.isManagingMode,
     required this.isAppliedUser,
@@ -247,6 +259,7 @@ class GroupMemberListCellWidget extends ConsumerStatefulWidget {
   final bool isManagingMode;
   final bool isAppliedUser;
   final String memberId;
+  final String groupManagerUid;
   final GroupEntity groupEntity;
   final Function(GroupEntity, String) updateGroupEntity;
 
@@ -339,30 +352,33 @@ class _GroupMemberListCellWidgetState
             ),
             child: Row(
               children: [
-                SmallColoredButtonWidget(
-                  buttonLabel: '내보내기',
-                  backgroundColor: CustomColors.whBrightGrey,
-                  onPressed: () async {
-                    await ref
-                        .watch(withdrawalFromGroupUsecaseProvider)(
-                      groupId: widget.groupEntity.groupId,
-                      targetUserId: widget.memberId,
-                    )
-                        .then((result) {
-                      if (result.isRight()) {
-                        final List<String> uidList = widget
-                            .groupEntity.groupMemberUidList
-                            .where((element) => element != widget.memberId)
-                            .toList();
+                Visibility(
+                  visible: widget.groupManagerUid != widget.memberId,
+                  child: SmallColoredButtonWidget(
+                    buttonLabel: '내보내기',
+                    backgroundColor: CustomColors.whBrightGrey,
+                    onPressed: () async {
+                      await ref
+                          .watch(withdrawalFromGroupUsecaseProvider)(
+                        groupId: widget.groupEntity.groupId,
+                        targetUserId: widget.memberId,
+                      )
+                          .then((result) {
+                        if (result.isRight()) {
+                          final List<String> uidList = widget
+                              .groupEntity.groupMemberUidList
+                              .where((element) => element != widget.memberId)
+                              .toList();
 
-                        widget.updateGroupEntity(
-                          widget.groupEntity
-                              .copyWith(groupMemberUidList: uidList),
-                          widget.memberId,
-                        );
-                      }
-                    });
-                  },
+                          widget.updateGroupEntity(
+                            widget.groupEntity
+                                .copyWith(groupMemberUidList: uidList),
+                            widget.memberId,
+                          );
+                        }
+                      });
+                    },
+                  ),
                 ),
               ],
             ),
@@ -391,7 +407,6 @@ class _GroupMemberListCellWidgetState
               const SizedBox(width: 4.0),
               SmallColoredButtonWidget(
                 buttonLabel: '수락',
-                backgroundColor: CustomColors.whYellow,
                 onPressed: () async {
                   await ref
                       .watch(acceptApplyingForJoiningGroupUsecaseProvider)(

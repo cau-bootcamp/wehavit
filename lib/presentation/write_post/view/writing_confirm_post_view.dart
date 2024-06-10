@@ -39,10 +39,10 @@ class _WritingConfirmPostViewState
           backgroundColor: CustomColors.whDarkBlack,
           appBar: WehavitAppBar(
             title: widget.hasRested ? '반성글 남기기' : '인증 남기기',
-            leadingTitle: '목표 선택',
+            leadingTitle: '',
             leadingIcon: Icons.chevron_left,
             leadingAction: () {
-              Navigator.pop(context);
+              Navigator.of(context).pop(false);
             },
             trailingTitle: '공유 대상',
             trailingIcon: Icons.cloud_upload_outlined,

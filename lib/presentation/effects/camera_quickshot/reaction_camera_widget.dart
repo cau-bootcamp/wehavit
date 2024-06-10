@@ -151,8 +151,8 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         decoration: TextDecoration.none,
-                        color: CustomColors.whWhite,
                         fontSize: 24,
+                        color: CustomColors.whWhite,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
@@ -163,9 +163,11 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
                     top: _reactionCameraWidgetModel.cameraWidgetPositionY +
                         _reactionCameraWidgetModel.cameraWidgetRadius * 2 +
                         100,
-                    child: const Text(
-                      '취소하려면 지금 손가락을 떼세요',
-                      style: TextStyle(
+                    child: Text(
+                      _reactionCameraWidgetModel.isPosInCapturingArea
+                          ? ''
+                          : '취소하려면 지금 손가락을 떼세요',
+                      style: const TextStyle(
                         decoration: TextDecoration.none,
                         color: CustomColors.whWhite,
                         fontSize: 16.0,
