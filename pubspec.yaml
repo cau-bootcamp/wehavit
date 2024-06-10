@@ -40,7 +40,7 @@ dependencies:
   firebase_storage: ^11.5.2
   intl: ^0.19.0
   multiselect: ^0.1.1
-  image_picker: ^1.0.7
+  image_picker: ^1.1.2
   firebase_messaging: ^14.7.5
   flutter_local_notifications: ^17.1.2
   dotted_border: ^2.1.0

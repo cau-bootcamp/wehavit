@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:images_picker/images_picker.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
 
 import 'package:wehavit/presentation/write_post/write_post.dart';
@@ -13,15 +13,11 @@ class WritingConfirmPostViewModelProvider
   final UploadConfirmPostUseCase _uploadConfirmPostUseCase;
 
   Future<void> pickPhotos() async {
-    List<Media>? photosList = [];
-    photosList = await ImagesPicker.pick(
-      count: maxImagesCount,
-      pickType: PickType.all,
-      cropOpt: CropOption(
-        aspectRatio: const CropAspectRatio(600, 400),
-      ),
-    );
-    state.imageMediaList = photosList ?? [];
+    final ImagePicker picker = ImagePicker();
+    final List<XFile> imageList =
+        await picker.pickMultiImage(limit: maxImagesCount);
+
+    state.imageMediaList = imageList;
   }
 
   Future<void> uploadPost({required bool hasRested}) async {
