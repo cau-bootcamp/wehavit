@@ -58,13 +58,16 @@ class MyPageWehavitSummaryWidget extends StatelessWidget {
                 ),
               );
             },
-            child: const Text(
-              '더 많은 통계 보러가기',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14.0,
-                fontWeight: FontWeight.w700,
-                color: CustomColors.whWhite,
+            child: Container(
+              constraints: const BoxConstraints(minWidth: 250),
+              child: const Text(
+                '더 많은 통계 보러가기',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.w700,
+                  color: CustomColors.whWhite,
+                ),
               ),
             ),
           ),

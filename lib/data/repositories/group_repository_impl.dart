@@ -122,8 +122,8 @@ class GroupRepositoryImpl implements GroupRepository {
   }
 
   @override
-  EitherFuture<GroupEntity> getGroupEntity({required String groupId}) {
-    return _wehavitDatasource.getGroupEntity(groupId: groupId);
+  EitherFuture<GroupEntity> getGroupEntityById({required String groupId}) {
+    return _wehavitDatasource.getGroupEntityById(groupId: groupId);
   }
 
   @override
@@ -160,5 +160,12 @@ class GroupRepositoryImpl implements GroupRepository {
       groupId: groupId,
       userId: userId,
     );
+  }
+
+  @override
+  EitherFuture<GroupEntity> getGroupEntityByName({
+    required String groupName,
+  }) {
+    return _wehavitDatasource.getGroupEntityByName(groupName: groupName);
   }
 }

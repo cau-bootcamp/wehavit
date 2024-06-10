@@ -217,6 +217,12 @@ final getGroupEntityByIdUsecaseProvider =
   return GetGroupEntityByIdUsecase(groupRepository);
 });
 
+final getGroupEntityByGroupNameUsecaseProvider =
+    Provider<GetGroupEntityByGroupNameUsecase>((ref) {
+  final groupRepository = ref.watch(groupRepositoryProvider);
+  return GetGroupEntityByGroupNameUsecase(groupRepository);
+});
+
 final checkWhetherAlreadyRegisteredToGroupUsecaseProvider =
     Provider<CheckWhetherAlreadyRegisteredToGroupUsecase>((ref) {
   final groupRepository = ref.watch(groupRepositoryProvider);

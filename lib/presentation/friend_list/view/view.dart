@@ -1,3 +1,3 @@
 export 'friend_list_view.dart';
-export 'friend_list_view_widget.dart';
+export '../provider/friend_list_view_widget.dart';
 export 'screens.dart';

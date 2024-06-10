@@ -120,4 +120,8 @@ class FriendListViewModelProvider extends StateNotifier<FriendListViewModel> {
       from: state.friendFutureUserList,
     );
   }
+
+  void resetFriendSearchData() {
+    state.searchedFutureUserList = null;
+  }
 }

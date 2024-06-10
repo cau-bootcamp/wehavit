@@ -29,7 +29,9 @@ abstract class GroupRepository {
     required String targetUserId,
   });
 
-  EitherFuture<GroupEntity> getGroupEntity({required String groupId});
+  EitherFuture<GroupEntity> getGroupEntityById({required String groupId});
+
+  EitherFuture<GroupEntity> getGroupEntityByName({required String groupName});
 
   EitherFuture<List<GroupEntity>> getGroupEntityList();
 

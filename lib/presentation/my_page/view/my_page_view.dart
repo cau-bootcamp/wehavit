@@ -31,8 +31,9 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final viewModel = ref.watch(myPageViewModelProvider);
-    final provider = ref.read(myPageViewModelProvider.notifier);
+    // final provider = ref.read(myPageViewModelProvider.notifier);
 
     return Scaffold(
       backgroundColor: CustomColors.whDarkBlack,
