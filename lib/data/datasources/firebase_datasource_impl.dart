@@ -1448,7 +1448,9 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }
 
   @override
-  EitherFuture<GroupEntity> getGroupEntity({required String groupId}) async {
+  EitherFuture<GroupEntity> getGroupEntityById({
+    required String groupId,
+  }) async {
     try {
       final groupEntity = await firestore
           .collection(FirebaseCollectionName.groups)
@@ -1600,7 +1602,8 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       final groupEntityList = (await Future.wait(
         groupIdList
             .map(
-              (groupId) async => await getGroupEntity(groupId: groupId).then(
+              (groupId) async =>
+                  await getGroupEntityById(groupId: groupId).then(
                 (result) => result.fold(
                   (failure) => null,
                   (groupEntity) => groupEntity,
@@ -2088,5 +2091,35 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     await ref.putFile(userImageFile);
     final downloadUrl = await ref.getDownloadURL();
     return Future(() => right(downloadUrl));
+  }
+
+  @override
+  EitherFuture<GroupEntity> getGroupEntityByName({
+    required String groupName,
+  }) async {
+    try {
+      final groupEntityList = await firestore
+          .collection(FirebaseCollectionName.groups)
+          .where(FirebaseGroupFieldName.name, isEqualTo: groupName)
+          .get()
+          .then(
+            (result) => result.docs
+                .map(
+                  (doc) => FirebaseGroupModel.fromFireStoreDocument(doc)
+                      .toGroupEntity(
+                    groupId: doc.id,
+                  ),
+                )
+                .toList(),
+          );
+
+      if (groupEntityList.isEmpty) {
+        return Future(() => left(const Failure('cannot get group entity')));
+      }
+
+      return Future(() => right(groupEntityList.first));
+    } on Exception {
+      return Future(() => left(const Failure('cannot get group entity')));
+    }
   }
 }

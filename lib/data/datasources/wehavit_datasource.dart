@@ -109,7 +109,7 @@ abstract class WehavitDatasource {
 
   EitherFuture<int> getGroupSharedPostCount(String groupId);
 
-  EitherFuture<GroupEntity> getGroupEntity({required String groupId});
+  EitherFuture<GroupEntity> getGroupEntityById({required String groupId});
 
   EitherFuture<bool> checkWhetherAlreadyAppliedToGroup({
     required String groupId,
@@ -172,4 +172,6 @@ abstract class WehavitDatasource {
     required String aboutMe,
     required String handle,
   });
+
+  EitherFuture<GroupEntity> getGroupEntityByName({required String groupName});
 }

@@ -17,7 +17,7 @@ class JoinGroupView extends ConsumerStatefulWidget {
 }
 
 class _JoinGroupViewState extends ConsumerState<JoinGroupView> {
-  final groupIdController = TextEditingController();
+  final groupNameFieldController = TextEditingController();
   List<GroupListViewCellWidgetModel> groupListCellWidgetModelList = [];
 
   bool isSearchDone = false;
@@ -45,25 +45,46 @@ class _JoinGroupViewState extends ConsumerState<JoinGroupView> {
                     alignment: Alignment.centerRight,
                     children: [
                       TextFormField(
-                        style: const TextStyle(color: Colors.white),
-                        decoration: const InputDecoration(
-                          isCollapsed: true,
-                          contentPadding: EdgeInsets.symmetric(vertical: 4.0),
-                          hintText: '그룹 코드 입력',
-                          hintStyle: TextStyle(
-                            color: CustomColors.whPlaceholderGrey,
-                          ),
-                        ),
-                        controller: groupIdController,
+                        controller: groupNameFieldController,
                         onChanged: (value) {
                           setState(() {});
                         },
+                        cursorColor: CustomColors.whWhite,
+                        textAlignVertical: TextAlignVertical.center,
+                        style: const TextStyle(
+                          color: CustomColors.whWhite,
+                          fontSize: 16.0,
+                        ),
+                        decoration: InputDecoration(
+                          hintText: '그룹 이름',
+                          hintStyle: const TextStyle(
+                            fontSize: 16,
+                            color: CustomColors.whPlaceholderGrey,
+                          ),
+                          filled: true,
+                          fillColor: CustomColors.whGrey,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: const BorderSide(
+                              width: 0,
+                              style: BorderStyle.none,
+                            ),
+                          ),
+                          isCollapsed: true,
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 12.0,
+                            horizontal: 16.0,
+                          ),
+                        ),
                       ),
                       Visibility(
                         replacement: IconButton(
                           onPressed: () {
-                            groupIdController.clear();
-                            setState(() {});
+                            setState(() {
+                              groupNameFieldController.clear();
+                              groupListCellWidgetModelList = [];
+                              isSearchDone = false;
+                            });
                           },
                           icon: const Icon(
                             Icons.close,
@@ -71,12 +92,13 @@ class _JoinGroupViewState extends ConsumerState<JoinGroupView> {
                             color: CustomColors.whWhite,
                           ),
                         ),
-                        visible: groupIdController.text.isEmpty,
+                        visible: groupNameFieldController.text.isEmpty,
                         child: IconButton(
                           onPressed: () async {
                             final clipboardData =
                                 await Clipboard.getData(Clipboard.kTextPlain);
-                            groupIdController.text = clipboardData?.text ?? '';
+                            groupNameFieldController.text =
+                                clipboardData?.text ?? '';
                             setState(() {});
                           },
                           icon: const Icon(
@@ -91,10 +113,10 @@ class _JoinGroupViewState extends ConsumerState<JoinGroupView> {
                 ),
                 IconButton(
                   onPressed: () async {
-                    if (groupIdController.text.isNotEmpty) {
+                    if (groupNameFieldController.text.isNotEmpty) {
                       final groupEntity = await ref
-                          .read(getGroupEntityByIdUsecaseProvider)(
-                            groupId: groupIdController.text,
+                          .read(getGroupEntityByGroupNameUsecaseProvider)(
+                            groupname: groupNameFieldController.text,
                           )
                           .then(
                             (result) => result.fold(
@@ -106,6 +128,7 @@ class _JoinGroupViewState extends ConsumerState<JoinGroupView> {
                       if (groupEntity == null) {
                         // 그룹 정보를 불러올 수 없는 경우 (데이터가 없다거나?)
                         setState(() {
+                          isSearchDone = true;
                           isSearchSuccessed = false;
                         });
                         return;
@@ -131,7 +154,7 @@ class _JoinGroupViewState extends ConsumerState<JoinGroupView> {
                   icon: Icon(
                     Icons.search,
                     size: 28,
-                    color: groupIdController.text.isEmpty
+                    color: groupNameFieldController.text.isEmpty
                         ? CustomColors.whGrey
                         : CustomColors.whWhite,
                   ),
@@ -140,12 +163,25 @@ class _JoinGroupViewState extends ConsumerState<JoinGroupView> {
             ),
             Visibility(
               visible: isSearchDone,
+              replacement: const Expanded(
+                child: Center(
+                  child: Text(
+                    '참여하려는 그룹의 이름을\n 검색창에 입력해주세요 🥰',
+                    style: TextStyle(
+                      color: CustomColors.whSemiWhite,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 20.0,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
               child: Visibility(
                 visible: isSearchSuccessed,
                 replacement: const Expanded(
                   child: Center(
                     child: Text(
-                      '해당 코드의 그룹을 찾을 수 없어요 🤔',
+                      '해당 이름의 그룹을 찾을 수 없어요 🤔',
                       style: TextStyle(
                         color: CustomColors.whSemiWhite,
                         fontWeight: FontWeight.w600,

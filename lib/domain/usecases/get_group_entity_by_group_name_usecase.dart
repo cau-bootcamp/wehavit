@@ -2,15 +2,15 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
 
-class GetGroupEntityByIdUsecase {
-  GetGroupEntityByIdUsecase(
+class GetGroupEntityByGroupNameUsecase {
+  GetGroupEntityByGroupNameUsecase(
     this._groupRepository,
   );
 
   final GroupRepository _groupRepository;
   EitherFuture<GroupEntity> call({
-    required String groupId,
+    required String groupname,
   }) async {
-    return _groupRepository.getGroupEntityById(groupId: groupId);
+    return _groupRepository.getGroupEntityByName(groupName: groupname);
   }
 }
