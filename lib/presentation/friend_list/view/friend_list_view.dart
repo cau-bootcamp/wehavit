@@ -54,6 +54,9 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
         trailingAction: () {
           setState(() {
             isManagingMode = !isManagingMode;
+            if (isManagingMode == false) {
+              provider.resetFriendSearchData();
+            }
           });
         },
       ),
