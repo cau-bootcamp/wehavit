@@ -1,7 +1,9 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/constants/constants.dart';
 import 'package:wehavit/common/utils/utils.dart';
+import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/group/group.dart';
 
 class GroupListViewCellWidget extends StatelessWidget {
@@ -77,15 +79,19 @@ class GroupListViewCellContentWidget extends StatelessWidget {
                   children: [
                     GroupListCellBulletWidget(
                       title: '멤버 수',
-                      number: cellModel.groupEntity.groupMemberUidList.length,
+                      number: Future(
+                        () => right(
+                          cellModel.groupEntity.groupMemberUidList.length,
+                        ),
+                      ),
                     ),
                     const SizedBox(height: 6),
-                    GroupListCellBulletFutureWidget(
+                    GroupListCellBulletWidget(
                       title: '함께 도전중인 목표 수',
                       number: cellModel.sharedResolutionCount,
                     ),
                     const SizedBox(height: 6),
-                    GroupListCellBulletFutureWidget(
+                    GroupListCellBulletWidget(
                       title: '현재까지 올라온 인증글 수',
                       number: cellModel.sharedPostCount,
                     ),
@@ -108,7 +114,7 @@ class GroupListCellBulletWidget extends StatelessWidget {
   });
 
   final String title;
-  final int number;
+  final EitherFuture<int> number;
 
   @override
   Widget build(BuildContext context) {
@@ -126,72 +132,37 @@ class GroupListCellBulletWidget extends StatelessWidget {
         const SizedBox(
           width: 8,
         ),
-        Text(
-          number.toString(),
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 22,
-            fontWeight: FontWeight.w600,
-            height: 0,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class GroupListCellBulletFutureWidget extends StatelessWidget {
-  const GroupListCellBulletFutureWidget({
-    super.key,
-    required this.title,
-    required this.number,
-  });
-
-  final String title;
-  final EitherFuture<int> number;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.w300,
+        EitherFutureBuilder<int>(
+          target: number,
+          forFail: Container(),
+          forWaiting: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4.0),
+              color: CustomColors.whGrey,
+            ),
+            child: const Text(
+              '1234',
+              style: TextStyle(
+                color: Colors.transparent,
+                fontSize: 22,
+                fontWeight: FontWeight.w600,
+                height: 0,
+              ),
             ),
           ),
-          const SizedBox(
-            width: 8,
-          ),
-          FutureBuilder(
-            future: number,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Text(
-                  snapshot.data!.fold((l) => '0', (r) => r.toString()),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w600,
-                    height: 0,
-                  ),
-                );
-              } else {
-                // TODO: 나중에 예쁜걸로 수정하기! ******
-                return const SizedBox(
-                  width: 30,
-                  height: 16,
-                  child: LinearProgressIndicator(),
-                );
-              }
-            },
-          ),
-        ],
-      ),
+          mainWidgetCallback: (value) {
+            return Text(
+              value.toString(),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 22,
+                fontWeight: FontWeight.w600,
+                height: 0,
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 }

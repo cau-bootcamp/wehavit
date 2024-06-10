@@ -45,7 +45,7 @@ class ResolutionListViewModelProvider
       }).toList(),
     );
 
-    state.resolutionModelList = modelList;
+    state = state.copyWith(newResolutionModelList: modelList);
 
     int tempTotalCount = 0;
     state.futureDoneCount = Future(() async {

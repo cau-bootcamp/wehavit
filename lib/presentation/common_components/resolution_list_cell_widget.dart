@@ -22,24 +22,14 @@ class ResolutionListCellWidget extends ConsumerStatefulWidget {
 
 class _MyPageResolutionListCellWidgetState
     extends ConsumerState<ResolutionListCellWidget> {
-  late EitherFuture<List<bool>> futureDoneList =
-      ref.watch(getTargetResolutionDoneListForWeekUsecaseProvider)(
-    resolutionId: widget.resolutionEntity.resolutionId ?? '',
-    startMonday: DateTime.now().getMondayDateTime(),
-  );
-
-  @override
-  void initState() {
-    super.initState();
-    // final EitherFuture<List<bool>> futureDoneList =
-    //     ref.watch(getTargetResolutionDoneListForWeekUsecaseProvider)(
-    //   resolutionId: widget.resolutionEntity.resolutionId ?? '',
-    //   startMonday: DateTime.now().getMondayDateTime(),
-    // );
-  }
-
   @override
   Widget build(BuildContext context) {
+    EitherFuture<List<bool>> futureDoneList =
+        ref.watch(getTargetResolutionDoneListForWeekUsecaseProvider)(
+      resolutionId: widget.resolutionEntity.resolutionId ?? '',
+      startMonday: DateTime.now().getMondayDateTime(),
+    );
+
     final daysSinceFirstDay = DateTime.now()
             .difference(widget.resolutionEntity.startDate ?? DateTime.now())
             .inDays +
@@ -395,6 +385,7 @@ class ResolutionLinearGaugeWidget extends StatelessWidget {
       mainWidgetCallback: (successList) {
         final successCount =
             successList.where((element) => element == true).length;
+
         return Column(
           children: [
             Row(

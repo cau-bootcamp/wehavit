@@ -149,8 +149,11 @@ class _GroupViewState extends ConsumerState<GroupView>
               ),
               WideColoredButton(
                 buttonTitle: '돌아가기',
-                onPressed: () {},
-                isDiminished: true,
+                backgroundColor: Colors.transparent,
+                foregroundColor: CustomColors.whPlaceholderGrey,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               ),
             ],
           ),

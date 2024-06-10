@@ -47,9 +47,12 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
         minimum: const EdgeInsets.symmetric(horizontal: 16.0),
         child: RefreshIndicator(
           onRefresh: () async {
-            provider
-                .loadResolutionModelList()
-                .whenComplete(() => setState(() {}));
+            provider.loadResolutionModelList().whenComplete(() {
+              setState(() {
+                ref.watch(resolutionListViewModelProvider).isLoadingView =
+                    false;
+              });
+            });
           },
           child: ListView(
             children: [
@@ -93,10 +96,16 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
                               index: index,
                             );
                           },
-                        ).whenComplete(() {
-                          provider
+                        ).whenComplete(() async {
+                          await provider
                               .loadResolutionModelList()
-                              .whenComplete(() => setState(() {}));
+                              .whenComplete(() {
+                            setState(() {
+                              ref
+                                  .watch(resolutionListViewModelProvider)
+                                  .isLoadingView = false;
+                            });
+                          });
                         });
                       },
                     ),
@@ -153,7 +162,9 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
                 viewModel.resolutionModelList![index].entity.goalStatement ??
                     '',
                 style: TextStyle(
-                  color: PointColors.colorList[0],
+                  color: PointColors.colorList[
+                      viewModel.resolutionModelList![index].entity.colorIndex ??
+                          0],
                   fontSize: 18.0,
                   fontWeight: FontWeight.w600,
                 ),
@@ -272,7 +283,8 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
           ),
           WideColoredButton(
             buttonTitle: '돌아가기',
-            isDiminished: true,
+            backgroundColor: Colors.transparent,
+            foregroundColor: CustomColors.whPlaceholderGrey,
             onPressed: () {
               Navigator.pop(context);
             },
