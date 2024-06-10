@@ -332,6 +332,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     try {
       final reactionModel =
           FirebaseReactionModel.fromReactionEntity(reactionEntity);
+
       await firestore
           .collection(
             FirebaseCollectionName.getConfirmPostReactionCollectionName(
@@ -389,7 +390,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
                     .toList();
 
                 final shareGroupEntityList = (await Future.wait(
-                  model.shareGroupIdList!.map((groupId) async {
+                  (model.shareGroupIdList ?? []).map((groupId) async {
                     final entity = (await fetchGroupEntityByGroupId(groupId))
                         .fold((failure) => null, (entity) => entity);
 

@@ -147,8 +147,10 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                     !viewModel.isShowingCalendar;
                               });
                             },
-                            icon: const Icon(
-                              Icons.keyboard_arrow_down,
+                            icon: Icon(
+                              viewModel.isShowingCalendar
+                                  ? Icons.keyboard_arrow_up
+                                  : Icons.keyboard_arrow_down,
                               color: CustomColors.whWhite,
                             ),
                           ),
@@ -285,13 +287,20 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                                       target: viewModel
                                                               .confirmPostList[
                                                           cellDate],
-                                                      forWaiting: const Padding(
-                                                        padding:
-                                                            EdgeInsets.all(2.0),
-                                                        child:
-                                                            CircularProgressIndicator(
-                                                          color: CustomColors
-                                                              .whBrightGrey,
+                                                      forWaiting:
+                                                          const SizedBox(
+                                                        width: 20,
+                                                        height: 20,
+                                                        child: Padding(
+                                                          padding:
+                                                              EdgeInsets.all(
+                                                            2.0,
+                                                          ),
+                                                          child:
+                                                              CircularProgressIndicator(
+                                                            color: CustomColors
+                                                                .whBrightGrey,
+                                                          ),
                                                         ),
                                                       ),
                                                       forFail: const Text('-'),

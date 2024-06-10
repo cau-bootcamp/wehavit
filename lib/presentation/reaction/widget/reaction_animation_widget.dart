@@ -137,7 +137,6 @@ class _ReactionAnimationWidgetState
     );
   }
 
-  // TODO: 이 함수를 화면이 켜졌을 때 호출하도록 로직 구현하기
   Future<void> showUnreadReactions() async {
     final fetchResult =
         await _reactionAnimationWidgetManager.getUnreadReactionGroupList();

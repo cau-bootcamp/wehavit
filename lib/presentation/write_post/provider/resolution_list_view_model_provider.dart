@@ -27,6 +27,7 @@ class ResolutionListViewModelProvider
 
     if (resolutionList == null) {
       state.resolutionModelList = null;
+
       return;
     }
 

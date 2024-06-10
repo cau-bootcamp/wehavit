@@ -355,6 +355,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                               );
                               return;
                             }
+
                             await reactionCameraModelProvider
                                 .setFocusingModeTo(false);
 
@@ -372,7 +373,6 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                                 imageFilePath: imageFilePath,
                               );
                             }
-
                             // setState(() {});
                           },
                           onPointerMove: (event) async {
@@ -387,6 +387,8 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
 
                             reactionCameraModelProvider
                                 .updatePanPosition(panningPosition);
+
+                            if (reactionCameraModel.isPosInCapturingArea) {}
                           },
                           child: Container(
                             padding:

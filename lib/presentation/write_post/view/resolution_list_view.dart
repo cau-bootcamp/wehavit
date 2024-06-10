@@ -19,7 +19,6 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
   @override
   void initState() {
     super.initState();
-
     unawaited(
       ref
           .read(resolutionListViewModelProvider.notifier)
@@ -218,7 +217,7 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
             children: [
               Expanded(
                 child: WideColoredButton(
-                  buttonTitle: '반성글 작성하기',
+                  buttonTitle: '반성 남기기',
                   foregroundColor: Colors.red,
                   onPressed: () async {
                     final result = await Navigator.push(
