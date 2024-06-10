@@ -40,8 +40,6 @@ class _MyPageResolutionListCellWidgetState
 
   @override
   Widget build(BuildContext context) {
-    print("BUILD");
-
     final daysSinceFirstDay = DateTime.now()
             .difference(widget.resolutionEntity.startDate ?? DateTime.now())
             .inDays +

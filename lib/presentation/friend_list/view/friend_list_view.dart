@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
@@ -69,6 +68,7 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
                 onPressed: () async {
                   await ref.read(logOutUseCaseProvider).call();
                   if (mounted) {
+                    // ignore: use_build_context_synchronously
                     Navigator.pushReplacementNamed(context, '/entrance');
                   }
                 },

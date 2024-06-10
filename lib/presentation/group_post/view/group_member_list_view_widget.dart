@@ -127,7 +127,7 @@ class _GroupMemberListBottomSheetState
                               ),
                             ),
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -184,6 +184,7 @@ class _GroupMemberListBottomSheetState
                         //   ],
                         // ),
                         child: Text(
+                          // ignore: lines_longer_than_80_chars
                           '멤버 (${widget.groupEntity.groupMemberUidList.length})',
                           style: const TextStyle(
                             color: CustomColors.whPlaceholderGrey,
@@ -406,7 +407,6 @@ class _GroupMemberListCellWidgetState
               const SizedBox(width: 4.0),
               SmallColoredButtonWidget(
                 buttonLabel: '수락',
-                backgroundColor: CustomColors.whYellow,
                 onPressed: () async {
                   await ref
                       .watch(acceptApplyingForJoiningGroupUsecaseProvider)(

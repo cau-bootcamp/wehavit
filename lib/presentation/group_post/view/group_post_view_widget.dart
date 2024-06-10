@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:path/path.dart';
 import 'package:wehavit/common/common.dart';
 
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
@@ -12,6 +11,7 @@ import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/effects/effects.dart';
 import 'package:wehavit/presentation/group_post/group_post.dart';
+import 'package:wehavit/presentation/group_post/view/confirm_post_photo_view.dart';
 
 class ConfirmPostWidget extends ConsumerStatefulWidget {
   const ConfirmPostWidget({
@@ -232,9 +232,6 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                         top: 4.0,
                         bottom: 12.0,
                       ),
-
-                      // height: 200,
-
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -682,7 +679,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
   }
 }
 
-class ConfirmPostContentWidget extends StatelessWidget {
+class ConfirmPostContentWidget extends StatefulWidget {
   const ConfirmPostContentWidget({
     super.key,
     required this.confirmPostEntity,
@@ -690,8 +687,26 @@ class ConfirmPostContentWidget extends StatelessWidget {
   final ConfirmPostEntity confirmPostEntity;
 
   @override
+  State<ConfirmPostContentWidget> createState() =>
+      _ConfirmPostContentWidgetState();
+}
+
+class _ConfirmPostContentWidgetState extends State<ConfirmPostContentWidget> {
+  late List<ImageProvider> imageList;
+
+  @override
+  void initState() {
+    super.initState();
+    imageList = widget.confirmPostEntity.imageUrlList?.map((imageUrl) {
+          return NetworkImage(imageUrl);
+        }).toList() ??
+        [];
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (confirmPostEntity.content != null && confirmPostEntity.content != '') {
+    if (widget.confirmPostEntity.content != null &&
+        widget.confirmPostEntity.content != '') {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -701,7 +716,7 @@ class ConfirmPostContentWidget extends StatelessWidget {
                 minHeight: 100,
               ),
               child: Text(
-                confirmPostEntity.content!,
+                widget.confirmPostEntity.content!,
                 textAlign: TextAlign.start,
                 style: const TextStyle(
                   color: CustomColors.whWhite,
@@ -712,220 +727,177 @@ class ConfirmPostContentWidget extends StatelessWidget {
           const SizedBox(
             width: 4.0,
           ),
-          if (confirmPostEntity.imageUrlList!.isNotEmpty)
-            Stack(
-              alignment: Alignment.bottomRight,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(20.0),
+          if (widget.confirmPostEntity.imageUrlList!.isNotEmpty)
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.all(0),
+                backgroundColor: CustomColors.whDarkBlack,
+              ),
+              onPressed: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ConfirmPostPhotoView(
+                      imageProviderList: imageList,
+                      initPageIndex: 0,
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withAlpha(64),
-                        offset: const Offset(0, 4),
-                        blurRadius: 4,
-                      ),
-                    ],
                   ),
-                  clipBehavior: Clip.hardEdge,
-                  child: Image(
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) {
-                        return Stack(
-                          children: [
-                            child,
-                            if (confirmPostEntity.imageUrlList!.length > 1)
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  // ignore: lines_longer_than_80_chars
-                                  '+${confirmPostEntity.imageUrlList!.length - 1}',
-                                  style: const TextStyle(
-                                    color: CustomColors.whWhite,
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.w700,
+                );
+              },
+              child: Stack(
+                alignment: Alignment.bottomRight,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: CustomColors.whDarkBlack,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(20.0),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withAlpha(64),
+                          offset: const Offset(0, 4),
+                          blurRadius: 4,
+                        ),
+                      ],
+                    ),
+                    clipBehavior: Clip.hardEdge,
+                    child: Image(
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) {
+                          return Stack(
+                            children: [
+                              child,
+                              if (widget
+                                      .confirmPostEntity.imageUrlList!.length >
+                                  1)
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    // ignore: lines_longer_than_80_chars
+                                    '+${widget.confirmPostEntity.imageUrlList!.length - 1}',
+                                    style: const TextStyle(
+                                      color: CustomColors.whWhite,
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.w700,
+                                    ),
                                   ),
                                 ),
-                              ),
-                          ],
-                        );
-                      } else {
-                        return Container(
-                          color: CustomColors.whBlack,
-                          child: const Center(
-                            child: SizedBox(
-                              width: 30,
-                              height: 30,
-                              child: CircularProgressIndicator(
-                                color: CustomColors.whYellow,
+                            ],
+                          );
+                        } else {
+                          return const SizedBox(
+                            width: 150,
+                            height: 100,
+                            child: Center(
+                              child: SizedBox(
+                                width: 40,
+                                height: 40,
+                                child: CircularProgressIndicator(
+                                  color: CustomColors.whYellow,
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      }
-                    },
-                    fit: BoxFit.cover,
-                    width: 150,
-                    height: 100,
-                    image: NetworkImage(
-                      confirmPostEntity.imageUrlList!.first,
+                          );
+                        }
+                      },
+                      fit: BoxFit.cover,
+                      width: 150,
+                      height: 100,
+                      image: NetworkImage(
+                        widget.confirmPostEntity.imageUrlList!.first,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
         ],
       );
     } else {
-      if (confirmPostEntity.imageUrlList!.length == 1) {
+      if (widget.confirmPostEntity.imageUrlList!.length == 1) {
+        return ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.all(0),
+            backgroundColor: CustomColors.whDarkBlack,
+          ),
+          onPressed: () async {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ConfirmPostPhotoView(
+                  imageProviderList: imageList,
+                  initPageIndex: 0,
+                ),
+              ),
+            );
+          },
+          child: AspectRatio(
+            aspectRatio: 1.5,
+            child: Container(
+              decoration: BoxDecoration(
+                color: CustomColors.whDarkBlack,
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(20.0),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withAlpha(64),
+                    offset: const Offset(0, 4),
+                    blurRadius: 4,
+                  ),
+                ],
+              ),
+              clipBehavior: Clip.hardEdge,
+              child: Image(
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child;
+                  } else {
+                    return Container(
+                      color: CustomColors.whBlack,
+                      child: const Center(
+                        child: SizedBox(
+                          width: 30,
+                          height: 30,
+                          child: CircularProgressIndicator(
+                            color: CustomColors.whYellow,
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                },
+                fit: BoxFit.cover,
+                image: NetworkImage(widget.confirmPostEntity.imageUrlList![0]),
+              ),
+            ),
+          ),
+        );
+      } else if (widget.confirmPostEntity.imageUrlList!.length == 2) {
         return Column(
           children: [
-            AspectRatio(
-              aspectRatio: 1.5,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(20.0),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withAlpha(64),
-                      offset: const Offset(0, 4),
-                      blurRadius: 4,
-                    ),
-                  ],
-                ),
-                clipBehavior: Clip.hardEdge,
-                child: Image(
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) {
-                      return child;
-                    } else {
-                      return Container(
-                        color: CustomColors.whBlack,
-                        child: const Center(
-                          child: SizedBox(
-                            width: 30,
-                            height: 30,
-                            child: CircularProgressIndicator(
-                              color: CustomColors.whYellow,
-                            ),
-                          ),
-                        ),
-                      );
-                    }
-                  },
-                  fit: BoxFit.cover,
-                  image: NetworkImage(
-                    confirmPostEntity.imageUrlList![0],
-                  ),
-                ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.all(0),
+                backgroundColor: CustomColors.whDarkBlack,
               ),
-            ),
-          ],
-        );
-      } else if (confirmPostEntity.imageUrlList!.length == 2) {
-        return Column(
-          children: [
-            AspectRatio(
-              aspectRatio: 1.5,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(20.0),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withAlpha(64),
-                      offset: const Offset(0, 4),
-                      blurRadius: 4,
+              onPressed: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ConfirmPostPhotoView(
+                      imageProviderList: imageList,
+                      initPageIndex: 0,
                     ),
-                  ],
-                ),
-                clipBehavior: Clip.hardEdge,
-                child: Image(
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) {
-                      return child;
-                    } else {
-                      return Container(
-                        color: CustomColors.whBlack,
-                        child: const Center(
-                          child: SizedBox(
-                            width: 30,
-                            height: 30,
-                            child: CircularProgressIndicator(
-                              color: CustomColors.whYellow,
-                            ),
-                          ),
-                        ),
-                      );
-                    }
-                  },
-                  fit: BoxFit.cover,
-                  image: NetworkImage(
-                    confirmPostEntity.imageUrlList![0],
                   ),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 8.0,
-            ),
-            AspectRatio(
-              aspectRatio: 1.5,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(20.0),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withAlpha(64),
-                      offset: const Offset(0, 4),
-                      blurRadius: 4,
-                    ),
-                  ],
-                ),
-                clipBehavior: Clip.hardEdge,
-                child: Image(
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) {
-                      return child;
-                    } else {
-                      return Container(
-                        color: CustomColors.whBlack,
-                        child: const Center(
-                          child: SizedBox(
-                            width: 30,
-                            height: 30,
-                            child: CircularProgressIndicator(
-                              color: CustomColors.whYellow,
-                            ),
-                          ),
-                        ),
-                      );
-                    }
-                  },
-                  fit: BoxFit.cover,
-                  image: NetworkImage(
-                    confirmPostEntity.imageUrlList![1],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        );
-      } else if (confirmPostEntity.imageUrlList!.length == 3) {
-        return IntrinsicHeight(
-          child: Row(
-            children: [
-              Expanded(
+                );
+              },
+              child: AspectRatio(
+                aspectRatio: 1.5,
                 child: Container(
-                  height: double.infinity,
                   decoration: BoxDecoration(
+                    color: CustomColors.whDarkBlack,
                     borderRadius: const BorderRadius.all(
                       Radius.circular(20.0),
                     ),
@@ -959,7 +931,140 @@ class ConfirmPostContentWidget extends StatelessWidget {
                     },
                     fit: BoxFit.cover,
                     image: NetworkImage(
-                      confirmPostEntity.imageUrlList![0],
+                      widget.confirmPostEntity.imageUrlList![0],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 8.0,
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.all(0),
+                backgroundColor: CustomColors.whDarkBlack,
+              ),
+              onPressed: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ConfirmPostPhotoView(
+                      imageProviderList: imageList,
+                      initPageIndex: 1,
+                    ),
+                  ),
+                );
+              },
+              child: AspectRatio(
+                aspectRatio: 1.5,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: CustomColors.whDarkBlack,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(20.0),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withAlpha(64),
+                        offset: const Offset(0, 4),
+                        blurRadius: 4,
+                      ),
+                    ],
+                  ),
+                  clipBehavior: Clip.hardEdge,
+                  child: Image(
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child;
+                      } else {
+                        return Container(
+                          color: CustomColors.whBlack,
+                          child: const Center(
+                            child: SizedBox(
+                              width: 30,
+                              height: 30,
+                              child: CircularProgressIndicator(
+                                color: CustomColors.whYellow,
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                    fit: BoxFit.cover,
+                    image: NetworkImage(
+                      widget.confirmPostEntity.imageUrlList![1],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      } else if (widget.confirmPostEntity.imageUrlList!.length == 3) {
+        return IntrinsicHeight(
+          child: Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    padding: const EdgeInsets.all(0),
+                    backgroundColor: CustomColors.whDarkBlack,
+                  ),
+                  onPressed: () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ConfirmPostPhotoView(
+                          imageProviderList: imageList,
+                          initPageIndex: 0,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    height: double.infinity,
+                    decoration: BoxDecoration(
+                      color: CustomColors.whDarkBlack,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(20.0),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withAlpha(64),
+                          offset: const Offset(0, 4),
+                          blurRadius: 4,
+                        ),
+                      ],
+                    ),
+                    clipBehavior: Clip.hardEdge,
+                    child: Image(
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) {
+                          return child;
+                        } else {
+                          return Container(
+                            color: CustomColors.whBlack,
+                            child: const Center(
+                              child: SizedBox(
+                                width: 30,
+                                height: 30,
+                                child: CircularProgressIndicator(
+                                  color: CustomColors.whYellow,
+                                ),
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                      fit: BoxFit.cover,
+                      image: NetworkImage(
+                        widget.confirmPostEntity.imageUrlList![0],
+                      ),
                     ),
                   ),
                 ),
@@ -970,44 +1075,62 @@ class ConfirmPostContentWidget extends StatelessWidget {
               Expanded(
                 child: Column(
                   children: [
-                    AspectRatio(
-                      aspectRatio: 1.5,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(20.0),
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withAlpha(64),
-                              offset: const Offset(0, 4),
-                              blurRadius: 4,
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.all(0),
+                        backgroundColor: CustomColors.whDarkBlack,
+                      ),
+                      onPressed: () async {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ConfirmPostPhotoView(
+                              imageProviderList: imageList,
+                              initPageIndex: 1,
                             ),
-                          ],
-                        ),
-                        clipBehavior: Clip.hardEdge,
-                        child: Image(
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) {
-                              return child;
-                            } else {
-                              return Container(
-                                color: CustomColors.whBlack,
-                                child: const Center(
-                                  child: SizedBox(
-                                    width: 30,
-                                    height: 30,
-                                    child: CircularProgressIndicator(
-                                      color: CustomColors.whYellow,
+                          ),
+                        );
+                      },
+                      child: AspectRatio(
+                        aspectRatio: 1.5,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: CustomColors.whDarkBlack,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(20.0),
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withAlpha(64),
+                                offset: const Offset(0, 4),
+                                blurRadius: 4,
+                              ),
+                            ],
+                          ),
+                          clipBehavior: Clip.hardEdge,
+                          child: Image(
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) {
+                                return child;
+                              } else {
+                                return Container(
+                                  color: CustomColors.whBlack,
+                                  child: const Center(
+                                    child: SizedBox(
+                                      width: 30,
+                                      height: 30,
+                                      child: CircularProgressIndicator(
+                                        color: CustomColors.whYellow,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              );
-                            }
-                          },
-                          fit: BoxFit.cover,
-                          image: NetworkImage(
-                            confirmPostEntity.imageUrlList![1],
+                                );
+                              }
+                            },
+                            fit: BoxFit.cover,
+                            image: NetworkImage(
+                              widget.confirmPostEntity.imageUrlList![1],
+                            ),
                           ),
                         ),
                       ),
@@ -1015,44 +1138,62 @@ class ConfirmPostContentWidget extends StatelessWidget {
                     const SizedBox(
                       height: 8.0,
                     ),
-                    AspectRatio(
-                      aspectRatio: 1.5,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(20.0),
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withAlpha(64),
-                              offset: const Offset(0, 4),
-                              blurRadius: 4,
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.all(0),
+                        backgroundColor: CustomColors.whDarkBlack,
+                      ),
+                      onPressed: () async {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ConfirmPostPhotoView(
+                              imageProviderList: imageList,
+                              initPageIndex: 2,
                             ),
-                          ],
-                        ),
-                        clipBehavior: Clip.hardEdge,
-                        child: Image(
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) {
-                              return child;
-                            } else {
-                              return Container(
-                                color: CustomColors.whBlack,
-                                child: const Center(
-                                  child: SizedBox(
-                                    width: 30,
-                                    height: 30,
-                                    child: CircularProgressIndicator(
-                                      color: CustomColors.whYellow,
+                          ),
+                        );
+                      },
+                      child: AspectRatio(
+                        aspectRatio: 1.5,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: CustomColors.whDarkBlack,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(20.0),
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withAlpha(64),
+                                offset: const Offset(0, 4),
+                                blurRadius: 4,
+                              ),
+                            ],
+                          ),
+                          clipBehavior: Clip.hardEdge,
+                          child: Image(
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) {
+                                return child;
+                              } else {
+                                return Container(
+                                  color: CustomColors.whBlack,
+                                  child: const Center(
+                                    child: SizedBox(
+                                      width: 30,
+                                      height: 30,
+                                      child: CircularProgressIndicator(
+                                        color: CustomColors.whYellow,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              );
-                            }
-                          },
-                          fit: BoxFit.cover,
-                          image: NetworkImage(
-                            confirmPostEntity.imageUrlList![2],
+                                );
+                              }
+                            },
+                            fit: BoxFit.cover,
+                            image: NetworkImage(
+                              widget.confirmPostEntity.imageUrlList![2],
+                            ),
                           ),
                         ),
                       ),
