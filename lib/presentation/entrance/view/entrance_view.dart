@@ -11,7 +11,7 @@ import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/effects/effects.dart';
-import 'package:wehavit/presentation/entrance/auth.dart';
+import 'package:wehavit/presentation/entrance/entrance.dart';
 
 class EntranceView extends StatefulHookConsumerWidget {
   const EntranceView({super.key});
