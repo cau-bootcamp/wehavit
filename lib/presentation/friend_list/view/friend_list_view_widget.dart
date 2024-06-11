@@ -70,48 +70,45 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
       ),
       forFail: Container(),
       mainWidgetCallback: (userEntity) {
-        return Container(
-          // margin: const EdgeInsets.only(top: 12),
-          child: Row(
-            children: [
-              ProfileImageCircleWidget(
-                size: 60,
-                url: userEntity.userImageUrl,
-              ),
-              const SizedBox(
-                width: 12,
-              ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      userEntity.userName ?? '',
-                      style: const TextStyle(
-                        color: CustomColors.whWhite,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      overflow: TextOverflow.ellipsis,
+        return Row(
+          children: [
+            ProfileImageCircleWidget(
+              size: 60,
+              url: userEntity.userImageUrl,
+            ),
+            const SizedBox(
+              width: 12,
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    userEntity.userName ?? '',
+                    style: const TextStyle(
+                      color: CustomColors.whWhite,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
                     ),
-                    Text(
-                      userEntity.aboutMe ?? '',
-                      style: const TextStyle(
-                        color: CustomColors.whPlaceholderGrey,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w300,
-                      ),
-                      overflow: TextOverflow.ellipsis,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    userEntity.aboutMe ?? '',
+                    style: const TextStyle(
+                      color: CustomColors.whPlaceholderGrey,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w300,
                     ),
-                    const SizedBox(
-                      width: 8,
-                    ),
-                  ],
-                ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                ],
               ),
-              postfixButtonWidget(userEntity, ref),
-            ],
-          ),
+            ),
+            postfixButtonWidget(userEntity, ref),
+          ],
         );
       },
     );
@@ -402,26 +399,26 @@ class FriendListMyProfileWidget extends StatelessWidget {
                 ],
               ),
             ),
-            Column(
-              children: [
-                Image.asset(
-                  CustomIconImage.linkIcon,
-                  width: 20,
-                  height: 20,
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                const Text(
-                  '복사하기',
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.w700,
-                    color: CustomColors.whWhite,
-                  ),
-                ),
-              ],
-            ),
+            // Column(
+            //   children: [
+            //     Image.asset(
+            //       CustomIconImage.linkIcon,
+            //       width: 20,
+            //       height: 20,
+            //     ),
+            //     const SizedBox(
+            //       height: 4,
+            //     ),
+            //     const Text(
+            //       '복사하기',
+            //       style: TextStyle(
+            //         fontSize: 14.0,
+            //         fontWeight: FontWeight.w700,
+            //         color: CustomColors.whWhite,
+            //       ),
+            //     ),
+            //   ],
+            // ),
           ],
         );
       },

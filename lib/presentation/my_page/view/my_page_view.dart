@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wehavit/common/common.dart';
+import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
@@ -37,7 +38,16 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
 
     return Scaffold(
       backgroundColor: CustomColors.whDarkBlack,
-      appBar: WehavitAppBar(title: '내 정보'),
+      appBar: WehavitAppBar(
+          title: '내 정보',
+          trailingTitle: '로그아웃',
+          trailingAction: () async {
+            await ref.read(logOutUseCaseProvider).call();
+            if (mounted) {
+              // ignore: use_build_context_synchronously
+              Navigator.pushReplacementNamed(context, '/entrance');
+            }
+          }),
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: RefreshIndicator(
