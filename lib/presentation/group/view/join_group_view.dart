@@ -1,13 +1,13 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/presentation/common_components/common_components.dart';
-import 'package:wehavit/presentation/group/group.dart';
+import 'package:wehavit/presentation/presentation.dart';
 
 class JoinGroupView extends ConsumerStatefulWidget {
   const JoinGroupView({super.key});
@@ -26,6 +26,7 @@ class _JoinGroupViewState extends ConsumerState<JoinGroupView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: CustomColors.whDarkBlack,
       appBar: WehavitAppBar(
         title: '그룹에 참여하기',
@@ -39,93 +40,97 @@ class _JoinGroupViewState extends ConsumerState<JoinGroupView> {
         child: Column(
           children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  child: Stack(
-                    alignment: Alignment.centerRight,
-                    children: [
-                      TextFormField(
-                        controller: groupNameFieldController,
-                        onChanged: (value) {
-                          setState(() {});
-                        },
-                        cursorColor: CustomColors.whWhite,
-                        textAlignVertical: TextAlignVertical.center,
-                        style: const TextStyle(
-                          color: CustomColors.whWhite,
-                          fontSize: 16.0,
-                        ),
-                        decoration: InputDecoration(
-                          hintText: '그룹 이름',
-                          hintStyle: const TextStyle(
-                            fontSize: 16,
-                            color: CustomColors.whPlaceholderGrey,
-                          ),
-                          filled: true,
-                          fillColor: CustomColors.whGrey,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(
-                              width: 0,
-                              style: BorderStyle.none,
-                            ),
-                          ),
-                          isCollapsed: true,
-                          contentPadding: const EdgeInsets.symmetric(
-                            vertical: 12.0,
-                            horizontal: 16.0,
-                          ),
-                        ),
-                      ),
-                      Visibility(
-                        replacement: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              groupNameFieldController.clear();
-                              groupListCellWidgetModelList = [];
-                              isSearchDone = false;
-                            });
-                          },
-                          icon: const Icon(
-                            Icons.close,
-                            size: 24,
-                            color: CustomColors.whWhite,
-                          ),
-                        ),
-                        visible: groupNameFieldController.text.isEmpty,
-                        child: IconButton(
-                          onPressed: () async {
-                            final clipboardData =
-                                await Clipboard.getData(Clipboard.kTextPlain);
-                            groupNameFieldController.text =
-                                clipboardData?.text ?? '';
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 12.0),
+                    child: Stack(
+                      alignment: Alignment.centerRight,
+                      children: [
+                        TextFormField(
+                          controller: groupNameFieldController,
+                          onChanged: (value) {
                             setState(() {});
                           },
-                          icon: const Icon(
-                            Icons.paste,
-                            size: 20,
+                          cursorColor: CustomColors.whWhite,
+                          textAlignVertical: TextAlignVertical.center,
+                          style: const TextStyle(
                             color: CustomColors.whWhite,
+                            fontSize: 16.0,
+                          ),
+                          decoration: InputDecoration(
+                            hintText: '그룹 이름',
+                            hintStyle: const TextStyle(
+                              fontSize: 16,
+                              color: CustomColors.whPlaceholderGrey,
+                            ),
+                            filled: true,
+                            fillColor: CustomColors.whGrey,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: const BorderSide(
+                                width: 0,
+                                style: BorderStyle.none,
+                              ),
+                            ),
+                            isCollapsed: true,
+                            contentPadding: const EdgeInsets.symmetric(
+                              vertical: 12.0,
+                              horizontal: 16.0,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                        Visibility(
+                          replacement: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                groupNameFieldController.clear();
+                                groupListCellWidgetModelList = [];
+                                isSearchDone = false;
+                              });
+                            },
+                            icon: const Icon(
+                              Icons.close,
+                              size: 24,
+                              color: CustomColors.whWhite,
+                            ),
+                          ),
+                          visible: groupNameFieldController.text.isEmpty,
+                          child: IconButton(
+                            onPressed: () async {
+                              final clipboardData =
+                                  await Clipboard.getData(Clipboard.kTextPlain);
+                              groupNameFieldController.text =
+                                  clipboardData?.text ?? '';
+                              setState(() {});
+                            },
+                            icon: const Icon(
+                              Icons.paste,
+                              size: 20,
+                              color: CustomColors.whWhite,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 IconButton(
                   onPressed: () async {
                     if (groupNameFieldController.text.isNotEmpty) {
-                      final groupEntity = await ref
-                          .read(getGroupEntityByGroupNameUsecaseProvider)(
-                            groupname: groupNameFieldController.text,
-                          )
+                      final groupEntityList = await ref
+                          .read(searchGroupEntityListByGroupNameUsecaseProvider)
+                          (searchKeyword: groupNameFieldController.text)
                           .then(
                             (result) => result.fold(
                               (failure) => null,
-                              (entity) => entity,
+                              (list) => list,
                             ),
                           );
 
-                      if (groupEntity == null) {
+                      if (groupEntityList == null ||
+                          (groupEntityList.isEmpty)) {
                         // 그룹 정보를 불러올 수 없는 경우 (데이터가 없다거나?)
                         setState(() {
                           isSearchDone = true;
@@ -134,17 +139,48 @@ class _JoinGroupViewState extends ConsumerState<JoinGroupView> {
                         return;
                       }
 
-                      groupListCellWidgetModelList = await ref
-                          .read(getGroupListViewCellWidgetModelUsecaseProvider)(
-                            groupEntity: groupEntity,
-                          )
-                          .then(
-                            (result) => result.fold(
-                              (failure) => [],
-                              (model) => [model],
-                            ),
-                          );
+                      groupListCellWidgetModelList = (await Future.wait(
+                        groupEntityList.map(
+                          (futureEntity) async {
+                            return futureEntity.then((result) async {
+                              final model = await result.fold(
+                                (failure) => null,
+                                (entity) async => await ref
+                                    .read(
+                                      // ignore: lines_longer_than_80_chars
+                                      getGroupListViewCellWidgetModelUsecaseProvider,
+                                    )(
+                                      groupEntity: entity,
+                                    )
+                                    .then(
+                                      (result) => result.fold(
+                                        (failure) => null,
+                                        (model) => model,
+                                      ),
+                                    ),
+                              );
 
+                              if (model != null) {
+                                return model;
+                              }
+                            });
+                          },
+                        ).toList(),
+                      ))
+                          .whereNotNull()
+                          .toList();
+
+                      if (groupListCellWidgetModelList.isEmpty) {
+                        // 그룹 정보를 불러올 수 없는 경우 (데이터가 없다거나?)
+                        setState(() {
+                          isSearchDone = true;
+                          isSearchSuccessed = false;
+                        });
+                        return;
+                      }
+
+                      // ignore: use_build_context_synchronously
+                      FocusScope.of(context).unfocus();
                       setState(() {
                         isSearchSuccessed = true;
                         isSearchDone = true;
@@ -190,53 +226,54 @@ class _JoinGroupViewState extends ConsumerState<JoinGroupView> {
                     ),
                   ),
                 ),
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 16.0,
-                      ),
-                      child: const Text(
-                        '참여하려는 그룹을 선택해주세요',
-                        style: TextStyle(
-                          color: CustomColors.whSemiWhite,
-                          fontWeight: FontWeight.w300,
-                          fontSize: 14.0,
+                child: Expanded(
+                  child: ListView(
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.only(
+                          top: 8.0,
+                          bottom: 16.0,
+                        ),
+                        child: const Text(
+                          '참여하려는 그룹을 선택해주세요',
+                          style: TextStyle(
+                            color: CustomColors.whSemiWhite,
+                            fontWeight: FontWeight.w300,
+                            fontSize: 14.0,
+                          ),
                         ),
                       ),
-                    ),
-                    SingleChildScrollView(
-                      child: Column(
-                        children: groupListCellWidgetModelList
-                            .map(
-                              (cellModel) => GestureDetector(
-                                child: GroupListViewCellWidget(
-                                  cellModel: cellModel,
-                                ),
-                                onTapUp: (details) async {
-                                  showModalBottomSheet(
-                                    isScrollControlled: true,
-                                    context: context,
-                                    builder: (context) {
-                                      return GradientBottomSheet(
-                                        SizedBox(
-                                          height: MediaQuery.sizeOf(context)
-                                                  .height *
+                      ...groupListCellWidgetModelList.map(
+                        (cellModel) => Container(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: GestureDetector(
+                            child: GroupListViewCellWidget(
+                              cellModel: cellModel,
+                            ),
+                            onTapUp: (details) async {
+                              showModalBottomSheet(
+                                isScrollControlled: true,
+                                context: context,
+                                builder: (context) {
+                                  return GradientBottomSheet(
+                                    SizedBox(
+                                      height:
+                                          MediaQuery.sizeOf(context).height *
                                               0.80,
-                                          child: JoinGroupIntroduceView(
-                                            groupModel: cellModel,
-                                          ),
-                                        ),
-                                      );
-                                    },
+                                      child: JoinGroupIntroduceView(
+                                        groupModel: cellModel,
+                                      ),
+                                    ),
                                   );
                                 },
-                              ),
-                            )
-                            .toList(),
+                              );
+                            },
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -354,7 +391,11 @@ class _JoinGroupIntroduceViewState
                             color: CustomColors.whWhite,
                           ),
                         ),
-                        UserProfileBar(futureUserEntity: groupManagerEntity!),
+                        const SizedBox(height: 8.0),
+                        FriendListCellWidget(
+                          futureUserEntity: groupManagerEntity!,
+                          cellState: FriendListCellState.normal,
+                        ),
                       ],
                     ),
                   ),
@@ -415,8 +456,8 @@ class _JoinGroupIntroduceViewState
                             setState(() {});
 
                             isAppliedFuture = ref
-                                // ignore: lines_longer_than_80_chars
                                 .read(
+                                  // ignore: lines_longer_than_80_chars
                                   checkWhetherAlreadyAppliedToGroupUsecaseProvider,
                                 )(
                                   widget.groupModel.groupEntity.groupId,
@@ -432,7 +473,7 @@ class _JoinGroupIntroduceViewState
                         ),
                       );
                     } else if (snapshot.hasError) {
-                      return WideColoredButton(
+                      return const WideColoredButton(
                         buttonTitle: '신청 여부 조회에 문제가 발생하였습니다',
                         foregroundColor: CustomColors.whBlack,
                         backgroundColor: CustomColors.whPlaceholderGrey,
@@ -450,14 +491,14 @@ class _JoinGroupIntroduceViewState
                   },
                 );
               } else {
-                return WideColoredButton(
+                return const WideColoredButton(
                   buttonTitle: '이미 그룹에 참여중입니다',
                   foregroundColor: CustomColors.whBlack,
                   backgroundColor: CustomColors.whPlaceholderGrey,
                 );
               }
             } else if (snapshot.hasError) {
-              return WideColoredButton(
+              return const WideColoredButton(
                 buttonTitle: '가입 여부 조회에 문제가 발생하였습니다',
                 foregroundColor: CustomColors.whBlack,
                 backgroundColor: CustomColors.whPlaceholderGrey,

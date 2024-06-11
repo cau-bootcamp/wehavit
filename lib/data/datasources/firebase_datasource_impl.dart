@@ -2123,4 +2123,57 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       return Future(() => left(const Failure('cannot get group entity')));
     }
   }
+
+  @override
+  EitherFuture<List<EitherFuture<GroupEntity>>> getGroupEntityListByGroupName({
+    required String keyword,
+  }) {
+    try {
+      return firestore
+          .collection(FirebaseCollectionName.groups)
+          .where(
+            FirebaseGroupFieldName.name,
+            isGreaterThanOrEqualTo: keyword,
+          )
+          .limit(5)
+          .get()
+          .then((groups) {
+        List<EitherFuture<GroupEntity>> futureGroupList =
+            groups.docs.map((doc) {
+          return EitherFuture<GroupEntity>(() {
+            try {
+              GroupEntity groupEntity =
+                  FirebaseGroupModel.fromFireStoreDocument(doc)
+                      .toGroupEntity(groupId: doc.id);
+
+              if (groupEntity.groupName.startsWith(keyword)) {
+                return Future(() => right(groupEntity));
+              } else {
+                return Future(
+                  () => left(
+                    const Failure('doesn\'t match pattern'),
+                  ),
+                );
+              }
+            } on Exception catch (e) {
+              return Future(
+                () => left(
+                  Failure('Error processing document: ${e.toString()}'),
+                ),
+              );
+            }
+          });
+        }).toList();
+        return right(futureGroupList);
+      });
+    } on Exception catch (e) {
+      return Future.value(
+        left(
+          Failure(
+            'catch error on getGroupEntityListByGroupName : ${e.toString()}',
+          ),
+        ),
+      );
+    }
+  }
 }

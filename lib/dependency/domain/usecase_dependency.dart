@@ -358,3 +358,9 @@ final unshareResolutionToFriendUsecaseProvider =
   final resolutionRepository = ref.watch(resolutionRepositoryProvider);
   return UnshareResolutionToFriendUsecase(resolutionRepository);
 });
+
+final searchGroupEntityListByGroupNameUsecaseProvider =
+    Provider<SearchGroupEntityListByGroupNameUsecase>((ref) {
+  final groupRepository = ref.watch(groupRepositoryProvider);
+  return SearchGroupEntityListByGroupNameUsecase(groupRepository);
+});
