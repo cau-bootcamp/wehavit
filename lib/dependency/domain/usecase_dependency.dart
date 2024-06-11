@@ -258,7 +258,11 @@ final checkWeatherUserIsMnagerOfGroupEntityUsecaseProvider =
 final getAppliedUserListForGroupEntityUsecaseProvider =
     Provider<GetAppliedUserListForGroupEntityUsecase>((ref) {
   final groupRepository = ref.watch(groupRepositoryProvider);
-  return GetAppliedUserListForGroupEntityUsecase(groupRepository);
+  final userModelRepository = ref.watch(userModelRepositoryProvider);
+  return GetAppliedUserListForGroupEntityUsecase(
+    userModelRepository,
+    groupRepository,
+  );
 });
 
 final getAchievementPercentageForGroupMemberUsecaseProvider =

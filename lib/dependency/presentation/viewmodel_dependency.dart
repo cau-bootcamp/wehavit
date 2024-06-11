@@ -146,11 +146,14 @@ final groupPostViewModelProvider = StateNotifierProvider.autoDispose<
       ref.watch(sendQuickShotReactionToConfirmPostUsecaseProvider);
   final sendCommentReactionToConfirmPostUsecase =
       ref.watch(sendCommentReactionToConfirmPostUsecaseProvider);
+  final getAppliedUserListForGroupEntityUsecase =
+      ref.watch(getAppliedUserListForGroupEntityUsecaseProvider);
   return GroupPostViewModelProvider(
     getGroupConfirmPostListByDateUsecase,
     sendEmojiReactionToConfirmPostUsecase,
     sendQuickShotReactionToConfirmPostUsecase,
     sendCommentReactionToConfirmPostUsecase,
+    getAppliedUserListForGroupEntityUsecase,
   );
 });
 

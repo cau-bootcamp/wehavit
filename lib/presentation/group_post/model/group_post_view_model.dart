@@ -16,6 +16,9 @@ class GroupPostViewModel {
 
   String groupId = '';
 
+  // 관리자일 때만 숫자를 불러옴
+  int appliedUserCountForManager = 0;
+
   bool isShowingCalendar = true;
   DateTime selectedDate =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
