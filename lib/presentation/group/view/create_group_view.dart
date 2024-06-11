@@ -13,6 +13,8 @@ class CreateGroupView extends ConsumerStatefulWidget {
 }
 
 class _CreateGroupViewState extends ConsumerState<CreateGroupView> {
+  List<FocusNode> focuseNodeList = [FocusNode(), FocusNode(), FocusNode()];
+
   @override
   Widget build(BuildContext context) {
     final viewModel = ref.watch(createGroupViewModelProvider);
@@ -36,30 +38,49 @@ class _CreateGroupViewState extends ConsumerState<CreateGroupView> {
                 controller: viewModel.scrollController,
                 child: Column(
                   children: [
-                    CreateGroupNameFieldWidget(
-                      provider: provider,
-                      onPressed: () {
-                        setState(() {});
-                      },
+                    Visibility(
+                      visible: viewModel.currentStep >= 0,
+                      maintainState: true,
+                      child: CreateGroupNameFieldWidget(
+                        provider: provider,
+                        focusNode: focuseNodeList[0],
+                        onPressed: () {
+                          setState(() {});
+                        },
+                      ),
                     ),
-                    CreateGroupDescriptionFieldWidget(
-                      provider: provider,
-                      onPressed: () {
-                        setState(() {});
-                      },
+                    Visibility(
+                      visible: viewModel.currentStep >= 1,
+                      maintainState: true,
+                      child: CreateGroupDescriptionFieldWidget(
+                        provider: provider,
+                        focusNode: focuseNodeList[1],
+                        onPressed: () {
+                          setState(() {});
+                        },
+                      ),
                     ),
-                    CreateGroupRuleFieldWidget(
-                      provider: provider,
-                      onPressed: () {
-                        setState(() {});
-                      },
+                    Visibility(
+                      visible: viewModel.currentStep >= 2,
+                      maintainState: true,
+                      child: CreateGroupRuleFieldWidget(
+                        provider: provider,
+                        focusNode: focuseNodeList[2],
+                        onPressed: () {
+                          setState(() {});
+                        },
+                      ),
                     ),
-                    CreateGroupColorSelectorWidget(
-                      viewModel: viewModel,
-                      provider: provider,
-                      onPressed: () {
-                        setState(() {});
-                      },
+                    Visibility(
+                      visible: viewModel.currentStep >= 3,
+                      maintainState: true,
+                      child: CreateGroupColorSelectorWidget(
+                        viewModel: viewModel,
+                        provider: provider,
+                        onPressed: () {
+                          setState(() {});
+                        },
+                      ),
                     ),
                   ],
                 ),
@@ -68,25 +89,57 @@ class _CreateGroupViewState extends ConsumerState<CreateGroupView> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: WideColoredButton(
-                buttonTitle: '그룹 만들기',
-                isDiminished: !provider.isComplete(),
+                buttonTitle: viewModel.currentStep != 3
+                    ? '다음 (${viewModel.currentStep + 1} / ${viewModel.stepDoneList.length})'
+                    : '그룹 만들기',
+                isDiminished: !viewModel.isMovableToNextStep,
                 foregroundColor: CustomColors.whBlack,
                 backgroundColor: CustomColors.whYellow,
                 onPressed: () async {
-                  final groupEntity = await provider.createGroup();
+                  if (viewModel.currentStep != 3) {
+                    setState(() {
+                      viewModel.currentStep += 1;
+                      provider.setFocusedStep(viewModel.currentStep);
+                      provider.checkIsMovableToNextStep();
+                    });
 
-                  if (groupEntity != null) {
-                    // ignore: use_build_context_synchronously
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return DoneCreatingGroupView(
-                            groupEntity: groupEntity,
-                          );
-                        },
-                      ),
-                    );
+                    if (viewModel.currentStep < 3) {
+                      FocusScope.of(context).requestFocus(
+                        focuseNodeList[viewModel.currentStep],
+                      );
+                    } else {
+                      focuseNodeList[0].unfocus();
+                      focuseNodeList[1].unfocus();
+                      focuseNodeList[2].unfocus();
+                    }
+
+                    setState(() {});
+                  }
+
+                  // 모든 데이터 다 채웠음
+                  else {
+                    final groupEntity = await provider.createGroup();
+
+                    if (groupEntity != null) {
+                      Navigator.push(
+                        // ignore: use_build_context_synchronously
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return DoneCreatingGroupView(
+                              groupEntity: groupEntity,
+                            );
+                          },
+                        ),
+                      );
+                    } else {
+                      showToastMessage(
+                        // ignore: use_build_context_synchronously
+                        context,
+                        text: '잠시 후 다시 시도해주세요',
+                        icon: const Icon(Icons.not_interested),
+                      );
+                    }
                   }
                 },
               ),
@@ -141,11 +194,7 @@ class CreateGroupColorSelectorWidget extends StatelessWidget {
                   child: GestureDetector(
                     onTapUp: (details) {
                       provider.setGroupColorIndex(index);
-                      if (index >= 0) {
-                        provider.setStepDoneList(3, true);
-                      } else {
-                        provider.setStepDoneList(3, false);
-                      }
+
                       onPressed();
                     },
                     child: Stack(
@@ -188,10 +237,12 @@ class CreateGroupRuleFieldWidget extends StatelessWidget {
     super.key,
     required this.provider,
     required this.onPressed,
+    required this.focusNode,
   });
 
   final CreateGroupViewModelProvider provider;
   final Function onPressed;
+  final FocusNode focusNode;
 
   @override
   Widget build(BuildContext context) {
@@ -214,6 +265,7 @@ class CreateGroupRuleFieldWidget extends StatelessWidget {
           TextFormField(
             style: const TextStyle(color: CustomColors.whWhite),
             // minLines: 4,
+            focusNode: focusNode,
             maxLines: 4,
             cursorColor: CustomColors.whWhite,
             decoration: InputDecoration(
@@ -229,13 +281,12 @@ class CreateGroupRuleFieldWidget extends StatelessWidget {
               isCollapsed: true,
               contentPadding: const EdgeInsets.all(10.0),
             ),
+            onTap: () {
+              provider.setFocusedStep(2);
+            },
             onChanged: (value) {
               provider.setGroupRule(value);
-              if (value.isEmpty) {
-                provider.setStepDoneList(2, false);
-              } else {
-                provider.setStepDoneList(2, true);
-              }
+
               onPressed();
             },
           ),
@@ -250,10 +301,12 @@ class CreateGroupDescriptionFieldWidget extends StatelessWidget {
     super.key,
     required this.provider,
     required this.onPressed,
+    required this.focusNode,
   });
 
   final CreateGroupViewModelProvider provider;
   final Function onPressed;
+  final FocusNode focusNode;
 
   @override
   Widget build(BuildContext context) {
@@ -274,6 +327,7 @@ class CreateGroupDescriptionFieldWidget extends StatelessWidget {
             height: 8.0,
           ),
           TextFormField(
+            focusNode: focusNode,
             style: const TextStyle(color: CustomColors.whWhite),
             // minLines: 4,
             cursorColor: CustomColors.whWhite,
@@ -291,13 +345,12 @@ class CreateGroupDescriptionFieldWidget extends StatelessWidget {
               isCollapsed: true,
               contentPadding: const EdgeInsets.all(10.0),
             ),
+            onTap: () {
+              provider.setFocusedStep(1);
+            },
             onChanged: (value) {
               provider.setDescriptionName(value);
-              if (value.isEmpty) {
-                provider.setStepDoneList(1, false);
-              } else {
-                provider.setStepDoneList(1, true);
-              }
+
               onPressed();
             },
           ),
@@ -312,10 +365,12 @@ class CreateGroupNameFieldWidget extends StatelessWidget {
     super.key,
     required this.provider,
     required this.onPressed,
+    required this.focusNode,
   });
 
   final CreateGroupViewModelProvider provider;
   final Function onPressed;
+  final FocusNode focusNode;
 
   @override
   Widget build(BuildContext context) {
@@ -336,6 +391,7 @@ class CreateGroupNameFieldWidget extends StatelessWidget {
             height: 8.0,
           ),
           TextFormField(
+            focusNode: focusNode,
             cursorColor: CustomColors.whWhite,
             style: const TextStyle(color: CustomColors.whWhite),
             decoration: InputDecoration(
@@ -351,13 +407,12 @@ class CreateGroupNameFieldWidget extends StatelessWidget {
               isCollapsed: true,
               contentPadding: const EdgeInsets.all(10.0),
             ),
+            onTap: () {
+              provider.setFocusedStep(0);
+            },
             onChanged: (value) {
               provider.setGroupName(value);
-              if (value.isEmpty) {
-                provider.setStepDoneList(0, false);
-              } else {
-                provider.setStepDoneList(0, true);
-              }
+
               onPressed();
             },
           ),

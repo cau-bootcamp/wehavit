@@ -10,6 +10,7 @@ import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
+// ignore: must_be_immutable
 class GroupPostView extends ConsumerStatefulWidget {
   GroupPostView({super.key, required this.groupEntity});
 

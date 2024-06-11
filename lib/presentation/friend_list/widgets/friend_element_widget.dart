@@ -77,7 +77,7 @@ class _FriendElementWidgetState extends State<FriendElementWidget> {
             color: Colors.black54,
             blurRadius: 5.0,
             offset: Offset(0, 2),
-          )
+          ),
         ],
       ),
     );

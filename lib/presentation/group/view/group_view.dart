@@ -29,7 +29,7 @@ class _GroupViewState extends ConsumerState<GroupView>
   Widget build(BuildContext context) {
     super.build(context);
     final viewModel = ref.watch(groupViewModelProvider);
-    // final provider = ref.read(groupViewModelProvider.notifier);
+    final provider = ref.read(groupViewModelProvider.notifier);
 
     List<Widget> groupListViewCellList = (viewModel.groupListViewCellModelList
                 ?.map(
@@ -58,7 +58,13 @@ class _GroupViewState extends ConsumerState<GroupView>
         .append(
       GroupListViewAddCellWidget(
         tapAddGroupCallback: () async {
-          showAddMenuBottomSheet(context);
+          showAddMenuBottomSheet(
+            context,
+            setStateCallback: () async {
+              await provider.loadMyGroupCellList();
+              setState(() {});
+            },
+          );
         },
       ),
     ).toList();
@@ -80,7 +86,9 @@ class _GroupViewState extends ConsumerState<GroupView>
             child: viewModel.groupListViewCellModelList != null
                 ? RefreshIndicator(
                     onRefresh: () async {
-                      unawaited(loadGroupCellList());
+                      provider
+                          .loadMyGroupCellList()
+                          .whenComplete(() => setState(() {}));
                     },
                     child: ListView.builder(
                       padding: const EdgeInsets.only(bottom: 60.0),
@@ -103,7 +111,10 @@ class _GroupViewState extends ConsumerState<GroupView>
     );
   }
 
-  Future<dynamic> showAddMenuBottomSheet(BuildContext context) {
+  Future<dynamic> showAddMenuBottomSheet(
+    BuildContext context, {
+    required void Function() setStateCallback,
+  }) {
     return showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -141,7 +152,10 @@ class _GroupViewState extends ConsumerState<GroupView>
                         return const CreateGroupView();
                       },
                     ),
-                  ).then((_) => Navigator.pop(context));
+                  ).then((_) {
+                    setStateCallback();
+                    Navigator.pop(context);
+                  });
                 },
               ),
               const SizedBox(

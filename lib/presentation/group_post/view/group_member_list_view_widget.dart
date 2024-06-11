@@ -9,6 +9,7 @@ import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 
+// ignore: must_be_immutable
 class GroupMemberListBottomSheet extends ConsumerStatefulWidget {
   GroupMemberListBottomSheet(
     this.updateParentViewGroupEntity, {
