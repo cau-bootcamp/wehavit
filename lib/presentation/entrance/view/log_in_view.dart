@@ -67,6 +67,7 @@ class _LogInViewState extends ConsumerState<LogInView> {
                       height: 16.0,
                     ),
                     TextFormField(
+                      keyboardType: TextInputType.emailAddress,
                       controller: viewmodel.emailEditingController,
                       cursorColor: CustomColors.whWhite,
                       textAlignVertical: TextAlignVertical.center,
@@ -138,6 +139,10 @@ class _LogInViewState extends ConsumerState<LogInView> {
                 ),
                 WideColoredButton(
                   onPressed: () async {
+                    setState(() {
+                      viewmodel.isProcessing = true;
+                    });
+
                     provider.logIn().then((result) {
                       result.fold(
                         (failure) {
@@ -180,9 +185,14 @@ class _LogInViewState extends ConsumerState<LogInView> {
                           ),
                         ),
                       );
+                    }).whenComplete(() {
+                      setState(() {
+                        viewmodel.isProcessing = false;
+                      });
                     });
                   },
-                  buttonTitle: '로그인하기',
+                  buttonTitle: viewmodel.isProcessing ? '처리중' : '로그인하기',
+                  isDiminished: viewmodel.isProcessing,
                   backgroundColor: CustomColors.whYellow,
                   foregroundColor: CustomColors.whBlack,
                 ),

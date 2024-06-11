@@ -67,6 +67,7 @@ class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
                       height: 8.0,
                     ),
                     TextFormField(
+                      keyboardType: TextInputType.emailAddress,
                       controller: viewmodel.emailInputController,
                       onChanged: (value) {
                         provider.checkEmailEntered();
