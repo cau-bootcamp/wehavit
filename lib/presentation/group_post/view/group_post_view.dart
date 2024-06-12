@@ -28,7 +28,15 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
     final provider = ref.read(groupPostViewModelProvider.notifier);
     viewModel.groupId = widget.groupEntity.groupId;
 
-    unawaited(provider.loadAppliedUserCount(entity: widget.groupEntity));
+    unawaited(
+      provider
+          .loadAppliedUserCount(entity: widget.groupEntity)
+          .whenComplete(() {
+        setState(() {
+          print("load");
+        });
+      }),
+    );
 
     unawaited(
       provider
@@ -79,12 +87,9 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                     groupEntity: widget.groupEntity,
                   );
                 },
-              ).whenComplete(() {
-                provider
-                    .loadAppliedUserCount(entity: widget.groupEntity)
-                    .whenComplete(() {
-                  setState(() {});
-                });
+              ).whenComplete(() async {
+                await provider.loadAppliedUserCount(entity: widget.groupEntity);
+                setState(() {});
               });
             },
             trailingIconBadgeCount: viewModel.appliedUserCountForManager,
