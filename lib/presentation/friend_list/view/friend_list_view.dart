@@ -187,12 +187,12 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
                     Container(
                       margin: const EdgeInsets.only(bottom: 4.0),
                       child: FriendListTextFieldWidget(
-                        searchCallback: (searchNickname) async {
-                          if (searchNickname != null &&
-                              searchNickname.isNotEmpty) {
+                        searchCallback: (searchedHandle) async {
+                          if (searchedHandle != null &&
+                              searchedHandle.isNotEmpty) {
                             provider
-                                .searchUserByNickname(
-                                  nickname: searchNickname,
+                                .searchUserByHandle(
+                                  handle: searchedHandle,
                                 )
                                 .whenComplete(() => setState(() {}));
                           }

@@ -304,6 +304,13 @@ final searchUserDataListByNicknameUsecaseProvider =
   final userModelRepository = ref.watch(userModelRepositoryProvider);
   return SearchUserDataListByNicknameUsecase(userModelRepository);
 });
+
+final searchUserDataListByHandleUsecaseProvider =
+    Provider<SearchUserDataListByHandleUsecase>((ref) {
+  final userModelRepository = ref.watch(userModelRepositoryProvider);
+  return SearchUserDataListByHandleUsecase(userModelRepository);
+});
+
 final acceptApplyingForFriendUsecaseProvider =
     Provider<AcceptApplyingForFriendUsecase>((ref) {
   final userModelRepository = ref.watch(userModelRepositoryProvider);

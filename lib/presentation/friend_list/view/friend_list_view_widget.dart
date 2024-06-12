@@ -83,14 +83,30 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    userEntity.userName ?? '',
-                    style: const TextStyle(
-                      color: CustomColors.whWhite,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    overflow: TextOverflow.ellipsis,
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        '${userEntity.handle} • ',
+                        style: const TextStyle(
+                          color: CustomColors.whWhite,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Expanded(
+                        child: Text(
+                          userEntity.userName ?? '',
+                          style: const TextStyle(
+                            color: CustomColors.whSemiWhite,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
                   ),
                   Text(
                     userEntity.aboutMe ?? '',
@@ -285,7 +301,7 @@ class FriendListTextFieldWidget extends StatelessWidget {
                 decoration: const InputDecoration(
                   icon: Icon(Icons.search),
                   iconColor: CustomColors.whWhite,
-                  hintText: '닉네임으로 친구 찾기',
+                  hintText: 'ID로 친구 찾기',
                   hintStyle: TextStyle(
                     color: CustomColors.whWhite,
                     fontSize: 16,
