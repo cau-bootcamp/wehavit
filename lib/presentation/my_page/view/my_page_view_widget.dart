@@ -211,10 +211,16 @@ class MySimpleStatisticsWidget extends StatelessWidget {
         return IntrinsicHeight(
           child: Row(
             children: [
-              const VerticalDivider(
-                thickness: 4,
-                width: 2,
-                color: CustomColors.whYellow,
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(2.0),
+                ),
+                clipBehavior: Clip.hardEdge,
+                child: const VerticalDivider(
+                  thickness: 4,
+                  width: 4,
+                  color: CustomColors.whYellow,
+                ),
               ),
               const SizedBox(width: 12),
               Column(

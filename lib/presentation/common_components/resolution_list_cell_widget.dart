@@ -144,6 +144,7 @@ class ResolutionListCellHeadWidget extends StatelessWidget {
                   fontSize: 16.0,
                   fontWeight: FontWeight.w600,
                   height: 1.2,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
               Visibility(
@@ -155,6 +156,7 @@ class ResolutionListCellHeadWidget extends StatelessWidget {
                     fontSize: 14.0,
                     fontWeight: FontWeight.w500,
                     height: 1.2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ),
@@ -252,6 +254,7 @@ class ResolutionListWeeklyDoneCellWidget extends StatelessWidget {
             width: 2,
           ),
         ),
+        padding: const EdgeInsets.only(top: 2),
         width: 25,
         height: 25,
         alignment: Alignment.center,
@@ -338,6 +341,7 @@ class ResolutionLinearGaugeWidget extends StatelessWidget {
                   color: CustomColors.whWhite,
                   fontSize: 14.0,
                   fontWeight: FontWeight.w500,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
@@ -349,6 +353,7 @@ class ResolutionLinearGaugeWidget extends StatelessWidget {
             minHeight: 7,
             color: PointColors.colorList[resolutionEntity?.colorIndex ?? 0],
             backgroundColor: CustomColors.whDarkBlack,
+            borderRadius: BorderRadius.circular(4.0),
           ),
         ],
       ),
@@ -391,13 +396,19 @@ class ResolutionLinearGaugeWidget extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  resolutionEntity?.actionStatement ?? '',
-                  style: const TextStyle(
-                    color: CustomColors.whWhite,
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.w500,
+                Expanded(
+                  child: Text(
+                    resolutionEntity?.actionStatement ?? '',
+                    style: const TextStyle(
+                      color: CustomColors.whWhite,
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w500,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
+                ),
+                Container(
+                  width: 4.0,
                 ),
                 Text(
                   // ignore: lines_longer_than_80_chars
@@ -413,36 +424,42 @@ class ResolutionLinearGaugeWidget extends StatelessWidget {
             const SizedBox(
               height: 4,
             ),
-            Stack(
-              alignment: Alignment.centerLeft,
-              children: [
-                Container(
-                  height: 7,
-                  width: double.infinity,
-                  color: CustomColors.whDarkBlack,
-                ),
-                Flex(
-                  direction: Axis.horizontal,
-                  children: [
-                    Flexible(
-                      flex: successCount,
-                      child: Container(
-                        height: 7,
-                        color: PointColors
-                            .colorList[resolutionEntity?.colorIndex ?? 0],
+            Container(
+              clipBehavior: Clip.hardEdge,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4.0),
+              ),
+              child: Stack(
+                alignment: Alignment.centerLeft,
+                children: [
+                  Container(
+                    height: 7,
+                    width: double.infinity,
+                    color: CustomColors.whDarkBlack,
+                  ),
+                  Flex(
+                    direction: Axis.horizontal,
+                    children: [
+                      Flexible(
+                        flex: successCount,
+                        child: Container(
+                          height: 7,
+                          color: PointColors
+                              .colorList[resolutionEntity?.colorIndex ?? 0],
+                        ),
                       ),
-                    ),
-                    Flexible(
-                      flex:
-                          (resolutionEntity?.actionPerWeek ?? 1) - successCount,
-                      child: Container(
-                        height: 7,
-                        color: Colors.transparent,
+                      Flexible(
+                        flex: (resolutionEntity?.actionPerWeek ?? 1) -
+                            successCount,
+                        child: Container(
+                          height: 7,
+                          color: Colors.transparent,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
         );
