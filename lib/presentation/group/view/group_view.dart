@@ -34,31 +34,31 @@ class _GroupViewState extends ConsumerState<GroupView>
     final viewModel = ref.watch(groupViewModelProvider);
     final provider = ref.read(groupViewModelProvider.notifier);
 
-    List<Widget> groupListViewCellList = (viewModel.groupListViewCellModelList
-                ?.map(
-                  (cellModel) => GestureDetector(
-                    onTapUp: (details) async {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return GroupPostView(
-                              groupEntity: cellModel.groupEntity,
-                            );
-                          },
-                        ),
-                      ).whenComplete(
-                        () => setState(
-                          () {},
-                        ),
-                      );
-                    },
-                    child: GroupListViewCellWidget(cellModel: cellModel),
-                  ),
-                )
-                .toList() ??
-            List<Widget>.empty())
-        .append(
+    List<Widget> groupListViewCellList = [
+      ...viewModel.groupListViewCellModelList
+              ?.map(
+                (cellModel) => GestureDetector(
+                  onTapUp: (details) async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return GroupPostView(
+                            groupEntity: cellModel.groupEntity,
+                          );
+                        },
+                      ),
+                    ).whenComplete(
+                      () => setState(
+                        () {},
+                      ),
+                    );
+                  },
+                  child: GroupListViewCellWidget(cellModel: cellModel),
+                ),
+              )
+              .toList() ??
+          List<Widget>.empty(),
       GroupListViewAddCellWidget(
         tapAddGroupCallback: () async {
           showAddMenuBottomSheet(
@@ -70,7 +70,7 @@ class _GroupViewState extends ConsumerState<GroupView>
           );
         },
       ),
-    ).toList();
+    ];
 
     return Scaffold(
       backgroundColor: CustomColors.whDarkBlack,
@@ -95,8 +95,7 @@ class _GroupViewState extends ConsumerState<GroupView>
                     },
                     child: ListView.builder(
                       padding: const EdgeInsets.only(bottom: 60.0),
-                      itemCount:
-                          viewModel.groupListViewCellModelList!.length + 1,
+                      itemCount: groupListViewCellList.length,
                       itemBuilder: (context, index) {
                         return Padding(
                           padding: const EdgeInsets.only(
