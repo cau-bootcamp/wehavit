@@ -92,17 +92,26 @@ class _GroupMemberListBottomSheetState
                     child: Stack(
                       alignment: Alignment.topRight,
                       children: [
-                        IconButton(
+                        TextButton(
                           onPressed: () {
                             setState(() {
                               isManagingMode = !isManagingMode;
                             });
                           },
-                          icon: const Icon(
-                            Icons.manage_accounts_outlined,
-                            color: CustomColors.whWhite,
-                            size: 24.0,
-                          ),
+                          child: isManagingMode
+                              ? const Text(
+                                  '완료',
+                                  style: TextStyle(
+                                    color: CustomColors.whWhite,
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                )
+                              : const Icon(
+                                  Icons.manage_accounts_outlined,
+                                  color: CustomColors.whWhite,
+                                  size: 24.0,
+                                ),
                         ),
                         Visibility(
                           visible: appliedUidList.isNotEmpty,
