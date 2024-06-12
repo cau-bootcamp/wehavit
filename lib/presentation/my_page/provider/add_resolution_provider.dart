@@ -1,14 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/domain/usecases/usecases.dart';
 
 class AddResolutionNotifier extends StateNotifier<ResolutionEntity> {
-  AddResolutionNotifier(Ref ref) : super(const ResolutionEntity()) {
-    _uploadResolutionUsecase = ref.watch(uploadResolutionUsecaseProvider);
-  }
-
-  late final UploadResolutionUseCase _uploadResolutionUsecase;
+  AddResolutionNotifier(Ref ref) : super(const ResolutionEntity());
 
   void changeFanList(List<UserDataEntity> newFanList) {
     state = state.copyWith(shareFriendEntityList: newFanList);

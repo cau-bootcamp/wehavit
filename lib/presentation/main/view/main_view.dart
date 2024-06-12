@@ -47,11 +47,11 @@ class _MainViewState extends ConsumerState<MainView>
                 TabBarView(
                   controller: tabController,
                   physics: const NeverScrollableScrollPhysics(),
-                  children: const [
-                    ResolutionListView(),
-                    GroupView(),
-                    FriendListView(),
-                    MyPageView(),
+                  children: [
+                    ResolutionListView(0, tabController),
+                    GroupView(1, tabController),
+                    FriendListView(2, tabController),
+                    MyPageView(3, tabController),
                   ],
                 ),
                 SizedBox(

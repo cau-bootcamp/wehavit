@@ -8,7 +8,10 @@ import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 class ResolutionListView extends ConsumerStatefulWidget {
-  const ResolutionListView({super.key});
+  const ResolutionListView(this.index, this.tabController, {super.key});
+
+  final int index;
+  final TabController tabController;
 
   @override
   ConsumerState<ResolutionListView> createState() => _ResolutionListViewState();
@@ -95,16 +98,19 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
                               index: index,
                             );
                           },
-                        ).whenComplete(() async {
-                          await provider
-                              .loadResolutionModelList()
-                              .whenComplete(() {
-                            setState(() {
+                        ).then((returnValue) async {
+                          print("DEBUG: $returnValue");
+                          if (returnValue == true) {
+                            await provider
+                                .loadResolutionModelList()
+                                .whenComplete(() {
                               ref
                                   .watch(resolutionListViewModelProvider)
                                   .isLoadingView = false;
                             });
-                          });
+                          } else {
+                            //
+                          }
                         });
                       },
                     ),
@@ -117,7 +123,20 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
                             fullscreenDialog: true,
                             builder: (context) => const AddResolutionView(),
                           ),
-                        );
+                        ).whenComplete(() async {
+                          await ref
+                              .watch(myPageViewModelProvider.notifier)
+                              .getMyResolutionListUsecase();
+                          await provider
+                              .loadResolutionModelList()
+                              .whenComplete(() {
+                            setState(() {
+                              ref
+                                  .watch(resolutionListViewModelProvider)
+                                  .isLoadingView = false;
+                            });
+                          });
+                        });
                       },
                     ),
                   ).toList(),
@@ -158,13 +177,25 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
           Column(
             children: [
               Text(
-                viewModel.resolutionModelList![index].entity.goalStatement ??
+                viewModel.resolutionModelList![index].entity.resolutionName ??
                     '',
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   color: PointColors.colorList[
                       viewModel.resolutionModelList![index].entity.colorIndex ??
                           0],
                   fontSize: 18.0,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 4.0),
+              Text(
+                viewModel.resolutionModelList![index].entity.goalStatement ??
+                    '',
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: CustomColors.whWhite,
+                  fontSize: 16.0,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -197,6 +228,9 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
                 ),
               );
               if (result == true) {
+                // ignore: use_build_context_synchronously
+                Navigator.of(context).pop(true);
+
                 showToastMessage(
                   // ignore: use_build_context_synchronously
                   context,
@@ -260,7 +294,7 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
                         model: viewModel.resolutionModelList![index],
                       )
                           .whenComplete(() {
-                        Navigator.pop(context);
+                        Navigator.pop(context, true);
                         // ignore: use_build_context_synchronously
                         showToastMessage(
                           context,
@@ -285,7 +319,7 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
             backgroundColor: Colors.transparent,
             foregroundColor: CustomColors.whPlaceholderGrey,
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pop(context, false);
             },
           ),
         ],
