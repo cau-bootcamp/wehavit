@@ -8,10 +8,7 @@ import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 class ResolutionListView extends ConsumerStatefulWidget {
-  const ResolutionListView(this.index, this.tabController, {super.key});
-
-  final int index;
-  final TabController tabController;
+  const ResolutionListView({super.key});
 
   @override
   ConsumerState<ResolutionListView> createState() => _ResolutionListViewState();
@@ -22,6 +19,7 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
   @override
   void initState() {
     super.initState();
+    print("DEBUG init");
     unawaited(
       ref
           .read(resolutionListViewModelProvider.notifier)
@@ -99,7 +97,6 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
                             );
                           },
                         ).then((returnValue) async {
-                          print("DEBUG: $returnValue");
                           if (returnValue == true) {
                             await provider
                                 .loadResolutionModelList()

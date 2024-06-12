@@ -7,10 +7,7 @@ import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 class FriendListView extends ConsumerStatefulWidget {
-  const FriendListView(this.index, this.tabController, {super.key});
-
-  final int index;
-  final TabController tabController;
+  const FriendListView({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => FrinedListViewState();

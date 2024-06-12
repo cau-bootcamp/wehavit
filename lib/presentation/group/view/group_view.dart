@@ -9,10 +9,7 @@ import 'package:wehavit/presentation/group/group.dart';
 import 'package:wehavit/presentation/group_post/group_post.dart';
 
 class GroupView extends ConsumerStatefulWidget {
-  const GroupView(this.index, this.tabController, {super.key});
-
-  final int index;
-  final TabController tabController;
+  const GroupView({super.key});
 
   @override
   ConsumerState<GroupView> createState() => _GroupViewState();
