@@ -9,6 +9,7 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
     this._sendEmojiReactionToConfirmPostUsecase,
     this._sendQuickShotReactionToConfirmPostUsecase,
     this._sendCommentReactionToConfirmPostUsecase,
+    this.getAppliedUserListForGroupEntityUsecase,
   ) : super(GroupPostViewModel());
 
   final GetGroupConfirmPostListByDateUsecase
@@ -20,6 +21,9 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
       _sendQuickShotReactionToConfirmPostUsecase;
   final SendCommentReactionToConfirmPostUsecase
       _sendCommentReactionToConfirmPostUsecase;
+
+  final GetAppliedUserListForGroupEntityUsecase
+      getAppliedUserListForGroupEntityUsecase;
 
   Future<void> loadConfirmPostEntityListFor({
     required DateTime dateTime,
@@ -96,5 +100,13 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
       );
     }
     return Future(() => null);
+  }
+
+  Future<void> loadAppliedUserCount({required GroupEntity entity}) async {
+    state.appliedUserCountForManager =
+        await getAppliedUserListForGroupEntityUsecase.call(entity).then(
+              (result) =>
+                  result.fold((failure) => 0, (uidList) => uidList.length),
+            );
   }
 }

@@ -36,6 +36,8 @@ export 'reject_applying_for_friend_usecase.dart';
 export 'reject_applying_for_joining_group_usecase.dart';
 export 'remove_friend_usecase.dart';
 export 'remove_user_data_usecase.dart';
+export 'search_group_entity_list_by_group_name_usecase.dart';
+export 'search_user_data_list_by_handle_usecase.dart';
 export 'search_user_data_list_by_nickname_usecase.dart';
 export 'send_comment_reaction_to_confirm_post_usecase.dart';
 export 'send_emoji_reaction_to_confirm_post_usercase.dart';

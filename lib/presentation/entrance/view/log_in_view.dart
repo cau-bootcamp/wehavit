@@ -6,7 +6,7 @@ import 'package:wehavit/dependency/data/repository_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
-import 'package:wehavit/presentation/entrance/auth.dart';
+import 'package:wehavit/presentation/entrance/entrance.dart';
 import 'package:wehavit/presentation/main/view/main_view.dart';
 
 class LogInView extends ConsumerStatefulWidget {
@@ -67,6 +67,7 @@ class _LogInViewState extends ConsumerState<LogInView> {
                       height: 16.0,
                     ),
                     TextFormField(
+                      keyboardType: TextInputType.emailAddress,
                       controller: viewmodel.emailEditingController,
                       cursorColor: CustomColors.whWhite,
                       textAlignVertical: TextAlignVertical.center,
@@ -138,6 +139,10 @@ class _LogInViewState extends ConsumerState<LogInView> {
                 ),
                 WideColoredButton(
                   onPressed: () async {
+                    setState(() {
+                      viewmodel.isProcessing = true;
+                    });
+
                     provider.logIn().then((result) {
                       result.fold(
                         (failure) {
@@ -180,9 +185,14 @@ class _LogInViewState extends ConsumerState<LogInView> {
                           ),
                         ),
                       );
+                    }).whenComplete(() {
+                      setState(() {
+                        viewmodel.isProcessing = false;
+                      });
                     });
                   },
-                  buttonTitle: '로그인하기',
+                  buttonTitle: viewmodel.isProcessing ? '처리중' : '로그인하기',
+                  isDiminished: viewmodel.isProcessing,
                   backgroundColor: CustomColors.whYellow,
                   foregroundColor: CustomColors.whBlack,
                 ),

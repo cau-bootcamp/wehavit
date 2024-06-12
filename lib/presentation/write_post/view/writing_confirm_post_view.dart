@@ -215,7 +215,6 @@ class _WritingConfirmPostViewState
                           viewModel.isUploading = false;
 
                           Navigator.of(context).pop(true);
-                          Navigator.of(context).pop();
                         });
                       },
                       style: TextButton.styleFrom(

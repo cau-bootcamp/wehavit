@@ -10,6 +10,7 @@ import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
+// ignore: must_be_immutable
 class GroupPostView extends ConsumerStatefulWidget {
   GroupPostView({super.key, required this.groupEntity});
 
@@ -25,7 +26,9 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
     super.didChangeDependencies();
     final viewModel = ref.watch(groupPostViewModelProvider);
     final provider = ref.read(groupPostViewModelProvider.notifier);
-    ref.watch(groupPostViewModelProvider).groupId = widget.groupEntity.groupId;
+    viewModel.groupId = widget.groupEntity.groupId;
+
+    unawaited(provider.loadAppliedUserCount(entity: widget.groupEntity));
 
     unawaited(
       provider
@@ -57,69 +60,34 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
       children: [
         Scaffold(
           backgroundColor: CustomColors.whBlack,
-          appBar: AppBar(
-            backgroundColor: CustomColors.whBlack,
-            scrolledUnderElevation: 0,
-            title: Text(
-              widget.groupEntity.groupName,
-              style: const TextStyle(
-                color: CustomColors.whWhite,
-                fontSize: 20.0,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: const Icon(
-                Icons.chevron_left,
-                color: CustomColors.whWhite,
-                size: 36.0,
-              ),
-            ),
-            centerTitle: true,
-            automaticallyImplyLeading: false,
-            actions: [
-              // IconButton(
-              //   onPressed: () async {},
-              //   icon: const Icon(
-              //     Icons.campaign_outlined,
-              //     color: CustomColors.whWhite,
-              //     size: 30,
-              //   ),
-              // ),
-              // IconButton(
-              //   onPressed: () {},
-              //   icon: const Icon(
-              //     Icons.error_outline,
-              //     color: CustomColors.whWhite,
-              //     size: 30,
-              //   ),
-              // ),
-              Container(
-                margin: const EdgeInsets.only(right: 12.0),
-                child: IconButton(
-                  onPressed: () async {
-                    showModalBottomSheet(
-                      isScrollControlled: true,
-                      context: context,
-                      builder: (context) {
-                        return GroupMemberListBottomSheet(
-                          updateGroupEntity,
-                          groupEntity: widget.groupEntity,
-                        );
-                      },
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.people_outline,
-                    color: CustomColors.whWhite,
-                    size: 30,
-                  ),
-                ),
-              ),
-            ],
+          appBar: WehavitAppBar(
+            title: widget.groupEntity.groupName,
+            leadingIcon: Icons.chevron_left,
+            leadingTitle: '',
+            leadingAction: () {
+              Navigator.pop(context);
+            },
+            trailingTitle: '',
+            trailingIcon: Icons.people_outline,
+            trailingAction: () async {
+              showModalBottomSheet(
+                isScrollControlled: true,
+                context: context,
+                builder: (context) {
+                  return GroupMemberListBottomSheet(
+                    updateGroupEntity,
+                    groupEntity: widget.groupEntity,
+                  );
+                },
+              ).whenComplete(() {
+                provider
+                    .loadAppliedUserCount(entity: widget.groupEntity)
+                    .whenComplete(() {
+                  setState(() {});
+                });
+              });
+            },
+            trailingIconBadgeCount: viewModel.appliedUserCountForManager,
           ),
           body: SafeArea(
             minimum: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -147,8 +115,10 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                     !viewModel.isShowingCalendar;
                               });
                             },
-                            icon: const Icon(
-                              Icons.keyboard_arrow_down,
+                            icon: Icon(
+                              viewModel.isShowingCalendar
+                                  ? Icons.keyboard_arrow_up
+                                  : Icons.keyboard_arrow_down,
                               color: CustomColors.whWhite,
                             ),
                           ),
@@ -285,13 +255,20 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                                       target: viewModel
                                                               .confirmPostList[
                                                           cellDate],
-                                                      forWaiting: const Padding(
-                                                        padding:
-                                                            EdgeInsets.all(2.0),
-                                                        child:
-                                                            CircularProgressIndicator(
-                                                          color: CustomColors
-                                                              .whBrightGrey,
+                                                      forWaiting:
+                                                          const SizedBox(
+                                                        width: 20,
+                                                        height: 20,
+                                                        child: Padding(
+                                                          padding:
+                                                              EdgeInsets.all(
+                                                            2.0,
+                                                          ),
+                                                          child:
+                                                              CircularProgressIndicator(
+                                                            color: CustomColors
+                                                                .whBrightGrey,
+                                                          ),
                                                         ),
                                                       ),
                                                       forFail: const Text('-'),

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
@@ -29,39 +28,45 @@ class _GroupViewState extends ConsumerState<GroupView>
   Widget build(BuildContext context) {
     super.build(context);
     final viewModel = ref.watch(groupViewModelProvider);
-    // final provider = ref.read(groupViewModelProvider.notifier);
+    final provider = ref.read(groupViewModelProvider.notifier);
 
-    List<Widget> groupListViewCellList = (viewModel.groupListViewCellModelList
-                ?.map(
-                  (cellModel) => GestureDetector(
-                    onTapUp: (details) async {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return GroupPostView(
-                              groupEntity: cellModel.groupEntity,
-                            );
-                          },
-                        ),
-                      ).whenComplete(
-                        () => setState(
-                          () {},
-                        ),
-                      );
-                    },
-                    child: GroupListViewCellWidget(cellModel: cellModel),
-                  ),
-                )
-                .toList() ??
-            List<Widget>.empty())
-        .append(
+    List<Widget> groupListViewCellList = [
+      ...viewModel.groupListViewCellModelList
+              ?.map(
+                (cellModel) => GestureDetector(
+                  onTapUp: (details) async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return GroupPostView(
+                            groupEntity: cellModel.groupEntity,
+                          );
+                        },
+                      ),
+                    ).whenComplete(
+                      () => setState(
+                        () {},
+                      ),
+                    );
+                  },
+                  child: GroupListViewCellWidget(cellModel: cellModel),
+                ),
+              )
+              .toList() ??
+          List<Widget>.empty(),
       GroupListViewAddCellWidget(
         tapAddGroupCallback: () async {
-          showAddMenuBottomSheet(context);
+          showAddMenuBottomSheet(
+            context,
+            setStateCallback: () async {
+              await provider.loadMyGroupCellList();
+              setState(() {});
+            },
+          );
         },
       ),
-    ).toList();
+    ];
 
     return Scaffold(
       backgroundColor: CustomColors.whDarkBlack,
@@ -80,12 +85,13 @@ class _GroupViewState extends ConsumerState<GroupView>
             child: viewModel.groupListViewCellModelList != null
                 ? RefreshIndicator(
                     onRefresh: () async {
-                      unawaited(loadGroupCellList());
+                      provider
+                          .loadMyGroupCellList()
+                          .whenComplete(() => setState(() {}));
                     },
                     child: ListView.builder(
                       padding: const EdgeInsets.only(bottom: 60.0),
-                      itemCount:
-                          viewModel.groupListViewCellModelList!.length + 1,
+                      itemCount: groupListViewCellList.length,
                       itemBuilder: (context, index) {
                         return Padding(
                           padding: const EdgeInsets.only(
@@ -103,7 +109,10 @@ class _GroupViewState extends ConsumerState<GroupView>
     );
   }
 
-  Future<dynamic> showAddMenuBottomSheet(BuildContext context) {
+  Future<dynamic> showAddMenuBottomSheet(
+    BuildContext context, {
+    required void Function() setStateCallback,
+  }) {
     return showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -141,7 +150,10 @@ class _GroupViewState extends ConsumerState<GroupView>
                         return const CreateGroupView();
                       },
                     ),
-                  ).then((_) => Navigator.pop(context));
+                  ).then((_) {
+                    setStateCallback();
+                    Navigator.pop(context);
+                  });
                 },
               ),
               const SizedBox(

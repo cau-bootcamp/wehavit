@@ -9,6 +9,7 @@ import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 
+// ignore: must_be_immutable
 class GroupMemberListBottomSheet extends ConsumerStatefulWidget {
   GroupMemberListBottomSheet(
     this.updateParentViewGroupEntity, {
@@ -91,17 +92,26 @@ class _GroupMemberListBottomSheetState
                     child: Stack(
                       alignment: Alignment.topRight,
                       children: [
-                        IconButton(
+                        TextButton(
                           onPressed: () {
                             setState(() {
                               isManagingMode = !isManagingMode;
                             });
                           },
-                          icon: const Icon(
-                            Icons.manage_accounts_outlined,
-                            color: CustomColors.whWhite,
-                            size: 24.0,
-                          ),
+                          child: isManagingMode
+                              ? const Text(
+                                  '완료',
+                                  style: TextStyle(
+                                    color: CustomColors.whWhite,
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                )
+                              : const Icon(
+                                  Icons.manage_accounts_outlined,
+                                  color: CustomColors.whWhite,
+                                  size: 24.0,
+                                ),
                         ),
                         Visibility(
                           visible: appliedUidList.isNotEmpty,

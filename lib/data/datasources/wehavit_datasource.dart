@@ -174,4 +174,12 @@ abstract class WehavitDatasource {
   });
 
   EitherFuture<GroupEntity> getGroupEntityByName({required String groupName});
+
+  EitherFuture<List<EitherFuture<GroupEntity>>> getGroupEntityListByGroupName({
+    required String keyword,
+  });
+
+  EitherFuture<List<EitherFuture<UserDataEntity>>> getUserDataListByHandle({
+    required String handle,
+  });
 }

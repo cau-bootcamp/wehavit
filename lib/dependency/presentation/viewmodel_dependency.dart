@@ -46,8 +46,8 @@ final friendListViewModelProvider =
     StateNotifierProvider<FriendListViewModelProvider, FriendListViewModel>(
         (ref) {
   final getFriendListUsecase = ref.read(getFriendListUseCaseProvider);
-  final searchUserDataListByNicknameUsecase =
-      ref.read(searchUserDataListByNicknameUsecaseProvider);
+  final searchUserDataListByHandleUsecase =
+      ref.read(searchUserDataListByHandleUsecaseProvider);
   final getMyUserDataUsecase = ref.read(getMyUserDataUsecaseProvider);
   final getAppliedUserListForFriendUsecase =
       ref.read(getAppliedUserListForFriendUsecaseProvider);
@@ -63,7 +63,7 @@ final friendListViewModelProvider =
       ref.read(getUserDataFromIdUsecaseProvider);
   return FriendListViewModelProvider(
     getFriendListUsecase,
-    searchUserDataListByNicknameUsecase,
+    searchUserDataListByHandleUsecase,
     getMyUserDataUsecase,
     getAppliedUserListForFriendUsecase,
     acceptApplyingForFriendUsecase,
@@ -146,11 +146,14 @@ final groupPostViewModelProvider = StateNotifierProvider.autoDispose<
       ref.watch(sendQuickShotReactionToConfirmPostUsecaseProvider);
   final sendCommentReactionToConfirmPostUsecase =
       ref.watch(sendCommentReactionToConfirmPostUsecaseProvider);
+  final getAppliedUserListForGroupEntityUsecase =
+      ref.watch(getAppliedUserListForGroupEntityUsecaseProvider);
   return GroupPostViewModelProvider(
     getGroupConfirmPostListByDateUsecase,
     sendEmojiReactionToConfirmPostUsecase,
     sendQuickShotReactionToConfirmPostUsecase,
     sendCommentReactionToConfirmPostUsecase,
+    getAppliedUserListForGroupEntityUsecase,
   );
 });
 

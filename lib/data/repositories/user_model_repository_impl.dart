@@ -75,6 +75,13 @@ class UserModelRepositoryImpl implements UserModelRepository {
   }
 
   @override
+  EitherFuture<List<EitherFuture<UserDataEntity>>> getUserDataListByHandle({
+    required String handle,
+  }) async {
+    return _wehavitDatasource.getUserDataListByHandle(handle: handle);
+  }
+
+  @override
   EitherFuture<void> registerUserData({
     required String uid,
     required String name,

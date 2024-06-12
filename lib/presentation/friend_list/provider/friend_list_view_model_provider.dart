@@ -7,7 +7,7 @@ import 'package:wehavit/presentation/friend_list/model/friend_list_view_model.da
 class FriendListViewModelProvider extends StateNotifier<FriendListViewModel> {
   FriendListViewModelProvider(
     this._getFriendListUsecase,
-    this._searchUserDataListByNicknameUsecase,
+    this._searchUserDataListByHandleUsecase,
     this._getMyUserDataUsecase,
     this._getAppliedUserListForFriendUsecase,
     this._acceptApplyingForFriendUsecase,
@@ -19,8 +19,7 @@ class FriendListViewModelProvider extends StateNotifier<FriendListViewModel> {
 
   final GetFriendListUsecase _getFriendListUsecase;
   final GetAppliedUserListForFriendUsecase _getAppliedUserListForFriendUsecase;
-  final SearchUserDataListByNicknameUsecase
-      _searchUserDataListByNicknameUsecase;
+  final SearchUserDataListByHandleUsecase _searchUserDataListByHandleUsecase;
   final GetMyUserDataUsecase _getMyUserDataUsecase;
   final AcceptApplyingForFriendUsecase _acceptApplyingForFriendUsecase;
   final RejectApplyingForFriendUsecase _rejectApplyingForFriendUsecase;
@@ -37,9 +36,9 @@ class FriendListViewModelProvider extends StateNotifier<FriendListViewModel> {
     );
   }
 
-  Future<void> searchUserByNickname({required String nickname}) async {
-    state.searchedFutureUserList = await _searchUserDataListByNicknameUsecase(
-      nickname: nickname,
+  Future<void> searchUserByHandle({required String handle}) async {
+    state.searchedFutureUserList = await _searchUserDataListByHandleUsecase(
+      handle: handle,
     ).then(
       (result) => result.fold(
         (failure) => null,

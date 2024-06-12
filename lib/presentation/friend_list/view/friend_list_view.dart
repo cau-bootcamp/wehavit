@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
@@ -69,11 +68,11 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
               ElevatedButton(
                 // 수정 필요함!
                 onPressed: () async {
-                  await ref.read(logOutUseCaseProvider).call();
-                  if (mounted) {
-                    // ignore: use_build_context_synchronously
-                    Navigator.pushReplacementNamed(context, '/entrance');
-                  }
+                  // await ref.read(logOutUseCaseProvider).call();
+                  // if (mounted) {
+                  //   // ignore: use_build_context_synchronously
+                  //   Navigator.pushReplacementNamed(context, '/entrance');
+                  // }
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
@@ -185,12 +184,12 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
                     Container(
                       margin: const EdgeInsets.only(bottom: 4.0),
                       child: FriendListTextFieldWidget(
-                        searchCallback: (searchNickname) async {
-                          if (searchNickname != null &&
-                              searchNickname.isNotEmpty) {
+                        searchCallback: (searchedHandle) async {
+                          if (searchedHandle != null &&
+                              searchedHandle.isNotEmpty) {
                             provider
-                                .searchUserByNickname(
-                                  nickname: searchNickname,
+                                .searchUserByHandle(
+                                  handle: searchedHandle,
                                 )
                                 .whenComplete(() => setState(() {}));
                           }

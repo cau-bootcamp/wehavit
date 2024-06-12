@@ -29,6 +29,7 @@ class GetMyResolutionListUsecase {
           ),
         );
       }
+
       return _resolutionRepository.getActiveResolutionEntityList(fetchResult);
     });
   }

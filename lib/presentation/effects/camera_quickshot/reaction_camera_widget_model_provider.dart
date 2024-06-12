@@ -78,6 +78,7 @@ class ReactionCameraWidgetModelProvider
         currentButtonPosition: position,
         isPosInCapturingArea: true,
       );
+
       return;
     }
 

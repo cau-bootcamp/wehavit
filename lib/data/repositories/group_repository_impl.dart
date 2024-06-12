@@ -168,4 +168,11 @@ class GroupRepositoryImpl implements GroupRepository {
   }) {
     return _wehavitDatasource.getGroupEntityByName(groupName: groupName);
   }
+
+  @override
+  EitherFuture<List<EitherFuture<GroupEntity>>> getGroupEntityListByGroupName({
+    required String keyword,
+  }) {
+    return _wehavitDatasource.getGroupEntityListByGroupName(keyword: keyword);
+  }
 }

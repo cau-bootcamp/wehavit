@@ -5,14 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
-import 'package:wehavit/presentation/effects/effects.dart';
-import 'package:wehavit/presentation/entrance/auth.dart';
-import 'package:wehavit/presentation/friend_list/friend_list.dart';
-import 'package:wehavit/presentation/group/view/group_view.dart';
-import 'package:wehavit/presentation/main/view/main_view.dart';
-import 'package:wehavit/presentation/my_page/my_page.dart';
-import 'package:wehavit/presentation/splash/splash.dart';
-import 'package:wehavit/presentation/test_view/test_view.dart';
+import 'package:wehavit/presentation/presentation.dart';
 
 part 'route_provider.g.dart';
 
@@ -111,17 +104,17 @@ class AuthRoute extends GoRouteData {
   }
 }
 
-@TypedGoRoute<MyPageRoute>(path: MyPageRoute.path)
-class MyPageRoute extends GoRouteData {
-  const MyPageRoute();
+// @TypedGoRoute<MyPageRoute>(path: MyPageRoute.path)
+// class MyPageRoute extends GoRouteData {
+//   const MyPageRoute();
 
-  static const path = RouteLocation.myPage;
+//   static const path = RouteLocation.myPage;
 
-  @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return const MyPageView();
-  }
-}
+//   @override
+//   Widget build(BuildContext context, GoRouterState state) {
+//     return const MyPageView();
+//   }
+// }
 
 @TypedGoRoute<TestPageRoute>(path: TestPageRoute.path)
 class TestPageRoute extends GoRouteData {
@@ -147,17 +140,17 @@ class AddResolutionRoute extends GoRouteData {
   }
 }
 
-@TypedGoRoute<FriendListRoute>(path: FriendListRoute.path)
-class FriendListRoute extends GoRouteData {
-  const FriendListRoute();
+// @TypedGoRoute<FriendListRoute>(path: FriendListRoute.path)
+// class FriendListRoute extends GoRouteData {
+//   const FriendListRoute();
 
-  static const path = RouteLocation.friendList;
+//   static const path = RouteLocation.friendList;
 
-  @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return const FriendListView();
-  }
-}
+//   @override
+//   Widget build(BuildContext context, GoRouterState state) {
+//     return const FriendListView();
+//   }
+// }
 
 @TypedGoRoute<AnimationSampleViewRoute>(path: AnimationSampleViewRoute.path)
 class AnimationSampleViewRoute extends GoRouteData {
@@ -195,17 +188,17 @@ class GroupSampleViewRoute extends GoRouteData {
   }
 }
 
-@TypedGoRoute<GroupViewRoute>(path: GroupViewRoute.path)
-class GroupViewRoute extends GoRouteData {
-  const GroupViewRoute();
+// @TypedGoRoute<GroupViewRoute>(path: GroupViewRoute.path)
+// class GroupViewRoute extends GoRouteData {
+//   const GroupViewRoute();
 
-  static const path = RouteLocation.groupView;
+//   static const path = RouteLocation.groupView;
 
-  @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return const GroupView();
-  }
-}
+//   @override
+//   Widget build(BuildContext context, GoRouterState state) {
+//     return const GroupView();
+//   }
+// }
 
 class GoNavigatorObserver extends NavigatorObserver {
   @override

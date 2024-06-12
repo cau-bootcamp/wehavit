@@ -45,288 +45,310 @@ class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
           Navigator.pop(context);
         },
       ),
-      body: SafeArea(
-        minimum: const EdgeInsets.all(16.0),
-        maintainBottomViewPadding: true,
-        child: Column(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      body: Stack(
+        children: [
+          SafeArea(
+            minimum: const EdgeInsets.all(16.0),
+            maintainBottomViewPadding: true,
+            child: Column(
               children: [
-                const Text(
-                  '이메일',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    color: CustomColors.whWhite,
-                    fontSize: 20,
-                  ),
-                ),
-                Container(
-                  height: 8.0,
-                ),
-                TextFormField(
-                  controller: viewmodel.emailInputController,
-                  onChanged: (value) {
-                    provider.checkEmailEntered();
-                  },
-                  cursorColor: CustomColors.whWhite,
-                  textAlignVertical: TextAlignVertical.center,
-                  style: const TextStyle(
-                    color: CustomColors.whWhite,
-                    fontSize: 16.0,
-                  ),
-                  decoration: InputDecoration(
-                    hintText: '이메일',
-                    hintStyle: const TextStyle(
-                      fontSize: 16,
-                      color: CustomColors.whPlaceholderGrey,
-                    ),
-                    filled: true,
-                    fillColor: CustomColors.whGrey,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(
-                        width: 0,
-                        style: BorderStyle.none,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      '이메일',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: CustomColors.whWhite,
+                        fontSize: 20,
                       ),
                     ),
-                    isCollapsed: true,
-                    contentPadding: const EdgeInsets.symmetric(
-                      vertical: 12.0,
-                      horizontal: 16.0,
+                    Container(
+                      height: 8.0,
                     ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 24,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  '비밀번호',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    color: CustomColors.whWhite,
-                    fontSize: 20,
-                  ),
-                ),
-                Container(
-                  height: 8.0,
-                ),
-                TextFormField(
-                  controller: viewmodel.passwordInputController,
-                  obscureText: true,
-                  obscuringCharacter: '*',
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(
-                      RegExp(r'[0-9a-zA-Z!@#$%^&*(),.?":{}|<>]'),
+                    TextFormField(
+                      keyboardType: TextInputType.emailAddress,
+                      controller: viewmodel.emailInputController,
+                      onChanged: (value) {
+                        provider.checkEmailEntered();
+                      },
+                      cursorColor: CustomColors.whWhite,
+                      textAlignVertical: TextAlignVertical.center,
+                      style: const TextStyle(
+                        color: CustomColors.whWhite,
+                        fontSize: 16.0,
+                      ),
+                      decoration: InputDecoration(
+                        hintText: '이메일',
+                        hintStyle: const TextStyle(
+                          fontSize: 16,
+                          color: CustomColors.whPlaceholderGrey,
+                        ),
+                        filled: true,
+                        fillColor: CustomColors.whGrey,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(
+                            width: 0,
+                            style: BorderStyle.none,
+                          ),
+                        ),
+                        isCollapsed: true,
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 12.0,
+                          horizontal: 16.0,
+                        ),
+                      ),
                     ),
                   ],
-                  onChanged: (value) {
-                    setState(() {
-                      provider.checkPasswordValidity();
-                    });
-                  },
-                  cursorColor: CustomColors.whWhite,
-                  textAlignVertical: TextAlignVertical.center,
-                  style: const TextStyle(
-                    color: CustomColors.whWhite,
-                    fontSize: 16.0,
-                  ),
-                  decoration: InputDecoration(
-                    hintText: '비밀번호',
-                    hintStyle: const TextStyle(
-                      fontSize: 16,
-                      color: CustomColors.whPlaceholderGrey,
-                    ),
-                    filled: true,
-                    fillColor: CustomColors.whGrey,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(
-                        width: 0,
-                        style: BorderStyle.none,
+                ),
+                const SizedBox(
+                  height: 24,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      '비밀번호',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: CustomColors.whWhite,
+                        fontSize: 20,
                       ),
                     ),
-                    isCollapsed: true,
-                    contentPadding: const EdgeInsets.symmetric(
-                      vertical: 12.0,
-                      horizontal: 16.0,
+                    Container(
+                      height: 8.0,
                     ),
-                  ),
-                ),
-                Container(
-                  height: 8.0,
-                ),
-                Container(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: Text(
-                    '6자리 이상의 알파벳, 숫자, 특수문자로 구성',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      color: viewmodel.isPasswordValid != null
-                          ? (viewmodel.isPasswordValid!
-                              ? PointColors.green
-                              : PointColors.red)
-                          : CustomColors.whPlaceholderGrey,
-                      fontSize: 14,
+                    TextFormField(
+                      controller: viewmodel.passwordInputController,
+                      obscureText: true,
+                      obscuringCharacter: '*',
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.allow(
+                          RegExp(r'[0-9a-zA-Z!@#$%^&*(),.?":{}|<>]'),
+                        ),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          provider.checkPasswordValidity();
+                        });
+                      },
+                      cursorColor: CustomColors.whWhite,
+                      textAlignVertical: TextAlignVertical.center,
+                      style: const TextStyle(
+                        color: CustomColors.whWhite,
+                        fontSize: 16.0,
+                      ),
+                      decoration: InputDecoration(
+                        hintText: '비밀번호',
+                        hintStyle: const TextStyle(
+                          fontSize: 16,
+                          color: CustomColors.whPlaceholderGrey,
+                        ),
+                        filled: true,
+                        fillColor: CustomColors.whGrey,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(
+                            width: 0,
+                            style: BorderStyle.none,
+                          ),
+                        ),
+                        isCollapsed: true,
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 12.0,
+                          horizontal: 16.0,
+                        ),
+                      ),
                     ),
-                  ),
+                    Container(
+                      height: 8.0,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(left: 8),
+                      child: Text(
+                        '6자리 이상의 알파벳, 숫자, 특수문자로 구성',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          color: viewmodel.isPasswordValid != null
+                              ? (viewmodel.isPasswordValid!
+                                  ? PointColors.green
+                                  : PointColors.red)
+                              : CustomColors.whPlaceholderGrey,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 24,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      '비밀번호 확인',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: CustomColors.whWhite,
+                        fontSize: 20,
+                      ),
+                    ),
+                    Container(
+                      height: 8.0,
+                    ),
+                    TextFormField(
+                      controller: viewmodel.passwordValidatorInputController,
+                      obscureText: true,
+                      obscuringCharacter: '*',
+                      onChanged: (value) {
+                        setState(() {
+                          provider.matchPasswordAndValidator();
+                        });
+                      },
+                      cursorColor: CustomColors.whWhite,
+                      textAlignVertical: TextAlignVertical.center,
+                      style: const TextStyle(
+                        color: CustomColors.whWhite,
+                        fontSize: 16.0,
+                      ),
+                      decoration: InputDecoration(
+                        hintText: '비밀번호 확인',
+                        hintStyle: const TextStyle(
+                          fontSize: 16,
+                          color: CustomColors.whPlaceholderGrey,
+                        ),
+                        filled: true,
+                        fillColor: CustomColors.whGrey,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(
+                            width: 0,
+                            style: BorderStyle.none,
+                          ),
+                        ),
+                        isCollapsed: true,
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 12.0,
+                          horizontal: 16.0,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 8.0,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(left: 8),
+                      child: Visibility(
+                        visible: viewmodel
+                            .passwordValidatorInputController.text.isNotEmpty,
+                        child: Text(
+                          viewmodel.isPasswordMatched
+                              ? '일치합니다'
+                              : '비밀번호와 일치하지 않습니다',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            color: viewmodel.isPasswordMatched
+                                ? PointColors.green
+                                : PointColors.red,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Expanded(child: Container()),
+                WideColoredButton(
+                  isDiminished: !(viewmodel.isEmailEntered &
+                          (viewmodel.isPasswordValid ?? false) &
+                          viewmodel.isPasswordMatched) |
+                      viewmodel.isProcessing,
+                  buttonTitle: viewmodel.isProcessing ? '처리 중' : '다음',
+                  backgroundColor: CustomColors.whYellow,
+                  foregroundColor: CustomColors.whBlack,
+                  onPressed: () async {
+                    setState(() {
+                      viewmodel.isProcessing = true;
+                    });
+
+                    ref
+                        .read(signUpWithEmailAndPasswordUsecaseProvider)
+                        .call(
+                          viewmodel.emailInputController.text,
+                          viewmodel.passwordInputController.text,
+                        )
+                        .then((result) {
+                      setState(() {
+                        viewmodel.isProcessing = false;
+                      });
+
+                      return result.fold((failure) {
+                        viewmodel.registerFailReason =
+                            RegisterFailReasonConverter.fromExceptionCode(
+                          failure.message,
+                        );
+
+                        String alertMessage;
+
+                        switch (viewmodel.registerFailReason) {
+                          case RegisterFailReason.emailFormatIsInvalid:
+                            alertMessage = '이메일의 형식이 올바르지 않아요';
+                          case RegisterFailReason.passwordIsWeak:
+                            alertMessage = '비밀번호가 올바르지 않아요';
+                          case RegisterFailReason.emailIsAlreadyTaken:
+                            alertMessage = '이미 사용 중인 이메일이예요';
+                          default:
+                            alertMessage = '잠시 후 다시 시도해주세요';
+                        }
+
+                        showToastMessage(
+                          context,
+                          text: alertMessage,
+                          icon: const Icon(
+                            Icons.warning,
+                            color: CustomColors.whYellow,
+                          ),
+                        );
+
+                        return false;
+                      }, (result) {
+                        if (result == AuthResult.success) {
+                          return true;
+                        }
+
+                        return false;
+                      });
+                    }).then((canMoveToNextStep) {
+                      if (canMoveToNextStep) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return const SignUpUserDetailView();
+                            },
+                          ),
+                        );
+                      }
+                    });
+                  },
                 ),
               ],
             ),
-            const SizedBox(
-              height: 24,
+          ),
+          Visibility(
+            visible: viewmodel.isProcessing,
+            child: Container(
+              constraints: const BoxConstraints.expand(),
+              alignment: Alignment.center,
+              color: CustomColors.whDarkBlack.withAlpha(130),
+              child: const CircularProgressIndicator(
+                color: CustomColors.whYellow,
+              ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  '비밀번호 확인',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    color: CustomColors.whWhite,
-                    fontSize: 20,
-                  ),
-                ),
-                Container(
-                  height: 8.0,
-                ),
-                TextFormField(
-                  controller: viewmodel.passwordValidatorInputController,
-                  obscureText: true,
-                  obscuringCharacter: '*',
-                  onChanged: (value) {
-                    setState(() {
-                      provider.matchPasswordAndValidator();
-                    });
-                  },
-                  cursorColor: CustomColors.whWhite,
-                  textAlignVertical: TextAlignVertical.center,
-                  style: const TextStyle(
-                    color: CustomColors.whWhite,
-                    fontSize: 16.0,
-                  ),
-                  decoration: InputDecoration(
-                    hintText: '비밀번호 확인',
-                    hintStyle: const TextStyle(
-                      fontSize: 16,
-                      color: CustomColors.whPlaceholderGrey,
-                    ),
-                    filled: true,
-                    fillColor: CustomColors.whGrey,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(
-                        width: 0,
-                        style: BorderStyle.none,
-                      ),
-                    ),
-                    isCollapsed: true,
-                    contentPadding: const EdgeInsets.symmetric(
-                      vertical: 12.0,
-                      horizontal: 16.0,
-                    ),
-                  ),
-                ),
-                Container(
-                  height: 8.0,
-                ),
-                Container(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: Text(
-                    viewmodel.isPasswordMatched ? '일치합니다' : '비밀번호와 일치하지 않습니다',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      color: viewmodel.isPasswordMatched
-                          ? PointColors.green
-                          : PointColors.red,
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Expanded(child: Container()),
-            WideColoredButton(
-              isDiminished: !(viewmodel.isEmailEntered &
-                      (viewmodel.isPasswordValid ?? false) &
-                      viewmodel.isPasswordMatched) |
-                  viewmodel.isProcessing,
-              buttonTitle: viewmodel.isProcessing ? '처리 중' : '다음',
-              backgroundColor: CustomColors.whYellow,
-              foregroundColor: CustomColors.whBlack,
-              onPressed: () async {
-                setState(() {
-                  viewmodel.isProcessing = true;
-                });
-
-                ref
-                    .read(signUpWithEmailAndPasswordUsecaseProvider)
-                    .call(
-                      viewmodel.emailInputController.text,
-                      viewmodel.passwordInputController.text,
-                    )
-                    .then((result) {
-                  setState(() {
-                    viewmodel.isProcessing = false;
-                  });
-
-                  return result.fold((failure) {
-                    viewmodel.registerFailReason =
-                        RegisterFailReasonConverter.fromExceptionCode(
-                      failure.message,
-                    );
-
-                    String alertMessage;
-
-                    switch (viewmodel.registerFailReason) {
-                      case RegisterFailReason.emailFormatIsInvalid:
-                        alertMessage = '이메일의 형식이 올바르지 않아요';
-                      case RegisterFailReason.passwordIsWeak:
-                        alertMessage = '비밀번호가 올바르지 않아요';
-                      case RegisterFailReason.emailIsAlreadyTaken:
-                        alertMessage = '이미 사용 중인 이메일이예요';
-                      default:
-                        alertMessage = '잠시 후 다시 시도해주세요';
-                    }
-
-                    showToastMessage(
-                      context,
-                      text: alertMessage,
-                      icon: const Icon(
-                        Icons.warning,
-                        color: CustomColors.whYellow,
-                      ),
-                    );
-
-                    return false;
-                  }, (result) {
-                    if (result == AuthResult.success) {
-                      return true;
-                    }
-
-                    return false;
-                  });
-                }).then((canMoveToNextStep) {
-                  if (canMoveToNextStep) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return const SignUpUserDetailView();
-                        },
-                      ),
-                    );
-                  }
-                });
-              },
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -349,15 +371,21 @@ class _SignUpUserDetailViewState extends ConsumerState<SignUpUserDetailView> {
     return Stack(
       children: [
         Scaffold(
-          resizeToAvoidBottomInset: false,
+          resizeToAvoidBottomInset: true,
           backgroundColor: CustomColors.whDarkBlack,
           appBar: WehavitAppBar(
             title: '회원가입',
             leadingTitle: '',
             leadingIcon: Icons.chevron_left,
             leadingAction: () async {
-              await provider.removeUserData();
-              await provider.logOut();
+              try {
+                await provider.removeUserData();
+                await provider.logOut();
+              } on Exception catch (e) {
+                // ignore: avoid_print
+                print('DEBUG: ${e.toString()}');
+              }
+
               // ignore: use_build_context_synchronously
               Navigator.pop(context);
             },
@@ -367,215 +395,225 @@ class _SignUpUserDetailViewState extends ConsumerState<SignUpUserDetailView> {
             maintainBottomViewPadding: true,
             child: Column(
               children: [
-                TextButton(
-                  style: TextButton.styleFrom(
-                    overlayColor: CustomColors.whYellow,
-                  ),
-                  onPressed: () async {
-                    provider.pickProfileImage().whenComplete(
-                          () => setState(() {}),
-                        );
-                  },
-                  child: Stack(
-                    clipBehavior: Clip.none,
+                Expanded(
+                  child: ListView(
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.only(bottom: 32.0),
+                    keyboardDismissBehavior:
+                        ScrollViewKeyboardDismissBehavior.onDrag,
                     children: [
-                      Container(
-                        width: 85,
-                        height: 85,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: CustomColors.whGrey,
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          overlayColor: CustomColors.whYellow,
                         ),
-                        clipBehavior: Clip.hardEdge,
-                        child: viewmodel.profileImageFile != null
-                            ? Image.file(
-                                viewmodel.profileImageFile!,
-                                fit: BoxFit.cover,
-                              )
-                            : Container(),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: -5,
-                        child: Container(
-                          width: 25,
-                          height: 25,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: CustomColors.whWhite,
-                          ),
-                          child: const Icon(
-                            Icons.photo_camera,
-                            color: CustomColors.whBlack,
-                            size: 18.0,
-                          ),
+                        onPressed: () async {
+                          provider.pickProfileImage().whenComplete(
+                                () => setState(() {}),
+                              );
+                        },
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            Container(
+                              width: 85,
+                              height: 85,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: CustomColors.whGrey,
+                              ),
+                              clipBehavior: Clip.hardEdge,
+                              child: viewmodel.profileImageFile != null
+                                  ? Image.file(
+                                      viewmodel.profileImageFile!,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Container(),
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              right: -5,
+                              child: Container(
+                                width: 25,
+                                height: 25,
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: CustomColors.whWhite,
+                                ),
+                                child: const Icon(
+                                  Icons.photo_camera,
+                                  color: CustomColors.whBlack,
+                                  size: 18.0,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
+                      const SizedBox(
+                        height: 24,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            '이름',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: CustomColors.whWhite,
+                              fontSize: 20,
+                            ),
+                          ),
+                          Container(
+                            height: 8.0,
+                          ),
+                          TextFormField(
+                            onChanged: (value) {
+                              provider.setName(value);
+                              setState(() {});
+                            },
+                            cursorColor: CustomColors.whWhite,
+                            textAlignVertical: TextAlignVertical.center,
+                            style: const TextStyle(
+                              color: CustomColors.whWhite,
+                              fontSize: 16.0,
+                            ),
+                            decoration: InputDecoration(
+                              hintText: '친구들에게 보여지는 이름이예요',
+                              hintStyle: const TextStyle(
+                                fontSize: 16,
+                                color: CustomColors.whPlaceholderGrey,
+                              ),
+                              filled: true,
+                              fillColor: CustomColors.whGrey,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
+                                  width: 0,
+                                  style: BorderStyle.none,
+                                ),
+                              ),
+                              isCollapsed: true,
+                              contentPadding: const EdgeInsets.symmetric(
+                                vertical: 12.0,
+                                horizontal: 16.0,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 24,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            '사용자 ID',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: CustomColors.whWhite,
+                              fontSize: 20,
+                            ),
+                          ),
+                          Container(
+                            height: 8.0,
+                          ),
+                          TextFormField(
+                            onChanged: (value) {
+                              provider.setHandle(value);
+                              setState(() {});
+                            },
+                            cursorColor: CustomColors.whWhite,
+                            textAlignVertical: TextAlignVertical.center,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.allow(
+                                RegExp(r'[0-9a-zA-Z!@#$%^&*(),.?":{}|<>_]'),
+                              ),
+                            ],
+                            style: const TextStyle(
+                              color: CustomColors.whWhite,
+                              fontSize: 16.0,
+                            ),
+                            decoration: InputDecoration(
+                              hintText: '친구가 나를 찾을 때 사용하는 ID예요',
+                              hintStyle: const TextStyle(
+                                fontSize: 16,
+                                color: CustomColors.whPlaceholderGrey,
+                              ),
+                              filled: true,
+                              fillColor: CustomColors.whGrey,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
+                                  width: 0,
+                                  style: BorderStyle.none,
+                                ),
+                              ),
+                              isCollapsed: true,
+                              contentPadding: const EdgeInsets.symmetric(
+                                vertical: 12.0,
+                                horizontal: 16.0,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 24,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            '한 줄 소개',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: CustomColors.whWhite,
+                              fontSize: 20,
+                            ),
+                          ),
+                          Container(
+                            height: 8.0,
+                          ),
+                          TextFormField(
+                            onChanged: (value) {
+                              provider.setAboutMe(value);
+                              setState(() {});
+                            },
+                            cursorColor: CustomColors.whWhite,
+                            textAlignVertical: TextAlignVertical.center,
+                            style: const TextStyle(
+                              color: CustomColors.whWhite,
+                              fontSize: 16.0,
+                            ),
+                            decoration: InputDecoration(
+                              hintText: '나에 대해 소개해주세요',
+                              hintStyle: const TextStyle(
+                                fontSize: 16,
+                                color: CustomColors.whPlaceholderGrey,
+                              ),
+                              filled: true,
+                              fillColor: CustomColors.whGrey,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
+                                  width: 0,
+                                  style: BorderStyle.none,
+                                ),
+                              ),
+                              isCollapsed: true,
+                              contentPadding: const EdgeInsets.symmetric(
+                                vertical: 12.0,
+                                horizontal: 16.0,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      // Expanded(child: Container()),
                     ],
                   ),
                 ),
-                const SizedBox(
-                  height: 24,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      '이름',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: CustomColors.whWhite,
-                        fontSize: 20,
-                      ),
-                    ),
-                    Container(
-                      height: 8.0,
-                    ),
-                    TextFormField(
-                      onChanged: (value) {
-                        provider.setName(value);
-                        setState(() {});
-                      },
-                      cursorColor: CustomColors.whWhite,
-                      textAlignVertical: TextAlignVertical.center,
-                      style: const TextStyle(
-                        color: CustomColors.whWhite,
-                        fontSize: 16.0,
-                      ),
-                      decoration: InputDecoration(
-                        hintText: '친구들에게 보여지는 이름이예요',
-                        hintStyle: const TextStyle(
-                          fontSize: 16,
-                          color: CustomColors.whPlaceholderGrey,
-                        ),
-                        filled: true,
-                        fillColor: CustomColors.whGrey,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
-                            width: 0,
-                            style: BorderStyle.none,
-                          ),
-                        ),
-                        isCollapsed: true,
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 12.0,
-                          horizontal: 16.0,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 24,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      '사용자 ID',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: CustomColors.whWhite,
-                        fontSize: 20,
-                      ),
-                    ),
-                    Container(
-                      height: 8.0,
-                    ),
-                    TextFormField(
-                      onChanged: (value) {
-                        provider.setHandle(value);
-                        setState(() {});
-                      },
-                      cursorColor: CustomColors.whWhite,
-                      textAlignVertical: TextAlignVertical.center,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.allow(
-                          RegExp(r'[0-9a-zA-Z!@#$%^&*(),.?":{}|<>]'),
-                        ),
-                      ],
-                      style: const TextStyle(
-                        color: CustomColors.whWhite,
-                        fontSize: 16.0,
-                      ),
-                      decoration: InputDecoration(
-                        hintText: '친구가 나를 찾을 때 사용하는 ID예요',
-                        hintStyle: const TextStyle(
-                          fontSize: 16,
-                          color: CustomColors.whPlaceholderGrey,
-                        ),
-                        filled: true,
-                        fillColor: CustomColors.whGrey,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
-                            width: 0,
-                            style: BorderStyle.none,
-                          ),
-                        ),
-                        isCollapsed: true,
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 12.0,
-                          horizontal: 16.0,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 24,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      '한 줄 소개',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: CustomColors.whWhite,
-                        fontSize: 20,
-                      ),
-                    ),
-                    Container(
-                      height: 8.0,
-                    ),
-                    TextFormField(
-                      onChanged: (value) {
-                        provider.setAboutMe(value);
-                        setState(() {});
-                      },
-                      cursorColor: CustomColors.whWhite,
-                      textAlignVertical: TextAlignVertical.center,
-                      style: const TextStyle(
-                        color: CustomColors.whWhite,
-                        fontSize: 16.0,
-                      ),
-                      decoration: InputDecoration(
-                        hintText: '나에 대해 소개해주세요',
-                        hintStyle: const TextStyle(
-                          fontSize: 16,
-                          color: CustomColors.whPlaceholderGrey,
-                        ),
-                        filled: true,
-                        fillColor: CustomColors.whGrey,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
-                            width: 0,
-                            style: BorderStyle.none,
-                          ),
-                        ),
-                        isCollapsed: true,
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 12.0,
-                          horizontal: 16.0,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Expanded(child: Container()),
                 WideColoredButton(
                   onPressed: () async {
                     setState(() {

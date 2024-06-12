@@ -133,7 +133,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                             color: CustomColors.whWhite,
                           ),
                           label: const Text(
-                            '코멘트',
+                            '메시지',
                             style: TextStyle(
                               color: CustomColors.whWhite,
                               fontSize: 16.0,
@@ -293,7 +293,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                             color: CustomColors.whWhite,
                           ),
                           label: const Text(
-                            '코멘트',
+                            '메시지',
                             style: TextStyle(
                               color: CustomColors.whWhite,
                               fontSize: 16.0,
@@ -355,6 +355,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                               );
                               return;
                             }
+
                             await reactionCameraModelProvider
                                 .setFocusingModeTo(false);
 
@@ -372,7 +373,6 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                                 imageFilePath: imageFilePath,
                               );
                             }
-
                             // setState(() {});
                           },
                           onPointerMove: (event) async {
@@ -387,6 +387,8 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
 
                             reactionCameraModelProvider
                                 .updatePanPosition(panningPosition);
+
+                            if (reactionCameraModel.isPosInCapturingArea) {}
                           },
                           child: Container(
                             padding:
@@ -773,13 +775,22 @@ class _ConfirmPostContentWidgetState extends State<ConfirmPostContentWidget> {
                                   1)
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    // ignore: lines_longer_than_80_chars
-                                    '+${widget.confirmPostEntity.imageUrlList!.length - 1}',
-                                    style: const TextStyle(
-                                      color: CustomColors.whWhite,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.w700,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12.0),
+                                      color: CustomColors.whBlack,
+                                    ),
+                                    child: Text(
+                                      // ignore: lines_longer_than_80_chars
+                                      '+${widget.confirmPostEntity.imageUrlList!.length - 1}',
+                                      style: const TextStyle(
+                                        color: CustomColors.whWhite,
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.w700,
+                                      ),
                                     ),
                                   ),
                                 ),

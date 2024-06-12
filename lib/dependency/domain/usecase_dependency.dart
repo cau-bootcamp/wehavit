@@ -258,7 +258,11 @@ final checkWeatherUserIsMnagerOfGroupEntityUsecaseProvider =
 final getAppliedUserListForGroupEntityUsecaseProvider =
     Provider<GetAppliedUserListForGroupEntityUsecase>((ref) {
   final groupRepository = ref.watch(groupRepositoryProvider);
-  return GetAppliedUserListForGroupEntityUsecase(groupRepository);
+  final userModelRepository = ref.watch(userModelRepositoryProvider);
+  return GetAppliedUserListForGroupEntityUsecase(
+    userModelRepository,
+    groupRepository,
+  );
 });
 
 final getAchievementPercentageForGroupMemberUsecaseProvider =
@@ -300,6 +304,13 @@ final searchUserDataListByNicknameUsecaseProvider =
   final userModelRepository = ref.watch(userModelRepositoryProvider);
   return SearchUserDataListByNicknameUsecase(userModelRepository);
 });
+
+final searchUserDataListByHandleUsecaseProvider =
+    Provider<SearchUserDataListByHandleUsecase>((ref) {
+  final userModelRepository = ref.watch(userModelRepositoryProvider);
+  return SearchUserDataListByHandleUsecase(userModelRepository);
+});
+
 final acceptApplyingForFriendUsecaseProvider =
     Provider<AcceptApplyingForFriendUsecase>((ref) {
   final userModelRepository = ref.watch(userModelRepositoryProvider);
@@ -357,4 +368,10 @@ final unshareResolutionToFriendUsecaseProvider =
     Provider<UnshareResolutionToFriendUsecase>((ref) {
   final resolutionRepository = ref.watch(resolutionRepositoryProvider);
   return UnshareResolutionToFriendUsecase(resolutionRepository);
+});
+
+final searchGroupEntityListByGroupNameUsecaseProvider =
+    Provider<SearchGroupEntityListByGroupNameUsecase>((ref) {
+  final groupRepository = ref.watch(groupRepositoryProvider);
+  return SearchGroupEntityListByGroupNameUsecase(groupRepository);
 });
