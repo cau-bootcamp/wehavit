@@ -2,15 +2,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/data/datasources/datasources.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 
-final googleAuthDatasourceProvider = Provider<AuthGoogleDatasource>((ref) {
-  return AuthGoogleDatasourceImpl();
+final googleAuthDatasourceProvider = Provider<AuthSocialDataSource>((ref) {
+  return AuthSocialDataSourceImpl();
 });
 
-class AuthGoogleDatasourceImpl implements AuthGoogleDatasource {
+class AuthSocialDataSourceImpl implements AuthSocialDataSource {
   @override
   EitherFuture<AuthResult> googleLogInAndSignUp() async {
     final GoogleSignIn googleSignIn = GoogleSignIn(
@@ -48,5 +49,36 @@ class AuthGoogleDatasourceImpl implements AuthGoogleDatasource {
   Future<void> googleLogOut() async {
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
+  }
+
+  @override
+  EitherFuture<AuthResult> appleLogInAndSignUp() async {
+    try {
+      final appleCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+
+      // Create an `OAuthCredential` from the credential returned by Apple.
+      final oauthCredential = OAuthProvider('apple.com').credential(
+        idToken: appleCredential.identityToken,
+        accessToken: appleCredential.authorizationCode,
+      );
+
+      await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+
+      return right(AuthResult.success);
+    } on FirebaseAuthException catch (exception) {
+      return left(Failure(exception.code));
+    } on Exception catch (exception) {
+      return left(Failure(exception.toString()));
+    }
+  }
+
+  @override
+  Future<void> appleLogOut() async {
+    await FirebaseAuth.instance.signOut();
   }
 }

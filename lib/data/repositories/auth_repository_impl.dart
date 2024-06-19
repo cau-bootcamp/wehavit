@@ -11,11 +11,11 @@ import 'package:wehavit/domain/repositories/repositories.dart';
 class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(
     this._authDataSource,
-    this._googleAuthDataSource,
+    this._authSocialDataSource,
   );
 
   final AuthDataSource _authDataSource;
-  final AuthGoogleDatasource _googleAuthDataSource;
+  final AuthSocialDataSource _authSocialDataSource;
 
   @override
   EitherFuture<AuthResult> logIn({
@@ -37,7 +37,13 @@ class AuthRepositoryImpl implements AuthRepository {
         }
       case LogInType.google:
         try {
-          futureResult = _googleAuthDataSource.googleLogInAndSignUp();
+          futureResult = _authSocialDataSource.googleLogInAndSignUp();
+        } catch (e) {
+          return left(Failure(AuthResult.failure.name));
+        }
+      case LogInType.apple:
+        try {
+          futureResult = _authSocialDataSource.appleLogInAndSignUp();
         } catch (e) {
           return left(Failure(AuthResult.failure.name));
         }
@@ -72,7 +78,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
       case LogInType.google:
         try {
-          futureResult = _googleAuthDataSource.googleLogInAndSignUp();
+          futureResult = _authSocialDataSource.googleLogInAndSignUp();
         } catch (e) {
           return left(Failure(AuthResult.failure.name));
         }
@@ -96,7 +102,7 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<void> logOut() async {
     await _authDataSource.logOut();
-    await _googleAuthDataSource.googleLogOut();
+    await _authSocialDataSource.googleLogOut();
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('isLoggedIn', false);

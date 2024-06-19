@@ -1,8 +1,15 @@
 // ignore: file_names
+
+import 'dart:io';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/data/repository_dependency.dart';
+import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
@@ -257,23 +264,26 @@ class _LogInViewState extends ConsumerState<LogInView> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
-                          width: 45,
-                          height: 45,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: CustomColors.whDarkBlack,
-                          ),
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              ref.read(authRepositoryProvider).logOut();
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.transparent,
-                              padding: const EdgeInsets.all(0),
+                        Visibility(
+                          visible: false,
+                          child: Container(
+                            width: 45,
+                            height: 45,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: CustomColors.whDarkBlack,
                             ),
-                            child: Image.asset(
-                              CustomIconImage.kakaoLogInLogoIcon,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                ref.read(authRepositoryProvider).logOut();
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                padding: const EdgeInsets.all(0),
+                              ),
+                              child: Image.asset(
+                                CustomIconImage.kakaoLogInLogoIcon,
+                              ),
                             ),
                           ),
                         ),
@@ -337,15 +347,7 @@ class _LogInViewState extends ConsumerState<LogInView> {
                                     ),
                                     // 사용자가 이미 가입을 했으면
                                     // 메인 뷰로 이동
-                                    (userData) => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        fullscreenDialog: true,
-                                        builder: (context) {
-                                          return const MainView();
-                                        },
-                                      ),
-                                    ),
+                                    (userData) => navigateToMainView(context),
                                   );
                                 });
                               }
@@ -358,15 +360,80 @@ class _LogInViewState extends ConsumerState<LogInView> {
                         const SizedBox(
                           width: 24,
                         ),
-                        Container(
-                          width: 45,
-                          height: 45,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: CustomColors.whPlaceholderGrey,
-                          ),
-                          child: Image.asset(
-                            CustomIconImage.appleLogInLogoIcon,
+                        Visibility(
+                          visible: Platform.isIOS,
+                          child: Container(
+                            width: 45,
+                            height: 45,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: CustomColors.whPlaceholderGrey,
+                            ),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                padding: const EdgeInsets.all(0),
+                              ),
+                              onPressed: () async {
+                                setState(() {
+                                  viewmodel.isProcessing = true;
+                                });
+
+                                final String? userId =
+                                    await signInWithApple().then((result) {
+                                  return result.fold(
+                                    (failure) {
+                                      return null;
+                                    },
+                                    (authResult) async {
+                                      if (authResult == AuthResult.aborted) {
+                                        return null;
+                                      }
+
+                                      return await ref
+                                          .read(userModelRepositoryProvider)
+                                          .getMyUserId()
+                                          .then((result) {
+                                        return result.fold(
+                                          (failure) => null,
+                                          (uid) => uid,
+                                        );
+                                      });
+                                    },
+                                  );
+                                });
+
+                                if (userId != null) {
+                                  ref
+                                      .read(userModelRepositoryProvider)
+                                      .getUserDataEntityById(userId)
+                                      .then((result) {
+                                    result.fold(
+                                      // 기존에 사용자에 대한 데이터가 없는 경우에는
+                                      // 회원가입으로 이동
+                                      (failure) => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return const SignUpUserDetailView();
+                                          },
+                                        ),
+                                      ),
+                                      // 사용자가 이미 가입을 했으면
+                                      // 메인 뷰로 이동
+                                      (userData) => navigateToMainView(context),
+                                    );
+                                  });
+                                }
+
+                                setState(() {
+                                  viewmodel.isProcessing = false;
+                                });
+                              },
+                              child: Image.asset(
+                                CustomIconImage.appleLogInLogoIcon,
+                              ),
+                            ),
                           ),
                         ),
                       ],
@@ -377,6 +444,28 @@ class _LogInViewState extends ConsumerState<LogInView> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  EitherFuture<AuthResult> signInWithApple() async {
+    return ref.read(logInWithAppleUsecaseProvider).call().then((result) {
+      return result.fold((failure) {
+        return left(failure);
+      }, (authResult) {
+        return right(authResult);
+      });
+    });
+  }
+
+  Future<void> navigateToMainView(BuildContext context) async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (context) {
+          return const MainView();
+        },
       ),
     );
   }

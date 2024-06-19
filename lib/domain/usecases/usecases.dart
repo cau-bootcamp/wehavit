@@ -28,6 +28,7 @@ export 'get_target_resolution_entity_usecase.dart';
 export 'get_to_whom_resolution_will_be_shared_usecase.dart';
 export 'get_unread_reaction_list_usecase.dart';
 export 'get_user_data_from_id_usecase.dart';
+export 'log_in_with_apple_usecase.dart';
 export 'log_in_with_email_and_password_usecase.dart';
 export 'log_in_with_google_usecase.dart';
 export 'log_out_usecase.dart';

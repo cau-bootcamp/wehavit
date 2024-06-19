@@ -17,6 +17,11 @@ final googleLogInUseCaseProvider = Provider<LogInWithGoogleUsecase>((ref) {
   return LogInWithGoogleUsecase(authRepository);
 });
 
+final logInWithAppleUsecaseProvider = Provider<LogInWithAppleUsecase>((ref) {
+  final authRepository = ref.watch(authRepositoryProvider);
+  return LogInWithAppleUsecase(authRepository);
+});
+
 final emailAndPasswordRegisterUseCaseProvider =
     Provider<SignUpWithEmailAndPasswordUsecase>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
