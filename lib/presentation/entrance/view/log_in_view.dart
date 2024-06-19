@@ -2,14 +2,11 @@
 
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/dependency/data/repository_dependency.dart';
-import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
@@ -147,10 +144,10 @@ class _LogInViewState extends ConsumerState<LogInView> {
                 WideColoredButton(
                   onPressed: () async {
                     setState(() {
-                      viewmodel.isProcessing = true;
+                      provider.setIsProcessing(true);
                     });
 
-                    provider.logIn().then((result) {
+                    provider.logInWithEmail().then((result) {
                       result.fold(
                         (failure) {
                           String toastMessage = '';
@@ -194,7 +191,7 @@ class _LogInViewState extends ConsumerState<LogInView> {
                       );
                     }).whenComplete(() {
                       setState(() {
-                        viewmodel.isProcessing = false;
+                        provider.setIsProcessing(false);
                       });
                     });
                   },
@@ -275,7 +272,7 @@ class _LogInViewState extends ConsumerState<LogInView> {
                             ),
                             child: ElevatedButton(
                               onPressed: () async {
-                                ref.read(authRepositoryProvider).logOut();
+                                provider.logOut();
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.transparent,
@@ -303,15 +300,23 @@ class _LogInViewState extends ConsumerState<LogInView> {
                               padding: const EdgeInsets.all(0),
                             ),
                             onPressed: () async {
-                              ref
-                                  .read(authProvider.notifier)
-                                  .googleLogIn()
-                                  .then((result) {
-                                return getUserIdFromAuthResult(result);
+                              setState(() {
+                                provider.setIsProcessing(true);
+                              });
+
+                              provider.logInWithGoogle().then((result) {
+                                return getUserIdFromAuthResult(
+                                  provider,
+                                  result,
+                                );
                               }).then((userId) {
                                 if (userId != null) {
-                                  navigateBasedOnUserState(userId);
+                                  navigateBasedOnUserState(provider, userId);
                                 }
+                              });
+
+                              setState(() {
+                                provider.setIsProcessing(false);
                               });
                             },
                             child: Image.asset(
@@ -338,19 +343,22 @@ class _LogInViewState extends ConsumerState<LogInView> {
                               ),
                               onPressed: () async {
                                 setState(() {
-                                  viewmodel.isProcessing = true;
+                                  provider.setIsProcessing(true);
                                 });
 
-                                signInWithApple().then((result) {
-                                  return getUserIdFromAuthResult(result);
+                                provider.logInWithApple().then((result) {
+                                  return getUserIdFromAuthResult(
+                                    provider,
+                                    result,
+                                  );
                                 }).then((userId) {
                                   if (userId != null) {
-                                    navigateBasedOnUserState(userId);
+                                    navigateBasedOnUserState(provider, userId);
                                   }
                                 });
 
                                 setState(() {
-                                  viewmodel.isProcessing = false;
+                                  provider.setIsProcessing(false);
                                 });
                               },
                               child: Image.asset(
@@ -371,7 +379,10 @@ class _LogInViewState extends ConsumerState<LogInView> {
     );
   }
 
-  Future<String?> getUserIdFromAuthResult(Either<Failure, AuthResult> result) {
+  Future<String?> getUserIdFromAuthResult(
+    LogInViewModelProvider provider,
+    Either<Failure, AuthResult> result,
+  ) {
     return result.fold(
       (failure) {
         return Future(() => null);
@@ -380,10 +391,7 @@ class _LogInViewState extends ConsumerState<LogInView> {
         if (authResult != AuthResult.success) {
           return Future(() => null);
         }
-        return await ref
-            .read(userModelRepositoryProvider)
-            .getMyUserId()
-            .then((result) {
+        return provider.getMyUserId().then((result) {
           return result.fold(
             (failure) => null,
             (uid) => uid,
@@ -393,33 +401,11 @@ class _LogInViewState extends ConsumerState<LogInView> {
     );
   }
 
-  EitherFuture<AuthResult> signInWithApple() async {
-    return ref.read(logInWithAppleUsecaseProvider).call().then((result) {
-      return result.fold((failure) {
-        return left(failure);
-      }, (authResult) {
-        return right(authResult);
-      });
-    });
-  }
-
-  Future<void> navigateToMainView() async {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        fullscreenDialog: true,
-        builder: (context) {
-          return const MainView();
-        },
-      ),
-    );
-  }
-
-  Future<void> navigateBasedOnUserState(String userId) async {
-    ref
-        .read(userModelRepositoryProvider)
-        .getUserDataEntityById(userId)
-        .then((result) {
+  Future<void> navigateBasedOnUserState(
+    LogInViewModelProvider provider,
+    String userId,
+  ) async {
+    provider.getUserDataEntity(id: userId).then((result) {
       result.fold(
         // 기존에 사용자에 대한 데이터가 없는 경우에는
         // 회원가입으로 이동
@@ -438,6 +424,18 @@ class _LogInViewState extends ConsumerState<LogInView> {
         fullscreenDialog: true,
         builder: (context) {
           return const SignUpUserDetailView();
+        },
+      ),
+    );
+  }
+
+  Future<void> navigateToMainView() async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (context) {
+          return const MainView();
         },
       ),
     );

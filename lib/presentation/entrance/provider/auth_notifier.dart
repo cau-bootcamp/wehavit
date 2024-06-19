@@ -14,9 +14,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
   ) : super(const AuthState.initial());
   final LogInWithGoogleUsecase _googleLogInUseCase;
   final SignUpWithEmailAndPasswordUsecase _emailAndPasswordRegisterUseCase;
-  final LogInWithEmailAndPasswordUsecase _emailAndPasswordLogInUseCase;
+  final LogInWithEmailUsecase _emailAndPasswordLogInUseCase;
   final GoogleLogOutUseCase _googleLogOut;
-  final LogOutUseCase _logOut;
+  final LogOutUsecase _logOut;
 
   EitherFuture<AuthResult> googleLogIn() async {
     return _googleLogInUseCase();
