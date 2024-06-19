@@ -11,7 +11,7 @@ import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/entrance/entrance.dart';
-import 'package:wehavit/presentation/main/view/main_view.dart';
+import 'package:wehavit/presentation/main/main.dart';
 
 class LogInView extends ConsumerStatefulWidget {
   const LogInView({super.key});
@@ -179,15 +179,7 @@ class _LogInViewState extends ConsumerState<LogInView> {
                             ),
                           );
                         },
-                        (success) => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            fullscreenDialog: true,
-                            builder: (context) {
-                              return const MainView();
-                            },
-                          ),
-                        ),
+                        (success) => navigateToMainView(),
                       );
                     }).whenComplete(() {
                       setState(() {
