@@ -2,9 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/dependency/data/repository_dependency.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
 
-final logOutUseCaseProvider = Provider<LogOutUseCase>((ref) {
+final logOutUseCaseProvider = Provider<LogOutUsecase>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
-  return LogOutUseCase(authRepository);
+  return LogOutUsecase(authRepository);
 });
 
 final googleLogOutUseCaseProvider = Provider<GoogleLogOutUseCase>((ref) {
@@ -12,9 +12,14 @@ final googleLogOutUseCaseProvider = Provider<GoogleLogOutUseCase>((ref) {
   return GoogleLogOutUseCase(authRepository);
 });
 
-final googleLogInUseCaseProvider = Provider<LogInWithGoogleUsecase>((ref) {
+final logInWithGoogleUsecaseProvider = Provider<LogInWithGoogleUsecase>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
   return LogInWithGoogleUsecase(authRepository);
+});
+
+final logInWithAppleUsecaseProvider = Provider<LogInWithAppleUsecase>((ref) {
+  final authRepository = ref.watch(authRepositoryProvider);
+  return LogInWithAppleUsecase(authRepository);
 });
 
 final emailAndPasswordRegisterUseCaseProvider =
@@ -24,9 +29,9 @@ final emailAndPasswordRegisterUseCaseProvider =
 });
 
 final emailAndPasswordLogInUseCaseProvider =
-    Provider<LogInWithEmailAndPasswordUsecase>((ref) {
+    Provider<LogInWithEmailUsecase>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
-  return LogInWithEmailAndPasswordUsecase(authRepository);
+  return LogInWithEmailUsecase(authRepository);
 });
 
 // final authStateChangesUseCaseProvider = Provider<AuthStateChangesUseCase>(
@@ -138,6 +143,11 @@ final getUserDataFromIdUsecaseProvider =
     Provider<GetUserDataFromIdUsecase>((ref) {
   final repository = ref.watch(userModelRepositoryProvider);
   return GetUserDataFromIdUsecase(repository);
+});
+
+final getMyUserIdUsecaseProvider = Provider<GetMyUserIdUsecase>((ref) {
+  final repository = ref.watch(userModelRepositoryProvider);
+  return GetMyUserIdUsecase(repository);
 });
 
 final getMyUserDataUsecaseProvider = Provider<GetMyUserDataUsecase>((ref) {
@@ -341,9 +351,9 @@ final removeCurrentUserDataUsecaseProvider =
 });
 
 final logInWithEmailAndPasswordUsecaseProvider =
-    Provider<LogInWithEmailAndPasswordUsecase>((ref) {
+    Provider<LogInWithEmailUsecase>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
-  return LogInWithEmailAndPasswordUsecase(authRepository);
+  return LogInWithEmailUsecase(authRepository);
 });
 
 final shareResolutionToGroupUsecaseProvider =

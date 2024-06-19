@@ -32,9 +32,7 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
       provider
           .loadAppliedUserCount(entity: widget.groupEntity)
           .whenComplete(() {
-        setState(() {
-          print("load");
-        });
+        setState(() {});
       }),
     );
 

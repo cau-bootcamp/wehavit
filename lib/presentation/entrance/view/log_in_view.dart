@@ -1,13 +1,17 @@
 // ignore: file_names
+
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart';
+
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/dependency/data/repository_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/entrance/entrance.dart';
-import 'package:wehavit/presentation/main/view/main_view.dart';
+import 'package:wehavit/presentation/main/main.dart';
 
 class LogInView extends ConsumerStatefulWidget {
   const LogInView({super.key});
@@ -140,10 +144,10 @@ class _LogInViewState extends ConsumerState<LogInView> {
                 WideColoredButton(
                   onPressed: () async {
                     setState(() {
-                      viewmodel.isProcessing = true;
+                      provider.setIsProcessing(true);
                     });
 
-                    provider.logIn().then((result) {
+                    provider.logInWithEmail().then((result) {
                       result.fold(
                         (failure) {
                           String toastMessage = '';
@@ -175,19 +179,11 @@ class _LogInViewState extends ConsumerState<LogInView> {
                             ),
                           );
                         },
-                        (success) => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            fullscreenDialog: true,
-                            builder: (context) {
-                              return const MainView();
-                            },
-                          ),
-                        ),
+                        (success) => navigateToMainView(),
                       );
                     }).whenComplete(() {
                       setState(() {
-                        viewmodel.isProcessing = false;
+                        provider.setIsProcessing(false);
                       });
                     });
                   },
@@ -257,23 +253,26 @@ class _LogInViewState extends ConsumerState<LogInView> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
-                          width: 45,
-                          height: 45,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: CustomColors.whDarkBlack,
-                          ),
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              ref.read(authRepositoryProvider).logOut();
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.transparent,
-                              padding: const EdgeInsets.all(0),
+                        Visibility(
+                          visible: false,
+                          child: Container(
+                            width: 45,
+                            height: 45,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: CustomColors.whDarkBlack,
                             ),
-                            child: Image.asset(
-                              CustomIconImage.kakaoLogInLogoIcon,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                provider.logOut();
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                padding: const EdgeInsets.all(0),
+                              ),
+                              child: Image.asset(
+                                CustomIconImage.kakaoLogInLogoIcon,
+                              ),
                             ),
                           ),
                         ),
@@ -293,62 +292,24 @@ class _LogInViewState extends ConsumerState<LogInView> {
                               padding: const EdgeInsets.all(0),
                             ),
                             onPressed: () async {
-                              final String? userId = await ref
-                                  .read(authProvider.notifier)
-                                  .googleLogIn()
-                                  .then((result) {
-                                return result.fold(
-                                  (failure) {
-                                    return null;
-                                  },
-                                  (authResult) async {
-                                    if (authResult == AuthResult.aborted) {
-                                      return null;
-                                    }
-
-                                    return await ref
-                                        .read(userModelRepositoryProvider)
-                                        .getMyUserId()
-                                        .then((result) {
-                                      return result.fold(
-                                        (failure) => null,
-                                        (uid) => uid,
-                                      );
-                                    });
-                                  },
-                                );
+                              setState(() {
+                                provider.setIsProcessing(true);
                               });
 
-                              if (userId != null) {
-                                ref
-                                    .read(userModelRepositoryProvider)
-                                    .getUserDataEntityById(userId)
-                                    .then((result) {
-                                  result.fold(
-                                    // 기존에 사용자에 대한 데이터가 없는 경우에는
-                                    // 회원가입으로 이동
-                                    (failure) => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) {
-                                          return const SignUpUserDetailView();
-                                        },
-                                      ),
-                                    ),
-                                    // 사용자가 이미 가입을 했으면
-                                    // 메인 뷰로 이동
-                                    (userData) => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        fullscreenDialog: true,
-                                        builder: (context) {
-                                          return const MainView();
-                                        },
-                                      ),
-                                    ),
-                                  );
-                                });
-                              }
+                              provider.logInWithGoogle().then((result) {
+                                return getUserIdFromAuthResult(
+                                  provider,
+                                  result,
+                                );
+                              }).then((userId) {
+                                if (userId != null) {
+                                  navigateBasedOnUserState(provider, userId);
+                                }
+                              });
+
+                              setState(() {
+                                provider.setIsProcessing(false);
+                              });
                             },
                             child: Image.asset(
                               CustomIconImage.googleLogInLogoIcon,
@@ -358,15 +319,44 @@ class _LogInViewState extends ConsumerState<LogInView> {
                         const SizedBox(
                           width: 24,
                         ),
-                        Container(
-                          width: 45,
-                          height: 45,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: CustomColors.whPlaceholderGrey,
-                          ),
-                          child: Image.asset(
-                            CustomIconImage.appleLogInLogoIcon,
+                        Visibility(
+                          visible: Platform.isIOS,
+                          child: Container(
+                            width: 45,
+                            height: 45,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: CustomColors.whPlaceholderGrey,
+                            ),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                padding: const EdgeInsets.all(0),
+                              ),
+                              onPressed: () async {
+                                setState(() {
+                                  provider.setIsProcessing(true);
+                                });
+
+                                provider.logInWithApple().then((result) {
+                                  return getUserIdFromAuthResult(
+                                    provider,
+                                    result,
+                                  );
+                                }).then((userId) {
+                                  if (userId != null) {
+                                    navigateBasedOnUserState(provider, userId);
+                                  }
+                                });
+
+                                setState(() {
+                                  provider.setIsProcessing(false);
+                                });
+                              },
+                              child: Image.asset(
+                                CustomIconImage.appleLogInLogoIcon,
+                              ),
+                            ),
                           ),
                         ),
                       ],
@@ -377,6 +367,68 @@ class _LogInViewState extends ConsumerState<LogInView> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Future<String?> getUserIdFromAuthResult(
+    LogInViewModelProvider provider,
+    Either<Failure, AuthResult> result,
+  ) {
+    return result.fold(
+      (failure) {
+        return Future(() => null);
+      },
+      (authResult) async {
+        if (authResult != AuthResult.success) {
+          return Future(() => null);
+        }
+        return provider.getMyUserId().then((result) {
+          return result.fold(
+            (failure) => null,
+            (uid) => uid,
+          );
+        });
+      },
+    );
+  }
+
+  Future<void> navigateBasedOnUserState(
+    LogInViewModelProvider provider,
+    String userId,
+  ) async {
+    provider.getUserDataEntity(id: userId).then((result) {
+      result.fold(
+        // 기존에 사용자에 대한 데이터가 없는 경우에는
+        // 회원가입으로 이동
+        (failure) => navigateToSignUpUserDetailView(),
+        // 데이터가 있으면
+        // 메인으로 이동
+        (userData) => navigateToMainView(),
+      );
+    });
+  }
+
+  Future<void> navigateToSignUpUserDetailView() async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (context) {
+          return const SignUpUserDetailView();
+        },
+      ),
+    );
+  }
+
+  Future<void> navigateToMainView() async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (context) {
+          return const MainView();
+        },
       ),
     );
   }

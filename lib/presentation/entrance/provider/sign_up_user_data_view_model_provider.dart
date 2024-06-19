@@ -17,7 +17,7 @@ class SignUpUserDataViewModelProvider
 
   UploadUserDataUsecase uploadUserDataUsecase;
   RemoveCurrentUserDataUsecase removeCurrentUserDataUsecase;
-  LogOutUseCase logOutUseCase;
+  LogOutUsecase logOutUseCase;
 
   Future<void> pickProfileImage() async {
     final picker = ImagePicker();

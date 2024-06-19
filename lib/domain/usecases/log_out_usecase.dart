@@ -1,7 +1,7 @@
 import 'package:wehavit/domain/repositories/repositories.dart';
 
-class LogOutUseCase {
-  LogOutUseCase(this._repository);
+class LogOutUsecase {
+  LogOutUsecase(this._repository);
 
   final AuthRepository _repository;
 

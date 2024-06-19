@@ -2,8 +2,8 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
 
-class LogInWithEmailAndPasswordUsecase {
-  LogInWithEmailAndPasswordUsecase(this._authRepository);
+class LogInWithEmailUsecase {
+  LogInWithEmailUsecase(this._authRepository);
 
   final AuthRepository _authRepository;
 

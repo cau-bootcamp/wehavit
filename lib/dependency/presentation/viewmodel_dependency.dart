@@ -8,7 +8,7 @@ import 'package:wehavit/domain/usecases/usecases.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
-  final usecaseGoogleLogIn = ref.watch(googleLogInUseCaseProvider);
+  final usecaseGoogleLogIn = ref.watch(logInWithGoogleUsecaseProvider);
   final emailAndPasswordRegister =
       ref.watch(emailAndPasswordRegisterUseCaseProvider);
   final emailAndPasswordLogIn = ref.watch(emailAndPasswordLogInUseCaseProvider);
@@ -174,7 +174,7 @@ final signUpUserDataViewModelProvider = StateNotifierProvider.autoDispose<
       ref.watch(uploadUserDataUsecaseProvider);
   RemoveCurrentUserDataUsecase removeCurrentUserDataUsecase =
       ref.watch(removeCurrentUserDataUsecaseProvider);
-  LogOutUseCase logOutUseCase = ref.watch(logOutUseCaseProvider);
+  LogOutUsecase logOutUseCase = ref.watch(logOutUseCaseProvider);
   return SignUpUserDataViewModelProvider(
     uploadUserDataUsecase,
     removeCurrentUserDataUsecase,
@@ -185,10 +185,25 @@ final signUpUserDataViewModelProvider = StateNotifierProvider.autoDispose<
 final logInViewModelProvider =
     StateNotifierProvider.autoDispose<LogInViewModelProvider, LogInViewModel>(
         (ref) {
-  LogInWithEmailAndPasswordUsecase logInWithEmailAndPasswordUsecase =
+  LogInWithEmailUsecase logInWithEmailAndPasswordUsecase =
       ref.watch(logInWithEmailAndPasswordUsecaseProvider);
+  LogInWithAppleUsecase logInWithAppleUsecase =
+      ref.watch(logInWithAppleUsecaseProvider);
+  LogInWithGoogleUsecase logInWithGoogleUsecase =
+      ref.watch(logInWithGoogleUsecaseProvider);
+  LogOutUsecase logOutUsecase = ref.watch(logOutUseCaseProvider);
+  GetMyUserIdUsecase getMyUserIdUsecase = ref.watch(getMyUserIdUsecaseProvider);
+  GetUserDataFromIdUsecase getUserDataFromIdUsecase =
+      ref.watch(getUserDataFromIdUsecaseProvider);
 
-  return LogInViewModelProvider(logInWithEmailAndPasswordUsecase);
+  return LogInViewModelProvider(
+    logInWithEmailAndPasswordUsecase,
+    logInWithAppleUsecase,
+    logInWithGoogleUsecase,
+    logOutUsecase,
+    getMyUserIdUsecase,
+    getUserDataFromIdUsecase,
+  );
 });
 
 final addResolutionViewModelProvider = StateNotifierProvider.autoDispose<
