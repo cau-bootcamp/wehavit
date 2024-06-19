@@ -12,7 +12,7 @@ class EditUserDetailView extends ConsumerStatefulWidget {
   const EditUserDetailView({
     required this.isModifying,
     this.uid,
-    this.profileImageFile,
+    this.profileImageUrl,
     this.name,
     this.handle,
     this.aboutMe,
@@ -21,7 +21,7 @@ class EditUserDetailView extends ConsumerStatefulWidget {
 
   final bool isModifying;
   final String? uid;
-  final File? profileImageFile;
+  final String? profileImageUrl;
   final String? name;
   final String? handle;
   final String? aboutMe;
@@ -37,21 +37,28 @@ class _EditUserDetailViewState extends ConsumerState<EditUserDetailView> {
   }
 
   @override
-  void didChangeDependencies() {
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
 
-    final viewmodel = ref.watch(signUpUserDataViewModelProvider);
-    viewmodel.uid = widget.uid ?? '';
-    viewmodel.profileImageFile = widget.profileImageFile;
-    viewmodel.name = widget.name ?? '';
-    viewmodel.handle = widget.handle ?? '';
-    viewmodel.aboutMe = widget.aboutMe ?? '';
+    if (widget.isModifying) {
+      final viewmodel = ref.watch(editUserDataViewModelProvider);
+
+      viewmodel.uid = widget.uid ?? '';
+      viewmodel.profileImageFile = await ref
+          .read(editUserDataViewModelProvider.notifier)
+          .downloadImageToFile(widget.profileImageUrl!);
+      viewmodel.name = widget.name ?? '';
+      viewmodel.handle = widget.handle ?? '';
+      viewmodel.aboutMe = widget.aboutMe ?? '';
+    }
+
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    final viewmodel = ref.watch(signUpUserDataViewModelProvider);
-    final provider = ref.read(signUpUserDataViewModelProvider.notifier);
+    final viewmodel = ref.watch(editUserDataViewModelProvider);
+    final provider = ref.read(editUserDataViewModelProvider.notifier);
 
     return Stack(
       children: [
@@ -344,13 +351,17 @@ class _EditUserDetailViewState extends ConsumerState<EditUserDetailView> {
                               );
                             },
                             (success) async {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  fullscreenDialog: true,
-                                  builder: (context) => const MainView(),
-                                ),
-                              );
+                              if (widget.isModifying) {
+                                Navigator.pop(context);
+                              } else {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    fullscreenDialog: true,
+                                    builder: (context) => const MainView(),
+                                  ),
+                                );
+                              }
                             },
                           ),
                         );

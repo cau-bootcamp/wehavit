@@ -168,7 +168,7 @@ final signUpAuthDataViewModelProvider = StateNotifierProvider.autoDispose<
   return SignUpAuthDataViewModelProvider();
 });
 
-final signUpUserDataViewModelProvider = StateNotifierProvider.autoDispose<
+final editUserDataViewModelProvider = StateNotifierProvider.autoDispose<
     EditUserDataViewModelProvider, EditUserDetailViewModel>((ref) {
   UploadUserDataUsecase uploadUserDataUsecase =
       ref.watch(uploadUserDataUsecaseProvider);

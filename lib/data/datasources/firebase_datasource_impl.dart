@@ -2041,7 +2041,11 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           .get()
           .then((result) {
         if (result.docs.isNotEmpty) {
-          return false;
+          if (result.docs.first.id == uid) {
+            return true;
+          } else {
+            return false;
+          }
         } else {
           return true;
         }
