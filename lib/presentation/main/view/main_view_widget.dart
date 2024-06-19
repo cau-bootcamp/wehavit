@@ -102,10 +102,10 @@ class TabBarProfileImageButton extends StatelessWidget {
             forFail: Container(),
             forWaiting: Container(),
             mainWidgetCallback: (entity) {
-              return Image.network(
-                entity.userImageUrl ??
+              return ProfileImageCircleWidget(
+                size: 40,
+                url: entity.userImageUrl ??
                     'https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSAOnLXSaPbc4K0IId0dSTI050OfwusYAyfQzMiCF6mrwNPVdmN',
-                fit: BoxFit.cover,
               );
             },
           ),

@@ -55,7 +55,8 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
       backgroundColor: CustomColors.whDarkBlack,
       appBar: WehavitAppBar(
         title: '내 정보',
-        trailingTitle: '로그아웃',
+        trailingTitle: '',
+        trailingIcon: Icons.menu,
         trailingAction: () async {
           showMyPageMenuBottomSheet(context);
         },
