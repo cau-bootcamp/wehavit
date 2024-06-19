@@ -303,54 +303,16 @@ class _LogInViewState extends ConsumerState<LogInView> {
                               padding: const EdgeInsets.all(0),
                             ),
                             onPressed: () async {
-                              final String? userId = await ref
+                              ref
                                   .read(authProvider.notifier)
                                   .googleLogIn()
                                   .then((result) {
-                                return result.fold(
-                                  (failure) {
-                                    return null;
-                                  },
-                                  (authResult) async {
-                                    if (authResult == AuthResult.aborted) {
-                                      return null;
-                                    }
-
-                                    return await ref
-                                        .read(userModelRepositoryProvider)
-                                        .getMyUserId()
-                                        .then((result) {
-                                      return result.fold(
-                                        (failure) => null,
-                                        (uid) => uid,
-                                      );
-                                    });
-                                  },
-                                );
+                                return getUserIdFromAuthResult(result);
+                              }).then((userId) {
+                                if (userId != null) {
+                                  navigateBasedOnUserState(userId);
+                                }
                               });
-
-                              if (userId != null) {
-                                ref
-                                    .read(userModelRepositoryProvider)
-                                    .getUserDataEntityById(userId)
-                                    .then((result) {
-                                  result.fold(
-                                    // 기존에 사용자에 대한 데이터가 없는 경우에는
-                                    // 회원가입으로 이동
-                                    (failure) => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) {
-                                          return const SignUpUserDetailView();
-                                        },
-                                      ),
-                                    ),
-                                    // 사용자가 이미 가입을 했으면
-                                    // 메인 뷰로 이동
-                                    (userData) => navigateToMainView(context),
-                                  );
-                                });
-                              }
                             },
                             child: Image.asset(
                               CustomIconImage.googleLogInLogoIcon,
@@ -379,52 +341,13 @@ class _LogInViewState extends ConsumerState<LogInView> {
                                   viewmodel.isProcessing = true;
                                 });
 
-                                final String? userId =
-                                    await signInWithApple().then((result) {
-                                  return result.fold(
-                                    (failure) {
-                                      return null;
-                                    },
-                                    (authResult) async {
-                                      if (authResult == AuthResult.aborted) {
-                                        return null;
-                                      }
-
-                                      return await ref
-                                          .read(userModelRepositoryProvider)
-                                          .getMyUserId()
-                                          .then((result) {
-                                        return result.fold(
-                                          (failure) => null,
-                                          (uid) => uid,
-                                        );
-                                      });
-                                    },
-                                  );
+                                signInWithApple().then((result) {
+                                  return getUserIdFromAuthResult(result);
+                                }).then((userId) {
+                                  if (userId != null) {
+                                    navigateBasedOnUserState(userId);
+                                  }
                                 });
-
-                                if (userId != null) {
-                                  ref
-                                      .read(userModelRepositoryProvider)
-                                      .getUserDataEntityById(userId)
-                                      .then((result) {
-                                    result.fold(
-                                      // 기존에 사용자에 대한 데이터가 없는 경우에는
-                                      // 회원가입으로 이동
-                                      (failure) => Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) {
-                                            return const SignUpUserDetailView();
-                                          },
-                                        ),
-                                      ),
-                                      // 사용자가 이미 가입을 했으면
-                                      // 메인 뷰로 이동
-                                      (userData) => navigateToMainView(context),
-                                    );
-                                  });
-                                }
 
                                 setState(() {
                                   viewmodel.isProcessing = false;
@@ -448,6 +371,28 @@ class _LogInViewState extends ConsumerState<LogInView> {
     );
   }
 
+  Future<String?> getUserIdFromAuthResult(Either<Failure, AuthResult> result) {
+    return result.fold(
+      (failure) {
+        return Future(() => null);
+      },
+      (authResult) async {
+        if (authResult != AuthResult.success) {
+          return Future(() => null);
+        }
+        return await ref
+            .read(userModelRepositoryProvider)
+            .getMyUserId()
+            .then((result) {
+          return result.fold(
+            (failure) => null,
+            (uid) => uid,
+          );
+        });
+      },
+    );
+  }
+
   EitherFuture<AuthResult> signInWithApple() async {
     return ref.read(logInWithAppleUsecaseProvider).call().then((result) {
       return result.fold((failure) {
@@ -458,13 +403,41 @@ class _LogInViewState extends ConsumerState<LogInView> {
     });
   }
 
-  Future<void> navigateToMainView(BuildContext context) async {
+  Future<void> navigateToMainView() async {
     Navigator.push(
       context,
       MaterialPageRoute(
         fullscreenDialog: true,
         builder: (context) {
           return const MainView();
+        },
+      ),
+    );
+  }
+
+  Future<void> navigateBasedOnUserState(String userId) async {
+    ref
+        .read(userModelRepositoryProvider)
+        .getUserDataEntityById(userId)
+        .then((result) {
+      result.fold(
+        // 기존에 사용자에 대한 데이터가 없는 경우에는
+        // 회원가입으로 이동
+        (failure) => navigateToSignUpUserDetailView(),
+        // 데이터가 있으면
+        // 메인으로 이동
+        (userData) => navigateToMainView(),
+      );
+    });
+  }
+
+  Future<void> navigateToSignUpUserDetailView() async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (context) {
+          return const SignUpUserDetailView();
         },
       ),
     );
