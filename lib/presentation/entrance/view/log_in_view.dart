@@ -415,7 +415,9 @@ class _LogInViewState extends ConsumerState<LogInView> {
       MaterialPageRoute(
         fullscreenDialog: true,
         builder: (context) {
-          return const SignUpUserDetailView();
+          return const EditUserDetailView(
+            isModifying: false,
+          );
         },
       ),
     );

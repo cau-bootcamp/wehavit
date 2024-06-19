@@ -1,6 +1,6 @@
 import 'dart:io';
 
-class SignUpUserDataViewModel {
+class EditUserDetailViewModel {
   String uid = '';
   File? profileImageFile;
 

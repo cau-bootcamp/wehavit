@@ -7,13 +7,13 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
 import 'package:wehavit/presentation/entrance/entrance.dart';
 
-class SignUpUserDataViewModelProvider
-    extends StateNotifier<SignUpUserDataViewModel> {
-  SignUpUserDataViewModelProvider(
+class EditUserDataViewModelProvider
+    extends StateNotifier<EditUserDetailViewModel> {
+  EditUserDataViewModelProvider(
     this.uploadUserDataUsecase,
     this.removeCurrentUserDataUsecase,
     this.logOutUseCase,
-  ) : super(SignUpUserDataViewModel());
+  ) : super(EditUserDetailViewModel());
 
   UploadUserDataUsecase uploadUserDataUsecase;
   RemoveCurrentUserDataUsecase removeCurrentUserDataUsecase;

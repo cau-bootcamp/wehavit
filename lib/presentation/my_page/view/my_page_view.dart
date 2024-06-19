@@ -1,7 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
@@ -57,11 +61,52 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
         title: '내 정보',
         trailingTitle: '로그아웃',
         trailingAction: () async {
-          await ref.read(logOutUseCaseProvider).call();
-          if (mounted) {
-            // ignore: use_build_context_synchronously
-            Navigator.pushReplacementNamed(context, '/entrance');
+          final userEntity = await ref
+              .read(getMyUserDataUsecaseProvider)
+              .call()
+              .then((result) {
+            return result.fold((failure) {
+              return null;
+            }, (entity) {
+              return entity;
+            });
+          });
+          if (userEntity != null) {
+            final documentDirectory = await getApplicationDocumentsDirectory();
+            final file = File('${documentDirectory.path}/downloaded_image.jpg');
+            try {
+              // HTTP GET 요청을 통해 이미지 데이터 다운로드
+              final response =
+                  await http.get(Uri.parse(userEntity.userImageUrl!));
+              if (response.statusCode == 200) {
+                // 임시 디렉토리에 파일 저장 경로 생성
+
+                // 파일로 이미지 데이터 저장
+                file.writeAsBytesSync(response.bodyBytes);
+              } else {
+                throw Exception('이미지 다운로드 실패');
+              }
+            } catch (e) {
+              print('이미지 다운로드 중 오류 발생: $e');
+            }
+
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return EditUserDetailView(
+                isModifying: true,
+                uid: userEntity.userId,
+                profileImageFile: file,
+                name: userEntity.userName,
+                handle: userEntity.handle,
+                aboutMe: userEntity.aboutMe,
+              );
+            }));
           }
+
+          // await ref.read(logOutUseCaseProvider).call();
+          // if (mounted) {
+          //   // ignore: use_build_context_synchronously
+          //   Navigator.pushReplacementNamed(context, '/entrance');
+          // }
         },
       ),
       body: Container(
