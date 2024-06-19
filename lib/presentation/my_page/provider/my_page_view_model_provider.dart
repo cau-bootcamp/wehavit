@@ -12,7 +12,15 @@ class MyPageViewModelProvider extends StateNotifier<MyPageViewModel> {
   final GetMyUserDataUsecase getMyUserDataUsecase;
 
   Future<void> loadData() async {
+    getResolutionList();
+    getMyUserData();
+  }
+
+  Future<void> getResolutionList() async {
     state.futureMyyResolutionList = getMyResolutionListUsecase();
+  }
+
+  Future<void> getMyUserData() async {
     state.futureMyUserDataEntity = getMyUserDataUsecase();
   }
 }

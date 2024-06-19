@@ -58,7 +58,10 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
         trailingTitle: '',
         trailingIcon: Icons.menu,
         trailingAction: () async {
-          showMyPageMenuBottomSheet(context);
+          // 변경사항을 TabBar에 알리기 위해 mainViewState를 참조
+          MainViewState? mainViewState =
+              context.findAncestorStateOfType<MainViewState>();
+          showMyPageMenuBottomSheet(context, mainViewState);
         },
       ),
       body: Container(
@@ -115,6 +118,7 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
 
   Future<dynamic> showMyPageMenuBottomSheet(
     BuildContext context,
+    MainViewState? mainViewState,
   ) {
     return showModalBottomSheet(
       context: context,
@@ -152,7 +156,20 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
                           );
                         },
                       ),
-                    ).then((_) => Navigator.pop(context));
+                    ).then((result) {
+                      if (result == true) {
+                        mainViewState?.loadUserData();
+
+                        ref
+                            .read(myPageViewModelProvider.notifier)
+                            .getMyUserData()
+                            .whenComplete(() {
+                          setState(() {});
+                        });
+                      }
+
+                      Navigator.pop(context);
+                    });
                   }
                 },
                 // isDiminished: true,

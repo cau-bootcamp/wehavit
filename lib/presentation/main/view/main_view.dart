@@ -11,10 +11,10 @@ class MainView extends ConsumerStatefulWidget {
   const MainView({super.key});
 
   @override
-  ConsumerState<MainView> createState() => _MainViewState();
+  ConsumerState<MainView> createState() => MainViewState();
 }
 
-class _MainViewState extends ConsumerState<MainView>
+class MainViewState extends ConsumerState<MainView>
     with TickerProviderStateMixin {
   late TabController tabController;
   late EitherFuture<UserDataEntity> userDataEntity;
@@ -23,13 +23,19 @@ class _MainViewState extends ConsumerState<MainView>
   void initState() {
     super.initState();
     tabController = TabController(length: 4, vsync: this);
+
+    unawaited(loadUserData());
   }
 
   @override
   Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
+  }
 
-    userDataEntity = ref.read(getMyUserDataUsecaseProvider).call();
+  Future<void> loadUserData() async {
+    setState(() {
+      userDataEntity = ref.read(getMyUserDataUsecaseProvider).call();
+    });
   }
 
   @override

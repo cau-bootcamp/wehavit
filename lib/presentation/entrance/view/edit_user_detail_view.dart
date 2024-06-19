@@ -350,7 +350,7 @@ class _EditUserDetailViewState extends ConsumerState<EditUserDetailView> {
                             },
                             (success) async {
                               if (widget.isModifying) {
-                                Navigator.pop(context);
+                                Navigator.pop(context, true);
                               } else {
                                 Navigator.pushReplacement(
                                   context,
