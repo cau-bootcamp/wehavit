@@ -64,7 +64,7 @@ class FirebaseConfirmPostImagePathName {
   static String storagePath({
     required String uid,
   }) {
-    return '$uid/confirm_post/_${DateTime.now().toIso8601String()}';
+    return '$uid/confirm_post/$uid/_${DateTime.now().toIso8601String()}';
   }
 }
 
