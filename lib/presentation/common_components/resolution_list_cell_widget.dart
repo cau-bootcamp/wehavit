@@ -36,10 +36,9 @@ class _MyPageResolutionListCellWidgetState
         1;
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 16.0),
       width: double.infinity,
       decoration: const BoxDecoration(
-        color: CustomColors.whSemiBlack,
+        // color: CustomColors.whSemiBlack,
         borderRadius: BorderRadius.all(
           Radius.circular(16.0),
         ),

@@ -48,6 +48,12 @@ class MyPageWehavitSummaryWidget extends StatelessWidget {
             height: 2,
           ),
           TextButton(
+            style: TextButton.styleFrom(
+              foregroundColor: CustomColors.whYellow,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+            ),
             onPressed: () {
               showToastMessage(
                 context,
@@ -58,17 +64,21 @@ class MyPageWehavitSummaryWidget extends StatelessWidget {
                 ),
               );
             },
-            child: Container(
-              constraints: const BoxConstraints(minWidth: 250),
-              child: const Text(
-                '더 많은 통계 보러가기',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.w700,
-                  color: CustomColors.whWhite,
+            child: const Flex(
+              direction: Axis.horizontal,
+              mainAxisAlignment: MainAxisAlignment.center,
+              // constraints: const BoxConstraints(minWidth: 250),
+              children: [
+                Text(
+                  '더 많은 통계 보러가기',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.w700,
+                    color: CustomColors.whWhite,
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
         ],
@@ -320,6 +330,40 @@ class SimpleStatisticsBulletWidget extends StatelessWidget {
             fontWeight: FontWeight.w400,
             color: CustomColors.whWhite,
             overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class ResolutionListPlaceholderWidget extends StatelessWidget {
+  const ResolutionListPlaceholderWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          height: 30,
+        ),
+        Text(
+          '아직 도전중인 목표가 없으시네요!\n위해빗과 함께 새로운 도전을 시작해보세요',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+            color: CustomColors.whWhite,
+          ),
+        ),
+        Text(
+          '😉',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 40,
+            fontWeight: FontWeight.bold,
+            color: CustomColors.whWhite,
           ),
         ),
       ],

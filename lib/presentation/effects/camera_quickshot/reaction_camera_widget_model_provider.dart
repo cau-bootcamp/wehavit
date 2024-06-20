@@ -73,18 +73,9 @@ class ReactionCameraWidgetModelProvider
   }
 
   void updatePanPosition(Point<double> position) {
-    if (checkPosInCapturingArea(position)) {
-      state = state.copyWith(
-        currentButtonPosition: position,
-        isPosInCapturingArea: true,
-      );
-
-      return;
-    }
-
     state = state.copyWith(
       currentButtonPosition: position,
-      isPosInCapturingArea: false,
+      isPosInCapturingArea: checkPosInCapturingArea(position),
     );
   }
 

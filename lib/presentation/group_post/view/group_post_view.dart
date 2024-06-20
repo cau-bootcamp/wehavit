@@ -127,220 +127,7 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                           ),
                         ],
                       ),
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 250),
-                        curve: Curves.fastOutSlowIn,
-                        height: viewModel.isShowingCalendar ? 64 : 0,
-                        child: ProviderScope(
-                          child: CarouselSlider.builder(
-                            itemBuilder: (context, index, realIndex) {
-                              return Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: List<Widget>.generate(7, (jndex) {
-                                  final cellDate = viewModel.todayDate.subtract(
-                                    Duration(
-                                      days: viewModel.todayDate.weekday -
-                                          1 -
-                                          jndex +
-                                          7 * index,
-                                    ),
-                                  );
-                                  final isFuture =
-                                      viewModel.todayDate.isBefore(cellDate);
-
-                                  return Expanded(
-                                    child: GestureDetector(
-                                      onTapUp: (details) async {
-                                        if (!isFuture) {
-                                          provider
-                                              .changeSelectedDate(
-                                            to: cellDate,
-                                          )
-                                              .then((value) {
-                                            if (mounted) {
-                                              setState(() {});
-                                            }
-                                          });
-                                        }
-                                      },
-                                      child: Container(
-                                        margin: const EdgeInsets.symmetric(
-                                          horizontal: 4.0,
-                                        ),
-                                        clipBehavior: Clip.hardEdge,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: CustomColors.whBlack,
-                                            width: 2,
-                                            strokeAlign:
-                                                BorderSide.strokeAlignOutside,
-                                          ),
-                                          borderRadius: BorderRadius.circular(
-                                            14.0,
-                                          ),
-                                        ),
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            boxShadow: [
-                                              const BoxShadow(
-                                                blurRadius: 4,
-                                                color: CustomColors.whBlack,
-                                              ),
-                                              BoxShadow(
-                                                offset: const Offset(0, 4),
-                                                blurRadius: 6,
-                                                color: isFuture
-                                                    ? CustomColors.whGrey
-                                                    : cellDate ==
-                                                            viewModel
-                                                                .selectedDate
-                                                        ? CustomColors.whYellow
-                                                        : CustomColors
-                                                            .whYellowDark,
-                                              ),
-                                            ],
-                                          ),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Flexible(
-                                                child: FittedBox(
-                                                  fit: BoxFit.scaleDown,
-                                                  child: Text(
-                                                    cellDate.day == 1
-                                                        ? '${cellDate.month}/${cellDate.day}'
-                                                        : cellDate.day
-                                                            .toString(),
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      color: isFuture ||
-                                                              cellDate !=
-                                                                  viewModel
-                                                                      .selectedDate
-                                                          ? CustomColors
-                                                              .whPlaceholderGrey
-                                                          : CustomColors
-                                                              .whBlack,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              Flexible(
-                                                child: FittedBox(
-                                                  fit: BoxFit.scaleDown,
-                                                  child: Visibility(
-                                                    visible: !isFuture,
-                                                    replacement: Text(
-                                                      '-',
-                                                      style: TextStyle(
-                                                        height: 1.0,
-                                                        fontFamily: 'Giants',
-                                                        fontSize: 24,
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        color: isFuture ||
-                                                                cellDate !=
-                                                                    viewModel
-                                                                        .selectedDate
-                                                            ? CustomColors
-                                                                .whPlaceholderGrey
-                                                            : CustomColors
-                                                                .whBlack,
-                                                      ),
-                                                    ),
-                                                    child: EitherFutureBuilder<
-                                                        List<
-                                                            ConfirmPostEntity>>(
-                                                      target: viewModel
-                                                              .confirmPostList[
-                                                          cellDate],
-                                                      forWaiting:
-                                                          const SizedBox(
-                                                        width: 20,
-                                                        height: 20,
-                                                        child: Padding(
-                                                          padding:
-                                                              EdgeInsets.all(
-                                                            2.0,
-                                                          ),
-                                                          child:
-                                                              CircularProgressIndicator(
-                                                            color: CustomColors
-                                                                .whBrightGrey,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      forFail: const Text('-'),
-                                                      mainWidgetCallback:
-                                                          (entityList) => Text(
-                                                        entityList.length
-                                                            .toString(),
-                                                        style: TextStyle(
-                                                          height: 1.0,
-                                                          fontFamily: 'Giants',
-                                                          fontSize: 24,
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          color: isFuture ||
-                                                                  cellDate !=
-                                                                      viewModel
-                                                                          .selectedDate
-                                                              ? CustomColors
-                                                                  .whPlaceholderGrey
-                                                              : CustomColors
-                                                                  .whBlack,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                }),
-                              );
-                            },
-                            itemCount: viewModel.calendartMondayDateList.length,
-                            options: CarouselOptions(
-                              height: 64,
-                              viewportFraction: 1.0,
-                              enableInfiniteScroll: false,
-                              reverse: true,
-                              onPageChanged: (index, reason) async {
-                                if (index ==
-                                    viewModel.calendartMondayDateList.length -
-                                        1) {
-                                  // 마지막 페이지에 도달했을 때 추가 요소를 추가합니다.
-                                  viewModel.calendartMondayDateList.insert(
-                                    0,
-                                    viewModel.calendartMondayDateList.first
-                                        .subtract(
-                                      const Duration(days: 7),
-                                    ),
-                                  );
-
-                                  await provider
-                                      .loadConfirmPostsForWeek(
-                                    mondayOfTargetWeek:
-                                        viewModel.calendartMondayDateList[0],
-                                  )
-                                      .whenComplete(() {
-                                    setState(() {});
-                                  });
-                                }
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
+                      putScrollCalendarWidget(viewModel, provider),
                     ],
                   ),
                 ),
@@ -443,6 +230,186 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
         ),
         const ReactionCameraWidget(),
       ],
+    );
+  }
+
+  AnimatedContainer putScrollCalendarWidget(
+      GroupPostViewModel viewModel, GroupPostViewModelProvider provider) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 250),
+      curve: Curves.fastOutSlowIn,
+      height: viewModel.isShowingCalendar ? 64 : 0,
+      child: ProviderScope(
+        child: CarouselSlider.builder(
+          itemBuilder: (context, index, realIndex) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: List<Widget>.generate(7, (jndex) {
+                final cellDate = viewModel.todayDate.subtract(
+                  Duration(
+                    days: viewModel.todayDate.weekday - 1 - jndex + 7 * index,
+                  ),
+                );
+                final isFuture = viewModel.todayDate.isBefore(cellDate);
+
+                return Expanded(
+                  child: GestureDetector(
+                    onTapUp: (details) async {
+                      if (!isFuture) {
+                        provider
+                            .changeSelectedDate(
+                          to: cellDate,
+                        )
+                            .then((value) {
+                          if (mounted) {
+                            setState(() {});
+                          }
+                        });
+                      }
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 4.0,
+                      ),
+                      clipBehavior: Clip.hardEdge,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: CustomColors.whBlack,
+                          width: 2,
+                          strokeAlign: BorderSide.strokeAlignOutside,
+                        ),
+                        borderRadius: BorderRadius.circular(
+                          14.0,
+                        ),
+                      ),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            const BoxShadow(
+                              blurRadius: 4,
+                              color: CustomColors.whBlack,
+                            ),
+                            BoxShadow(
+                              offset: const Offset(0, 4),
+                              blurRadius: 6,
+                              color: isFuture
+                                  ? CustomColors.whGrey
+                                  : cellDate == viewModel.selectedDate
+                                      ? CustomColors.whYellow
+                                      : CustomColors.whYellowDark,
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Flexible(
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  cellDate.day == 1
+                                      ? '${cellDate.month}/${cellDate.day}'
+                                      : cellDate.day.toString(),
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: isFuture ||
+                                            cellDate != viewModel.selectedDate
+                                        ? CustomColors.whPlaceholderGrey
+                                        : CustomColors.whBlack,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Visibility(
+                                  visible: !isFuture,
+                                  replacement: Text(
+                                    '-',
+                                    style: TextStyle(
+                                      height: 1.0,
+                                      fontFamily: 'Giants',
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w700,
+                                      color: isFuture ||
+                                              cellDate != viewModel.selectedDate
+                                          ? CustomColors.whPlaceholderGrey
+                                          : CustomColors.whBlack,
+                                    ),
+                                  ),
+                                  child: EitherFutureBuilder<
+                                      List<ConfirmPostEntity>>(
+                                    target: viewModel.confirmPostList[cellDate],
+                                    forWaiting: const SizedBox(
+                                      width: 20,
+                                      height: 20,
+                                      child: Padding(
+                                        padding: EdgeInsets.all(
+                                          2.0,
+                                        ),
+                                        child: CircularProgressIndicator(
+                                          color: CustomColors.whBrightGrey,
+                                        ),
+                                      ),
+                                    ),
+                                    forFail: const Text('-'),
+                                    mainWidgetCallback: (entityList) => Text(
+                                      entityList.length.toString(),
+                                      style: TextStyle(
+                                        height: 1.0,
+                                        fontFamily: 'Giants',
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w700,
+                                        color: isFuture ||
+                                                cellDate !=
+                                                    viewModel.selectedDate
+                                            ? CustomColors.whPlaceholderGrey
+                                            : CustomColors.whBlack,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }),
+            );
+          },
+          itemCount: viewModel.calendartMondayDateList.length,
+          options: CarouselOptions(
+            height: 64,
+            viewportFraction: 1.0,
+            enableInfiniteScroll: false,
+            reverse: true,
+            onPageChanged: (index, reason) async {
+              if (index == viewModel.calendartMondayDateList.length - 1) {
+                // 마지막 페이지에 도달했을 때 추가 요소를 추가합니다.
+                viewModel.calendartMondayDateList.insert(
+                  0,
+                  viewModel.calendartMondayDateList.first.subtract(
+                    const Duration(days: 7),
+                  ),
+                );
+
+                await provider
+                    .loadConfirmPostsForWeek(
+                  mondayOfTargetWeek: viewModel.calendartMondayDateList[0],
+                )
+                    .whenComplete(() {
+                  setState(() {});
+                });
+              }
+            },
+          ),
+        ),
+      ),
     );
   }
 

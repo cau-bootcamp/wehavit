@@ -46,7 +46,7 @@ class SmallColoredButtonWidget extends StatelessWidget {
             buttonLabel,
             style: const TextStyle(
               color: CustomColors.whDarkBlack,
-              fontSize: 16.0,
+              fontSize: 14.0,
               fontWeight: FontWeight.w600,
             ),
           ),

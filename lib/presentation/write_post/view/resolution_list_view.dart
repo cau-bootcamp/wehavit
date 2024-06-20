@@ -19,7 +19,7 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
   @override
   void initState() {
     super.initState();
-    print("DEBUG init");
+
     unawaited(
       ref
           .read(resolutionListViewModelProvider.notifier)
@@ -80,36 +80,53 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
                 child: Column(
                   children: List<Widget>.generate(
                     viewModel.resolutionModelList?.length ?? 0,
-                    (index) => GestureDetector(
-                      child: ResolutionListCellWidget(
-                        resolutionEntity:
-                            viewModel.resolutionModelList![index].entity,
-                        showDetails: false,
+                    (index) => Container(
+                      margin: const EdgeInsets.only(bottom: 16.0),
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                          backgroundColor: CustomColors.whSemiBlack,
+                          shadowColor: Colors.transparent,
+                          surfaceTintColor: Colors.transparent,
+                          overlayColor: PointColors.colorList[viewModel
+                                  .resolutionModelList![index]
+                                  .entity
+                                  .colorIndex ??
+                              0],
+                          padding: const EdgeInsets.all(0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16.0),
+                          ),
+                        ),
+                        onPressed: () async {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (context) {
+                              return WritingResolutionBottomSheetWidget(
+                                viewModel: viewModel,
+                                provider: provider,
+                                index: index,
+                              );
+                            },
+                          ).then((returnValue) async {
+                            if (returnValue == true) {
+                              await provider
+                                  .loadResolutionModelList()
+                                  .whenComplete(() {
+                                ref
+                                    .watch(resolutionListViewModelProvider)
+                                    .isLoadingView = false;
+                              });
+                            } else {
+                              //
+                            }
+                          });
+                        },
+                        child: ResolutionListCellWidget(
+                          resolutionEntity:
+                              viewModel.resolutionModelList![index].entity,
+                          showDetails: false,
+                        ),
                       ),
-                      onTapUp: (details) async {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            return WritingResolutionBottomSheetWidget(
-                              viewModel: viewModel,
-                              provider: provider,
-                              index: index,
-                            );
-                          },
-                        ).then((returnValue) async {
-                          if (returnValue == true) {
-                            await provider
-                                .loadResolutionModelList()
-                                .whenComplete(() {
-                              ref
-                                  .watch(resolutionListViewModelProvider)
-                                  .isLoadingView = false;
-                            });
-                          } else {
-                            //
-                          }
-                        });
-                      },
                     ),
                   ).append(
                     AddResolutionCellWidget(

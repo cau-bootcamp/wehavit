@@ -198,7 +198,7 @@ class _GroupMemberListBottomSheetState
                           '멤버 (${widget.groupEntity.groupMemberUidList.length})',
                           style: const TextStyle(
                             color: CustomColors.whPlaceholderGrey,
-                            fontSize: 16.0,
+                            fontSize: 17.0,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -207,7 +207,7 @@ class _GroupMemberListBottomSheetState
                         isManagingMode ? '그룹에서 내보내기' : '이번주 목표 달성률',
                         style: const TextStyle(
                           color: CustomColors.whPlaceholderGrey,
-                          fontSize: 16.0,
+                          fontSize: 17.0,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -297,23 +297,11 @@ class _GroupMemberListCellWidgetState
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Container(
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: CustomColors.whGrey,
-          ),
-          width: 60,
-          height: 60,
-          clipBehavior: Clip.hardEdge,
-          child: Visibility(
-            visible: userEntity != null,
-            replacement: const ColoredBox(color: CustomColors.whBrightGrey),
-            child: Image.network(
-              fit: BoxFit.cover,
-              userEntity?.userImageUrl ?? '',
-            ),
-          ),
+        ProfileImageCircleWidget(
+          size: 60,
+          url: userEntity?.userImageUrl ?? '',
         ),
+
         const SizedBox(
           width: 20.0,
         ),
@@ -326,7 +314,7 @@ class _GroupMemberListCellWidgetState
                 userEntity?.userName ?? '',
                 style: const TextStyle(
                   color: CustomColors.whWhite,
-                  fontSize: 18.0,
+                  fontSize: 16.0,
                   fontWeight: FontWeight.w600,
                   height: 1.0,
                 ),
@@ -356,7 +344,7 @@ class _GroupMemberListCellWidgetState
               '${((achievePercentage ?? 0) * 100).ceil().toString()}%',
               style: const TextStyle(
                 color: CustomColors.whWhite,
-                fontSize: 20.0,
+                fontSize: 16.0,
                 fontWeight: FontWeight.w600,
               ),
             ),
