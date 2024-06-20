@@ -12,7 +12,7 @@ class FirebaseStorageName {
     return '$postOwnerUid/confirm_post/$confirmPostId/_${FirebaseAuth.instance.currentUser!.uid}_${DateTime.now().toIso8601String()}';
   }
 
-  static String getUserProfilePhotoStorageName(String userId) {
-    return '$userId/profile_photo/_${DateTime.now().toIso8601String()}';
+  static String getUserProfilePhotoPath(String userId) {
+    return '$userId/profile_photo';
   }
 }

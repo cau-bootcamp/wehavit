@@ -39,24 +39,31 @@ class _EditUserDetailViewState extends ConsumerState<EditUserDetailView> {
     super.didChangeDependencies();
 
     if (widget.isModifying) {
-      final viewmodel = ref.watch(editUserDataViewModelProvider);
-
-      viewmodel.uid = widget.uid ?? '';
-      viewmodel.profileImageFile = await ref
-          .read(editUserDataViewModelProvider.notifier)
-          .downloadImageToFile(widget.profileImageUrl!);
-      viewmodel.name = widget.name ?? '';
-      viewmodel.handle = widget.handle ?? '';
-      viewmodel.aboutMe = widget.aboutMe ?? '';
+      loadDataFromArguments().whenComplete(() {
+        setState(() {});
+      });
     }
+  }
 
-    setState(() {});
+  Future<void> loadDataFromArguments() async {
+    final viewmodel = ref.watch(editUserDataViewModelProvider);
+
+    viewmodel.uid = widget.uid ?? '';
+    viewmodel.name = widget.name ?? '';
+    viewmodel.handle = widget.handle ?? '';
+    viewmodel.aboutMe = widget.aboutMe ?? '';
+
+    await ref
+        .read(editUserDataViewModelProvider.notifier)
+        .downloadImageToFile(widget.profileImageUrl!);
   }
 
   @override
   Widget build(BuildContext context) {
     final viewmodel = ref.watch(editUserDataViewModelProvider);
     final provider = ref.read(editUserDataViewModelProvider.notifier);
+
+    UniqueKey imageKey = UniqueKey();
 
     return Stack(
       children: [
@@ -114,9 +121,10 @@ class _EditUserDetailViewState extends ConsumerState<EditUserDetailView> {
                                 color: CustomColors.whGrey,
                               ),
                               clipBehavior: Clip.hardEdge,
-                              child: viewmodel.profileImageFile != null
-                                  ? Image.file(
-                                      viewmodel.profileImageFile!,
+                              child: viewmodel.profileImage != null
+                                  ? Image(
+                                      image: viewmodel.profileImage!,
+                                      key: imageKey,
                                       fit: BoxFit.cover,
                                     )
                                   : Container(),
@@ -369,7 +377,7 @@ class _EditUserDetailViewState extends ConsumerState<EditUserDetailView> {
                   },
                   isDiminished: !((viewmodel.name.isNotEmpty &
                               viewmodel.handle.isNotEmpty) &
-                          (viewmodel.profileImageFile != null)) |
+                          (viewmodel.profileImage != null)) |
                       viewmodel.isProcessing,
                   buttonTitle: viewmodel.isProcessing ? '처리 중' : '완료',
                   backgroundColor: CustomColors.whYellow,

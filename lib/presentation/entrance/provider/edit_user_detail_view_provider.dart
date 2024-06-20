@@ -1,7 +1,9 @@
 import 'dart:io';
-import 'package:http/http.dart' as http;
+
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:wehavit/common/common.dart';
@@ -25,7 +27,9 @@ class EditUserDataViewModelProvider
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
-      state.profileImageFile = File(pickedFile.path);
+      state.profileImage?.evict();
+
+      state.profileImage = FileImage(File(pickedFile.path));
     }
   }
 
@@ -42,7 +46,7 @@ class EditUserDataViewModelProvider
   }
 
   EitherFuture<void> registerUserData() async {
-    if (state.profileImageFile == null) {
+    if (state.profileImage == null) {
       return Future(() => left(const Failure('no-image-file')));
     }
     if (state.handle.isEmpty) {
@@ -52,7 +56,7 @@ class EditUserDataViewModelProvider
     return await uploadUserDataUsecase(
       uid: state.uid,
       name: state.name,
-      userImageFile: state.profileImageFile!,
+      userImageFile: state.profileImage!.file,
       aboutMe: state.aboutMe,
       handle: state.handle,
     ).then((result) {
@@ -71,7 +75,9 @@ class EditUserDataViewModelProvider
     return logOutUseCase.call();
   }
 
-  Future<File> downloadImageToFile(String imageUrl) async {
+  Future<void> downloadImageToFile(String imageUrl) async {
+    state.profileImage?.evict();
+
     try {
       // HTTP GET 요청을 통해 이미지 데이터 다운로드
       final response = await http.get(Uri.parse(imageUrl));
@@ -83,11 +89,12 @@ class EditUserDataViewModelProvider
         // 파일로 이미지 데이터 저장
         final file = File(filePath);
         await file.writeAsBytes(response.bodyBytes);
-        return file;
+
+        state.profileImage = FileImage(file);
       } else {
         throw Exception('이미지 다운로드 실패: 상태 코드 ${response.statusCode}');
       }
-    } catch (e) {
+    } on Exception catch (e) {
       throw Exception('이미지 다운로드 중 오류 발생: $e');
     }
   }
