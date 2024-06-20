@@ -256,6 +256,8 @@ class _LogInViewState extends ConsumerState<LogInView> {
                         Visibility(
                           visible: false,
                           child: Container(
+                            margin:
+                                const EdgeInsets.symmetric(horizontal: 12.0),
                             width: 45,
                             height: 45,
                             decoration: const BoxDecoration(
@@ -276,10 +278,8 @@ class _LogInViewState extends ConsumerState<LogInView> {
                             ),
                           ),
                         ),
-                        const SizedBox(
-                          width: 24,
-                        ),
                         Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 12.0),
                           width: 45,
                           height: 45,
                           decoration: const BoxDecoration(
@@ -316,12 +316,11 @@ class _LogInViewState extends ConsumerState<LogInView> {
                             ),
                           ),
                         ),
-                        const SizedBox(
-                          width: 24,
-                        ),
                         Visibility(
                           visible: Platform.isIOS,
                           child: Container(
+                            margin:
+                                const EdgeInsets.symmetric(horizontal: 12.0),
                             width: 45,
                             height: 45,
                             decoration: const BoxDecoration(
