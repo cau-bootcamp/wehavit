@@ -2119,23 +2119,12 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     required String userId,
     required File userImageFile,
   }) async {
-    // await deleteLastUserProfilePhoto(userId: userId);
-
     String storagePath = FirebaseStorageName.getUserProfilePhotoPath(userId);
     final ref = FirebaseStorage.instance.ref(storagePath);
 
     await ref.putFile(userImageFile);
     final downloadUrl = await ref.getDownloadURL();
     return Future(() => right(downloadUrl));
-  }
-
-  Future<void> deleteLastUserProfilePhoto({
-    required String userId,
-  }) async {
-    String storagePath = FirebaseStorageName.getUserProfilePhotoPath(userId);
-
-    final ref = FirebaseStorage.instance.ref(storagePath);
-    await ref.delete();
   }
 
   @override

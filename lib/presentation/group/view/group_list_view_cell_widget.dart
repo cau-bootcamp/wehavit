@@ -73,7 +73,7 @@ class GroupListViewCellContentWidget extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 0.0),
+                padding: const EdgeInsets.symmetric(),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
