@@ -90,67 +90,69 @@ class _EditUserDetailViewState extends ConsumerState<EditUserDetailView> {
             },
           ),
           body: SafeArea(
-            minimum: const EdgeInsets.all(16.0),
+            minimum: const EdgeInsets.symmetric(horizontal: 16.0),
             maintainBottomViewPadding: true,
             child: Column(
               children: [
                 Expanded(
                   child: ListView(
                     shrinkWrap: true,
-                    padding: const EdgeInsets.only(bottom: 32.0),
+                    padding: const EdgeInsets.only(top: 24.0, bottom: 32.0),
                     keyboardDismissBehavior:
                         ScrollViewKeyboardDismissBehavior.onDrag,
                     children: [
-                      TextButton(
-                        style: TextButton.styleFrom(
-                          overlayColor: CustomColors.whYellow,
-                        ),
-                        onPressed: () async {
-                          provider.pickProfileImage().whenComplete(
-                                () => setState(() {}),
-                              );
-                        },
-                        child: Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            Container(
-                              width: 85,
-                              height: 85,
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: CustomColors.whGrey,
-                              ),
-                              clipBehavior: Clip.hardEdge,
-                              child: viewmodel.profileImage != null
-                                  ? Image(
-                                      image: viewmodel.profileImage!,
-                                      key: imageKey,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Container(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              overlayColor: CustomColors.whYellow,
                             ),
-                            Positioned(
-                              bottom: 0,
-                              right: -5,
-                              child: Container(
-                                width: 25,
-                                height: 25,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: CustomColors.whWhite,
+                            onPressed: () async {
+                              provider.pickProfileImage().whenComplete(
+                                    () => setState(() {}),
+                                  );
+                            },
+                            child: Stack(
+                              clipBehavior: Clip.none,
+                              children: [
+                                Container(
+                                  width: 85,
+                                  height: 85,
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: CustomColors.whGrey,
+                                  ),
+                                  clipBehavior: Clip.hardEdge,
+                                  child: viewmodel.profileImage != null
+                                      ? Image(
+                                          image: viewmodel.profileImage!,
+                                          key: imageKey,
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Container(),
                                 ),
-                                child: const Icon(
-                                  Icons.photo_camera,
-                                  color: CustomColors.whBlack,
-                                  size: 18.0,
+                                Positioned(
+                                  bottom: 0,
+                                  right: -5,
+                                  child: Container(
+                                    width: 25,
+                                    height: 25,
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: CustomColors.whWhite,
+                                    ),
+                                    child: const Icon(
+                                      Icons.photo_camera,
+                                      color: CustomColors.whBlack,
+                                      size: 18.0,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 24,
+                          ),
+                        ],
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
