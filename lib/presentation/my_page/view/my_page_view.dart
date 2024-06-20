@@ -103,12 +103,12 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
                       resolutionList.length,
                       (index) => Container(
                         margin: const EdgeInsets.only(bottom: 16.0),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
+                        child: TextButton(
+                          style: TextButton.styleFrom(
                             backgroundColor: CustomColors.whSemiBlack,
                             shadowColor: Colors.transparent,
                             surfaceTintColor: Colors.transparent,
-                            foregroundColor: PointColors.colorList[
+                            overlayColor: PointColors.colorList[
                                 resolutionList[index].colorIndex ?? 0],
                             padding: const EdgeInsets.all(0),
                             shape: RoundedRectangleBorder(
