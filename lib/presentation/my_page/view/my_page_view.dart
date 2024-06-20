@@ -55,13 +55,13 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
       backgroundColor: CustomColors.whDarkBlack,
       appBar: WehavitAppBar(
         title: '내 정보',
-        trailingTitle: '로그아웃',
+        trailingTitle: '',
+        trailingIcon: Icons.menu,
         trailingAction: () async {
-          await ref.read(logOutUseCaseProvider).call();
-          if (mounted) {
-            // ignore: use_build_context_synchronously
-            Navigator.pushReplacementNamed(context, '/entrance');
-          }
+          // 변경사항을 TabBar에 알리기 위해 mainViewState를 참조
+          MainViewState? mainViewState =
+              context.findAncestorStateOfType<MainViewState>();
+          showMyPageMenuBottomSheet(context, mainViewState);
         },
       ),
       body: Container(
@@ -113,6 +113,96 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
           ),
         ),
       ),
+    );
+  }
+
+  Future<dynamic> showMyPageMenuBottomSheet(
+    BuildContext context,
+    MainViewState? mainViewState,
+  ) {
+    return showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return GradientBottomSheet(
+          Column(
+            children: [
+              WideColoredButton(
+                buttonTitle: '내 정보 수정하기',
+                buttonIcon: Icons.person,
+                onPressed: () async {
+                  final userEntity = await ref
+                      .read(getMyUserDataUsecaseProvider)
+                      .call()
+                      .then((result) {
+                    return result.fold((failure) {
+                      return null;
+                    }, (entity) {
+                      return entity;
+                    });
+                  });
+                  if (userEntity != null) {
+                    Navigator.push(
+                      // ignore: use_build_context_synchronously
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return EditUserDetailView(
+                            isModifying: true,
+                            uid: userEntity.userId,
+                            profileImageUrl: userEntity.userImageUrl,
+                            name: userEntity.userName,
+                            handle: userEntity.handle,
+                            aboutMe: userEntity.aboutMe,
+                          );
+                        },
+                      ),
+                    ).then((result) {
+                      if (result == true) {
+                        mainViewState?.loadUserData();
+
+                        ref
+                            .read(myPageViewModelProvider.notifier)
+                            .getMyUserData()
+                            .whenComplete(() {
+                          setState(() {});
+                        });
+                      }
+
+                      Navigator.pop(context);
+                    });
+                  }
+                },
+                // isDiminished: true,
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              WideColoredButton(
+                buttonTitle: '로그아웃',
+                buttonIcon: Icons.person_off_outlined,
+                onPressed: () async {
+                  await ref.read(logOutUseCaseProvider).call();
+                  if (mounted) {
+                    // ignore: use_build_context_synchronously
+                    Navigator.pushReplacementNamed(context, '/entrance');
+                  }
+                },
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              WideColoredButton(
+                buttonTitle: '돌아가기',
+                backgroundColor: Colors.transparent,
+                foregroundColor: CustomColors.whPlaceholderGrey,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

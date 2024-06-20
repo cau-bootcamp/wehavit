@@ -1,8 +1,8 @@
-import 'dart:io';
+import 'package:flutter/widgets.dart';
 
-class SignUpUserDataViewModel {
+class EditUserDetailViewModel {
   String uid = '';
-  File? profileImageFile;
+  FileImage? profileImage;
 
   String name = '';
   String handle = '';

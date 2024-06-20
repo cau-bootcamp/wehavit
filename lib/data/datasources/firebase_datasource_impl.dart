@@ -2035,15 +2035,17 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     required String aboutMe,
   }) async {
     try {
-      final myUid = getMyUserId();
-
       final handleAvailable = await firestore
           .collection(FirebaseCollectionName.users)
           .where(FirebaseUserFieldName.handle, isEqualTo: handle)
           .get()
           .then((result) {
         if (result.docs.isNotEmpty) {
-          return false;
+          if (result.docs.first.id == uid) {
+            return true;
+          } else {
+            return false;
+          }
         } else {
           return true;
         }
@@ -2067,21 +2069,45 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
         return left(const Failure('profile-image-upload-fail'));
       }
 
-      await firestore
+      final isDocExist = await firestore
           .collection(
             FirebaseCollectionName.users,
           )
-          .doc(myUid)
-          .set({
-        FirebaseUserFieldName.displayName: name,
-        FirebaseUserFieldName.handle: handle,
-        FirebaseUserFieldName.imageUrl: imageUrl,
-        FirebaseUserFieldName.createdAt: DateTime.now(),
-        FirebaseUserFieldName.aboutMe: aboutMe,
-        FirebaseUserFieldName.cumulativeGoals: 0,
-        FirebaseUserFieldName.cumulativePosts: 0,
-        FirebaseUserFieldName.cumulativeReactions: 0,
+          .doc(uid)
+          .get()
+          .then((snapshot) {
+        return snapshot.exists;
       });
+
+      if (isDocExist) {
+        firestore
+            .collection(
+              FirebaseCollectionName.users,
+            )
+            .doc(uid)
+            .update({
+          FirebaseUserFieldName.displayName: name,
+          FirebaseUserFieldName.handle: handle,
+          FirebaseUserFieldName.imageUrl: imageUrl,
+          FirebaseUserFieldName.aboutMe: aboutMe,
+        });
+      } else {
+        await firestore
+            .collection(
+              FirebaseCollectionName.users,
+            )
+            .doc(uid)
+            .set({
+          FirebaseUserFieldName.displayName: name,
+          FirebaseUserFieldName.handle: handle,
+          FirebaseUserFieldName.imageUrl: imageUrl,
+          FirebaseUserFieldName.createdAt: DateTime.now(),
+          FirebaseUserFieldName.aboutMe: aboutMe,
+          FirebaseUserFieldName.cumulativeGoals: 0,
+          FirebaseUserFieldName.cumulativePosts: 0,
+          FirebaseUserFieldName.cumulativeReactions: 0,
+        });
+      }
 
       return right(null);
     } on Exception catch (exception) {
@@ -2093,8 +2119,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     required String userId,
     required File userImageFile,
   }) async {
-    String storagePath =
-        FirebaseStorageName.getUserProfilePhotoStorageName(userId);
+    String storagePath = FirebaseStorageName.getUserProfilePhotoPath(userId);
     final ref = FirebaseStorage.instance.ref(storagePath);
 
     await ref.putFile(userImageFile);
