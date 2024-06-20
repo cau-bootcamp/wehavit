@@ -363,7 +363,9 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                               return;
                             }
 
-                            if (reactionCameraModel.isPosInCapturingArea) {
+                            if (ref
+                                .read(reactionCameraWidgetModelProvider)
+                                .isPosInCapturingArea) {
                               final imageFilePath =
                                   await reactionCameraModelProvider
                                       .endOnCapturingArea();

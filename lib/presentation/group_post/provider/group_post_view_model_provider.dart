@@ -54,8 +54,7 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
     required String imageFilePath,
     required ConfirmPostEntity entity,
   }) async {
-    _sendQuickShotReactionToConfirmPostUsecase((entity, imageFilePath))
-        .then((value) => print(value));
+    _sendQuickShotReactionToConfirmPostUsecase((entity, imageFilePath));
   }
 
   Future<void> sendTextReaction({required ConfirmPostEntity entity}) async {
