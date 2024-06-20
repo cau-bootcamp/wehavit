@@ -20,4 +20,9 @@ abstract class ConfirmPostRepository {
   );
 
   EitherFuture<String> uploadConfirmPostImage({required String localFileUrl});
+
+  EitherFuture<List<ConfirmPostEntity>> getFriendConfirmPostEntityListByDate({
+    required List<String> targetResolutionList,
+    required DateTime selectedDate,
+  });
 }

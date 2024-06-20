@@ -2269,4 +2269,76 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       );
     }
   }
+
+  @override
+  EitherFuture<List<ConfirmPostEntity>> getFriendConfirmPostEntityListByDate(
+    List<String> targetResolutionList,
+    DateTime selectedDate,
+  ) async {
+    try {
+      DateTime startDate =
+          DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+
+      DateTime endDate =
+          DateTime(startDate.year, startDate.month, startDate.day)
+              .add(const Duration(days: 1));
+
+      final uid = getMyUserId();
+
+      // query에 비어있는 리스트를 전달하면 에러가 발생하여, 예외처리 적용하였음
+      if (targetResolutionList.isEmpty) {
+        return Future(
+          () => right([]),
+        );
+      }
+
+      final fetchResult = await FirebaseFirestore.instance
+          .collection(FirebaseCollectionName.confirmPosts)
+          .where(
+            FirebaseConfirmPostFieldName.createdAt,
+            isGreaterThanOrEqualTo: Timestamp.fromDate(startDate),
+            isLessThanOrEqualTo: Timestamp.fromDate(endDate),
+          )
+          .where(
+            Filter.or(
+              Filter(
+                FirebaseConfirmPostFieldName.resolutionId,
+                whereIn: targetResolutionList,
+              ),
+              Filter(
+                FirebaseConfirmPostFieldName.owner,
+                isEqualTo: uid,
+              ),
+            ),
+          )
+          .get();
+
+      List<ConfirmPostEntity> confirmPosts = await Future.wait(
+        fetchResult.docs.map(
+          (doc) async {
+            final confirmPostModel =
+                FirebaseConfirmPostModel.fromFireStoreDocument(doc);
+
+            final ownerUserEntity =
+                (await getUserEntityByUserId(confirmPostModel.owner!))!;
+
+            final entity = confirmPostModel.toConfirmPostEntity(
+              doc.reference.id,
+              ownerUserEntity,
+            );
+
+            return entity;
+          },
+        ).toList(),
+      );
+
+      return Future(() => right(confirmPosts));
+    } on Exception catch (e) {
+      return Future(
+        () => left(
+          Failure('catch error on getFriendConfirmPostEntityListByDate - $e'),
+        ),
+      );
+    }
+  }
 }

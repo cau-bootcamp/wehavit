@@ -385,3 +385,9 @@ final searchGroupEntityListByGroupNameUsecaseProvider =
   final groupRepository = ref.watch(groupRepositoryProvider);
   return SearchGroupEntityListByGroupNameUsecase(groupRepository);
 });
+
+final getFriendConfirmPostListByDateUsecaseProvider =
+    Provider<GetFriendConfirmPostListByDateUsecase>((ref) {
+  final confirmPostRepository = ref.watch(confirmPostRepositoryProvider);
+  return GetFriendConfirmPostListByDateUsecase(confirmPostRepository);
+});

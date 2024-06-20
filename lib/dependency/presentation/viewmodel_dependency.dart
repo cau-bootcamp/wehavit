@@ -241,3 +241,22 @@ final addResolutionDoneViewModelProvider = StateNotifierProvider.autoDispose<
     unshareResolutionToGroupdUsecase,
   );
 });
+
+final friendPostViewModelProvider = StateNotifierProvider.autoDispose<
+    FriendPostViewModelProvider, FriendPostViewModel>((ref) {
+  final getFriendConfirmPostListByDateUsecase =
+      ref.watch(getFriendConfirmPostListByDateUsecaseProvider);
+  final sendEmojiReactionToConfirmPostUsecase =
+      ref.watch(sendEmojiReactionToConfirmPostUsecaseProvider);
+  final sendQuickShotReactionToConfirmPostUsecase =
+      ref.watch(sendQuickShotReactionToConfirmPostUsecaseProvider);
+  final sendCommentReactionToConfirmPostUsecase =
+      ref.watch(sendCommentReactionToConfirmPostUsecaseProvider);
+
+  return FriendPostViewModelProvider(
+    getFriendConfirmPostListByDateUsecase,
+    sendEmojiReactionToConfirmPostUsecase,
+    sendQuickShotReactionToConfirmPostUsecase,
+    sendCommentReactionToConfirmPostUsecase,
+  );
+});

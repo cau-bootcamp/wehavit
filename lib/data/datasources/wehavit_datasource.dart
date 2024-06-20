@@ -182,4 +182,9 @@ abstract class WehavitDatasource {
   EitherFuture<List<EitherFuture<UserDataEntity>>> getUserDataListByHandle({
     required String handle,
   });
+
+  EitherFuture<List<ConfirmPostEntity>> getFriendConfirmPostEntityListByDate(
+    List<String> targetResolutionList,
+    DateTime selectedDate,
+  );
 }
