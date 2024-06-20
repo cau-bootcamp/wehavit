@@ -124,64 +124,12 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                         ),
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        TextButton.icon(
-                          icon: const Icon(
-                            Icons.chat_bubble_outline,
-                            color: CustomColors.whWhite,
-                          ),
-                          label: const Text(
-                            '메시지',
-                            style: TextStyle(
-                              color: CustomColors.whWhite,
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w300,
-                            ),
-                          ),
-                          onPressed: () {},
-                        ),
-                        TextButton.icon(
-                          icon: const Icon(
-                            Icons.emoji_emotions_outlined,
-                            color: CustomColors.whWhite,
-                          ),
-                          label: const Text(
-                            '이모지',
-                            style: TextStyle(
-                              color: CustomColors.whWhite,
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w300,
-                            ),
-                          ),
-                          onPressed: () async {},
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.camera_alt_outlined,
-                                color: CustomColors.whWhite,
-                              ),
-                              SizedBox(
-                                width: 8.0,
-                              ),
-                              Text(
-                                '퀵샷',
-                                style: TextStyle(
-                                  color: CustomColors.whWhite,
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w300,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                    ConfirmPostReactionButtonListWidget(
+                      onMessagePressed: () {},
+                      onEmojiPressed: () {},
+                      onQuickShotPointerDown: (_) {},
+                      onQuickShotPointerUp: (_) {},
+                      onQuickShotPointerMove: (_) {},
                     ),
                   ],
                 ),
@@ -284,141 +232,82 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                         ],
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        TextButton.icon(
-                          icon: const Icon(
-                            Icons.chat_bubble_outline,
-                            color: CustomColors.whWhite,
-                          ),
-                          label: const Text(
-                            '메시지',
-                            style: TextStyle(
-                              color: CustomColors.whWhite,
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w300,
+                    ConfirmPostReactionButtonListWidget(
+                      onMessagePressed: () {
+                        setState(() {
+                          isShowingCommentField = !isShowingCommentField;
+                        });
+                      },
+                      onEmojiPressed: () async {
+                        showEmojiSheet(viewModel, provider, context);
+                      },
+                      onQuickShotPointerDown: (event) {
+                        isTouchMoved = false;
+
+                        if (reactionCameraModel.cameraController == null) {
+                          return;
+                        }
+
+                        panningPosition = Point(
+                          event.position.dx,
+                          event.position.dy,
+                        );
+
+                        reactionCameraModelProvider
+                            .updatePanPosition(panningPosition);
+
+                        if (mounted) {
+                          setState(() {});
+                        }
+                      },
+                      onQuickShotPointerUp: (event) async {
+                        if (!isTouchMoved) {
+                          showToastMessage(
+                            context,
+                            text: '퀵샷 버튼을 누르고 드래그 해주세요!',
+                            icon: const Icon(
+                              Icons.warning,
+                              color: CustomColors.whYellow,
                             ),
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              isShowingCommentField = !isShowingCommentField;
-                            });
-                          },
-                        ),
-                        TextButton.icon(
-                          icon: const Icon(
-                            Icons.emoji_emotions_outlined,
-                            color: CustomColors.whWhite,
-                          ),
-                          label: const Text(
-                            '이모지',
-                            style: TextStyle(
-                              color: CustomColors.whWhite,
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w300,
-                            ),
-                          ),
-                          onPressed: () async {
-                            showEmojiSheet(viewModel, provider, context);
-                          },
-                        ),
-                        Listener(
-                          onPointerDown: (event) async {
-                            isTouchMoved = false;
+                          );
+                          return;
+                        }
 
-                            if (reactionCameraModel.cameraController == null) {
-                              return;
-                            }
+                        await reactionCameraModelProvider
+                            .setFocusingModeTo(false);
 
-                            panningPosition = Point(
-                              event.position.dx,
-                              event.position.dy,
-                            );
+                        if (reactionCameraModel.cameraController == null) {
+                          return;
+                        }
 
-                            reactionCameraModelProvider
-                                .updatePanPosition(panningPosition);
+                        if (ref
+                            .read(reactionCameraWidgetModelProvider)
+                            .isPosInCapturingArea) {
+                          final imageFilePath =
+                              await reactionCameraModelProvider
+                                  .endOnCapturingArea();
 
-                            if (mounted) {
-                              setState(() {});
-                            }
-                          },
-                          onPointerUp: (_) async {
-                            if (!isTouchMoved) {
-                              showToastMessage(
-                                context,
-                                text: '퀵샷 버튼을 누르고 드래그 해주세요!',
-                                icon: const Icon(
-                                  Icons.warning,
-                                  color: CustomColors.whYellow,
-                                ),
-                              );
-                              return;
-                            }
+                          await provider.sendImageReaction(
+                            entity: widget.confirmPostEntity,
+                            imageFilePath: imageFilePath,
+                          );
+                        }
+                      },
+                      onQuickShotPointerMove: (event) async {
+                        isTouchMoved = true;
+                        await reactionCameraModelProvider
+                            .setFocusingModeTo(true);
 
-                            await reactionCameraModelProvider
-                                .setFocusingModeTo(false);
+                        panningPosition = Point(
+                          event.position.dx,
+                          event.position.dy,
+                        );
 
-                            if (reactionCameraModel.cameraController == null) {
-                              return;
-                            }
+                        reactionCameraModelProvider
+                            .updatePanPosition(panningPosition);
 
-                            if (ref
-                                .read(reactionCameraWidgetModelProvider)
-                                .isPosInCapturingArea) {
-                              final imageFilePath =
-                                  await reactionCameraModelProvider
-                                      .endOnCapturingArea();
-
-                              await provider.sendImageReaction(
-                                entity: widget.confirmPostEntity,
-                                imageFilePath: imageFilePath,
-                              );
-                            }
-                            // setState(() {});
-                          },
-                          onPointerMove: (event) async {
-                            isTouchMoved = true;
-                            await reactionCameraModelProvider
-                                .setFocusingModeTo(true);
-
-                            panningPosition = Point(
-                              event.position.dx,
-                              event.position.dy,
-                            );
-
-                            reactionCameraModelProvider
-                                .updatePanPosition(panningPosition);
-
-                            if (reactionCameraModel.isPosInCapturingArea) {}
-                          },
-                          child: Container(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                            child: const Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.camera_alt_outlined,
-                                  color: CustomColors.whWhite,
-                                ),
-                                SizedBox(
-                                  width: 8.0,
-                                ),
-                                Text(
-                                  '퀵샷',
-                                  style: TextStyle(
-                                    color: CustomColors.whWhite,
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.w300,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
+                        if (reactionCameraModel.isPosInCapturingArea) {}
+                      },
                     ),
                     Visibility(
                       visible: isShowingCommentField,
@@ -724,6 +613,8 @@ class _ConfirmPostContentWidgetState extends State<ConfirmPostContentWidget> {
                 textAlign: TextAlign.start,
                 style: const TextStyle(
                   color: CustomColors.whWhite,
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
             ),
@@ -1233,5 +1124,92 @@ class _ConfirmPostContentWidgetState extends State<ConfirmPostContentWidget> {
         );
       }
     }
+  }
+}
+
+class ConfirmPostReactionButtonListWidget extends StatelessWidget {
+  const ConfirmPostReactionButtonListWidget({
+    super.key,
+    required this.onMessagePressed,
+    required this.onEmojiPressed,
+    required this.onQuickShotPointerDown,
+    required this.onQuickShotPointerUp,
+    required this.onQuickShotPointerMove,
+  });
+  final Function() onMessagePressed;
+  final Function() onEmojiPressed;
+  final Function(PointerDownEvent) onQuickShotPointerDown;
+  final Function(PointerUpEvent) onQuickShotPointerUp;
+  final Function(PointerMoveEvent) onQuickShotPointerMove;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        TextButton.icon(
+          icon: const Icon(
+            Icons.chat_bubble_outline,
+            color: CustomColors.whWhite,
+            size: 20.0,
+          ),
+          label: const Text(
+            '메시지',
+            style: TextStyle(
+              color: CustomColors.whWhite,
+              fontSize: 14.0,
+              fontWeight: FontWeight.w300,
+            ),
+          ),
+          onPressed: onMessagePressed,
+        ),
+        TextButton.icon(
+          icon: const Icon(
+            Icons.emoji_emotions_outlined,
+            color: CustomColors.whWhite,
+            size: 20.0,
+          ),
+          label: const Text(
+            '이모지',
+            style: TextStyle(
+              color: CustomColors.whWhite,
+              fontSize: 14.0,
+              fontWeight: FontWeight.w300,
+            ),
+          ),
+          onPressed: onEmojiPressed,
+        ),
+        Listener(
+          onPointerDown: onQuickShotPointerDown,
+          onPointerUp: onQuickShotPointerUp,
+          onPointerMove: onQuickShotPointerMove,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: const Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.camera_alt_outlined,
+                  color: CustomColors.whWhite,
+                  size: 20.0,
+                ),
+                SizedBox(
+                  width: 8.0,
+                ),
+                Text(
+                  '퀵샷',
+                  style: TextStyle(
+                    color: CustomColors.whWhite,
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
