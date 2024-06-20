@@ -66,7 +66,7 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
           replacement: Column(
             children: [
               ElevatedButton(
-                // 수정 필요함!
+                // TODO: 수정 필요함!
                 onPressed: () async {
                   // await ref.read(logOutUseCaseProvider).call();
                   // if (mounted) {

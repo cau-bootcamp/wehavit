@@ -48,6 +48,12 @@ class MyPageWehavitSummaryWidget extends StatelessWidget {
             height: 2,
           ),
           TextButton(
+            style: TextButton.styleFrom(
+              foregroundColor: CustomColors.whYellow,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+            ),
             onPressed: () {
               showToastMessage(
                 context,
@@ -58,17 +64,21 @@ class MyPageWehavitSummaryWidget extends StatelessWidget {
                 ),
               );
             },
-            child: Container(
-              constraints: const BoxConstraints(minWidth: 250),
-              child: const Text(
-                '더 많은 통계 보러가기',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.w700,
-                  color: CustomColors.whWhite,
+            child: const Flex(
+              direction: Axis.horizontal,
+              mainAxisAlignment: MainAxisAlignment.center,
+              // constraints: const BoxConstraints(minWidth: 250),
+              children: [
+                Text(
+                  '더 많은 통계 보러가기',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.w700,
+                    color: CustomColors.whWhite,
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
         ],

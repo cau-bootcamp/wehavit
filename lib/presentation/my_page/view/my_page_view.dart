@@ -99,11 +99,37 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
                 forFail: Container(),
                 mainWidgetCallback: (resolutionList) {
                   return Column(
-                    children: List<ResolutionListCellWidget>.generate(
+                    children: List<Widget>.generate(
                       resolutionList.length,
-                      (index) => ResolutionListCellWidget(
-                        resolutionEntity: resolutionList[index],
-                        showDetails: true,
+                      (index) => Container(
+                        margin: const EdgeInsets.only(bottom: 16.0),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: CustomColors.whSemiBlack,
+                            shadowColor: Colors.transparent,
+                            surfaceTintColor: Colors.transparent,
+                            foregroundColor: PointColors.colorList[
+                                resolutionList[index].colorIndex ?? 0],
+                            padding: const EdgeInsets.all(0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.0),
+                            ),
+                          ),
+                          onPressed: () {
+                            showToastMessage(
+                              context,
+                              text: '현재 개발중인 기능입니다!',
+                              icon: const Icon(
+                                Icons.warning,
+                                color: CustomColors.whYellow,
+                              ),
+                            );
+                          },
+                          child: ResolutionListCellWidget(
+                            resolutionEntity: resolutionList[index],
+                            showDetails: true,
+                          ),
+                        ),
                       ),
                     ),
                   );
