@@ -1109,15 +1109,15 @@ class _ConfirmPostContentWidgetState extends State<ConfirmPostContentWidget> {
           ),
         );
       } else {
-        return Container(
-          constraints: const BoxConstraints(minHeight: 150),
-          child: Center(
-            child: SizedBox(
-              width: 120,
-              height: 120,
-              // TODO: placeholder asset image 설정하기
-              child: Image.asset(
-                'assets/images/emoji_3d/smiling_face_with_heart-eyes_3d.png',
+        // 인증만 남긴 경우
+        return const Center(
+          child: SizedBox(
+            child: Text(
+              '오늘 실천 완료!',
+              style: TextStyle(
+                color: CustomColors.whWhite,
+                fontSize: 14.0,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
