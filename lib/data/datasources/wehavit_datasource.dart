@@ -187,4 +187,12 @@ abstract class WehavitDatasource {
     List<String> targetResolutionList,
     DateTime selectedDate,
   );
+
+  EitherFuture<int> getFriendSharedPostCount(
+    List<String> sharedResolutionIdList,
+  );
+
+  EitherFuture<List<String>> getResolutionIdListSharedToMe({
+    required String targetUid,
+  });
 }

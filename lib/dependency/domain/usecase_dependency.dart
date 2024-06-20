@@ -221,6 +221,12 @@ final getGroupListViewCellWidgetModelUsecaseProvider =
   return GetGroupListViewCellWidgetModelUsecase(groupRepository);
 });
 
+final getGroupListViewFriendCellWidgetModelUsecaseProvider =
+    Provider<GetGroupListViewFriendCellWidgetModelUsecase>((ref) {
+  final groupRepository = ref.watch(groupRepositoryProvider);
+  return GetGroupListViewFriendCellWidgetModelUsecase(groupRepository);
+});
+
 final getGroupEntityByIdUsecaseProvider =
     Provider<GetGroupEntityByIdUsecase>((ref) {
   final groupRepository = ref.watch(groupRepositoryProvider);
@@ -249,6 +255,12 @@ final getTargetResolutionDoneListForWeekUsecaseProvider =
     Provider<GetTargetResolutionDoneListForWeekUsecase>((ref) {
   final resolutionRepository = ref.watch(resolutionRepositoryProvider);
   return GetTargetResolutionDoneListForWeekUsecase(resolutionRepository);
+});
+
+final getSharedResolutionIdListFromFriendUidUsecaseProvider =
+    Provider<GetSharedResolutionIdListFromFriendUidUsecase>((ref) {
+  final resolutionRepository = ref.watch(resolutionRepositoryProvider);
+  return GetSharedResolutionIdListFromFriendUidUsecase(resolutionRepository);
 });
 
 final getToWhomResolutionWillBeSharedUsecaseProvider =

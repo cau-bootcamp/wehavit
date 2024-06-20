@@ -104,9 +104,15 @@ final groupViewModelProvider =
   final getGroupListUsecase = ref.watch(getGroupListUseCaseProvider);
   final getGroupListViewCellWidgetModelUsecase =
       ref.watch(getGroupListViewCellWidgetModelUsecaseProvider);
+  final getGroupListViewFriendCellWidgetModelUsecase =
+      ref.watch(getGroupListViewFriendCellWidgetModelUsecaseProvider);
+  final getSharedResolutionIdListFromFriendUidUsecase =
+      ref.watch(getSharedResolutionIdListFromFriendUidUsecaseProvider);
   return GroupViewModelProvider(
     getGroupListUsecase,
     getGroupListViewCellWidgetModelUsecase,
+    getGroupListViewFriendCellWidgetModelUsecase,
+    getSharedResolutionIdListFromFriendUidUsecase,
   );
 });
 

@@ -2341,4 +2341,62 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       );
     }
   }
+
+  @override
+  EitherFuture<int> getFriendSharedPostCount(
+    List<String> sharedResolutionIdList,
+  ) async {
+    try {
+      int postCount = 0;
+
+      return Future.wait(
+        sharedResolutionIdList.map((id) {
+          return firestore
+              .collection(FirebaseCollectionName.confirmPosts)
+              .where(
+                FirebaseConfirmPostFieldName.resolutionId,
+                isEqualTo: id,
+              )
+              .get()
+              .then((value) {
+            postCount += value.docs.length;
+          });
+        }),
+      ).then((_) {
+        return right(postCount);
+      });
+    } on Exception catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  EitherFuture<List<String>> getResolutionIdListSharedToMe({
+    required String targetUid,
+  }) {
+    try {
+      final myUid = getMyUserId();
+
+      return firestore
+          .collection(
+            FirebaseCollectionName.getTargetResolutionCollectionName(
+              targetUid,
+            ),
+          )
+          .where(
+            FirebaseResolutionFieldName.resolutionShareFriendIdList,
+            arrayContains: myUid,
+          )
+          .get()
+          .then((snapshot) {
+        return snapshot.docs.map((doc) {
+          return doc.id;
+        }).toList();
+      }).then((list) {
+        return right(list);
+      });
+    } on Exception catch (e) {
+      return Future(() => left(Failure(e.toString())));
+    }
+  }
 }

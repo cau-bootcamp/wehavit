@@ -22,6 +22,7 @@ class _GroupViewState extends ConsumerState<GroupView>
     super.initState();
 
     unawaited(loadGroupCellList());
+    unawaited(loadFriendCellList());
   }
 
   @override
@@ -88,6 +89,8 @@ class _GroupViewState extends ConsumerState<GroupView>
                       provider
                           .loadMyGroupCellList()
                           .whenComplete(() => setState(() {}));
+
+                      loadFriendCellList();
                     },
                     child: ListView.builder(
                       padding: const EdgeInsets.only(bottom: 60.0),
@@ -179,6 +182,31 @@ class _GroupViewState extends ConsumerState<GroupView>
         .read(groupViewModelProvider.notifier)
         .loadMyGroupCellList()
         .whenComplete(() => setState(() {}));
+  }
+
+  Future<void> loadFriendCellList() async {
+    await ref.read(friendListViewModelProvider.notifier).getFriendList();
+
+    final userIdList = await Future.wait(
+      ref
+              .read(friendListViewModelProvider)
+              .friendFutureUserList
+              ?.map((futureFriendEntity) async {
+            final result = await futureFriendEntity;
+            return result.fold(
+              (failure) => null,
+              (entity) => entity.userId,
+            );
+          }).toList() ??
+          [],
+    );
+
+    final userIdListWithoutNull =
+        userIdList.where((userId) => userId != null).cast<String>().toList();
+
+    await ref
+        .read(groupViewModelProvider.notifier)
+        .loadFriendCellWidgetModel(friendUidList: userIdListWithoutNull);
   }
 
   @override
