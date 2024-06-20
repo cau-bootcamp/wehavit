@@ -98,36 +98,40 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
                 forWaiting: Container(),
                 forFail: Container(),
                 mainWidgetCallback: (resolutionList) {
-                  return Column(
-                    children: List<Widget>.generate(
-                      resolutionList.length,
-                      (index) => Container(
-                        margin: const EdgeInsets.only(bottom: 16.0),
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            backgroundColor: CustomColors.whSemiBlack,
-                            shadowColor: Colors.transparent,
-                            surfaceTintColor: Colors.transparent,
-                            overlayColor: PointColors.colorList[
-                                resolutionList[index].colorIndex ?? 0],
-                            padding: const EdgeInsets.all(0),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16.0),
-                            ),
-                          ),
-                          onPressed: () {
-                            showToastMessage(
-                              context,
-                              text: '현재 개발중인 기능입니다!',
-                              icon: const Icon(
-                                Icons.warning,
-                                color: CustomColors.whYellow,
+                  return Visibility(
+                    replacement: ResolutionListPlaceholderWidget(),
+                    visible: resolutionList.isNotEmpty,
+                    child: Column(
+                      children: List<Widget>.generate(
+                        resolutionList.length,
+                        (index) => Container(
+                          margin: const EdgeInsets.only(bottom: 16.0),
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor: CustomColors.whSemiBlack,
+                              shadowColor: Colors.transparent,
+                              surfaceTintColor: Colors.transparent,
+                              overlayColor: PointColors.colorList[
+                                  resolutionList[index].colorIndex ?? 0],
+                              padding: const EdgeInsets.all(0),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16.0),
                               ),
-                            );
-                          },
-                          child: ResolutionListCellWidget(
-                            resolutionEntity: resolutionList[index],
-                            showDetails: true,
+                            ),
+                            onPressed: () {
+                              showToastMessage(
+                                context,
+                                text: '현재 개발중인 기능입니다!',
+                                icon: const Icon(
+                                  Icons.warning,
+                                  color: CustomColors.whYellow,
+                                ),
+                              );
+                            },
+                            child: ResolutionListCellWidget(
+                              resolutionEntity: resolutionList[index],
+                              showDetails: true,
+                            ),
                           ),
                         ),
                       ),

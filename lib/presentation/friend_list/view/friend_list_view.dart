@@ -66,14 +66,8 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
           replacement: Column(
             children: [
               ElevatedButton(
-                // TODO: 수정 필요함!
-                onPressed: () async {
-                  // await ref.read(logOutUseCaseProvider).call();
-                  // if (mounted) {
-                  //   // ignore: use_build_context_synchronously
-                  //   Navigator.pushReplacementNamed(context, '/entrance');
-                  // }
-                },
+                // TODO: 친구초대용 링크 복사 기능 삽입하기
+                onPressed: () async {},
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16.0),
@@ -117,29 +111,35 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
                       const SizedBox(
                         height: 16.0,
                       ),
-                      Expanded(
-                        child: RefreshIndicator(
-                          onRefresh: () async {
-                            unawaited(
-                              ref
-                                  .read(friendListViewModelProvider.notifier)
-                                  .getAppliedFriendList()
-                                  .whenComplete(() => setState(() {})),
-                            );
-                          },
-                          child: ListView.builder(
-                            padding: const EdgeInsets.only(bottom: 64),
-                            itemCount: viewModel.friendFutureUserList!.length,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                margin: const EdgeInsets.only(bottom: 12),
-                                child: FriendListCellWidget(
-                                  futureUserEntity:
-                                      viewModel.friendFutureUserList![index],
-                                  cellState: FriendListCellState.normal,
-                                ),
+                      Visibility(
+                        replacement:
+                            const Center(child: FriendListPlaceholderWidget()),
+                        visible:
+                            viewModel.friendFutureUserList?.isNotEmpty ?? false,
+                        child: Expanded(
+                          child: RefreshIndicator(
+                            onRefresh: () async {
+                              unawaited(
+                                ref
+                                    .read(friendListViewModelProvider.notifier)
+                                    .getAppliedFriendList()
+                                    .whenComplete(() => setState(() {})),
                               );
                             },
+                            child: ListView.builder(
+                              padding: const EdgeInsets.only(bottom: 64),
+                              itemCount: viewModel.friendFutureUserList!.length,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  margin: const EdgeInsets.only(bottom: 12),
+                                  child: FriendListCellWidget(
+                                    futureUserEntity:
+                                        viewModel.friendFutureUserList![index],
+                                    cellState: FriendListCellState.normal,
+                                  ),
+                                );
+                              },
+                            ),
                           ),
                         ),
                       ),

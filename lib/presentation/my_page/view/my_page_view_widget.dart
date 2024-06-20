@@ -336,3 +336,37 @@ class SimpleStatisticsBulletWidget extends StatelessWidget {
     );
   }
 }
+
+class ResolutionListPlaceholderWidget extends StatelessWidget {
+  const ResolutionListPlaceholderWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          height: 30,
+        ),
+        Text(
+          '아직 도전중인 목표가 없으시네요!\n위해빗과 함께 새로운 도전을 시작해보세요',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+            color: CustomColors.whWhite,
+          ),
+        ),
+        Text(
+          '😉',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 40,
+            fontWeight: FontWeight.bold,
+            color: CustomColors.whWhite,
+          ),
+        ),
+      ],
+    );
+  }
+}
