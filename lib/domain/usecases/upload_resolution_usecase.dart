@@ -7,9 +7,11 @@ import 'package:wehavit/domain/repositories/repositories.dart';
 class UploadResolutionUseCase {
   UploadResolutionUseCase(
     this._resolutionRepository,
+    this._userModelRepository,
   );
 
   final ResolutionRepository _resolutionRepository;
+  final UserModelRepository _userModelRepository;
 
   EitherFuture<ResolutionEntity?> call({
     required String resolutionName,
@@ -37,10 +39,14 @@ class UploadResolutionUseCase {
 
     return _resolutionRepository.uploadResolutionEntity(entity).then(
           (result) => result.fold(
-            (failure) => left(const Failure("can't get resolution entity id")),
-            (resolutionId) =>
-                right(entity.copyWith(resolutionId: resolutionId)),
-          ),
+              (failure) =>
+                  left(const Failure("can't get resolution entity id")),
+              (resolutionId) async {
+            await _userModelRepository.incrementUserDataCounter(
+              type: UserIncrementalDataType.goal,
+            );
+            return right(entity.copyWith(resolutionId: resolutionId));
+          }),
         );
   }
 }

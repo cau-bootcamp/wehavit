@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/constants/constants.dart';
-import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
+import 'package:wehavit/dependency/dependency.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/main/main.dart';
 
@@ -38,6 +38,14 @@ class _EditUserDetailViewState extends ConsumerState<EditUserDetailView> {
   Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
 
+    final viewmodel = ref.watch(editUserDataViewModelProvider);
+    final userId = await ref
+        .read(getMyUserIdUsecaseProvider)
+        .call()
+        .then((result) => result.fold((failure) => null, (id) => id));
+
+    viewmodel.uid = widget.uid ?? (userId ?? '');
+
     if (widget.isModifying) {
       loadDataFromArguments().whenComplete(() {
         setState(() {});
@@ -48,7 +56,6 @@ class _EditUserDetailViewState extends ConsumerState<EditUserDetailView> {
   Future<void> loadDataFromArguments() async {
     final viewmodel = ref.watch(editUserDataViewModelProvider);
 
-    viewmodel.uid = widget.uid ?? '';
     viewmodel.name = widget.name ?? '';
     viewmodel.handle = widget.handle ?? '';
     viewmodel.aboutMe = widget.aboutMe ?? '';
