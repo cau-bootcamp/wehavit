@@ -59,7 +59,7 @@ class GroupViewModelProvider extends StateNotifier<GroupViewModel> {
   Future<void> loadFriendCellWidgetModel({
     required List<String> friendUidList,
   }) async {
-    List<String> sharedResolutionIdList = [];
+    Map<String, List<String>> sharedResolutionIdMap = {};
 
     await Future.wait(
       friendUidList.map((uid) async {
@@ -70,14 +70,15 @@ class GroupViewModelProvider extends StateNotifier<GroupViewModel> {
           (failure) => <String>[], // 실패 시 빈 리스트 반환
           (list) => list, // 성공 시 리스트 반환
         );
-        sharedResolutionIdList.addAll(list);
+        sharedResolutionIdMap[uid] = list;
       }),
     );
 
     state.groupListViewFriendCellModel =
         await getGroupListViewFriendCellWidgetModelUsecase(
       userIdList: friendUidList,
-      sharedResolutionIdList: sharedResolutionIdList,
+      sharedResolutionIdList:
+          sharedResolutionIdMap.values.expand((list) => list).toList(),
     ).then((result) {
       return result.fold((failure) {
         return null;
@@ -86,9 +87,8 @@ class GroupViewModelProvider extends StateNotifier<GroupViewModel> {
       });
     });
 
-    state.groupListViewFriendCellModel?.friendUidList = friendUidList;
-    state.groupListViewFriendCellModel?.sharedResolutionIdList =
-        sharedResolutionIdList;
+    state.groupListViewFriendCellModel?.friendIdResolutionMap =
+        sharedResolutionIdMap;
   }
 
   Future<void> updateGroupEntity({required GroupEntity forEntity}) async {

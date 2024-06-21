@@ -1738,22 +1738,27 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           );
 
           final shareFriendEntityList = (await Future.wait(
-            model.shareFriendIdList!.map((uid) async {
-              final entity = (await fetchUserDataEntityByUserId(uid))
-                  .fold((failure) => null, (entity) => entity);
+            model.shareFriendIdList?.map((uid) async {
+                  final entity = (await fetchUserDataEntityByUserId(uid)).fold(
+                    (failure) => null,
+                    (entity) => entity,
+                  );
 
-              if (entity != null) {
-                return entity;
-              }
-            }).toList(),
+                  if (entity != null) {
+                    return entity;
+                  }
+                }).toList() ??
+                [] as List<Future<UserDataEntity?>>,
           ))
               .nonNulls
               .toList();
 
           final shareGroupEntityList = (await Future.wait(
             model.shareGroupIdList!.map((groupId) async {
-              final entity = (await fetchGroupEntityByGroupId(groupId))
-                  .fold((failure) => null, (entity) => entity);
+              final entity = (await fetchGroupEntityByGroupId(groupId)).fold(
+                (failure) => null,
+                (entity) => entity,
+              );
 
               if (entity != null) {
                 return entity;
@@ -1778,6 +1783,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       });
     } on Exception catch (e) {
       debugPrint(e.toString());
+
       return Future(
         () => left(
           const Failure(

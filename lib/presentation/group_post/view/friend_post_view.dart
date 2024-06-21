@@ -35,7 +35,10 @@ class _FriendPostViewState extends ConsumerState<FriendPostView> {
     final viewModel = ref.watch(friendPostViewModelProvider);
     final provider = ref.read(friendPostViewModelProvider.notifier);
 
-    viewModel.sharedResolutionIdList = widget.cellModel.sharedResolutionIdList;
+    viewModel.sharedResolutionIdList = widget
+        .cellModel.friendIdResolutionMap.values
+        .expand((list) => list)
+        .toList();
 
     unawaited(
       provider
@@ -82,7 +85,8 @@ class _FriendPostViewState extends ConsumerState<FriendPostView> {
                 context: context,
                 builder: (context) {
                   return FriendListBottomSheet(
-                    friendUidList: widget.cellModel.friendUidList,
+                    friendIdResolutionMap:
+                        widget.cellModel.friendIdResolutionMap,
                   );
                 },
               );
