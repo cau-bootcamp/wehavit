@@ -1738,22 +1738,27 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           );
 
           final shareFriendEntityList = (await Future.wait(
-            model.shareFriendIdList!.map((uid) async {
-              final entity = (await fetchUserDataEntityByUserId(uid))
-                  .fold((failure) => null, (entity) => entity);
+            model.shareFriendIdList?.map((uid) async {
+                  final entity = (await fetchUserDataEntityByUserId(uid)).fold(
+                    (failure) => null,
+                    (entity) => entity,
+                  );
 
-              if (entity != null) {
-                return entity;
-              }
-            }).toList(),
+                  if (entity != null) {
+                    return entity;
+                  }
+                }).toList() ??
+                [] as List<Future<UserDataEntity?>>,
           ))
               .nonNulls
               .toList();
 
           final shareGroupEntityList = (await Future.wait(
             model.shareGroupIdList!.map((groupId) async {
-              final entity = (await fetchGroupEntityByGroupId(groupId))
-                  .fold((failure) => null, (entity) => entity);
+              final entity = (await fetchGroupEntityByGroupId(groupId)).fold(
+                (failure) => null,
+                (entity) => entity,
+              );
 
               if (entity != null) {
                 return entity;
@@ -1778,6 +1783,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       });
     } on Exception catch (e) {
       debugPrint(e.toString());
+
       return Future(
         () => left(
           const Failure(
@@ -2267,6 +2273,136 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       return Future.value(
         left(Failure('catch error on searching friend : ${e.toString()}')),
       );
+    }
+  }
+
+  @override
+  EitherFuture<List<ConfirmPostEntity>> getFriendConfirmPostEntityListByDate(
+    List<String> targetResolutionList,
+    DateTime selectedDate,
+  ) async {
+    try {
+      DateTime startDate =
+          DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+
+      DateTime endDate =
+          DateTime(startDate.year, startDate.month, startDate.day)
+              .add(const Duration(days: 1));
+
+      final uid = getMyUserId();
+
+      // query에 비어있는 리스트를 전달하면 에러가 발생하여, 예외처리 적용하였음
+      if (targetResolutionList.isEmpty) {
+        return Future(
+          () => right([]),
+        );
+      }
+
+      final fetchResult = await FirebaseFirestore.instance
+          .collection(FirebaseCollectionName.confirmPosts)
+          .where(
+            FirebaseConfirmPostFieldName.createdAt,
+            isGreaterThanOrEqualTo: Timestamp.fromDate(startDate),
+            isLessThanOrEqualTo: Timestamp.fromDate(endDate),
+          )
+          .where(
+            Filter.or(
+              Filter(
+                FirebaseConfirmPostFieldName.resolutionId,
+                whereIn: targetResolutionList,
+              ),
+              Filter(
+                FirebaseConfirmPostFieldName.owner,
+                isEqualTo: uid,
+              ),
+            ),
+          )
+          .get();
+
+      List<ConfirmPostEntity> confirmPosts = await Future.wait(
+        fetchResult.docs.map(
+          (doc) async {
+            final confirmPostModel =
+                FirebaseConfirmPostModel.fromFireStoreDocument(doc);
+
+            final ownerUserEntity =
+                (await getUserEntityByUserId(confirmPostModel.owner!))!;
+
+            final entity = confirmPostModel.toConfirmPostEntity(
+              doc.reference.id,
+              ownerUserEntity,
+            );
+
+            return entity;
+          },
+        ).toList(),
+      );
+
+      return Future(() => right(confirmPosts));
+    } on Exception catch (e) {
+      return Future(
+        () => left(
+          Failure('catch error on getFriendConfirmPostEntityListByDate - $e'),
+        ),
+      );
+    }
+  }
+
+  @override
+  EitherFuture<int> getFriendSharedPostCount(
+    List<String> sharedResolutionIdList,
+  ) async {
+    try {
+      int postCount = 0;
+
+      return Future.wait(
+        sharedResolutionIdList.map((id) {
+          return firestore
+              .collection(FirebaseCollectionName.confirmPosts)
+              .where(
+                FirebaseConfirmPostFieldName.resolutionId,
+                isEqualTo: id,
+              )
+              .get()
+              .then((value) {
+            postCount += value.docs.length;
+          });
+        }),
+      ).then((_) {
+        return right(postCount);
+      });
+    } on Exception catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  EitherFuture<List<String>> getResolutionIdListSharedToMe({
+    required String targetUid,
+  }) {
+    try {
+      final myUid = getMyUserId();
+
+      return firestore
+          .collection(
+            FirebaseCollectionName.getTargetResolutionCollectionName(
+              targetUid,
+            ),
+          )
+          .where(
+            FirebaseResolutionFieldName.resolutionShareFriendIdList,
+            arrayContains: myUid,
+          )
+          .get()
+          .then((snapshot) {
+        return snapshot.docs.map((doc) {
+          return doc.id;
+        }).toList();
+      }).then((list) {
+        return right(list);
+      });
+    } on Exception catch (e) {
+      return Future(() => left(Failure(e.toString())));
     }
   }
 }

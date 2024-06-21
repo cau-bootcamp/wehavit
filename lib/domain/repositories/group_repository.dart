@@ -73,4 +73,7 @@ abstract class GroupRepository {
   EitherFuture<List<EitherFuture<GroupEntity>>> getGroupEntityListByGroupName({
     required String keyword,
   });
+
+  EitherFuture<(EitherFuture<int>, EitherFuture<int>)>
+      getGroupListViewFriendCellModelData(List<String> sharedResolutionIdList);
 }

@@ -22,4 +22,13 @@ class GroupEntity with _$GroupEntity {
 
   factory GroupEntity.fromJson(Map<String, dynamic> json) =>
       _$GroupEntityFromJson(json);
+
+  static GroupEntity dummy = GroupEntity(
+    groupName: 'dummy name',
+    groupManagerUid: '',
+    groupMemberUidList: [],
+    groupCreatedAt: DateTime.now(),
+    groupColor: 0,
+    groupId: '',
+  );
 }

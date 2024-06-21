@@ -104,9 +104,15 @@ final groupViewModelProvider =
   final getGroupListUsecase = ref.watch(getGroupListUseCaseProvider);
   final getGroupListViewCellWidgetModelUsecase =
       ref.watch(getGroupListViewCellWidgetModelUsecaseProvider);
+  final getGroupListViewFriendCellWidgetModelUsecase =
+      ref.watch(getGroupListViewFriendCellWidgetModelUsecaseProvider);
+  final getSharedResolutionIdListFromFriendUidUsecase =
+      ref.watch(getSharedResolutionIdListFromFriendUidUsecaseProvider);
   return GroupViewModelProvider(
     getGroupListUsecase,
     getGroupListViewCellWidgetModelUsecase,
+    getGroupListViewFriendCellWidgetModelUsecase,
+    getSharedResolutionIdListFromFriendUidUsecase,
   );
 });
 
@@ -239,5 +245,24 @@ final addResolutionDoneViewModelProvider = StateNotifierProvider.autoDispose<
     unshareResolutionToFriendUsecase,
     shareResolutionToGroupdUsecase,
     unshareResolutionToGroupdUsecase,
+  );
+});
+
+final friendPostViewModelProvider = StateNotifierProvider.autoDispose<
+    FriendPostViewModelProvider, FriendPostViewModel>((ref) {
+  final getFriendConfirmPostListByDateUsecase =
+      ref.watch(getFriendConfirmPostListByDateUsecaseProvider);
+  final sendEmojiReactionToConfirmPostUsecase =
+      ref.watch(sendEmojiReactionToConfirmPostUsecaseProvider);
+  final sendQuickShotReactionToConfirmPostUsecase =
+      ref.watch(sendQuickShotReactionToConfirmPostUsecaseProvider);
+  final sendCommentReactionToConfirmPostUsecase =
+      ref.watch(sendCommentReactionToConfirmPostUsecaseProvider);
+
+  return FriendPostViewModelProvider(
+    getFriendConfirmPostListByDateUsecase,
+    sendEmojiReactionToConfirmPostUsecase,
+    sendQuickShotReactionToConfirmPostUsecase,
+    sendCommentReactionToConfirmPostUsecase,
   );
 });

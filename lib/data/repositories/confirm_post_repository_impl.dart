@@ -114,4 +114,15 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
   }) async {
     return _wehavitDatasource.uploadConfirmPostImageFromLocalUrl(localFileUrl);
   }
+
+  @override
+  EitherFuture<List<ConfirmPostEntity>> getFriendConfirmPostEntityListByDate({
+    required List<String> targetResolutionList,
+    required DateTime selectedDate,
+  }) {
+    return _wehavitDatasource.getFriendConfirmPostEntityListByDate(
+      targetResolutionList,
+      selectedDate,
+    );
+  }
 }

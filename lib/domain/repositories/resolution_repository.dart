@@ -37,6 +37,10 @@ abstract class ResolutionRepository {
     String resolutionId,
   );
 
+  EitherFuture<List<String>> getResolutionIdListSharedToMe({
+    required String from,
+  });
+
   EitherFuture<ResolutionEntity> getTargetResolutionEntity({
     required String targetUserId,
     required String targetResolutionId,

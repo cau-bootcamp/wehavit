@@ -175,4 +175,22 @@ class GroupRepositoryImpl implements GroupRepository {
   }) {
     return _wehavitDatasource.getGroupEntityListByGroupName(keyword: keyword);
   }
+
+  @override
+  EitherFuture<(EitherFuture<int>, EitherFuture<int>)>
+      getGroupListViewFriendCellModelData(
+    List<String> sharedResolutionIdList,
+  ) {
+    final sharedPostsCount =
+        _wehavitDatasource.getFriendSharedPostCount(sharedResolutionIdList);
+
+    return Future(
+      () => right(
+        (
+          Future(() => right(sharedResolutionIdList.length)),
+          sharedPostsCount,
+        ),
+      ),
+    );
+  }
 }
