@@ -87,7 +87,7 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        '${userEntity.handle} • ',
+                        '${userEntity.userName}',
                         style: const TextStyle(
                           color: CustomColors.whWhite,
                           fontSize: 16,
@@ -97,7 +97,9 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
                       ),
                       Expanded(
                         child: Text(
-                          userEntity.userName ?? '',
+                          userEntity.handle != null
+                              ? ' • ${userEntity.handle}'
+                              : '',
                           style: const TextStyle(
                             color: CustomColors.whSemiWhite,
                             fontSize: 16,
