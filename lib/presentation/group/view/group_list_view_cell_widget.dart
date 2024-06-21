@@ -106,6 +106,105 @@ class GroupListViewCellContentWidget extends StatelessWidget {
   }
 }
 
+class GroupListViewFriendCellWidget extends StatelessWidget {
+  const GroupListViewFriendCellWidget({super.key, required this.cellModel});
+
+  final GroupListViewFriendCellWidgetModel cellModel;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        color: CustomColors.whSemiBlack,
+        boxShadow: const [
+          BoxShadow(
+            color: CustomColors.whBlack,
+            blurRadius: 4,
+            offset: Offset(2, 4),
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+      child: GroupListViewFriendCellContentWidget(
+        cellModel: cellModel,
+      ),
+    );
+  }
+}
+
+class GroupListViewFriendCellContentWidget extends StatelessWidget {
+  const GroupListViewFriendCellContentWidget({
+    super.key,
+    required this.cellModel,
+  });
+
+  final GroupListViewFriendCellWidgetModel cellModel;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Text(
+        //   // ignore: lines_longer_than_80_chars
+        //   '함께한 지 ${DateTime.now().difference(cellModel.groupEntity.groupCreatedAt).inDays + 1}일 째',
+        //   style: TextStyle(
+        //     color: PointColors.colorList[cellModel.groupEntity.groupColor],
+        //     fontWeight: FontWeight.w500,
+        //     fontSize: 14,
+        //   ),
+        // ),
+        const Text(
+          '내 친구들',
+          style: TextStyle(
+            color: PointColors.yellow,
+            fontWeight: FontWeight.w700,
+            fontSize: 24,
+          ),
+        ),
+        const SizedBox(
+          height: 12,
+        ),
+        IntrinsicHeight(
+          child: Row(
+            children: [
+              const VerticalDivider(
+                thickness: 4,
+                width: 16,
+                color: PointColors.yellow,
+              ),
+              const SizedBox(width: 8),
+              Padding(
+                padding: const EdgeInsets.symmetric(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GroupListCellBulletWidget(
+                      title: '친구 수',
+                      number: cellModel.friendCount,
+                    ),
+                    const SizedBox(height: 6),
+                    GroupListCellBulletWidget(
+                      title: '나에게 공유 중인 목표 수',
+                      number: cellModel.sharedResolutionCount,
+                    ),
+                    const SizedBox(height: 6),
+                    GroupListCellBulletWidget(
+                      title: '현재까지 올라온 인증글 수',
+                      number: cellModel.sharedPostCount,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class GroupListCellBulletWidget extends StatelessWidget {
   const GroupListCellBulletWidget({
     super.key,

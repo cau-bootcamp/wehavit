@@ -8,11 +8,17 @@ class GroupViewModelProvider extends StateNotifier<GroupViewModel> {
   GroupViewModelProvider(
     this.getGroupListUsecase,
     this.getGroupListViewCellWidgetModelUsecase,
+    this.getGroupListViewFriendCellWidgetModelUsecase,
+    this.getSharedResolutionIdListFromFriendUidUsecase,
   ) : super(GroupViewModel());
 
   final GetGroupListUsecase getGroupListUsecase;
   final GetGroupListViewCellWidgetModelUsecase
       getGroupListViewCellWidgetModelUsecase;
+  final GetGroupListViewFriendCellWidgetModelUsecase
+      getGroupListViewFriendCellWidgetModelUsecase;
+  final GetSharedResolutionIdListFromFriendUidUsecase
+      getSharedResolutionIdListFromFriendUidUsecase;
 
   Future<void> loadMyGroupCellList() async {
     state.myGroupList = await getGroupListUsecase(NoParams()).then(
@@ -50,6 +56,41 @@ class GroupViewModelProvider extends StateNotifier<GroupViewModel> {
         .toList();
   }
 
+  Future<void> loadFriendCellWidgetModel({
+    required List<String> friendUidList,
+  }) async {
+    Map<String, List<String>> sharedResolutionIdMap = {};
+
+    await Future.wait(
+      friendUidList.map((uid) async {
+        final result = await getSharedResolutionIdListFromFriendUidUsecase.call(
+          targetUid: uid,
+        );
+        final list = result.fold(
+          (failure) => <String>[], // 실패 시 빈 리스트 반환
+          (list) => list, // 성공 시 리스트 반환
+        );
+        sharedResolutionIdMap[uid] = list;
+      }),
+    );
+
+    state.groupListViewFriendCellModel =
+        await getGroupListViewFriendCellWidgetModelUsecase(
+      userIdList: friendUidList,
+      sharedResolutionIdList:
+          sharedResolutionIdMap.values.expand((list) => list).toList(),
+    ).then((result) {
+      return result.fold((failure) {
+        return null;
+      }, (model) {
+        return model;
+      });
+    });
+
+    state.groupListViewFriendCellModel?.friendIdResolutionMap =
+        sharedResolutionIdMap;
+  }
+
   Future<void> updateGroupEntity({required GroupEntity forEntity}) async {
     final groupIndex = state.myGroupList
             ?.indexWhere((element) => element.groupId == forEntity.groupId) ??
@@ -59,7 +100,8 @@ class GroupViewModelProvider extends StateNotifier<GroupViewModel> {
       state.myGroupList?[groupIndex] = forEntity;
     }
     final groupCellIndex = state.groupListViewCellModelList?.indexWhere(
-            (element) => element.groupEntity.groupId == forEntity.groupId) ??
+          (element) => element.groupEntity.groupId == forEntity.groupId,
+        ) ??
         -1;
     if (groupCellIndex >= 0) {
       final groupModel = await getGroupListViewCellWidgetModelUsecase(

@@ -182,4 +182,17 @@ abstract class WehavitDatasource {
   EitherFuture<List<EitherFuture<UserDataEntity>>> getUserDataListByHandle({
     required String handle,
   });
+
+  EitherFuture<List<ConfirmPostEntity>> getFriendConfirmPostEntityListByDate(
+    List<String> targetResolutionList,
+    DateTime selectedDate,
+  );
+
+  EitherFuture<int> getFriendSharedPostCount(
+    List<String> sharedResolutionIdList,
+  );
+
+  EitherFuture<List<String>> getResolutionIdListSharedToMe({
+    required String targetUid,
+  });
 }

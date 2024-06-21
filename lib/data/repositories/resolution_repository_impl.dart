@@ -97,4 +97,11 @@ class ResolutionRepositoryImpl implements ResolutionRepository {
       targetResolutionId: targetResolutionId,
     );
   }
+
+  @override
+  EitherFuture<List<String>> getResolutionIdListSharedToMe({
+    required String from,
+  }) {
+    return _wehavitDatasource.getResolutionIdListSharedToMe(targetUid: from);
+  }
 }
