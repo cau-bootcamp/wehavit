@@ -40,6 +40,15 @@ class _FriendPostViewState extends ConsumerState<FriendPostView> {
         .expand((list) => list)
         .toList();
 
+    ref
+        .watch(resolutionListViewModelProvider)
+        .resolutionModelList
+        ?.forEach((model) {
+      if (model.entity.resolutionId != null) {
+        viewModel.sharedResolutionIdList.add(model.entity.resolutionId!);
+      }
+    });
+
     unawaited(
       provider
           .loadConfirmPostsForWeek(
