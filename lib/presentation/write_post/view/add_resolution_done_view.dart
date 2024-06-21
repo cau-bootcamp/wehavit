@@ -56,9 +56,16 @@ class _AddResolutionDoneViewState extends ConsumerState<AddResolutionDoneView> {
             children: [
               Container(
                 margin: const EdgeInsets.only(top: 16.0),
-                child: ResolutionListCellWidget(
-                  resolutionEntity: viewmodel.resolutionEntity!,
-                  showDetails: true,
+                child: Container(
+                  padding: const EdgeInsets.all(0),
+                  decoration: BoxDecoration(
+                    color: CustomColors.whSemiBlack,
+                    borderRadius: BorderRadius.circular(16.0),
+                  ),
+                  child: ResolutionListCellWidget(
+                    resolutionEntity: viewmodel.resolutionEntity!,
+                    showDetails: true,
+                  ),
                 ),
               ),
               Expanded(
