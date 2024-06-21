@@ -12,6 +12,9 @@ class GroupListViewFriendCellWidgetModel {
   final EitherFuture<int> sharedResolutionCount;
   final EitherFuture<int> sharedPostCount;
 
+  List<String> friendUidList = [];
+  List<String> sharedResolutionIdList = [];
+
   static final dummyModel = GroupListViewFriendCellWidgetModel(
     friendCount: Future.delayed(
       const Duration(seconds: 2),

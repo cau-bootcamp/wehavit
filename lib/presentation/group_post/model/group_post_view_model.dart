@@ -8,16 +8,24 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/effects/effects.dart';
 
-class GroupPostViewModel {
-  final DateFormat formatter = DateFormat('yyyy년 MM월 dd일');
-
-  CarouselController carouselController = CarouselController();
-  ScrollController scrollController = ScrollController();
+class GroupPostViewModel extends PostViewModel {
+  static final mondayOfThisWeek = DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
+  ).subtract(Duration(days: DateTime.now().weekday - 1));
 
   String groupId = '';
 
   // 관리자일 때만 숫자를 불러옴
   int appliedUserCountForManager = 0;
+}
+
+class PostViewModel {
+  final DateFormat formatter = DateFormat('yyyy년 MM월 dd일');
+
+  CarouselController carouselController = CarouselController();
+  ScrollController scrollController = ScrollController();
 
   bool isShowingCalendar = true;
   DateTime selectedDate =

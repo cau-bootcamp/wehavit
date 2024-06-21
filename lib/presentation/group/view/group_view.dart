@@ -32,6 +32,28 @@ class _GroupViewState extends ConsumerState<GroupView>
     final provider = ref.read(groupViewModelProvider.notifier);
 
     List<Widget> groupListViewCellList = [
+      if (viewModel.groupListViewFriendCellModel != null)
+        GestureDetector(
+          onTapUp: (details) async {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return FriendPostView(
+                    cellModel: viewModel.groupListViewFriendCellModel!,
+                  );
+                },
+              ),
+            ).whenComplete(
+              () => setState(
+                () {},
+              ),
+            );
+          },
+          child: GroupListViewFriendCellWidget(
+            cellModel: viewModel.groupListViewFriendCellModel!,
+          ),
+        ),
       ...viewModel.groupListViewCellModelList
               ?.map(
                 (cellModel) => GestureDetector(
@@ -204,9 +226,12 @@ class _GroupViewState extends ConsumerState<GroupView>
     final userIdListWithoutNull =
         userIdList.where((userId) => userId != null).cast<String>().toList();
 
+    ref.watch(groupViewModelProvider).friendUidList = userIdListWithoutNull;
+
     await ref
         .read(groupViewModelProvider.notifier)
-        .loadFriendCellWidgetModel(friendUidList: userIdListWithoutNull);
+        .loadFriendCellWidgetModel(friendUidList: userIdListWithoutNull)
+        .whenComplete(() => setState(() {}));
   }
 
   @override
