@@ -14,8 +14,10 @@ class WritingConfirmPostViewModelProvider
 
   Future<void> pickPhotos() async {
     final ImagePicker picker = ImagePicker();
-    final List<XFile> imageList =
-        await picker.pickMultiImage(limit: maxImagesCount);
+    final List<XFile> imageList = await picker.pickMultiImage(
+      limit: maxImagesCount,
+      requestFullMetadata: false,
+    );
 
     state.imageMediaList = imageList;
   }

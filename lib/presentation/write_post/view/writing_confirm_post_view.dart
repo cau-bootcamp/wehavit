@@ -22,6 +22,8 @@ class WritingConfirmPostView extends ConsumerStatefulWidget {
 
 class _WritingConfirmPostViewState
     extends ConsumerState<WritingConfirmPostView> {
+  FocusNode contentFieldFocusNode = FocusNode();
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -36,6 +38,7 @@ class _WritingConfirmPostViewState
     return Stack(
       children: [
         Scaffold(
+          resizeToAvoidBottomInset: true,
           backgroundColor: CustomColors.whDarkBlack,
           appBar: WehavitAppBar(
             title: widget.hasRested ? '반성글 남기기' : '인증 남기기',
@@ -62,8 +65,9 @@ class _WritingConfirmPostViewState
             },
           ),
           body: SafeArea(
-            minimum: const EdgeInsets.symmetric(
-              horizontal: 16.0,
+            minimum: const EdgeInsets.only(
+              left: 16.0,
+              right: 16.0,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -134,8 +138,8 @@ class _WritingConfirmPostViewState
                 ),
                 Expanded(
                   child: TextFormField(
+                    focusNode: contentFieldFocusNode,
                     maxLines: null,
-                    autofocus: true,
                     style: const TextStyle(
                       color: CustomColors.whWhite,
                     ),
@@ -175,9 +179,17 @@ class _WritingConfirmPostViewState
                     IconButton(
                       onPressed: () async {
                         if (!widget.hasRested) {
-                          provider
-                              .pickPhotos()
-                              .whenComplete(() => setState(() {}));
+                          FocusScope.of(context).unfocus();
+                          provider.pickPhotos().whenComplete(
+                                () => setState(() {
+                                  Future.delayed(
+                                    const Duration(
+                                      milliseconds: 100,
+                                    ),
+                                    () => contentFieldFocusNode.requestFocus(),
+                                  );
+                                }),
+                              );
                         }
                       },
                       icon: Icon(
