@@ -52,7 +52,7 @@ class AuthSocialDataSourceImpl implements AuthSocialDataSource {
   }
 
   @override
-  EitherFuture<AuthResult> appleLogInAndSignUp() async {
+  EitherFuture<(AuthResult, String?)> appleLogInAndSignUp() async {
     try {
       final appleCredential = await SignInWithApple.getAppleIDCredential(
         scopes: [
@@ -69,7 +69,7 @@ class AuthSocialDataSourceImpl implements AuthSocialDataSource {
 
       await FirebaseAuth.instance.signInWithCredential(oauthCredential);
 
-      return right(AuthResult.success);
+      return right((AuthResult.success, appleCredential.givenName));
     } on FirebaseAuthException catch (exception) {
       return left(Failure(exception.code));
     } on Exception catch (exception) {

@@ -7,7 +7,7 @@ class LogInWithGoogleUsecase {
 
   final AuthRepository _authRepository;
 
-  EitherFuture<AuthResult> call() async {
+  EitherFuture<(AuthResult, String?)> call() async {
     return _authRepository.logIn(type: LogInType.google);
   }
 }
