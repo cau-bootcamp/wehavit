@@ -1,6 +1,7 @@
 ![Frame 341](https://github.com/cau-bootcamp/wehavit/assets/39216546/e0ea1545-b810-48c8-bf31-37687d3f5e61)
 
 <h3 align="center"> 🎉 친구들과 함께 주고 받는 서로의 도전을 응원하는 공간, 위해빗 👏 </h3>
+<div align="center"> <img align="center" src="https://github.com/cau-bootcamp/wehavit/assets/39216546/463b5439-155d-4b9c-b7e3-929984505bde" width=100 /> </div><br> 
 <div align="center"> 2023. 08. 19. ~ 진행중 </div>
 
 # Background
