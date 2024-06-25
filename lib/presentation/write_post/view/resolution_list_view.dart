@@ -99,14 +99,14 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
                         ),
                         onPressed: () async {
                           showModalBottomSheet(
+                            isScrollControlled: true,
                             context: context,
-                            builder: (context) {
-                              return WritingResolutionBottomSheetWidget(
-                                viewModel: viewModel,
-                                provider: provider,
-                                index: index,
-                              );
-                            },
+                            builder: (context) =>
+                                WritingResolutionBottomSheetWidget(
+                              viewModel: viewModel,
+                              provider: provider,
+                              index: index,
+                            ),
                           ).then((returnValue) async {
                             if (returnValue == true) {
                               await provider
