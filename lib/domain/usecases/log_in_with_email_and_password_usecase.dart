@@ -7,7 +7,7 @@ class LogInWithEmailUsecase {
 
   final AuthRepository _authRepository;
 
-  EitherFuture<AuthResult> call(String email, String password) {
+  EitherFuture<(AuthResult, String?)> call(String email, String password) {
     return _authRepository.logIn(
       type: LogInType.wehavit,
       email: email,

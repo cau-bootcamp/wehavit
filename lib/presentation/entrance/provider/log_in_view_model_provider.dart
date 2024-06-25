@@ -28,11 +28,11 @@ class LogInViewModelProvider extends StateNotifier<LogInViewModel> {
     );
   }
 
-  EitherFuture<AuthResult> logInWithApple() async {
+  EitherFuture<(AuthResult, String?)> logInWithApple() async {
     return _logInWithAppleUsecase();
   }
 
-  EitherFuture<AuthResult> logInWithGoogle() {
+  EitherFuture<(AuthResult, String?)> logInWithGoogle() {
     return _logInWithGoogleUsecase();
   }
 

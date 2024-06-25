@@ -18,7 +18,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   final GoogleLogOutUseCase _googleLogOut;
   final LogOutUsecase _logOut;
 
-  EitherFuture<AuthResult> googleLogIn() async {
+  EitherFuture<(AuthResult, String?)> googleLogIn() async {
     return _googleLogInUseCase();
   }
 
@@ -50,10 +50,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
         authResult: AuthResult.failure,
         authType: AuthType.emailAndPassword,
       ),
-      (authResult) {
+      (result) {
         return state.copyWith(
           isLoading: false,
-          authResult: authResult,
+          authResult: result.$1,
           authType: AuthType.emailAndPassword,
         );
       },

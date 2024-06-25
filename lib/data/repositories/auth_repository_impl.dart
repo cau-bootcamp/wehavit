@@ -18,26 +18,32 @@ class AuthRepositoryImpl implements AuthRepository {
   final AuthSocialDataSource _authSocialDataSource;
 
   @override
-  EitherFuture<AuthResult> logIn({
+  EitherFuture<(AuthResult, String?)> logIn({
     required LogInType type,
     String? email,
     String? password,
   }) async {
-    EitherFuture<AuthResult> futureResult;
+    EitherFuture<(AuthResult, String?)> futureResult;
 
     switch (type) {
       case LogInType.wehavit:
         try {
-          futureResult = _authDataSource.logInWithEmailAndPassword(
-            email: email,
-            password: password,
+          futureResult = Future(
+            () async => (await _authDataSource.logInWithEmailAndPassword(
+              email: email,
+              password: password,
+            ))
+                .map((authResult) => (authResult, null)),
           );
         } catch (e) {
           return left(Failure(AuthResult.failure.name));
         }
       case LogInType.google:
         try {
-          futureResult = _authSocialDataSource.googleLogInAndSignUp();
+          futureResult = Future(
+            () async => (await _authSocialDataSource.googleLogInAndSignUp())
+                .map((authResult) => (authResult, null)),
+          );
         } catch (e) {
           return left(Failure(AuthResult.failure.name));
         }

@@ -6,7 +6,7 @@ abstract class AuthSocialDataSource {
 
   Future<void> googleLogOut();
 
-  EitherFuture<AuthResult> appleLogInAndSignUp();
+  EitherFuture<(AuthResult, String?)> appleLogInAndSignUp();
 
   Future<void> appleLogOut();
 }

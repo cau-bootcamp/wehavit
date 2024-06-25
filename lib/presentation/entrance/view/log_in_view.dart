@@ -301,9 +301,13 @@ class _LogInViewState extends ConsumerState<LogInView> {
                                   provider,
                                   result,
                                 );
-                              }).then((userId) {
-                                if (userId != null) {
-                                  navigateBasedOnUserState(provider, userId);
+                              }).then((userInfo) {
+                                if (userInfo.$1 != null) {
+                                  navigateBasedOnUserState(
+                                    provider,
+                                    userInfo.$1!,
+                                    userInfo.$2,
+                                  );
                                 }
                               });
 
@@ -342,9 +346,13 @@ class _LogInViewState extends ConsumerState<LogInView> {
                                     provider,
                                     result,
                                   );
-                                }).then((userId) {
-                                  if (userId != null) {
-                                    navigateBasedOnUserState(provider, userId);
+                                }).then((userInfo) {
+                                  if (userInfo.$1 != null) {
+                                    navigateBasedOnUserState(
+                                      provider,
+                                      userInfo.$1!,
+                                      userInfo.$2,
+                                    );
                                   }
                                 });
 
@@ -370,22 +378,22 @@ class _LogInViewState extends ConsumerState<LogInView> {
     );
   }
 
-  Future<String?> getUserIdFromAuthResult(
+  Future<(String?, String?)> getUserIdFromAuthResult(
     LogInViewModelProvider provider,
-    Either<Failure, AuthResult> result,
+    Either<Failure, (AuthResult, String?)> result,
   ) {
     return result.fold(
       (failure) {
-        return Future(() => null);
+        return Future(() => (null, null));
       },
       (authResult) async {
-        if (authResult != AuthResult.success) {
-          return Future(() => null);
+        if (authResult.$1 != AuthResult.success) {
+          return Future(() => (null, null));
         }
         return provider.getMyUserId().then((result) {
           return result.fold(
-            (failure) => null,
-            (uid) => uid,
+            (failure) => (null, authResult.$2),
+            (uid) => (uid, authResult.$2),
           );
         });
       },
@@ -395,12 +403,13 @@ class _LogInViewState extends ConsumerState<LogInView> {
   Future<void> navigateBasedOnUserState(
     LogInViewModelProvider provider,
     String userId,
+    String? userName,
   ) async {
     provider.getUserDataEntity(id: userId).then((result) {
       result.fold(
         // 기존에 사용자에 대한 데이터가 없는 경우에는
         // 회원가입으로 이동
-        (failure) => navigateToSignUpUserDetailView(),
+        (failure) => navigateToSignUpUserDetailView(name: userName),
         // 데이터가 있으면
         // 메인으로 이동
         (userData) => navigateToMainView(),
@@ -408,14 +417,18 @@ class _LogInViewState extends ConsumerState<LogInView> {
     });
   }
 
-  Future<void> navigateToSignUpUserDetailView() async {
+  Future<void> navigateToSignUpUserDetailView({
+    String? name,
+    String? profileImageUrl,
+  }) async {
     Navigator.push(
       context,
       MaterialPageRoute(
         fullscreenDialog: true,
         builder: (context) {
-          return const EditUserDetailView(
+          return EditUserDetailView(
             isModifying: false,
+            name: name,
           );
         },
       ),
