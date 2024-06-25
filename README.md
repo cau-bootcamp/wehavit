@@ -54,6 +54,47 @@
 
 - macOS (Apple Silicon)
 - Flutter (Channel stable, 3.22.2, on macOS 14.5 23F79 darwin-arm64 (Rosetta), locale ko-KR)
+- Android SDK version 34.0.0
+- Xcode 15.4
+
+### 적용한 아키텍처
+
+- **Clean Architecture** for overall project
+- **MVVM** for presentation layer
+
+### 적용한 상태관리 도구
+- Riverpod
+
+### 실행 방법
+1. Git Clone 
+    
+    ```bash
+    $ git clone https://github.com/cau-bootcamp/wehavit.git 
+    $ cd wehavit
+    ```
+
+2. dependency 패키지 설치
+
+    ```bash
+    flutter pub get
+    ```
+
+3. Firebase App 설정
+    Install firebase cli tool: https://firebase.google.com/docs/cli?hl=ko#setup_update_cli
+   
+    ```bash
+    $ firebase login # login to firebase
+    $ firebase projects:create {your-project-name} # create new project
+    $ dart pub global activate flutterfire_cli # install flutterfire cli
+    $ flutterfire configure --project={your-project-name} # set up firebase config on you flutter app
+    ```
+
+5. WeHavit 실행
+    Run and enjoy. 😊
+
+    ```bash
+    flutter run
+    ```
 
 
 # License
