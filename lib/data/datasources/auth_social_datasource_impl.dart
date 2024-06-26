@@ -61,6 +61,9 @@ class AuthSocialDataSourceImpl implements AuthSocialDataSource {
         ],
       );
 
+      print(appleCredential.identityToken);
+      print(appleCredential.authorizationCode);
+
       // Create an `OAuthCredential` from the credential returned by Apple.
       final oauthCredential = OAuthProvider('apple.com').credential(
         idToken: appleCredential.identityToken,
