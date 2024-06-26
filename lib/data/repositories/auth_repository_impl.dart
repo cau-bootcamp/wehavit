@@ -113,4 +113,9 @@ class AuthRepositoryImpl implements AuthRepository {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('isLoggedIn', false);
   }
+
+  @override
+  EitherFuture<void> revokeSignInWithApple() {
+    return _authSocialDataSource.revokeSignInWithApple();
+  }
 }

@@ -17,4 +17,6 @@ abstract class AuthRepository {
 
   Future<void> logOut();
   Stream<User?> authStateChanges();
+
+  EitherFuture<void> revokeSignInWithApple();
 }

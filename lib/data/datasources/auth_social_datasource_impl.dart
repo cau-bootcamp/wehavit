@@ -1,8 +1,13 @@
+import 'dart:convert';
+
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:http/http.dart' as http;
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/data/datasources/datasources.dart';
 import 'package:wehavit/domain/entities/entities.dart';
@@ -61,9 +66,6 @@ class AuthSocialDataSourceImpl implements AuthSocialDataSource {
         ],
       );
 
-      print(appleCredential.identityToken);
-      print(appleCredential.authorizationCode);
-
       // Create an `OAuthCredential` from the credential returned by Apple.
       final oauthCredential = OAuthProvider('apple.com').credential(
         idToken: appleCredential.identityToken,
@@ -83,5 +85,135 @@ class AuthSocialDataSourceImpl implements AuthSocialDataSource {
   @override
   Future<void> appleLogOut() async {
     await FirebaseAuth.instance.signOut();
+  }
+
+  @override
+  EitherFuture<void> revokeSignInWithApple() async {
+    try {
+      final appleCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+
+      final String privateKey = [
+        dotenv.env['APPLE_PRIVATE_KEY_LINE1']!,
+        dotenv.env['APPLE_PRIVATE_KEY_LINE2']!,
+        dotenv.env['APPLE_PRIVATE_KEY_LINE3']!,
+        dotenv.env['APPLE_PRIVATE_KEY_LINE4']!,
+        dotenv.env['APPLE_PRIVATE_KEY_LINE5']!,
+        dotenv.env['APPLE_PRIVATE_KEY_LINE6']!,
+      ].join('\n');
+
+      const String teamId = 'JPL38XBHJ4';
+      const String clientId = 'com.bootcamp.wehavit';
+      const String keyId = '67F4G5H6JW';
+
+      final String authCode = appleCredential.authorizationCode;
+      final String clientSecret = createJwt(
+        teamId: teamId,
+        clientId: clientId,
+        keyId: keyId,
+        privateKey: privateKey,
+      );
+
+      final accessToken = (await requestAppleTokens(
+        authCode,
+        clientSecret,
+      ))['access_token'] as String;
+
+      const String tokenTypeHint = 'access_token';
+
+      await revokeAppleToken(
+        clientId: clientId,
+        clientSecret: clientSecret,
+        token: accessToken,
+        tokenTypeHint: tokenTypeHint,
+      );
+
+      return right(null);
+    } on Exception catch (e) {
+      return left(Failure('사용자 계정 삭제 중 오류 발생: $e'));
+    }
+  }
+
+// JWT 생성 함수
+  String createJwt({
+    required String teamId,
+    required String clientId,
+    required String keyId,
+    required String privateKey,
+  }) {
+    final jwt = JWT(
+      {
+        'iss': teamId,
+        'iat': DateTime.now().millisecondsSinceEpoch ~/ 1000,
+        'exp': (DateTime.now().millisecondsSinceEpoch ~/ 1000) + 3600,
+        'aud': 'https://appleid.apple.com',
+        'sub': clientId,
+      },
+      header: {
+        'kid': keyId,
+        'alg': 'ES256',
+      },
+    );
+
+    final key = ECPrivateKey(privateKey);
+    return jwt.sign(key, algorithm: JWTAlgorithm.ES256);
+  }
+
+// 사용자 토큰 취소 함수
+  EitherFuture<void> revokeAppleToken({
+    required String clientId,
+    required String clientSecret,
+    required String token,
+    required String tokenTypeHint,
+  }) async {
+    final url = Uri.parse('https://appleid.apple.com/auth/revoke');
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: {
+        'client_id': clientId,
+        'client_secret': clientSecret,
+        'token': token,
+        'token_type_hint': tokenTypeHint,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      // 토큰이 성공적으로 취소됨
+      return right(null);
+    } else {
+      return left(Failure('토큰 취소 중 오류 발생 : ${response.statusCode}'));
+    }
+  }
+
+  Future<Map<String, dynamic>> requestAppleTokens(
+    String authorizationCode,
+    String clientSecret,
+  ) async {
+    final response = await http.post(
+      Uri.parse('https://appleid.apple.com/auth/token'),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: {
+        'client_id': 'com.bootcamp.wehavit',
+        'client_secret': clientSecret,
+        'code': authorizationCode,
+        'grant_type': 'authorization_code',
+        'redirect_uri': 'YOUR_REDIRECT_URI', // 필요시 설정
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('토큰 요청 실패: ${response.body}');
+    }
   }
 }

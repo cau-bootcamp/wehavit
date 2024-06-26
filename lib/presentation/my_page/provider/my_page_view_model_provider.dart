@@ -6,10 +6,12 @@ class MyPageViewModelProvider extends StateNotifier<MyPageViewModel> {
   MyPageViewModelProvider(
     this.getMyResolutionListUsecase,
     this.getMyUserDataUsecase,
+    this.revokeAppleSignInUsecase,
   ) : super(MyPageViewModel());
 
   final GetMyResolutionListUsecase getMyResolutionListUsecase;
   final GetMyUserDataUsecase getMyUserDataUsecase;
+  final RevokeAppleSignInUsecase revokeAppleSignInUsecase;
 
   Future<void> loadData() async {
     getResolutionList();
@@ -22,5 +24,14 @@ class MyPageViewModelProvider extends StateNotifier<MyPageViewModel> {
 
   Future<void> getMyUserData() async {
     state.futureMyUserDataEntity = getMyUserDataUsecase();
+  }
+
+  Future<bool> revokeAppleSignIn() async {
+    return await revokeAppleSignInUsecase.call().then(
+          (result) => result.fold(
+            (failure) => false,
+            (success) => true,
+          ),
+        );
   }
 }
