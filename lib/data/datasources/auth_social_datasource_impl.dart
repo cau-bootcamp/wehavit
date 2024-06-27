@@ -2,12 +2,11 @@ import 'dart:convert';
 
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:http/http.dart' as http;
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/data/datasources/datasources.dart';
 import 'package:wehavit/domain/entities/entities.dart';
@@ -90,6 +89,26 @@ class AuthSocialDataSourceImpl implements AuthSocialDataSource {
   @override
   EitherFuture<void> revokeSignInWithApple() async {
     try {
+      const privateKey1 = String.fromEnvironment('APPLE_PRIVATE_KEY_LINE1');
+      const privateKey2 = String.fromEnvironment('APPLE_PRIVATE_KEY_LINE2');
+      const privateKey3 = String.fromEnvironment('APPLE_PRIVATE_KEY_LINE3');
+      const privateKey4 = String.fromEnvironment('APPLE_PRIVATE_KEY_LINE4');
+      const privateKey5 = String.fromEnvironment('APPLE_PRIVATE_KEY_LINE5');
+      const privateKey6 = String.fromEnvironment('APPLE_PRIVATE_KEY_LINE6');
+
+      final String privateKey = [
+        privateKey1,
+        privateKey2,
+        privateKey3,
+        privateKey4,
+        privateKey5,
+        privateKey6,
+      ].join('\n');
+
+      const String teamId = 'JPL38XBHJ4';
+      const String clientId = 'com.bootcamp.wehavit';
+      const String keyId = '67F4G5H6JW';
+
       final appleCredential = await SignInWithApple.getAppleIDCredential(
         scopes: [
           AppleIDAuthorizationScopes.email,
@@ -97,18 +116,22 @@ class AuthSocialDataSourceImpl implements AuthSocialDataSource {
         ],
       );
 
-      final String privateKey = [
-        dotenv.env['APPLE_PRIVATE_KEY_LINE1']!,
-        dotenv.env['APPLE_PRIVATE_KEY_LINE2']!,
-        dotenv.env['APPLE_PRIVATE_KEY_LINE3']!,
-        dotenv.env['APPLE_PRIVATE_KEY_LINE4']!,
-        dotenv.env['APPLE_PRIVATE_KEY_LINE5']!,
-        dotenv.env['APPLE_PRIVATE_KEY_LINE6']!,
-      ].join('\n');
+      final oauthCredential = OAuthProvider('apple.com').credential(
+        idToken: appleCredential.identityToken,
+        accessToken: appleCredential.authorizationCode,
+      );
 
-      const String teamId = 'JPL38XBHJ4';
-      const String clientId = 'com.bootcamp.wehavit';
-      const String keyId = '67F4G5H6JW';
+      // 사용자 재인증
+      try {
+        await FirebaseAuth.instance.currentUser
+            ?.reauthenticateWithCredential(oauthCredential);
+      } on Exception catch (e) {
+        return left(
+          Failure(
+            'fail to reauthenticate firebase auth - ${e.toString()}',
+          ),
+        );
+      }
 
       final String authCode = appleCredential.authorizationCode;
       final String clientSecret = createJwt(
@@ -121,18 +144,17 @@ class AuthSocialDataSourceImpl implements AuthSocialDataSource {
       final accessToken = (await requestAppleTokens(
         authCode,
         clientSecret,
+        clientId,
       ))['access_token'] as String;
 
       const String tokenTypeHint = 'access_token';
 
-      await revokeAppleToken(
+      return revokeAppleToken(
         clientId: clientId,
         clientSecret: clientSecret,
         token: accessToken,
         tokenTypeHint: tokenTypeHint,
       );
-
-      return right(null);
     } on Exception catch (e) {
       return left(Failure('사용자 계정 삭제 중 오류 발생: $e'));
     }
@@ -188,13 +210,14 @@ class AuthSocialDataSourceImpl implements AuthSocialDataSource {
       // 토큰이 성공적으로 취소됨
       return right(null);
     } else {
-      return left(Failure('토큰 취소 중 오류 발생 : ${response.statusCode}'));
+      return left(Failure('토큰 취소 중 오류 발생 : ${response.body}'));
     }
   }
 
   Future<Map<String, dynamic>> requestAppleTokens(
     String authorizationCode,
     String clientSecret,
+    String clientId,
   ) async {
     final response = await http.post(
       Uri.parse('https://appleid.apple.com/auth/token'),
@@ -202,7 +225,7 @@ class AuthSocialDataSourceImpl implements AuthSocialDataSource {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: {
-        'client_id': 'com.bootcamp.wehavit',
+        'client_id': clientId,
         'client_secret': clientSecret,
         'code': authorizationCode,
         'grant_type': 'authorization_code',

@@ -45,6 +45,7 @@ class _EditUserDetailViewState extends ConsumerState<EditUserDetailView> {
         .then((result) => result.fold((failure) => null, (id) => id));
 
     viewmodel.uid = widget.uid ?? (userId ?? '');
+    viewmodel.name = widget.name ?? '';
 
     if (widget.isModifying) {
       loadDataFromArguments().whenComplete(() {
@@ -56,7 +57,6 @@ class _EditUserDetailViewState extends ConsumerState<EditUserDetailView> {
   Future<void> loadDataFromArguments() async {
     final viewmodel = ref.watch(editUserDataViewModelProvider);
 
-    viewmodel.name = widget.name ?? '';
     viewmodel.handle = widget.handle ?? '';
     viewmodel.aboutMe = widget.aboutMe ?? '';
 
