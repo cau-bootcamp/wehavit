@@ -2075,8 +2075,6 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
         return left(const Failure('profile-image-upload-fail'));
       }
 
-      print(uid);
-
       final isDocExist = await firestore
           .collection(
             FirebaseCollectionName.users,

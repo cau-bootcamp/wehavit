@@ -405,3 +405,9 @@ final getFriendConfirmPostListByDateUsecaseProvider =
   final confirmPostRepository = ref.watch(confirmPostRepositoryProvider);
   return GetFriendConfirmPostListByDateUsecase(confirmPostRepository);
 });
+
+final revokeAppleSignInUsecaseProvider =
+    Provider<RevokeAppleSignInUsecase>((ref) {
+  final authRepository = ref.watch(authRepositoryProvider);
+  return RevokeAppleSignInUsecase(authRepository);
+});

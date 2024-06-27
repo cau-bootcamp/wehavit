@@ -9,4 +9,6 @@ abstract class AuthSocialDataSource {
   EitherFuture<(AuthResult, String?)> appleLogInAndSignUp();
 
   Future<void> appleLogOut();
+
+  EitherFuture<void> revokeSignInWithApple();
 }

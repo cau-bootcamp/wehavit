@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
@@ -45,110 +45,123 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
     }
   }
 
+  Future<void> deleteAccount() async {
+    ref.watch(myPageViewModelProvider.notifier).deleteAccount(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
     final viewModel = ref.watch(myPageViewModelProvider);
     final provider = ref.watch(myPageViewModelProvider.notifier);
 
-    return Scaffold(
-      backgroundColor: CustomColors.whDarkBlack,
-      appBar: WehavitAppBar(
-        title: '내 정보',
-        trailingTitle: '',
-        trailingIcon: Icons.menu,
-        trailingAction: () async {
-          // 변경사항을 TabBar에 알리기 위해 mainViewState를 참조
-          MainViewState? mainViewState =
-              context.findAncestorStateOfType<MainViewState>();
-          showMyPageMenuBottomSheet(context, mainViewState);
-        },
-      ),
-      body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: RefreshIndicator(
-          onRefresh: () async {
-            provider.loadData().whenComplete(() {
-              setState(() {});
-            });
-          },
-          child: ListView(
-            padding: const EdgeInsets.only(bottom: 64.0),
-            children: [
-              // 내 프로필
-              MyPageWehavitSummaryWidget(
-                futureUserEntity: viewModel.futureMyUserDataEntity,
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              const Text(
-                '도전중인 목표',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                  fontSize: 20,
-                ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              EitherFutureBuilder<List<ResolutionEntity>>(
-                target: viewModel.futureMyyResolutionList,
-                forWaiting: Container(),
-                forFail: Container(),
-                mainWidgetCallback: (resolutionList) {
-                  return Visibility(
-                    replacement: ResolutionListPlaceholderWidget(),
-                    visible: resolutionList.isNotEmpty,
-                    child: Column(
-                      children: List<Widget>.generate(
-                        resolutionList.length,
-                        (index) => Container(
-                          margin: const EdgeInsets.only(bottom: 16.0),
-                          child: TextButton(
-                            style: TextButton.styleFrom(
-                              backgroundColor: CustomColors.whSemiBlack,
-                              shadowColor: Colors.transparent,
-                              surfaceTintColor: Colors.transparent,
-                              overlayColor: PointColors.colorList[
-                                  resolutionList[index].colorIndex ?? 0],
-                              padding: const EdgeInsets.all(0),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16.0),
-                              ),
-                            ),
-                            onPressed: () {
-                              showToastMessage(
-                                context,
-                                text: '현재 개발중인 기능입니다!',
-                                icon: const Icon(
-                                  Icons.warning,
-                                  color: CustomColors.whYellow,
+    return Stack(
+      children: [
+        Scaffold(
+          backgroundColor: CustomColors.whDarkBlack,
+          appBar: WehavitAppBar(
+            title: '내 정보',
+            trailingTitle: '',
+            trailingIcon: Icons.menu,
+            trailingAction: () async {
+              // 변경사항을 TabBar에 알리기 위해 mainViewState를 참조
+              MainViewState? mainViewState =
+                  context.findAncestorStateOfType<MainViewState>();
+              showMyPageMenuBottomSheet(
+                context,
+                mainViewState,
+                deleteAccount,
+              );
+            },
+          ),
+          body: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: RefreshIndicator(
+              onRefresh: () async {
+                provider.loadData().whenComplete(() {
+                  setState(() {});
+                });
+              },
+              child: ListView(
+                padding: const EdgeInsets.only(bottom: 64.0),
+                children: [
+                  // 내 프로필
+                  MyPageWehavitSummaryWidget(
+                    futureUserEntity: viewModel.futureMyUserDataEntity,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  const Text(
+                    '도전중인 목표',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  EitherFutureBuilder<List<ResolutionEntity>>(
+                    target: viewModel.futureMyyResolutionList,
+                    forWaiting: Container(),
+                    forFail: Container(),
+                    mainWidgetCallback: (resolutionList) {
+                      return Visibility(
+                        replacement: const ResolutionListPlaceholderWidget(),
+                        visible: resolutionList.isNotEmpty,
+                        child: Column(
+                          children: List<Widget>.generate(
+                            resolutionList.length,
+                            (index) => Container(
+                              margin: const EdgeInsets.only(bottom: 16.0),
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor: CustomColors.whSemiBlack,
+                                  shadowColor: Colors.transparent,
+                                  surfaceTintColor: Colors.transparent,
+                                  overlayColor: PointColors.colorList[
+                                      resolutionList[index].colorIndex ?? 0],
+                                  padding: const EdgeInsets.all(0),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16.0),
+                                  ),
                                 ),
-                              );
-                            },
-                            child: ResolutionListCellWidget(
-                              resolutionEntity: resolutionList[index],
-                              showDetails: true,
+                                onPressed: () {
+                                  showToastMessage(
+                                    context,
+                                    text: '현재 개발중인 기능입니다!',
+                                    icon: const Icon(
+                                      Icons.warning,
+                                      color: CustomColors.whYellow,
+                                    ),
+                                  );
+                                },
+                                child: ResolutionListCellWidget(
+                                  resolutionEntity: resolutionList[index],
+                                  showDetails: true,
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                  );
-                },
+                      );
+                    },
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
-      ),
+      ],
     );
   }
 
   Future<dynamic> showMyPageMenuBottomSheet(
     BuildContext context,
     MainViewState? mainViewState,
+    Function() deleteAccount,
   ) {
     return showModalBottomSheet(
       context: context,
@@ -216,6 +229,53 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
                     // ignore: use_build_context_synchronously
                     Navigator.pushReplacementNamed(context, '/entrance');
                   }
+                },
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              WideColoredButton(
+                buttonTitle: '회원탈퇴',
+                buttonIcon: Icons.no_accounts_outlined,
+                foregroundColor: PointColors.red,
+                onPressed: () async {
+                  showCupertinoDialog(
+                    context: context,
+                    builder: (context) {
+                      return CupertinoAlertDialog(
+                        title: const Text('정말 탈퇴하시겠어요?'),
+                        content: const Text('작성하신 인증글의 복구가 불가능합니다'),
+                        actions: [
+                          CupertinoDialogAction(
+                            textStyle: const TextStyle(
+                              color: PointColors.blue,
+                            ),
+                            isDefaultAction: true,
+                            child: const Text('취소'),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          CupertinoDialogAction(
+                            isDestructiveAction: true,
+                            onPressed: deleteAccount,
+                            child: const Text('탈퇴하기'),
+                          ),
+                        ],
+                      );
+                    },
+                  ).then((result) {
+                    if (result == false) {
+                      showToastMessage(
+                        context,
+                        text: '오류 발생, 문의 부탁드립니다',
+                        icon: const Icon(
+                          Icons.report_problem,
+                          color: CustomColors.whYellow,
+                        ),
+                      );
+                    }
+                  });
                 },
               ),
               const SizedBox(

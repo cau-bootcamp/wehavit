@@ -34,6 +34,7 @@ migrate_working_dir/
 
 # dotenv environment variables file
 .env*
+*.env
 
 # Avoid committing generated Javascript files:
 *.dart.js

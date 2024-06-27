@@ -8,6 +8,7 @@ import 'firebase_options.dart';
 import 'main/app.dart';
 
 Future<void> main() async {
+  // ignore: avoid_redundant_argument_values
   WidgetsFlutterBinding.ensureInitialized();
   await Future.wait([
     SharedPrefs.init(),

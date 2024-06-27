@@ -85,10 +85,11 @@ final myPageViewModelProvider =
   final getMyResolutionListUsecase =
       ref.watch(getMyResolutionListUsecaseProvider);
   final getMyUserDataUsecase = ref.watch(getMyUserDataUsecaseProvider);
-
+  final revokeAppleSignInUsecase = ref.watch(revokeAppleSignInUsecaseProvider);
   return MyPageViewModelProvider(
     getMyResolutionListUsecase,
     getMyUserDataUsecase,
+    revokeAppleSignInUsecase,
   );
 });
 
