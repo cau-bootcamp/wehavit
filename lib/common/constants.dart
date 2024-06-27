@@ -13,3 +13,17 @@ class AppKeys {
 }
 
 const appTitle = 'WeHavit';
+
+enum Environment {
+  development,
+  production,
+}
+
+class Application {
+  const Application._();
+
+  static String environment = String.fromEnvironment(
+    'ENVIRONMENT',
+    defaultValue: Environment.production.toString(),
+  );
+}

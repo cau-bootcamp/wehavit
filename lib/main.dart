@@ -8,8 +8,8 @@ import 'firebase_options.dart';
 import 'main/app.dart';
 
 Future<void> main() async {
+  // ignore: avoid_redundant_argument_values
   WidgetsFlutterBinding.ensureInitialized();
-
   await Future.wait([
     SharedPrefs.init(),
     Firebase.initializeApp(
@@ -19,9 +19,7 @@ Future<void> main() async {
 
   runApp(
     ProviderScope(
-      observers: [
-        Observers(),
-      ],
+      observers: [Observers()],
       child: const MyApp(),
     ),
   );
