@@ -1,8 +1,15 @@
 ![Frame 341](https://github.com/cau-bootcamp/wehavit/assets/39216546/e0ea1545-b810-48c8-bf31-37687d3f5e61)
-
 <h3 align="center"> 🎉 친구들과 함께 주고 받는 서로의 도전을 응원하는 공간, 위해빗 👏 </h3>
 <div align="center"> <img align="center" src="https://github.com/cau-bootcamp/wehavit/assets/39216546/463b5439-155d-4b9c-b7e3-929984505bde" width=100 /> </div><br> 
-<div align="center"> 2023. 08. 19. ~ 진행중 </div>
+<div align="center"> 2023. 08. 19. ~ 진행중 <br><br></div>
+<div align="center">
+  <a href = "https://apps.apple.com/kr/app/wehavit/id6504269390" >
+    <img src="https://github.com/cau-bootcamp/wehavit/assets/39216546/754ff73d-5ef4-42c4-a643-be1bbee58e13" />
+  </a>
+</div>
+
+
+
 
 # Background
 더 나은 삶을 위해 새로운 장기적인 노력을 해보려 할 때 혼자서는 노력을 이어가기 어려운가요? <br>
