@@ -253,7 +253,7 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
                             isDefaultAction: true,
                             child: const Text('취소'),
                             onPressed: () {
-                              Navigator.pop(context, false);
+                              Navigator.pop(context);
                             },
                           ),
                           CupertinoDialogAction(
