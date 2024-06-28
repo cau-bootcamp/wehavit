@@ -3,10 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
+import 'package:wehavit/common/utils/preference_key.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/presentation.dart';
-import 'package:wehavit/presentation/write_post/view/writing_post_guide_view.dart';
 
 class ResolutionListView extends ConsumerStatefulWidget {
   const ResolutionListView({super.key});
@@ -99,26 +100,51 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
                           ),
                         ),
                         onPressed: () async {
-                          showModalBottomSheet(
-                            isScrollControlled: true,
-                            context: context,
-                            builder: (context) => GradientBottomSheet(
-                              SizedBox(
-                                height:
-                                    MediaQuery.sizeOf(context).height * 0.80,
-                                child: const WritingPostGuideView(),
-                              ),
-                            ),
-                          ).whenComplete(() {
-                            showModalBottomSheet(
-                              isScrollControlled: true,
-                              context: context,
-                              builder: (context) =>
-                                  WritingResolutionBottomSheetWidget(
-                                viewModel: viewModel,
-                                provider: provider,
-                                index: index,
-                              ),
+                          final isGuideShown =
+                              await SharedPreferences.getInstance()
+                                  .then((instance) {
+                            return instance
+                                .getBool(PreferenceKey.isWritingPostGuideShown);
+                          });
+
+                          if (isGuideShown == null || isGuideShown == false) {
+                            // ignore: use_build_context_synchronously
+                            showGuideBottomSheet(context)
+                                .whenComplete(() async {
+                              await SharedPreferences.getInstance()
+                                  .then((instance) {
+                                instance.setBool(
+                                  PreferenceKey.isWritingPostGuideShown,
+                                  true,
+                                );
+                              });
+                              showWritingOptionBottomSheet(
+                                // ignore: use_build_context_synchronously
+                                context,
+                                viewModel,
+                                provider,
+                                index,
+                              ).then((returnValue) async {
+                                if (returnValue == true) {
+                                  await provider
+                                      .loadResolutionModelList()
+                                      .whenComplete(() {
+                                    ref
+                                        .watch(resolutionListViewModelProvider)
+                                        .isLoadingView = false;
+                                  });
+                                } else {
+                                  //
+                                }
+                              });
+                            });
+                          } else {
+                            showWritingOptionBottomSheet(
+                              // ignore: use_build_context_synchronously
+                              context,
+                              viewModel,
+                              provider,
+                              index,
                             ).then((returnValue) async {
                               if (returnValue == true) {
                                 await provider
@@ -132,7 +158,7 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
                                 //
                               }
                             });
-                          });
+                          }
                         },
                         child: ResolutionListCellWidget(
                           resolutionEntity:
@@ -174,6 +200,36 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Future<dynamic> showWritingOptionBottomSheet(
+    BuildContext context,
+    ResolutionListViewModel viewModel,
+    ResolutionListViewModelProvider provider,
+    int index,
+  ) {
+    return showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (context) => WritingResolutionBottomSheetWidget(
+        viewModel: viewModel,
+        provider: provider,
+        index: index,
+      ),
+    );
+  }
+
+  Future<dynamic> showGuideBottomSheet(BuildContext context) {
+    return showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (context) => GradientBottomSheet(
+        SizedBox(
+          height: MediaQuery.sizeOf(context).height * 0.80,
+          child: const WritingPostGuideView(),
         ),
       ),
     );
