@@ -6,6 +6,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/presentation.dart';
+import 'package:wehavit/presentation/write_post/view/writing_post_guide_view.dart';
 
 class ResolutionListView extends ConsumerStatefulWidget {
   const ResolutionListView({super.key});
@@ -101,24 +102,36 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
                           showModalBottomSheet(
                             isScrollControlled: true,
                             context: context,
-                            builder: (context) =>
-                                WritingResolutionBottomSheetWidget(
-                              viewModel: viewModel,
-                              provider: provider,
-                              index: index,
+                            builder: (context) => GradientBottomSheet(
+                              SizedBox(
+                                height:
+                                    MediaQuery.sizeOf(context).height * 0.80,
+                                child: const WritingPostGuideView(),
+                              ),
                             ),
-                          ).then((returnValue) async {
-                            if (returnValue == true) {
-                              await provider
-                                  .loadResolutionModelList()
-                                  .whenComplete(() {
-                                ref
-                                    .watch(resolutionListViewModelProvider)
-                                    .isLoadingView = false;
-                              });
-                            } else {
-                              //
-                            }
+                          ).whenComplete(() {
+                            showModalBottomSheet(
+                              isScrollControlled: true,
+                              context: context,
+                              builder: (context) =>
+                                  WritingResolutionBottomSheetWidget(
+                                viewModel: viewModel,
+                                provider: provider,
+                                index: index,
+                              ),
+                            ).then((returnValue) async {
+                              if (returnValue == true) {
+                                await provider
+                                    .loadResolutionModelList()
+                                    .whenComplete(() {
+                                  ref
+                                      .watch(resolutionListViewModelProvider)
+                                      .isLoadingView = false;
+                                });
+                              } else {
+                                //
+                              }
+                            });
                           });
                         },
                         child: ResolutionListCellWidget(
