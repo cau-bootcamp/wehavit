@@ -9,4 +9,6 @@ class GuideImage {
       'assets/images/guide/reaction_guide_2.png';
   static const String reactionGuideImage3 =
       'assets/images/guide/reaction_guide_3.png';
+  static const String reactionGuideImage4 =
+      'assets/images/guide/reaction_guide_4.png';
 }

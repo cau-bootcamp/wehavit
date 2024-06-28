@@ -22,8 +22,26 @@ class GroupPostView extends ConsumerStatefulWidget {
 
 class _GroupPostViewState extends ConsumerState<GroupPostView> {
   @override
-  void didChangeDependencies() {
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (context) => GradientBottomSheet(
+          SizedBox(
+            height: MediaQuery.sizeOf(context).height * 0.80,
+            child: const ReactionGuideView(),
+          ),
+        ),
+      );
+    });
+  }
+
+  @override
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
+
     final viewModel = ref.watch(groupPostViewModelProvider);
     final provider = ref.read(groupPostViewModelProvider.notifier);
     viewModel.groupId = widget.groupEntity.groupId;
