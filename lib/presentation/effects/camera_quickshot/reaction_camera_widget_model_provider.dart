@@ -37,10 +37,12 @@ class ReactionCameraWidgetModelProvider
     );
 
     if (state.cameraController == null && description != null) {
-      state.cameraController =
-          CameraController(description, ResolutionPreset.medium);
+      state.cameraController = CameraController(
+        description,
+        ResolutionPreset.medium,
+        enableAudio: false,
+      );
       await state.cameraController!.initialize();
-
       return Future(() => true);
     }
 
