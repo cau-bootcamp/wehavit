@@ -100,7 +100,6 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
                           ),
                         ),
                         onPressed: () async {
-                          // DEBUG: 수정
                           final isGuideShown =
                               await SharedPreferences.getInstance()
                                   .then((instance) {

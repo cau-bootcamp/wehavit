@@ -26,7 +26,6 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // DEBUG: 수정
       final isGuideShown =
           await SharedPreferences.getInstance().then((instance) {
         return instance.getBool(PreferenceKey.isReactionGuideShown);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
@@ -53,8 +54,17 @@ class _WritingPostGuideViewState extends State<WritingPostGuideView>
             ],
           ),
         ),
-        const SizedBox(
-          height: 16.0,
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 12.0),
+          child: SmoothPageIndicator(
+            controller: pageController!,
+            count: lastPageIndex + 1,
+            effect: const WormEffect(
+              dotHeight: 8,
+              dotWidth: 8,
+              activeDotColor: CustomColors.whYellow,
+            ),
+          ),
         ),
         WideColoredButton(
           buttonTitle: currentPageIndex == lastPageIndex ? '인증 남기러가기' : '다음',
