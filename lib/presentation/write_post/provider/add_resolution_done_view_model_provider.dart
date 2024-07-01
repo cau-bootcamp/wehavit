@@ -1,6 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
+import 'package:wehavit/dependency/dependency.dart';
+import 'package:wehavit/domain/domain.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
@@ -14,6 +16,7 @@ class AddResolutionDoneViewModelProvider
     this.unshareResolutionToFriendUsecase,
     this.shareResolutionToGroupUsecase,
     this.unshareResolutionToGroupUsecase,
+    this.getUserDataFromIdUsecase,
   ) : super(AddResolutionDoneViewModel());
 
   GetFriendListUsecase getFriendListUsecase;
@@ -23,6 +26,7 @@ class AddResolutionDoneViewModelProvider
   UnshareResolutionToFriendUsecase unshareResolutionToFriendUsecase;
   ShareResolutionToGroupUsecase shareResolutionToGroupUsecase;
   UnshareResolutionToGroupUsecase unshareResolutionToGroupUsecase;
+  GetUserDataFromIdUsecase getUserDataFromIdUsecase;
 
   void toggleFriendSelection(index) {
     if (state.tempSelectedFriendList != null) {
@@ -49,6 +53,7 @@ class AddResolutionDoneViewModelProvider
     final sharedFriendList = state.resolutionEntity?.shareFriendEntityList
         ?.map((entity) => entity.userId)
         .toList();
+
     final futureSelectedFriendList =
         state.friendList?.map((futureEntity) async {
       final result = await futureEntity;
@@ -104,6 +109,9 @@ class AddResolutionDoneViewModelProvider
   }
 
   Future<void> applyChangedSharingOfFriends() async {
+    List<UserDataEntity> currentSharedFriendList =
+        state.resolutionEntity!.shareFriendEntityList?.toList() ?? [];
+
     state.selectedFriendList!.forEachIndexed(
       (index, value) async {
         if (state.tempSelectedFriendList![index] != value) {
@@ -131,6 +139,18 @@ class AddResolutionDoneViewModelProvider
                       },
                     ),
                   );
+
+              final userEntity =
+                  await getUserDataFromIdUsecase.call(userId).then(
+                        (result) => result.fold(
+                          (failure) => null,
+                          (entity) => entity,
+                        ),
+                      );
+
+              if (userEntity != null) {
+                currentSharedFriendList.add(userEntity);
+              }
             }
             // 공유 취소하기
             else {
@@ -148,11 +168,17 @@ class AddResolutionDoneViewModelProvider
                       },
                     ),
                   );
+
+              currentSharedFriendList
+                  .removeWhere((entity) => entity.userId == userId);
             }
           }
         }
       },
     );
+
+    state.resolutionEntity = state.resolutionEntity
+        ?.copyWith(shareFriendEntityList: currentSharedFriendList);
   }
 
   Future<void> applyChangedSharingOfGroups() async {

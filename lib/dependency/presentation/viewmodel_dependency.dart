@@ -220,7 +220,7 @@ final addResolutionViewModelProvider = StateNotifierProvider.autoDispose<
   return AddResolutionViewModelProvider(uploadResolutionUseCase);
 });
 
-final addResolutionDoneViewModelProvider = StateNotifierProvider.autoDispose<
+final addResolutionDoneViewModelProvider = StateNotifierProvider<
     AddResolutionDoneViewModelProvider, AddResolutionDoneViewModel>((ref) {
   GetFriendListUsecase getFriendListUsecase =
       ref.watch(getFriendListUseCaseProvider);
@@ -237,6 +237,8 @@ final addResolutionDoneViewModelProvider = StateNotifierProvider.autoDispose<
       ref.watch(shareResolutionToGroupUsecaseProvider);
   UnshareResolutionToGroupUsecase unshareResolutionToGroupdUsecase =
       ref.watch(unshareResolutionToGroupUsecaseProvider);
+  GetUserDataFromIdUsecase getUserDataFromIdUsecase =
+      ref.watch(getUserDataFromIdUsecaseProvider);
 
   return AddResolutionDoneViewModelProvider(
     getFriendListUsecase,
@@ -246,6 +248,7 @@ final addResolutionDoneViewModelProvider = StateNotifierProvider.autoDispose<
     unshareResolutionToFriendUsecase,
     shareResolutionToGroupdUsecase,
     unshareResolutionToGroupdUsecase,
+    getUserDataFromIdUsecase,
   );
 });
 

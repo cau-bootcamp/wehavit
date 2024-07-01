@@ -132,6 +132,7 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
                                   showModifyResolutionShareTargetBottomSheet(
                                     context,
                                     () {},
+                                    resolutionList[index],
                                   );
                                 },
                                 child: ResolutionListCellWidget(
@@ -295,7 +296,11 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
   Future<dynamic> showModifyResolutionShareTargetBottomSheet(
     BuildContext context,
     Function() deleteAccount,
+    ResolutionEntity entity,
   ) {
+    ref.watch(addResolutionDoneViewModelProvider).resolutionEntity = entity;
+    final provider = ref.read(addResolutionDoneViewModelProvider.notifier);
+
     return showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -306,7 +311,21 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
                 buttonTitle: '목표 공유 친구 수정하기',
                 buttonIcon: Icons.people_alt_outlined,
                 onPressed: () async {
-                  Navigator.pop(context);
+                  provider.loadFriendList().whenComplete(() async {
+                    await provider.resetTempFriendList();
+                    showModalBottomSheet(
+                      isScrollControlled: true,
+                      // ignore: use_build_context_synchronously
+                      context: context,
+                      builder: (context) => GradientBottomSheet(
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.82,
+                          child:
+                              const ShareResolutionToFriendBottomSheetWidget(),
+                        ),
+                      ),
+                    );
+                  });
                 },
               ),
               const SizedBox(
@@ -316,7 +335,23 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
                 buttonTitle: '목표 공유 그룹 수정하기',
                 buttonIcon: Icons.flag_outlined,
                 onPressed: () async {
-                  Navigator.pop(context);
+                  provider.loadGroupList().whenComplete(
+                    () async {
+                      await provider.resetTempGroupList();
+                      showModalBottomSheet(
+                        isScrollControlled: true,
+                        // ignore: use_build_context_synchronously
+                        context: context,
+                        builder: (context) => GradientBottomSheet(
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.82,
+                            child:
+                                const ShareResolutionToGroupBottomSheetWidget(),
+                          ),
+                        ),
+                      );
+                    },
+                  );
                 },
               ),
               const SizedBox(
