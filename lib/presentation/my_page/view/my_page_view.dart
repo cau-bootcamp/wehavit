@@ -322,7 +322,10 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
                               const ShareResolutionToFriendBottomSheetWidget(),
                         ),
                       ),
-                    ).whenComplete(() {
+                    ).then((newEntity) {
+                      ref
+                          .watch(addResolutionDoneViewModelProvider)
+                          .resolutionEntity = newEntity;
                       ref
                           .read(myPageViewModelProvider.notifier)
                           .getResolutionList()
@@ -340,23 +343,33 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
                 buttonTitle: '목표 공유 그룹 수정하기',
                 buttonIcon: Icons.flag_outlined,
                 onPressed: () async {
-                  provider.loadGroupList().whenComplete(
-                    () async {
-                      await provider.resetTempGroupList();
-                      showModalBottomSheet(
-                        isScrollControlled: true,
-                        // ignore: use_build_context_synchronously
-                        context: context,
-                        builder: (context) => GradientBottomSheet(
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.82,
-                            child:
-                                const ShareResolutionToGroupBottomSheetWidget(),
-                          ),
+                  provider.loadGroupList().whenComplete(() async {
+                    await provider.resetTempGroupList();
+                    showModalBottomSheet(
+                      isScrollControlled: true,
+                      // ignore: use_build_context_synchronously
+                      context: context,
+                      builder: (context) => GradientBottomSheet(
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.82,
+                          child:
+                              const ShareResolutionToGroupBottomSheetWidget(),
                         ),
-                      );
-                    },
-                  );
+                      ),
+                    ).then((newEntity) {
+                      if (newEntity != null && newEntity is ResolutionEntity) {
+                        ref
+                            .watch(addResolutionDoneViewModelProvider)
+                            .resolutionEntity = newEntity;
+                        ref
+                            .read(myPageViewModelProvider.notifier)
+                            .getResolutionList()
+                            .whenComplete(() {
+                          setState(() {});
+                        });
+                      }
+                    });
+                  });
                 },
               ),
               const SizedBox(

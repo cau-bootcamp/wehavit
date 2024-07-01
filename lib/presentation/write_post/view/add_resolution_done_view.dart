@@ -283,7 +283,7 @@ class _ShareResolutionToGroupBottomSheetWidgetState
               child: TextButton(
                 onPressed: () async {
                   provider.applyChangedSharingOfGroups().whenComplete(() {
-                    Navigator.pop(context);
+                    Navigator.pop(context, viewmodel.resolutionEntity);
                   });
                 },
                 child: const Text(
