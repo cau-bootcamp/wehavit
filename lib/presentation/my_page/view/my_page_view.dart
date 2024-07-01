@@ -131,7 +131,6 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
                                 onPressed: () async {
                                   showModifyResolutionShareTargetBottomSheet(
                                     context,
-                                    () {},
                                     resolutionList[index],
                                   );
                                 },
@@ -295,7 +294,6 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
 
   Future<dynamic> showModifyResolutionShareTargetBottomSheet(
     BuildContext context,
-    Function() deleteAccount,
     ResolutionEntity entity,
   ) {
     ref.watch(addResolutionDoneViewModelProvider).resolutionEntity = entity;
@@ -324,7 +322,14 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
                               const ShareResolutionToFriendBottomSheetWidget(),
                         ),
                       ),
-                    );
+                    ).whenComplete(() {
+                      ref
+                          .read(myPageViewModelProvider.notifier)
+                          .getResolutionList()
+                          .whenComplete(() {
+                        setState(() {});
+                      });
+                    });
                   });
                 },
               ),

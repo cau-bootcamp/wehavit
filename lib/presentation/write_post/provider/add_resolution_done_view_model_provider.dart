@@ -1,9 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/dependency/dependency.dart';
 import 'package:wehavit/domain/domain.dart';
-import 'package:wehavit/domain/usecases/usecases.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 class AddResolutionDoneViewModelProvider
@@ -112,70 +110,68 @@ class AddResolutionDoneViewModelProvider
     List<UserDataEntity> currentSharedFriendList =
         state.resolutionEntity!.shareFriendEntityList?.toList() ?? [];
 
-    state.selectedFriendList!.forEachIndexed(
-      (index, value) async {
-        if (state.tempSelectedFriendList![index] != value) {
-          final userId = await state.friendList?[index].then(
-            (value) => value.fold(
+    // 전체 코드 블록을 async 함수로 만듭니다.
+    await Future.forEach(state.selectedFriendList!.asMap().entries,
+        (entry) async {
+      final index = entry.key;
+      final value = entry.value;
+
+      if (state.tempSelectedFriendList![index] != value) {
+        final userId = await state.friendList?[index].then(
+          (value) => value.fold(
+            (failure) => null,
+            (entity) => entity.userId,
+          ),
+        );
+
+        if (userId != null && state.resolutionEntity?.resolutionId != null) {
+          // 공유하기
+          if (state.tempSelectedFriendList![index]) {
+            final shareResult = await shareResolutionToFriendUsecase.call(
+              resolutionId: state.resolutionEntity!.resolutionId!,
+              friendId: userId,
+            );
+
+            shareResult.fold(
               (failure) => null,
-              (entity) => entity.userId,
-            ),
-          );
+              (success) {
+                state.selectedFriendList?[index] =
+                    state.tempSelectedFriendList![index];
+              },
+            );
 
-          if (userId != null && state.resolutionEntity?.resolutionId != null) {
-            // 공유하기
-            if (state.tempSelectedFriendList![index]) {
-              shareResolutionToFriendUsecase
-                  .call(
-                    resolutionId: state.resolutionEntity!.resolutionId!,
-                    friendId: userId,
-                  )
-                  .then(
-                    (result) => result.fold(
-                      (failure) => null,
-                      (success) {
-                        state.selectedFriendList?[index] =
-                            state.tempSelectedFriendList![index];
-                      },
-                    ),
-                  );
+            final userEntity = await getUserDataFromIdUsecase.call(userId).then(
+                  (result) => result.fold(
+                    (failure) => null,
+                    (entity) => entity,
+                  ),
+                );
 
-              final userEntity =
-                  await getUserDataFromIdUsecase.call(userId).then(
-                        (result) => result.fold(
-                          (failure) => null,
-                          (entity) => entity,
-                        ),
-                      );
-
-              if (userEntity != null) {
-                currentSharedFriendList.add(userEntity);
-              }
-            }
-            // 공유 취소하기
-            else {
-              unshareResolutionToFriendUsecase
-                  .call(
-                    resolutionId: state.resolutionEntity!.resolutionId!,
-                    friendId: userId,
-                  )
-                  .then(
-                    (result) => result.fold(
-                      (failure) => null,
-                      (success) {
-                        state.selectedFriendList?[index] =
-                            state.tempSelectedFriendList![index];
-                      },
-                    ),
-                  );
-
-              currentSharedFriendList
-                  .removeWhere((entity) => entity.userId == userId);
+            if (userEntity != null) {
+              currentSharedFriendList.add(userEntity);
             }
           }
+          // 공유 취소하기
+          else {
+            final unshareResult = await unshareResolutionToFriendUsecase.call(
+              resolutionId: state.resolutionEntity!.resolutionId!,
+              friendId: userId,
+            );
+
+            unshareResult.fold(
+              (failure) => null,
+              (success) {
+                state.selectedFriendList?[index] =
+                    state.tempSelectedFriendList![index];
+              },
+            );
+
+            currentSharedFriendList
+                .removeWhere((entity) => entity.userId == userId);
+          }
         }
-      },
-    );
+      }
+    });
 
     state.resolutionEntity = state.resolutionEntity
         ?.copyWith(shareFriendEntityList: currentSharedFriendList);
