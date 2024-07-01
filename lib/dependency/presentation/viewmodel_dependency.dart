@@ -100,8 +100,7 @@ final reactionAnimationWidgetManagerProvider =
 
 // Group View
 final groupViewModelProvider =
-    StateNotifierProvider.autoDispose<GroupViewModelProvider, GroupViewModel>(
-        (ref) {
+    StateNotifierProvider<GroupViewModelProvider, GroupViewModel>((ref) {
   final getGroupListUsecase = ref.watch(getGroupListUseCaseProvider);
   final getGroupListViewCellWidgetModelUsecase =
       ref.watch(getGroupListViewCellWidgetModelUsecaseProvider);
@@ -123,7 +122,7 @@ final createGroupViewModelProvider = StateNotifierProvider.autoDispose<
   return CreateGroupViewModelProvider(createGroupUsecase);
 });
 
-final resolutionListViewModelProvider = StateNotifierProvider.autoDispose<
+final resolutionListViewModelProvider = StateNotifierProvider<
     ResolutionListViewModelProvider, ResolutionListViewModel>((ref) {
   final getMyResolutionListUsecase =
       ref.watch(getMyResolutionListUsecaseProvider);

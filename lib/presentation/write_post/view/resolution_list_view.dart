@@ -19,22 +19,6 @@ class ResolutionListView extends ConsumerStatefulWidget {
 class _ResolutionListViewState extends ConsumerState<ResolutionListView>
     with AutomaticKeepAliveClientMixin<ResolutionListView> {
   @override
-  void initState() {
-    super.initState();
-
-    unawaited(
-      ref
-          .read(resolutionListViewModelProvider.notifier)
-          .loadResolutionModelList()
-          .whenComplete(() {
-        setState(() {
-          ref.watch(resolutionListViewModelProvider).isLoadingView = false;
-        });
-      }),
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
     super.build(context);
     final viewModel = ref.watch(resolutionListViewModelProvider);

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
+import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
@@ -23,19 +24,77 @@ class MainViewState extends ConsumerState<MainView>
   void initState() {
     super.initState();
     tabController = TabController(length: 4, vsync: this);
-
-    unawaited(loadUserData());
   }
 
   @override
   Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
+
+    loadUserData();
+    loadResolutionData();
+    loadFriendData();
+    loadGroupData();
   }
 
   Future<void> loadUserData() async {
-    setState(() {
-      userDataEntity = ref.read(getMyUserDataUsecaseProvider).call();
+    userDataEntity = ref.read(getMyUserDataUsecaseProvider).call();
+    ref.read(friendListViewModelProvider.notifier).getMyUserDataEntity();
+  }
+
+  Future<void> loadResolutionData() async {
+    ref
+        .read(resolutionListViewModelProvider.notifier)
+        .loadResolutionModelList()
+        .whenComplete(() {
+      setState(() {
+        ref.watch(resolutionListViewModelProvider).isLoadingView = false;
+      });
     });
+  }
+
+  Future<void> loadGroupData() async {
+    // loadGroupCell
+    ref
+        .read(groupViewModelProvider.notifier)
+        .loadMyGroupCellList()
+        .whenComplete(() => setState(() {}));
+  }
+
+  Future<void> loadFriendData() async {
+    ref
+        .read(friendListViewModelProvider.notifier)
+        .getAppliedFriendList()
+        .whenComplete(() => setState(() {}));
+
+    await ref
+        .read(friendListViewModelProvider.notifier)
+        .getFriendList()
+        .whenComplete(() => setState(() {}));
+
+    // loadFriendCell
+    final userIdList = await Future.wait(
+      ref
+              .read(friendListViewModelProvider)
+              .friendFutureUserList
+              ?.map((futureFriendEntity) async {
+            final result = await futureFriendEntity;
+            return result.fold(
+              (failure) => null,
+              (entity) => entity.userId,
+            );
+          }).toList() ??
+          [],
+    );
+
+    final userIdListWithoutNull =
+        userIdList.where((userId) => userId != null).cast<String>().toList();
+
+    ref.watch(groupViewModelProvider).friendUidList = userIdListWithoutNull;
+
+    await ref
+        .read(groupViewModelProvider.notifier)
+        .loadFriendCellWidgetModel(friendUidList: userIdListWithoutNull)
+        .whenComplete(() => setState(() {}));
   }
 
   @override

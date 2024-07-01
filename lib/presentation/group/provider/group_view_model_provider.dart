@@ -29,6 +29,8 @@ class GroupViewModelProvider extends StateNotifier<GroupViewModel> {
       }),
     );
 
+    print(state.myGroupList);
+
     if (state.myGroupList == null) {
       state.groupListViewCellModelList = null;
       return;
