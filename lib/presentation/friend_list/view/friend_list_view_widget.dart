@@ -28,53 +28,17 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
   Widget build(BuildContext context) {
     return EitherFutureBuilder<UserDataEntity>(
       target: widget.futureUserEntity,
-      forWaiting: Row(
-        children: [
-          Container(
-            width: 60,
-            height: 60,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: CustomColors.whBlack,
-            ),
-          ),
-          const SizedBox(
-            width: 12,
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: 20,
-                  width: 200,
-                  decoration: BoxDecoration(
-                    color: CustomColors.whBlack,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Container(
-                  height: 20,
-                  width: 90,
-                  decoration: BoxDecoration(
-                    color: CustomColors.whBlack,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          // ColoredButton(buttonTitle: "Hi"),
-        ],
-      ),
-      forFail: Container(),
-      mainWidgetCallback: (userEntity) {
-        return Row(
+      forWaiting: Container(
+        margin: const EdgeInsets.symmetric(vertical: 6.0),
+        child: Row(
           children: [
-            ProfileImageCircleWidget(
-              size: 60,
-              url: userEntity.userImageUrl,
+            Container(
+              width: 60,
+              height: 60,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: CustomColors.whBlack,
+              ),
             ),
             const SizedBox(
               width: 12,
@@ -83,50 +47,92 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        '${userEntity.userName}',
-                        style: const TextStyle(
-                          color: CustomColors.whWhite,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      Expanded(
-                        child: Text(
-                          userEntity.handle != null
-                              ? ' • ${userEntity.handle}'
-                              : '',
+                  Container(
+                    height: 20,
+                    width: 200,
+                    decoration: BoxDecoration(
+                      color: CustomColors.whBlack,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Container(
+                    height: 20,
+                    width: 90,
+                    decoration: BoxDecoration(
+                      color: CustomColors.whBlack,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // ColoredButton(buttonTitle: "Hi"),
+          ],
+        ),
+      ),
+      forFail: Container(),
+      mainWidgetCallback: (userEntity) {
+        return Container(
+          margin: const EdgeInsets.symmetric(vertical: 6.0),
+          child: Row(
+            children: [
+              ProfileImageCircleWidget(
+                size: 60,
+                url: userEntity.userImageUrl,
+              ),
+              const SizedBox(
+                width: 12,
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          '${userEntity.userName}',
                           style: const TextStyle(
-                            color: CustomColors.whSemiWhite,
+                            color: CustomColors.whWhite,
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                    ],
-                  ),
-                  Text(
-                    userEntity.aboutMe ?? '',
-                    style: const TextStyle(
-                      color: CustomColors.whPlaceholderGrey,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w300,
+                        Expanded(
+                          child: Text(
+                            userEntity.handle != null
+                                ? ' • ${userEntity.handle}'
+                                : '',
+                            style: const TextStyle(
+                              color: CustomColors.whSemiWhite,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
                     ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                ],
+                    Text(
+                      userEntity.aboutMe ?? '',
+                      style: const TextStyle(
+                        color: CustomColors.whPlaceholderGrey,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w300,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            postfixButtonWidget(userEntity, ref),
-          ],
+              postfixButtonWidget(userEntity, ref),
+            ],
+          ),
         );
       },
     );
