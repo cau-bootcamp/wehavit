@@ -99,9 +99,9 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
                     children: [
                       Container(
                         alignment: Alignment.centerLeft,
-                        child: Text(
-                          '내 친구들 (${viewModel.friendFutureUserList!.length})',
-                          style: const TextStyle(
+                        child: const Text(
+                          '내 친구들',
+                          style: TextStyle(
                             fontSize: 16.0,
                             fontWeight: FontWeight.w600,
                             color: CustomColors.whWhite,
@@ -249,9 +249,9 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
                       const SizedBox(
                         height: 32,
                       ),
-                      Text(
-                        '내 친구들 (${viewModel.friendFutureUserList!.length})',
-                        style: const TextStyle(
+                      const Text(
+                        '내 친구들',
+                        style: TextStyle(
                           fontSize: 16.0,
                           fontWeight: FontWeight.w600,
                           color: CustomColors.whWhite,
