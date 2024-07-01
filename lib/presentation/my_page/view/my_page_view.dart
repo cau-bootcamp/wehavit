@@ -128,14 +128,10 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
                                     borderRadius: BorderRadius.circular(16.0),
                                   ),
                                 ),
-                                onPressed: () {
-                                  showToastMessage(
+                                onPressed: () async {
+                                  showModifyResolutionShareTargetBottomSheet(
                                     context,
-                                    text: '현재 개발중인 기능입니다!',
-                                    icon: const Icon(
-                                      Icons.warning,
-                                      color: CustomColors.whYellow,
-                                    ),
+                                    () {},
                                   );
                                 },
                                 child: ResolutionListCellWidget(
@@ -276,6 +272,51 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
                       );
                     }
                   });
+                },
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              WideColoredButton(
+                buttonTitle: '돌아가기',
+                backgroundColor: Colors.transparent,
+                foregroundColor: CustomColors.whPlaceholderGrey,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<dynamic> showModifyResolutionShareTargetBottomSheet(
+    BuildContext context,
+    Function() deleteAccount,
+  ) {
+    return showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return GradientBottomSheet(
+          Column(
+            children: [
+              WideColoredButton(
+                buttonTitle: '목표 공유 친구 수정하기',
+                buttonIcon: Icons.people_alt_outlined,
+                onPressed: () async {
+                  Navigator.pop(context);
+                },
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              WideColoredButton(
+                buttonTitle: '목표 공유 그룹 수정하기',
+                buttonIcon: Icons.flag_outlined,
+                onPressed: () async {
+                  Navigator.pop(context);
                 },
               ),
               const SizedBox(
