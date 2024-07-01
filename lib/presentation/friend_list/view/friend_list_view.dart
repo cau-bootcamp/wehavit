@@ -99,9 +99,9 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
                     children: [
                       Container(
                         alignment: Alignment.centerLeft,
-                        child: Text(
-                          '내 친구들 (${viewModel.friendFutureUserList!.length})',
-                          style: const TextStyle(
+                        child: const Text(
+                          '내 친구들',
+                          style: TextStyle(
                             fontSize: 16.0,
                             fontWeight: FontWeight.w600,
                             color: CustomColors.whWhite,
@@ -130,13 +130,10 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
                               padding: const EdgeInsets.only(bottom: 64),
                               itemCount: viewModel.friendFutureUserList!.length,
                               itemBuilder: (context, index) {
-                                return Container(
-                                  margin: const EdgeInsets.only(bottom: 12),
-                                  child: FriendListCellWidget(
-                                    futureUserEntity:
-                                        viewModel.friendFutureUserList![index],
-                                    cellState: FriendListCellState.normal,
-                                  ),
+                                return FriendListCellWidget(
+                                  futureUserEntity:
+                                      viewModel.friendFutureUserList![index],
+                                  cellState: FriendListCellState.normal,
                                 );
                               },
                             ),
@@ -202,13 +199,10 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
                       Column(
                         children: List<Widget>.generate(
                           viewModel.searchedFutureUserList!.length,
-                          (index) => Container(
-                            margin: const EdgeInsets.only(top: 12.0),
-                            child: FriendListCellWidget(
-                              futureUserEntity:
-                                  viewModel.searchedFutureUserList![index],
-                              cellState: FriendListCellState.toApply,
-                            ),
+                          (index) => FriendListCellWidget(
+                            futureUserEntity:
+                                viewModel.searchedFutureUserList![index],
+                            cellState: FriendListCellState.toApply,
                           ),
                         ),
                       ),
@@ -255,9 +249,9 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
                       const SizedBox(
                         height: 32,
                       ),
-                      Text(
-                        '내 친구들 (${viewModel.friendFutureUserList!.length})',
-                        style: const TextStyle(
+                      const Text(
+                        '내 친구들',
+                        style: TextStyle(
                           fontSize: 16.0,
                           fontWeight: FontWeight.w600,
                           color: CustomColors.whWhite,
@@ -266,13 +260,10 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
                       Column(
                         children: List<Widget>.generate(
                           viewModel.friendFutureUserList!.length,
-                          (index) => Container(
-                            margin: const EdgeInsets.only(top: 12.0),
-                            child: FriendListCellWidget(
-                              futureUserEntity:
-                                  viewModel.friendFutureUserList![index],
-                              cellState: FriendListCellState.managing,
-                            ),
+                          (index) => FriendListCellWidget(
+                            futureUserEntity:
+                                viewModel.friendFutureUserList![index],
+                            cellState: FriendListCellState.managing,
                           ),
                         ),
                       ),

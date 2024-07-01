@@ -220,7 +220,7 @@ final addResolutionViewModelProvider = StateNotifierProvider.autoDispose<
   return AddResolutionViewModelProvider(uploadResolutionUseCase);
 });
 
-final addResolutionDoneViewModelProvider = StateNotifierProvider.autoDispose<
+final addResolutionDoneViewModelProvider = StateNotifierProvider<
     AddResolutionDoneViewModelProvider, AddResolutionDoneViewModel>((ref) {
   GetFriendListUsecase getFriendListUsecase =
       ref.watch(getFriendListUseCaseProvider);
