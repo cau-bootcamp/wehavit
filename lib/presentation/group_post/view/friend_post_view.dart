@@ -30,11 +30,10 @@ class _FriendPostViewState extends ConsumerState<FriendPostView> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // DEBUG: 수정
-      final isGuideShown = false;
-      // await SharedPreferences.getInstance().then((instance) {
-      //   return instance.getBool(PreferenceKey.isReactionGuideShown);
-      // });
+      final isGuideShown =
+          await SharedPreferences.getInstance().then((instance) {
+        return instance.getBool(PreferenceKey.isReactionGuideShown);
+      });
 
       if (isGuideShown == null || isGuideShown == false) {
         showModalBottomSheet(

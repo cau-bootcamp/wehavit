@@ -101,12 +101,12 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
                         ),
                         onPressed: () async {
                           // DEBUG: 수정
-                          final isGuideShown = false;
-                          //     await SharedPreferences.getInstance()
-                          //         .then((instance) {
-                          //   return instance
-                          //       .getBool(PreferenceKey.isWritingPostGuideShown);
-                          // });
+                          final isGuideShown =
+                              await SharedPreferences.getInstance()
+                                  .then((instance) {
+                            return instance
+                                .getBool(PreferenceKey.isWritingPostGuideShown);
+                          });
 
                           if (isGuideShown == null || isGuideShown == false) {
                             // ignore: use_build_context_synchronously
