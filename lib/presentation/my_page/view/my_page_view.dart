@@ -128,14 +128,10 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
                                     borderRadius: BorderRadius.circular(16.0),
                                   ),
                                 ),
-                                onPressed: () {
-                                  showToastMessage(
+                                onPressed: () async {
+                                  showModifyResolutionShareTargetBottomSheet(
                                     context,
-                                    text: '현재 개발중인 기능입니다!',
-                                    icon: const Icon(
-                                      Icons.warning,
-                                      color: CustomColors.whYellow,
-                                    ),
+                                    resolutionList[index],
                                   );
                                 },
                                 child: ResolutionListCellWidget(
@@ -275,6 +271,104 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
                         ),
                       );
                     }
+                  });
+                },
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              WideColoredButton(
+                buttonTitle: '돌아가기',
+                backgroundColor: Colors.transparent,
+                foregroundColor: CustomColors.whPlaceholderGrey,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<dynamic> showModifyResolutionShareTargetBottomSheet(
+    BuildContext context,
+    ResolutionEntity entity,
+  ) {
+    ref.watch(addResolutionDoneViewModelProvider).resolutionEntity = entity;
+    final provider = ref.read(addResolutionDoneViewModelProvider.notifier);
+
+    return showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return GradientBottomSheet(
+          Column(
+            children: [
+              WideColoredButton(
+                buttonTitle: '목표 공유 친구 수정하기',
+                buttonIcon: Icons.people_alt_outlined,
+                onPressed: () async {
+                  provider.loadFriendList().whenComplete(() async {
+                    await provider.resetTempFriendList();
+                    showModalBottomSheet(
+                      isScrollControlled: true,
+                      // ignore: use_build_context_synchronously
+                      context: context,
+                      builder: (context) => GradientBottomSheet(
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.82,
+                          child:
+                              const ShareResolutionToFriendBottomSheetWidget(),
+                        ),
+                      ),
+                    ).then((newEntity) {
+                      ref
+                          .watch(addResolutionDoneViewModelProvider)
+                          .resolutionEntity = newEntity;
+                      ref
+                          .read(myPageViewModelProvider.notifier)
+                          .getResolutionList()
+                          .whenComplete(() {
+                        setState(() {});
+                      });
+                    });
+                  });
+                },
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              WideColoredButton(
+                buttonTitle: '목표 공유 그룹 수정하기',
+                buttonIcon: Icons.flag_outlined,
+                onPressed: () async {
+                  provider.loadGroupList().whenComplete(() async {
+                    await provider.resetTempGroupList();
+                    showModalBottomSheet(
+                      isScrollControlled: true,
+                      // ignore: use_build_context_synchronously
+                      context: context,
+                      builder: (context) => GradientBottomSheet(
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.82,
+                          child:
+                              const ShareResolutionToGroupBottomSheetWidget(),
+                        ),
+                      ),
+                    ).then((newEntity) {
+                      if (newEntity != null && newEntity is ResolutionEntity) {
+                        ref
+                            .watch(addResolutionDoneViewModelProvider)
+                            .resolutionEntity = newEntity;
+                        ref
+                            .read(myPageViewModelProvider.notifier)
+                            .getResolutionList()
+                            .whenComplete(() {
+                          setState(() {});
+                        });
+                      }
+                    });
                   });
                 },
               ),

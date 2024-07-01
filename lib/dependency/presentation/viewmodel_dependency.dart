@@ -237,6 +237,8 @@ final addResolutionDoneViewModelProvider = StateNotifierProvider<
       ref.watch(shareResolutionToGroupUsecaseProvider);
   UnshareResolutionToGroupUsecase unshareResolutionToGroupdUsecase =
       ref.watch(unshareResolutionToGroupUsecaseProvider);
+  GetUserDataFromIdUsecase getUserDataFromIdUsecase =
+      ref.watch(getUserDataFromIdUsecaseProvider);
 
   return AddResolutionDoneViewModelProvider(
     getFriendListUsecase,
@@ -246,6 +248,7 @@ final addResolutionDoneViewModelProvider = StateNotifierProvider<
     unshareResolutionToFriendUsecase,
     shareResolutionToGroupdUsecase,
     unshareResolutionToGroupdUsecase,
+    getUserDataFromIdUsecase,
   );
 });
 
