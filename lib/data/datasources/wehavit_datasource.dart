@@ -195,4 +195,9 @@ abstract class WehavitDatasource {
   EitherFuture<List<String>> getResolutionIdListSharedToMe({
     required String targetUid,
   });
+
+  EitherFuture<void> updateResolutionEntity({
+    required String targetResolutionId,
+    required ResolutionEntity newEntity,
+  });
 }

@@ -18,6 +18,8 @@ class ResolutionListViewModelProvider
   final UploadConfirmPostUseCase _uploadConfirmPostUseCase;
 
   Future<void> loadResolutionModelList() async {
+    state.isLoadingView = false;
+
     final resolutionList = await _getMyResolutionListUsecase().then(
       (result) => result.fold(
         (failure) => null,
@@ -80,6 +82,8 @@ class ResolutionListViewModelProvider
         ),
       );
     });
+
+    state.isLoadingView = false;
   }
 
   Future<void> uploadPostWithoutContents({

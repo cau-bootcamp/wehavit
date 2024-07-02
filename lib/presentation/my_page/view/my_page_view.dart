@@ -397,7 +397,32 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
                           ),
                           CupertinoDialogAction(
                             isDestructiveAction: true,
-                            onPressed: () {},
+                            onPressed: () {
+                              ref
+                                  .read(myPageViewModelProvider.notifier)
+                                  .deactiveResolution(
+                                    targetResolutionEntity: entity,
+                                  )
+                                  .whenComplete(() async {
+                                ref
+                                    .read(
+                                      resolutionListViewModelProvider.notifier,
+                                    )
+                                    .loadResolutionModelList();
+                                await ref
+                                    .read(myPageViewModelProvider.notifier)
+                                    .loadData()
+                                    .whenComplete(() {
+                                  context
+                                      .findAncestorStateOfType<
+                                          _MyPageScreenState>()
+                                      ?.setState(() {});
+                                });
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                setState(() {});
+                              });
+                            },
                             child: const Text('삭제'),
                           ),
                         ],

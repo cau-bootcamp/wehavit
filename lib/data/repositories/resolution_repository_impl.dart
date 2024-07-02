@@ -104,4 +104,15 @@ class ResolutionRepositoryImpl implements ResolutionRepository {
   }) {
     return _wehavitDatasource.getResolutionIdListSharedToMe(targetUid: from);
   }
+
+  @override
+  EitherFuture<void> updateResolutionEntity({
+    required String targetResolutionId,
+    required ResolutionEntity newEntity,
+  }) {
+    return _wehavitDatasource.updateResolutionEntity(
+      targetResolutionId: targetResolutionId,
+      newEntity: newEntity,
+    );
+  }
 }
