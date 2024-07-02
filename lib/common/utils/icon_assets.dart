@@ -9,6 +9,7 @@ class CustomIconImage {
   static const String kakaoLogInLogoIcon =
       'assets/images/icons/social_kakao_log_in_logo.png';
 
+  static const String iconNone = 'assets/images/icons/icon_none.png';
   static const String iconBag = 'assets/images/icons/icon_bag.png';
   static const String iconBikeInside =
       'assets/images/icons/icon_bike_inside.png';
@@ -29,6 +30,7 @@ class CustomIconImage {
   static const String iconWalk = 'assets/images/icons/icon_walk.png';
 
   static const List<String> resolutionIcons = [
+    iconNone,
     iconBike,
     iconBikeInside,
     iconSwim,
