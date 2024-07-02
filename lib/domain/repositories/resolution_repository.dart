@@ -45,4 +45,9 @@ abstract class ResolutionRepository {
     required String targetUserId,
     required String targetResolutionId,
   });
+
+  EitherFuture<void> updateResolutionEntity({
+    required String targetResolutionId,
+    required ResolutionEntity newEntity,
+  });
 }

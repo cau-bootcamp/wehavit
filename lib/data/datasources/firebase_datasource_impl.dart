@@ -368,6 +368,10 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           .collection(
             FirebaseCollectionName.getTargetResolutionCollectionName(userId),
           )
+          .where(
+            FirebaseResolutionFieldName.resolutionIsActive,
+            isEqualTo: true,
+          )
           .get()
           .then(
             (result) => Future.wait(
@@ -2403,6 +2407,29 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       });
     } on Exception catch (e) {
       return Future(() => left(Failure(e.toString())));
+    }
+  }
+
+  @override
+  EitherFuture<void> updateResolutionEntity({
+    required String targetResolutionId,
+    required ResolutionEntity newEntity,
+  }) async {
+    try {
+      final myUid = getMyUserId();
+
+      await firestore
+          .collection(
+            FirebaseCollectionName.getTargetResolutionCollectionName(myUid),
+          )
+          .doc(targetResolutionId)
+          .update(FirebaseResolutionModel.fromEntity(newEntity).toJson());
+
+      return Future(() => right(null));
+    } on Exception {
+      return Future(
+        () => left(const Failure('catch error on updateResolutionEntity')),
+      );
     }
   }
 }

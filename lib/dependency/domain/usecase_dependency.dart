@@ -411,3 +411,15 @@ final revokeAppleSignInUsecaseProvider =
   final authRepository = ref.watch(authRepositoryProvider);
   return RevokeAppleSignInUsecase(authRepository);
 });
+
+final updateResolutionUseCaseProvider =
+    Provider<UpdateResolutionUseCase>((ref) {
+  final resolutionRepository = ref.watch(resolutionRepositoryProvider);
+  return UpdateResolutionUseCase(resolutionRepository);
+});
+
+final setResolutionDeactiveUsecaseProvider =
+    Provider<SetResolutionDeactiveUsecase>((ref) {
+  final resolutionRepository = ref.watch(resolutionRepositoryProvider);
+  return SetResolutionDeactiveUsecase(resolutionRepository);
+});

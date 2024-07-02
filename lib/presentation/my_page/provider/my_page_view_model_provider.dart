@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
 import 'package:wehavit/presentation/my_page/model/model.dart';
 
@@ -9,11 +10,13 @@ class MyPageViewModelProvider extends StateNotifier<MyPageViewModel> {
     this.getMyResolutionListUsecase,
     this.getMyUserDataUsecase,
     this.revokeAppleSignInUsecase,
+    this.setResolutionDeactiveUsecase,
   ) : super(MyPageViewModel());
 
   final GetMyResolutionListUsecase getMyResolutionListUsecase;
   final GetMyUserDataUsecase getMyUserDataUsecase;
   final RevokeAppleSignInUsecase revokeAppleSignInUsecase;
+  final SetResolutionDeactiveUsecase setResolutionDeactiveUsecase;
 
   Future<void> loadData() async {
     getResolutionList();
@@ -81,5 +84,14 @@ class MyPageViewModelProvider extends StateNotifier<MyPageViewModel> {
       Navigator.pop(context, false);
     }
     return false;
+  }
+
+  Future<void> deactiveResolution({
+    required ResolutionEntity targetResolutionEntity,
+  }) async {
+    await setResolutionDeactiveUsecase.call(
+      resolutionId: targetResolutionEntity.resolutionId ?? '',
+      entity: targetResolutionEntity,
+    );
   }
 }

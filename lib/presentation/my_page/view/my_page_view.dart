@@ -127,7 +127,7 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
                                   ),
                                 ),
                                 onPressed: () async {
-                                  showModifyResolutionShareTargetBottomSheet(
+                                  showModifyResolutionBottomSheet(
                                     context,
                                     resolutionList[index],
                                   );
@@ -290,7 +290,7 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
     );
   }
 
-  Future<dynamic> showModifyResolutionShareTargetBottomSheet(
+  Future<dynamic> showModifyResolutionBottomSheet(
     BuildContext context,
     ResolutionEntity entity,
   ) {
@@ -367,6 +367,78 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
                         });
                       }
                     });
+                  });
+                },
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              WideColoredButton(
+                buttonTitle: '목표 삭제하기',
+                buttonIcon: Icons.flag_outlined,
+                foregroundColor: PointColors.red,
+                onPressed: () async {
+                  showCupertinoDialog(
+                    context: context,
+                    builder: (context) {
+                      return CupertinoAlertDialog(
+                        title: const Text('정말 삭제하시겠어요?'),
+                        content: const Text('목표에 대해 작성하신 인증 글은 유지됩니다'),
+                        actions: [
+                          CupertinoDialogAction(
+                            textStyle: const TextStyle(
+                              color: PointColors.blue,
+                            ),
+                            isDefaultAction: true,
+                            child: const Text('취소'),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          CupertinoDialogAction(
+                            isDestructiveAction: true,
+                            onPressed: () {
+                              ref
+                                  .read(myPageViewModelProvider.notifier)
+                                  .deactiveResolution(
+                                    targetResolutionEntity: entity,
+                                  )
+                                  .whenComplete(() async {
+                                ref
+                                    .read(
+                                      resolutionListViewModelProvider.notifier,
+                                    )
+                                    .loadResolutionModelList();
+                                await ref
+                                    .read(myPageViewModelProvider.notifier)
+                                    .loadData()
+                                    .whenComplete(() {
+                                  context
+                                      .findAncestorStateOfType<
+                                          _MyPageScreenState>()
+                                      ?.setState(() {});
+                                });
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                setState(() {});
+                              });
+                            },
+                            child: const Text('삭제'),
+                          ),
+                        ],
+                      );
+                    },
+                  ).then((result) {
+                    if (result == false) {
+                      showToastMessage(
+                        context,
+                        text: '오류 발생, 문의 부탁드립니다',
+                        icon: const Icon(
+                          Icons.report_problem,
+                          color: CustomColors.whYellow,
+                        ),
+                      );
+                    }
                   });
                 },
               ),
