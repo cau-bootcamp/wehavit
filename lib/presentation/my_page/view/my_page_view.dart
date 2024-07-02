@@ -27,8 +27,6 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
   void initState() {
     super.initState();
     widget.tabController.addListener(_handleTabChange);
-
-    unawaited(ref.read(myPageViewModelProvider.notifier).loadData());
   }
 
   @override
@@ -197,7 +195,7 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
                       ),
                     ).then((result) {
                       if (result == true) {
-                        mainViewState?.loadUserData();
+                        mainViewState?.setState(() {});
 
                         ref
                             .read(myPageViewModelProvider.notifier)

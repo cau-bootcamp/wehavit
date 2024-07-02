@@ -14,27 +14,6 @@ class FriendListView extends ConsumerStatefulWidget {
 }
 
 class FrinedListViewState extends ConsumerState<FriendListView> {
-  @override
-  void initState() {
-    super.initState();
-
-    unawaited(
-      ref.read(friendListViewModelProvider.notifier).getMyUserDataEntity(),
-    );
-    unawaited(
-      ref
-          .read(friendListViewModelProvider.notifier)
-          .getAppliedFriendList()
-          .whenComplete(() => setState(() {})),
-    );
-    unawaited(
-      ref
-          .read(friendListViewModelProvider.notifier)
-          .getFriendList()
-          .whenComplete(() => setState(() {})),
-    );
-  }
-
   bool isManagingMode = false;
 
   @override

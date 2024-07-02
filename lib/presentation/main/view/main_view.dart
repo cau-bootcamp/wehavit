@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/dependency/domain/usecase_dependency.dart';
-import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 class MainView extends ConsumerStatefulWidget {
@@ -17,29 +16,89 @@ class MainView extends ConsumerStatefulWidget {
 class MainViewState extends ConsumerState<MainView>
     with TickerProviderStateMixin {
   late TabController tabController;
-  late EitherFuture<UserDataEntity> userDataEntity;
 
   @override
   void initState() {
     super.initState();
     tabController = TabController(length: 4, vsync: this);
-
-    unawaited(loadUserData());
   }
 
   @override
   Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
+
+    loadUserData();
+    loadResolutionData();
+    loadFriendData();
+    loadGroupData();
   }
 
   Future<void> loadUserData() async {
-    setState(() {
-      userDataEntity = ref.read(getMyUserDataUsecaseProvider).call();
+    ref.read(friendListViewModelProvider.notifier).getMyUserDataEntity();
+    ref.read(myPageViewModelProvider.notifier).loadData();
+  }
+
+  Future<void> loadResolutionData() async {
+    // 인증 리스트의 목표 셀 로드
+    ref
+        .read(resolutionListViewModelProvider.notifier)
+        .loadResolutionModelList()
+        .whenComplete(() {
+      setState(() {
+        ref.watch(resolutionListViewModelProvider).isLoadingView = false;
+      });
     });
+  }
+
+  Future<void> loadGroupData() async {
+    // 그룹리스트의 그룹 셀 로드
+    ref
+        .read(groupViewModelProvider.notifier)
+        .loadMyGroupCellList()
+        .whenComplete(() => setState(() {}));
+  }
+
+  Future<void> loadFriendData() async {
+    // 친구리스트 셀 로드
+    ref
+        .read(friendListViewModelProvider.notifier)
+        .getAppliedFriendList()
+        .whenComplete(() => setState(() {}));
+
+    await ref
+        .read(friendListViewModelProvider.notifier)
+        .getFriendList()
+        .whenComplete(() => setState(() {}));
+
+    // 그룹리스트의 친구 셀 로드
+    final userIdList = await Future.wait(
+      ref
+              .read(friendListViewModelProvider)
+              .friendFutureUserList
+              ?.map((futureFriendEntity) async {
+            final result = await futureFriendEntity;
+            return result.fold(
+              (failure) => null,
+              (entity) => entity.userId,
+            );
+          }).toList() ??
+          [],
+    );
+
+    final userIdListWithoutNull =
+        userIdList.where((userId) => userId != null).cast<String>().toList();
+
+    ref.watch(groupViewModelProvider).friendUidList = userIdListWithoutNull;
+
+    await ref
+        .read(groupViewModelProvider.notifier)
+        .loadFriendCellWidgetModel(friendUidList: userIdListWithoutNull)
+        .whenComplete(() => setState(() {}));
   }
 
   @override
   Widget build(BuildContext context) {
+    final myPageViewModel = ref.watch(myPageViewModelProvider);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: CustomColors.whDarkBlack,
@@ -96,7 +155,8 @@ class MainViewState extends ConsumerState<MainView>
                             ),
                             TabBarProfileImageButton(
                               isSelected: tabController.index == 3,
-                              futureUserDataEntity: userDataEntity,
+                              futureUserDataEntity:
+                                  myPageViewModel.futureMyUserDataEntity!,
                             ),
                           ],
                         ),
