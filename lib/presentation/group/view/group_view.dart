@@ -221,7 +221,4 @@ class _GroupViewState extends ConsumerState<GroupView> {
         .loadFriendCellWidgetModel(friendUidList: userIdListWithoutNull)
         .whenComplete(() => setState(() {}));
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

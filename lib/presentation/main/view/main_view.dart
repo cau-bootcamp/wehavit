@@ -3,9 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
-import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 class MainView extends ConsumerStatefulWidget {
@@ -18,7 +16,6 @@ class MainView extends ConsumerStatefulWidget {
 class MainViewState extends ConsumerState<MainView>
     with TickerProviderStateMixin {
   late TabController tabController;
-  late EitherFuture<UserDataEntity> userDataEntity;
 
   @override
   void initState() {
@@ -37,11 +34,12 @@ class MainViewState extends ConsumerState<MainView>
   }
 
   Future<void> loadUserData() async {
-    userDataEntity = ref.read(getMyUserDataUsecaseProvider).call();
     ref.read(friendListViewModelProvider.notifier).getMyUserDataEntity();
+    ref.read(myPageViewModelProvider.notifier).loadData();
   }
 
   Future<void> loadResolutionData() async {
+    // 인증 리스트의 목표 셀 로드
     ref
         .read(resolutionListViewModelProvider.notifier)
         .loadResolutionModelList()
@@ -53,7 +51,7 @@ class MainViewState extends ConsumerState<MainView>
   }
 
   Future<void> loadGroupData() async {
-    // loadGroupCell
+    // 그룹리스트의 그룹 셀 로드
     ref
         .read(groupViewModelProvider.notifier)
         .loadMyGroupCellList()
@@ -61,6 +59,7 @@ class MainViewState extends ConsumerState<MainView>
   }
 
   Future<void> loadFriendData() async {
+    // 친구리스트 셀 로드
     ref
         .read(friendListViewModelProvider.notifier)
         .getAppliedFriendList()
@@ -71,7 +70,7 @@ class MainViewState extends ConsumerState<MainView>
         .getFriendList()
         .whenComplete(() => setState(() {}));
 
-    // loadFriendCell
+    // 그룹리스트의 친구 셀 로드
     final userIdList = await Future.wait(
       ref
               .read(friendListViewModelProvider)
@@ -99,6 +98,7 @@ class MainViewState extends ConsumerState<MainView>
 
   @override
   Widget build(BuildContext context) {
+    final myPageViewModel = ref.watch(myPageViewModelProvider);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: CustomColors.whDarkBlack,
@@ -155,7 +155,8 @@ class MainViewState extends ConsumerState<MainView>
                             ),
                             TabBarProfileImageButton(
                               isSelected: tabController.index == 3,
-                              futureUserDataEntity: userDataEntity,
+                              futureUserDataEntity:
+                                  myPageViewModel.futureMyUserDataEntity!,
                             ),
                           ],
                         ),
