@@ -1,8 +1,9 @@
 class AddResolutionViewModel {
   int focusedStep = 0;
   int currentStep = 0;
+  int maxStep = 5;
 
-  List<bool> inputConditions = [false, false, false, true, true];
+  List<bool> inputConditions = [false, false, false, true, true, true];
 
   String name = '';
   String goal = '';

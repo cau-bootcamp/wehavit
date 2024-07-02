@@ -364,6 +364,75 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                       ],
                     ),
                   ),
+                  Visibility(
+                    visible: viewmodel.currentStep >= 5,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Visibility(
+                          visible: viewmodel.focusedStep == 5,
+                          child: const Text(
+                            '도전을 나타낼 아이콘을 골라주세요',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: CustomColors.whWhite,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 16.0,
+                        ),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: List<Widget>.generate(
+                              CustomIconImage.resolutionIcons.length,
+                              (int index) => TextButton(
+                                style: TextButton.styleFrom(
+                                  minimumSize: Size.zero,
+                                  padding: EdgeInsets.zero,
+                                  tapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    provider.setFocusedStep(5);
+                                    provider.setIconIndex(index);
+                                  });
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.only(
+                                    right: 6.0,
+                                  ),
+                                  width: 52,
+                                  height: 52,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12.0),
+                                    border: Border.all(
+                                      color: viewmodel.iconIndex == index
+                                          ? CustomColors.whYellow
+                                          : CustomColors.whWhite,
+                                      width: 2.0,
+                                    ),
+                                    color: viewmodel.iconIndex == index
+                                        ? CustomColors.whYellowDark
+                                        : CustomColors.whGrey,
+                                  ),
+                                  child: Image.asset(
+                                    CustomIconImage.resolutionIcons[index],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 40,
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -374,7 +443,7 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
               child: WideColoredButton(
                 onPressed: () async {
                   // 데이터 채우기
-                  if (viewmodel.currentStep != 4) {
+                  if (viewmodel.currentStep != viewmodel.maxStep) {
                     setState(() {
                       viewmodel.currentStep += 1;
                       provider.setFocusedStep(viewmodel.currentStep);
@@ -419,8 +488,8 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                     // navigate
                   }
                 },
-                buttonTitle: viewmodel.currentStep != 4
-                    ? '다음 (${viewmodel.currentStep + 1}/5)'
+                buttonTitle: viewmodel.currentStep != viewmodel.maxStep
+                    ? '다음 (${viewmodel.currentStep + 1}/${viewmodel.maxStep + 1})'
                     : '도전 만들기',
                 foregroundColor: CustomColors.whBlack,
                 backgroundColor: CustomColors.whYellow,

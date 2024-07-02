@@ -17,10 +17,10 @@ class ResolutionListCellWidget extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<ResolutionListCellWidget> createState() =>
-      _MyPageResolutionListCellWidgetState();
+      _ResolutionListCellWidgetState();
 }
 
-class _MyPageResolutionListCellWidgetState
+class _ResolutionListCellWidgetState
     extends ConsumerState<ResolutionListCellWidget> {
   @override
   Widget build(BuildContext context) {
@@ -60,6 +60,7 @@ class _MyPageResolutionListCellWidgetState
                   showGoalStatement: widget.showDetails,
                   pointColor: PointColors
                       .colorList[widget.resolutionEntity.colorIndex ?? 0],
+                  iconIndex: widget.resolutionEntity.iconIndex ?? 0,
                 ),
                 const SizedBox(
                   height: 12,
@@ -110,12 +111,14 @@ class ResolutionListCellHeadWidget extends StatelessWidget {
     required this.goalStatement,
     required this.showGoalStatement,
     required this.pointColor,
+    required this.iconIndex,
   });
 
   final String resolutionName;
   final String goalStatement;
   final bool showGoalStatement;
   final Color pointColor;
+  final int iconIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -128,6 +131,7 @@ class ResolutionListCellHeadWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(8.0),
             color: pointColor,
           ),
+          child: Image.asset(CustomIconImage.resolutionIcons[iconIndex]),
         ),
         const SizedBox(
           width: 12,
