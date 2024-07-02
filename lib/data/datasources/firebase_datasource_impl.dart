@@ -368,6 +368,10 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           .collection(
             FirebaseCollectionName.getTargetResolutionCollectionName(userId),
           )
+          .where(
+            FirebaseResolutionFieldName.resolutionIsActive,
+            isEqualTo: true,
+          )
           .get()
           .then(
             (result) => Future.wait(
