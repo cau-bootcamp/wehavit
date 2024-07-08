@@ -2,21 +2,29 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:wehavit/common/constants/constants.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
+// ignore: must_be_immutable
 class ResolutionDetailView extends ConsumerStatefulWidget {
-  const ResolutionDetailView({
+  ResolutionDetailView({
     super.key,
     required this.entity,
   });
 
-  final ResolutionEntity entity;
+  ResolutionEntity entity;
   @override
   ConsumerState<ResolutionDetailView> createState() =>
       _ResolutionDetailViewState();
+}
+
+class ChartData {
+  ChartData(this.x, this.y);
+  final String x;
+  final double? y;
 }
 
 class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
@@ -32,7 +40,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
         leadingTitle: '',
         trailingTitle: '',
         trailingIcon: Icons.more_horiz,
-        trailingAction: () {
+        trailingAction: () async {
           showModifyResolutionBottomSheet(
             context,
             widget.entity,
@@ -160,16 +168,16 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                 const SizedBox(
                   height: 16.0,
                 ),
-                Row(
+                const Row(
                   children: [
-                    const ResolutionSingleStatisticCellWidget(
+                    ResolutionSingleStatisticCellWidget(
                       primary: '32회',
                       secondary: '실천 인증 횟수',
                     ),
-                    const SizedBox(
+                    SizedBox(
                       width: 16.0,
                     ),
-                    const ResolutionSingleStatisticCellWidget(
+                    ResolutionSingleStatisticCellWidget(
                       primary: '32회',
                       secondary: '실천 인증 횟수',
                     ),
@@ -178,16 +186,16 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                 const SizedBox(
                   height: 16.0,
                 ),
-                Row(
+                const Row(
                   children: [
-                    const ResolutionSingleStatisticCellWidget(
+                    ResolutionSingleStatisticCellWidget(
                       primary: '32회',
                       secondary: '실천 인증 횟수',
                     ),
-                    const SizedBox(
+                    SizedBox(
                       width: 16.0,
                     ),
-                    const ResolutionSingleStatisticCellWidget(
+                    ResolutionSingleStatisticCellWidget(
                       primary: '32회',
                       secondary: '실천 인증 횟수',
                     ),
@@ -220,6 +228,60 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                     borderRadius: BorderRadius.circular(16.0),
                     color: CustomColors.whGrey,
                   ),
+                  child: SizedBox(
+                    height: 200,
+                    child: SfCartesianChart(
+                      plotAreaBorderColor: Colors.transparent,
+                      primaryXAxis: const CategoryAxis(
+                        majorGridLines:
+                            MajorGridLines(color: Colors.transparent),
+                        majorTickLines:
+                            MajorTickLines(color: Colors.transparent),
+                        labelStyle: TextStyle(
+                          color: Colors.white, // 레이블 색상을 흰색으로 변경
+                          fontSize: 14, // 폰트 크기 (옵션)
+                          fontWeight: FontWeight.normal, // 폰트 굵기 (옵션)
+                        ),
+                      ),
+                      primaryYAxis: const NumericAxis(
+                        isVisible: false,
+                      ),
+                      series: <CartesianSeries>[
+                        // Renders bar chart
+                        ColumnSeries<ChartData, String>(
+                          animationDuration: 750,
+                          dataLabelMapper: (datum, index) =>
+                              datum.y?.toInt().toString(),
+                          dataLabelSettings: const DataLabelSettings(
+                            isVisible: true,
+                            textStyle: TextStyle(
+                              color: CustomColors.whWhite,
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          color: PointColors
+                              .colorList[widget.entity.colorIndex ?? 0],
+                          dataSource: [
+                            ChartData('월', 35),
+                            ChartData('화', 28),
+                            ChartData('수', 34),
+                            ChartData('목', 32),
+                            ChartData('금', 40),
+                            ChartData('토', 40),
+                            ChartData('일', 40),
+                          ],
+                          xValueMapper: (ChartData data, _) => data.x,
+                          yValueMapper: (ChartData data, _) => data.y,
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(8),
+                            topRight: Radius.circular(8),
+                          ),
+                          width: 0.5,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -251,10 +313,14 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 32.0,
             ),
-            WideColoredButton(buttonTitle: '목표 삭제하기'),
+            WideColoredButton(
+              buttonTitle: '목표 삭제하기',
+              foregroundColor: CustomColors.whRed,
+              onPressed: () {},
+            ),
           ],
         ),
       ),
@@ -293,6 +359,8 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                         ),
                       ),
                     ).then((newEntity) {
+                      widget.entity = newEntity;
+
                       ref
                           .watch(addResolutionDoneViewModelProvider)
                           .resolutionEntity = newEntity;

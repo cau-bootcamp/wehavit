@@ -437,7 +437,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                                         ),
                                 color: Color.lerp(
                                   CustomColors.whYellow,
-                                  CustomColors.whRedBright,
+                                  CustomColors.whRed,
                                   min(1, viewModel.countSend / 24),
                                 ),
                                 fontWeight: FontWeight.w700,
