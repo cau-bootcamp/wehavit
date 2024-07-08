@@ -1,6 +1,8 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:wehavit/common/constants/constants.dart';
@@ -29,7 +31,18 @@ class ChartData {
 
 class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    ref.watch(resolutionDetailViewModelProvider).resolutionEntity =
+        widget.entity;
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final viewModel = ref.watch(resolutionDetailViewModelProvider);
+    final provider = ref.read(resolutionDetailViewModelProvider.notifier);
+
     return Scaffold(
       appBar: WehavitAppBar(
         title: widget.entity.resolutionName ?? '나의 도전',
@@ -249,7 +262,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                       series: <CartesianSeries>[
                         // Renders bar chart
                         ColumnSeries<ChartData, String>(
-                          animationDuration: 750,
+                          animationDuration: 0,
                           dataLabelMapper: (datum, index) =>
                               datum.y?.toInt().toString(),
                           dataLabelSettings: const DataLabelSettings(
@@ -303,13 +316,65 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                 const SizedBox(
                   height: 16,
                 ),
-                Container(
-                  padding: const EdgeInsets.all(20.0),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16.0),
-                    color: CustomColors.whGrey,
-                  ),
+                Column(
+                  children: [
+                    putScrollableCalendarWidget(viewModel, provider),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Stack(
+                          alignment: Alignment.centerRight,
+                          children: [
+                            UserProfileBar(
+                              futureUserEntity: Future(
+                                () => right(
+                                  UserDataEntity.dummyModel,
+                                ),
+                              ),
+                            ),
+                            if (ConfirmPostEntityDummy.dummy.hasRested == false)
+                              Text(
+                                // ignore: lines_longer_than_80_chars
+                                '${ConfirmPostEntityDummy.dummy.createdAt!.hour > 12 ? '오후' : '오전'} ${ConfirmPostEntityDummy.dummy.createdAt!.hour > 12 ? ConfirmPostEntityDummy.dummy.createdAt!.hour - 12 : ConfirmPostEntityDummy.dummy.createdAt!.hour}시 ${ConfirmPostEntityDummy.dummy.createdAt!.minute}분',
+                                style: const TextStyle(
+                                  color: CustomColors.whWhite,
+                                ),
+                              )
+                            else
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16.0),
+                                  color: CustomColors.whRed,
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 4.0,
+                                  horizontal: 8.0,
+                                ),
+                                child: const Text(
+                                  '오늘 실천 실패 😢',
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.w300,
+                                    color: CustomColors.whWhite,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                        // const SizedBox(height: 12.0),
+
+                        // ResolutionLinearGaugeWidget(
+                        //   resolutionEntity: resolutionEntity,
+                        //   futureDoneList: resolutionDoneListForWrittenWeek,
+                        // ),
+
+                        const SizedBox(height: 12.0),
+                        ConfirmPostContentWidget(
+                          confirmPostEntity: ConfirmPostEntityDummy.dummy,
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -325,6 +390,183 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
         ),
       ),
       backgroundColor: CustomColors.whDarkBlack,
+    );
+  }
+
+  ProviderScope putScrollableCalendarWidget(
+    ResolutionDetailViewModel viewModel,
+    ResolutionDetailViewModelProvider provider,
+  ) {
+    return ProviderScope(
+      child: CarouselSlider.builder(
+        itemBuilder: (context, index, realIndex) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: List<Widget>.generate(7, (jndex) {
+              final cellDate = viewModel.todayDate.subtract(
+                Duration(
+                  days: viewModel.todayDate.weekday - 1 - jndex + 7 * index,
+                ),
+              );
+              final isFuture = viewModel.todayDate.isBefore(cellDate);
+
+              return Expanded(
+                child: GestureDetector(
+                  onTapUp: (details) async {
+                    if (!isFuture) {
+                      provider
+                          .changeSelectedDate(
+                        to: cellDate,
+                      )
+                          .then((value) {
+                        if (mounted) {
+                          setState(() {});
+                        }
+                      });
+                    }
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 4.0,
+                    ),
+                    clipBehavior: Clip.hardEdge,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: CustomColors.whBlack,
+                        width: 2,
+                        strokeAlign: BorderSide.strokeAlignOutside,
+                      ),
+                      borderRadius: BorderRadius.circular(
+                        14.0,
+                      ),
+                    ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          const BoxShadow(
+                            blurRadius: 4,
+                            color: CustomColors.whBlack,
+                          ),
+                          BoxShadow(
+                            offset: const Offset(0, 4),
+                            blurRadius: 6,
+                            color: isFuture
+                                ? CustomColors.whGrey
+                                : cellDate == viewModel.selectedDate
+                                    ? CustomColors.whYellow
+                                    : CustomColors.whYellowDark,
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Flexible(
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                cellDate.day == 1
+                                    ? '${cellDate.month}/${cellDate.day}'
+                                    : cellDate.day.toString(),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: isFuture ||
+                                          cellDate != viewModel.selectedDate
+                                      ? CustomColors.whPlaceholderGrey
+                                      : CustomColors.whBlack,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Flexible(
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Visibility(
+                                visible: !isFuture,
+                                replacement: Text(
+                                  '-',
+                                  style: TextStyle(
+                                    height: 1.0,
+                                    fontFamily: 'Giants',
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w700,
+                                    color: isFuture ||
+                                            cellDate != viewModel.selectedDate
+                                        ? CustomColors.whPlaceholderGrey
+                                        : CustomColors.whBlack,
+                                  ),
+                                ),
+                                child: EitherFutureBuilder<
+                                    List<ConfirmPostEntity>>(
+                                  target: viewModel.confirmPostList[cellDate],
+                                  forWaiting: const SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(
+                                        2.0,
+                                      ),
+                                      child: CircularProgressIndicator(
+                                        color: CustomColors.whBrightGrey,
+                                      ),
+                                    ),
+                                  ),
+                                  forFail: const Text('-'),
+                                  mainWidgetCallback: (entityList) => Text(
+                                    entityList.length.toString(),
+                                    style: TextStyle(
+                                      height: 1.0,
+                                      fontFamily: 'Giants',
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w700,
+                                      color: isFuture ||
+                                              cellDate != viewModel.selectedDate
+                                          ? CustomColors.whPlaceholderGrey
+                                          : CustomColors.whBlack,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }),
+          );
+        },
+        itemCount: viewModel.calendartMondayDateList.length,
+        options: CarouselOptions(
+          height: 64,
+          viewportFraction: 1.0,
+          enableInfiniteScroll: false,
+          reverse: true,
+          onPageChanged: (index, reason) async {
+            if (index == viewModel.calendartMondayDateList.length - 1) {
+              // 마지막 페이지에 도달했을 때 추가 요소를 추가합니다.
+              viewModel.calendartMondayDateList.insert(
+                0,
+                viewModel.calendartMondayDateList.first.subtract(
+                  const Duration(days: 7),
+                ),
+              );
+
+              await provider
+                  .loadConfirmPosts(
+                resolutionId: widget.entity.resolutionId ?? '',
+                mondayOfTargetWeek: viewModel.calendartMondayDateList[0],
+              )
+                  .whenComplete(() {
+                setState(() {});
+              });
+            }
+          },
+        ),
+      ),
     );
   }
 

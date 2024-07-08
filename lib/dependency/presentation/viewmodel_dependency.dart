@@ -272,3 +272,13 @@ final friendPostViewModelProvider = StateNotifierProvider.autoDispose<
     sendCommentReactionToConfirmPostUsecase,
   );
 });
+
+final resolutionDetailViewModelProvider = StateNotifierProvider.autoDispose<
+    ResolutionDetailViewModelProvider, ResolutionDetailViewModel>((ref) {
+  final GetConfirmPostListForResolutionIdUsecase
+      getConfirmPostListForResolutionIdUsecase =
+      ref.watch(getConfirmPostListForResolutionIdUsecaseProvider);
+  return ResolutionDetailViewModelProvider(
+    getConfirmPostListForResolutionIdUsecase,
+  );
+});
