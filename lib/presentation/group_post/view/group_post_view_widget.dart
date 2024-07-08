@@ -11,17 +11,18 @@ import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/effects/effects.dart';
 import 'package:wehavit/presentation/group_post/group_post.dart';
-import 'package:wehavit/presentation/group_post/view/confirm_post_photo_view.dart';
 
 class ConfirmPostWidget extends ConsumerStatefulWidget {
   const ConfirmPostWidget({
     required this.confirmPostEntity,
     required this.createdDate,
+    this.showReactionToolbar = true,
     super.key,
   });
 
   final ConfirmPostEntity confirmPostEntity;
   final DateTime createdDate;
+  final bool showReactionToolbar;
 
   @override
   ConsumerState<ConfirmPostWidget> createState() => _ConfirmPostWidgetState();
@@ -85,45 +86,47 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                 borderRadius: BorderRadius.all(
                   Radius.circular(16.0),
                 ),
+                border: Border(
+                  top: BorderSide(
+                    width: 8.0,
+                    color: CustomColors.whDarkBlack,
+                    strokeAlign: BorderSide.strokeAlignOutside,
+                  ),
+                  left: BorderSide(
+                    width: 8.0,
+                    color: CustomColors.whDarkBlack,
+                    strokeAlign: BorderSide.strokeAlignOutside,
+                  ),
+                  right: BorderSide(
+                    width: 8.0,
+                    color: CustomColors.whDarkBlack,
+                    strokeAlign: BorderSide.strokeAlignOutside,
+                  ),
+                ),
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(0.0),
-                child: Column(
-                  children: [
-                    Container(
-                      decoration: const BoxDecoration(
-                        color: CustomColors.whGrey,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(16.0),
-                        ),
-                        border: Border(
-                          top: BorderSide(
-                            width: 8.0,
-                            color: CustomColors.whDarkBlack,
-                          ),
-                          left: BorderSide(
-                            width: 8.0,
-                            color: CustomColors.whDarkBlack,
-                          ),
-                          right: BorderSide(
-                            width: 8.0,
-                            color: CustomColors.whDarkBlack,
-                          ),
-                        ),
-                      ),
-                      padding: const EdgeInsets.only(
-                        left: 8.0,
-                        right: 8.0,
-                        top: 4.0,
-                        bottom: 12.0,
-                      ),
-                      height: 244,
-                      child: const Center(
-                        child: CircularProgressIndicator(
-                          color: CustomColors.whYellow,
-                        ),
+              child: Column(
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                      color: CustomColors.whGrey,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(16.0),
                       ),
                     ),
+                    padding: const EdgeInsets.only(
+                      left: 8.0,
+                      right: 8.0,
+                      top: 4.0,
+                      bottom: 12.0,
+                    ),
+                    height: 244,
+                    child: const Center(
+                      child: CircularProgressIndicator(
+                        color: CustomColors.whYellow,
+                      ),
+                    ),
+                  ),
+                  if (widget.showReactionToolbar)
                     ConfirmPostReactionButtonListWidget(
                       onMessagePressed: () {},
                       onEmojiPressed: () {},
@@ -131,8 +134,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                       onQuickShotPointerUp: (_) {},
                       onQuickShotPointerMove: (_) {},
                     ),
-                  ],
-                ),
+                ],
               ),
             ),
           ],
@@ -143,10 +145,28 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
         child: Stack(
           children: [
             Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: CustomColors.whDarkBlack,
-                borderRadius: BorderRadius.all(
+                borderRadius: const BorderRadius.all(
                   Radius.circular(16.0),
+                ),
+                border: Border(
+                  top: const BorderSide(
+                    width: 8.0,
+                    color: CustomColors.whDarkBlack,
+                  ),
+                  left: const BorderSide(
+                    width: 8.0,
+                    color: CustomColors.whDarkBlack,
+                  ),
+                  right: const BorderSide(
+                    width: 8.0,
+                    color: CustomColors.whDarkBlack,
+                  ),
+                  bottom: BorderSide(
+                    width: widget.showReactionToolbar ? 0.1 : 8.0,
+                    color: CustomColors.whDarkBlack,
+                  ),
                 ),
               ),
               child: Padding(
@@ -157,21 +177,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                       decoration: const BoxDecoration(
                         color: CustomColors.whGrey,
                         borderRadius: BorderRadius.all(
-                          Radius.circular(16.0),
-                        ),
-                        border: Border(
-                          top: BorderSide(
-                            width: 8.0,
-                            color: CustomColors.whDarkBlack,
-                          ),
-                          left: BorderSide(
-                            width: 8.0,
-                            color: CustomColors.whDarkBlack,
-                          ),
-                          right: BorderSide(
-                            width: 8.0,
-                            color: CustomColors.whDarkBlack,
-                          ),
+                          Radius.circular(8.0),
                         ),
                       ),
                       padding: const EdgeInsets.only(
@@ -232,83 +238,84 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                         ],
                       ),
                     ),
-                    ConfirmPostReactionButtonListWidget(
-                      onMessagePressed: () {
-                        setState(() {
-                          isShowingCommentField = !isShowingCommentField;
-                        });
-                      },
-                      onEmojiPressed: () async {
-                        showEmojiSheet(viewModel, provider, context);
-                      },
-                      onQuickShotPointerDown: (event) {
-                        isTouchMoved = false;
+                    if (widget.showReactionToolbar)
+                      ConfirmPostReactionButtonListWidget(
+                        onMessagePressed: () {
+                          setState(() {
+                            isShowingCommentField = !isShowingCommentField;
+                          });
+                        },
+                        onEmojiPressed: () async {
+                          showEmojiSheet(viewModel, provider, context);
+                        },
+                        onQuickShotPointerDown: (event) {
+                          isTouchMoved = false;
 
-                        if (reactionCameraModel.cameraController == null) {
-                          return;
-                        }
+                          if (reactionCameraModel.cameraController == null) {
+                            return;
+                          }
 
-                        panningPosition = Point(
-                          event.position.dx,
-                          event.position.dy,
-                        );
-
-                        reactionCameraModelProvider
-                            .updatePanPosition(panningPosition);
-
-                        if (mounted) {
-                          setState(() {});
-                        }
-                      },
-                      onQuickShotPointerUp: (event) async {
-                        if (!isTouchMoved) {
-                          showToastMessage(
-                            context,
-                            text: '퀵샷 버튼을 누르고 드래그 해주세요!',
-                            icon: const Icon(
-                              Icons.warning,
-                              color: CustomColors.whYellow,
-                            ),
+                          panningPosition = Point(
+                            event.position.dx,
+                            event.position.dy,
                           );
-                          return;
-                        }
 
-                        await reactionCameraModelProvider
-                            .setFocusingModeTo(false);
+                          reactionCameraModelProvider
+                              .updatePanPosition(panningPosition);
 
-                        if (reactionCameraModel.cameraController == null) {
-                          return;
-                        }
+                          if (mounted) {
+                            setState(() {});
+                          }
+                        },
+                        onQuickShotPointerUp: (event) async {
+                          if (!isTouchMoved) {
+                            showToastMessage(
+                              context,
+                              text: '퀵샷 버튼을 누르고 드래그 해주세요!',
+                              icon: const Icon(
+                                Icons.warning,
+                                color: CustomColors.whYellow,
+                              ),
+                            );
+                            return;
+                          }
 
-                        if (ref
-                            .read(reactionCameraWidgetModelProvider)
-                            .isPosInCapturingArea) {
-                          final imageFilePath =
-                              await reactionCameraModelProvider
-                                  .endOnCapturingArea();
+                          await reactionCameraModelProvider
+                              .setFocusingModeTo(false);
 
-                          await provider.sendImageReaction(
-                            entity: widget.confirmPostEntity,
-                            imageFilePath: imageFilePath,
+                          if (reactionCameraModel.cameraController == null) {
+                            return;
+                          }
+
+                          if (ref
+                              .read(reactionCameraWidgetModelProvider)
+                              .isPosInCapturingArea) {
+                            final imageFilePath =
+                                await reactionCameraModelProvider
+                                    .endOnCapturingArea();
+
+                            await provider.sendImageReaction(
+                              entity: widget.confirmPostEntity,
+                              imageFilePath: imageFilePath,
+                            );
+                          }
+                        },
+                        onQuickShotPointerMove: (event) async {
+                          isTouchMoved = true;
+                          await reactionCameraModelProvider
+                              .setFocusingModeTo(true);
+
+                          panningPosition = Point(
+                            event.position.dx,
+                            event.position.dy,
                           );
-                        }
-                      },
-                      onQuickShotPointerMove: (event) async {
-                        isTouchMoved = true;
-                        await reactionCameraModelProvider
-                            .setFocusingModeTo(true);
 
-                        panningPosition = Point(
-                          event.position.dx,
-                          event.position.dy,
-                        );
+                          reactionCameraModelProvider
+                              .updatePanPosition(panningPosition);
 
-                        reactionCameraModelProvider
-                            .updatePanPosition(panningPosition);
-
-                        if (reactionCameraModel.isPosInCapturingArea) {}
-                      },
-                    ),
+                          if (reactionCameraModel.isPosInCapturingArea) {}
+                        },
+                      ),
                     Visibility(
                       visible: isShowingCommentField,
                       child: Padding(

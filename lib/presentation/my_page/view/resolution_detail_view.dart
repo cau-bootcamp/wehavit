@@ -2,7 +2,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:wehavit/common/constants/constants.dart';
@@ -314,72 +313,53 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                   ),
                 ),
                 const SizedBox(
-                  height: 16,
+                  height: 4,
                 ),
                 Column(
                   children: [
+                    Text(
+                      viewModel.selectedDateString,
+                      textAlign: TextAlign.start,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: CustomColors.whPlaceholderGrey,
+                        fontSize: 18,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 8.0,
+                    ),
                     putScrollableCalendarWidget(viewModel, provider),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Stack(
-                          alignment: Alignment.centerRight,
-                          children: [
-                            UserProfileBar(
-                              futureUserEntity: Future(
-                                () => right(
-                                  UserDataEntity.dummyModel,
-                                ),
-                              ),
-                            ),
-                            if (ConfirmPostEntityDummy.dummy.hasRested == false)
-                              Text(
-                                // ignore: lines_longer_than_80_chars
-                                '${ConfirmPostEntityDummy.dummy.createdAt!.hour > 12 ? '오후' : '오전'} ${ConfirmPostEntityDummy.dummy.createdAt!.hour > 12 ? ConfirmPostEntityDummy.dummy.createdAt!.hour - 12 : ConfirmPostEntityDummy.dummy.createdAt!.hour}시 ${ConfirmPostEntityDummy.dummy.createdAt!.minute}분',
-                                style: const TextStyle(
-                                  color: CustomColors.whWhite,
-                                ),
-                              )
-                            else
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16.0),
-                                  color: CustomColors.whRed,
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 4.0,
-                                  horizontal: 8.0,
-                                ),
-                                child: const Text(
-                                  '오늘 실천 실패 😢',
-                                  style: TextStyle(
-                                    fontSize: 12.0,
-                                    fontWeight: FontWeight.w300,
-                                    color: CustomColors.whWhite,
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                        // const SizedBox(height: 12.0),
-
-                        // ResolutionLinearGaugeWidget(
-                        //   resolutionEntity: resolutionEntity,
-                        //   futureDoneList: resolutionDoneListForWrittenWeek,
-                        // ),
-
-                        const SizedBox(height: 12.0),
-                        ConfirmPostContentWidget(
-                          confirmPostEntity: ConfirmPostEntityDummy.dummy,
-                        ),
-                      ],
+                    const SizedBox(
+                      height: 12.0,
+                    ),
+                    ConfirmPostWidget(
+                      confirmPostEntity: ConfirmPostEntityDummy.dummy,
+                      createdDate: ConfirmPostEntityDummy.dummy.createdAt!,
+                      showReactionToolbar: false,
                     ),
                   ],
                 ),
               ],
             ),
             const SizedBox(
-              height: 32.0,
+              height: 40.0,
+            ),
+            Container(
+              width: double.infinity,
+              alignment: Alignment.center,
+              child: const Text(
+                '더 많은 통계가 곧 추가됩니다!',
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: CustomColors.whSemiWhite,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 40.0,
             ),
             WideColoredButton(
               buttonTitle: '목표 삭제하기',
@@ -389,7 +369,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
           ],
         ),
       ),
-      backgroundColor: CustomColors.whDarkBlack,
+      backgroundColor: CustomColors.whBlack,
     );
   }
 
