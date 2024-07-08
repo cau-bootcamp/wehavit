@@ -22,7 +22,7 @@ class CustomColors {
   static const Color whBlack = Color(0xff2b2b2b);
   static const Color whDarkBlack = Color(0xff1F1F1F);
   static const Color whSemiBlack = Color(0xff404040);
-  static const Color whGrey = Color(0xff565656);
+  static const Color whGrey = Color(0xff404040);
   static const Color whBrightGrey = Color(0xff838383);
   static const Color whWhite = Color(0xffFFFFFF);
   static const Color whSemiWhite = Color(0xffEEEEEE);
