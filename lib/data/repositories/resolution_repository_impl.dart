@@ -124,4 +124,13 @@ class ResolutionRepositoryImpl implements ResolutionRepository {
       targetResolutionId: targetResolutionId,
     );
   }
+
+  @override
+  EitherFuture<void> incrementReceivedReactionCount({
+    required String targetResolutionId,
+  }) {
+    return _wehavitDatasource.incrementReceivedReactionCount(
+      targetResolutionId: targetResolutionId,
+    );
+  }
 }

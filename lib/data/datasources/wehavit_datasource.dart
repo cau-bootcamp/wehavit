@@ -204,4 +204,8 @@ abstract class WehavitDatasource {
   EitherFuture<void> incrementResolutionPostcount({
     required String targetResolutionId,
   });
+
+  EitherFuture<void> incrementReceivedReactionCount({
+    required String targetResolutionId,
+  });
 }

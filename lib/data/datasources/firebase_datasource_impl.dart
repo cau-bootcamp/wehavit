@@ -2475,4 +2475,49 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       );
     }
   }
+
+  @override
+  EitherFuture<void> incrementReceivedReactionCount({
+    required String targetResolutionId,
+  }) async {
+    try {
+      final myUid = getMyUserId();
+
+      final currentPostCount = await firestore
+          .collection(
+            FirebaseCollectionName.getTargetResolutionCollectionName(myUid),
+          )
+          .doc(targetResolutionId)
+          .get()
+          .then(
+            (doc) => doc.data()?[FirebaseResolutionFieldName
+                .resolutionReceivedReactionCount] as int?,
+          );
+
+      if (currentPostCount == null) {
+        return Future(
+          () =>
+              left(const Failure('can\'t get current received reaction count')),
+        );
+      }
+
+      await firestore
+          .collection(
+            FirebaseCollectionName.getTargetResolutionCollectionName(myUid),
+          )
+          .doc(targetResolutionId)
+          .update({
+        FirebaseResolutionFieldName.resolutionReceivedReactionCount:
+            currentPostCount + 1,
+      });
+
+      return Future(() => right(null));
+    } on Exception {
+      return Future(
+        () => left(
+          const Failure('catch error on incrementReceivedReactionCount'),
+        ),
+      );
+    }
+  }
 }

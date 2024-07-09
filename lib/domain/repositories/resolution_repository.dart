@@ -54,4 +54,8 @@ abstract class ResolutionRepository {
   EitherFuture<void> incrementWrittenPostCount({
     required String targetResolutionId,
   });
+
+  EitherFuture<void> incrementReceivedReactionCount({
+    required String targetResolutionId,
+  });
 }
