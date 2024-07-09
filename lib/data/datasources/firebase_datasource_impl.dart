@@ -6,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:path/path.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/data/datasources/datasources.dart';
 import 'package:wehavit/data/models/firebase_models/group_announcement_model/firebase_group_announcement_model.dart';
@@ -2531,7 +2530,8 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
 
       final resolutionActionPerWeek = await firestore
           .collection(
-              FirebaseCollectionName.getTargetResolutionCollectionName(myUid))
+            FirebaseCollectionName.getTargetResolutionCollectionName(myUid),
+          )
           .doc(targetResolutionId)
           .get()
           .then(
@@ -2625,12 +2625,6 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
         }
         return <int>[];
       });
-
-      if (currentList == null) {
-        return left(
-          const Failure('fail to load current weekly post count list'),
-        );
-      }
 
       currentList[createdDate.weekday - 1] += 1;
 
