@@ -440,6 +440,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                                 child: ConfirmPostWidget(
                                   confirmPostEntity: entityList[index],
                                   createdDate: viewModel.selectedDate,
+                                  showReactionToolbar: false,
                                 ),
                               ),
                             ),
