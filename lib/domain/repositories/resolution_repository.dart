@@ -50,4 +50,16 @@ abstract class ResolutionRepository {
     required String targetResolutionId,
     required ResolutionEntity newEntity,
   });
+
+  EitherFuture<void> incrementWrittenPostCount({
+    required String targetResolutionId,
+  });
+
+  EitherFuture<void> incrementReceivedReactionCount({
+    required String targetResolutionId,
+  });
+
+  EitherFuture<void> updateWeekSuccessCount({
+    required String targetResolutionId,
+  });
 }

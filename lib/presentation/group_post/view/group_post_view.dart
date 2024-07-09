@@ -265,7 +265,9 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
   }
 
   AnimatedContainer putScrollCalendarWidget(
-      GroupPostViewModel viewModel, GroupPostViewModelProvider provider) {
+    GroupPostViewModel viewModel,
+    GroupPostViewModelProvider provider,
+  ) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 250),
       curve: Curves.fastOutSlowIn,

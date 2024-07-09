@@ -200,4 +200,26 @@ abstract class WehavitDatasource {
     required String targetResolutionId,
     required ResolutionEntity newEntity,
   });
+
+  EitherFuture<void> incrementResolutionPostcount({
+    required String targetResolutionId,
+  });
+
+  EitherFuture<void> incrementReceivedReactionCount({
+    required String targetResolutionId,
+  });
+
+  EitherFuture<void> updateWeekSuccessCount({
+    required targetResolutionId,
+  });
+
+  EitherFuture<void> updateWeeklyPostCount({
+    required String targetResolutionId,
+    required DateTime? createdDate,
+  });
+
+  EitherFuture<List<ConfirmPostEntity>> getConfirmPostEntityByDate({
+    required DateTime selectedDate,
+    required String targetResolutionId,
+  });
 }

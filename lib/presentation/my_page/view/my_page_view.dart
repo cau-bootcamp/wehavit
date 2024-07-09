@@ -15,10 +15,10 @@ class MyPageView extends ConsumerStatefulWidget {
   final TabController tabController;
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _MyPageScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() => MyPageScreenState();
 }
 
-class _MyPageScreenState extends ConsumerState<MyPageView>
+class MyPageScreenState extends ConsumerState<MyPageView>
     with AutomaticKeepAliveClientMixin<MyPageView> {
   @override
   bool get wantKeepAlive => true;
@@ -127,9 +127,14 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
                                   ),
                                 ),
                                 onPressed: () async {
-                                  showModifyResolutionBottomSheet(
+                                  Navigator.push(
                                     context,
-                                    resolutionList[index],
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          ResolutionDetailView(
+                                        entity: resolutionList[index],
+                                      ),
+                                    ),
                                   );
                                 },
                                 child: ResolutionListCellWidget(
@@ -254,176 +259,6 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
                             isDestructiveAction: true,
                             onPressed: deleteAccount,
                             child: const Text('탈퇴하기'),
-                          ),
-                        ],
-                      );
-                    },
-                  ).then((result) {
-                    if (result == false) {
-                      showToastMessage(
-                        context,
-                        text: '오류 발생, 문의 부탁드립니다',
-                        icon: const Icon(
-                          Icons.report_problem,
-                          color: CustomColors.whYellow,
-                        ),
-                      );
-                    }
-                  });
-                },
-              ),
-              const SizedBox(
-                height: 12,
-              ),
-              WideColoredButton(
-                buttonTitle: '돌아가기',
-                backgroundColor: Colors.transparent,
-                foregroundColor: CustomColors.whPlaceholderGrey,
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Future<dynamic> showModifyResolutionBottomSheet(
-    BuildContext context,
-    ResolutionEntity entity,
-  ) {
-    ref.watch(addResolutionDoneViewModelProvider).resolutionEntity = entity;
-    final provider = ref.read(addResolutionDoneViewModelProvider.notifier);
-
-    return showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return GradientBottomSheet(
-          Column(
-            children: [
-              WideColoredButton(
-                buttonTitle: '목표 공유 친구 수정하기',
-                buttonIcon: Icons.people_alt_outlined,
-                onPressed: () async {
-                  provider.loadFriendList().whenComplete(() async {
-                    await provider.resetTempFriendList();
-                    showModalBottomSheet(
-                      isScrollControlled: true,
-                      // ignore: use_build_context_synchronously
-                      context: context,
-                      builder: (context) => GradientBottomSheet(
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.82,
-                          child:
-                              const ShareResolutionToFriendBottomSheetWidget(),
-                        ),
-                      ),
-                    ).then((newEntity) {
-                      ref
-                          .watch(addResolutionDoneViewModelProvider)
-                          .resolutionEntity = newEntity;
-                      ref
-                          .read(myPageViewModelProvider.notifier)
-                          .getResolutionList()
-                          .whenComplete(() {
-                        setState(() {});
-                      });
-                    });
-                  });
-                },
-              ),
-              const SizedBox(
-                height: 12,
-              ),
-              WideColoredButton(
-                buttonTitle: '목표 공유 그룹 수정하기',
-                buttonIcon: Icons.flag_outlined,
-                onPressed: () async {
-                  provider.loadGroupList().whenComplete(() async {
-                    await provider.resetTempGroupList();
-                    showModalBottomSheet(
-                      isScrollControlled: true,
-                      // ignore: use_build_context_synchronously
-                      context: context,
-                      builder: (context) => GradientBottomSheet(
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.82,
-                          child:
-                              const ShareResolutionToGroupBottomSheetWidget(),
-                        ),
-                      ),
-                    ).then((newEntity) {
-                      if (newEntity != null && newEntity is ResolutionEntity) {
-                        ref
-                            .watch(addResolutionDoneViewModelProvider)
-                            .resolutionEntity = newEntity;
-                        ref
-                            .read(myPageViewModelProvider.notifier)
-                            .getResolutionList()
-                            .whenComplete(() {
-                          setState(() {});
-                        });
-                      }
-                    });
-                  });
-                },
-              ),
-              const SizedBox(
-                height: 12,
-              ),
-              WideColoredButton(
-                buttonTitle: '목표 삭제하기',
-                buttonIcon: Icons.flag_outlined,
-                foregroundColor: PointColors.red,
-                onPressed: () async {
-                  showCupertinoDialog(
-                    context: context,
-                    builder: (context) {
-                      return CupertinoAlertDialog(
-                        title: const Text('정말 삭제하시겠어요?'),
-                        content: const Text('목표에 대해 작성하신 인증 글은 유지됩니다'),
-                        actions: [
-                          CupertinoDialogAction(
-                            textStyle: const TextStyle(
-                              color: PointColors.blue,
-                            ),
-                            isDefaultAction: true,
-                            child: const Text('취소'),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                          ),
-                          CupertinoDialogAction(
-                            isDestructiveAction: true,
-                            onPressed: () {
-                              ref
-                                  .read(myPageViewModelProvider.notifier)
-                                  .deactiveResolution(
-                                    targetResolutionEntity: entity,
-                                  )
-                                  .whenComplete(() async {
-                                ref
-                                    .read(
-                                      resolutionListViewModelProvider.notifier,
-                                    )
-                                    .loadResolutionModelList();
-                                await ref
-                                    .read(myPageViewModelProvider.notifier)
-                                    .loadData()
-                                    .whenComplete(() {
-                                  context
-                                      .findAncestorStateOfType<
-                                          _MyPageScreenState>()
-                                      ?.setState(() {});
-                                });
-                                Navigator.pop(context);
-                                Navigator.pop(context);
-                                setState(() {});
-                              });
-                            },
-                            child: const Text('삭제'),
                           ),
                         ],
                       );

@@ -41,6 +41,21 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
         },
       );
 
+      _wehavitDatasource.incrementUserDataCounter(
+        type: UserIncrementalDataType.post,
+      );
+      _wehavitDatasource.incrementResolutionPostcount(
+        targetResolutionId: resolutionId,
+      );
+      _wehavitDatasource.updateWeekSuccessCount(
+        targetResolutionId: resolutionId,
+      );
+
+      _wehavitDatasource.updateWeeklyPostCount(
+        targetResolutionId: resolutionId,
+        createdDate: confirmPostEntity.createdAt,
+      );
+
       return Future(() => right(true));
     } on FirebaseException catch (e) {
       return left(Failure(e.message ?? 'FirebaseException'));
@@ -123,6 +138,17 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
     return _wehavitDatasource.getFriendConfirmPostEntityListByDate(
       targetResolutionList,
       selectedDate,
+    );
+  }
+
+  @override
+  EitherFuture<List<ConfirmPostEntity>> getConfirmPostEntityByDate({
+    required DateTime selectedDate,
+    required String targetResolutionId,
+  }) {
+    return _wehavitDatasource.getConfirmPostEntityByDate(
+      selectedDate: selectedDate,
+      targetResolutionId: targetResolutionId,
     );
   }
 }

@@ -22,7 +22,7 @@ class CustomColors {
   static const Color whBlack = Color(0xff2b2b2b);
   static const Color whDarkBlack = Color(0xff1F1F1F);
   static const Color whSemiBlack = Color(0xff404040);
-  static const Color whGrey = Color(0xff565656);
+  static const Color whGrey = Color(0xff404040);
   static const Color whBrightGrey = Color(0xff838383);
   static const Color whWhite = Color(0xffFFFFFF);
   static const Color whSemiWhite = Color(0xffEEEEEE);
@@ -30,8 +30,8 @@ class CustomColors {
   static const Color whYellow = Color(0xffFFB800);
   static const Color whYellowBright = Color(0xfffadf92);
   static const Color whYellowDark = Color(0xff705100);
-  static const Color whRed = Color(0xffA23333);
-  static const Color whRedBright = Color(0xffDA3A3A);
+  static const Color whRed = Color(0xffF55748);
+
   static const Color whUnSelectedTextColor = Color(0xffA2A2A2);
   static const Color whSelectedTextColor = Color(0xff000000);
   static const Color whPlaceholderGrey = Color(0xffC3C2C7);

@@ -79,3 +79,16 @@ class TimestampConverter implements JsonConverter<DateTime, Timestamp> {
   @override
   Timestamp toJson(DateTime date) => Timestamp.fromDate(date);
 }
+
+extension ConfirmPostEntityDummy on ConfirmPostEntity {
+  static ConfirmPostEntity dummy = ConfirmPostEntity(
+    resolutionGoalStatement: 'dummy goal statement',
+    resolutionId: 'vR3lA2WTqm7wDC4ve1LN',
+    content: 'content',
+    imageUrlList: [],
+    owner: '69dlXoGSBKhzrySuhb8t9MvqzdD3',
+    recentStrike: 3,
+    createdAt: DateTime.now(),
+    updatedAt: DateTime.now(),
+  );
+}

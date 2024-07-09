@@ -8,9 +8,11 @@ class SendEmojiReactionToConfirmPostUsecase
   SendEmojiReactionToConfirmPostUsecase(
     this._reactionRepository,
     this._userModelRepository,
+    this._resolutionRepository,
   );
   final ReactionRepository _reactionRepository;
   final UserModelRepository _userModelRepository;
+  final ResolutionRepository _resolutionRepository;
 
   @override
   EitherFuture<bool> call((ConfirmPostEntity, List<int>) params) async {
@@ -42,6 +44,9 @@ class SendEmojiReactionToConfirmPostUsecase
         .whenComplete(() {
       _userModelRepository.incrementUserDataCounter(
         type: UserIncrementalDataType.reaction,
+      );
+      _resolutionRepository.incrementReceivedReactionCount(
+        targetResolutionId: params.$1.resolutionId ?? '',
       );
     });
   }

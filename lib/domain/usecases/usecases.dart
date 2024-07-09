@@ -11,6 +11,7 @@ export 'get_achivement_percentage_for_group_member_usecase.dart';
 export 'get_applied_user_list_for_friend_usecase.dart';
 export 'get_applied_user_list_for_group_entity_usecase.dart';
 export 'get_confirm_post_list_for_resolution_id.dart';
+export 'get_confirm_post_of_datetime_from_target_resolution_usecase.dart';
 export 'get_friend_confirm_post_list_by_date_usecase.dart';
 export 'get_friend_list_usecase.dart';
 export 'get_group_announcement_list_usecase.dart';

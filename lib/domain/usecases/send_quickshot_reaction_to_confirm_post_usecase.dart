@@ -9,10 +9,12 @@ class SendQuickShotReactionToConfirmPostUsecase
     this._reactionRepository,
     this._userModelRepository,
     this._photoRepository,
+    this._resolutionRepository,
   );
   final ReactionRepository _reactionRepository;
   final UserModelRepository _userModelRepository;
   final PhotoRepository _photoRepository;
+  final ResolutionRepository _resolutionRepository;
 
   @override
   EitherFuture<bool> call((ConfirmPostEntity, String) params) async {
@@ -56,6 +58,9 @@ class SendQuickShotReactionToConfirmPostUsecase
         .whenComplete(() {
       _userModelRepository.incrementUserDataCounter(
         type: UserIncrementalDataType.reaction,
+      );
+      _resolutionRepository.incrementReceivedReactionCount(
+        targetResolutionId: params.$1.resolutionId ?? '',
       );
     });
   }
