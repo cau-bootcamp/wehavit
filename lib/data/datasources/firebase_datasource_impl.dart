@@ -2432,4 +2432,47 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       );
     }
   }
+
+  @override
+  EitherFuture<void> incrementResolutionPostcount({
+    required String targetResolutionId,
+  }) async {
+    try {
+      final myUid = getMyUserId();
+
+      final currentPostCount = await firestore
+          .collection(
+            FirebaseCollectionName.getTargetResolutionCollectionName(myUid),
+          )
+          .doc(targetResolutionId)
+          .get()
+          .then(
+            (doc) => doc.data()?[
+                FirebaseResolutionFieldName.resolutionWrittenPostCount] as int?,
+          );
+
+      if (currentPostCount == null) {
+        return Future(
+          () => left(const Failure('can\'t get current post count')),
+        );
+      }
+
+      await firestore
+          .collection(
+            FirebaseCollectionName.getTargetResolutionCollectionName(myUid),
+          )
+          .doc(targetResolutionId)
+          .update({
+        FirebaseResolutionFieldName.resolutionWrittenPostCount:
+            currentPostCount + 1,
+      });
+
+      return Future(() => right(null));
+    } on Exception {
+      return Future(
+        () =>
+            left(const Failure('catch error on incrementResolutionPostcount')),
+      );
+    }
+  }
 }

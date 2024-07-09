@@ -60,6 +60,7 @@ final uploadConfirmPostUseCaseProvider = Provider<UploadConfirmPostUseCase>(
   (ref) => UploadConfirmPostUseCase(
     ref.watch(confirmPostRepositoryProvider),
     ref.watch(userModelRepositoryProvider),
+    ref.watch(resolutionRepositoryProvider),
   ),
 );
 

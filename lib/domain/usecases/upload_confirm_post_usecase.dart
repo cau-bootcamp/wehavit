@@ -8,10 +8,12 @@ class UploadConfirmPostUseCase {
   UploadConfirmPostUseCase(
     this._confirmPostRepository,
     this._userModelRepository,
+    this._resolutionRepository,
   );
 
   final ConfirmPostRepository _confirmPostRepository;
   final UserModelRepository _userModelRepository;
+  final ResolutionRepository _resolutionRepository;
 
   EitherFuture<bool> call({
     required String resolutionGoalStatement,
@@ -70,6 +72,9 @@ class UploadConfirmPostUseCase {
           .whenComplete(() {
         _userModelRepository.incrementUserDataCounter(
           type: UserIncrementalDataType.post,
+        );
+        _resolutionRepository.incrementWrittenPostCount(
+          targetResolutionId: resolutionId,
         );
       });
     } on Exception catch (e) {

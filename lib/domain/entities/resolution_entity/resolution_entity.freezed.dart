@@ -35,7 +35,8 @@ mixin _$ResolutionEntity {
       throw _privateConstructorUsedError;
   int? get writtenPostCount => throw _privateConstructorUsedError;
   int? get receivedReactionCount => throw _privateConstructorUsedError;
-  List<DateTime>? get successWeekList => throw _privateConstructorUsedError;
+  List<DateTime>? get successWeekMondayList =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -63,7 +64,7 @@ abstract class $ResolutionEntityCopyWith<$Res> {
       List<GroupEntity>? shareGroupEntityList,
       int? writtenPostCount,
       int? receivedReactionCount,
-      List<DateTime>? successWeekList});
+      List<DateTime>? successWeekMondayList});
 }
 
 /// @nodoc
@@ -92,7 +93,7 @@ class _$ResolutionEntityCopyWithImpl<$Res, $Val extends ResolutionEntity>
     Object? shareGroupEntityList = freezed,
     Object? writtenPostCount = freezed,
     Object? receivedReactionCount = freezed,
-    Object? successWeekList = freezed,
+    Object? successWeekMondayList = freezed,
   }) {
     return _then(_value.copyWith(
       resolutionId: freezed == resolutionId
@@ -147,9 +148,9 @@ class _$ResolutionEntityCopyWithImpl<$Res, $Val extends ResolutionEntity>
           ? _value.receivedReactionCount
           : receivedReactionCount // ignore: cast_nullable_to_non_nullable
               as int?,
-      successWeekList: freezed == successWeekList
-          ? _value.successWeekList
-          : successWeekList // ignore: cast_nullable_to_non_nullable
+      successWeekMondayList: freezed == successWeekMondayList
+          ? _value.successWeekMondayList
+          : successWeekMondayList // ignore: cast_nullable_to_non_nullable
               as List<DateTime>?,
     ) as $Val);
   }
@@ -177,7 +178,7 @@ abstract class _$$ResolutionEntityImplCopyWith<$Res>
       List<GroupEntity>? shareGroupEntityList,
       int? writtenPostCount,
       int? receivedReactionCount,
-      List<DateTime>? successWeekList});
+      List<DateTime>? successWeekMondayList});
 }
 
 /// @nodoc
@@ -204,7 +205,7 @@ class __$$ResolutionEntityImplCopyWithImpl<$Res>
     Object? shareGroupEntityList = freezed,
     Object? writtenPostCount = freezed,
     Object? receivedReactionCount = freezed,
-    Object? successWeekList = freezed,
+    Object? successWeekMondayList = freezed,
   }) {
     return _then(_$ResolutionEntityImpl(
       resolutionId: freezed == resolutionId
@@ -259,9 +260,9 @@ class __$$ResolutionEntityImplCopyWithImpl<$Res>
           ? _value.receivedReactionCount
           : receivedReactionCount // ignore: cast_nullable_to_non_nullable
               as int?,
-      successWeekList: freezed == successWeekList
-          ? _value._successWeekList
-          : successWeekList // ignore: cast_nullable_to_non_nullable
+      successWeekMondayList: freezed == successWeekMondayList
+          ? _value._successWeekMondayList
+          : successWeekMondayList // ignore: cast_nullable_to_non_nullable
               as List<DateTime>?,
     ));
   }
@@ -286,10 +287,10 @@ class _$ResolutionEntityImpl implements _ResolutionEntity {
       final List<GroupEntity>? shareGroupEntityList,
       this.writtenPostCount,
       this.receivedReactionCount,
-      final List<DateTime>? successWeekList})
+      final List<DateTime>? successWeekMondayList})
       : _shareFriendEntityList = shareFriendEntityList,
         _shareGroupEntityList = shareGroupEntityList,
-        _successWeekList = successWeekList;
+        _successWeekMondayList = successWeekMondayList;
 
   factory _$ResolutionEntityImpl.fromJson(Map<String, dynamic> json) =>
       _$$ResolutionEntityImplFromJson(json);
@@ -338,19 +339,20 @@ class _$ResolutionEntityImpl implements _ResolutionEntity {
   final int? writtenPostCount;
   @override
   final int? receivedReactionCount;
-  final List<DateTime>? _successWeekList;
+  final List<DateTime>? _successWeekMondayList;
   @override
-  List<DateTime>? get successWeekList {
-    final value = _successWeekList;
+  List<DateTime>? get successWeekMondayList {
+    final value = _successWeekMondayList;
     if (value == null) return null;
-    if (_successWeekList is EqualUnmodifiableListView) return _successWeekList;
+    if (_successWeekMondayList is EqualUnmodifiableListView)
+      return _successWeekMondayList;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(value);
   }
 
   @override
   String toString() {
-    return 'ResolutionEntity(resolutionId: $resolutionId, resolutionName: $resolutionName, goalStatement: $goalStatement, actionStatement: $actionStatement, isActive: $isActive, actionPerWeek: $actionPerWeek, colorIndex: $colorIndex, iconIndex: $iconIndex, startDate: $startDate, shareFriendEntityList: $shareFriendEntityList, shareGroupEntityList: $shareGroupEntityList, writtenPostCount: $writtenPostCount, receivedReactionCount: $receivedReactionCount, successWeekList: $successWeekList)';
+    return 'ResolutionEntity(resolutionId: $resolutionId, resolutionName: $resolutionName, goalStatement: $goalStatement, actionStatement: $actionStatement, isActive: $isActive, actionPerWeek: $actionPerWeek, colorIndex: $colorIndex, iconIndex: $iconIndex, startDate: $startDate, shareFriendEntityList: $shareFriendEntityList, shareGroupEntityList: $shareGroupEntityList, writtenPostCount: $writtenPostCount, receivedReactionCount: $receivedReactionCount, successWeekMondayList: $successWeekMondayList)';
   }
 
   @override
@@ -385,7 +387,7 @@ class _$ResolutionEntityImpl implements _ResolutionEntity {
             (identical(other.receivedReactionCount, receivedReactionCount) ||
                 other.receivedReactionCount == receivedReactionCount) &&
             const DeepCollectionEquality()
-                .equals(other._successWeekList, _successWeekList));
+                .equals(other._successWeekMondayList, _successWeekMondayList));
   }
 
   @JsonKey(ignore: true)
@@ -405,7 +407,7 @@ class _$ResolutionEntityImpl implements _ResolutionEntity {
       const DeepCollectionEquality().hash(_shareGroupEntityList),
       writtenPostCount,
       receivedReactionCount,
-      const DeepCollectionEquality().hash(_successWeekList));
+      const DeepCollectionEquality().hash(_successWeekMondayList));
 
   @JsonKey(ignore: true)
   @override
@@ -437,7 +439,7 @@ abstract class _ResolutionEntity implements ResolutionEntity {
       final List<GroupEntity>? shareGroupEntityList,
       final int? writtenPostCount,
       final int? receivedReactionCount,
-      final List<DateTime>? successWeekList}) = _$ResolutionEntityImpl;
+      final List<DateTime>? successWeekMondayList}) = _$ResolutionEntityImpl;
 
   factory _ResolutionEntity.fromJson(Map<String, dynamic> json) =
       _$ResolutionEntityImpl.fromJson;
@@ -469,7 +471,7 @@ abstract class _ResolutionEntity implements ResolutionEntity {
   @override
   int? get receivedReactionCount;
   @override
-  List<DateTime>? get successWeekList;
+  List<DateTime>? get successWeekMondayList;
   @override
   @JsonKey(ignore: true)
   _$$ResolutionEntityImplCopyWith<_$ResolutionEntityImpl> get copyWith =>

@@ -37,7 +37,7 @@ class UploadResolutionUseCase {
       resolutionId: '',
       writtenPostCount: 0,
       receivedReactionCount: 0,
-      successWeekList: [],
+      successWeekMondayList: [],
     );
 
     return _resolutionRepository.uploadResolutionEntity(entity).then(

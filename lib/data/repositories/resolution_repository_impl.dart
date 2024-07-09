@@ -115,4 +115,13 @@ class ResolutionRepositoryImpl implements ResolutionRepository {
       newEntity: newEntity,
     );
   }
+
+  @override
+  EitherFuture<void> incrementWrittenPostCount({
+    required String targetResolutionId,
+  }) {
+    return _wehavitDatasource.incrementResolutionPostcount(
+      targetResolutionId: targetResolutionId,
+    );
+  }
 }

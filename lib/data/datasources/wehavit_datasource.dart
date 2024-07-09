@@ -200,4 +200,8 @@ abstract class WehavitDatasource {
     required String targetResolutionId,
     required ResolutionEntity newEntity,
   });
+
+  EitherFuture<void> incrementResolutionPostcount({
+    required String targetResolutionId,
+  });
 }
