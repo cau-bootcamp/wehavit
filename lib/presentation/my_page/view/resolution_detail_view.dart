@@ -363,7 +363,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                       target: viewModel.confirmPostList[viewModel.selectedDate],
                       forWaiting: const Center(
                         child: SizedBox(
-                          height: 50,
+                          height: 252,
                           width: 50,
                           child: CircularProgressIndicator(
                             color: CustomColors.whBrightGrey,
@@ -405,7 +405,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                         return Visibility(
                           visible: entityList.isNotEmpty,
                           replacement: const SizedBox(
-                            height: 200,
+                            height: 252,
                             child: Center(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
