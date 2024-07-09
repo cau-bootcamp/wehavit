@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -33,8 +35,28 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    ref.watch(resolutionDetailViewModelProvider).resolutionEntity =
-        widget.entity;
+    final viewmodel = ref.watch(resolutionDetailViewModelProvider);
+    final provider = ref.read(resolutionDetailViewModelProvider.notifier);
+
+    viewmodel.resolutionEntity = widget.entity;
+
+    unawaited(
+      provider
+          .loadConfirmPostsForWeek(
+            mondayOfTargetWeek: viewmodel.calendartMondayDateList[0],
+          )
+          .whenComplete(() => setState(() {})),
+    );
+
+    unawaited(
+      provider
+          .loadConfirmPostsForWeek(
+            mondayOfTargetWeek: viewmodel.calendartMondayDateList[1],
+          )
+          .whenComplete(() => setState(() {})),
+    );
+
+    unawaited(provider.loadConfirmPostEntityListFor(dateTime: DateTime.now()));
   }
 
   static List<String> weekdayString = ['월', '화', '수', '목', '금', '토', '일'];
@@ -280,7 +302,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                           color: PointColors
                               .colorList[widget.entity.colorIndex ?? 0],
                           dataSource: List<ChartData>.generate(
-                            widget.entity.weeklyPostCountList!.length,
+                            widget.entity.weeklyPostCountList?.length ?? 0,
                             (index) => ChartData(
                               weekdayString[index],
                               widget.entity.weeklyPostCountList![index]
@@ -308,7 +330,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  '내 인증글',
+                  '내가 쓴 인증글',
                   textAlign: TextAlign.start,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
@@ -337,23 +359,106 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                     const SizedBox(
                       height: 12.0,
                     ),
-                    ConfirmPostWidget(
-                      confirmPostEntity: ConfirmPostEntityDummy.dummy,
-                      createdDate: ConfirmPostEntityDummy.dummy.createdAt!,
-                      showReactionToolbar: false,
+                    EitherFutureBuilder<List<ConfirmPostEntity>>(
+                      target: viewModel.confirmPostList[viewModel.selectedDate],
+                      forWaiting: const Center(
+                        child: SizedBox(
+                          height: 50,
+                          width: 50,
+                          child: CircularProgressIndicator(
+                            color: CustomColors.whBrightGrey,
+                          ),
+                        ),
+                      ),
+                      forFail: const SizedBox(
+                        height: 150,
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '이 날에는 인증글을 남기지 않았어요',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: CustomColors.whWhite,
+                                ),
+                              ),
+                              Text(
+                                '🤫',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 40,
+                                  fontWeight: FontWeight.bold,
+                                  color: CustomColors.whWhite,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 60,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      mainWidgetCallback: (entityList) {
+                        return Visibility(
+                          visible: entityList.isNotEmpty,
+                          replacement: const SizedBox(
+                            height: 200,
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    '이 날에는 인증글을 남기지 않았어요',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: CustomColors.whWhite,
+                                    ),
+                                  ),
+                                  Text(
+                                    '🤫',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 40,
+                                      fontWeight: FontWeight.bold,
+                                      color: CustomColors.whWhite,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          child: Column(
+                            children: List<Widget>.generate(
+                              entityList.length,
+                              (index) => Padding(
+                                padding: const EdgeInsets.only(bottom: 12.0),
+                                child: ConfirmPostWidget(
+                                  confirmPostEntity: entityList[index],
+                                  createdDate: viewModel.selectedDate,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
               ],
             ),
             const SizedBox(
-              height: 40.0,
+              height: 20.0,
             ),
             Container(
               width: double.infinity,
               alignment: Alignment.center,
               child: const Text(
-                '더 많은 통계가 곧 추가됩니다!',
+                '곧, 더 많은 통계가 곧 추가됩니다!',
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
@@ -540,8 +645,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
               );
 
               await provider
-                  .loadConfirmPosts(
-                resolutionId: widget.entity.resolutionId ?? '',
+                  .loadConfirmPostsForWeek(
                 mondayOfTargetWeek: viewModel.calendartMondayDateList[0],
               )
                   .whenComplete(() {

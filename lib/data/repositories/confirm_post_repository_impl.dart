@@ -140,4 +140,15 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
       selectedDate,
     );
   }
+
+  @override
+  EitherFuture<List<ConfirmPostEntity>> getConfirmPostEntityByDate({
+    required DateTime selectedDate,
+    required String targetResolutionId,
+  }) {
+    return _wehavitDatasource.getConfirmPostEntityByDate(
+      selectedDate: selectedDate,
+      targetResolutionId: targetResolutionId,
+    );
+  }
 }

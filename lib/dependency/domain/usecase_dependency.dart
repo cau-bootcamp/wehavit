@@ -429,3 +429,11 @@ final setResolutionDeactiveUsecaseProvider =
   final resolutionRepository = ref.watch(resolutionRepositoryProvider);
   return SetResolutionDeactiveUsecase(resolutionRepository);
 });
+
+final getConfirmPostOfDatetimeFromTargetResolutionUsecaseProvider =
+    Provider<GetConfirmPostOfDatetimeFromTargetResolutionUsecase>((ref) {
+  final confirmPostRepository = ref.watch(confirmPostRepositoryProvider);
+  return GetConfirmPostOfDatetimeFromTargetResolutionUsecase(
+    confirmPostRepository,
+  );
+});

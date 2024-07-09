@@ -217,4 +217,9 @@ abstract class WehavitDatasource {
     required String targetResolutionId,
     required DateTime? createdDate,
   });
+
+  EitherFuture<List<ConfirmPostEntity>> getConfirmPostEntityByDate({
+    required DateTime selectedDate,
+    required String targetResolutionId,
+  });
 }

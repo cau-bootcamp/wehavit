@@ -2646,4 +2646,66 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       );
     }
   }
+
+  @override
+  EitherFuture<List<ConfirmPostEntity>> getConfirmPostEntityByDate({
+    required DateTime selectedDate,
+    required String targetResolutionId,
+  }) async {
+    try {
+      final myUid = getMyUserId();
+      DateTime startDate =
+          DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+
+      final fetchResult = await firestore
+          .collection(FirebaseCollectionName.confirmPosts)
+          .where(
+            Filter.and(
+              Filter(
+                FirebaseConfirmPostFieldName.resolutionId,
+                isEqualTo: targetResolutionId,
+              ),
+              Filter(
+                FirebaseConfirmPostFieldName.createdAt,
+                isGreaterThanOrEqualTo: Timestamp.fromDate(startDate),
+              ),
+              Filter(
+                FirebaseConfirmPostFieldName.createdAt,
+                isLessThan: Timestamp.fromDate(
+                  selectedDate.add(const Duration(days: 1)),
+                ),
+              ),
+            ),
+          )
+          .get();
+
+      if (fetchResult.docs.isEmpty) {
+        return right([]);
+      }
+
+      final targetFirestoreDocument = fetchResult.docs.first;
+
+      final model = FirebaseConfirmPostModel.fromFireStoreDocument(
+        targetFirestoreDocument,
+      );
+
+      final ownerUserEntity = await getUserEntityByUserId(myUid);
+
+      if (ownerUserEntity == null) {
+        return left(
+          const Failure(
+            'fail to fetch user entity from getConfirmPostEntityByDate',
+          ),
+        );
+      }
+      final entity = model.toConfirmPostEntity(
+        targetFirestoreDocument.reference.id,
+        ownerUserEntity,
+      );
+
+      return Future(() => right([entity]));
+    } on Exception catch (e) {
+      return Future(() => left(Failure(e.toString())));
+    }
+  }
 }

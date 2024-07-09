@@ -278,7 +278,11 @@ final resolutionDetailViewModelProvider = StateNotifierProvider.autoDispose<
   final GetConfirmPostListForResolutionIdUsecase
       getConfirmPostListForResolutionIdUsecase =
       ref.watch(getConfirmPostListForResolutionIdUsecaseProvider);
+  final GetConfirmPostOfDatetimeFromTargetResolutionUsecase
+      getConfirmPostOfDatetimeFromTargetResolutionUsecase =
+      ref.watch(getConfirmPostOfDatetimeFromTargetResolutionUsecaseProvider);
   return ResolutionDetailViewModelProvider(
     getConfirmPostListForResolutionIdUsecase,
+    getConfirmPostOfDatetimeFromTargetResolutionUsecase,
   );
 });
