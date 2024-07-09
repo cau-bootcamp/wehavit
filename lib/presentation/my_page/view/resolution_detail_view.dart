@@ -37,6 +37,8 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
         widget.entity;
   }
 
+  static List<String> weekdayString = ['월', '화', '수', '목', '금', '토', '일'];
+
   @override
   Widget build(BuildContext context) {
     final viewModel = ref.watch(resolutionDetailViewModelProvider);
@@ -180,36 +182,39 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                 const SizedBox(
                   height: 16.0,
                 ),
-                const Row(
+                Row(
                   children: [
                     ResolutionSingleStatisticCellWidget(
-                      primary: '32회',
+                      primary: '${widget.entity.writtenPostCount}회',
                       secondary: '실천 인증 횟수',
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 16.0,
                     ),
                     ResolutionSingleStatisticCellWidget(
-                      primary: '32회',
-                      secondary: '실천 인증 횟수',
+                      primary:
+                          '${widget.entity.successWeekMondayList?.length}회',
+                      secondary: '주간 목표 달성 횟수',
                     ),
                   ],
                 ),
                 const SizedBox(
                   height: 16.0,
                 ),
-                const Row(
+                Row(
                   children: [
                     ResolutionSingleStatisticCellWidget(
-                      primary: '32회',
-                      secondary: '실천 인증 횟수',
+                      primary: '${widget.entity.receivedReactionCount}회',
+                      secondary: '받은 격려 수',
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 16.0,
                     ),
                     ResolutionSingleStatisticCellWidget(
-                      primary: '32회',
-                      secondary: '실천 인증 횟수',
+                      primary:
+                          // ignore: lines_longer_than_80_chars
+                          '${DateTime.now().difference(widget.entity.startDate ?? DateTime.now()).inDays + 1}일',
+                      secondary: '도전을 함께한 일 수',
                     ),
                   ],
                 ),
@@ -274,15 +279,14 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                           ),
                           color: PointColors
                               .colorList[widget.entity.colorIndex ?? 0],
-                          dataSource: [
-                            ChartData('월', 35),
-                            ChartData('화', 28),
-                            ChartData('수', 34),
-                            ChartData('목', 32),
-                            ChartData('금', 40),
-                            ChartData('토', 40),
-                            ChartData('일', 40),
-                          ],
+                          dataSource: List<ChartData>.generate(
+                            widget.entity.weeklyPostCountList!.length,
+                            (index) => ChartData(
+                              weekdayString[index],
+                              widget.entity.weeklyPostCountList![index]
+                                  .toDouble(),
+                            ),
+                          ),
                           xValueMapper: (ChartData data, _) => data.x,
                           yValueMapper: (ChartData data, _) => data.y,
                           borderRadius: const BorderRadius.only(
