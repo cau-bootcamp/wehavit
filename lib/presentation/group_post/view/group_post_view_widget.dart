@@ -81,26 +81,27 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
         child: Stack(
           children: [
             Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: CustomColors.whDarkBlack,
-                borderRadius: BorderRadius.all(
+                borderRadius: const BorderRadius.all(
                   Radius.circular(16.0),
                 ),
                 border: Border(
-                  top: BorderSide(
+                  top: const BorderSide(
                     width: 8.0,
                     color: CustomColors.whDarkBlack,
-                    strokeAlign: BorderSide.strokeAlignOutside,
                   ),
-                  left: BorderSide(
+                  left: const BorderSide(
                     width: 8.0,
                     color: CustomColors.whDarkBlack,
-                    strokeAlign: BorderSide.strokeAlignOutside,
                   ),
-                  right: BorderSide(
+                  right: const BorderSide(
                     width: 8.0,
                     color: CustomColors.whDarkBlack,
-                    strokeAlign: BorderSide.strokeAlignOutside,
+                  ),
+                  bottom: BorderSide(
+                    width: widget.showReactionToolbar ? 0.1 : 8.0,
+                    color: CustomColors.whDarkBlack,
                   ),
                 ),
               ),
@@ -110,16 +111,15 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                     decoration: const BoxDecoration(
                       color: CustomColors.whGrey,
                       borderRadius: BorderRadius.all(
-                        Radius.circular(16.0),
+                        Radius.circular(8.0),
                       ),
                     ),
                     padding: const EdgeInsets.only(
                       left: 8.0,
                       right: 8.0,
-                      top: 4.0,
                       bottom: 12.0,
                     ),
-                    height: 244,
+                    height: 224,
                     child: const Center(
                       child: CircularProgressIndicator(
                         color: CustomColors.whYellow,
@@ -202,14 +202,15 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                                   color: CustomColors.whRed,
                                 ),
                                 padding: const EdgeInsets.symmetric(
-                                  vertical: 4.0,
-                                  horizontal: 8.0,
+                                  vertical: 2.0,
+                                  horizontal: 6.0,
                                 ),
                                 child: const Text(
-                                  '오늘 실천 실패 😢',
+                                  '오늘은 SKIP',
                                   style: TextStyle(
                                     fontSize: 12.0,
-                                    fontWeight: FontWeight.w300,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: 'Pretendard',
                                     color: CustomColors.whWhite,
                                   ),
                                 ),

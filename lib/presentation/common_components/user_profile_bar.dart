@@ -33,8 +33,8 @@ class _UserProfileBarState extends State<UserProfileBar> {
                   shape: BoxShape.circle,
                   color: CustomColors.whGrey,
                 ),
-                width: 60,
-                height: 60,
+                width: 52,
+                height: 52,
               ),
               const Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -54,7 +54,7 @@ class _UserProfileBarState extends State<UserProfileBar> {
               Container(
                 margin: const EdgeInsets.only(left: 4.0, right: 12.0),
                 child: CircleAvatar(
-                  radius: 24,
+                  radius: 26,
                   foregroundImage: NetworkImage(data.userImageUrl ?? ''),
                 ),
               ),
@@ -119,8 +119,8 @@ class _UserProfileBarState extends State<UserProfileBar> {
                 shape: BoxShape.circle,
                 color: CustomColors.whPlaceholderGrey,
               ),
-              width: 60,
-              height: 60,
+              width: 52,
+              height: 52,
             ),
             const Column(
               mainAxisAlignment: MainAxisAlignment.center,
