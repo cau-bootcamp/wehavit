@@ -37,6 +37,7 @@ mixin _$FirebaseResolutionModel {
   @TimestampConverter()
   List<DateTime>? get successWeekMondayList =>
       throw _privateConstructorUsedError;
+  List<int>? get weeklyPostCountList => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -63,7 +64,8 @@ abstract class $FirebaseResolutionModelCopyWith<$Res> {
       List<String>? shareGroupIdList,
       int? writtenPostCount,
       int? receivedReactionCount,
-      @TimestampConverter() List<DateTime>? successWeekMondayList});
+      @TimestampConverter() List<DateTime>? successWeekMondayList,
+      List<int>? weeklyPostCountList});
 }
 
 /// @nodoc
@@ -93,6 +95,7 @@ class _$FirebaseResolutionModelCopyWithImpl<$Res,
     Object? writtenPostCount = freezed,
     Object? receivedReactionCount = freezed,
     Object? successWeekMondayList = freezed,
+    Object? weeklyPostCountList = freezed,
   }) {
     return _then(_value.copyWith(
       resolutionName: freezed == resolutionName
@@ -147,6 +150,10 @@ class _$FirebaseResolutionModelCopyWithImpl<$Res,
           ? _value.successWeekMondayList
           : successWeekMondayList // ignore: cast_nullable_to_non_nullable
               as List<DateTime>?,
+      weeklyPostCountList: freezed == weeklyPostCountList
+          ? _value.weeklyPostCountList
+          : weeklyPostCountList // ignore: cast_nullable_to_non_nullable
+              as List<int>?,
     ) as $Val);
   }
 }
@@ -173,7 +180,8 @@ abstract class _$$FirebaseResolutionModelImplCopyWith<$Res>
       List<String>? shareGroupIdList,
       int? writtenPostCount,
       int? receivedReactionCount,
-      @TimestampConverter() List<DateTime>? successWeekMondayList});
+      @TimestampConverter() List<DateTime>? successWeekMondayList,
+      List<int>? weeklyPostCountList});
 }
 
 /// @nodoc
@@ -202,6 +210,7 @@ class __$$FirebaseResolutionModelImplCopyWithImpl<$Res>
     Object? writtenPostCount = freezed,
     Object? receivedReactionCount = freezed,
     Object? successWeekMondayList = freezed,
+    Object? weeklyPostCountList = freezed,
   }) {
     return _then(_$FirebaseResolutionModelImpl(
       resolutionName: freezed == resolutionName
@@ -256,6 +265,10 @@ class __$$FirebaseResolutionModelImplCopyWithImpl<$Res>
           ? _value._successWeekMondayList
           : successWeekMondayList // ignore: cast_nullable_to_non_nullable
               as List<DateTime>?,
+      weeklyPostCountList: freezed == weeklyPostCountList
+          ? _value._weeklyPostCountList
+          : weeklyPostCountList // ignore: cast_nullable_to_non_nullable
+              as List<int>?,
     ));
   }
 }
@@ -278,10 +291,12 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
       required this.writtenPostCount,
       required this.receivedReactionCount,
       @TimestampConverter()
-      required final List<DateTime>? successWeekMondayList})
+      required final List<DateTime>? successWeekMondayList,
+      required final List<int>? weeklyPostCountList})
       : _shareFriendIdList = shareFriendIdList,
         _shareGroupIdList = shareGroupIdList,
-        _successWeekMondayList = successWeekMondayList;
+        _successWeekMondayList = successWeekMondayList,
+        _weeklyPostCountList = weeklyPostCountList;
 
   factory _$FirebaseResolutionModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$FirebaseResolutionModelImplFromJson(json);
@@ -341,9 +356,20 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
     return EqualUnmodifiableListView(value);
   }
 
+  final List<int>? _weeklyPostCountList;
+  @override
+  List<int>? get weeklyPostCountList {
+    final value = _weeklyPostCountList;
+    if (value == null) return null;
+    if (_weeklyPostCountList is EqualUnmodifiableListView)
+      return _weeklyPostCountList;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
   String toString() {
-    return 'FirebaseResolutionModel(resolutionName: $resolutionName, goalStatement: $goalStatement, actionStatement: $actionStatement, isActive: $isActive, colorIndex: $colorIndex, iconIndex: $iconIndex, actionPerWeek: $actionPerWeek, startDate: $startDate, shareFriendIdList: $shareFriendIdList, shareGroupIdList: $shareGroupIdList, writtenPostCount: $writtenPostCount, receivedReactionCount: $receivedReactionCount, successWeekMondayList: $successWeekMondayList)';
+    return 'FirebaseResolutionModel(resolutionName: $resolutionName, goalStatement: $goalStatement, actionStatement: $actionStatement, isActive: $isActive, colorIndex: $colorIndex, iconIndex: $iconIndex, actionPerWeek: $actionPerWeek, startDate: $startDate, shareFriendIdList: $shareFriendIdList, shareGroupIdList: $shareGroupIdList, writtenPostCount: $writtenPostCount, receivedReactionCount: $receivedReactionCount, successWeekMondayList: $successWeekMondayList, weeklyPostCountList: $weeklyPostCountList)';
   }
 
   @override
@@ -376,7 +402,9 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
             (identical(other.receivedReactionCount, receivedReactionCount) ||
                 other.receivedReactionCount == receivedReactionCount) &&
             const DeepCollectionEquality()
-                .equals(other._successWeekMondayList, _successWeekMondayList));
+                .equals(other._successWeekMondayList, _successWeekMondayList) &&
+            const DeepCollectionEquality()
+                .equals(other._weeklyPostCountList, _weeklyPostCountList));
   }
 
   @JsonKey(ignore: true)
@@ -395,7 +423,8 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
       const DeepCollectionEquality().hash(_shareGroupIdList),
       writtenPostCount,
       receivedReactionCount,
-      const DeepCollectionEquality().hash(_successWeekMondayList));
+      const DeepCollectionEquality().hash(_successWeekMondayList),
+      const DeepCollectionEquality().hash(_weeklyPostCountList));
 
   @JsonKey(ignore: true)
   @override
@@ -427,7 +456,8 @@ abstract class _FirebaseResolutionModel implements FirebaseResolutionModel {
           required final int? writtenPostCount,
           required final int? receivedReactionCount,
           @TimestampConverter()
-          required final List<DateTime>? successWeekMondayList}) =
+          required final List<DateTime>? successWeekMondayList,
+          required final List<int>? weeklyPostCountList}) =
       _$FirebaseResolutionModelImpl;
 
   factory _FirebaseResolutionModel.fromJson(Map<String, dynamic> json) =
@@ -461,6 +491,8 @@ abstract class _FirebaseResolutionModel implements FirebaseResolutionModel {
   @override
   @TimestampConverter()
   List<DateTime>? get successWeekMondayList;
+  @override
+  List<int>? get weeklyPostCountList;
   @override
   @JsonKey(ignore: true)
   _$$FirebaseResolutionModelImplCopyWith<_$FirebaseResolutionModelImpl>

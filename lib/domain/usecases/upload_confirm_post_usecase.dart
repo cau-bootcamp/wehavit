@@ -8,12 +8,10 @@ class UploadConfirmPostUseCase {
   UploadConfirmPostUseCase(
     this._confirmPostRepository,
     this._userModelRepository,
-    this._resolutionRepository,
   );
 
   final ConfirmPostRepository _confirmPostRepository;
   final UserModelRepository _userModelRepository;
-  final ResolutionRepository _resolutionRepository;
 
   EitherFuture<bool> call({
     required String resolutionGoalStatement,
@@ -73,15 +71,6 @@ class UploadConfirmPostUseCase {
         return result.fold((failure) {
           return left(failure);
         }, (success) {
-          _userModelRepository.incrementUserDataCounter(
-            type: UserIncrementalDataType.post,
-          );
-          _resolutionRepository.incrementWrittenPostCount(
-            targetResolutionId: resolutionId,
-          );
-          _resolutionRepository.updateWeekSuccessCount(
-            targetResolutionId: resolutionId,
-          );
           return right(success);
         });
       });

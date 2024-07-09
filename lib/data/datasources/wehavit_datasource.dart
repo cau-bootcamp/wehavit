@@ -212,4 +212,9 @@ abstract class WehavitDatasource {
   EitherFuture<void> updateWeekSuccessCount({
     required targetResolutionId,
   });
+
+  EitherFuture<void> updateWeeklyPostCount({
+    required String targetResolutionId,
+    required DateTime? createdDate,
+  });
 }

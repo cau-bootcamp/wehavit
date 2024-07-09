@@ -38,6 +38,7 @@ class UploadResolutionUseCase {
       writtenPostCount: 0,
       receivedReactionCount: 0,
       successWeekMondayList: [],
+      weeklyPostCountList: List<int>.generate(7, (_) => 0),
     );
 
     return _resolutionRepository.uploadResolutionEntity(entity).then(

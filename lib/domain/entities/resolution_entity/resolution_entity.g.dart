@@ -30,6 +30,9 @@ _$ResolutionEntityImpl _$$ResolutionEntityImplFromJson(
       successWeekMondayList: (json['successWeekMondayList'] as List<dynamic>?)
           ?.map((e) => const TimestampConverter().fromJson(e as Timestamp))
           .toList(),
+      weeklyPostCountList: (json['weeklyPostCountList'] as List<dynamic>?)
+          ?.map((e) => (e as num).toInt())
+          .toList(),
     );
 
 Map<String, dynamic> _$$ResolutionEntityImplToJson(
@@ -52,6 +55,7 @@ Map<String, dynamic> _$$ResolutionEntityImplToJson(
       'successWeekMondayList': instance.successWeekMondayList
           ?.map(const TimestampConverter().toJson)
           .toList(),
+      'weeklyPostCountList': instance.weeklyPostCountList,
     };
 
 Value? _$JsonConverterFromJson<Json, Value>(

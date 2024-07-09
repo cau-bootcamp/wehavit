@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:path/path.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/data/datasources/datasources.dart';
 import 'package:wehavit/data/models/firebase_models/group_announcement_model/firebase_group_announcement_model.dart';
@@ -2588,6 +2589,65 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       return Future(
         () => left(
           const Failure('catch error on incrementReceivedReactionCount'),
+        ),
+      );
+    }
+  }
+
+  @override
+  EitherFuture<void> updateWeeklyPostCount({
+    required String targetResolutionId,
+    required DateTime? createdDate,
+  }) async {
+    try {
+      final myUid = getMyUserId();
+
+      if (createdDate == null) {
+        return left(
+          const Failure('fail to get created date in updateWeeklyPostCount'),
+        );
+      }
+
+      final currentList = await firestore
+          .collection(
+            FirebaseCollectionName.getTargetResolutionCollectionName(myUid),
+          )
+          .doc(targetResolutionId)
+          .get()
+          .then((doc) {
+        final data = doc.data();
+        if (data != null) {
+          final list =
+              data[FirebaseResolutionFieldName.resolutionWeeklyPostcountList];
+          if (list is List) {
+            return list.map((item) => item as int).toList();
+          }
+        }
+        return <int>[];
+      });
+
+      if (currentList == null) {
+        return left(
+          const Failure('fail to load current weekly post count list'),
+        );
+      }
+
+      currentList[createdDate.weekday - 1] += 1;
+
+      await firestore
+          .collection(
+            FirebaseCollectionName.getTargetResolutionCollectionName(myUid),
+          )
+          .doc(targetResolutionId)
+          .update({
+        FirebaseResolutionFieldName.resolutionWeeklyPostcountList: currentList,
+      });
+
+      return Future(() => right(null));
+    } on Exception {
+      return Future(
+        () => left(
+          const Failure('catch error on updateWeeklyPostCount'),
         ),
       );
     }

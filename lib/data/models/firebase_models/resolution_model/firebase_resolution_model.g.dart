@@ -29,6 +29,9 @@ _$FirebaseResolutionModelImpl _$$FirebaseResolutionModelImplFromJson(
       successWeekMondayList: (json['successWeekMondayList'] as List<dynamic>?)
           ?.map((e) => const TimestampConverter().fromJson(e as Timestamp))
           .toList(),
+      weeklyPostCountList: (json['weeklyPostCountList'] as List<dynamic>?)
+          ?.map((e) => (e as num).toInt())
+          .toList(),
     );
 
 Map<String, dynamic> _$$FirebaseResolutionModelImplToJson(
@@ -50,6 +53,7 @@ Map<String, dynamic> _$$FirebaseResolutionModelImplToJson(
       'successWeekMondayList': instance.successWeekMondayList
           ?.map(const TimestampConverter().toJson)
           .toList(),
+      'weeklyPostCountList': instance.weeklyPostCountList,
     };
 
 Value? _$JsonConverterFromJson<Json, Value>(
