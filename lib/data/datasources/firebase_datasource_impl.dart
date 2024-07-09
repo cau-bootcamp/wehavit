@@ -2520,4 +2520,76 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       );
     }
   }
+
+  @override
+  EitherFuture<void> updateWeekSuccessCount({
+    required targetResolutionId,
+  }) async {
+    try {
+      final myUid = getMyUserId();
+
+      final resolutionActionPerWeek = await firestore
+          .collection(
+              FirebaseCollectionName.getTargetResolutionCollectionName(myUid))
+          .doc(targetResolutionId)
+          .get()
+          .then(
+            (doc) =>
+                doc.data()?[FirebaseResolutionFieldName.resolutionActionPerWeek]
+                    as int? ??
+                8,
+          );
+
+      final currentWeeklyPostCount = await firestore
+          .collection(
+            FirebaseCollectionName.confirmPosts,
+          )
+          .where(
+            Filter.and(
+              Filter(
+                FirebaseConfirmPostFieldName.resolutionId,
+                isEqualTo: targetResolutionId,
+              ),
+              Filter(
+                FirebaseConfirmPostFieldName.createdAt,
+                isGreaterThanOrEqualTo:
+                    Timestamp.fromDate(DateTime.now().getMondayDateTime()),
+              ),
+            ),
+          )
+          .get()
+          .then(
+            (snapshot) => snapshot.docs
+                .where(
+                  (doc) =>
+                      doc.data()[FirebaseConfirmPostFieldName.attributes]
+                          [FirebaseConfirmPostFieldName.attributesHasRested] ==
+                      false,
+                )
+                .length,
+          );
+
+      if (resolutionActionPerWeek <= currentWeeklyPostCount) {
+        final thisMondayTimestamp =
+            Timestamp.fromDate(DateTime.now().getMondayDateTime());
+        await firestore
+            .collection(
+              FirebaseCollectionName.getTargetResolutionCollectionName(myUid),
+            )
+            .doc(targetResolutionId)
+            .update({
+          FirebaseResolutionFieldName.resolutionWeekSuccessList:
+              FieldValue.arrayUnion([thisMondayTimestamp]),
+        });
+      }
+
+      return Future(() => right(null));
+    } on Exception {
+      return Future(
+        () => left(
+          const Failure('catch error on incrementReceivedReactionCount'),
+        ),
+      );
+    }
+  }
 }

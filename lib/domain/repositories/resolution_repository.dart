@@ -58,4 +58,8 @@ abstract class ResolutionRepository {
   EitherFuture<void> incrementReceivedReactionCount({
     required String targetResolutionId,
   });
+
+  EitherFuture<void> updateWeekSuccessCount({
+    required String targetResolutionId,
+  });
 }

@@ -28,7 +28,7 @@ class FirebaseResolutionFieldName {
   static const resolutionShareGroupIdList = 'shareGroupIdList';
   static const resolutionWrittenPostCount = 'writtenPostCount';
   static const resolutionReceivedReactionCount = 'receivedReactionCount';
-  static const resolutionWeekSuccessCount = 'weekSuccessCount';
+  static const resolutionWeekSuccessList = 'weekSuccessList';
 }
 
 @immutable

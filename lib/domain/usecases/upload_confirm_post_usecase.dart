@@ -69,13 +69,21 @@ class UploadConfirmPostUseCase {
 
       return await _confirmPostRepository
           .createConfirmPost(confirmPost)
-          .whenComplete(() {
-        _userModelRepository.incrementUserDataCounter(
-          type: UserIncrementalDataType.post,
-        );
-        _resolutionRepository.incrementWrittenPostCount(
-          targetResolutionId: resolutionId,
-        );
+          .then((result) {
+        return result.fold((failure) {
+          return left(failure);
+        }, (success) {
+          _userModelRepository.incrementUserDataCounter(
+            type: UserIncrementalDataType.post,
+          );
+          _resolutionRepository.incrementWrittenPostCount(
+            targetResolutionId: resolutionId,
+          );
+          _resolutionRepository.updateWeekSuccessCount(
+            targetResolutionId: resolutionId,
+          );
+          return right(success);
+        });
       });
     } on Exception catch (e) {
       return Future(() => left(Failure(e.toString())));

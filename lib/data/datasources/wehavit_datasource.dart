@@ -208,4 +208,8 @@ abstract class WehavitDatasource {
   EitherFuture<void> incrementReceivedReactionCount({
     required String targetResolutionId,
   });
+
+  EitherFuture<void> updateWeekSuccessCount({
+    required targetResolutionId,
+  });
 }

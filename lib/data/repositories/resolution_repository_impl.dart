@@ -133,4 +133,13 @@ class ResolutionRepositoryImpl implements ResolutionRepository {
       targetResolutionId: targetResolutionId,
     );
   }
+
+  @override
+  EitherFuture<void> updateWeekSuccessCount({
+    required String targetResolutionId,
+  }) {
+    return _wehavitDatasource.updateWeekSuccessCount(
+      targetResolutionId: targetResolutionId,
+    );
+  }
 }
