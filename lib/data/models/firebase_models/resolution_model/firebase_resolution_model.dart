@@ -20,6 +20,9 @@ class FirebaseResolutionModel with _$FirebaseResolutionModel {
     @TimestampConverter() required DateTime? startDate,
     required List<String>? shareFriendIdList,
     required List<String>? shareGroupIdList,
+    required int? writtenPostCount,
+    required int? receivedReactionCount,
+    @TimestampConverter() required List<DateTime>? successWeekList,
   }) = _FirebaseResolutionModel;
 
   factory FirebaseResolutionModel.fromJson(Map<String, dynamic> json) =>
@@ -49,6 +52,9 @@ class FirebaseResolutionModel with _$FirebaseResolutionModel {
                 ?.map((groupEntity) => groupEntity.groupId)
                 .toList() ??
             [],
+        writtenPostCount: entity.writtenPostCount,
+        receivedReactionCount: entity.receivedReactionCount,
+        successWeekList: entity.successWeekList,
       );
 }
 
@@ -70,6 +76,9 @@ extension ConvertFirebaseResolutionModel on FirebaseResolutionModel {
       startDate: startDate,
       shareFriendEntityList: shareFriendEntityList,
       shareGroupEntityList: shareGroupEntityList,
+      writtenPostCount: writtenPostCount,
+      receivedReactionCount: receivedReactionCount,
+      successWeekList: successWeekList,
     );
   }
 }

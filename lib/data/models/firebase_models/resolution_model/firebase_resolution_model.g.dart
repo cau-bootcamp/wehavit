@@ -24,6 +24,11 @@ _$FirebaseResolutionModelImpl _$$FirebaseResolutionModelImplFromJson(
       shareGroupIdList: (json['shareGroupIdList'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
+      writtenPostCount: (json['writtenPostCount'] as num?)?.toInt(),
+      receivedReactionCount: (json['receivedReactionCount'] as num?)?.toInt(),
+      successWeekList: (json['successWeekList'] as List<dynamic>?)
+          ?.map((e) => const TimestampConverter().fromJson(e as Timestamp))
+          .toList(),
     );
 
 Map<String, dynamic> _$$FirebaseResolutionModelImplToJson(
@@ -40,6 +45,11 @@ Map<String, dynamic> _$$FirebaseResolutionModelImplToJson(
           instance.startDate, const TimestampConverter().toJson),
       'shareFriendIdList': instance.shareFriendIdList,
       'shareGroupIdList': instance.shareGroupIdList,
+      'writtenPostCount': instance.writtenPostCount,
+      'receivedReactionCount': instance.receivedReactionCount,
+      'successWeekList': instance.successWeekList
+          ?.map(const TimestampConverter().toJson)
+          .toList(),
     };
 
 Value? _$JsonConverterFromJson<Json, Value>(

@@ -35,6 +35,9 @@ class UploadResolutionUseCase {
       colorIndex: colorIndex,
       iconIndex: iconIndex,
       resolutionId: '',
+      writtenPostCount: 0,
+      receivedReactionCount: 0,
+      successWeekList: [],
     );
 
     return _resolutionRepository.uploadResolutionEntity(entity).then(

@@ -25,6 +25,11 @@ _$ResolutionEntityImpl _$$ResolutionEntityImplFromJson(
       shareGroupEntityList: (json['shareGroupEntityList'] as List<dynamic>?)
           ?.map((e) => GroupEntity.fromJson(e as Map<String, dynamic>))
           .toList(),
+      writtenPostCount: (json['writtenPostCount'] as num?)?.toInt(),
+      receivedReactionCount: (json['receivedReactionCount'] as num?)?.toInt(),
+      successWeekList: (json['successWeekList'] as List<dynamic>?)
+          ?.map((e) => const TimestampConverter().fromJson(e as Timestamp))
+          .toList(),
     );
 
 Map<String, dynamic> _$$ResolutionEntityImplToJson(
@@ -42,6 +47,11 @@ Map<String, dynamic> _$$ResolutionEntityImplToJson(
           instance.startDate, const TimestampConverter().toJson),
       'shareFriendEntityList': instance.shareFriendEntityList,
       'shareGroupEntityList': instance.shareGroupEntityList,
+      'writtenPostCount': instance.writtenPostCount,
+      'receivedReactionCount': instance.receivedReactionCount,
+      'successWeekList': instance.successWeekList
+          ?.map(const TimestampConverter().toJson)
+          .toList(),
     };
 
 Value? _$JsonConverterFromJson<Json, Value>(
