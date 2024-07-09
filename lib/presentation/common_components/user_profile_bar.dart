@@ -3,9 +3,14 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 
 class UserProfileBar extends StatefulWidget {
-  const UserProfileBar({super.key, required this.futureUserEntity});
+  const UserProfileBar({
+    super.key,
+    required this.futureUserEntity,
+    this.secondaryText,
+  });
 
   final EitherFuture<UserDataEntity> futureUserEntity;
+  final String? secondaryText;
 
   @override
   State<UserProfileBar> createState() => _UserProfileBarState();
@@ -47,9 +52,9 @@ class _UserProfileBarState extends State<UserProfileBar> {
             ],
             (data) => [
               Container(
-                margin: const EdgeInsets.only(left: 4.0, right: 16.0),
+                margin: const EdgeInsets.only(left: 4.0, right: 12.0),
                 child: CircleAvatar(
-                  radius: 30,
+                  radius: 24,
                   foregroundImage: NetworkImage(data.userImageUrl ?? ''),
                 ),
               ),
@@ -61,9 +66,22 @@ class _UserProfileBarState extends State<UserProfileBar> {
                     data.userName ?? '',
                     style: const TextStyle(
                       color: CustomColors.whWhite,
-                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Pretendard',
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.w700,
+                      height: 1.1,
                     ),
                   ),
+                  if (widget.secondaryText != null)
+                    Text(
+                      widget.secondaryText!,
+                      style: const TextStyle(
+                        color: CustomColors.whWhite,
+                        fontFamily: 'Pretendard',
+                        fontSize: 13.0,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
                 ],
               ),
             ],
