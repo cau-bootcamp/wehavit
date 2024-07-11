@@ -15,19 +15,9 @@ class GroupView extends ConsumerStatefulWidget {
   ConsumerState<GroupView> createState() => _GroupViewState();
 }
 
-class _GroupViewState extends ConsumerState<GroupView>
-    with AutomaticKeepAliveClientMixin<GroupView> {
-  @override
-  void initState() {
-    super.initState();
-
-    unawaited(loadGroupCellList());
-    unawaited(loadFriendCellList());
-  }
-
+class _GroupViewState extends ConsumerState<GroupView> {
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     final viewModel = ref.watch(groupViewModelProvider);
     final provider = ref.read(groupViewModelProvider.notifier);
 
@@ -207,8 +197,6 @@ class _GroupViewState extends ConsumerState<GroupView>
   }
 
   Future<void> loadFriendCellList() async {
-    await ref.read(friendListViewModelProvider.notifier).getFriendList();
-
     final userIdList = await Future.wait(
       ref
               .read(friendListViewModelProvider)
@@ -233,7 +221,4 @@ class _GroupViewState extends ConsumerState<GroupView>
         .loadFriendCellWidgetModel(friendUidList: userIdListWithoutNull)
         .whenComplete(() => setState(() {}));
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

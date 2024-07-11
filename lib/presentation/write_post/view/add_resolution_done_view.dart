@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
+import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 class AddResolutionDoneView extends ConsumerStatefulWidget {
@@ -162,7 +163,7 @@ class _ShareResolutionToFriendBottomSheetWidgetState
               child: TextButton(
                 onPressed: () async {
                   provider.applyChangedSharingOfFriends().whenComplete(() {
-                    Navigator.pop(context);
+                    Navigator.pop(context, viewmodel.resolutionEntity);
                   });
                 },
                 child: const Text(
@@ -184,60 +185,64 @@ class _ShareResolutionToFriendBottomSheetWidgetState
           child: ListView(
             children: List<Widget>.generate(
               viewmodel.friendList!.length,
-              (index) => Container(
-                margin: const EdgeInsets.only(bottom: 16.0),
-                child: TextButton(
-                  onPressed: () {
-                    setState(() {
-                      provider.toggleFriendSelection(index);
-                    });
-                  },
-                  style: TextButton.styleFrom(
-                    minimumSize: Size.zero,
-                    padding: EdgeInsets.zero,
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    side: BorderSide.none,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(8.0),
-                      ),
+              (index) => TextButton(
+                onPressed: () {
+                  setState(() {
+                    provider.toggleFriendSelection(index);
+                  });
+                },
+                style: TextButton.styleFrom(
+                  minimumSize: Size.zero,
+                  padding: EdgeInsets.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  side: BorderSide.none,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(8.0),
                     ),
-                    overlayColor: CustomColors.whYellow,
                   ),
-                  child: Stack(
-                    alignment: Alignment.centerRight,
-                    children: [
-                      FriendListCellWidget(
-                        futureUserEntity: viewmodel.friendList![index],
-                        cellState: FriendListCellState.normal,
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(
-                          right: 8.0,
-                        ),
-                        width: 24,
-                        height: 24,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: viewmodel.tempSelectedFriendList![index]
-                              ? CustomColors.whYellow
-                              : Colors.transparent,
-                          border: Border.all(
-                            color: CustomColors.whBrightGrey,
+                  overlayColor: CustomColors.whYellow,
+                ),
+                child: Stack(
+                  alignment: Alignment.centerRight,
+                  children: [
+                    FriendListCellWidget(
+                      futureUserEntity: viewmodel.friendList![index],
+                      cellState: FriendListCellState.normal,
+                    ),
+                    EitherFutureBuilder<UserDataEntity>(
+                      target: viewmodel.friendList![index],
+                      forFail: Container(),
+                      forWaiting: Container(),
+                      mainWidgetCallback: (_) {
+                        return Container(
+                          margin: const EdgeInsets.only(
+                            right: 8.0,
                           ),
-                        ),
-                        child: Visibility(
-                          visible: viewmodel.tempSelectedFriendList![index],
-                          child: const Icon(
-                            Icons.check,
-                            color: CustomColors.whWhite,
-                            size: 20,
-                            weight: 500,
+                          width: 24,
+                          height: 24,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: viewmodel.tempSelectedFriendList![index]
+                                ? CustomColors.whYellow
+                                : Colors.transparent,
+                            border: Border.all(
+                              color: CustomColors.whBrightGrey,
+                            ),
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
+                          child: Visibility(
+                            visible: viewmodel.tempSelectedFriendList![index],
+                            child: const Icon(
+                              Icons.check,
+                              color: CustomColors.whWhite,
+                              size: 20,
+                              weight: 500,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -283,7 +288,7 @@ class _ShareResolutionToGroupBottomSheetWidgetState
               child: TextButton(
                 onPressed: () async {
                   provider.applyChangedSharingOfGroups().whenComplete(() {
-                    Navigator.pop(context);
+                    Navigator.pop(context, viewmodel.resolutionEntity);
                   });
                 },
                 child: const Text(

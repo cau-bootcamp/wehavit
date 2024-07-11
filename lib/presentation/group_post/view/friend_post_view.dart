@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
@@ -27,6 +28,31 @@ class _FriendPostViewState extends ConsumerState<FriendPostView> {
   @override
   void initState() {
     super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final isGuideShown =
+          await SharedPreferences.getInstance().then((instance) {
+        return instance.getBool(PreferenceKey.isReactionGuideShown);
+      });
+
+      if (isGuideShown == null || isGuideShown == false) {
+        showModalBottomSheet(
+          isScrollControlled: true,
+          // ignore: use_build_context_synchronously
+          context: context,
+          builder: (context) => GradientBottomSheet(
+            SizedBox(
+              height: MediaQuery.sizeOf(context).height * 0.80,
+              child: const ReactionGuideView(),
+            ),
+          ),
+        ).whenComplete(() {
+          SharedPreferences.getInstance().then((instance) {
+            instance.setBool(PreferenceKey.isReactionGuideShown, true);
+          });
+        });
+      }
+    });
   }
 
   @override

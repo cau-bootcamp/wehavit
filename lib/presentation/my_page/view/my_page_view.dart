@@ -15,10 +15,10 @@ class MyPageView extends ConsumerStatefulWidget {
   final TabController tabController;
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _MyPageScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() => MyPageScreenState();
 }
 
-class _MyPageScreenState extends ConsumerState<MyPageView>
+class MyPageScreenState extends ConsumerState<MyPageView>
     with AutomaticKeepAliveClientMixin<MyPageView> {
   @override
   bool get wantKeepAlive => true;
@@ -27,8 +27,6 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
   void initState() {
     super.initState();
     widget.tabController.addListener(_handleTabChange);
-
-    unawaited(ref.read(myPageViewModelProvider.notifier).loadData());
   }
 
   @override
@@ -128,13 +126,14 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
                                     borderRadius: BorderRadius.circular(16.0),
                                   ),
                                 ),
-                                onPressed: () {
-                                  showToastMessage(
+                                onPressed: () async {
+                                  Navigator.push(
                                     context,
-                                    text: '현재 개발중인 기능입니다!',
-                                    icon: const Icon(
-                                      Icons.warning,
-                                      color: CustomColors.whYellow,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          ResolutionDetailView(
+                                        entity: resolutionList[index],
+                                      ),
                                     ),
                                   );
                                 },
@@ -201,7 +200,7 @@ class _MyPageScreenState extends ConsumerState<MyPageView>
                       ),
                     ).then((result) {
                       if (result == true) {
-                        mainViewState?.loadUserData();
+                        mainViewState?.setState(() {});
 
                         ref
                             .read(myPageViewModelProvider.notifier)

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/common/utils/guide_image_assets.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 class WritingPostGuideView extends StatefulWidget {
@@ -37,7 +37,7 @@ class _WritingPostGuideViewState extends State<WritingPostGuideView>
           ),
         ),
         const SizedBox(
-          height: 40.0,
+          height: 20.0,
         ),
         Expanded(
           child: PageView(
@@ -54,8 +54,17 @@ class _WritingPostGuideViewState extends State<WritingPostGuideView>
             ],
           ),
         ),
-        const SizedBox(
-          height: 16.0,
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 12.0),
+          child: SmoothPageIndicator(
+            controller: pageController!,
+            count: lastPageIndex + 1,
+            effect: const WormEffect(
+              dotHeight: 8,
+              dotWidth: 8,
+              activeDotColor: CustomColors.whYellow,
+            ),
+          ),
         ),
         WideColoredButton(
           buttonTitle: currentPageIndex == lastPageIndex ? '인증 남기러가기' : '다음',
@@ -84,9 +93,11 @@ class WritingPostGuideFirstView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Image.asset(GuideImage.postGuideImage1),
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Image.asset(GuideImage.postGuideImage1),
+          ),
         ),
         const SizedBox(height: 24.0),
         const Text(
@@ -99,9 +110,7 @@ class WritingPostGuideFirstView extends StatelessWidget {
           ),
           textAlign: TextAlign.center,
         ),
-        Expanded(
-          child: Container(),
-        ),
+        Container(height: 12.0),
         const Text(
           'Tip',
           style: TextStyle(
@@ -120,9 +129,6 @@ class WritingPostGuideFirstView extends StatelessWidget {
           ),
           textAlign: TextAlign.center,
         ),
-        Expanded(
-          child: Container(),
-        ),
       ],
     );
   }
@@ -135,9 +141,11 @@ class WritingPostGuideSecondView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Image.asset(GuideImage.postGuideImage2),
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Image.asset(GuideImage.postGuideImage2),
+          ),
         ),
         const SizedBox(height: 24.0),
         const Text(
@@ -149,9 +157,6 @@ class WritingPostGuideSecondView extends StatelessWidget {
             fontWeight: FontWeight.w500,
           ),
           textAlign: TextAlign.center,
-        ),
-        Expanded(
-          child: Container(),
         ),
       ],
     );
@@ -165,9 +170,11 @@ class WritingPostGuideThirdView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Image.asset(GuideImage.postGuideImage3),
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Image.asset(GuideImage.postGuideImage3),
+          ),
         ),
         const SizedBox(height: 24.0),
         const Text(
@@ -179,9 +186,6 @@ class WritingPostGuideThirdView extends StatelessWidget {
             fontWeight: FontWeight.w500,
           ),
           textAlign: TextAlign.center,
-        ),
-        Expanded(
-          child: Container(),
         ),
       ],
     );

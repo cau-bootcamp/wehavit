@@ -68,11 +68,13 @@ final sendQuickShotReactionToConfirmPostUsecaseProvider =
   final reactionRepository = ref.watch(reactionRepositoryProvider);
   final userModelRepository = ref.watch(userModelRepositoryProvider);
   final photoRepository = ref.watch(photoRepositoryProvider);
+  final resolutionRepository = ref.watch(resolutionRepositoryProvider);
 
   return SendQuickShotReactionToConfirmPostUsecase(
     reactionRepository,
     userModelRepository,
     photoRepository,
+    resolutionRepository,
   );
 });
 
@@ -80,9 +82,11 @@ final sendEmojiReactionToConfirmPostUsecaseProvider =
     Provider<SendEmojiReactionToConfirmPostUsecase>((ref) {
   final reactionRepository = ref.watch(reactionRepositoryProvider);
   final userModelRepository = ref.watch(userModelRepositoryProvider);
+  final resolutionRepository = ref.watch(resolutionRepositoryProvider);
   return SendEmojiReactionToConfirmPostUsecase(
     reactionRepository,
     userModelRepository,
+    resolutionRepository,
   );
 });
 
@@ -90,9 +94,11 @@ final sendCommentReactionToConfirmPostUsecaseProvider =
     Provider<SendCommentReactionToConfirmPostUsecase>((ref) {
   final reactionRepository = ref.watch(reactionRepositoryProvider);
   final userModelRepository = ref.watch(userModelRepositoryProvider);
+  final resolutionRepository = ref.watch(resolutionRepositoryProvider);
   return SendCommentReactionToConfirmPostUsecase(
     reactionRepository,
     userModelRepository,
+    resolutionRepository,
   );
 });
 
@@ -410,4 +416,24 @@ final revokeAppleSignInUsecaseProvider =
     Provider<RevokeAppleSignInUsecase>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
   return RevokeAppleSignInUsecase(authRepository);
+});
+
+final updateResolutionUseCaseProvider =
+    Provider<UpdateResolutionUseCase>((ref) {
+  final resolutionRepository = ref.watch(resolutionRepositoryProvider);
+  return UpdateResolutionUseCase(resolutionRepository);
+});
+
+final setResolutionDeactiveUsecaseProvider =
+    Provider<SetResolutionDeactiveUsecase>((ref) {
+  final resolutionRepository = ref.watch(resolutionRepositoryProvider);
+  return SetResolutionDeactiveUsecase(resolutionRepository);
+});
+
+final getConfirmPostOfDatetimeFromTargetResolutionUsecaseProvider =
+    Provider<GetConfirmPostOfDatetimeFromTargetResolutionUsecase>((ref) {
+  final confirmPostRepository = ref.watch(confirmPostRepositoryProvider);
+  return GetConfirmPostOfDatetimeFromTargetResolutionUsecase(
+    confirmPostRepository,
+  );
 });

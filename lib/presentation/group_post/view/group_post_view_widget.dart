@@ -11,17 +11,18 @@ import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/effects/effects.dart';
 import 'package:wehavit/presentation/group_post/group_post.dart';
-import 'package:wehavit/presentation/group_post/view/confirm_post_photo_view.dart';
 
 class ConfirmPostWidget extends ConsumerStatefulWidget {
   const ConfirmPostWidget({
     required this.confirmPostEntity,
     required this.createdDate,
+    this.showReactionToolbar = true,
     super.key,
   });
 
   final ConfirmPostEntity confirmPostEntity;
   final DateTime createdDate;
+  final bool showReactionToolbar;
 
   @override
   ConsumerState<ConfirmPostWidget> createState() => _ConfirmPostWidgetState();
@@ -80,50 +81,52 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
         child: Stack(
           children: [
             Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: CustomColors.whDarkBlack,
-                borderRadius: BorderRadius.all(
+                borderRadius: const BorderRadius.all(
                   Radius.circular(16.0),
                 ),
+                border: Border(
+                  top: const BorderSide(
+                    width: 8.0,
+                    color: CustomColors.whDarkBlack,
+                  ),
+                  left: const BorderSide(
+                    width: 8.0,
+                    color: CustomColors.whDarkBlack,
+                  ),
+                  right: const BorderSide(
+                    width: 8.0,
+                    color: CustomColors.whDarkBlack,
+                  ),
+                  bottom: BorderSide(
+                    width: widget.showReactionToolbar ? 0.1 : 8.0,
+                    color: CustomColors.whDarkBlack,
+                  ),
+                ),
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(0.0),
-                child: Column(
-                  children: [
-                    Container(
-                      decoration: const BoxDecoration(
-                        color: CustomColors.whGrey,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(16.0),
-                        ),
-                        border: Border(
-                          top: BorderSide(
-                            width: 8.0,
-                            color: CustomColors.whDarkBlack,
-                          ),
-                          left: BorderSide(
-                            width: 8.0,
-                            color: CustomColors.whDarkBlack,
-                          ),
-                          right: BorderSide(
-                            width: 8.0,
-                            color: CustomColors.whDarkBlack,
-                          ),
-                        ),
-                      ),
-                      padding: const EdgeInsets.only(
-                        left: 8.0,
-                        right: 8.0,
-                        top: 4.0,
-                        bottom: 12.0,
-                      ),
-                      height: 244,
-                      child: const Center(
-                        child: CircularProgressIndicator(
-                          color: CustomColors.whYellow,
-                        ),
+              child: Column(
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                      color: CustomColors.whGrey,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8.0),
                       ),
                     ),
+                    padding: const EdgeInsets.only(
+                      left: 8.0,
+                      right: 8.0,
+                      bottom: 12.0,
+                    ),
+                    height: 224,
+                    child: const Center(
+                      child: CircularProgressIndicator(
+                        color: CustomColors.whYellow,
+                      ),
+                    ),
+                  ),
+                  if (widget.showReactionToolbar)
                     ConfirmPostReactionButtonListWidget(
                       onMessagePressed: () {},
                       onEmojiPressed: () {},
@@ -131,8 +134,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                       onQuickShotPointerUp: (_) {},
                       onQuickShotPointerMove: (_) {},
                     ),
-                  ],
-                ),
+                ],
               ),
             ),
           ],
@@ -143,95 +145,93 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
         child: Stack(
           children: [
             Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: CustomColors.whDarkBlack,
-                borderRadius: BorderRadius.all(
+                borderRadius: const BorderRadius.all(
                   Radius.circular(16.0),
                 ),
+                border: Border(
+                  top: const BorderSide(
+                    width: 8.0,
+                    color: CustomColors.whDarkBlack,
+                  ),
+                  left: const BorderSide(
+                    width: 8.0,
+                    color: CustomColors.whDarkBlack,
+                  ),
+                  right: const BorderSide(
+                    width: 8.0,
+                    color: CustomColors.whDarkBlack,
+                  ),
+                  bottom: BorderSide(
+                    width: widget.showReactionToolbar ? 0.1 : 8.0,
+                    color: CustomColors.whDarkBlack,
+                  ),
+                ),
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(0.0),
-                child: Column(
-                  children: [
-                    Container(
-                      decoration: const BoxDecoration(
-                        color: CustomColors.whGrey,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(16.0),
-                        ),
-                        border: Border(
-                          top: BorderSide(
-                            width: 8.0,
-                            color: CustomColors.whDarkBlack,
-                          ),
-                          left: BorderSide(
-                            width: 8.0,
-                            color: CustomColors.whDarkBlack,
-                          ),
-                          right: BorderSide(
-                            width: 8.0,
-                            color: CustomColors.whDarkBlack,
-                          ),
-                        ),
-                      ),
-                      padding: const EdgeInsets.only(
-                        left: 8.0,
-                        right: 8.0,
-                        top: 4.0,
-                        bottom: 12.0,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Stack(
-                            alignment: Alignment.centerRight,
-                            children: [
-                              UserProfileBar(
-                                futureUserEntity: futureUserDataEntity,
-                              ),
-                              if (widget.confirmPostEntity.hasRested == false)
-                                Text(
-                                  // ignore: lines_longer_than_80_chars
-                                  '${widget.confirmPostEntity.createdAt!.hour > 12 ? '오후' : '오전'} ${widget.confirmPostEntity.createdAt!.hour > 12 ? widget.confirmPostEntity.createdAt!.hour - 12 : widget.confirmPostEntity.createdAt!.hour}시 ${widget.confirmPostEntity.createdAt!.minute}분',
-                                  style: const TextStyle(
-                                    color: CustomColors.whWhite,
-                                  ),
-                                )
-                              else
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16.0),
-                                    color: CustomColors.whRed,
-                                  ),
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 4.0,
-                                    horizontal: 8.0,
-                                  ),
-                                  child: const Text(
-                                    '오늘 실천 실패 😢',
-                                    style: TextStyle(
-                                      fontSize: 12.0,
-                                      fontWeight: FontWeight.w300,
-                                      color: CustomColors.whWhite,
-                                    ),
-                                  ),
-                                ),
-                            ],
-                          ),
-                          // const SizedBox(height: 12.0),
-
-                          ResolutionLinearGaugeWidget(
-                            resolutionEntity: resolutionEntity,
-                            futureDoneList: resolutionDoneListForWrittenWeek,
-                          ),
-
-                          const SizedBox(height: 12.0),
-                          ConfirmPostContentWidget(
-                            confirmPostEntity: widget.confirmPostEntity,
-                          ),
-                        ],
+              child: Column(
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                      color: CustomColors.whGrey,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8.0),
                       ),
                     ),
+                    padding: const EdgeInsets.only(
+                      left: 8.0,
+                      right: 8.0,
+                      bottom: 12.0,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Stack(
+                          alignment: Alignment.centerRight,
+                          children: [
+                            UserProfileBar(
+                              futureUserEntity: futureUserDataEntity,
+                              secondaryText:
+                                  // ignore: lines_longer_than_80_chars
+                                  '${widget.confirmPostEntity.createdAt!.hour >= 12 ? '오후' : '오전'} ${widget.confirmPostEntity.createdAt!.hour > 12 ? widget.confirmPostEntity.createdAt!.hour - 12 : widget.confirmPostEntity.createdAt!.hour}시 ${widget.confirmPostEntity.createdAt!.minute}분',
+                            ),
+                            if (widget.confirmPostEntity.hasRested == true)
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16.0),
+                                  color: CustomColors.whRed,
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 2.0,
+                                  horizontal: 6.0,
+                                ),
+                                child: const Text(
+                                  '오늘은 SKIP',
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: 'Pretendard',
+                                    color: CustomColors.whWhite,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                        // const SizedBox(height: 12.0),
+
+                        ResolutionLinearGaugeWidget(
+                          resolutionEntity: resolutionEntity,
+                          futureDoneList: resolutionDoneListForWrittenWeek,
+                        ),
+
+                        const SizedBox(height: 12.0),
+                        ConfirmPostContentWidget(
+                          confirmPostEntity: widget.confirmPostEntity,
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (widget.showReactionToolbar)
                     ConfirmPostReactionButtonListWidget(
                       onMessagePressed: () {
                         setState(() {
@@ -309,67 +309,66 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                         if (reactionCameraModel.isPosInCapturingArea) {}
                       },
                     ),
-                    Visibility(
-                      visible: isShowingCommentField,
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          left: 8.0,
-                          right: 8.0,
-                          bottom: 8.0,
-                        ),
-                        child: Stack(
-                          alignment: Alignment.centerRight,
-                          children: [
-                            TextFormField(
-                              controller: commentEditingController,
-                              style: const TextStyle(
-                                color: CustomColors.whWhite,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w300,
+                  Visibility(
+                    visible: isShowingCommentField,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 8.0,
+                        right: 8.0,
+                        bottom: 8.0,
+                      ),
+                      child: Stack(
+                        alignment: Alignment.centerRight,
+                        children: [
+                          TextFormField(
+                            controller: commentEditingController,
+                            style: const TextStyle(
+                              color: CustomColors.whWhite,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w300,
+                            ),
+                            decoration: InputDecoration(
+                              isDense: true,
+                              filled: true,
+                              fillColor: CustomColors.whYellowDark,
+                              contentPadding: const EdgeInsets.only(
+                                left: 12.0,
+                                right: 44.0,
+                                top: 8.0,
+                                bottom: 8.0,
                               ),
-                              decoration: InputDecoration(
-                                isDense: true,
-                                filled: true,
-                                fillColor: CustomColors.whYellowDark,
-                                contentPadding: const EdgeInsets.only(
-                                  left: 12.0,
-                                  right: 44.0,
-                                  top: 8.0,
-                                  bottom: 8.0,
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: const BorderSide(
-                                    width: 0,
-                                    style: BorderStyle.none,
-                                  ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: const BorderSide(
+                                  width: 0,
+                                  style: BorderStyle.none,
                                 ),
                               ),
                             ),
-                            IconButton(
-                              onPressed: () async {
-                                sendMessageReaction(
-                                  widget.confirmPostEntity,
-                                  commentEditingController.text,
-                                ).whenComplete(() {
-                                  commentEditingController.clear();
+                          ),
+                          IconButton(
+                            onPressed: () async {
+                              sendMessageReaction(
+                                widget.confirmPostEntity,
+                                commentEditingController.text,
+                              ).whenComplete(() {
+                                commentEditingController.clear();
 
-                                  setState(() {
-                                    isShowingCommentField = false;
-                                  });
+                                setState(() {
+                                  isShowingCommentField = false;
                                 });
-                              },
-                              icon: const Icon(
-                                Icons.send_outlined,
-                                color: CustomColors.whWhite,
-                              ),
+                              });
+                            },
+                            icon: const Icon(
+                              Icons.send_outlined,
+                              color: CustomColors.whWhite,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -437,7 +436,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                                         ),
                                 color: Color.lerp(
                                   CustomColors.whYellow,
-                                  CustomColors.whRedBright,
+                                  CustomColors.whRed,
                                   min(1, viewModel.countSend / 24),
                                 ),
                                 fontWeight: FontWeight.w700,

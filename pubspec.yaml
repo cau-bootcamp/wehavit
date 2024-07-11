@@ -2,7 +2,7 @@ name: wehavit
 description: A new Havit tracking app without the comparing others.
 publish_to: 'none'
 
-version: 1.0.2+2
+version: 1.0.3+1
 
 environment:
   sdk: '>=3.4.3 <4.0.0'
@@ -56,6 +56,7 @@ dependencies:
   sign_in_with_apple: ^6.1.1
   dart_jsonwebtoken: ^2.14.0
   flutter_dotenv: ^5.1.0
+  smooth_page_indicator: ^1.1.0
 
 
 
@@ -102,6 +103,27 @@ flutter:
         - asset: assets/fonts/SF-Pro-Text-Heavy.otf
           weight: 800
         - asset: assets/fonts/SF-Pro-Text-Black.otf
+          weight: 900
+
+    - family: Pretendard
+      fonts:
+        - asset: assets/fonts/Pretendard-Thin.otf
+          weight: 100
+        - asset: assets/fonts/Pretendard-ExtraLight.otf
+          weight: 200
+        - asset: assets/fonts/Pretendard-Light.otf
+          weight: 300
+        - asset: assets/fonts/Pretendard-Regular.otf
+          weight: 400
+        - asset: assets/fonts/Pretendard-Medium.otf
+          weight: 500
+        - asset: assets/fonts/Pretendard-SemiBold.otf
+          weight: 600
+        - asset: assets/fonts/Pretendard-Bold.otf
+          weight: 700
+        - asset: assets/fonts/Pretendard-ExtraBold.otf
+          weight: 800
+        - asset: assets/fonts/Pretendard-Black.otf
           weight: 900
 
     - family: Giants

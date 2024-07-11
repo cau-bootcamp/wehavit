@@ -368,6 +368,10 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           .collection(
             FirebaseCollectionName.getTargetResolutionCollectionName(userId),
           )
+          .where(
+            FirebaseResolutionFieldName.resolutionIsActive,
+            isEqualTo: true,
+          )
           .get()
           .then(
             (result) => Future.wait(
@@ -2401,6 +2405,305 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       }).then((list) {
         return right(list);
       });
+    } on Exception catch (e) {
+      return Future(() => left(Failure(e.toString())));
+    }
+  }
+
+  @override
+  EitherFuture<void> updateResolutionEntity({
+    required String targetResolutionId,
+    required ResolutionEntity newEntity,
+  }) async {
+    try {
+      final myUid = getMyUserId();
+
+      await firestore
+          .collection(
+            FirebaseCollectionName.getTargetResolutionCollectionName(myUid),
+          )
+          .doc(targetResolutionId)
+          .update(FirebaseResolutionModel.fromEntity(newEntity).toJson());
+
+      return Future(() => right(null));
+    } on Exception {
+      return Future(
+        () => left(const Failure('catch error on updateResolutionEntity')),
+      );
+    }
+  }
+
+  @override
+  EitherFuture<void> incrementResolutionPostcount({
+    required String targetResolutionId,
+  }) async {
+    try {
+      final myUid = getMyUserId();
+
+      final currentPostCount = await firestore
+          .collection(
+            FirebaseCollectionName.getTargetResolutionCollectionName(myUid),
+          )
+          .doc(targetResolutionId)
+          .get()
+          .then(
+            (doc) => doc.data()?[
+                FirebaseResolutionFieldName.resolutionWrittenPostCount] as int?,
+          );
+
+      if (currentPostCount == null) {
+        return Future(
+          () => left(const Failure('can\'t get current post count')),
+        );
+      }
+
+      await firestore
+          .collection(
+            FirebaseCollectionName.getTargetResolutionCollectionName(myUid),
+          )
+          .doc(targetResolutionId)
+          .update({
+        FirebaseResolutionFieldName.resolutionWrittenPostCount:
+            currentPostCount + 1,
+      });
+
+      return Future(() => right(null));
+    } on Exception {
+      return Future(
+        () =>
+            left(const Failure('catch error on incrementResolutionPostcount')),
+      );
+    }
+  }
+
+  @override
+  EitherFuture<void> incrementReceivedReactionCount({
+    required String targetResolutionId,
+  }) async {
+    try {
+      final myUid = getMyUserId();
+
+      final currentPostCount = await firestore
+          .collection(
+            FirebaseCollectionName.getTargetResolutionCollectionName(myUid),
+          )
+          .doc(targetResolutionId)
+          .get()
+          .then(
+            (doc) => doc.data()?[FirebaseResolutionFieldName
+                .resolutionReceivedReactionCount] as int?,
+          );
+
+      if (currentPostCount == null) {
+        return Future(
+          () =>
+              left(const Failure('can\'t get current received reaction count')),
+        );
+      }
+
+      await firestore
+          .collection(
+            FirebaseCollectionName.getTargetResolutionCollectionName(myUid),
+          )
+          .doc(targetResolutionId)
+          .update({
+        FirebaseResolutionFieldName.resolutionReceivedReactionCount:
+            currentPostCount + 1,
+      });
+
+      return Future(() => right(null));
+    } on Exception {
+      return Future(
+        () => left(
+          const Failure('catch error on incrementReceivedReactionCount'),
+        ),
+      );
+    }
+  }
+
+  @override
+  EitherFuture<void> updateWeekSuccessCount({
+    required targetResolutionId,
+  }) async {
+    try {
+      final myUid = getMyUserId();
+
+      final resolutionActionPerWeek = await firestore
+          .collection(
+            FirebaseCollectionName.getTargetResolutionCollectionName(myUid),
+          )
+          .doc(targetResolutionId)
+          .get()
+          .then(
+            (doc) =>
+                doc.data()?[FirebaseResolutionFieldName.resolutionActionPerWeek]
+                    as int? ??
+                8,
+          );
+
+      final currentWeeklyPostCount = await firestore
+          .collection(
+            FirebaseCollectionName.confirmPosts,
+          )
+          .where(
+            Filter.and(
+              Filter(
+                FirebaseConfirmPostFieldName.resolutionId,
+                isEqualTo: targetResolutionId,
+              ),
+              Filter(
+                FirebaseConfirmPostFieldName.createdAt,
+                isGreaterThanOrEqualTo:
+                    Timestamp.fromDate(DateTime.now().getMondayDateTime()),
+              ),
+            ),
+          )
+          .get()
+          .then(
+            (snapshot) => snapshot.docs
+                .where(
+                  (doc) =>
+                      doc.data()[FirebaseConfirmPostFieldName.attributes]
+                          [FirebaseConfirmPostFieldName.attributesHasRested] ==
+                      false,
+                )
+                .length,
+          );
+
+      if (resolutionActionPerWeek <= currentWeeklyPostCount) {
+        final thisMondayTimestamp =
+            Timestamp.fromDate(DateTime.now().getMondayDateTime());
+        await firestore
+            .collection(
+              FirebaseCollectionName.getTargetResolutionCollectionName(myUid),
+            )
+            .doc(targetResolutionId)
+            .update({
+          FirebaseResolutionFieldName.resolutionWeekSuccessList:
+              FieldValue.arrayUnion([thisMondayTimestamp]),
+        });
+      }
+
+      return Future(() => right(null));
+    } on Exception {
+      return Future(
+        () => left(
+          const Failure('catch error on incrementReceivedReactionCount'),
+        ),
+      );
+    }
+  }
+
+  @override
+  EitherFuture<void> updateWeeklyPostCount({
+    required String targetResolutionId,
+    required DateTime? createdDate,
+  }) async {
+    try {
+      final myUid = getMyUserId();
+
+      if (createdDate == null) {
+        return left(
+          const Failure('fail to get created date in updateWeeklyPostCount'),
+        );
+      }
+
+      final currentList = await firestore
+          .collection(
+            FirebaseCollectionName.getTargetResolutionCollectionName(myUid),
+          )
+          .doc(targetResolutionId)
+          .get()
+          .then((doc) {
+        final data = doc.data();
+        if (data != null) {
+          final list =
+              data[FirebaseResolutionFieldName.resolutionWeeklyPostcountList];
+          if (list is List) {
+            return list.map((item) => item as int).toList();
+          }
+        }
+        return <int>[];
+      });
+
+      currentList[createdDate.weekday - 1] += 1;
+
+      await firestore
+          .collection(
+            FirebaseCollectionName.getTargetResolutionCollectionName(myUid),
+          )
+          .doc(targetResolutionId)
+          .update({
+        FirebaseResolutionFieldName.resolutionWeeklyPostcountList: currentList,
+      });
+
+      return Future(() => right(null));
+    } on Exception {
+      return Future(
+        () => left(
+          const Failure('catch error on updateWeeklyPostCount'),
+        ),
+      );
+    }
+  }
+
+  @override
+  EitherFuture<List<ConfirmPostEntity>> getConfirmPostEntityByDate({
+    required DateTime selectedDate,
+    required String targetResolutionId,
+  }) async {
+    try {
+      final myUid = getMyUserId();
+      DateTime startDate =
+          DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+
+      final fetchResult = await firestore
+          .collection(FirebaseCollectionName.confirmPosts)
+          .where(
+            Filter.and(
+              Filter(
+                FirebaseConfirmPostFieldName.resolutionId,
+                isEqualTo: targetResolutionId,
+              ),
+              Filter(
+                FirebaseConfirmPostFieldName.createdAt,
+                isGreaterThanOrEqualTo: Timestamp.fromDate(startDate),
+              ),
+              Filter(
+                FirebaseConfirmPostFieldName.createdAt,
+                isLessThan: Timestamp.fromDate(
+                  selectedDate.add(const Duration(days: 1)),
+                ),
+              ),
+            ),
+          )
+          .get();
+
+      if (fetchResult.docs.isEmpty) {
+        return right([]);
+      }
+
+      final targetFirestoreDocument = fetchResult.docs.first;
+
+      final model = FirebaseConfirmPostModel.fromFireStoreDocument(
+        targetFirestoreDocument,
+      );
+
+      final ownerUserEntity = await getUserEntityByUserId(myUid);
+
+      if (ownerUserEntity == null) {
+        return left(
+          const Failure(
+            'fail to fetch user entity from getConfirmPostEntityByDate',
+          ),
+        );
+      }
+      final entity = model.toConfirmPostEntity(
+        targetFirestoreDocument.reference.id,
+        ownerUserEntity,
+      );
+
+      return Future(() => right([entity]));
     } on Exception catch (e) {
       return Future(() => left(Failure(e.toString())));
     }

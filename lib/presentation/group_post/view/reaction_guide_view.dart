@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/common/utils/guide_image_assets.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 class ReactionGuideView extends StatefulWidget {
@@ -37,7 +37,7 @@ class _ReactionGuideViewState extends State<ReactionGuideView>
           ),
         ),
         const SizedBox(
-          height: 40.0,
+          height: 20.0,
         ),
         Expanded(
           child: PageView(
@@ -55,8 +55,17 @@ class _ReactionGuideViewState extends State<ReactionGuideView>
             ],
           ),
         ),
-        const SizedBox(
-          height: 16.0,
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 12.0),
+          child: SmoothPageIndicator(
+            controller: pageController!,
+            count: lastPageIndex + 1,
+            effect: const WormEffect(
+              dotHeight: 8,
+              dotWidth: 8,
+              activeDotColor: CustomColors.whYellow,
+            ),
+          ),
         ),
         WideColoredButton(
           buttonTitle: currentPageIndex == lastPageIndex ? '격려 남기러가기' : '다음',
@@ -85,9 +94,11 @@ class ReactionGuideFirstView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Image.asset(GuideImage.reactionGuideImage1),
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Image.asset(GuideImage.reactionGuideImage1),
+          ),
         ),
         const SizedBox(height: 24.0),
         const Text(
@@ -100,8 +111,8 @@ class ReactionGuideFirstView extends StatelessWidget {
           ),
           textAlign: TextAlign.center,
         ),
-        Expanded(
-          child: Container(),
+        const SizedBox(
+          height: 12,
         ),
         const Text(
           'Tip',
@@ -121,9 +132,6 @@ class ReactionGuideFirstView extends StatelessWidget {
           ),
           textAlign: TextAlign.center,
         ),
-        Expanded(
-          child: Container(),
-        ),
       ],
     );
   }
@@ -136,9 +144,11 @@ class ReactionGuideSecondView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Image.asset(GuideImage.reactionGuideImage2),
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Image.asset(GuideImage.reactionGuideImage2),
+          ),
         ),
         const SizedBox(height: 24.0),
         const Text(
@@ -150,9 +160,6 @@ class ReactionGuideSecondView extends StatelessWidget {
             fontWeight: FontWeight.w500,
           ),
           textAlign: TextAlign.center,
-        ),
-        Expanded(
-          child: Container(),
         ),
       ],
     );
@@ -166,9 +173,11 @@ class ReactionGuideThirdView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Image.asset(GuideImage.reactionGuideImage3),
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Image.asset(GuideImage.reactionGuideImage3),
+          ),
         ),
         const SizedBox(height: 24.0),
         const Text(
@@ -181,9 +190,9 @@ class ReactionGuideThirdView extends StatelessWidget {
           ),
           textAlign: TextAlign.center,
         ),
-        Expanded(
-          child: Container(),
-        ),
+        // Expanded(
+        //   child: Container(),
+        // ),
       ],
     );
   }

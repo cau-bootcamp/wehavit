@@ -67,10 +67,12 @@ class UploadConfirmPostUseCase {
 
       return await _confirmPostRepository
           .createConfirmPost(confirmPost)
-          .whenComplete(() {
-        _userModelRepository.incrementUserDataCounter(
-          type: UserIncrementalDataType.post,
-        );
+          .then((result) {
+        return result.fold((failure) {
+          return left(failure);
+        }, (success) {
+          return right(success);
+        });
       });
     } on Exception catch (e) {
       return Future(() => left(Failure(e.toString())));

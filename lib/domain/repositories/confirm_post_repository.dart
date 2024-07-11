@@ -7,6 +7,11 @@ abstract class ConfirmPostRepository {
     required String groupId,
   });
 
+  EitherFuture<List<ConfirmPostEntity>> getConfirmPostEntityByDate({
+    required DateTime selectedDate,
+    required String targetResolutionId,
+  });
+
   EitherFuture<List<ConfirmPostEntity>> getConfirmPostEntityListByResolutionId({
     required String resolutionId,
   });

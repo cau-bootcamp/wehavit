@@ -74,16 +74,6 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
 
   Future<void> changeSelectedDate({required DateTime to}) async {
     state.selectedDate = to;
-
-    // final fetchResult = await _getGroupConfirmPostListByDateUsecase
-    //     .call(state.groupId, to)
-    //     .then((result) => result.fold((failure) => null, (list) => list));
-
-    // if (fetchResult == null) {
-    //   return;
-    // }
-
-    // state.confirmPostList[to] = fetchResult;
   }
 
   void resetSendingEmojis() {

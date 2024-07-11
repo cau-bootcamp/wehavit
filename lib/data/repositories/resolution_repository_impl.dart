@@ -104,4 +104,42 @@ class ResolutionRepositoryImpl implements ResolutionRepository {
   }) {
     return _wehavitDatasource.getResolutionIdListSharedToMe(targetUid: from);
   }
+
+  @override
+  EitherFuture<void> updateResolutionEntity({
+    required String targetResolutionId,
+    required ResolutionEntity newEntity,
+  }) {
+    return _wehavitDatasource.updateResolutionEntity(
+      targetResolutionId: targetResolutionId,
+      newEntity: newEntity,
+    );
+  }
+
+  @override
+  EitherFuture<void> incrementWrittenPostCount({
+    required String targetResolutionId,
+  }) {
+    return _wehavitDatasource.incrementResolutionPostcount(
+      targetResolutionId: targetResolutionId,
+    );
+  }
+
+  @override
+  EitherFuture<void> incrementReceivedReactionCount({
+    required String targetResolutionId,
+  }) {
+    return _wehavitDatasource.incrementReceivedReactionCount(
+      targetResolutionId: targetResolutionId,
+    );
+  }
+
+  @override
+  EitherFuture<void> updateWeekSuccessCount({
+    required String targetResolutionId,
+  }) {
+    return _wehavitDatasource.updateWeekSuccessCount(
+      targetResolutionId: targetResolutionId,
+    );
+  }
 }

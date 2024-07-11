@@ -86,10 +86,13 @@ final myPageViewModelProvider =
       ref.watch(getMyResolutionListUsecaseProvider);
   final getMyUserDataUsecase = ref.watch(getMyUserDataUsecaseProvider);
   final revokeAppleSignInUsecase = ref.watch(revokeAppleSignInUsecaseProvider);
+  final setResolutionDeactiveUsecase =
+      ref.watch(setResolutionDeactiveUsecaseProvider);
   return MyPageViewModelProvider(
     getMyResolutionListUsecase,
     getMyUserDataUsecase,
     revokeAppleSignInUsecase,
+    setResolutionDeactiveUsecase,
   );
 });
 
@@ -100,8 +103,7 @@ final reactionAnimationWidgetManagerProvider =
 
 // Group View
 final groupViewModelProvider =
-    StateNotifierProvider.autoDispose<GroupViewModelProvider, GroupViewModel>(
-        (ref) {
+    StateNotifierProvider<GroupViewModelProvider, GroupViewModel>((ref) {
   final getGroupListUsecase = ref.watch(getGroupListUseCaseProvider);
   final getGroupListViewCellWidgetModelUsecase =
       ref.watch(getGroupListViewCellWidgetModelUsecaseProvider);
@@ -123,7 +125,7 @@ final createGroupViewModelProvider = StateNotifierProvider.autoDispose<
   return CreateGroupViewModelProvider(createGroupUsecase);
 });
 
-final resolutionListViewModelProvider = StateNotifierProvider.autoDispose<
+final resolutionListViewModelProvider = StateNotifierProvider<
     ResolutionListViewModelProvider, ResolutionListViewModel>((ref) {
   final getMyResolutionListUsecase =
       ref.watch(getMyResolutionListUsecaseProvider);
@@ -220,7 +222,7 @@ final addResolutionViewModelProvider = StateNotifierProvider.autoDispose<
   return AddResolutionViewModelProvider(uploadResolutionUseCase);
 });
 
-final addResolutionDoneViewModelProvider = StateNotifierProvider.autoDispose<
+final addResolutionDoneViewModelProvider = StateNotifierProvider<
     AddResolutionDoneViewModelProvider, AddResolutionDoneViewModel>((ref) {
   GetFriendListUsecase getFriendListUsecase =
       ref.watch(getFriendListUseCaseProvider);
@@ -237,6 +239,8 @@ final addResolutionDoneViewModelProvider = StateNotifierProvider.autoDispose<
       ref.watch(shareResolutionToGroupUsecaseProvider);
   UnshareResolutionToGroupUsecase unshareResolutionToGroupdUsecase =
       ref.watch(unshareResolutionToGroupUsecaseProvider);
+  GetUserDataFromIdUsecase getUserDataFromIdUsecase =
+      ref.watch(getUserDataFromIdUsecaseProvider);
 
   return AddResolutionDoneViewModelProvider(
     getFriendListUsecase,
@@ -246,6 +250,7 @@ final addResolutionDoneViewModelProvider = StateNotifierProvider.autoDispose<
     unshareResolutionToFriendUsecase,
     shareResolutionToGroupdUsecase,
     unshareResolutionToGroupdUsecase,
+    getUserDataFromIdUsecase,
   );
 });
 
@@ -265,5 +270,19 @@ final friendPostViewModelProvider = StateNotifierProvider.autoDispose<
     sendEmojiReactionToConfirmPostUsecase,
     sendQuickShotReactionToConfirmPostUsecase,
     sendCommentReactionToConfirmPostUsecase,
+  );
+});
+
+final resolutionDetailViewModelProvider = StateNotifierProvider.autoDispose<
+    ResolutionDetailViewModelProvider, ResolutionDetailViewModel>((ref) {
+  final GetConfirmPostListForResolutionIdUsecase
+      getConfirmPostListForResolutionIdUsecase =
+      ref.watch(getConfirmPostListForResolutionIdUsecaseProvider);
+  final GetConfirmPostOfDatetimeFromTargetResolutionUsecase
+      getConfirmPostOfDatetimeFromTargetResolutionUsecase =
+      ref.watch(getConfirmPostOfDatetimeFromTargetResolutionUsecaseProvider);
+  return ResolutionDetailViewModelProvider(
+    getConfirmPostListForResolutionIdUsecase,
+    getConfirmPostOfDatetimeFromTargetResolutionUsecase,
   );
 });
