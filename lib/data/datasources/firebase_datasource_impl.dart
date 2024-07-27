@@ -2738,4 +2738,26 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       return left(Failure(e.toString()));
     }
   }
+
+  @override
+  EitherFuture<String> getUserFCMMessageToken({required String uid}) async {
+    try {
+      final token = await firestore
+          .collection(FirebaseCollectionName.users)
+          .doc(uid)
+          .get()
+          .then((snapshot) {
+        return snapshot.data()?[FirebaseUserFieldName.messageToken] ??
+            null as String?;
+      });
+
+      if (token == null) {
+        return left(Failure('cannot get user FCM Token from uid $uid'));
+      } else {
+        return right(token);
+      }
+    } on Exception catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
 }

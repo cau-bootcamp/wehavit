@@ -226,4 +226,6 @@ abstract class WehavitDatasource {
   EitherFuture<void> updateFCMToken({
     required bool delete,
   });
+
+  EitherFuture<String> getUserFCMMessageToken({required String uid});
 }

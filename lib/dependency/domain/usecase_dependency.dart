@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/dependency/data/repository_dependency.dart';
+import 'package:wehavit/domain/usecases/send_notification_to_shared_users_usecase.dart';
 import 'package:wehavit/domain/usecases/update_FCM_token_usecase.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
 
@@ -450,4 +451,16 @@ final getConfirmPostOfDatetimeFromTargetResolutionUsecaseProvider =
 final updateFCMTokenUsecaseProvider = Provider<UpdateFCMTokenUsecase>((ref) {
   final userModelRepository = ref.watch(userModelRepositoryProvider);
   return UpdateFCMTokenUsecase(userModelRepository);
+});
+
+final sendNotificationToSharedUsersUsecaseProvider =
+    Provider<SendNotificationToSharedUsersUsecase>((ref) {
+  final groupRepository = ref.watch(groupRepositoryProvider);
+  final userModelRepository = ref.watch(userModelRepositoryProvider);
+  final notificationRepository = ref.watch(notificationRepositoryProvider);
+  return SendNotificationToSharedUsersUsecase(
+    groupRepository,
+    userModelRepository,
+    notificationRepository,
+  );
 });

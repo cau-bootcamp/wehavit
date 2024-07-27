@@ -48,4 +48,6 @@ abstract class UserModelRepository {
   EitherFuture<void> removeCurrentUserData();
 
   EitherFuture<void> updateFCMToken({required bool delete});
+
+  EitherFuture<String> getUserFCMMessageToken({required String uid});
 }
