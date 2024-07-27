@@ -1,5 +1,8 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
@@ -17,10 +20,22 @@ class MainViewState extends ConsumerState<MainView>
     with TickerProviderStateMixin {
   late TabController tabController;
 
+  Future<void> updateFCMMessageToken() async {
+    FirebaseFirestore.instance
+        .collection(FirebaseCollectionName.users)
+        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .update({
+      FirebaseUserFieldName.messageToken:
+          await FirebaseMessaging.instance.getToken(),
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     tabController = TabController(length: 4, vsync: this);
+
+    unawaited(ref.read(mainViewModelProvider.notifier).updateFCMToken());
   }
 
   @override

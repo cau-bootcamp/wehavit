@@ -57,6 +57,7 @@ dependencies:
   dart_jsonwebtoken: ^2.14.0
   flutter_dotenv: ^5.1.0
   smooth_page_indicator: ^1.1.0
+  googleapis_auth: ^1.6.0
 
 
 
@@ -82,6 +83,7 @@ flutter:
     - assets/images/icons/
     - assets/images/guide/
     - assets/fonts/
+    - .env/
 
   fonts:
     - family: SF-Pro

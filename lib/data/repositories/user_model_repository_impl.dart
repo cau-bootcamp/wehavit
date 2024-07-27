@@ -102,4 +102,9 @@ class UserModelRepositoryImpl implements UserModelRepository {
   EitherFuture<void> removeCurrentUserData() {
     return _authDataSource.removeCurrentUserData();
   }
+
+  @override
+  EitherFuture<void> updateFCMToken({required bool delete}) {
+    return _wehavitDatasource.updateFCMToken(delete: delete);
+  }
 }

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/dependency/data/repository_dependency.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wehavit/domain/usecases/update_FCM_token_usecase.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
@@ -169,7 +170,9 @@ final groupPostViewModelProvider = StateNotifierProvider.autoDispose<
 final mainViewModelProvider =
     StateNotifierProvider.autoDispose<MainViewModelProvider, MainViewModel>(
         (ref) {
-  return MainViewModelProvider();
+  UpdateFCMTokenUsecase updateFCMTokenUsecase =
+      ref.watch(updateFCMTokenUsecaseProvider);
+  return MainViewModelProvider(updateFCMTokenUsecase);
 });
 
 final signUpAuthDataViewModelProvider = StateNotifierProvider.autoDispose<

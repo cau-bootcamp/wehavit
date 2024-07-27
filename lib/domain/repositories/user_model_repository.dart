@@ -46,4 +46,6 @@ abstract class UserModelRepository {
   });
 
   EitherFuture<void> removeCurrentUserData();
+
+  EitherFuture<void> updateFCMToken({required bool delete});
 }

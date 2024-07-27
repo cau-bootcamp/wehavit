@@ -1,8 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/common/utils/preference_key.dart';
@@ -28,6 +32,77 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
       backgroundColor: CustomColors.whDarkBlack,
       appBar: WehavitAppBar(
         title: '인증 남기기',
+        trailingAction: () async {
+          // FirebaseMessaging.instance.subscribeToTopic("group1");
+          // FirebaseMessaging.instance.subscribeToTopic("group2");
+
+          String? _fcmToken = await FirebaseMessaging.instance.getToken();
+          print(_fcmToken);
+
+          final jsonCredentials =
+              await rootBundle.loadString('.env/we-havit-be-111008c5229d.json');
+          final creds =
+              auth.ServiceAccountCredentials.fromJson(jsonCredentials);
+          final client = await auth.clientViaServiceAccount(
+            creds,
+            ['https://www.googleapis.com/auth/cloud-platform'],
+          );
+
+          var response = await client.post(
+            Uri.parse(
+                'https://fcm.googleapis.com/v1/projects/764897522660/messages:send'),
+            headers: <String, String>{
+              'Content-Type': 'application/json',
+              'project_id': '764897522660',
+            },
+            body: jsonEncode(
+              <String, dynamic>{
+                'message': {
+                  'condition':
+                      '\'group1\' in topics || \'group2\' in topics || \'group3\' in topics || \'group4\' in topics || \'group5\' in topics',
+                  // 'token': 'ezFo70FfVE5mgilEy1OcTB:APA91bGG6WKuRRbkZeV4XP9GkI1vS1QyCQ12akQrW_sasA3eZcEDHZUvbs9waECMFGgffVBxCPf0Jn1k_00JlSukbFCCJxHgrUtUn6R5TOKPcfs9hYjNembQ_0w5BvLJvQ_Xc8fUFTMs',
+                  'notification': {
+                    'title': 'group1에서 알림이 왔어요',
+                    'body': 'world',
+                  },
+                },
+              },
+            ),
+          );
+
+          // response = await client.post(
+          //   Uri.parse(
+          //       'https://fcm.googleapis.com/v1/projects/764897522660/messages:send'),
+          //   headers: <String, String>{
+          //     'Content-Type': 'application/json',
+          //     'project_id': '764897522660',
+          //   },
+          //   body: jsonEncode(
+          //     <String, dynamic>{
+          //       'message': {
+          //         // 'collapse_key': 'abc',
+          //         // 'topic': 'group2',
+          //         // 'token': 'ezFo70FfVE5mgilEy1OcTB:APA91bGG6WKuRRbkZeV4XP9GkI1vS1QyCQ12akQrW_sasA3eZcEDHZUvbs9waECMFGgffVBxCPf0Jn1k_00JlSukbFCCJxHgrUtUn6R5TOKPcfs9hYjNembQ_0w5BvLJvQ_Xc8fUFTMs',
+          //         'notification': {
+          //           'title': 'group2에서 알림이 왔어요',
+          //           'body': 'world',
+          //         },
+          //       },
+          //     },
+          //   ),
+          // );
+
+          if (response.statusCode == 200) {
+            // 메시지 전송이 성공했을 때 로직
+            print("send");
+            print(response.body);
+          } else {
+            // 메시지 전송이 실패했을 때 로직
+            print("fail");
+            print(response.body);
+          }
+        },
+        trailingTitle: "hello",
       ),
       body: SafeArea(
         minimum: const EdgeInsets.symmetric(horizontal: 16.0),
