@@ -13,6 +13,7 @@ class UserDataEntity with _$UserDataEntity {
     String? userName,
     String? userImageUrl,
     String? aboutMe,
+    String? messageToken,
     DateTime? createdAt,
     int? cumulativeGoals,
     int? cumulativePosts,

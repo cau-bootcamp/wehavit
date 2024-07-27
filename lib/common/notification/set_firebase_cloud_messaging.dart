@@ -1,12 +1,13 @@
 // ignore_for_file: avoid_redundant_argument_values
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wehavit/common/routers/route_location.dart';
-import 'package:wehavit/common/routers/route_provider.dart';
+import 'package:wehavit/common/common.dart';
 import 'package:wehavit/firebase_options.dart';
 
 /// 알림 권한 요청 및 푸쉬 알림으로 앱 진입 시 라우팅을 처리하는 로직
@@ -99,6 +100,15 @@ Future<String?> setFirebaseCloudMessaging(BuildContext context) async {
   // 실기기 테스트 시에 이 토큰 값을 활용해주면 됨
   String? firebaseToken = await FirebaseMessaging.instance.getToken();
   debugPrint('firebase token : $firebaseToken');
+
+  // 기기에 접속할 때, 알림을 전달받을 기기의 토큰 값을 저장해주기
+  // TODO: 이후에 로직을 Firebase와 의존성을 분리할 수 있도록 개선하기
+  FirebaseFirestore.instance
+      .collection(FirebaseCollectionName.users)
+      .doc(FirebaseAuth.instance.currentUser?.uid)
+      .update({
+    FirebaseUserFieldName.messageToken: firebaseToken,
+  });
 
   return firebaseToken;
 }

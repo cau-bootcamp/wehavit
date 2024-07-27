@@ -14,6 +14,7 @@ class FirebaseUserFieldName {
   static const aboutMe = 'aboutMe';
   static const applyUid = 'uid';
   static const friendUid = 'userId';
+  static const messageToken = 'messageToken';
 }
 
 @immutable

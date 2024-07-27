@@ -13,6 +13,7 @@ _$UserDataEntityImpl _$$UserDataEntityImplFromJson(Map<String, dynamic> json) =>
       userName: json['userName'] as String?,
       userImageUrl: json['userImageUrl'] as String?,
       aboutMe: json['aboutMe'] as String?,
+      messageToken: json['messageToken'] as String?,
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),
@@ -29,6 +30,7 @@ Map<String, dynamic> _$$UserDataEntityImplToJson(
       'userName': instance.userName,
       'userImageUrl': instance.userImageUrl,
       'aboutMe': instance.aboutMe,
+      'messageToken': instance.messageToken,
       'createdAt': instance.createdAt?.toIso8601String(),
       'cumulativeGoals': instance.cumulativeGoals,
       'cumulativePosts': instance.cumulativePosts,
