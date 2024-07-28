@@ -40,7 +40,7 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
   // Reactions
   Future<void> sendEmojiReaction({
     required ConfirmPostEntity entity,
-    required UserDataEntity myUserEntity,
+    required UserDataEntity? myUserEntity,
   }) async {
     state.emojiWidgets.clear();
 
@@ -59,7 +59,7 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
       )
           .then(
         (isSendingReactionSuccess) {
-          if (!isSendingReactionSuccess) {
+          if (!isSendingReactionSuccess || myUserEntity == null) {
             return;
           }
 
@@ -69,6 +69,7 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
           );
         },
       );
+
       state.sendingEmojis = List<int>.generate(15, (index) => 0);
     }
   }
@@ -76,18 +77,58 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
   Future<void> sendImageReaction({
     required String imageFilePath,
     required ConfirmPostEntity entity,
+    required UserDataEntity? myUserEntity,
   }) async {
-    _sendQuickShotReactionToConfirmPostUsecase((entity, imageFilePath));
+    _sendQuickShotReactionToConfirmPostUsecase((entity, imageFilePath))
+        .then(
+      (result) => result.fold(
+        (failure) => false,
+        (success) => success,
+      ),
+    )
+        .then(
+      (isSendingReactionSuccess) {
+        if (!isSendingReactionSuccess || myUserEntity == null) {
+          return;
+        }
+
+        sendReactionNotification(
+          myUserEntity: myUserEntity,
+          postEntity: entity,
+        );
+      },
+    );
   }
 
-  Future<void> sendTextReaction({required ConfirmPostEntity entity}) async {
+  Future<void> sendTextReaction({
+    required ConfirmPostEntity entity,
+    required UserDataEntity? myUserEntity,
+  }) async {
     _sendCommentReactionToConfirmPostUsecase(
       (
         entity,
-        state.textEditingController.text,
+        state.commentEditingController.text,
       ),
+    )
+        .then(
+      (result) => result.fold(
+        (failure) => false,
+        (success) => success,
+      ),
+    )
+        .then(
+      (isSendingReactionSuccess) {
+        if (!isSendingReactionSuccess || myUserEntity == null) {
+          return;
+        }
+
+        sendReactionNotification(
+          myUserEntity: myUserEntity,
+          postEntity: entity,
+        );
+      },
     );
-    state.textEditingController.clear();
+    state.commentEditingController.clear();
   }
 
   void setFocusingModeTo(bool enabled) {

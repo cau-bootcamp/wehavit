@@ -22,6 +22,8 @@ class GroupPostViewModel extends PostViewModel {
 }
 
 class PostViewModel {
+  UserDataEntity? myUserEntity;
+
   final DateFormat formatter = DateFormat('yyyy년 MM월 dd일');
 
   CarouselController carouselController = CarouselController();
@@ -69,6 +71,6 @@ class PostViewModel {
   late Animation animation;
 
   // Text Reaction UI Variables
-  TextEditingController textEditingController = TextEditingController();
+  TextEditingController commentEditingController = TextEditingController();
   FocusNode commentFieldFocus = FocusNode();
 }

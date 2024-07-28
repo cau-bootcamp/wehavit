@@ -1,19 +1,12 @@
 import 'dart:async';
-import 'dart:convert';
 
-import 'package:collection/collection.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/common/utils/preference_key.dart';
-import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
-import 'package:wehavit/domain/domain.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 class ResolutionListView extends ConsumerStatefulWidget {

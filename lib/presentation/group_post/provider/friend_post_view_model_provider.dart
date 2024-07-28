@@ -83,10 +83,10 @@ class FriendPostViewModelProvider extends StateNotifier<FriendPostViewModel> {
     _sendCommentReactionToConfirmPostUsecase(
       (
         entity,
-        state.textEditingController.text,
+        state.commentEditingController.text,
       ),
     );
-    state.textEditingController.clear();
+    state.commentEditingController.clear();
   }
 
   void setFocusingModeTo(bool enabled) {
