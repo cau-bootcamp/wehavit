@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
+import 'package:wehavit/main/app.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 class MainView extends ConsumerStatefulWidget {
@@ -182,7 +183,11 @@ class MainViewState extends ConsumerState<MainView>
               ],
             ),
           ),
-          const ReactionAnimationWidget(),
+          ReactionAnimationWidget(
+            key: context
+                .findAncestorStateOfType<MyAppState>()
+                ?.reactionWidgetChildKey,
+          ),
         ],
       ),
     );

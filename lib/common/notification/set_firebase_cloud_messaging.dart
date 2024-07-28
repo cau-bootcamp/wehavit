@@ -1,16 +1,17 @@
-// ignore_for_file: avoid_redundant_argument_values
+// ignore_for_file: avoid_redundant_argument_values, lines_longer_than_80_chars
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wehavit/common/common.dart';
 import 'package:wehavit/firebase_options.dart';
+import 'package:wehavit/presentation/reaction/reaction.dart';
 
 /// 알림 권한 요청 및 푸쉬 알림으로 앱 진입 시 라우팅을 처리하는 로직
 ///
-Future<String?> setFirebaseCloudMessaging(BuildContext context) async {
+Future<String?> setFirebaseCloudMessaging(
+  GlobalKey reactionWidgetChildKey,
+) async {
   if (DefaultFirebaseOptions.currentPlatform == DefaultFirebaseOptions.ios) {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
@@ -43,7 +44,7 @@ Future<String?> setFirebaseCloudMessaging(BuildContext context) async {
       'wehavit_notification',
       'wehavit_notification',
       description: 'wehavit의 알림입니다',
-      importance: Importance.max,
+      importance: Importance.low,
     );
 
     final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -53,43 +54,35 @@ Future<String?> setFirebaseCloudMessaging(BuildContext context) async {
             AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
 
+    messaging.getInitialMessage().then((RemoteMessage? message) {
+      // 처음에 앱 실행했을 때 들어와있는 메시지가 있을 때 처리하는 로직
+      // 위해빗의 경우에는 앱 실행 시 reaction을 load 하는 로직이 이미 있기 때문에 괜찮음
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      (reactionWidgetChildKey as GlobalKey<ReactionAnimationWidgetState>)
+          .currentState
+          ?.showUnreadReactions();
+    });
+
     // background 상태. Notification 서랍에서 메시지 터치하여 앱으로 돌아왔을 때의 동작은 여기서.
     // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-    //   if (message.data['goto'] == 'LiveWaitingView') {
-    //     navigationKey.currentContext!.push(RouteLocation.liveWaitingSampleView);
-    //   } else {
-    //     //
-    //   }
+    //   print("DEBUG : listen0");
     // });
 
+    // print("DEBUG : listen ready");
+
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      RemoteNotification? notification = message.notification;
+      // RemoteNotification? notification = message.notification;
 
       // 여기 부분에 코드를 작성하면
       // 알림을 탭하지 않더라도, 알림을 받기만 하면 앱이 알림을 읽고 로직을 처리할 수 있음
-
-      // 아래 코드는 안드로이드의 로직으로 생각됨!
-      // 안드로이드 구현 시 참고하고, 필요없다면 삭제하기
-      // iOS 환경에서는 디버깅 테스트를 하며 한 번도 호출되지 않았음.
-      AndroidNotification? android = message.notification?.android;
-      if (message.notification != null && android != null) {
-        flutterLocalNotificationsPlugin.show(
-          notification.hashCode,
-          notification?.title,
-          notification?.body,
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              channel.id,
-              channel.name,
-              channelDescription: channel.description,
-              icon: android.smallIcon,
-            ),
-          ),
-        );
-      }
+      (reactionWidgetChildKey as GlobalKey<ReactionAnimationWidgetState>)
+          .currentState
+          ?.showUnreadReactions();
     });
   } else if (DefaultFirebaseOptions.currentPlatform ==
-      DefaultFirebaseOptions.ios) {
+      DefaultFirebaseOptions.android) {
     // TODO: 안드로이드에서의 알림 처리 여기에 구현하기
 
     throw UnimplementedError();
@@ -104,16 +97,11 @@ Future<String?> setFirebaseCloudMessaging(BuildContext context) async {
 
 /// 앱이 종료상태일 때 알림을 눌러 앱에 진입한 경우에 대해 처리하는 로직
 ///
-Future<void> setTerminatedStateMessageHandler(WidgetRef ref) async {
+Future<void> setTerminatedStateMessageHandler() async {
   if (DefaultFirebaseOptions.currentPlatform == DefaultFirebaseOptions.ios) {
     RemoteMessage? initialMessage =
         await FirebaseMessaging.instance.getInitialMessage();
-    if (initialMessage != null) {
-      if (initialMessage.data['goto'] == 'LiveWaitingView') {
-        final routerConfig = ref.watch(routerProvider);
-        routerConfig.push(RouteLocation.liveWaitingSampleView);
-      }
-    }
+    if (initialMessage != null) {}
   } else if (DefaultFirebaseOptions.currentPlatform ==
       DefaultFirebaseOptions.android) {
     // TODO: 안드로이드에서의 앱 종료 시점의 알림 처리 여기에 구현하기
