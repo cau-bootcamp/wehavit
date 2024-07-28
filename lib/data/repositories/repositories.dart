@@ -1,6 +1,8 @@
 export 'auth_repository_impl.dart';
 export 'confirm_post_repository_impl.dart';
 export 'friend_repository_impl.dart';
+export 'group_repository_impl.dart';
+export 'notification_repository_impl.dart';
 export 'photo_repository_impl.dart';
 export 'reaction_repository_impl.dart';
 export 'resolution_repository_impl.dart';

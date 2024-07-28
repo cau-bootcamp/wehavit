@@ -13,6 +13,7 @@ _$FirebaseUserModelImpl _$$FirebaseUserModelImplFromJson(
       displayName: json['displayName'] as String?,
       imageUrl: json['imageUrl'] as String?,
       aboutMe: json['aboutMe'] as String?,
+      messageToken: json['messageToken'] as String?,
       createdAt: _$JsonConverterFromJson<Timestamp, DateTime>(
           json['createdAt'], const TimestampConverter().fromJson),
       cumulativeGoals: (json['cumulativeGoals'] as num?)?.toInt(),
@@ -27,6 +28,7 @@ Map<String, dynamic> _$$FirebaseUserModelImplToJson(
       'displayName': instance.displayName,
       'imageUrl': instance.imageUrl,
       'aboutMe': instance.aboutMe,
+      'messageToken': instance.messageToken,
       'createdAt': _$JsonConverterToJson<Timestamp, DateTime>(
           instance.createdAt, const TimestampConverter().toJson),
       'cumulativeGoals': instance.cumulativeGoals,

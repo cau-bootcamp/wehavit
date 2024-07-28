@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
@@ -11,10 +13,10 @@ class ReactionAnimationWidget extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<ReactionAnimationWidget> createState() =>
-      _ReactionAnimationWidgetState();
+      ReactionAnimationWidgetState();
 }
 
-class _ReactionAnimationWidgetState
+class ReactionAnimationWidgetState
     extends ConsumerState<ReactionAnimationWidget> {
   late Map<Key, BalloonWidget> _balloonWidgets;
   late Map<Key, TextBubbleFrameWidget> _textBubbleWidgets;
@@ -72,7 +74,7 @@ class _ReactionAnimationWidgetState
         ref.read(reactionAnimationWidgetManagerProvider.notifier);
     _fetchUserDataFromIdUsecase = ref.watch(getUserDataFromIdUsecaseProvider);
 
-    showUnreadReactions();
+    unawaited(showUnreadReactions());
   }
 
   @override

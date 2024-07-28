@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/domain/usecases/usecases.dart';
+import 'package:wehavit/domain/domain.dart';
 import 'package:wehavit/presentation/group_post/group_post.dart';
 
 class FriendPostViewModelProvider extends StateNotifier<FriendPostViewModel> {
@@ -10,6 +9,8 @@ class FriendPostViewModelProvider extends StateNotifier<FriendPostViewModel> {
     this._sendEmojiReactionToConfirmPostUsecase,
     this._sendQuickShotReactionToConfirmPostUsecase,
     this._sendCommentReactionToConfirmPostUsecase,
+    this._sendNotificationToTargetUserUsecase,
+    this._getUserDataFromIdUsecase,
   ) : super(FriendPostViewModel());
 
   final GetFriendConfirmPostListByDateUsecase
@@ -21,6 +22,9 @@ class FriendPostViewModelProvider extends StateNotifier<FriendPostViewModel> {
       _sendQuickShotReactionToConfirmPostUsecase;
   final SendCommentReactionToConfirmPostUsecase
       _sendCommentReactionToConfirmPostUsecase;
+  final SendNotificationToTargetUserUsecase
+      _sendNotificationToTargetUserUsecase;
+  final GetUserDataFromIdUsecase _getUserDataFromIdUsecase;
 
   Future<void> loadConfirmPostEntityListFor({
     required DateTime dateTime,
@@ -44,6 +48,24 @@ class FriendPostViewModelProvider extends StateNotifier<FriendPostViewModel> {
           entity,
           state.sendingEmojis,
         ),
+      )
+          .then(
+        (result) => result.fold(
+          (failure) => false,
+          (success) => success,
+        ),
+      )
+          .then(
+        (isSendingReactionSuccess) {
+          if (!isSendingReactionSuccess) {
+            return;
+          }
+
+          sendReactionNotification(
+            myUserEntity: UserDataEntity.dummyModel,
+            postEntity: entity,
+          );
+        },
       );
 
       state.sendingEmojis = List<int>.generate(15, (index) => 0);
@@ -61,10 +83,10 @@ class FriendPostViewModelProvider extends StateNotifier<FriendPostViewModel> {
     _sendCommentReactionToConfirmPostUsecase(
       (
         entity,
-        state.textEditingController.text,
+        state.commentEditingController.text,
       ),
     );
-    state.textEditingController.clear();
+    state.commentEditingController.clear();
   }
 
   void setFocusingModeTo(bool enabled) {
@@ -74,16 +96,6 @@ class FriendPostViewModelProvider extends StateNotifier<FriendPostViewModel> {
 
   Future<void> changeSelectedDate({required DateTime to}) async {
     state.selectedDate = to;
-
-    // final fetchResult = await _getGroupConfirmPostListByDateUsecase
-    //     .call(state.groupId, to)
-    //     .then((result) => result.fold((failure) => null, (list) => list));
-
-    // if (fetchResult == null) {
-    //   return;
-    // }
-
-    // state.confirmPostList[to] = fetchResult;
   }
 
   void resetSendingEmojis() {
@@ -99,5 +111,27 @@ class FriendPostViewModelProvider extends StateNotifier<FriendPostViewModel> {
       );
     }
     return Future(() => null);
+  }
+
+  Future<void> sendReactionNotification({
+    required UserDataEntity myUserEntity,
+    required ConfirmPostEntity postEntity,
+  }) async {
+    if (postEntity.owner == null) {
+      return;
+    }
+
+    final targetUserEntity = await _getUserDataFromIdUsecase
+        .call(postEntity.owner!)
+        .then((result) => result.fold((failure) => null, (entity) => entity));
+
+    if (targetUserEntity == null) {
+      return;
+    }
+
+    _sendNotificationToTargetUserUsecase(
+      myUserEntity: myUserEntity,
+      targetUserEntity: targetUserEntity,
+    );
   }
 }

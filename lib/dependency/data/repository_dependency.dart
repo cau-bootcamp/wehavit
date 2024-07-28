@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/data/datasources/datasources.dart';
-import 'package:wehavit/data/repositories/group_repository_impl.dart';
 import 'package:wehavit/data/repositories/repositories.dart';
 import 'package:wehavit/dependency/data/datasource_dependency.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
@@ -60,4 +59,8 @@ final groupRepositoryProvider = Provider<GroupRepository>((ref) {
   final WehavitDatasource wehavitDatasource =
       ref.watch(wehavitDatasourceProvider);
   return GroupRepositoryImpl(wehavitDatasource);
+});
+
+final notificationRepositoryProvider = Provider<NotificationRepository>((ref) {
+  return NotificationRepositoryImpl();
 });

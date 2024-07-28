@@ -222,4 +222,10 @@ abstract class WehavitDatasource {
     required DateTime selectedDate,
     required String targetResolutionId,
   });
+
+  EitherFuture<void> updateFCMToken({
+    required bool delete,
+  });
+
+  EitherFuture<String> getUserFCMMessageToken({required String uid});
 }

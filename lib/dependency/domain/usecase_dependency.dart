@@ -1,15 +1,25 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/dependency/data/repository_dependency.dart';
+import 'package:wehavit/domain/usecases/send_notification_to_shared_users_usecase.dart';
+
 import 'package:wehavit/domain/usecases/usecases.dart';
 
 final logOutUseCaseProvider = Provider<LogOutUsecase>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
-  return LogOutUsecase(authRepository);
+  final userModelRepository = ref.watch(userModelRepositoryProvider);
+  return LogOutUsecase(
+    authRepository,
+    userModelRepository,
+  );
 });
 
 final googleLogOutUseCaseProvider = Provider<GoogleLogOutUseCase>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
-  return GoogleLogOutUseCase(authRepository);
+  final userModelRepository = ref.watch(userModelRepositoryProvider);
+  return GoogleLogOutUseCase(
+    authRepository,
+    userModelRepository,
+  );
 });
 
 final logInWithGoogleUsecaseProvider = Provider<LogInWithGoogleUsecase>((ref) {
@@ -435,5 +445,28 @@ final getConfirmPostOfDatetimeFromTargetResolutionUsecaseProvider =
   final confirmPostRepository = ref.watch(confirmPostRepositoryProvider);
   return GetConfirmPostOfDatetimeFromTargetResolutionUsecase(
     confirmPostRepository,
+  );
+});
+
+final updateFCMTokenUsecaseProvider = Provider<UpdateFCMTokenUsecase>((ref) {
+  final userModelRepository = ref.watch(userModelRepositoryProvider);
+  return UpdateFCMTokenUsecase(userModelRepository);
+});
+
+final sendNotificationToSharedUsersUsecaseProvider =
+    Provider<SendNotificationToSharedUsersUsecase>((ref) {
+  final userModelRepository = ref.watch(userModelRepositoryProvider);
+  final notificationRepository = ref.watch(notificationRepositoryProvider);
+  return SendNotificationToSharedUsersUsecase(
+    userModelRepository,
+    notificationRepository,
+  );
+});
+
+final sendNotificationToTargetUserUsecaseProvider =
+    Provider<SendNotificationToTargetUserUsecase>((ref) {
+  final notificationRepository = ref.watch(notificationRepositoryProvider);
+  return SendNotificationToTargetUserUsecase(
+    notificationRepository,
   );
 });

@@ -25,6 +25,7 @@ mixin _$UserDataEntity {
   String? get userName => throw _privateConstructorUsedError;
   String? get userImageUrl => throw _privateConstructorUsedError;
   String? get aboutMe => throw _privateConstructorUsedError;
+  String? get messageToken => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
   int? get cumulativeGoals => throw _privateConstructorUsedError;
   int? get cumulativePosts => throw _privateConstructorUsedError;
@@ -48,6 +49,7 @@ abstract class $UserDataEntityCopyWith<$Res> {
       String? userName,
       String? userImageUrl,
       String? aboutMe,
+      String? messageToken,
       DateTime? createdAt,
       int? cumulativeGoals,
       int? cumulativePosts,
@@ -72,6 +74,7 @@ class _$UserDataEntityCopyWithImpl<$Res, $Val extends UserDataEntity>
     Object? userName = freezed,
     Object? userImageUrl = freezed,
     Object? aboutMe = freezed,
+    Object? messageToken = freezed,
     Object? createdAt = freezed,
     Object? cumulativeGoals = freezed,
     Object? cumulativePosts = freezed,
@@ -97,6 +100,10 @@ class _$UserDataEntityCopyWithImpl<$Res, $Val extends UserDataEntity>
       aboutMe: freezed == aboutMe
           ? _value.aboutMe
           : aboutMe // ignore: cast_nullable_to_non_nullable
+              as String?,
+      messageToken: freezed == messageToken
+          ? _value.messageToken
+          : messageToken // ignore: cast_nullable_to_non_nullable
               as String?,
       createdAt: freezed == createdAt
           ? _value.createdAt
@@ -132,6 +139,7 @@ abstract class _$$UserDataEntityImplCopyWith<$Res>
       String? userName,
       String? userImageUrl,
       String? aboutMe,
+      String? messageToken,
       DateTime? createdAt,
       int? cumulativeGoals,
       int? cumulativePosts,
@@ -154,6 +162,7 @@ class __$$UserDataEntityImplCopyWithImpl<$Res>
     Object? userName = freezed,
     Object? userImageUrl = freezed,
     Object? aboutMe = freezed,
+    Object? messageToken = freezed,
     Object? createdAt = freezed,
     Object? cumulativeGoals = freezed,
     Object? cumulativePosts = freezed,
@@ -179,6 +188,10 @@ class __$$UserDataEntityImplCopyWithImpl<$Res>
       aboutMe: freezed == aboutMe
           ? _value.aboutMe
           : aboutMe // ignore: cast_nullable_to_non_nullable
+              as String?,
+      messageToken: freezed == messageToken
+          ? _value.messageToken
+          : messageToken // ignore: cast_nullable_to_non_nullable
               as String?,
       createdAt: freezed == createdAt
           ? _value.createdAt
@@ -210,6 +223,7 @@ class _$UserDataEntityImpl implements _UserDataEntity {
       this.userName,
       this.userImageUrl,
       this.aboutMe,
+      this.messageToken,
       this.createdAt,
       this.cumulativeGoals,
       this.cumulativePosts,
@@ -229,6 +243,8 @@ class _$UserDataEntityImpl implements _UserDataEntity {
   @override
   final String? aboutMe;
   @override
+  final String? messageToken;
+  @override
   final DateTime? createdAt;
   @override
   final int? cumulativeGoals;
@@ -239,7 +255,7 @@ class _$UserDataEntityImpl implements _UserDataEntity {
 
   @override
   String toString() {
-    return 'UserDataEntity(handle: $handle, userId: $userId, userName: $userName, userImageUrl: $userImageUrl, aboutMe: $aboutMe, createdAt: $createdAt, cumulativeGoals: $cumulativeGoals, cumulativePosts: $cumulativePosts, cumulativeReactions: $cumulativeReactions)';
+    return 'UserDataEntity(handle: $handle, userId: $userId, userName: $userName, userImageUrl: $userImageUrl, aboutMe: $aboutMe, messageToken: $messageToken, createdAt: $createdAt, cumulativeGoals: $cumulativeGoals, cumulativePosts: $cumulativePosts, cumulativeReactions: $cumulativeReactions)';
   }
 
   @override
@@ -254,6 +270,8 @@ class _$UserDataEntityImpl implements _UserDataEntity {
             (identical(other.userImageUrl, userImageUrl) ||
                 other.userImageUrl == userImageUrl) &&
             (identical(other.aboutMe, aboutMe) || other.aboutMe == aboutMe) &&
+            (identical(other.messageToken, messageToken) ||
+                other.messageToken == messageToken) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.cumulativeGoals, cumulativeGoals) ||
@@ -273,6 +291,7 @@ class _$UserDataEntityImpl implements _UserDataEntity {
       userName,
       userImageUrl,
       aboutMe,
+      messageToken,
       createdAt,
       cumulativeGoals,
       cumulativePosts,
@@ -300,6 +319,7 @@ abstract class _UserDataEntity implements UserDataEntity {
       final String? userName,
       final String? userImageUrl,
       final String? aboutMe,
+      final String? messageToken,
       final DateTime? createdAt,
       final int? cumulativeGoals,
       final int? cumulativePosts,
@@ -318,6 +338,8 @@ abstract class _UserDataEntity implements UserDataEntity {
   String? get userImageUrl;
   @override
   String? get aboutMe;
+  @override
+  String? get messageToken;
   @override
   DateTime? get createdAt;
   @override

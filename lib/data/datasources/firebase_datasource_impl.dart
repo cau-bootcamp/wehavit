@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fpdart/fpdart.dart';
@@ -2706,6 +2707,57 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       return Future(() => right([entity]));
     } on Exception catch (e) {
       return Future(() => left(Failure(e.toString())));
+    }
+  }
+
+  @override
+  EitherFuture<void> updateFCMToken({required bool delete}) async {
+    try {
+      String myUid = getMyUserId();
+
+      if (delete) {
+        await firestore
+            .collection(FirebaseCollectionName.users)
+            .doc(myUid)
+            .update({
+          FirebaseUserFieldName.messageToken: null,
+        });
+      } else {
+        String? firebaseToken = await FirebaseMessaging.instance.getToken();
+
+        await firestore
+            .collection(FirebaseCollectionName.users)
+            .doc(myUid)
+            .update({
+          FirebaseUserFieldName.messageToken: firebaseToken,
+        });
+      }
+
+      return right(null);
+    } on Exception catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  EitherFuture<String> getUserFCMMessageToken({required String uid}) async {
+    try {
+      final token = await firestore
+          .collection(FirebaseCollectionName.users)
+          .doc(uid)
+          .get()
+          .then((snapshot) {
+        return snapshot.data()?[FirebaseUserFieldName.messageToken] ??
+            null as String?;
+      });
+
+      if (token == null) {
+        return left(Failure('cannot get user FCM Token from uid $uid'));
+      } else {
+        return right(token);
+      }
+    } on Exception catch (e) {
+      return left(Failure(e.toString()));
     }
   }
 }

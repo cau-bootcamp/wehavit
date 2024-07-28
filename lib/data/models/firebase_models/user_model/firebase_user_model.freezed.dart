@@ -24,6 +24,7 @@ mixin _$FirebaseUserModel {
   String? get displayName => throw _privateConstructorUsedError;
   String? get imageUrl => throw _privateConstructorUsedError;
   String? get aboutMe => throw _privateConstructorUsedError;
+  String? get messageToken => throw _privateConstructorUsedError;
   @TimestampConverter()
   DateTime? get createdAt => throw _privateConstructorUsedError;
   int? get cumulativeGoals => throw _privateConstructorUsedError;
@@ -47,6 +48,7 @@ abstract class $FirebaseUserModelCopyWith<$Res> {
       String? displayName,
       String? imageUrl,
       String? aboutMe,
+      String? messageToken,
       @TimestampConverter() DateTime? createdAt,
       int? cumulativeGoals,
       int? cumulativePosts,
@@ -70,6 +72,7 @@ class _$FirebaseUserModelCopyWithImpl<$Res, $Val extends FirebaseUserModel>
     Object? displayName = freezed,
     Object? imageUrl = freezed,
     Object? aboutMe = freezed,
+    Object? messageToken = freezed,
     Object? createdAt = freezed,
     Object? cumulativeGoals = freezed,
     Object? cumulativePosts = freezed,
@@ -91,6 +94,10 @@ class _$FirebaseUserModelCopyWithImpl<$Res, $Val extends FirebaseUserModel>
       aboutMe: freezed == aboutMe
           ? _value.aboutMe
           : aboutMe // ignore: cast_nullable_to_non_nullable
+              as String?,
+      messageToken: freezed == messageToken
+          ? _value.messageToken
+          : messageToken // ignore: cast_nullable_to_non_nullable
               as String?,
       createdAt: freezed == createdAt
           ? _value.createdAt
@@ -125,6 +132,7 @@ abstract class _$$FirebaseUserModelImplCopyWith<$Res>
       String? displayName,
       String? imageUrl,
       String? aboutMe,
+      String? messageToken,
       @TimestampConverter() DateTime? createdAt,
       int? cumulativeGoals,
       int? cumulativePosts,
@@ -146,6 +154,7 @@ class __$$FirebaseUserModelImplCopyWithImpl<$Res>
     Object? displayName = freezed,
     Object? imageUrl = freezed,
     Object? aboutMe = freezed,
+    Object? messageToken = freezed,
     Object? createdAt = freezed,
     Object? cumulativeGoals = freezed,
     Object? cumulativePosts = freezed,
@@ -167,6 +176,10 @@ class __$$FirebaseUserModelImplCopyWithImpl<$Res>
       aboutMe: freezed == aboutMe
           ? _value.aboutMe
           : aboutMe // ignore: cast_nullable_to_non_nullable
+              as String?,
+      messageToken: freezed == messageToken
+          ? _value.messageToken
+          : messageToken // ignore: cast_nullable_to_non_nullable
               as String?,
       createdAt: freezed == createdAt
           ? _value.createdAt
@@ -197,6 +210,7 @@ class _$FirebaseUserModelImpl implements _FirebaseUserModel {
       this.displayName,
       this.imageUrl,
       this.aboutMe,
+      this.messageToken,
       @TimestampConverter() this.createdAt,
       this.cumulativeGoals,
       this.cumulativePosts,
@@ -214,6 +228,8 @@ class _$FirebaseUserModelImpl implements _FirebaseUserModel {
   @override
   final String? aboutMe;
   @override
+  final String? messageToken;
+  @override
   @TimestampConverter()
   final DateTime? createdAt;
   @override
@@ -225,7 +241,7 @@ class _$FirebaseUserModelImpl implements _FirebaseUserModel {
 
   @override
   String toString() {
-    return 'FirebaseUserModel(handle: $handle, displayName: $displayName, imageUrl: $imageUrl, aboutMe: $aboutMe, createdAt: $createdAt, cumulativeGoals: $cumulativeGoals, cumulativePosts: $cumulativePosts, cumulativeReactions: $cumulativeReactions)';
+    return 'FirebaseUserModel(handle: $handle, displayName: $displayName, imageUrl: $imageUrl, aboutMe: $aboutMe, messageToken: $messageToken, createdAt: $createdAt, cumulativeGoals: $cumulativeGoals, cumulativePosts: $cumulativePosts, cumulativeReactions: $cumulativeReactions)';
   }
 
   @override
@@ -239,6 +255,8 @@ class _$FirebaseUserModelImpl implements _FirebaseUserModel {
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
             (identical(other.aboutMe, aboutMe) || other.aboutMe == aboutMe) &&
+            (identical(other.messageToken, messageToken) ||
+                other.messageToken == messageToken) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.cumulativeGoals, cumulativeGoals) ||
@@ -257,6 +275,7 @@ class _$FirebaseUserModelImpl implements _FirebaseUserModel {
       displayName,
       imageUrl,
       aboutMe,
+      messageToken,
       createdAt,
       cumulativeGoals,
       cumulativePosts,
@@ -283,6 +302,7 @@ abstract class _FirebaseUserModel implements FirebaseUserModel {
       final String? displayName,
       final String? imageUrl,
       final String? aboutMe,
+      final String? messageToken,
       @TimestampConverter() final DateTime? createdAt,
       final int? cumulativeGoals,
       final int? cumulativePosts,
@@ -299,6 +319,8 @@ abstract class _FirebaseUserModel implements FirebaseUserModel {
   String? get imageUrl;
   @override
   String? get aboutMe;
+  @override
+  String? get messageToken;
   @override
   @TimestampConverter()
   DateTime? get createdAt;
