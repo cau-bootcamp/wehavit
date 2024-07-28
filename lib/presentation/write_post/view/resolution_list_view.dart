@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -200,13 +201,10 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
     ResolutionListViewModel viewModel,
     ResolutionListViewModelProvider provider,
     int index,
-  ) {
-    ref.read(sendNotificationToSharedUsersUsecaseProvider)(
-      entity: viewModel.resolutionModelList![index].entity,
-    );
-
+  ) async {
     return showModalBottomSheet(
       isScrollControlled: true,
+      // ignore: use_build_context_synchronously
       context: context,
       builder: (context) => WritingResolutionBottomSheetWidget(
         viewModel: viewModel,

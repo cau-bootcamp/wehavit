@@ -221,11 +221,25 @@ class _WritingConfirmPostViewState
                         viewModel.isUploading = true;
                         setState(() {});
 
+                        final myUserEntity = await ref
+                            .read(myPageViewModelProvider)
+                            .futureMyUserDataEntity
+                            ?.then(
+                              (result) => result.fold(
+                                (failure) => null,
+                                (entity) => entity,
+                              ),
+                            );
+
                         await provider
-                            .uploadPost(hasRested: widget.hasRested)
+                            .uploadPost(
+                          hasRested: widget.hasRested,
+                          myUserEntity: myUserEntity,
+                        )
                             .whenComplete(() {
                           viewModel.isUploading = false;
 
+                          // ignore: use_build_context_synchronously
                           Navigator.of(context).pop(true);
                         });
                       },

@@ -41,9 +41,11 @@ class NotificationRepositoryImpl extends NotificationRepository {
       );
 
       if (response.statusCode == 200) {
-        print("send");
+        // ignore: avoid_print
+        print('DEBUG : send');
       } else {
-        print("send fail");
+        // ignore: avoid_print
+        print('DEBUG : message send fail to $token');
       }
     }
   }

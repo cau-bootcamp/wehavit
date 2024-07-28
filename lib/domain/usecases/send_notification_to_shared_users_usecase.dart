@@ -16,13 +16,25 @@ class SendNotificationToSharedUsersUsecase {
   final UserModelRepository _userModelRepository;
   final NotificationRepository _notificationRepository;
 
+  static String messageTitleTemplate = 'WeHavit';
+  static String messageContentTemplate = 'NAME님의 새로운 인증글이 여러분의 응원을 기다리고 있어요!';
+
   EitherFuture<void> call({
-    required ResolutionEntity entity,
+    required UserDataEntity? myUserEntity,
+    required ResolutionEntity resolutionEntity,
   }) async {
+    if (myUserEntity == null) {
+      return left(
+        const Failure(
+          'cannot get user entity from SendNotificationToSharedUsersUsecase',
+        ),
+      );
+    }
+
     List<String> sharingUserTokenList = [];
 
-    final groupEntityList = entity.shareGroupEntityList ?? [];
-    final friendEntityList = entity.shareFriendEntityList ?? [];
+    final groupEntityList = resolutionEntity.shareGroupEntityList ?? [];
+    final friendEntityList = resolutionEntity.shareFriendEntityList ?? [];
 
     await Future.forEach(groupEntityList, (GroupEntity groupEntity) async {
       await Future.forEach(groupEntity.groupMemberUidList, (String uid) async {
@@ -48,10 +60,12 @@ class SendNotificationToSharedUsersUsecase {
 
     sharingUserTokenList = sharingUserTokenList.toSet().toList();
 
-    // TODO
     await _notificationRepository.sendNotification(
-      title: "hello",
-      content: "hi there",
+      title: messageTitleTemplate,
+      content: messageContentTemplate.replaceFirst(
+        'NAME',
+        myUserEntity.userName ?? 'NULL',
+      ),
       targetTokenList: sharingUserTokenList,
     );
 

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/dependency/data/repository_dependency.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wehavit/domain/usecases/send_notification_to_shared_users_usecase.dart';
 import 'package:wehavit/domain/usecases/update_FCM_token_usecase.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
 import 'package:wehavit/presentation/presentation.dart';
@@ -143,7 +144,12 @@ final resolutionListViewModelProvider = StateNotifierProvider<
 final writingConfirmPostViewModelProvider = StateNotifierProvider.autoDispose<
     WritingConfirmPostViewModelProvider, WritingConfirmPostViewModel>((ref) {
   final uploadConfirmPostUsecase = ref.watch(uploadConfirmPostUseCaseProvider);
-  return WritingConfirmPostViewModelProvider(uploadConfirmPostUsecase);
+  final sendNotificationToSharedUsersUsecase =
+      ref.watch(sendNotificationToSharedUsersUsecaseProvider);
+  return WritingConfirmPostViewModelProvider(
+    uploadConfirmPostUsecase,
+    sendNotificationToSharedUsersUsecase,
+  );
 });
 
 final groupPostViewModelProvider = StateNotifierProvider.autoDispose<
