@@ -516,7 +516,20 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
         );
       },
     ).whenComplete(() async {
-      await provider.sendEmojiReaction(entity: widget.confirmPostEntity);
+      final myUserEntity = await ref
+          .read(myPageViewModelProvider)
+          .futureMyUserDataEntity
+          ?.then(
+              (result) => result.fold((failure) => null, (entity) => entity));
+
+      if (myUserEntity == null) {
+        return;
+      }
+
+      await provider.sendEmojiReaction(
+        entity: widget.confirmPostEntity,
+        myUserEntity: myUserEntity,
+      );
 
       viewModel.countSend = 0;
       provider.resetSendingEmojis();

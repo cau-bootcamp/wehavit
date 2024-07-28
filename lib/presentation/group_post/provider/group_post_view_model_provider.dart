@@ -10,20 +10,23 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
     this._sendQuickShotReactionToConfirmPostUsecase,
     this._sendCommentReactionToConfirmPostUsecase,
     this.getAppliedUserListForGroupEntityUsecase,
+    this._sendNotificationToTargetUserUsecase,
+    this._getUserDataFromIdUsecase,
   ) : super(GroupPostViewModel());
 
   final GetGroupConfirmPostListByDateUsecase
       _getGroupConfirmPostListByDateUsecase;
-
   final SendEmojiReactionToConfirmPostUsecase
       _sendEmojiReactionToConfirmPostUsecase;
   final SendQuickShotReactionToConfirmPostUsecase
       _sendQuickShotReactionToConfirmPostUsecase;
   final SendCommentReactionToConfirmPostUsecase
       _sendCommentReactionToConfirmPostUsecase;
-
   final GetAppliedUserListForGroupEntityUsecase
       getAppliedUserListForGroupEntityUsecase;
+  final SendNotificationToTargetUserUsecase
+      _sendNotificationToTargetUserUsecase;
+  final GetUserDataFromIdUsecase _getUserDataFromIdUsecase;
 
   Future<void> loadConfirmPostEntityListFor({
     required DateTime dateTime,
@@ -35,7 +38,10 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
   }
 
   // Reactions
-  Future<void> sendEmojiReaction({required ConfirmPostEntity entity}) async {
+  Future<void> sendEmojiReaction({
+    required ConfirmPostEntity entity,
+    required UserDataEntity myUserEntity,
+  }) async {
     state.emojiWidgets.clear();
 
     if (state.sendingEmojis.any((element) => element > 0)) {
@@ -44,8 +50,25 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
           entity,
           state.sendingEmojis,
         ),
-      );
+      )
+          .then(
+        (result) => result.fold(
+          (failure) => false,
+          (success) => success,
+        ),
+      )
+          .then(
+        (isSendingReactionSuccess) {
+          if (!isSendingReactionSuccess) {
+            return;
+          }
 
+          sendReactionNotification(
+            myUserEntity: myUserEntity,
+            postEntity: entity,
+          );
+        },
+      );
       state.sendingEmojis = List<int>.generate(15, (index) => 0);
     }
   }
@@ -97,5 +120,27 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
               (result) =>
                   result.fold((failure) => 0, (uidList) => uidList.length),
             );
+  }
+
+  Future<void> sendReactionNotification({
+    required UserDataEntity myUserEntity,
+    required ConfirmPostEntity postEntity,
+  }) async {
+    if (postEntity.owner == null) {
+      return;
+    }
+
+    final targetUserEntity = await _getUserDataFromIdUsecase
+        .call(postEntity.owner!)
+        .then((result) => result.fold((failure) => null, (entity) => entity));
+
+    if (targetUserEntity == null) {
+      return;
+    }
+
+    _sendNotificationToTargetUserUsecase(
+      myUserEntity: myUserEntity,
+      targetUserEntity: targetUserEntity,
+    );
   }
 }

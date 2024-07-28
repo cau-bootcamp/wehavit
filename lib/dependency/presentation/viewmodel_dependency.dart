@@ -4,8 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/dependency/data/repository_dependency.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/domain/usecases/send_notification_to_shared_users_usecase.dart';
-import 'package:wehavit/domain/usecases/update_FCM_token_usecase.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
@@ -164,12 +162,17 @@ final groupPostViewModelProvider = StateNotifierProvider.autoDispose<
       ref.watch(sendCommentReactionToConfirmPostUsecaseProvider);
   final getAppliedUserListForGroupEntityUsecase =
       ref.watch(getAppliedUserListForGroupEntityUsecaseProvider);
+  final sendNotificationToTargetUserUsecase =
+      ref.watch(sendNotificationToTargetUserUsecaseProvider);
+  final getUserDataFromIdUsecase = ref.watch(getUserDataFromIdUsecaseProvider);
   return GroupPostViewModelProvider(
     getGroupConfirmPostListByDateUsecase,
     sendEmojiReactionToConfirmPostUsecase,
     sendQuickShotReactionToConfirmPostUsecase,
     sendCommentReactionToConfirmPostUsecase,
     getAppliedUserListForGroupEntityUsecase,
+    sendNotificationToTargetUserUsecase,
+    getUserDataFromIdUsecase,
   );
 });
 
@@ -273,12 +276,17 @@ final friendPostViewModelProvider = StateNotifierProvider.autoDispose<
       ref.watch(sendQuickShotReactionToConfirmPostUsecaseProvider);
   final sendCommentReactionToConfirmPostUsecase =
       ref.watch(sendCommentReactionToConfirmPostUsecaseProvider);
+  final sendNotificationToTargetUserUsecase =
+      ref.watch(sendNotificationToTargetUserUsecaseProvider);
+  final getUserDataFromIdUsecase = ref.watch(getUserDataFromIdUsecaseProvider);
 
   return FriendPostViewModelProvider(
     getFriendConfirmPostListByDateUsecase,
     sendEmojiReactionToConfirmPostUsecase,
     sendQuickShotReactionToConfirmPostUsecase,
     sendCommentReactionToConfirmPostUsecase,
+    sendNotificationToTargetUserUsecase,
+    getUserDataFromIdUsecase,
   );
 });
 

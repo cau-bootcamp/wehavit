@@ -1,18 +1,15 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/domain/repositories/group_repository.dart';
 import 'package:wehavit/domain/repositories/notification_repository.dart';
 import 'package:wehavit/domain/repositories/user_model_repository.dart';
 
 class SendNotificationToSharedUsersUsecase {
   SendNotificationToSharedUsersUsecase(
-    this._groupRepository,
     this._userModelRepository,
     this._notificationRepository,
   );
 
-  final GroupRepository _groupRepository;
   final UserModelRepository _userModelRepository;
   final NotificationRepository _notificationRepository;
 
