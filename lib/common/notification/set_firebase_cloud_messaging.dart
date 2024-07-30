@@ -47,12 +47,15 @@ Future<String?> setFirebaseCloudMessaging(
     //   importance: Importance.low,
     // );
 
-    // final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    //     FlutterLocalNotificationsPlugin();
-    // await flutterLocalNotificationsPlugin
-    //     .resolvePlatformSpecificImplementation<
-    //         AndroidFlutterLocalNotificationsPlugin>()
-    //     ?.createNotificationChannel(channel);
+    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+        FlutterLocalNotificationsPlugin();
+
+    await flutterLocalNotificationsPlugin.initialize(
+      const InitializationSettings(
+        android: AndroidInitializationSettings('@mipmap/appicon'),
+        // iOS: IOSInitializationSettings(),
+      ),
+    );
 
     messaging.getInitialMessage().then((RemoteMessage? message) {
       // 처음에 앱 실행했을 때 들어와있는 메시지가 있을 때 처리하는 로직

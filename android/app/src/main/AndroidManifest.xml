@@ -11,7 +11,9 @@
     <application
         android:label="wehavit"
         android:name="${applicationName}"
-        android:icon="@mipmap/appicon">
+        android:icon="@mipmap/launcher_icon" 
+        android:roundIcon="@mipmap/launcher_icon"
+        >
      
         <activity
             android:name=".MainActivity"
@@ -44,6 +46,13 @@
         </activity>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/transparent" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorPrimary" />
+
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
