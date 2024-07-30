@@ -46,6 +46,8 @@ class NotificationRepositoryImpl extends NotificationRepository {
       } else {
         // ignore: avoid_print
         print('DEBUG : message send fail to $token');
+        // 만약 token 타겟이 유효하지 않은 경우에 fail이 발생할 수 있음.
+        // ex) iOS Emulator의 Token으로 FCM이 메시지를 전송하는 경우
       }
     }
   }

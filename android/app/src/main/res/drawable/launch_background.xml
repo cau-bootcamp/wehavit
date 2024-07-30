@@ -7,6 +7,6 @@
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@mipmap/appicon" />
+            android:src="@mipmap/transparent" />
     </item>
 </layer-list>
