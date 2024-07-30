@@ -12,34 +12,73 @@ import 'package:wehavit/presentation/reaction/reaction.dart';
 Future<String?> setFirebaseCloudMessaging(
   GlobalKey reactionWidgetChildKey,
 ) async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  // background 관련 처리가 필요한 경우에는 아래줄 코드의 주석을 풀고
+  // 파일 최하단의 _firebaseMessagingBackgroundHandler 함수를 콜백으로 전달하기.
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  await messaging.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+  debugPrint('사용자에게서 알림 허가를 받음 : ${settings.authorizationStatus}');
+
   if (DefaultFirebaseOptions.currentPlatform == DefaultFirebaseOptions.ios) {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+    // const AndroidNotificationChannel channel = AndroidNotificationChannel(
+    //   'wehavit_notification',
+    //   'wehavit_notification',
+    //   description: 'wehavit의 알림입니다',
+    //   importance: Importance.low,
+    // );
 
-    // background 관련 처리가 필요한 경우에는 아래줄 코드의 주석을 풀고
-    // 파일 최하단의 _firebaseMessagingBackgroundHandler 함수를 콜백으로 전달하기.
-    // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    // final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    //     FlutterLocalNotificationsPlugin();
+    // await flutterLocalNotificationsPlugin
+    //     .resolvePlatformSpecificImplementation<
+    //         AndroidFlutterLocalNotificationsPlugin>()
+    //     ?.createNotificationChannel(channel);
 
-    await messaging.setForegroundNotificationPresentationOptions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
+    messaging.getInitialMessage().then((RemoteMessage? message) {
+      // 처음에 앱 실행했을 때 들어와있는 메시지가 있을 때 처리하는 로직
+      // 위해빗의 경우에는 앱 실행 시 reaction을 load 하는 로직이 이미 있기 때문에 괜찮음
+    });
 
-    NotificationSettings settings = await messaging.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      (reactionWidgetChildKey as GlobalKey<ReactionAnimationWidgetState>)
+          .currentState
+          ?.showUnreadReactions();
+    });
 
-    debugPrint('사용자에게서 알림 허가를 받음 : ${settings.authorizationStatus}');
+    // background 상태. Notification 서랍에서 메시지 터치하여 앱으로 돌아왔을 때의 동작은 여기서.
+    // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    //   print("DEBUG : listen0");
+    // });
 
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      // RemoteNotification? notification = message.notification;
+
+      (reactionWidgetChildKey as GlobalKey<ReactionAnimationWidgetState>)
+          .currentState
+          ?.showUnreadReactions();
+    });
+  } else if (DefaultFirebaseOptions.currentPlatform ==
+      DefaultFirebaseOptions.android) {
     const AndroidNotificationChannel channel = AndroidNotificationChannel(
       'wehavit_notification',
       'wehavit_notification',
@@ -70,22 +109,13 @@ Future<String?> setFirebaseCloudMessaging(
     //   print("DEBUG : listen0");
     // });
 
-    // print("DEBUG : listen ready");
-
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       // RemoteNotification? notification = message.notification;
 
-      // 여기 부분에 코드를 작성하면
-      // 알림을 탭하지 않더라도, 알림을 받기만 하면 앱이 알림을 읽고 로직을 처리할 수 있음
       (reactionWidgetChildKey as GlobalKey<ReactionAnimationWidgetState>)
           .currentState
           ?.showUnreadReactions();
     });
-  } else if (DefaultFirebaseOptions.currentPlatform ==
-      DefaultFirebaseOptions.android) {
-    // TODO: 안드로이드에서의 알림 처리 여기에 구현하기
-
-    throw UnimplementedError();
   }
 
   // 실기기 테스트 시에 이 토큰 값을 활용해주면 됨
@@ -99,18 +129,18 @@ Future<String?> setFirebaseCloudMessaging(
 ///
 Future<void> setTerminatedStateMessageHandler() async {
   if (DefaultFirebaseOptions.currentPlatform == DefaultFirebaseOptions.ios) {
-    RemoteMessage? initialMessage =
-        await FirebaseMessaging.instance.getInitialMessage();
-    if (initialMessage != null) {}
+    // RemoteMessage? initialMessage =
+    //     await FirebaseMessaging.instance.getInitialMessage();
+    // if (initialMessage != null) {}
   } else if (DefaultFirebaseOptions.currentPlatform ==
       DefaultFirebaseOptions.android) {
-    // TODO: 안드로이드에서의 앱 종료 시점의 알림 처리 여기에 구현하기
-    // iOS의 코드가 안드로이드에서도 동일하게 적용 가능한 지 확인해봐야함!
+    //
   }
 }
 
-// Future<void> _firebaseMessagingBackgroundHandler(
-//   RemoteMessage message, {
-// }) async {
-//   await Firebase.initializeApp();
-// }
+Future<void> _firebaseMessagingBackgroundHandler(
+  RemoteMessage message,
+) async {
+  // await Firebase.initializeApp();
+  print('DEBUG : receive message in background mode');
+}
