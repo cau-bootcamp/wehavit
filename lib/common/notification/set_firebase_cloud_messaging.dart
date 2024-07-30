@@ -126,7 +126,7 @@ Future<String?> setFirebaseCloudMessaging(
 }
 
 /// 앱이 종료상태일 때 알림을 눌러 앱에 진입한 경우에 대해 처리하는 로직
-///
+/// 현재는 종료상태일 때 앱 푸쉬로 들어오면 따로 이동하는 페이자가 없으므로,
 Future<void> setTerminatedStateMessageHandler() async {
   if (DefaultFirebaseOptions.currentPlatform == DefaultFirebaseOptions.ios) {
     // RemoteMessage? initialMessage =
