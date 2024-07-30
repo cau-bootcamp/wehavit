@@ -2,7 +2,7 @@ name: wehavit
 description: A new Havit tracking app without the comparing others.
 publish_to: 'none'
 
-version: 1.0.4+1
+version: 1.0.4+2
 
 environment:
   sdk: '>=3.4.3 <4.0.0'
