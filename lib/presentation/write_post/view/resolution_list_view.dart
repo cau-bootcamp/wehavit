@@ -194,9 +194,10 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
     ResolutionListViewModel viewModel,
     ResolutionListViewModelProvider provider,
     int index,
-  ) {
+  ) async {
     return showModalBottomSheet(
       isScrollControlled: true,
+      // ignore: use_build_context_synchronously
       context: context,
       builder: (context) => WritingResolutionBottomSheetWidget(
         viewModel: viewModel,

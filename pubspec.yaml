@@ -2,7 +2,7 @@ name: wehavit
 description: A new Havit tracking app without the comparing others.
 publish_to: 'none'
 
-version: 1.0.3+1
+version: 1.0.4+3
 
 environment:
   sdk: '>=3.4.3 <4.0.0'
@@ -57,6 +57,8 @@ dependencies:
   dart_jsonwebtoken: ^2.14.0
   flutter_dotenv: ^5.1.0
   smooth_page_indicator: ^1.1.0
+  googleapis_auth: ^1.6.0
+  
 
 
 
@@ -72,7 +74,15 @@ dev_dependencies:
   riverpod_generator: ^2.3.6
   riverpod_lint: ^2.3.4
   custom_lint: ^0.6.4
+  flutter_launcher_icons: ^0.13.1
 
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/icons/wehavit_icon.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  
 
 flutter:
   uses-material-design: true
@@ -82,6 +92,9 @@ flutter:
     - assets/images/icons/
     - assets/images/guide/
     - assets/fonts/
+    - .env/
+
+  
 
   fonts:
     - family: SF-Pro

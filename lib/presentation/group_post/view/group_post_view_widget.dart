@@ -33,6 +33,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
   late EitherFuture<List<bool>> resolutionDoneListForWrittenWeek;
   late EitherFuture<UserDataEntity> futureUserDataEntity;
   late EitherFuture<ResolutionEntity> futureResolutionEntity;
+  late UserDataEntity? myUserEntity;
 
   late ReactionCameraWidgetModel reactionCameraModel =
       ref.watch(reactionCameraWidgetModelProvider);
@@ -60,16 +61,26 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
       targetUserId: widget.confirmPostEntity.owner!,
       targetResolutionId: widget.confirmPostEntity.resolutionId!,
     );
+
+    myUserEntity =
+        await ref.read(myPageViewModelProvider).futureMyUserDataEntity?.then(
+              (result) => result.fold(
+                (failure) => null,
+                (entity) => entity,
+              ),
+            );
   }
 
   bool isShowingCommentField = false;
   bool isTouchMoved = false;
-  TextEditingController commentEditingController = TextEditingController();
+
+  late GroupPostViewModel viewModel;
+  late GroupPostViewModelProvider provider;
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = ref.watch(groupPostViewModelProvider);
-    final provider = ref.read(groupPostViewModelProvider.notifier);
+    viewModel = ref.watch(groupPostViewModelProvider);
+    provider = ref.read(groupPostViewModelProvider.notifier);
 
     Point<double> panningPosition = const Point(0, 0);
 
@@ -290,6 +301,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                           await provider.sendImageReaction(
                             entity: widget.confirmPostEntity,
                             imageFilePath: imageFilePath,
+                            myUserEntity: myUserEntity,
                           );
                         }
                       },
@@ -321,7 +333,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                         alignment: Alignment.centerRight,
                         children: [
                           TextFormField(
-                            controller: commentEditingController,
+                            controller: viewModel.commentEditingController,
                             style: const TextStyle(
                               color: CustomColors.whWhite,
                               fontSize: 16.0,
@@ -350,9 +362,8 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                             onPressed: () async {
                               sendMessageReaction(
                                 widget.confirmPostEntity,
-                                commentEditingController.text,
                               ).whenComplete(() {
-                                commentEditingController.clear();
+                                viewModel.commentEditingController.clear();
 
                                 setState(() {
                                   isShowingCommentField = false;
@@ -379,11 +390,11 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
 
   Future<void> sendMessageReaction(
     ConfirmPostEntity confirmPostEntity,
-    String comment,
   ) async {
-    await ref
-        .read(sendCommentReactionToConfirmPostUsecaseProvider)
-        .call((confirmPostEntity, comment));
+    await ref.read(groupPostViewModelProvider.notifier).sendTextReaction(
+          entity: confirmPostEntity,
+          myUserEntity: myUserEntity,
+        );
   }
 
   Future<dynamic> showEmojiSheet(
@@ -516,7 +527,10 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
         );
       },
     ).whenComplete(() async {
-      await provider.sendEmojiReaction(entity: widget.confirmPostEntity);
+      await provider.sendEmojiReaction(
+        entity: widget.confirmPostEntity,
+        myUserEntity: myUserEntity,
+      );
 
       viewModel.countSend = 0;
       provider.resetSendingEmojis();

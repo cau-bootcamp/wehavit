@@ -142,7 +142,12 @@ final resolutionListViewModelProvider = StateNotifierProvider<
 final writingConfirmPostViewModelProvider = StateNotifierProvider.autoDispose<
     WritingConfirmPostViewModelProvider, WritingConfirmPostViewModel>((ref) {
   final uploadConfirmPostUsecase = ref.watch(uploadConfirmPostUseCaseProvider);
-  return WritingConfirmPostViewModelProvider(uploadConfirmPostUsecase);
+  final sendNotificationToSharedUsersUsecase =
+      ref.watch(sendNotificationToSharedUsersUsecaseProvider);
+  return WritingConfirmPostViewModelProvider(
+    uploadConfirmPostUsecase,
+    sendNotificationToSharedUsersUsecase,
+  );
 });
 
 final groupPostViewModelProvider = StateNotifierProvider.autoDispose<
@@ -157,19 +162,26 @@ final groupPostViewModelProvider = StateNotifierProvider.autoDispose<
       ref.watch(sendCommentReactionToConfirmPostUsecaseProvider);
   final getAppliedUserListForGroupEntityUsecase =
       ref.watch(getAppliedUserListForGroupEntityUsecaseProvider);
+  final sendNotificationToTargetUserUsecase =
+      ref.watch(sendNotificationToTargetUserUsecaseProvider);
+  final getUserDataFromIdUsecase = ref.watch(getUserDataFromIdUsecaseProvider);
   return GroupPostViewModelProvider(
     getGroupConfirmPostListByDateUsecase,
     sendEmojiReactionToConfirmPostUsecase,
     sendQuickShotReactionToConfirmPostUsecase,
     sendCommentReactionToConfirmPostUsecase,
     getAppliedUserListForGroupEntityUsecase,
+    sendNotificationToTargetUserUsecase,
+    getUserDataFromIdUsecase,
   );
 });
 
 final mainViewModelProvider =
     StateNotifierProvider.autoDispose<MainViewModelProvider, MainViewModel>(
         (ref) {
-  return MainViewModelProvider();
+  UpdateFCMTokenUsecase updateFCMTokenUsecase =
+      ref.watch(updateFCMTokenUsecaseProvider);
+  return MainViewModelProvider(updateFCMTokenUsecase);
 });
 
 final signUpAuthDataViewModelProvider = StateNotifierProvider.autoDispose<
@@ -264,12 +276,17 @@ final friendPostViewModelProvider = StateNotifierProvider.autoDispose<
       ref.watch(sendQuickShotReactionToConfirmPostUsecaseProvider);
   final sendCommentReactionToConfirmPostUsecase =
       ref.watch(sendCommentReactionToConfirmPostUsecaseProvider);
+  final sendNotificationToTargetUserUsecase =
+      ref.watch(sendNotificationToTargetUserUsecaseProvider);
+  final getUserDataFromIdUsecase = ref.watch(getUserDataFromIdUsecaseProvider);
 
   return FriendPostViewModelProvider(
     getFriendConfirmPostListByDateUsecase,
     sendEmojiReactionToConfirmPostUsecase,
     sendQuickShotReactionToConfirmPostUsecase,
     sendCommentReactionToConfirmPostUsecase,
+    sendNotificationToTargetUserUsecase,
+    getUserDataFromIdUsecase,
   );
 });
 

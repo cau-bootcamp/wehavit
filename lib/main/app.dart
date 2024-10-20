@@ -8,38 +8,27 @@ class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
   @override
-  ConsumerState<MyApp> createState() => _MyAppState();
+  ConsumerState<MyApp> createState() => MyAppState();
 }
 
-class _MyAppState extends ConsumerState<MyApp> {
+class MyAppState extends ConsumerState<MyApp> {
+  final GlobalKey<ReactionAnimationWidgetState> reactionWidgetChildKey =
+      GlobalKey<ReactionAnimationWidgetState>();
+
   @override
   void initState() {
     super.initState();
 
-    // ignore: discarded_futures
-    setFirebaseCloudMessaging(context);
-    // ignore: discarded_futures
-    setTerminatedStateMessageHandler(ref);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // ignore: discarded_futures
+      setFirebaseCloudMessaging(reactionWidgetChildKey);
+      // ignore: discarded_futures
+      setTerminatedStateMessageHandler();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    // final routerConfig = ref.watch(routerProvider);
-    // final theme = ref.watch(themeProvider);
-
-    // return ScreenUtilInit(
-    //   designSize: const Size(375, 812),
-    //   builder: (ctx, child) {
-    //     return MaterialApp.router(
-    //       debugShowCheckedModeBanner: false,
-    //       title: appTitle,
-    //       // theme: ThemeData(fontFamily: 'SF-Pro'),
-    //       darkTheme: ThemeData.dark(),
-    //       themeMode: theme,
-    //       routerConfig: routerConfig,
-    //     );
-    //   },
-    // );
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: const EntranceView(),

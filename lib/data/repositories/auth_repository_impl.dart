@@ -91,7 +91,6 @@ class AuthRepositoryImpl implements AuthRepository {
       default:
         return left(Failure(AuthResult.failure.name));
     }
-
     return futureResult;
   }
 
