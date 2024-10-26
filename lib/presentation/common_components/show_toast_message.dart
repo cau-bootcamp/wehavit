@@ -11,7 +11,7 @@ void showToastMessage(
   fToast.init(context);
   Widget toast = Container(
     width: MediaQuery.of(context).size.width - 64,
-    padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 20.0),
+    padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 14),
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(16.0),
       gradient: CustomColors.toastMessageGradient,
