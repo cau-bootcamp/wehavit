@@ -310,11 +310,10 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                               text: '친구에게 퀵샷으로 응원을 보냈어요',
                               icon: const Icon(
                                 Icons.emoji_emotions,
-                                color: CustomColors.whWhite,
+                                color: CustomColors.whYellow,
                               ),
                             );
                           });
-                          ;
                         }
                       },
                       onQuickShotPointerMove: (event) async {
@@ -415,7 +414,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
         text: '친구에게 메시지로 응원을 보냈어요',
         icon: const Icon(
           Icons.emoji_emotions,
-          color: CustomColors.whWhite,
+          color: CustomColors.whYellow,
         ),
       );
     });
@@ -563,7 +562,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
             text: '친구에게 이모지로 응원을 보냈어요',
             icon: const Icon(
               Icons.emoji_emotions,
-              color: CustomColors.whWhite,
+              color: CustomColors.whYellow,
             ),
           );
         },
