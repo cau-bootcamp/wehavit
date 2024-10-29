@@ -426,6 +426,10 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
             reverse: true,
             onPageChanged: (index, reason) async {
               if (index == viewModel.calendartMondayDateList.length - 1) {
+                if (viewModel.calendartMondayDateList.first
+                    .isBefore(widget.groupEntity.groupCreatedAt)) {
+                  return;
+                }
                 // 마지막 페이지에 도달했을 때 추가 요소를 추가합니다.
                 viewModel.calendartMondayDateList.insert(
                   0,
