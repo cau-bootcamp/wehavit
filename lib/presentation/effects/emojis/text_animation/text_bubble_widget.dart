@@ -225,10 +225,18 @@ class _TextBubbleWidgetState extends State<TextBubbleWidget>
                             _disappearAnimationController.value,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8.0),
-                          child: CircleAvatar(
-                            radius: 30,
-                            backgroundColor: Colors.grey,
-                            foregroundImage: NetworkImage(widget.userImageUrl),
+                          child: Container(
+                            padding: const EdgeInsets.all(2),
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                            child: CircleAvatar(
+                              radius: 30,
+                              backgroundColor: Colors.grey,
+                              foregroundImage:
+                                  NetworkImage(widget.userImageUrl),
+                            ),
                           ),
                         ),
                       ),

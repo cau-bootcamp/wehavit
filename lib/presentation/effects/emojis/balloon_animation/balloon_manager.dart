@@ -187,16 +187,23 @@ class BalloonParticleWidget extends StatelessWidget {
           notifyWidgetIsDisposed();
         },
         child: Container(
-          clipBehavior: Clip.hardEdge,
-          width: radius,
-          height: radius,
+          padding: const EdgeInsets.all(2),
           decoration: const BoxDecoration(
-            color: Colors.grey,
+            color: Colors.white,
             shape: BoxShape.circle,
           ),
-          child: Image(
-            fit: BoxFit.cover,
-            image: NetworkImage(imageUrl),
+          child: Container(
+            clipBehavior: Clip.hardEdge,
+            width: radius,
+            height: radius,
+            decoration: const BoxDecoration(
+              color: Colors.grey,
+              shape: BoxShape.circle,
+            ),
+            child: Image(
+              fit: BoxFit.cover,
+              image: NetworkImage(imageUrl),
+            ),
           ),
         ),
       ),
