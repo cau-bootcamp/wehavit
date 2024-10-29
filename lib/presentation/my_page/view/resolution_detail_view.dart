@@ -499,11 +499,15 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                 ),
               );
               final isFuture = viewModel.todayDate.isBefore(cellDate);
+              final isPast = widget.entity.startDate
+                      ?.subtract(const Duration(days: 1))
+                      .isAfter(cellDate) ??
+                  true;
 
               return Expanded(
                 child: GestureDetector(
                   onTapUp: (details) async {
-                    if (!isFuture) {
+                    if (!isFuture && !isPast) {
                       provider
                           .changeSelectedDate(
                         to: cellDate,
@@ -540,7 +544,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                           BoxShadow(
                             offset: const Offset(0, 4),
                             blurRadius: 6,
-                            color: isFuture
+                            color: (isFuture || isPast)
                                 ? CustomColors.whGrey
                                 : cellDate == viewModel.selectedDate
                                     ? CustomColors.whYellow
@@ -561,7 +565,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
-                                  color: isFuture ||
+                                  color: (isFuture || isPast) ||
                                           cellDate != viewModel.selectedDate
                                       ? CustomColors.whPlaceholderGrey
                                       : CustomColors.whBlack,
@@ -581,7 +585,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                                     fontFamily: 'Giants',
                                     fontSize: 24,
                                     fontWeight: FontWeight.w700,
-                                    color: isFuture ||
+                                    color: (isFuture || isPast) ||
                                             cellDate != viewModel.selectedDate
                                         ? CustomColors.whPlaceholderGrey
                                         : CustomColors.whBlack,
@@ -610,7 +614,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                                       fontFamily: 'Giants',
                                       fontSize: 24,
                                       fontWeight: FontWeight.w700,
-                                      color: isFuture ||
+                                      color: (isFuture || isPast) ||
                                               cellDate != viewModel.selectedDate
                                           ? CustomColors.whPlaceholderGrey
                                           : CustomColors.whBlack,
@@ -637,6 +641,11 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
           reverse: true,
           onPageChanged: (index, reason) async {
             if (index == viewModel.calendartMondayDateList.length - 1) {
+              if (widget.entity.startDate
+                      ?.isAfter(viewModel.calendartMondayDateList.first) ??
+                  true) {
+                return;
+              }
               // 마지막 페이지에 도달했을 때 추가 요소를 추가합니다.
               viewModel.calendartMondayDateList.insert(
                 0,
