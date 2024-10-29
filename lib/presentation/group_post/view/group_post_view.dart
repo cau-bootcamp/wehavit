@@ -284,11 +284,14 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                   ),
                 );
                 final isFuture = viewModel.todayDate.isBefore(cellDate);
+                final isPast = widget.groupEntity.groupCreatedAt
+                    .subtract(const Duration(days: 1))
+                    .isAfter(cellDate);
 
                 return Expanded(
                   child: GestureDetector(
                     onTapUp: (details) async {
-                      if (!isFuture) {
+                      if (!isFuture && !isPast) {
                         provider
                             .changeSelectedDate(
                           to: cellDate,
@@ -325,7 +328,7 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                             BoxShadow(
                               offset: const Offset(0, 4),
                               blurRadius: 6,
-                              color: isFuture
+                              color: (isFuture || isPast)
                                   ? CustomColors.whGrey
                                   : cellDate == viewModel.selectedDate
                                       ? CustomColors.whYellow
@@ -346,7 +349,7 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
-                                    color: isFuture ||
+                                    color: (isFuture || isPast) ||
                                             cellDate != viewModel.selectedDate
                                         ? CustomColors.whPlaceholderGrey
                                         : CustomColors.whBlack,
@@ -358,7 +361,7 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                               child: FittedBox(
                                 fit: BoxFit.scaleDown,
                                 child: Visibility(
-                                  visible: !isFuture,
+                                  visible: !(isFuture || isPast),
                                   replacement: Text(
                                     '-',
                                     style: TextStyle(
@@ -366,7 +369,7 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                       fontFamily: 'Giants',
                                       fontSize: 24,
                                       fontWeight: FontWeight.w700,
-                                      color: isFuture ||
+                                      color: (isFuture || isPast) ||
                                               cellDate != viewModel.selectedDate
                                           ? CustomColors.whPlaceholderGrey
                                           : CustomColors.whBlack,
@@ -395,7 +398,7 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                         fontFamily: 'Giants',
                                         fontSize: 24,
                                         fontWeight: FontWeight.w700,
-                                        color: isFuture ||
+                                        color: (isFuture || isPast) ||
                                                 cellDate !=
                                                     viewModel.selectedDate
                                             ? CustomColors.whPlaceholderGrey
