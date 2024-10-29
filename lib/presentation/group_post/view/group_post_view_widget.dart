@@ -298,11 +298,22 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                               await reactionCameraModelProvider
                                   .endOnCapturingArea();
 
-                          await provider.sendImageReaction(
+                          await provider
+                              .sendImageReaction(
                             entity: widget.confirmPostEntity,
                             imageFilePath: imageFilePath,
                             myUserEntity: myUserEntity,
-                          );
+                          )
+                              .whenComplete(() {
+                            showToastMessage(
+                              context,
+                              text: '친구에게 퀵샷으로 응원을 보냈어요',
+                              icon: const Icon(
+                                Icons.emoji_emotions,
+                                color: CustomColors.whYellow,
+                              ),
+                            );
+                          });
                         }
                       },
                       onQuickShotPointerMove: (event) async {
@@ -391,10 +402,22 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
   Future<void> sendMessageReaction(
     ConfirmPostEntity confirmPostEntity,
   ) async {
-    await ref.read(groupPostViewModelProvider.notifier).sendTextReaction(
+    await ref
+        .read(groupPostViewModelProvider.notifier)
+        .sendTextReaction(
           entity: confirmPostEntity,
           myUserEntity: myUserEntity,
-        );
+        )
+        .whenComplete(() {
+      showToastMessage(
+        context,
+        text: '친구에게 메시지로 응원을 보냈어요',
+        icon: const Icon(
+          Icons.emoji_emotions,
+          color: CustomColors.whYellow,
+        ),
+      );
+    });
   }
 
   Future<dynamic> showEmojiSheet(
@@ -527,9 +550,22 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
         );
       },
     ).whenComplete(() async {
-      await provider.sendEmojiReaction(
+      await provider
+          .sendEmojiReaction(
         entity: widget.confirmPostEntity,
         myUserEntity: myUserEntity,
+      )
+          .whenComplete(
+        () {
+          showToastMessage(
+            context,
+            text: '친구에게 이모지로 응원을 보냈어요',
+            icon: const Icon(
+              Icons.emoji_emotions,
+              color: CustomColors.whYellow,
+            ),
+          );
+        },
       );
 
       viewModel.countSend = 0;
