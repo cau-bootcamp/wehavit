@@ -30,7 +30,7 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
         ref.read(reactionCameraWidgetModelProvider.notifier);
 
     _reactionCameraWidgetModelProvider.initializeCameraWidgetSetting(context);
-    await _reactionCameraWidgetModelProvider.initializeCamera();
+    // await _reactionCameraWidgetModelProvider.initializeCamera();
   }
 
   @override
