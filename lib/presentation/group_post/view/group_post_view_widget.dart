@@ -252,8 +252,9 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                       onEmojiPressed: () async {
                         showEmojiSheet(viewModel, provider, context);
                       },
-                      onQuickShotPointerDown: (event) {
+                      onQuickShotPointerDown: (event) async {
                         isTouchMoved = false;
+                        await reactionCameraModelProvider.initializeCamera();
 
                         if (reactionCameraModel.cameraController == null) {
                           return;
@@ -284,13 +285,6 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                           return;
                         }
 
-                        await reactionCameraModelProvider
-                            .setFocusingModeTo(false);
-
-                        if (reactionCameraModel.cameraController == null) {
-                          return;
-                        }
-
                         if (ref
                             .read(reactionCameraWidgetModelProvider)
                             .isPosInCapturingArea) {
@@ -315,6 +309,11 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                             );
                           });
                         }
+
+                        await reactionCameraModelProvider
+                            .setFocusingModeTo(false);
+
+                        await reactionCameraModelProvider.disposeCamera();
                       },
                       onQuickShotPointerMove: (event) async {
                         isTouchMoved = true;

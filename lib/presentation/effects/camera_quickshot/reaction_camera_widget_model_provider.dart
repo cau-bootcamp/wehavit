@@ -49,6 +49,13 @@ class ReactionCameraWidgetModelProvider
     return Future(() => false);
   }
 
+  Future<void> disposeCamera() async {
+    state.cameraController?.dispose();
+    state.cameraController = null;
+
+    return;
+  }
+
   void initializeCameraWidgetSetting(BuildContext context) {
     state.screenWidth = MediaQuery.of(context).size.width;
     state.screenHeight = MediaQuery.of(context).size.height;
@@ -63,12 +70,11 @@ class ReactionCameraWidgetModelProvider
 
   Future<void> setFocusingModeTo(bool newValue) async {
     if (newValue) {
-      state.cameraController?.resumePreview();
+      //
     } else {
       // 사용하지 않을 때는 멀리 치워놓기
       state.cameraButtonOriginXOffset = -100;
       state.cameraButtonOriginYOffset = -100;
-      state.cameraController?.pausePreview();
     }
 
     state = state.copyWith(isFocusingMode: newValue);
