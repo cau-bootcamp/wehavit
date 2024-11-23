@@ -16,7 +16,7 @@ dependencies:
   flutter_riverpod: ^2.4.6
   hooks_riverpod: ^2.4.6
   freezed_annotation: ^2.4.1
-  json_annotation: ^4.8.1
+  json_annotation: ^4.9.0
   go_router: ^14.1.4
   shared_preferences: ^2.2.2
   flutter_screenutil: ^5.9.0
