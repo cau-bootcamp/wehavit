@@ -40,6 +40,8 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
   late ReactionCameraWidgetModelProvider reactionCameraModelProvider =
       ref.read(reactionCameraWidgetModelProvider.notifier);
 
+  bool isShowingQuickshotPresets = false;
+
   @override
   void initState() {
     super.initState();
@@ -69,6 +71,8 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                 (entity) => entity,
               ),
             );
+
+    ref.read(groupPostViewModelProvider.notifier).getQuickshotPresets();
   }
 
   bool isShowingCommentField = false;
@@ -194,51 +198,219 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                       right: 8.0,
                       bottom: 12.0,
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Stack(
+                      alignment: Alignment.bottomRight,
                       children: [
-                        Stack(
-                          alignment: Alignment.centerRight,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            UserProfileBar(
-                              futureUserEntity: futureUserDataEntity,
-                              secondaryText:
-                                  // ignore: lines_longer_than_80_chars
-                                  '${widget.confirmPostEntity.createdAt!.hour >= 12 ? '오후' : '오전'} ${widget.confirmPostEntity.createdAt!.hour > 12 ? widget.confirmPostEntity.createdAt!.hour - 12 : widget.confirmPostEntity.createdAt!.hour}시 ${widget.confirmPostEntity.createdAt!.minute}분',
-                            ),
-                            if (widget.confirmPostEntity.hasRested == true)
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16.0),
-                                  color: CustomColors.whRed,
+                            Stack(
+                              alignment: Alignment.centerRight,
+                              children: [
+                                UserProfileBar(
+                                  futureUserEntity: futureUserDataEntity,
+                                  secondaryText:
+                                      // ignore: lines_longer_than_80_chars
+                                      '${widget.confirmPostEntity.createdAt!.hour >= 12 ? '오후' : '오전'} ${widget.confirmPostEntity.createdAt!.hour > 12 ? widget.confirmPostEntity.createdAt!.hour - 12 : widget.confirmPostEntity.createdAt!.hour}시 ${widget.confirmPostEntity.createdAt!.minute}분',
                                 ),
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 2.0,
-                                  horizontal: 6.0,
-                                ),
-                                child: const Text(
-                                  '오늘은 SKIP',
-                                  style: TextStyle(
-                                    fontSize: 12.0,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: 'Pretendard',
-                                    color: CustomColors.whWhite,
+                                if (widget.confirmPostEntity.hasRested == true)
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16.0),
+                                      color: CustomColors.whRed,
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 2.0,
+                                      horizontal: 6.0,
+                                    ),
+                                    child: const Text(
+                                      '오늘은 SKIP',
+                                      style: TextStyle(
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'Pretendard',
+                                        color: CustomColors.whWhite,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
+                              ],
+                            ),
+                            // const SizedBox(height: 12.0),
+
+                            ResolutionLinearGaugeWidget(
+                              resolutionEntity: resolutionEntity,
+                              futureDoneList: resolutionDoneListForWrittenWeek,
+                            ),
+
+                            const SizedBox(height: 12.0),
+                            ConfirmPostContentWidget(
+                              confirmPostEntity: widget.confirmPostEntity,
+                            ),
                           ],
                         ),
-                        // const SizedBox(height: 12.0),
+                        if (isShowingQuickshotPresets)
+                          Container(
+                            height: 48,
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 4,
+                              horizontal: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: CustomColors.whDarkBlack.withOpacity(0.9),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                if (viewModel.quickshotPresets.isEmpty)
+                                  const Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 4.0),
+                                    child: Text(
+                                      // ignore: lines_longer_than_80_chars
+                                      '미리 퀵샷을 찍어두고 보낼 수도 있어요\n저장 없이 보내려면 버튼을 꾹! 눌러주세요',
+                                      style: TextStyle(
+                                        color: CustomColors.whWhite,
+                                        height: 1.1,
+                                        fontSize: 13.0,
+                                      ),
+                                    ),
+                                  ),
+                                ...viewModel.quickshotPresets.map((entity) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(right: 4.0),
+                                    child: Container(
+                                      width: 40,
+                                      height: 40,
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: CustomColors.whDarkBlack,
+                                        border: Border.all(
+                                          color: CustomColors.whWhite,
+                                        ),
+                                      ),
+                                      clipBehavior: Clip.hardEdge,
+                                      child: MaterialButton(
+                                        onPressed: () {
+                                          // TODO: send preset image
+                                        },
+                                        onLongPress: () {
+                                          // TODO: remove preset
+                                        },
+                                        padding: EdgeInsets.zero,
+                                        child: ProfileImageCircleWidget(
+                                          size: 40,
+                                          url: entity.url,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }),
+                                // 추가 버튼
+                                Container(
+                                  width: 40,
+                                  height: 40,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: CustomColors.whDarkBlack,
+                                    border: Border.all(
+                                      color: CustomColors.whWhite,
+                                    ),
+                                  ),
+                                  clipBehavior: Clip.hardEdge,
+                                  child: Listener(
+                                    onPointerDown: (event) async {
+                                      isTouchMoved = false;
+                                      await reactionCameraModelProvider
+                                          .initializeCamera();
 
-                        ResolutionLinearGaugeWidget(
-                          resolutionEntity: resolutionEntity,
-                          futureDoneList: resolutionDoneListForWrittenWeek,
-                        ),
+                                      if (reactionCameraModel
+                                              .cameraController ==
+                                          null) {
+                                        return;
+                                      }
 
-                        const SizedBox(height: 12.0),
-                        ConfirmPostContentWidget(
-                          confirmPostEntity: widget.confirmPostEntity,
-                        ),
+                                      panningPosition = Point(
+                                        event.position.dx,
+                                        event.position.dy,
+                                      );
+
+                                      reactionCameraModelProvider
+                                          .updatePanPosition(panningPosition);
+                                    },
+                                    onPointerUp: (event) async {
+                                      if (!isTouchMoved) {
+                                        showToastMessage(
+                                          context,
+                                          text: '추가 버튼을 누른 채로 드래그 해주세요!',
+                                          icon: const Icon(
+                                            Icons.warning,
+                                            color: CustomColors.whYellow,
+                                          ),
+                                        );
+                                        return;
+                                      }
+
+                                      if (ref
+                                          .read(
+                                            reactionCameraWidgetModelProvider,
+                                          )
+                                          .isPosInCapturingArea) {
+                                        final imageFilePath =
+                                            await reactionCameraModelProvider
+                                                .endOnCapturingArea();
+
+                                        reactionCameraModelProvider
+                                            .setFocusingModeTo(false);
+
+                                        reactionCameraModelProvider
+                                            .disposeCamera();
+
+                                        await provider
+                                            .uploadQuickshotPreset(
+                                          imageFilePath: imageFilePath,
+                                        )
+                                            .whenComplete(() async {
+                                          await provider.getQuickshotPresets();
+                                        }).whenComplete(() {
+                                          setState(() {});
+                                        });
+                                      }
+
+                                      reactionCameraModelProvider
+                                          .setFocusingModeTo(false);
+
+                                      await reactionCameraModelProvider
+                                          .disposeCamera();
+                                    },
+                                    onPointerMove: (event) async {
+                                      isTouchMoved = true;
+                                      reactionCameraModelProvider
+                                          .setFocusingModeTo(true);
+
+                                      panningPosition = Point(
+                                        event.position.dx,
+                                        event.position.dy,
+                                      );
+
+                                      reactionCameraModelProvider
+                                          .updatePanPosition(panningPosition);
+
+                                      if (reactionCameraModel
+                                          .isPosInCapturingArea) {}
+                                    },
+                                    child: const Icon(
+                                      color: CustomColors.whBrightGrey,
+                                      Icons.add,
+                                      size: 20,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
                       ],
                     ),
                   ),
@@ -267,21 +439,14 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
 
                         reactionCameraModelProvider
                             .updatePanPosition(panningPosition);
-
-                        if (mounted) {
-                          setState(() {});
-                        }
                       },
                       onQuickShotPointerUp: (event) async {
                         if (!isTouchMoved) {
-                          showToastMessage(
-                            context,
-                            text: '퀵샷 버튼을 누르고 드래그 해주세요!',
-                            icon: const Icon(
-                              Icons.warning,
-                              color: CustomColors.whYellow,
-                            ),
-                          );
+                          setState(() {
+                            isShowingQuickshotPresets =
+                                !isShowingQuickshotPresets;
+                          });
+
                           return;
                         }
 
@@ -310,15 +475,13 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                           });
                         }
 
-                        await reactionCameraModelProvider
-                            .setFocusingModeTo(false);
+                        reactionCameraModelProvider.setFocusingModeTo(false);
 
                         await reactionCameraModelProvider.disposeCamera();
                       },
                       onQuickShotPointerMove: (event) async {
                         isTouchMoved = true;
-                        await reactionCameraModelProvider
-                            .setFocusingModeTo(true);
+                        reactionCameraModelProvider.setFocusingModeTo(true);
 
                         panningPosition = Point(
                           event.position.dx,

@@ -115,8 +115,7 @@ class UserModelRepositoryImpl implements UserModelRepository {
 
   @override
   EitherFuture<List<QuickshotPresetItemEntity>> getQuickshotPresets() {
-    // TODO: implement getQuickshotPresetUrls
-    throw UnimplementedError();
+    return _wehavitDatasource.getQuickshotPresets();
   }
 
   @override
@@ -130,7 +129,8 @@ class UserModelRepositoryImpl implements UserModelRepository {
 
   @override
   EitherFuture<void> removeQuickshotPreset(
-      QuickshotPresetItemEntity quickshotPresetItemEntity) {
+    QuickshotPresetItemEntity quickshotPresetItemEntity,
+  ) {
     // TODO: implement removeQuickshotPreset
     throw UnimplementedError();
   }

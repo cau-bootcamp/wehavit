@@ -68,7 +68,7 @@ class ReactionCameraWidgetModelProvider
     state.cameraButtonYOffset = state.cameraButtonOriginYOffset;
   }
 
-  Future<void> setFocusingModeTo(bool newValue) async {
+  void setFocusingModeTo(bool newValue) {
     if (newValue) {
       //
     } else {
@@ -76,8 +76,9 @@ class ReactionCameraWidgetModelProvider
       state.cameraButtonOriginXOffset = -100;
       state.cameraButtonOriginYOffset = -100;
     }
-
-    state = state.copyWith(isFocusingMode: newValue);
+    if (state.cameraController != null) {
+      state = state.copyWith(isFocusingMode: newValue);
+    }
   }
 
   void updatePanPosition(Point<double> position) {

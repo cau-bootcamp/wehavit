@@ -2809,4 +2809,29 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       );
     }
   }
+
+  @override
+  EitherFuture<List<QuickshotPresetItemEntity>> getQuickshotPresets() async {
+    try {
+      final userid = getMyUserId();
+
+      return firestore
+          .collection(
+            FirebaseCollectionName.getTargetUserQuickshotPresetCollectionName(
+              userid,
+            ),
+          )
+          .get()
+          .then((snapshot) {
+        return snapshot.docs.map((doc) {
+          return QuickshotPresetItemEntity.fromJson(doc.data())
+              .copyWith(id: doc.id);
+        }).toList();
+      }).then((result) {
+        return right(result);
+      });
+    } on Exception catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
 }

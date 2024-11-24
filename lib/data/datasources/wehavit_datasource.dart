@@ -236,4 +236,6 @@ abstract class WehavitDatasource {
   EitherFuture<void> uploadQuickshotPreset({
     required String quickshotImageUrl,
   });
+
+  EitherFuture<List<QuickshotPresetItemEntity>> getQuickshotPresets();
 }

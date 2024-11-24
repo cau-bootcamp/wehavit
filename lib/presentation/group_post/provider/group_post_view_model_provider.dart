@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
@@ -12,6 +13,8 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
     this.getAppliedUserListForGroupEntityUsecase,
     this._sendNotificationToTargetUserUsecase,
     this._getUserDataFromIdUsecase,
+    this._uploadQuickshotPresetUsecase,
+    this._getQuickshotPresetsUsecase,
   ) : super(GroupPostViewModel());
 
   final GetGroupConfirmPostListByDateUsecase
@@ -27,6 +30,8 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
   final SendNotificationToTargetUserUsecase
       _sendNotificationToTargetUserUsecase;
   final GetUserDataFromIdUsecase _getUserDataFromIdUsecase;
+  final UploadQuickshotPresetUsecase _uploadQuickshotPresetUsecase;
+  final GetQuickshotPresetsUsecase _getQuickshotPresetsUsecase;
 
   Future<void> loadConfirmPostEntityListFor({
     required DateTime dateTime,
@@ -129,6 +134,30 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
       },
     );
     state.commentEditingController.clear();
+  }
+
+  Future<void> uploadQuickshotPreset({
+    required String imageFilePath,
+  }) async {
+    await _uploadQuickshotPresetUsecase(localFileUrl: imageFilePath).then(
+      (result) => result.fold(
+        (failure) => false,
+        (success) => success,
+      ),
+    );
+  }
+
+  Future<void> getQuickshotPresets() async {
+    await _getQuickshotPresetsUsecase().then(
+      (result) => result.fold(
+        (failure) {
+          state.quickshotPresets = [];
+        },
+        (success) {
+          state.quickshotPresets = success;
+        },
+      ),
+    );
   }
 
   void setFocusingModeTo(bool enabled) {
