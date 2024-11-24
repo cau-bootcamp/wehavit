@@ -235,7 +235,7 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                         ),
                         child: SingleChildScrollView(
                           padding: const EdgeInsets.only(bottom: 20.0),
-                          physics: reactionCameraViewModel.isFocusingMode
+                          physics: reactionCameraViewModel.nonScrollMode
                               ? const NeverScrollableScrollPhysics()
                               : const AlwaysScrollableScrollPhysics(),
                           child: Column(

@@ -112,4 +112,27 @@ class UserModelRepositoryImpl implements UserModelRepository {
   EitherFuture<String> getUserFCMMessageToken({required String uid}) {
     return _wehavitDatasource.getUserFCMMessageToken(uid: uid);
   }
+
+  @override
+  EitherFuture<List<QuickshotPresetItemEntity>> getQuickshotPresets() {
+    return _wehavitDatasource.getQuickshotPresets();
+  }
+
+  @override
+  EitherFuture<void> uploadQuickshotPreset(
+    String quickshotImageUrl,
+  ) {
+    return _wehavitDatasource.uploadQuickshotPreset(
+      quickshotImageUrl: quickshotImageUrl,
+    );
+  }
+
+  @override
+  EitherFuture<void> removeQuickshotPreset(
+    QuickshotPresetItemEntity quickshotPresetItemEntity,
+  ) {
+    return _wehavitDatasource.removeQuickshotPreset(
+      entity: quickshotPresetItemEntity,
+    );
+  }
 }

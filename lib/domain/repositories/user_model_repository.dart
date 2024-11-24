@@ -50,4 +50,14 @@ abstract class UserModelRepository {
   EitherFuture<void> updateFCMToken({required bool delete});
 
   EitherFuture<String> getUserFCMMessageToken({required String uid});
+
+  EitherFuture<List<QuickshotPresetItemEntity>> getQuickshotPresets();
+
+  EitherFuture<void> uploadQuickshotPreset(
+    String quickshotImageUrl,
+  );
+
+  EitherFuture<void> removeQuickshotPreset(
+    QuickshotPresetItemEntity quickshotPresetItemEntity,
+  );
 }

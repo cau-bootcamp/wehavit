@@ -10,6 +10,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/data/datasources/datasources.dart';
 import 'package:wehavit/data/models/firebase_models/group_announcement_model/firebase_group_announcement_model.dart';
+import 'package:wehavit/data/models/firebase_models/reaction_model/firebase_quickshot_preset_model.dart';
 import 'package:wehavit/data/models/models.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 
@@ -533,6 +534,10 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     required String localPhotoUrl,
   }) async {
     try {
+      if (localPhotoUrl.isEmpty) {
+        throw Exception('no file');
+      }
+
       String storagePath =
           FirebaseStorageName.getConfirmPostQuickShotReactionStorageName(
         entity.owner!,
@@ -2758,6 +2763,100 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       }
     } on Exception catch (e) {
       return left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  EitherFuture<String> uploadQuickshotImageToPresetStorage({
+    required localPhotoUrl,
+  }) async {
+    try {
+      final id = getMyUserId();
+
+      String storagePath =
+          FirebaseStorageName.getUserQuickshotPresetStorageName(id);
+      String filePath = '$storagePath/${DateTime.now().toIso8601String()}';
+
+      final ref = FirebaseStorage.instance.ref(filePath);
+
+      await ref.putFile(File(localPhotoUrl));
+
+      return Future(() async => right(await ref.getDownloadURL()));
+    } on Exception catch (e) {
+      return Future(() => left(Failure(e.toString())));
+    }
+  }
+
+  @override
+  EitherFuture<void> uploadQuickshotPreset({
+    required String quickshotImageUrl,
+  }) async {
+    try {
+      final userId = getMyUserId();
+
+      final model = FirebaseQuickshotPresetModel(
+        url: quickshotImageUrl,
+        createdAt: DateTime.now(),
+      );
+      await firestore
+          .collection(
+            FirebaseCollectionName.getTargetUserQuickshotPresetCollectionName(
+              userId,
+            ),
+          )
+          .add(model.toJson());
+
+      return Future(() => right(null));
+    } on Exception catch (e) {
+      return Future(
+        () => left(Failure(e.toString())),
+      );
+    }
+  }
+
+  @override
+  EitherFuture<List<QuickshotPresetItemEntity>> getQuickshotPresets() async {
+    try {
+      final userid = getMyUserId();
+
+      return firestore
+          .collection(
+            FirebaseCollectionName.getTargetUserQuickshotPresetCollectionName(
+              userid,
+            ),
+          )
+          .get()
+          .then((snapshot) {
+        return snapshot.docs.map((doc) {
+          return QuickshotPresetItemEntity.fromJson(doc.data())
+              .copyWith(id: doc.id);
+        }).toList();
+      }).then((result) {
+        return right(result);
+      });
+    } on Exception catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  EitherFuture<void> removeQuickshotPreset({
+    required QuickshotPresetItemEntity entity,
+  }) async {
+    try {
+      final myUid = getMyUserId();
+
+      await firestore
+          .collection(
+            FirebaseCollectionName.getTargetUserQuickshotPresetCollectionName(
+              myUid,
+            ),
+          )
+          .doc(entity.id)
+          .delete();
+      return Future(() => right(null));
+    } on Exception catch (e) {
+      return Future(() => left(Failure(e.toString())));
     }
   }
 }

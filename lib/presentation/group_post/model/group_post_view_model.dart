@@ -73,4 +73,8 @@ class PostViewModel {
   // Text Reaction UI Variables
   TextEditingController commentEditingController = TextEditingController();
   FocusNode commentFieldFocus = FocusNode();
+
+  // Quickshot Presets
+
+  List<QuickshotPresetItemEntity> quickshotPresets = [];
 }
