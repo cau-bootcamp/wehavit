@@ -10,6 +10,6 @@ class GetQuickshotPresetUrlsUsecase {
   final UserModelRepository _userModelRepository;
 
   EitherFuture<List<QuickshotPresetItemEntity>> call() async {
-    return _userModelRepository.getQuickshotPresetUrls();
+    return _userModelRepository.getQuickshotPresets();
   }
 }

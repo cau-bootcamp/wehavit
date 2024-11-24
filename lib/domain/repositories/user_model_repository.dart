@@ -51,5 +51,13 @@ abstract class UserModelRepository {
 
   EitherFuture<String> getUserFCMMessageToken({required String uid});
 
-  EitherFuture<List<QuickshotPresetItemEntity>> getQuickshotPresetUrls();
+  EitherFuture<List<QuickshotPresetItemEntity>> getQuickshotPresets();
+
+  EitherFuture<void> uploadQuickshotPreset(
+    QuickshotPresetItemEntity quickshotPresetItemEntity,
+  );
+
+  EitherFuture<void> removeQuickshotPreset(
+    QuickshotPresetItemEntity quickshotPresetItemEntity,
+  );
 }
