@@ -23,7 +23,7 @@ class PhotoRepositoryImpl implements PhotoRepository {
 
   @override
   EitherFuture<String> uploadQuickshotPresetImage({required localPhotoUrl}) {
-    final uploadResult = _wehavitDatasource.uploadQuickshotToPreset(
+    final uploadResult = _wehavitDatasource.uploadQuickshotImageToPresetStorage(
       localPhotoUrl: localPhotoUrl,
     );
     return uploadResult;

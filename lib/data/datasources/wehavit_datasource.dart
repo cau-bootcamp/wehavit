@@ -228,4 +228,12 @@ abstract class WehavitDatasource {
   });
 
   EitherFuture<String> getUserFCMMessageToken({required String uid});
+
+  EitherFuture<String> uploadQuickshotImageToPresetStorage({
+    required localPhotoUrl,
+  });
+
+  EitherFuture<void> uploadQuickshotPreset({
+    required String quickshotImageUrl,
+  });
 }

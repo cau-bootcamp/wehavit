@@ -80,4 +80,8 @@ class FirebaseCollectionName {
   static final liveWaitingUsers = FirebaseAuth.instance.currentUser != null
       ? 'live_waiting_users'
       : 'invalid_address';
+
+  static String getTargetUserQuickshotPresetCollectionName(String targetUid) {
+    return 'users/$targetUid/quickshot_presets';
+  }
 }

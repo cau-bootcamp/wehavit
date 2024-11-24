@@ -123,8 +123,9 @@ class UserModelRepositoryImpl implements UserModelRepository {
   EitherFuture<void> uploadQuickshotPreset(
     String quickshotImageUrl,
   ) {
-    // TODO: implement uploadQuickshotPreset
-    throw UnimplementedError();
+    return _wehavitDatasource.uploadQuickshotPreset(
+      quickshotImageUrl: quickshotImageUrl,
+    );
   }
 
   @override
