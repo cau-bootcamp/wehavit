@@ -292,8 +292,23 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                                       ),
                                       clipBehavior: Clip.hardEdge,
                                       child: MaterialButton(
-                                        onPressed: () {
-                                          // TODO: send preset image
+                                        onPressed: () async {
+                                          await provider
+                                              .sendPresetImageReaction(
+                                            presetEntity: entity,
+                                            entity: widget.confirmPostEntity,
+                                            myUserEntity: myUserEntity,
+                                          )
+                                              .whenComplete(() {
+                                            showToastMessage(
+                                              context,
+                                              text: '친구에게 퀵샷으로 응원을 보냈어요',
+                                              icon: const Icon(
+                                                Icons.emoji_emotions,
+                                                color: CustomColors.whYellow,
+                                              ),
+                                            );
+                                          });
                                         },
                                         onLongPress: () {
                                           // TODO: remove preset
@@ -426,8 +441,8 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                       },
                       onQuickShotPointerDown: (event) async {
                         isTouchMoved = false;
-                        await reactionCameraModelProvider.initializeCamera();
 
+                        reactionCameraModelProvider.initializeCamera();
                         if (reactionCameraModel.cameraController == null) {
                           return;
                         }

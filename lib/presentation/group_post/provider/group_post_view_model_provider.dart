@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:collection/collection.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
 import 'package:wehavit/presentation/group_post/group_post.dart';
@@ -85,6 +89,51 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
     required UserDataEntity? myUserEntity,
   }) async {
     _sendQuickShotReactionToConfirmPostUsecase((entity, imageFilePath))
+        .then(
+      (result) => result.fold(
+        (failure) => false,
+        (success) => success,
+      ),
+    )
+        .then(
+      (isSendingReactionSuccess) {
+        if (!isSendingReactionSuccess || myUserEntity == null) {
+          return;
+        }
+
+        sendReactionNotification(
+          myUserEntity: myUserEntity,
+          postEntity: entity,
+        );
+      },
+    );
+  }
+
+  Future<void> sendPresetImageReaction({
+    required QuickshotPresetItemEntity presetEntity,
+    required ConfirmPostEntity entity,
+    required UserDataEntity? myUserEntity,
+  }) async {
+    Dio dio = Dio();
+    final tempDir = (await getTemporaryDirectory()).path;
+
+    final tempDirPath = '$tempDir/preset_image';
+    final tempFileName = presetEntity.id;
+
+    if (!(await Directory(tempDirPath).exists())) {
+      await Directory(tempDirPath).create(recursive: true);
+    }
+    final filePath = '$tempDirPath/$tempFileName';
+    final file = File('$tempDirPath/$tempFileName');
+    if (!(await file.exists())) {
+      final response = await dio.download(presetEntity.url, filePath);
+
+      if (response.statusCode != 200) {
+        return;
+      }
+    }
+
+    _sendQuickShotReactionToConfirmPostUsecase((entity, filePath))
         .then(
       (result) => result.fold(
         (failure) => false,
