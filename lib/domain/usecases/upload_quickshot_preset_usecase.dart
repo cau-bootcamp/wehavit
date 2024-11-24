@@ -18,7 +18,7 @@ class UploadQuickshotPresetUsecase {
   }) async {
     try {
       final networkImageUrl = await _photoRepository
-          .uploadQuickshotPresetImage(localFileUrl: localFileUrl)
+          .uploadQuickshotPresetImage(localPhotoUrl: localFileUrl)
           .then(
             (value) => value.fold(
               (failure) => null,
@@ -41,13 +41,8 @@ class UploadQuickshotPresetUsecase {
         return Future(() => left(const Failure('cannot get uid')));
       }
 
-      final quickshotPresetItemEntity = QuickshotPresetItemEntity(
-        createdAt: DateTime.now(),
-        url: networkImageUrl,
-      );
-
       return await _userModelRepository
-          .uploadQuickshotPreset(quickshotPresetItemEntity)
+          .uploadQuickshotPreset(networkImageUrl)
           .then((result) {
         return result.fold((failure) {
           return left(failure);

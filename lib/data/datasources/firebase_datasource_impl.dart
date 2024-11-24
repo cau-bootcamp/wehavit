@@ -2760,4 +2760,21 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       return left(Failure(e.toString()));
     }
   }
+
+  @override
+  EitherFuture<String> uploadQuickshotToPreset({required localPhotoUrl}) async {
+    try {
+      final id = getMyUserId();
+
+      String storagePath =
+          FirebaseStorageName.getUserQuickshotPresetStorageName(id);
+      final ref = FirebaseStorage.instance.ref(storagePath);
+
+      await ref.putFile(File(localPhotoUrl));
+
+      return Future(() async => right(await ref.getDownloadURL()));
+    } on Exception catch (e) {
+      return Future(() => left(Failure(e.toString())));
+    }
+  }
 }

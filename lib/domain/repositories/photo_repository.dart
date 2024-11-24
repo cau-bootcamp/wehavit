@@ -8,6 +8,6 @@ abstract class PhotoRepository {
   });
 
   EitherFuture<String> uploadQuickshotPresetImage({
-    required localFileUrl,
+    required localPhotoUrl,
   });
 }

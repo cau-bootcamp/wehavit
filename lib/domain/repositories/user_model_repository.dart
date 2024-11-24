@@ -54,7 +54,7 @@ abstract class UserModelRepository {
   EitherFuture<List<QuickshotPresetItemEntity>> getQuickshotPresets();
 
   EitherFuture<void> uploadQuickshotPreset(
-    QuickshotPresetItemEntity quickshotPresetItemEntity,
+    String quickshotImageUrl,
   );
 
   EitherFuture<void> removeQuickshotPreset(

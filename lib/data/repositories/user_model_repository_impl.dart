@@ -114,8 +114,23 @@ class UserModelRepositoryImpl implements UserModelRepository {
   }
 
   @override
-  EitherFuture<List<QuickshotPresetItemEntity>> getQuickshotPresetUrls() {
+  EitherFuture<List<QuickshotPresetItemEntity>> getQuickshotPresets() {
     // TODO: implement getQuickshotPresetUrls
+    throw UnimplementedError();
+  }
+
+  @override
+  EitherFuture<void> uploadQuickshotPreset(
+    String quickshotImageUrl,
+  ) {
+    // TODO: implement uploadQuickshotPreset
+    throw UnimplementedError();
+  }
+
+  @override
+  EitherFuture<void> removeQuickshotPreset(
+      QuickshotPresetItemEntity quickshotPresetItemEntity) {
+    // TODO: implement removeQuickshotPreset
     throw UnimplementedError();
   }
 }
