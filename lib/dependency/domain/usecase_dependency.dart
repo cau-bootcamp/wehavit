@@ -482,6 +482,15 @@ final getQuickshotPresetsUsecaseProvider =
   );
 });
 
+final removeQuickshotPresetUsecaseProvider =
+    Provider<RemoveQuickshotPresetUsecase>((ref) {
+  final userModelRepository = ref.watch(userModelRepositoryProvider);
+
+  return RemoveQuickshotPresetUsecase(
+    userModelRepository,
+  );
+});
+
 final uploadQuickshotPresetUsecaseProvider =
     Provider<UploadQuickshotPresetUsecase>((ref) {
   final userModelRepository = ref.watch(userModelRepositoryProvider);

@@ -169,6 +169,9 @@ final groupPostViewModelProvider = StateNotifierProvider.autoDispose<
       ref.watch(uploadQuickshotPresetUsecaseProvider);
   final getQuickshotPresetsUsecase =
       ref.watch(getQuickshotPresetsUsecaseProvider);
+  final removeQuickshotPresetUsecase =
+      ref.watch(removeQuickshotPresetUsecaseProvider);
+
   return GroupPostViewModelProvider(
     getGroupConfirmPostListByDateUsecase,
     sendEmojiReactionToConfirmPostUsecase,
@@ -179,6 +182,7 @@ final groupPostViewModelProvider = StateNotifierProvider.autoDispose<
     getUserDataFromIdUsecase,
     uploadQuickshotPresetUsecase,
     getQuickshotPresetsUsecase,
+    removeQuickshotPresetUsecase,
   );
 });
 

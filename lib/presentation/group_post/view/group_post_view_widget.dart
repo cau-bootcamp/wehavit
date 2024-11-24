@@ -77,6 +77,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
 
   bool isShowingCommentField = false;
   bool isTouchMoved = false;
+  bool _isFunctionCalled = false;
 
   late GroupPostViewModel viewModel;
   late GroupPostViewModelProvider provider;
@@ -310,8 +311,43 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                                             );
                                           });
                                         },
-                                        onLongPress: () {
-                                          // TODO: remove preset
+                                        onLongPress: () async {
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                content: const Text(
+                                                  '저장된 퀵샷을 지우시겠어요?',
+                                                ),
+                                                actions: <Widget>[
+                                                  ElevatedButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop(); //창 닫기
+                                                    },
+                                                    child: const Text('아니요'),
+                                                  ),
+                                                  ElevatedButton(
+                                                    onPressed: () {
+                                                      provider
+                                                          .removeQuickshotPresetEntity(
+                                                        entity: entity,
+                                                      )
+                                                          .whenComplete(
+                                                              () async {
+                                                        await provider
+                                                            .getQuickshotPresets();
+                                                        setState(() {});
+                                                        Navigator.of(context)
+                                                            .pop(); //창 닫기
+                                                      });
+                                                    },
+                                                    child: const Text('네'),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
                                         },
                                         padding: EdgeInsets.zero,
                                         child: ProfileImageCircleWidget(
@@ -338,14 +374,12 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                                   child: Listener(
                                     onPointerDown: (event) async {
                                       isTouchMoved = false;
-                                      await reactionCameraModelProvider
-                                          .initializeCamera();
+                                      setState(() {
+                                        reactionCameraModel.isAddingPreset =
+                                            true;
+                                      });
 
-                                      if (reactionCameraModel
-                                              .cameraController ==
-                                          null) {
-                                        return;
-                                      }
+                                      reactionCameraModel.nonScrollMode = true;
 
                                       panningPosition = Point(
                                         event.position.dx,
@@ -356,6 +390,9 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                                           .updatePanPosition(panningPosition);
                                     },
                                     onPointerUp: (event) async {
+                                      reactionCameraModel.nonScrollMode = false;
+
+                                      _isFunctionCalled = false;
                                       if (!isTouchMoved) {
                                         showToastMessage(
                                           context,
@@ -370,8 +407,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
 
                                       if (ref
                                           .read(
-                                            reactionCameraWidgetModelProvider,
-                                          )
+                                              reactionCameraWidgetModelProvider)
                                           .isPosInCapturingArea) {
                                         final imageFilePath =
                                             await reactionCameraModelProvider
@@ -379,9 +415,6 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
 
                                         reactionCameraModelProvider
                                             .setFocusingModeTo(false);
-
-                                        reactionCameraModelProvider
-                                            .disposeCamera();
 
                                         await provider
                                             .uploadQuickshotPreset(
@@ -401,9 +434,28 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                                           .disposeCamera();
                                     },
                                     onPointerMove: (event) async {
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback((_) {
+                                        reactionCameraModelProvider
+                                            .setFocusingModeTo(true);
+                                      });
+
+                                      if (ref
+                                              .read(
+                                                reactionCameraWidgetModelProvider,
+                                              )
+                                              .cameraController ==
+                                          null) {
+                                        if (!_isFunctionCalled) {
+                                          reactionCameraModelProvider
+                                              .initializeCamera();
+                                          _isFunctionCalled = true;
+                                        }
+
+                                        return;
+                                      }
+
                                       isTouchMoved = true;
-                                      reactionCameraModelProvider
-                                          .setFocusingModeTo(true);
 
                                       panningPosition = Point(
                                         event.position.dx,
@@ -412,9 +464,6 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
 
                                       reactionCameraModelProvider
                                           .updatePanPosition(panningPosition);
-
-                                      if (reactionCameraModel
-                                          .isPosInCapturingArea) {}
                                     },
                                     child: const Icon(
                                       color: CustomColors.whBrightGrey,
@@ -440,12 +489,12 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                         showEmojiSheet(viewModel, provider, context);
                       },
                       onQuickShotPointerDown: (event) async {
-                        isTouchMoved = false;
+                        setState(() {
+                          reactionCameraModel.isAddingPreset = false;
+                        });
 
-                        reactionCameraModelProvider.initializeCamera();
-                        if (reactionCameraModel.cameraController == null) {
-                          return;
-                        }
+                        isTouchMoved = false;
+                        reactionCameraModel.nonScrollMode = true;
 
                         panningPosition = Point(
                           event.position.dx,
@@ -456,6 +505,9 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                             .updatePanPosition(panningPosition);
                       },
                       onQuickShotPointerUp: (event) async {
+                        reactionCameraModel.nonScrollMode = false;
+
+                        _isFunctionCalled = false;
                         if (!isTouchMoved) {
                           setState(() {
                             isShowingQuickshotPresets =
@@ -495,8 +547,23 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
                         await reactionCameraModelProvider.disposeCamera();
                       },
                       onQuickShotPointerMove: (event) async {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          reactionCameraModelProvider.setFocusingModeTo(true);
+                        });
+
+                        if (ref
+                                .read(reactionCameraWidgetModelProvider)
+                                .cameraController ==
+                            null) {
+                          if (!_isFunctionCalled) {
+                            reactionCameraModelProvider.initializeCamera();
+                            _isFunctionCalled = true;
+                          }
+
+                          return;
+                        }
+
                         isTouchMoved = true;
-                        reactionCameraModelProvider.setFocusingModeTo(true);
 
                         panningPosition = Point(
                           event.position.dx,
@@ -505,8 +572,6 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget>
 
                         reactionCameraModelProvider
                             .updatePanPosition(panningPosition);
-
-                        if (reactionCameraModel.isPosInCapturingArea) {}
                       },
                     ),
                   Visibility(

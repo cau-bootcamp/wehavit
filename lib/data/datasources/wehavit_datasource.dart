@@ -238,4 +238,8 @@ abstract class WehavitDatasource {
   });
 
   EitherFuture<List<QuickshotPresetItemEntity>> getQuickshotPresets();
+
+  EitherFuture<void> removeQuickshotPreset({
+    required QuickshotPresetItemEntity entity,
+  });
 }

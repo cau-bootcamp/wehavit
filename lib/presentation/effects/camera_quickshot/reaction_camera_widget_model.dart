@@ -25,6 +25,9 @@ class ReactionCameraWidgetModel {
   double cameraWidgetRadius = 0;
 
   CameraController? cameraController;
+  bool nonScrollMode = false;
+
+  bool isAddingPreset = false;
 
   // Point<double> panPosition = const Point<double>(0, 0);
 

@@ -1,11 +1,9 @@
 import 'dart:io';
 
-import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/domain/usecases/usecases.dart';
+import 'package:wehavit/domain/domain.dart';
 import 'package:wehavit/presentation/group_post/group_post.dart';
 
 class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
@@ -19,6 +17,7 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
     this._getUserDataFromIdUsecase,
     this._uploadQuickshotPresetUsecase,
     this._getQuickshotPresetsUsecase,
+    this._removeQuickshotPresetUsecase,
   ) : super(GroupPostViewModel());
 
   final GetGroupConfirmPostListByDateUsecase
@@ -36,6 +35,7 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
   final GetUserDataFromIdUsecase _getUserDataFromIdUsecase;
   final UploadQuickshotPresetUsecase _uploadQuickshotPresetUsecase;
   final GetQuickshotPresetsUsecase _getQuickshotPresetsUsecase;
+  final RemoveQuickshotPresetUsecase _removeQuickshotPresetUsecase;
 
   Future<void> loadConfirmPostEntityListFor({
     required DateTime dateTime,
@@ -261,5 +261,12 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
       myUserEntity: myUserEntity,
       targetUserEntity: targetUserEntity,
     );
+  }
+
+  Future<void> removeQuickshotPresetEntity({
+    required QuickshotPresetItemEntity entity,
+  }) async {
+    _removeQuickshotPresetUsecase(quickshotEntity: entity);
+    return;
   }
 }

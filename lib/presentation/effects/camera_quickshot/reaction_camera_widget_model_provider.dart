@@ -20,7 +20,13 @@ class ReactionCameraWidgetModelProvider
   ReactionCameraWidgetModelProvider(Ref ref)
       : super(ReactionCameraWidgetModel());
 
+  bool isInitializing = false;
+  bool initialized = false;
+
   Future<bool> initializeCamera() async {
+    if (isInitializing || initialized) return false;
+
+    isInitializing = true;
     CameraDescription? description = await availableCameras().then(
       (cameras) {
         if (cameras.isEmpty) {
@@ -32,7 +38,8 @@ class ReactionCameraWidgetModelProvider
         );
       },
       onError: (onError) {
-        return Future(() => false);
+        isInitializing = false;
+        return false;
       },
     );
 
@@ -43,15 +50,20 @@ class ReactionCameraWidgetModelProvider
         enableAudio: false,
       );
       await state.cameraController!.initialize();
-      return Future(() => true);
+      isInitializing = false;
+      initialized = true;
+      return true;
     }
 
-    return Future(() => false);
+    isInitializing = false;
+    return false;
   }
 
   Future<void> disposeCamera() async {
     state.cameraController?.dispose();
     state.cameraController = null;
+    initialized = false;
+    isInitializing = false;
 
     return;
   }
@@ -69,6 +81,8 @@ class ReactionCameraWidgetModelProvider
   }
 
   void setFocusingModeTo(bool newValue) {
+    if (!initialized || newValue == state.isFocusingMode) return;
+
     if (newValue) {
       //
     } else {
@@ -82,6 +96,8 @@ class ReactionCameraWidgetModelProvider
   }
 
   void updatePanPosition(Point<double> position) {
+    if (!initialized) return;
+
     state = state.copyWith(
       currentButtonPosition: position,
       isPosInCapturingArea: checkPosInCapturingArea(position),
@@ -89,6 +105,7 @@ class ReactionCameraWidgetModelProvider
   }
 
   bool checkPosInCapturingArea(Point<double> position) {
+    if (!initialized) false;
     if (state.screenHeight - position.y <= 150) {
       return true;
     }

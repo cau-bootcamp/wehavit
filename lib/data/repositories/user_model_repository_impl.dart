@@ -131,7 +131,8 @@ class UserModelRepositoryImpl implements UserModelRepository {
   EitherFuture<void> removeQuickshotPreset(
     QuickshotPresetItemEntity quickshotPresetItemEntity,
   ) {
-    // TODO: implement removeQuickshotPreset
-    throw UnimplementedError();
+    return _wehavitDatasource.removeQuickshotPreset(
+      entity: quickshotPresetItemEntity,
+    );
   }
 }

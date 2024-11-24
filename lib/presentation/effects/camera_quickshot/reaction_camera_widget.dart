@@ -65,47 +65,52 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
                       ),
                     ),
                   ),
-                  Positioned(
-                    top: _reactionCameraWidgetModel.cameraWidgetPositionY,
-                    width: _reactionCameraWidgetModel.cameraWidgetRadius * 2,
-                    height: _reactionCameraWidgetModel.cameraWidgetRadius *
-                        2 *
-                        _reactionCameraWidgetModel
-                            .cameraController!.value.aspectRatio,
-                    child: Opacity(
-                      opacity:
-                          _reactionCameraWidgetModel.isFocusingMode ? 1 : 0,
-                      child: RepaintBoundary(
-                        key:
-                            _reactionCameraWidgetModel.repaintBoundaryGlobalKey,
-                        child: IgnorePointer(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                // 테두리 스타일 설정
-                                color: _reactionCameraWidgetModel
-                                        .isPosInCapturingArea
-                                    ? Colors.white
-                                    : Colors.transparent, // 테두리 색상
-                                width: 4, // 테두리 두께
-                              ),
-                            ),
+                  if (_reactionCameraWidgetModel
+                          .cameraController!.value.previewSize !=
+                      null)
+                    Positioned(
+                      top: _reactionCameraWidgetModel.cameraWidgetPositionY,
+                      width: _reactionCameraWidgetModel.cameraWidgetRadius * 2,
+                      height: _reactionCameraWidgetModel.cameraWidgetRadius *
+                          2 *
+                          _reactionCameraWidgetModel
+                              .cameraController!.value.aspectRatio,
+                      child: Opacity(
+                        opacity:
+                            _reactionCameraWidgetModel.isFocusingMode ? 1 : 0,
+                        child: RepaintBoundary(
+                          key: _reactionCameraWidgetModel
+                              .repaintBoundaryGlobalKey,
+                          child: IgnorePointer(
                             child: Container(
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
+                                  // 테두리 스타일 설정
+                                  color: _reactionCameraWidgetModel
+                                          .isPosInCapturingArea
+                                      ? Colors.white
+                                      : Colors.transparent, // 테두리 색상
                                   width: 4, // 테두리 두께
                                 ),
                               ),
                               child: Container(
-                                decoration: const BoxDecoration(
-                                  color: Colors.green,
-                                  shape: BoxShape.circle, // 원 모양의 테두리 설정
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    width: 4, // 테두리 두께
+                                  ),
                                 ),
-                                clipBehavior: Clip.hardEdge,
-                                child: CameraPreview(
-                                  _reactionCameraWidgetModel.cameraController!,
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    color: Colors.green,
+                                    shape: BoxShape.circle, // 원 모양의 테두리 설정
+                                  ),
+                                  clipBehavior: Clip.hardEdge,
+                                  child: CameraPreview(
+                                    _reactionCameraWidgetModel
+                                        .cameraController!,
+                                  ),
                                 ),
                               ),
                             ),
@@ -113,16 +118,13 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
                         ),
                       ),
                     ),
-                  ),
                   Positioned(
                     bottom: 0.0,
                     child: Container(
-                      color: Colors.transparent,
+                      color: CustomColors.whYellowDark,
                       height: 155,
                       width: MediaQuery.of(context).size.width,
-                      child: CustomPaint(
-                        painter: CurvePainter(),
-                      ),
+                      child: Container(),
                     ),
                   ),
                   Positioned(
@@ -146,8 +148,12 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
                     top: 100,
                     child: Text(
                       _reactionCameraWidgetModel.isPosInCapturingArea
-                          ? '손가락을 떼면 격려가 전송됩니다\n📸 바로 지금! 📸'
-                          : '아래로 손가락을 움직여\n사진으로 격려를 남기세요',
+                          ? (_reactionCameraWidgetModel.isAddingPreset
+                              ? '손가락을 떼면 격려를 저장합니다\n📸 바로 지금! 📸'
+                              : '손가락을 떼면 격려가 전송됩니다\n📸 바로 지금! 📸')
+                          : (_reactionCameraWidgetModel.isAddingPreset
+                              ? '아래로 손가락을 움직여\n당신의 사진을 남겨주세요'
+                              : '아래로 손가락을 움직여\n사진으로 격려를 남기세요'),
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         decoration: TextDecoration.none,

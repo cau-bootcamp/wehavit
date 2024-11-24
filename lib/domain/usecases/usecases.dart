@@ -42,6 +42,7 @@ export 'read_group_announcement_usecase.dart';
 export 'reject_applying_for_friend_usecase.dart';
 export 'reject_applying_for_joining_group_usecase.dart';
 export 'remove_friend_usecase.dart';
+export 'remove_quickshot_preset_usecase.dart';
 export 'remove_user_data_usecase.dart';
 export 'revoke_apple_sign_in_usecase.dart';
 export 'search_group_entity_list_by_group_name_usecase.dart';

@@ -534,6 +534,10 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     required String localPhotoUrl,
   }) async {
     try {
+      if (localPhotoUrl.isEmpty) {
+        throw Exception('no file');
+      }
+
       String storagePath =
           FirebaseStorageName.getConfirmPostQuickShotReactionStorageName(
         entity.owner!,
@@ -2832,6 +2836,27 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       });
     } on Exception catch (e) {
       return left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  EitherFuture<void> removeQuickshotPreset({
+    required QuickshotPresetItemEntity entity,
+  }) async {
+    try {
+      final myUid = getMyUserId();
+
+      await firestore
+          .collection(
+            FirebaseCollectionName.getTargetUserQuickshotPresetCollectionName(
+              myUid,
+            ),
+          )
+          .doc(entity.id)
+          .delete();
+      return Future(() => right(null));
+    } on Exception catch (e) {
+      return Future(() => left(Failure(e.toString())));
     }
   }
 }
