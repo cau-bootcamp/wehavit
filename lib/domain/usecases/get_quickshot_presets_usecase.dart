@@ -2,8 +2,8 @@ import 'package:wehavit/common/utils/utils.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
 
-class GetQuickshotPresetUrlsUsecase {
-  GetQuickshotPresetUrlsUsecase(
+class GetQuickshotPresetsUsecase {
+  GetQuickshotPresetsUsecase(
     this._userModelRepository,
   );
 

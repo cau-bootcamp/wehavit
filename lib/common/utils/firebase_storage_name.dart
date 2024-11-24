@@ -17,6 +17,6 @@ class FirebaseStorageName {
   }
 
   static String getUserQuickshotPresetStorageName(String userId) {
-    return '$userId/quickshot_presets}';
+    return '$userId/quickshot_presets';
   }
 }

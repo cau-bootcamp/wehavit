@@ -5,7 +5,7 @@ export 'entities/group_announcement_entity/group_announcement_entity.dart';
 export 'entities/group_entity/group_entity.dart';
 export 'entities/group_weekly_report_entity/group_weekly_report_entity.dart';
 export 'entities/group_weekly_report_entity/group_weekly_resport_entity.dart';
-export 'entities/reaction_entities/reaction_entity.dart';
+export 'entities/reaction_entity/reaction_entity.dart';
 export 'entities/resolution_entity/resolution_entity.dart';
 export 'entities/user_data_entity/user_data_entity.dart';
 export 'repositories/auth_repository.dart';
