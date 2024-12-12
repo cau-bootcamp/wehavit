@@ -90,8 +90,8 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
   Widget build(BuildContext context) {
     final viewModel = ref.watch(groupPostViewModelProvider);
     final provider = ref.read(groupPostViewModelProvider.notifier);
-    final reactionCameraViewModel =
-        ref.watch(reactionCameraWidgetModelProvider);
+    // final reactionCameraViewModel =
+    //     ref.watch(reactionCameraWidgetModelProvider);
 
     return Stack(
       children: [
@@ -117,7 +117,9 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                   );
                 },
               ).whenComplete(() async {
-                await provider.loadAppliedUserCount(entity: widget.groupEntity);
+                await provider.loadAppliedUserCount(
+                  entity: widget.groupEntity,
+                );
                 setState(() {});
               });
             },
@@ -235,9 +237,9 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                         ),
                         child: SingleChildScrollView(
                           padding: const EdgeInsets.only(bottom: 20.0),
-                          physics: reactionCameraViewModel.nonScrollMode
-                              ? const NeverScrollableScrollPhysics()
-                              : const AlwaysScrollableScrollPhysics(),
+                          // physics: reactionCameraViewModel.nonScrollMode
+                          //     ? const NeverScrollableScrollPhysics()
+                          //     : const AlwaysScrollableScrollPhysics(),
                           child: Column(
                             children: List<Widget>.generate(
                               entityList.length,
@@ -259,7 +261,16 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
             ),
           ),
         ),
-        const ReactionCameraWidget(),
+        ValueListenableBuilder(
+          valueListenable: showReactionCameraWidgetStateNotifier,
+          builder: (context, value, child) {
+            if (value) {
+              return const ReactionCameraWidget();
+            } else {
+              return Container();
+            }
+          },
+        ),
       ],
     );
   }

@@ -1,7 +1,28 @@
-import 'dart:math';
+import 'dart:core';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
+
+final showReactionCameraWidgetStateNotifier = ValueNotifier<bool>(
+  false,
+);
+
+class CameraPointerPositionNotifier extends ValueNotifier<Offset> {
+  CameraPointerPositionNotifier(super.value);
+
+  double? screenHeight;
+
+  bool get isPosInCapturingArea {
+    if (screenHeight == null) {
+      AssertionError('need to init first');
+      return false;
+    }
+
+    return screenHeight! - value.dy < 150;
+  }
+}
+
+final cameraPointerPositionNotifier = CameraPointerPositionNotifier(const Offset(0, 0));
 
 class ReactionCameraWidgetModel {
   GlobalKey repaintBoundaryGlobalKey = GlobalKey();
@@ -28,36 +49,4 @@ class ReactionCameraWidgetModel {
   bool nonScrollMode = false;
 
   bool isAddingPreset = false;
-
-  // Point<double> panPosition = const Point<double>(0, 0);
-
-  ReactionCameraWidgetModel copyWith({
-    bool? isFocusingMode,
-    bool? isPosInCapturingArea,
-    Point<double>? currentButtonPosition,
-  }) {
-    final newModel = ReactionCameraWidgetModel();
-
-    newModel.isFocusingMode = isFocusingMode ?? this.isFocusingMode;
-    newModel.isPosInCapturingArea =
-        isPosInCapturingArea ?? this.isPosInCapturingArea;
-    newModel.cameraButtonXOffset =
-        currentButtonPosition?.x ?? cameraButtonXOffset;
-    newModel.cameraButtonYOffset =
-        currentButtonPosition?.y ?? cameraButtonYOffset;
-
-    newModel.repaintBoundaryGlobalKey = repaintBoundaryGlobalKey;
-    newModel.cameraButtonOriginXOffset = cameraButtonOriginXOffset;
-    newModel.cameraButtonOriginYOffset = cameraButtonOriginYOffset;
-    newModel.cameraButtonRadius = cameraButtonRadius;
-    newModel.isShowingHelpMessage = isShowingHelpMessage;
-    newModel.screenHeight = screenHeight;
-    newModel.screenWidth = screenWidth;
-    newModel.cameraWidgetPositionX = cameraButtonOriginXOffset;
-    newModel.cameraWidgetPositionY = cameraWidgetPositionY;
-    newModel.cameraWidgetRadius = cameraWidgetRadius;
-    newModel.cameraController = cameraController;
-
-    return newModel;
-  }
 }
