@@ -3,10 +3,6 @@ import 'dart:core';
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 
-final showReactionCameraWidgetStateNotifier = ValueNotifier<bool>(
-  false,
-);
-
 class CameraPointerPositionNotifier extends ValueNotifier<Offset> {
   CameraPointerPositionNotifier(super.value);
 
@@ -21,8 +17,6 @@ class CameraPointerPositionNotifier extends ValueNotifier<Offset> {
     return screenHeight! - value.dy < 150;
   }
 }
-
-final cameraPointerPositionNotifier = CameraPointerPositionNotifier(const Offset(0, 0));
 
 class ReactionCameraWidgetModel {
   GlobalKey repaintBoundaryGlobalKey = GlobalKey();
