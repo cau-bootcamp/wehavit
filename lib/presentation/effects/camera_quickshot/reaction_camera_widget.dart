@@ -117,18 +117,23 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
               ),
             ),
           ),
-          Positioned(
-            left: model.cameraButtonXOffset - model.cameraButtonRadius,
-            top: model.cameraButtonYOffset - model.cameraButtonRadius,
-            child: Container(
-              width: model.cameraButtonRadius * 2,
-              height: model.cameraButtonRadius * 2,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: model.isFocusingMode ? Colors.amber : Colors.transparent,
-                // color: Colors.blue,
-              ),
-            ),
+          ValueListenableBuilder(
+            valueListenable: cameraPointerPositionNotifier,
+            builder: (context, value, child) {
+              return Positioned(
+                left: value.dx - model.cameraButtonRadius,
+                top: value.dy - model.cameraButtonRadius,
+                child: Container(
+                  width: model.cameraButtonRadius * 2,
+                  height: model.cameraButtonRadius * 2,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.amber,
+                    // color: Colors.blue,
+                  ),
+                ),
+              );
+            },
           ),
           Positioned(
             top: 64,

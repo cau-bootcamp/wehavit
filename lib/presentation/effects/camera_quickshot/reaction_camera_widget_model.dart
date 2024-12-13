@@ -21,11 +21,6 @@ class CameraPointerPositionNotifier extends ValueNotifier<Offset> {
 class ReactionCameraWidgetModel {
   GlobalKey repaintBoundaryGlobalKey = GlobalKey();
 
-  double cameraButtonOriginXOffset = -100;
-  double cameraButtonOriginYOffset = -100;
-
-  double cameraButtonXOffset = 0;
-  double cameraButtonYOffset = 0;
   double cameraButtonRadius = 25;
 
   bool isFocusingMode = false;

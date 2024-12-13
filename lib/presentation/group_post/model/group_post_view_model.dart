@@ -30,8 +30,7 @@ class PostViewModel {
   ScrollController scrollController = ScrollController();
 
   bool isShowingCalendar = true;
-  DateTime selectedDate =
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  DateTime selectedDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
   final todayDate = DateTime(
     DateTime.now().year,

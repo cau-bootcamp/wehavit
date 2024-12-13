@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:wehavit/common/common.dart';
 
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
@@ -1413,8 +1414,15 @@ class ConfirmPostReactionButtonListWidget extends ConsumerWidget {
           onTapDown: onQuickshotTapDown,
           onTapUp: onQuickshotTapUp,
           // onLongPressStart: onQuickshotLongPress,
-          onLongPressStart: (details) {
-            showReactionCameraWidgetStateNotifier.value = true;
+          onLongPressStart: (details) async {
+            PermissionStatus permission = await Permission.camera.status;
+
+            if (permission == PermissionStatus.denied) {
+              await Permission.camera.request();
+            }
+            if (permission == PermissionStatus.granted) {
+              showReactionCameraWidgetStateNotifier.value = true;
+            }
           },
           onLongPressMoveUpdate: (details) {
             cameraPointerPositionNotifier.value = details.globalPosition;

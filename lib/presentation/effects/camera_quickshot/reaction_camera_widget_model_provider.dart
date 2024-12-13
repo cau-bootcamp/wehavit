@@ -38,6 +38,8 @@ class ReactionCameraWidgetModelProvider extends StateNotifier<ReactionCameraWidg
   AutoDisposeStateNotifierProviderRef ref;
 
   Future<bool> _initializeCamera() async {
+    if (state.cameraController != null) return Future.value(false);
+
     CameraDescription? description = await availableCameras().then(
       (cameras) {
         if (cameras.isEmpty) {
@@ -49,7 +51,7 @@ class ReactionCameraWidgetModelProvider extends StateNotifier<ReactionCameraWidg
         );
       },
       onError: (onError) {
-        return false;
+        return null;
       },
     );
 
@@ -94,9 +96,6 @@ class ReactionCameraWidgetModelProvider extends StateNotifier<ReactionCameraWidg
     state.cameraWidgetPositionY = state.screenHeight / 6;
     state.cameraWidgetRadius = state.screenWidth / 2.3;
 
-    state.cameraButtonXOffset = state.cameraButtonOriginXOffset;
-    state.cameraButtonYOffset = state.cameraButtonOriginYOffset;
-
     cameraPointerPositionNotifier.screenHeight = state.screenHeight;
   }
 
@@ -105,20 +104,11 @@ class ReactionCameraWidgetModelProvider extends StateNotifier<ReactionCameraWidg
     return imageFilePath;
   }
 
-  bool isCameraButtonPanned(Point offset) {
-    if (offset.distanceTo(
-          Point(
-            state.cameraButtonOriginXOffset,
-            state.cameraButtonOriginYOffset,
-          ),
-        ) >=
-        30) {
-      return true;
-    }
-    return false;
-  }
-
   Future<String> capture() async {
+    if (state.cameraController == null) {
+      return '';
+    }
+
     var renderObject = state.repaintBoundaryGlobalKey.currentContext?.findRenderObject();
     if (renderObject is RenderRepaintBoundary) {
       var boundary = renderObject;
