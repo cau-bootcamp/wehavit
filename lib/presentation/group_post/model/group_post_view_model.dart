@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:camera/camera.dart';
-import 'package:carousel_slider/carousel_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:wehavit/common/common.dart';
@@ -30,8 +29,7 @@ class PostViewModel {
   ScrollController scrollController = ScrollController();
 
   bool isShowingCalendar = true;
-  DateTime selectedDate =
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  DateTime selectedDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
   final todayDate = DateTime(
     DateTime.now().year,

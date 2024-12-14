@@ -1,16 +1,32 @@
-import 'dart:math';
+import 'dart:core';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 
+class CameraPointerPositionNotifier extends ValueNotifier<Offset> {
+  CameraPointerPositionNotifier(super._value);
+
+  double? screenHeight;
+
+  bool get isPosInCapturingArea {
+    if (screenHeight == null) {
+      AssertionError('Need to call initializeCameraWidgetSetting first');
+      return false;
+    }
+
+    return screenHeight! - value.dy < 150;
+  }
+}
+
+enum ReactionCameraWidgetMode {
+  quickshot,
+  preset,
+  none;
+}
+
 class ReactionCameraWidgetModel {
   GlobalKey repaintBoundaryGlobalKey = GlobalKey();
 
-  double cameraButtonOriginXOffset = -100;
-  double cameraButtonOriginYOffset = -100;
-
-  double cameraButtonXOffset = 0;
-  double cameraButtonYOffset = 0;
   double cameraButtonRadius = 25;
 
   bool isFocusingMode = false;
@@ -25,39 +41,6 @@ class ReactionCameraWidgetModel {
   double cameraWidgetRadius = 0;
 
   CameraController? cameraController;
-  bool nonScrollMode = false;
 
   bool isAddingPreset = false;
-
-  // Point<double> panPosition = const Point<double>(0, 0);
-
-  ReactionCameraWidgetModel copyWith({
-    bool? isFocusingMode,
-    bool? isPosInCapturingArea,
-    Point<double>? currentButtonPosition,
-  }) {
-    final newModel = ReactionCameraWidgetModel();
-
-    newModel.isFocusingMode = isFocusingMode ?? this.isFocusingMode;
-    newModel.isPosInCapturingArea =
-        isPosInCapturingArea ?? this.isPosInCapturingArea;
-    newModel.cameraButtonXOffset =
-        currentButtonPosition?.x ?? cameraButtonXOffset;
-    newModel.cameraButtonYOffset =
-        currentButtonPosition?.y ?? cameraButtonYOffset;
-
-    newModel.repaintBoundaryGlobalKey = repaintBoundaryGlobalKey;
-    newModel.cameraButtonOriginXOffset = cameraButtonOriginXOffset;
-    newModel.cameraButtonOriginYOffset = cameraButtonOriginYOffset;
-    newModel.cameraButtonRadius = cameraButtonRadius;
-    newModel.isShowingHelpMessage = isShowingHelpMessage;
-    newModel.screenHeight = screenHeight;
-    newModel.screenWidth = screenWidth;
-    newModel.cameraWidgetPositionX = cameraButtonOriginXOffset;
-    newModel.cameraWidgetPositionY = cameraWidgetPositionY;
-    newModel.cameraWidgetRadius = cameraWidgetRadius;
-    newModel.cameraController = cameraController;
-
-    return newModel;
-  }
 }

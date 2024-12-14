@@ -20,8 +20,7 @@ class ResolutionDetailView extends ConsumerStatefulWidget {
 
   ResolutionEntity entity;
   @override
-  ConsumerState<ResolutionDetailView> createState() =>
-      _ResolutionDetailViewState();
+  ConsumerState<ResolutionDetailView> createState() => _ResolutionDetailViewState();
 }
 
 class ChartData {
@@ -123,8 +122,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                                 '⛳️ 나의 목표',
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
-                                  color: PointColors
-                                      .colorList[widget.entity.colorIndex ?? 0],
+                                  color: PointColors.colorList[widget.entity.colorIndex ?? 0],
                                   fontSize: 16,
                                 ),
                               ),
@@ -149,8 +147,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                                 '📋 나의 실천 계획',
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
-                                  color: PointColors
-                                      .colorList[widget.entity.colorIndex ?? 0],
+                                  color: PointColors.colorList[widget.entity.colorIndex ?? 0],
                                   fontSize: 16,
                                 ),
                               ),
@@ -176,8 +173,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                                 '📅 도전 시작일',
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
-                                  color: PointColors
-                                      .colorList[widget.entity.colorIndex ?? 0],
+                                  color: PointColors.colorList[widget.entity.colorIndex ?? 0],
                                   fontSize: 16,
                                 ),
                               ),
@@ -214,8 +210,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                       width: 16.0,
                     ),
                     ResolutionSingleStatisticCellWidget(
-                      primary:
-                          '${widget.entity.successWeekMondayList?.length}회',
+                      primary: '${widget.entity.successWeekMondayList?.length}회',
                       secondary: '주간 목표 달성 횟수',
                     ),
                   ],
@@ -272,10 +267,8 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                     child: SfCartesianChart(
                       plotAreaBorderColor: Colors.transparent,
                       primaryXAxis: const CategoryAxis(
-                        majorGridLines:
-                            MajorGridLines(color: Colors.transparent),
-                        majorTickLines:
-                            MajorTickLines(color: Colors.transparent),
+                        majorGridLines: MajorGridLines(color: Colors.transparent),
+                        majorTickLines: MajorTickLines(color: Colors.transparent),
                         labelStyle: TextStyle(
                           color: Colors.white, // 레이블 색상을 흰색으로 변경
                           fontSize: 14, // 폰트 크기 (옵션)
@@ -289,8 +282,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                         // Renders bar chart
                         ColumnSeries<ChartData, String>(
                           animationDuration: 0,
-                          dataLabelMapper: (datum, index) =>
-                              datum.y?.toInt().toString(),
+                          dataLabelMapper: (datum, index) => datum.y?.toInt().toString(),
                           dataLabelSettings: const DataLabelSettings(
                             isVisible: true,
                             textStyle: TextStyle(
@@ -299,14 +291,12 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          color: PointColors
-                              .colorList[widget.entity.colorIndex ?? 0],
+                          color: PointColors.colorList[widget.entity.colorIndex ?? 0],
                           dataSource: List<ChartData>.generate(
                             widget.entity.weeklyPostCountList?.length ?? 0,
                             (index) => ChartData(
                               weekdayString[index],
-                              widget.entity.weeklyPostCountList![index]
-                                  .toDouble(),
+                              widget.entity.weeklyPostCountList![index].toDouble(),
                             ),
                           ),
                           xValueMapper: (ChartData data, _) => data.x,
@@ -499,10 +489,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                 ),
               );
               final isFuture = viewModel.todayDate.isBefore(cellDate);
-              final isPast = widget.entity.startDate
-                      ?.subtract(const Duration(days: 1))
-                      .isAfter(cellDate) ??
-                  true;
+              final isPast = widget.entity.startDate?.subtract(const Duration(days: 1)).isAfter(cellDate) ?? true;
 
               return Expanded(
                 child: GestureDetector(
@@ -559,16 +546,11 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                             child: FittedBox(
                               fit: BoxFit.scaleDown,
                               child: Text(
-                                cellDate.day == 1
-                                    ? '${cellDate.month}/${cellDate.day}'
-                                    : cellDate.day.toString(),
+                                cellDate.day == 1 ? '${cellDate.month}/${cellDate.day}' : cellDate.day.toString(),
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
-                                  color: (isFuture || isPast) ||
-                                          cellDate != viewModel.selectedDate
-                                      ? CustomColors.whPlaceholderGrey
-                                      : CustomColors.whBlack,
+                                  color: (isFuture || isPast) || cellDate != viewModel.selectedDate ? CustomColors.whPlaceholderGrey : CustomColors.whBlack,
                                 ),
                               ),
                             ),
@@ -585,14 +567,10 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                                     fontFamily: 'Giants',
                                     fontSize: 24,
                                     fontWeight: FontWeight.w700,
-                                    color: (isFuture || isPast) ||
-                                            cellDate != viewModel.selectedDate
-                                        ? CustomColors.whPlaceholderGrey
-                                        : CustomColors.whBlack,
+                                    color: (isFuture || isPast) || cellDate != viewModel.selectedDate ? CustomColors.whPlaceholderGrey : CustomColors.whBlack,
                                   ),
                                 ),
-                                child: EitherFutureBuilder<
-                                    List<ConfirmPostEntity>>(
+                                child: EitherFutureBuilder<List<ConfirmPostEntity>>(
                                   target: viewModel.confirmPostList[cellDate],
                                   forWaiting: const SizedBox(
                                     width: 20,
@@ -614,10 +592,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                                       fontFamily: 'Giants',
                                       fontSize: 24,
                                       fontWeight: FontWeight.w700,
-                                      color: (isFuture || isPast) ||
-                                              cellDate != viewModel.selectedDate
-                                          ? CustomColors.whPlaceholderGrey
-                                          : CustomColors.whBlack,
+                                      color: (isFuture || isPast) || cellDate != viewModel.selectedDate ? CustomColors.whPlaceholderGrey : CustomColors.whBlack,
                                     ),
                                   ),
                                 ),
@@ -641,9 +616,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
           reverse: true,
           onPageChanged: (index, reason) async {
             if (index == viewModel.calendartMondayDateList.length - 1) {
-              if (widget.entity.startDate
-                      ?.isAfter(viewModel.calendartMondayDateList.first) ??
-                  true) {
+              if (widget.entity.startDate?.isAfter(viewModel.calendartMondayDateList.first) ?? true) {
                 return;
               }
               // 마지막 페이지에 도달했을 때 추가 요소를 추가합니다.
@@ -694,20 +667,14 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                       builder: (context) => GradientBottomSheet(
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.82,
-                          child:
-                              const ShareResolutionToFriendBottomSheetWidget(),
+                          child: const ShareResolutionToFriendBottomSheetWidget(),
                         ),
                       ),
                     ).then((newEntity) {
                       widget.entity = newEntity;
 
-                      ref
-                          .watch(addResolutionDoneViewModelProvider)
-                          .resolutionEntity = newEntity;
-                      ref
-                          .read(myPageViewModelProvider.notifier)
-                          .getResolutionList()
-                          .whenComplete(() {
+                      ref.watch(addResolutionDoneViewModelProvider).resolutionEntity = newEntity;
+                      ref.read(myPageViewModelProvider.notifier).getResolutionList().whenComplete(() {
                         setState(() {});
                       });
                     });
@@ -730,19 +697,13 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                       builder: (context) => GradientBottomSheet(
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.82,
-                          child:
-                              const ShareResolutionToGroupBottomSheetWidget(),
+                          child: const ShareResolutionToGroupBottomSheetWidget(),
                         ),
                       ),
                     ).then((newEntity) {
                       if (newEntity != null && newEntity is ResolutionEntity) {
-                        ref
-                            .watch(addResolutionDoneViewModelProvider)
-                            .resolutionEntity = newEntity;
-                        ref
-                            .read(myPageViewModelProvider.notifier)
-                            .getResolutionList()
-                            .whenComplete(() {
+                        ref.watch(addResolutionDoneViewModelProvider).resolutionEntity = newEntity;
+                        ref.read(myPageViewModelProvider.notifier).getResolutionList().whenComplete(() {
                           setState(() {});
                         });
                       }
@@ -789,14 +750,8 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                                       resolutionListViewModelProvider.notifier,
                                     )
                                     .loadResolutionModelList();
-                                await ref
-                                    .read(myPageViewModelProvider.notifier)
-                                    .loadData()
-                                    .whenComplete(() {
-                                  context
-                                      .findAncestorStateOfType<
-                                          MyPageScreenState>()
-                                      ?.setState(() {});
+                                await ref.read(myPageViewModelProvider.notifier).loadData().whenComplete(() {
+                                  context.findAncestorStateOfType<MyPageScreenState>()?.setState(() {});
                                 });
                                 // ignore: use_build_context_synchronously
                                 Navigator.pop(context);

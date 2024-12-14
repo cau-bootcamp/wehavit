@@ -35,7 +35,7 @@ void showToastMessage(
             text,
             style: const TextStyle(
               color: CustomColors.whWhite,
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: FontWeight.w500,
             ),
             maxLines: 1,

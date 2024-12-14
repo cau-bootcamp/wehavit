@@ -7,26 +7,40 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'package:wehavit/presentation/effects/effects.dart';
 
-final reactionCameraWidgetModelProvider = StateNotifierProvider<
-    ReactionCameraWidgetModelProvider,
-    ReactionCameraWidgetModel>((ref) => ReactionCameraWidgetModelProvider(ref));
+final reactionCameraWidgetModeNotifier = ValueNotifier<ReactionCameraWidgetMode>(
+  ReactionCameraWidgetMode.none,
+);
 
-class ReactionCameraWidgetModelProvider
-    extends StateNotifier<ReactionCameraWidgetModel> {
-  ReactionCameraWidgetModelProvider(Ref ref)
-      : super(ReactionCameraWidgetModel());
+final cameraPointerPositionNotifier = CameraPointerPositionNotifier(const Offset(0, 0));
 
-  bool isInitializing = false;
-  bool initialized = false;
+final reactionCameraWidgetModelProvider =
+    StateNotifierProvider.autoDispose<ReactionCameraWidgetModelProvider, ReactionCameraWidgetModel>((ref) {
+  final newModel = ReactionCameraWidgetModelProvider(ref);
 
-  Future<bool> initializeCamera() async {
-    if (isInitializing || initialized) return false;
+  ref.listenSelf((_, __) {
+    newModel._initializeCamera();
+  });
 
-    isInitializing = true;
+  ref.onDispose(() {
+    newModel._disposeCamera();
+  });
+
+  return newModel;
+});
+
+class ReactionCameraWidgetModelProvider extends StateNotifier<ReactionCameraWidgetModel> {
+  ReactionCameraWidgetModelProvider(this.ref) : super(ReactionCameraWidgetModel());
+
+  Ref ref;
+
+  Future<bool> _initializeCamera() async {
+    if (state.cameraController != null) return Future.value(false);
+
     CameraDescription? description = await availableCameras().then(
       (cameras) {
         if (cameras.isEmpty) {
@@ -38,8 +52,7 @@ class ReactionCameraWidgetModelProvider
         );
       },
       onError: (onError) {
-        isInitializing = false;
-        return false;
+        return null;
       },
     );
 
@@ -50,20 +63,17 @@ class ReactionCameraWidgetModelProvider
         enableAudio: false,
       );
       await state.cameraController!.initialize();
-      isInitializing = false;
-      initialized = true;
+
+      ref.notifyListeners();
       return true;
     }
 
-    isInitializing = false;
     return false;
   }
 
-  Future<void> disposeCamera() async {
+  Future<void> _disposeCamera() async {
     state.cameraController?.dispose();
     state.cameraController = null;
-    initialized = false;
-    isInitializing = false;
 
     return;
   }
@@ -76,40 +86,7 @@ class ReactionCameraWidgetModelProvider
     state.cameraWidgetPositionY = state.screenHeight / 6;
     state.cameraWidgetRadius = state.screenWidth / 2.3;
 
-    state.cameraButtonXOffset = state.cameraButtonOriginXOffset;
-    state.cameraButtonYOffset = state.cameraButtonOriginYOffset;
-  }
-
-  void setFocusingModeTo(bool newValue) {
-    if (!initialized || newValue == state.isFocusingMode) return;
-
-    if (newValue) {
-      //
-    } else {
-      // 사용하지 않을 때는 멀리 치워놓기
-      state.cameraButtonOriginXOffset = -100;
-      state.cameraButtonOriginYOffset = -100;
-    }
-    if (state.cameraController != null) {
-      state = state.copyWith(isFocusingMode: newValue);
-    }
-  }
-
-  void updatePanPosition(Point<double> position) {
-    if (!initialized) return;
-
-    state = state.copyWith(
-      currentButtonPosition: position,
-      isPosInCapturingArea: checkPosInCapturingArea(position),
-    );
-  }
-
-  bool checkPosInCapturingArea(Point<double> position) {
-    if (!initialized) false;
-    if (state.screenHeight - position.y <= 150) {
-      return true;
-    }
-    return false;
+    cameraPointerPositionNotifier.screenHeight = state.screenHeight;
   }
 
   Future<String> endOnCapturingArea() async {
@@ -117,32 +94,20 @@ class ReactionCameraWidgetModelProvider
     return imageFilePath;
   }
 
-  bool isCameraButtonPanned(Point offset) {
-    if (offset.distanceTo(
-          Point(
-            state.cameraButtonOriginXOffset,
-            state.cameraButtonOriginYOffset,
-          ),
-        ) >=
-        30) {
-      return true;
-    }
-    return false;
-  }
-
   Future<String> capture() async {
-    var renderObject =
-        state.repaintBoundaryGlobalKey.currentContext?.findRenderObject();
+    if (state.cameraController == null) {
+      return '';
+    }
+
+    var renderObject = state.repaintBoundaryGlobalKey.currentContext?.findRenderObject();
     if (renderObject is RenderRepaintBoundary) {
       var boundary = renderObject;
       ui.Image image = await boundary.toImage();
       final directory = (await getApplicationDocumentsDirectory()).path;
-      ByteData? byteData =
-          await image.toByteData(format: ui.ImageByteFormat.png);
+      ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
       Uint8List pngBytes = byteData!.buffer.asUint8List();
 
-      File imgFile =
-          File('$directory/screenshot${DateTime.now().toString()}.png');
+      File imgFile = File('$directory/screenshot${DateTime.now().toString()}.png');
       imgFile.writeAsBytes(pngBytes);
 
       return imgFile.path;

@@ -232,46 +232,48 @@ class MySimpleStatisticsWidget extends StatelessWidget {
                   color: CustomColors.whYellow,
                 ),
               ),
-              const SizedBox(width: 12),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SimpleStatisticsBulletWidget(
-                    icon: '📆',
-                    preText: '위해빗과 함께한 지 ',
-                    highlightedText:
-                        // ignore: lines_longer_than_80_chars
-                        '${DateTime.now().difference(userEntity.createdAt ?? DateTime.now()).inDays + 1}일째',
-                    postText: '가 되었어요.',
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  SimpleStatisticsBulletWidget(
-                    icon: '🕊️',
-                    preText: '지금까지 ',
-                    highlightedText: '${userEntity.cumulativeGoals}개',
-                    postText: '의 목표에 도전했어요',
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  SimpleStatisticsBulletWidget(
-                    icon: '👀',
-                    preText: '벌써 ',
-                    highlightedText: '${userEntity.cumulativePosts}개',
-                    postText: '의 실천을 인증했어요!',
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  SimpleStatisticsBulletWidget(
-                    icon: '👏',
-                    preText: '그리고 ',
-                    highlightedText: '${userEntity.cumulativeReactions}번',
-                    postText: '이나 친구들을 응원했어요!',
-                  ),
-                ],
+              const SizedBox(width: 8),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SimpleStatisticsBulletWidget(
+                      icon: '📆',
+                      preText: '위해빗과 함께한 지 ',
+                      highlightedText:
+                          // ignore: lines_longer_than_80_chars
+                          '${DateTime.now().difference(userEntity.createdAt ?? DateTime.now()).inDays + 1}일째',
+                      postText: '가 되었어요.',
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    SimpleStatisticsBulletWidget(
+                      icon: '🕊️',
+                      preText: '지금까지 ',
+                      highlightedText: '${userEntity.cumulativeGoals}개',
+                      postText: '의 목표에 도전했어요',
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    SimpleStatisticsBulletWidget(
+                      icon: '👀',
+                      preText: '벌써 ',
+                      highlightedText: '${userEntity.cumulativePosts}개',
+                      postText: '의 실천을 인증했어요!',
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    SimpleStatisticsBulletWidget(
+                      icon: '👏',
+                      preText: '그리고 ',
+                      highlightedText: '${userEntity.cumulativeReactions}번',
+                      postText: '이나 친구들을 응원했어요!',
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

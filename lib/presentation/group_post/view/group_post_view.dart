@@ -26,8 +26,7 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final isGuideShown =
-          await SharedPreferences.getInstance().then((instance) {
+      final isGuideShown = await SharedPreferences.getInstance().then((instance) {
         return instance.getBool(PreferenceKey.isReactionGuideShown);
       });
 
@@ -60,9 +59,7 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
     viewModel.groupId = widget.groupEntity.groupId;
 
     unawaited(
-      provider
-          .loadAppliedUserCount(entity: widget.groupEntity)
-          .whenComplete(() {
+      provider.loadAppliedUserCount(entity: widget.groupEntity).whenComplete(() {
         setState(() {});
       }),
     );
@@ -90,8 +87,8 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
   Widget build(BuildContext context) {
     final viewModel = ref.watch(groupPostViewModelProvider);
     final provider = ref.read(groupPostViewModelProvider.notifier);
-    final reactionCameraViewModel =
-        ref.watch(reactionCameraWidgetModelProvider);
+    // final reactionCameraViewModel =
+    //     ref.watch(reactionCameraWidgetModelProvider);
 
     return Stack(
       children: [
@@ -117,7 +114,9 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                   );
                 },
               ).whenComplete(() async {
-                await provider.loadAppliedUserCount(entity: widget.groupEntity);
+                await provider.loadAppliedUserCount(
+                  entity: widget.groupEntity,
+                );
                 setState(() {});
               });
             },
@@ -145,14 +144,11 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                           IconButton(
                             onPressed: () {
                               setState(() {
-                                viewModel.isShowingCalendar =
-                                    !viewModel.isShowingCalendar;
+                                viewModel.isShowingCalendar = !viewModel.isShowingCalendar;
                               });
                             },
                             icon: Icon(
-                              viewModel.isShowingCalendar
-                                  ? Icons.keyboard_arrow_up
-                                  : Icons.keyboard_arrow_down,
+                              viewModel.isShowingCalendar ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
                               color: CustomColors.whWhite,
                             ),
                           ),
@@ -235,9 +231,9 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                         ),
                         child: SingleChildScrollView(
                           padding: const EdgeInsets.only(bottom: 20.0),
-                          physics: reactionCameraViewModel.nonScrollMode
-                              ? const NeverScrollableScrollPhysics()
-                              : const AlwaysScrollableScrollPhysics(),
+                          // physics: reactionCameraViewModel.nonScrollMode
+                          //     ? const NeverScrollableScrollPhysics()
+                          //     : const AlwaysScrollableScrollPhysics(),
                           child: Column(
                             children: List<Widget>.generate(
                               entityList.length,
@@ -259,7 +255,16 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
             ),
           ),
         ),
-        const ReactionCameraWidget(),
+        ValueListenableBuilder(
+          valueListenable: reactionCameraWidgetModeNotifier,
+          builder: (context, value, child) {
+            if (value != ReactionCameraWidgetMode.none) {
+              return const ReactionCameraWidget();
+            } else {
+              return Container();
+            }
+          },
+        ),
       ],
     );
   }
@@ -284,9 +289,7 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                   ),
                 );
                 final isFuture = viewModel.todayDate.isBefore(cellDate);
-                final isPast = widget.groupEntity.groupCreatedAt
-                    .subtract(const Duration(days: 1))
-                    .isAfter(cellDate);
+                final isPast = widget.groupEntity.groupCreatedAt.subtract(const Duration(days: 1)).isAfter(cellDate);
 
                 return Expanded(
                   child: GestureDetector(
@@ -343,16 +346,11 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                               child: FittedBox(
                                 fit: BoxFit.scaleDown,
                                 child: Text(
-                                  cellDate.day == 1
-                                      ? '${cellDate.month}/${cellDate.day}'
-                                      : cellDate.day.toString(),
+                                  cellDate.day == 1 ? '${cellDate.month}/${cellDate.day}' : cellDate.day.toString(),
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
-                                    color: (isFuture || isPast) ||
-                                            cellDate != viewModel.selectedDate
-                                        ? CustomColors.whPlaceholderGrey
-                                        : CustomColors.whBlack,
+                                    color: (isFuture || isPast) || cellDate != viewModel.selectedDate ? CustomColors.whPlaceholderGrey : CustomColors.whBlack,
                                   ),
                                 ),
                               ),
@@ -369,14 +367,10 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                       fontFamily: 'Giants',
                                       fontSize: 24,
                                       fontWeight: FontWeight.w700,
-                                      color: (isFuture || isPast) ||
-                                              cellDate != viewModel.selectedDate
-                                          ? CustomColors.whPlaceholderGrey
-                                          : CustomColors.whBlack,
+                                      color: (isFuture || isPast) || cellDate != viewModel.selectedDate ? CustomColors.whPlaceholderGrey : CustomColors.whBlack,
                                     ),
                                   ),
-                                  child: EitherFutureBuilder<
-                                      List<ConfirmPostEntity>>(
+                                  child: EitherFutureBuilder<List<ConfirmPostEntity>>(
                                     target: viewModel.confirmPostList[cellDate],
                                     forWaiting: const SizedBox(
                                       width: 20,
@@ -398,11 +392,7 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                         fontFamily: 'Giants',
                                         fontSize: 24,
                                         fontWeight: FontWeight.w700,
-                                        color: (isFuture || isPast) ||
-                                                cellDate !=
-                                                    viewModel.selectedDate
-                                            ? CustomColors.whPlaceholderGrey
-                                            : CustomColors.whBlack,
+                                        color: (isFuture || isPast) || cellDate != viewModel.selectedDate ? CustomColors.whPlaceholderGrey : CustomColors.whBlack,
                                       ),
                                     ),
                                   ),
@@ -426,8 +416,7 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
             reverse: true,
             onPageChanged: (index, reason) async {
               if (index == viewModel.calendartMondayDateList.length - 1) {
-                if (viewModel.calendartMondayDateList.first
-                    .isBefore(widget.groupEntity.groupCreatedAt)) {
+                if (viewModel.calendartMondayDateList.first.isBefore(widget.groupEntity.groupCreatedAt)) {
                   return;
                 }
                 // 마지막 페이지에 도달했을 때 추가 요소를 추가합니다.
@@ -455,8 +444,6 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
 
   Future<void> updateGroupEntity(GroupEntity groupEntity) async {
     widget.groupEntity = groupEntity;
-    ref
-        .read(groupViewModelProvider.notifier)
-        .updateGroupEntity(forEntity: groupEntity);
+    ref.read(groupViewModelProvider.notifier).updateGroupEntity(forEntity: groupEntity);
   }
 }

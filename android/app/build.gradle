@@ -1,8 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'kotlin-android-extensions'
-    // id 'app_plugin_loader'
+    id "org.jetbrains.kotlin.android"
+    id 'kotlin-parcelize'
     id "dev.flutter.flutter-gradle-plugin"
 }
 
@@ -34,16 +34,16 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.bootcamp.wehavit"
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 34
     ndkVersion flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
 
     sourceSets {
@@ -55,7 +55,7 @@ android {
         applicationId "com.bootcamp.wehavit"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion 21
+        minSdkVersion 30
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -69,13 +69,14 @@ android {
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
             storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-            storePassword keystoreProperties['storePassword']
+            storePassword keystoreProperties['storePasswords']
         }
     }
     buildTypes {
         release {
             //signingConfig signingConfigs.debug로 되어있는데 signingConfig signingConfigs.release로 수정해준다.
-            signingConfig signingConfigs.release
+            // signingConfig signingConfigs.release
+            signingConfig signingConfigs.debug
 
             // start of proguard 코드난독화 및 사이즈 축소
             minifyEnabled true
