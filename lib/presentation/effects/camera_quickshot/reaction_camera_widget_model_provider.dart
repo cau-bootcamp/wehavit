@@ -12,8 +12,14 @@ import 'package:path_provider/path_provider.dart';
 
 import 'package:wehavit/presentation/effects/effects.dart';
 
-final showReactionCameraWidgetStateNotifier = ValueNotifier<bool>(
-  false,
+enum ReactionCameraWidgetMode {
+  quickshot,
+  preset,
+  none;
+}
+
+final reactionCameraWidgetModeNotifier = ValueNotifier<ReactionCameraWidgetMode>(
+  ReactionCameraWidgetMode.none,
 );
 
 final cameraPointerPositionNotifier = CameraPointerPositionNotifier(const Offset(0, 0));

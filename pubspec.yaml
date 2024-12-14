@@ -30,10 +30,10 @@ dependencies:
   equatable: ^2.0.5
   fpdart: ^1.1.0
   uuid: ^4.2.1
-  # syncfusion_flutter_charts: ^25.2.6
-  # syncfusion_flutter_gauges: ^25.2.6
+  syncfusion_flutter_charts: ^28.1.33
+  syncfusion_flutter_gauges: ^28.1.33
   carousel_slider: ^5.0.0
-  camera: ^0.11.0
+  camera: ^0.10.6
   # flutter_native_image: ^0.0.6+1
   path: ^1.8.3
   path_provider: ^2.1.1
@@ -59,6 +59,7 @@ dependencies:
   smooth_page_indicator: ^1.1.0
   googleapis_auth: ^1.6.0
   dio: ^5.7.0
+  permission_handler: ^11.3.1
 
 dev_dependencies:
   flutter_test:

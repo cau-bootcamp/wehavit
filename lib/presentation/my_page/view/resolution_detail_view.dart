@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-// import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:wehavit/common/constants/constants.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
@@ -264,57 +264,51 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                   ),
                   child: SizedBox(
                     height: 200,
-                    child: Container(),
-                    // SfCartesianChart(
-                    //   plotAreaBorderColor: Colors.transparent,
-                    //   primaryXAxis: const CategoryAxis(
-                    //     majorGridLines:
-                    //         MajorGridLines(color: Colors.transparent),
-                    //     majorTickLines:
-                    //         MajorTickLines(color: Colors.transparent),
-                    //     labelStyle: TextStyle(
-                    //       color: Colors.white, // 레이블 색상을 흰색으로 변경
-                    //       fontSize: 14, // 폰트 크기 (옵션)
-                    //       fontWeight: FontWeight.normal, // 폰트 굵기 (옵션)
-                    //     ),
-                    //   ),
-                    //   primaryYAxis: const NumericAxis(
-                    //     isVisible: false,
-                    //   ),
-                    //   series: <CartesianSeries>[
-                    //     // Renders bar chart
-                    //     ColumnSeries<ChartData, String>(
-                    //       animationDuration: 0,
-                    //       dataLabelMapper: (datum, index) =>
-                    //           datum.y?.toInt().toString(),
-                    //       dataLabelSettings: const DataLabelSettings(
-                    //         isVisible: true,
-                    //         textStyle: TextStyle(
-                    //           color: CustomColors.whWhite,
-                    //           fontSize: 14.0,
-                    //           fontWeight: FontWeight.w500,
-                    //         ),
-                    //       ),
-                    //       color: PointColors
-                    //           .colorList[widget.entity.colorIndex ?? 0],
-                    //       dataSource: List<ChartData>.generate(
-                    //         widget.entity.weeklyPostCountList?.length ?? 0,
-                    //         (index) => ChartData(
-                    //           weekdayString[index],
-                    //           widget.entity.weeklyPostCountList![index]
-                    //               .toDouble(),
-                    //         ),
-                    //       ),
-                    //       xValueMapper: (ChartData data, _) => data.x,
-                    //       yValueMapper: (ChartData data, _) => data.y,
-                    //       borderRadius: const BorderRadius.only(
-                    //         topLeft: Radius.circular(8),
-                    //         topRight: Radius.circular(8),
-                    //       ),
-                    //       width: 0.5,
-                    //     ),
-                    //   ],
-                    // ),
+                    child: SfCartesianChart(
+                      plotAreaBorderColor: Colors.transparent,
+                      primaryXAxis: const CategoryAxis(
+                        majorGridLines: MajorGridLines(color: Colors.transparent),
+                        majorTickLines: MajorTickLines(color: Colors.transparent),
+                        labelStyle: TextStyle(
+                          color: Colors.white, // 레이블 색상을 흰색으로 변경
+                          fontSize: 14, // 폰트 크기 (옵션)
+                          fontWeight: FontWeight.normal, // 폰트 굵기 (옵션)
+                        ),
+                      ),
+                      primaryYAxis: const NumericAxis(
+                        isVisible: false,
+                      ),
+                      series: <CartesianSeries>[
+                        // Renders bar chart
+                        ColumnSeries<ChartData, String>(
+                          animationDuration: 0,
+                          dataLabelMapper: (datum, index) => datum.y?.toInt().toString(),
+                          dataLabelSettings: const DataLabelSettings(
+                            isVisible: true,
+                            textStyle: TextStyle(
+                              color: CustomColors.whWhite,
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          color: PointColors.colorList[widget.entity.colorIndex ?? 0],
+                          dataSource: List<ChartData>.generate(
+                            widget.entity.weeklyPostCountList?.length ?? 0,
+                            (index) => ChartData(
+                              weekdayString[index],
+                              widget.entity.weeklyPostCountList![index].toDouble(),
+                            ),
+                          ),
+                          xValueMapper: (ChartData data, _) => data.x,
+                          yValueMapper: (ChartData data, _) => data.y,
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(8),
+                            topRight: Radius.circular(8),
+                          ),
+                          width: 0.5,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],

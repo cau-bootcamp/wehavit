@@ -35,11 +35,6 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
   late EitherFuture<ResolutionEntity> futureResolutionEntity;
   late UserDataEntity? myUserEntity;
 
-  // late ReactionCameraWidgetModel reactionCameraModel =
-  //     ref.watch(reactionCameraWidgetModelProvider);
-  // late ReactionCameraWidgetModelProvider reactionCameraModelProvider =
-  //     ref.read(reactionCameraWidgetModelProvider.notifier);
-
   bool isShowingQuickshotPresets = false;
 
   @override
@@ -74,8 +69,6 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
   }
 
   bool isShowingCommentField = false;
-  bool isTouchMoved = false;
-  bool _isFunctionCalled = false;
 
   late GroupPostViewModel viewModel;
   late GroupPostViewModelProvider provider;
@@ -146,8 +139,9 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
                       onEmojiPressed: () {},
                       onQuickshotTapDown: (_) {},
                       onQuickshotTapUp: (_) {},
-                      onQuickshotLongPress: (_) {},
-                      onCaptureQuickshot: () {},
+                      onQuickshotLongPressStart: (_) {},
+                      onQuickshotLongPressMove: (_) {},
+                      onQuickshotLongPressEnd: (_) {},
                     ),
                 ],
               ),
@@ -352,124 +346,171 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
                                     ),
                                   );
                                 }),
-                                // if (viewModel.quickshotPresets.length <= 6)
-                                //   // 추가 버튼
-                                //   Container(
-                                //     width: 40,
-                                //     height: 40,
-                                //     alignment: Alignment.center,
-                                //     decoration: BoxDecoration(
-                                //       shape: BoxShape.circle,
-                                //       color: CustomColors.whDarkBlack,
-                                //       border: Border.all(
-                                //         color: CustomColors.whWhite,
-                                //       ),
-                                //     ),
-                                //     clipBehavior: Clip.hardEdge,
-                                //     child: Listener(
-                                //       onPointerDown: (event) async {
-                                //         isTouchMoved = false;
-                                //         setState(() {
-                                //           reactionCameraModel.isAddingPreset =
-                                //               true;
-                                //         });
+                                if (viewModel.quickshotPresets.length < 5)
+                                  // 추가 버튼
+                                  Container(
+                                    width: 40,
+                                    height: 40,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: CustomColors.whDarkBlack,
+                                      border: Border.all(
+                                        color: CustomColors.whWhite,
+                                      ),
+                                    ),
+                                    clipBehavior: Clip.hardEdge,
+                                    child: GestureDetector(
+                                      behavior: HitTestBehavior.translucent,
+                                      onTapDown: (_) {},
+                                      onTapUp: (_) {
+                                        showToastMessage(
+                                          context,
+                                          text: '추가 버튼을 누른 채로 드래그 해주세요!',
+                                          icon: const Icon(
+                                            Icons.warning,
+                                            color: CustomColors.whYellow,
+                                          ),
+                                        );
+                                      },
+                                      onLongPressStart: (_) async {
+                                        PermissionStatus permission = await Permission.camera.status;
 
-                                //         reactionCameraModel.nonScrollMode =
-                                //             true;
+                                        if (permission == PermissionStatus.denied) {
+                                          await Permission.camera.request();
+                                        }
+                                        if (permission == PermissionStatus.granted) {
+                                          reactionCameraWidgetModeNotifier.value = ReactionCameraWidgetMode.preset;
+                                        }
+                                      },
+                                      onLongPressMoveUpdate: (detail) {
+                                        cameraPointerPositionNotifier.value = detail.globalPosition;
+                                      },
+                                      onLongPressEnd: (_) async {
+                                        final needCapture = cameraPointerPositionNotifier.isPosInCapturingArea;
 
-                                //         panningPosition = Point(
-                                //           event.position.dx,
-                                //           event.position.dy,
-                                //         );
+                                        if (needCapture) {
+                                          final imageFilePath = await ref.read(reactionCameraWidgetModelProvider.notifier).endOnCapturingArea();
 
-                                //         reactionCameraModelProvider
-                                //             .updatePanPosition(panningPosition);
-                                //       },
-                                //       onPointerUp: (event) async {
-                                //         reactionCameraModel.nonScrollMode =
-                                //             false;
+                                          cameraPointerPositionNotifier.value = Offset.zero;
+                                          reactionCameraWidgetModeNotifier.value = ReactionCameraWidgetMode.none;
 
-                                //         _isFunctionCalled = false;
-                                //         if (!isTouchMoved) {
-                                //           showToastMessage(
-                                //             context,
-                                //             text: '추가 버튼을 누른 채로 드래그 해주세요!',
-                                //             icon: const Icon(
-                                //               Icons.warning,
-                                //               color: CustomColors.whYellow,
-                                //             ),
-                                //           );
-                                //           return;
-                                //         }
+                                          await provider.uploadQuickshotPreset(imageFilePath: imageFilePath).whenComplete(() async {
+                                            await provider.getQuickshotPresets();
+                                          }).whenComplete(() {
+                                            if (mounted) {
+                                              showToastMessage(
+                                                context,
+                                                text: '퀵샷을 저장했어요',
+                                                icon: const Icon(
+                                                  Icons.emoji_emotions,
+                                                  color: CustomColors.whYellow,
+                                                ),
+                                              );
+                                            }
+                                            setState(() {});
+                                          });
+                                        } else {
+                                          cameraPointerPositionNotifier.value = Offset.zero;
+                                          reactionCameraWidgetModeNotifier.value = ReactionCameraWidgetMode.none;
+                                        }
+                                      },
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        child: const Icon(
+                                          color: CustomColors.whBrightGrey,
+                                          Icons.add,
+                                          size: 20,
+                                        ),
+                                      ),
+                                    ),
+                                    // Listener(
+                                    //   onPointerDown: (event) async {
+                                    //     isTouchMoved = false;
+                                    //     setState(() {
+                                    //       reactionCameraModel.isAddingPreset = true;
+                                    //     });
 
-                                //         if (ref
-                                //             .read(
-                                //                 reactionCameraWidgetModelProvider)
-                                //             .isPosInCapturingArea) {
-                                //           final imageFilePath =
-                                //               await reactionCameraModelProvider
-                                //                   .endOnCapturingArea();
+                                    //     reactionCameraModel.nonScrollMode = true;
 
-                                //           reactionCameraModelProvider
-                                //               .setFocusingModeTo(false);
+                                    //     panningPosition = Point(
+                                    //       event.position.dx,
+                                    //       event.position.dy,
+                                    //     );
 
-                                //           await provider
-                                //               .uploadQuickshotPreset(
-                                //             imageFilePath: imageFilePath,
-                                //           )
-                                //               .whenComplete(() async {
-                                //             await provider
-                                //                 .getQuickshotPresets();
-                                //           }).whenComplete(() {
-                                //             setState(() {});
-                                //           });
-                                //         }
+                                    //     reactionCameraModelProvider.updatePanPosition(panningPosition);
+                                    //   },
+                                    //   onPointerUp: (event) async {
+                                    //     reactionCameraModel.nonScrollMode = false;
 
-                                //         reactionCameraModelProvider
-                                //             .setFocusingModeTo(false);
+                                    //     _isFunctionCalled = false;
+                                    //     if (!isTouchMoved) {
+                                    //       showToastMessage(
+                                    //         context,
+                                    //         text: '추가 버튼을 누른 채로 드래그 해주세요!',
+                                    //         icon: const Icon(
+                                    //           Icons.warning,
+                                    //           color: CustomColors.whYellow,
+                                    //         ),
+                                    //       );
+                                    //       return;
+                                    //     }
 
-                                //         await reactionCameraModelProvider
-                                //             .disposeCamera();
-                                //       },
-                                //       onPointerMove: (event) async {
-                                //         WidgetsBinding.instance
-                                //             .addPostFrameCallback((_) {
-                                //           reactionCameraModelProvider
-                                //               .setFocusingModeTo(true);
-                                //         });
+                                    //     if (ref.read(reactionCameraWidgetModelProvider).isPosInCapturingArea) {
+                                    //       final imageFilePath = await reactionCameraModelProvider.endOnCapturingArea();
 
-                                //         if (ref
-                                //                 .read(
-                                //                   reactionCameraWidgetModelProvider,
-                                //                 )
-                                //                 .cameraController ==
-                                //             null) {
-                                //           if (!_isFunctionCalled) {
-                                //             reactionCameraModelProvider
-                                //                 .initializeCamera();
-                                //             _isFunctionCalled = true;
-                                //           }
+                                    //       reactionCameraModelProvider.setFocusingModeTo(false);
 
-                                //           return;
-                                //         }
+                                    //       await provider
+                                    //           .uploadQuickshotPreset(
+                                    //         imageFilePath: imageFilePath,
+                                    //       )
+                                    //           .whenComplete(() async {
+                                    //         await provider.getQuickshotPresets();
+                                    //       }).whenComplete(() {
+                                    //         setState(() {});
+                                    //       });
+                                    //     }
 
-                                //         isTouchMoved = true;
+                                    //     reactionCameraModelProvider.setFocusingModeTo(false);
 
-                                //         panningPosition = Point(
-                                //           event.position.dx,
-                                //           event.position.dy,
-                                //         );
+                                    //     await reactionCameraModelProvider.disposeCamera();
+                                    //   },
+                                    //   onPointerMove: (event) async {
+                                    //     WidgetsBinding.instance.addPostFrameCallback((_) {
+                                    //       reactionCameraModelProvider.setFocusingModeTo(true);
+                                    //     });
 
-                                //         reactionCameraModelProvider
-                                //             .updatePanPosition(panningPosition);
-                                //       },
-                                //       child: const Icon(
-                                //         color: CustomColors.whBrightGrey,
-                                //         Icons.add,
-                                //         size: 20,
-                                //       ),
-                                //     ),
-                                //   )
+                                    //     if (ref
+                                    //             .read(
+                                    //               reactionCameraWidgetModelProvider,
+                                    //             )
+                                    //             .cameraController ==
+                                    //         null) {
+                                    //       if (!_isFunctionCalled) {
+                                    //         reactionCameraModelProvider.initializeCamera();
+                                    //         _isFunctionCalled = true;
+                                    //       }
+
+                                    //       return;
+                                    //     }
+
+                                    //     isTouchMoved = true;
+
+                                    //     panningPosition = Point(
+                                    //       event.position.dx,
+                                    //       event.position.dy,
+                                    //     );
+
+                                    //     reactionCameraModelProvider.updatePanPosition(panningPosition);
+                                    //   },
+                                    //   child: const Icon(
+                                    //     color: CustomColors.whBrightGrey,
+                                    //     Icons.add,
+                                    //     size: 20,
+                                    //   ),
+                                    // ),
+                                  )
                               ],
                             ),
                           ),
@@ -492,28 +533,47 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
                           isShowingQuickshotPresets = !isShowingQuickshotPresets;
                         });
                       },
-                      onQuickshotLongPress: (event) async {
-                        showReactionCameraWidgetStateNotifier.value = true;
-                      },
-                      onCaptureQuickshot: () async {
-                        final imageFilePath = await ref.read(reactionCameraWidgetModelProvider.notifier).endOnCapturingArea();
+                      onQuickshotLongPressStart: (detail) async {
+                        PermissionStatus permission = await Permission.camera.status;
 
-                        await provider
-                            .sendImageReaction(
-                          entity: widget.confirmPostEntity,
-                          imageFilePath: imageFilePath,
-                          myUserEntity: myUserEntity,
-                        )
-                            .whenComplete(() {
-                          showToastMessage(
-                            context,
-                            text: '친구에게 퀵샷으로 응원을 보냈어요',
-                            icon: const Icon(
-                              Icons.emoji_emotions,
-                              color: CustomColors.whYellow,
-                            ),
-                          );
-                        });
+                        if (permission == PermissionStatus.denied) {
+                          await Permission.camera.request();
+                        }
+                        if (permission == PermissionStatus.granted) {
+                          reactionCameraWidgetModeNotifier.value = ReactionCameraWidgetMode.quickshot;
+                        }
+                      },
+                      onQuickshotLongPressMove: (detail) {
+                        cameraPointerPositionNotifier.value = detail.globalPosition;
+                      },
+                      onQuickshotLongPressEnd: (detail) async {
+                        final needCapture = cameraPointerPositionNotifier.isPosInCapturingArea;
+
+                        if (needCapture) {
+                          final imageFilePath = await ref.read(reactionCameraWidgetModelProvider.notifier).endOnCapturingArea();
+
+                          await provider
+                              .sendImageReaction(
+                            entity: widget.confirmPostEntity,
+                            imageFilePath: imageFilePath,
+                            myUserEntity: myUserEntity,
+                          )
+                              .whenComplete(() {
+                            if (mounted) {
+                              showToastMessage(
+                                context,
+                                text: '친구에게 퀵샷으로 응원을 보냈어요',
+                                icon: const Icon(
+                                  Icons.emoji_emotions,
+                                  color: CustomColors.whYellow,
+                                ),
+                              );
+                            }
+                          });
+                        }
+
+                        cameraPointerPositionNotifier.value = Offset.zero;
+                        reactionCameraWidgetModeNotifier.value = ReactionCameraWidgetMode.none;
                       },
                     ),
                   Visibility(
@@ -733,23 +793,25 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
         );
       },
     ).whenComplete(() async {
-      await provider
-          .sendEmojiReaction(
-        entity: widget.confirmPostEntity,
-        myUserEntity: myUserEntity,
-      )
-          .whenComplete(
-        () {
-          showToastMessage(
-            context,
-            text: '친구에게 이모지로 응원을 보냈어요',
-            icon: const Icon(
-              Icons.emoji_emotions,
-              color: CustomColors.whYellow,
-            ),
-          );
-        },
-      );
+      if (viewModel.countSend != 0) {
+        await provider
+            .sendEmojiReaction(
+          entity: widget.confirmPostEntity,
+          myUserEntity: myUserEntity,
+        )
+            .whenComplete(
+          () {
+            showToastMessage(
+              context,
+              text: '친구에게 이모지로 응원을 보냈어요',
+              icon: const Icon(
+                Icons.emoji_emotions,
+                color: CustomColors.whYellow,
+              ),
+            );
+          },
+        );
+      }
 
       viewModel.countSend = 0;
       provider.resetSendingEmojis();
@@ -1362,15 +1424,17 @@ class ConfirmPostReactionButtonListWidget extends ConsumerWidget {
     required this.onEmojiPressed,
     required this.onQuickshotTapDown,
     required this.onQuickshotTapUp,
-    required this.onQuickshotLongPress,
-    required this.onCaptureQuickshot,
+    required this.onQuickshotLongPressStart,
+    required this.onQuickshotLongPressMove,
+    required this.onQuickshotLongPressEnd,
   });
   final Function() onMessagePressed;
   final Function() onEmojiPressed;
   final Function(TapDownDetails) onQuickshotTapDown;
   final Function(TapUpDetails) onQuickshotTapUp;
-  final Function(LongPressStartDetails) onQuickshotLongPress;
-  final Function() onCaptureQuickshot;
+  final Function(LongPressStartDetails) onQuickshotLongPressStart;
+  final Function(LongPressMoveUpdateDetails) onQuickshotLongPressMove;
+  final Function(LongPressEndDetails) onQuickshotLongPressEnd;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -1413,30 +1477,9 @@ class ConfirmPostReactionButtonListWidget extends ConsumerWidget {
           behavior: HitTestBehavior.translucent,
           onTapDown: onQuickshotTapDown,
           onTapUp: onQuickshotTapUp,
-          // onLongPressStart: onQuickshotLongPress,
-          onLongPressStart: (details) async {
-            PermissionStatus permission = await Permission.camera.status;
-
-            if (permission == PermissionStatus.denied) {
-              await Permission.camera.request();
-            }
-            if (permission == PermissionStatus.granted) {
-              showReactionCameraWidgetStateNotifier.value = true;
-            }
-          },
-          onLongPressMoveUpdate: (details) {
-            cameraPointerPositionNotifier.value = details.globalPosition;
-          },
-          onLongPressEnd: (details) async {
-            final needCapture = cameraPointerPositionNotifier.isPosInCapturingArea;
-
-            if (needCapture) {
-              await onCaptureQuickshot();
-            }
-
-            cameraPointerPositionNotifier.value = Offset.zero;
-            showReactionCameraWidgetStateNotifier.value = false;
-          },
+          onLongPressStart: onQuickshotLongPressStart,
+          onLongPressMoveUpdate: onQuickshotLongPressMove,
+          onLongPressEnd: onQuickshotLongPressEnd,
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: const Row(

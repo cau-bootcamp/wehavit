@@ -144,8 +144,8 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
                   children: [
                     Text(
                       cameraPointerPositionNotifier.isPosInCapturingArea
-                          ? (model.isAddingPreset ? '손가락을 떼면 격려를 저장합니다\n📸 바로 지금! 📸' : '손가락을 떼면 격려가 전송됩니다\n📸 바로 지금! 📸')
-                          : (model.isAddingPreset ? '아래로 손가락을 움직여\n당신의 사진을 남겨주세요' : '아래로 손가락을 움직여\n사진으로 격려를 남기세요'),
+                          ? (reactionCameraWidgetModeNotifier.value == ReactionCameraWidgetMode.preset ? '손가락을 떼면 격려를 저장합니다\n📸 바로 지금! 📸' : '손가락을 떼면 격려가 전송됩니다\n📸 바로 지금! 📸')
+                          : (reactionCameraWidgetModeNotifier.value == ReactionCameraWidgetMode.preset ? '아래로 손가락을 움직여\n당신의 사진을 남겨주세요' : '아래로 손가락을 움직여\n사진으로 격려를 남기세요'),
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         decoration: TextDecoration.none,
