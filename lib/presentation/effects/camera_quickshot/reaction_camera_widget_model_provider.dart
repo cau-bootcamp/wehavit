@@ -12,19 +12,14 @@ import 'package:path_provider/path_provider.dart';
 
 import 'package:wehavit/presentation/effects/effects.dart';
 
-enum ReactionCameraWidgetMode {
-  quickshot,
-  preset,
-  none;
-}
-
 final reactionCameraWidgetModeNotifier = ValueNotifier<ReactionCameraWidgetMode>(
   ReactionCameraWidgetMode.none,
 );
 
 final cameraPointerPositionNotifier = CameraPointerPositionNotifier(const Offset(0, 0));
 
-final reactionCameraWidgetModelProvider = StateNotifierProvider.autoDispose<ReactionCameraWidgetModelProvider, ReactionCameraWidgetModel>((ref) {
+final reactionCameraWidgetModelProvider =
+    StateNotifierProvider.autoDispose<ReactionCameraWidgetModelProvider, ReactionCameraWidgetModel>((ref) {
   final newModel = ReactionCameraWidgetModelProvider(ref);
 
   ref.listenSelf((_, __) {
@@ -41,7 +36,7 @@ final reactionCameraWidgetModelProvider = StateNotifierProvider.autoDispose<Reac
 class ReactionCameraWidgetModelProvider extends StateNotifier<ReactionCameraWidgetModel> {
   ReactionCameraWidgetModelProvider(this.ref) : super(ReactionCameraWidgetModel());
 
-  AutoDisposeStateNotifierProviderRef ref;
+  Ref ref;
 
   Future<bool> _initializeCamera() async {
     if (state.cameraController != null) return Future.value(false);
@@ -73,17 +68,6 @@ class ReactionCameraWidgetModelProvider extends StateNotifier<ReactionCameraWidg
       return true;
     }
 
-    return false;
-  }
-
-  void updatePanPosition(Point<double> position) {
-    state.isPosInCapturingArea = _checkPosInCapturingArea(position);
-  }
-
-  bool _checkPosInCapturingArea(Point<double> position) {
-    if (state.screenHeight - position.y <= 150) {
-      return true;
-    }
     return false;
   }
 

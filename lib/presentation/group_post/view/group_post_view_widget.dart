@@ -78,8 +78,6 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
     viewModel = ref.watch(groupPostViewModelProvider);
     provider = ref.read(groupPostViewModelProvider.notifier);
 
-    // Point<double> panningPosition = const Point(0, 0);
-
     return EitherFutureBuilder<ResolutionEntity>(
       target: futureResolutionEntity,
       forFail: Container(),
@@ -90,22 +88,11 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
             Container(
               decoration: BoxDecoration(
                 color: CustomColors.whDarkBlack,
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(16.0),
-                ),
+                borderRadius: const BorderRadius.all(Radius.circular(16.0)),
                 border: Border(
-                  top: const BorderSide(
-                    width: 8.0,
-                    color: CustomColors.whDarkBlack,
-                  ),
-                  left: const BorderSide(
-                    width: 8.0,
-                    color: CustomColors.whDarkBlack,
-                  ),
-                  right: const BorderSide(
-                    width: 8.0,
-                    color: CustomColors.whDarkBlack,
-                  ),
+                  top: const BorderSide(width: 8.0, color: CustomColors.whDarkBlack),
+                  left: const BorderSide(width: 8.0, color: CustomColors.whDarkBlack),
+                  right: const BorderSide(width: 8.0, color: CustomColors.whDarkBlack),
                   bottom: BorderSide(
                     width: widget.showReactionToolbar ? 0.1 : 8.0,
                     color: CustomColors.whDarkBlack,
@@ -117,15 +104,9 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
                   Container(
                     decoration: const BoxDecoration(
                       color: CustomColors.whGrey,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(8.0),
-                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(8.0)),
                     ),
-                    padding: const EdgeInsets.only(
-                      left: 8.0,
-                      right: 8.0,
-                      bottom: 12.0,
-                    ),
+                    padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 12.0),
                     height: 224,
                     child: const Center(
                       child: CircularProgressIndicator(
@@ -137,7 +118,6 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
                     ConfirmPostReactionButtonListWidget(
                       onMessagePressed: () {},
                       onEmojiPressed: () {},
-                      onQuickshotTapDown: (_) {},
                       onQuickshotTapUp: (_) {},
                       onQuickshotLongPressStart: (_) {},
                       onQuickshotLongPressMove: (_) {},
@@ -156,22 +136,11 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
             Container(
               decoration: BoxDecoration(
                 color: CustomColors.whDarkBlack,
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(16.0),
-                ),
+                borderRadius: const BorderRadius.all(Radius.circular(16.0)),
                 border: Border(
-                  top: const BorderSide(
-                    width: 8.0,
-                    color: CustomColors.whDarkBlack,
-                  ),
-                  left: const BorderSide(
-                    width: 8.0,
-                    color: CustomColors.whDarkBlack,
-                  ),
-                  right: const BorderSide(
-                    width: 8.0,
-                    color: CustomColors.whDarkBlack,
-                  ),
+                  top: const BorderSide(width: 8.0, color: CustomColors.whDarkBlack),
+                  left: const BorderSide(width: 8.0, color: CustomColors.whDarkBlack),
+                  right: const BorderSide(width: 8.0, color: CustomColors.whDarkBlack),
                   bottom: BorderSide(
                     width: widget.showReactionToolbar ? 0.1 : 8.0,
                     color: CustomColors.whDarkBlack,
@@ -183,15 +152,9 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
                   Container(
                     decoration: const BoxDecoration(
                       color: CustomColors.whGrey,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(8.0),
-                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(8.0)),
                     ),
-                    padding: const EdgeInsets.only(
-                      left: 8.0,
-                      right: 8.0,
-                      bottom: 12.0,
-                    ),
+                    padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 12.0),
                     child: Stack(
                       alignment: Alignment.bottomRight,
                       children: [
@@ -229,26 +192,18 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
                                   ),
                               ],
                             ),
-                            // const SizedBox(height: 12.0),
-
                             ResolutionLinearGaugeWidget(
                               resolutionEntity: resolutionEntity,
                               futureDoneList: resolutionDoneListForWrittenWeek,
                             ),
-
                             const SizedBox(height: 12.0),
-                            ConfirmPostContentWidget(
-                              confirmPostEntity: widget.confirmPostEntity,
-                            ),
+                            ConfirmPostContentWidget(confirmPostEntity: widget.confirmPostEntity),
                           ],
                         ),
                         if (isShowingQuickshotPresets)
                           Container(
                             height: 48,
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 4,
-                              horizontal: 8,
-                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                             decoration: BoxDecoration(
                               color: CustomColors.whDarkBlack.withOpacity(0.9),
                               borderRadius: BorderRadius.circular(16),
@@ -260,13 +215,8 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
                                   const Padding(
                                     padding: EdgeInsets.symmetric(horizontal: 4.0),
                                     child: Text(
-                                      // ignore: lines_longer_than_80_chars
                                       '미리 퀵샷을 찍어두고 보낼 수도 있어요\n저장 없이 보내려면 버튼을 꾹! 눌러주세요',
-                                      style: TextStyle(
-                                        color: CustomColors.whWhite,
-                                        height: 1.1,
-                                        fontSize: 13.0,
-                                      ),
+                                      style: TextStyle(color: CustomColors.whWhite, height: 1.1, fontSize: 13.0),
                                     ),
                                   ),
                                 ...viewModel.quickshotPresets.map((entity) {
@@ -279,9 +229,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
                                         color: CustomColors.whDarkBlack,
-                                        border: Border.all(
-                                          color: CustomColors.whWhite,
-                                        ),
+                                        border: Border.all(color: CustomColors.whWhite),
                                       ),
                                       clipBehavior: Clip.hardEdge,
                                       child: MaterialButton(
@@ -362,7 +310,6 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
                                     clipBehavior: Clip.hardEdge,
                                     child: GestureDetector(
                                       behavior: HitTestBehavior.translucent,
-                                      onTapDown: (_) {},
                                       onTapUp: (_) {
                                         showToastMessage(
                                           context,
@@ -390,12 +337,16 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
                                         final needCapture = cameraPointerPositionNotifier.isPosInCapturingArea;
 
                                         if (needCapture) {
-                                          final imageFilePath = await ref.read(reactionCameraWidgetModelProvider.notifier).endOnCapturingArea();
+                                          final imageFilePath = await ref
+                                              .read(reactionCameraWidgetModelProvider.notifier)
+                                              .endOnCapturingArea();
 
                                           cameraPointerPositionNotifier.value = Offset.zero;
                                           reactionCameraWidgetModeNotifier.value = ReactionCameraWidgetMode.none;
 
-                                          await provider.uploadQuickshotPreset(imageFilePath: imageFilePath).whenComplete(() async {
+                                          await provider
+                                              .uploadQuickshotPreset(imageFilePath: imageFilePath)
+                                              .whenComplete(() async {
                                             await provider.getQuickshotPresets();
                                           }).whenComplete(() {
                                             if (mounted) {
@@ -424,93 +375,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
                                         ),
                                       ),
                                     ),
-                                    // Listener(
-                                    //   onPointerDown: (event) async {
-                                    //     isTouchMoved = false;
-                                    //     setState(() {
-                                    //       reactionCameraModel.isAddingPreset = true;
-                                    //     });
-
-                                    //     reactionCameraModel.nonScrollMode = true;
-
-                                    //     panningPosition = Point(
-                                    //       event.position.dx,
-                                    //       event.position.dy,
-                                    //     );
-
-                                    //     reactionCameraModelProvider.updatePanPosition(panningPosition);
-                                    //   },
-                                    //   onPointerUp: (event) async {
-                                    //     reactionCameraModel.nonScrollMode = false;
-
-                                    //     _isFunctionCalled = false;
-                                    //     if (!isTouchMoved) {
-                                    //       showToastMessage(
-                                    //         context,
-                                    //         text: '추가 버튼을 누른 채로 드래그 해주세요!',
-                                    //         icon: const Icon(
-                                    //           Icons.warning,
-                                    //           color: CustomColors.whYellow,
-                                    //         ),
-                                    //       );
-                                    //       return;
-                                    //     }
-
-                                    //     if (ref.read(reactionCameraWidgetModelProvider).isPosInCapturingArea) {
-                                    //       final imageFilePath = await reactionCameraModelProvider.endOnCapturingArea();
-
-                                    //       reactionCameraModelProvider.setFocusingModeTo(false);
-
-                                    //       await provider
-                                    //           .uploadQuickshotPreset(
-                                    //         imageFilePath: imageFilePath,
-                                    //       )
-                                    //           .whenComplete(() async {
-                                    //         await provider.getQuickshotPresets();
-                                    //       }).whenComplete(() {
-                                    //         setState(() {});
-                                    //       });
-                                    //     }
-
-                                    //     reactionCameraModelProvider.setFocusingModeTo(false);
-
-                                    //     await reactionCameraModelProvider.disposeCamera();
-                                    //   },
-                                    //   onPointerMove: (event) async {
-                                    //     WidgetsBinding.instance.addPostFrameCallback((_) {
-                                    //       reactionCameraModelProvider.setFocusingModeTo(true);
-                                    //     });
-
-                                    //     if (ref
-                                    //             .read(
-                                    //               reactionCameraWidgetModelProvider,
-                                    //             )
-                                    //             .cameraController ==
-                                    //         null) {
-                                    //       if (!_isFunctionCalled) {
-                                    //         reactionCameraModelProvider.initializeCamera();
-                                    //         _isFunctionCalled = true;
-                                    //       }
-
-                                    //       return;
-                                    //     }
-
-                                    //     isTouchMoved = true;
-
-                                    //     panningPosition = Point(
-                                    //       event.position.dx,
-                                    //       event.position.dy,
-                                    //     );
-
-                                    //     reactionCameraModelProvider.updatePanPosition(panningPosition);
-                                    //   },
-                                    //   child: const Icon(
-                                    //     color: CustomColors.whBrightGrey,
-                                    //     Icons.add,
-                                    //     size: 20,
-                                    //   ),
-                                    // ),
-                                  )
+                                  ),
                               ],
                             ),
                           ),
@@ -527,7 +392,6 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
                       onEmojiPressed: () async {
                         showEmojiSheet(viewModel, provider, context);
                       },
-                      onQuickshotTapDown: (event) async {},
                       onQuickshotTapUp: (event) async {
                         setState(() {
                           isShowingQuickshotPresets = !isShowingQuickshotPresets;
@@ -550,7 +414,8 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
                         final needCapture = cameraPointerPositionNotifier.isPosInCapturingArea;
 
                         if (needCapture) {
-                          final imageFilePath = await ref.read(reactionCameraWidgetModelProvider.notifier).endOnCapturingArea();
+                          final imageFilePath =
+                              await ref.read(reactionCameraWidgetModelProvider.notifier).endOnCapturingArea();
 
                           await provider
                               .sendImageReaction(
@@ -579,37 +444,22 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
                   Visibility(
                     visible: isShowingCommentField,
                     child: Padding(
-                      padding: const EdgeInsets.only(
-                        left: 8.0,
-                        right: 8.0,
-                        bottom: 8.0,
-                      ),
+                      padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
                       child: Stack(
                         alignment: Alignment.centerRight,
                         children: [
                           TextFormField(
                             controller: viewModel.commentEditingController,
                             style: const TextStyle(
-                              color: CustomColors.whWhite,
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w300,
-                            ),
+                                color: CustomColors.whWhite, fontSize: 16.0, fontWeight: FontWeight.w300),
                             decoration: InputDecoration(
                               isDense: true,
                               filled: true,
                               fillColor: CustomColors.whYellowDark,
-                              contentPadding: const EdgeInsets.only(
-                                left: 12.0,
-                                right: 44.0,
-                                top: 8.0,
-                                bottom: 8.0,
-                              ),
+                              contentPadding: const EdgeInsets.only(left: 12.0, right: 44.0, top: 8.0, bottom: 8.0),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(
-                                  width: 0,
-                                  style: BorderStyle.none,
-                                ),
+                                borderSide: const BorderSide(width: 0, style: BorderStyle.none),
                               ),
                             ),
                           ),
@@ -706,12 +556,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
                             child: Text(
                               viewModel.countSend.toString(),
                               style: TextStyle(
-                                fontSize: 40 +
-                                    24 *
-                                        min(
-                                          1,
-                                          viewModel.countSend / 24,
-                                        ),
+                                fontSize: 40 + 24 * min(1, viewModel.countSend / 24),
                                 color: Color.lerp(
                                   CustomColors.whYellow,
                                   CustomColors.whRed,
@@ -749,7 +594,6 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
                                     return Expanded(
                                       key: key,
                                       child: GestureDetector(
-                                        onTapDown: (detail) {},
                                         onTapUp: (detail) {
                                           shootEmoji(
                                             viewModel,
@@ -780,10 +624,6 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
                           );
                         },
                       ),
-                      // Expanded(child: Container()),
-                      // const SizedBox(
-                      //   height: 60,
-                      // ),
                     ],
                   ),
                 ),
@@ -1422,7 +1262,6 @@ class ConfirmPostReactionButtonListWidget extends ConsumerWidget {
     super.key,
     required this.onMessagePressed,
     required this.onEmojiPressed,
-    required this.onQuickshotTapDown,
     required this.onQuickshotTapUp,
     required this.onQuickshotLongPressStart,
     required this.onQuickshotLongPressMove,
@@ -1430,7 +1269,6 @@ class ConfirmPostReactionButtonListWidget extends ConsumerWidget {
   });
   final Function() onMessagePressed;
   final Function() onEmojiPressed;
-  final Function(TapDownDetails) onQuickshotTapDown;
   final Function(TapUpDetails) onQuickshotTapUp;
   final Function(LongPressStartDetails) onQuickshotLongPressStart;
   final Function(LongPressMoveUpdateDetails) onQuickshotLongPressMove;
@@ -1475,7 +1313,6 @@ class ConfirmPostReactionButtonListWidget extends ConsumerWidget {
         ),
         GestureDetector(
           behavior: HitTestBehavior.translucent,
-          onTapDown: onQuickshotTapDown,
           onTapUp: onQuickshotTapUp,
           onLongPressStart: onQuickshotLongPressStart,
           onLongPressMoveUpdate: onQuickshotLongPressMove,

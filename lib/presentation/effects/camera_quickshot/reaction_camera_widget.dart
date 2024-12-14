@@ -17,8 +17,6 @@ class ReactionCameraWidget extends ConsumerStatefulWidget {
 }
 
 class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
-  // late SwipeViewModelProvider _swipeViewModelProvider;
-
   @override
   Widget build(BuildContext context) {
     ReactionCameraWidgetModel model = ref.watch(reactionCameraWidgetModelProvider);
@@ -75,7 +73,9 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
                                 shape: BoxShape.circle,
                                 border: Border.all(
                                   // 테두리 스타일 설정
-                                  color: cameraPointerPositionNotifier.isPosInCapturingArea ? Colors.white : Colors.transparent, // 테두리 색상
+                                  color: cameraPointerPositionNotifier.isPosInCapturingArea
+                                      ? Colors.white
+                                      : Colors.transparent, // 테두리 색상
                                   width: 4, // 테두리 두께
                                 ),
                               ),
@@ -88,7 +88,6 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
                                 ),
                                 child: Container(
                                   decoration: const BoxDecoration(
-                                    color: Colors.grey,
                                     shape: BoxShape.circle, // 원 모양의 테두리 설정
                                   ),
                                   clipBehavior: Clip.hardEdge,
@@ -107,7 +106,7 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
             },
           ),
           Positioned(
-            bottom: 0.0,
+            bottom: 0,
             child: Container(
               color: Colors.transparent,
               height: 155,
@@ -144,8 +143,12 @@ class _ReactionCameraWidgetState extends ConsumerState<ReactionCameraWidget> {
                   children: [
                     Text(
                       cameraPointerPositionNotifier.isPosInCapturingArea
-                          ? (reactionCameraWidgetModeNotifier.value == ReactionCameraWidgetMode.preset ? '손가락을 떼면 격려를 저장합니다\n📸 바로 지금! 📸' : '손가락을 떼면 격려가 전송됩니다\n📸 바로 지금! 📸')
-                          : (reactionCameraWidgetModeNotifier.value == ReactionCameraWidgetMode.preset ? '아래로 손가락을 움직여\n당신의 사진을 남겨주세요' : '아래로 손가락을 움직여\n사진으로 격려를 남기세요'),
+                          ? (reactionCameraWidgetModeNotifier.value == ReactionCameraWidgetMode.preset
+                              ? '손가락을 떼면 격려를 저장합니다\n📸 바로 지금! 📸'
+                              : '손가락을 떼면 격려가 전송됩니다\n📸 바로 지금! 📸')
+                          : (reactionCameraWidgetModeNotifier.value == ReactionCameraWidgetMode.preset
+                              ? '아래로 손가락을 움직여\n당신의 사진을 남겨주세요'
+                              : '아래로 손가락을 움직여\n사진으로 격려를 남기세요'),
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         decoration: TextDecoration.none,
@@ -188,21 +191,15 @@ class CurvePainter extends CustomPainter {
           const ui.Color.fromARGB(255, 39, 28, 0),
         ],
       );
-    // paint.color = Color(0XFF382b47);
+
     paint.style = PaintingStyle.fill;
 
     var path = Path();
 
     path.moveTo(0, size.height);
     path.lineTo(0, size.height * 0.26);
-    path.quadraticBezierTo(
-      size.width / 2,
-      0,
-      size.width,
-      size.height * 0.26,
-    );
+    path.quadraticBezierTo(size.width / 2, 0, size.width, size.height * 0.26);
     path.lineTo(size.width, size.height);
-
     path.lineTo(0, size.height);
 
     canvas.drawPath(path, paint);

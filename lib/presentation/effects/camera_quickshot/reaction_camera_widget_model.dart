@@ -4,18 +4,24 @@ import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 
 class CameraPointerPositionNotifier extends ValueNotifier<Offset> {
-  CameraPointerPositionNotifier(super.value);
+  CameraPointerPositionNotifier(super._value);
 
   double? screenHeight;
 
   bool get isPosInCapturingArea {
     if (screenHeight == null) {
-      AssertionError('need to init first');
+      AssertionError('Need to call initializeCameraWidgetSetting first');
       return false;
     }
 
     return screenHeight! - value.dy < 150;
   }
+}
+
+enum ReactionCameraWidgetMode {
+  quickshot,
+  preset,
+  none;
 }
 
 class ReactionCameraWidgetModel {
@@ -35,7 +41,6 @@ class ReactionCameraWidgetModel {
   double cameraWidgetRadius = 0;
 
   CameraController? cameraController;
-  bool nonScrollMode = false;
 
   bool isAddingPreset = false;
 }

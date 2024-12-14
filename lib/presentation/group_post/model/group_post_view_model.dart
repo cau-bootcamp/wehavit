@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:camera/camera.dart';
-import 'package:carousel_slider/carousel_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:wehavit/common/common.dart';
