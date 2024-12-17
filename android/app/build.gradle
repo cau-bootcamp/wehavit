@@ -69,14 +69,13 @@ android {
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
             storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-            storePassword keystoreProperties['storePasswords']
+            storePassword keystoreProperties['storePassword']
         }
     }
     buildTypes {
         release {
             //signingConfig signingConfigs.debug로 되어있는데 signingConfig signingConfigs.release로 수정해준다.
-            // signingConfig signingConfigs.release
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
 
             // start of proguard 코드난독화 및 사이즈 축소
             minifyEnabled true
