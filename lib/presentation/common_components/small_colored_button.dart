@@ -1,3 +1,4 @@
+import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:wehavit/common/common.dart';
 
@@ -6,14 +7,16 @@ class SmallColoredButtonWidget extends StatelessWidget {
     super.key,
     required this.buttonLabel,
     this.backgroundColor = CustomColors.whYellow,
-    this.foregroundColor = CustomColors.whBlack,
+    this.foregroundColor = CustomColors.whGrey200,
     required this.onPressed,
+    this.isDisabled = false,
   });
 
   final String buttonLabel;
   final Color backgroundColor;
   final Color foregroundColor;
-  final Function? onPressed;
+  final Function onPressed;
+  final bool isDisabled;
 
   @override
   Widget build(BuildContext context) {
@@ -22,19 +25,15 @@ class SmallColoredButtonWidget extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.all(0.0),
-          backgroundColor: backgroundColor,
+          backgroundColor: isDisabled ? CustomColors.whGrey600 : backgroundColor,
           foregroundColor: foregroundColor,
           shadowColor: Colors.transparent,
           shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(20.0),
-            ),
+            borderRadius: BorderRadius.all(Radius.circular(20.0)),
           ),
         ),
         onPressed: () {
-          if (onPressed != null) {
-            onPressed!();
-          }
+          if (isDisabled != false) onPressed();
         },
         child: Container(
           height: 30,
@@ -44,11 +43,7 @@ class SmallColoredButtonWidget extends StatelessWidget {
           alignment: Alignment.center,
           child: Text(
             buttonLabel,
-            style: const TextStyle(
-              color: CustomColors.whDarkBlack,
-              fontSize: 14.0,
-              fontWeight: FontWeight.w600,
-            ),
+            style: context.labelLarge?.bold.copyWith(color: foregroundColor),
           ),
         ),
       ),
