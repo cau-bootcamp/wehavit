@@ -42,8 +42,7 @@ class AuthWehavitDataSourceImpl implements AuthDataSource {
 
       // Email 가입 시에는 displayName과 photoUrl이 없기 때문에 추가해준다.
       final String name = email.split('@').first;
-      final String photoUrl =
-          result.user!.photoURL ?? 'https://picsum.photos/80';
+      final String photoUrl = result.user!.photoURL ?? 'https://picsum.photos/80';
       await result.user!.updateDisplayName(name);
       await result.user!.updatePhotoURL(photoUrl);
 

@@ -39,10 +39,8 @@ class _EditUserDetailViewState extends ConsumerState<EditUserDetailView> {
     super.didChangeDependencies();
 
     final viewmodel = ref.watch(editUserDataViewModelProvider);
-    final userId = await ref
-        .read(getMyUserIdUsecaseProvider)
-        .call()
-        .then((result) => result.fold((failure) => null, (id) => id));
+    final userId =
+        await ref.read(getMyUserIdUsecaseProvider).call().then((result) => result.fold((failure) => null, (id) => id));
 
     viewmodel.uid = widget.uid ?? (userId ?? '');
     viewmodel.name = widget.name ?? '';
@@ -60,9 +58,7 @@ class _EditUserDetailViewState extends ConsumerState<EditUserDetailView> {
     viewmodel.handle = widget.handle ?? '';
     viewmodel.aboutMe = widget.aboutMe ?? '';
 
-    await ref
-        .read(editUserDataViewModelProvider.notifier)
-        .downloadImageToFile(widget.profileImageUrl!);
+    await ref.read(editUserDataViewModelProvider.notifier).downloadImageToFile(widget.profileImageUrl!);
   }
 
   @override
@@ -105,8 +101,7 @@ class _EditUserDetailViewState extends ConsumerState<EditUserDetailView> {
                   child: ListView(
                     shrinkWrap: true,
                     padding: const EdgeInsets.only(top: 24.0, bottom: 32.0),
-                    keyboardDismissBehavior:
-                        ScrollViewKeyboardDismissBehavior.onDrag,
+                    keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -384,10 +379,9 @@ class _EditUserDetailViewState extends ConsumerState<EditUserDetailView> {
                       viewmodel.isProcessing = false;
                     });
                   },
-                  isDiminished: !((viewmodel.name.isNotEmpty &
-                              viewmodel.handle.isNotEmpty) &
-                          (viewmodel.profileImage != null)) |
-                      viewmodel.isProcessing,
+                  isDiminished:
+                      !((viewmodel.name.isNotEmpty & viewmodel.handle.isNotEmpty) & (viewmodel.profileImage != null)) |
+                          viewmodel.isProcessing,
                   buttonTitle: viewmodel.isProcessing ? '처리 중' : '완료',
                   backgroundColor: CustomColors.whYellow,
                   foregroundColor: CustomColors.whBlack,

@@ -35,8 +35,7 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
           onRefresh: () async {
             provider.loadResolutionModelList().whenComplete(() {
               setState(() {
-                ref.watch(resolutionListViewModelProvider).isLoadingView =
-                    false;
+                ref.watch(resolutionListViewModelProvider).isLoadingView = false;
               });
             });
           },
@@ -73,30 +72,22 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
                           backgroundColor: CustomColors.whSemiBlack,
                           shadowColor: Colors.transparent,
                           surfaceTintColor: Colors.transparent,
-                          overlayColor: PointColors.colorList[viewModel
-                                  .resolutionModelList![index]
-                                  .entity
-                                  .colorIndex ??
-                              0],
+                          overlayColor:
+                              PointColors.colorList[viewModel.resolutionModelList![index].entity.colorIndex ?? 0],
                           padding: const EdgeInsets.all(0),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16.0),
                           ),
                         ),
                         onPressed: () async {
-                          final isGuideShown =
-                              await SharedPreferences.getInstance()
-                                  .then((instance) {
-                            return instance
-                                .getBool(PreferenceKey.isWritingPostGuideShown);
+                          final isGuideShown = await SharedPreferences.getInstance().then((instance) {
+                            return instance.getBool(PreferenceKey.isWritingPostGuideShown);
                           });
 
                           if (isGuideShown == null || isGuideShown == false) {
                             // ignore: use_build_context_synchronously
-                            showGuideBottomSheet(context)
-                                .whenComplete(() async {
-                              await SharedPreferences.getInstance()
-                                  .then((instance) {
+                            showGuideBottomSheet(context).whenComplete(() async {
+                              await SharedPreferences.getInstance().then((instance) {
                                 instance.setBool(
                                   PreferenceKey.isWritingPostGuideShown,
                                   true,
@@ -110,12 +101,8 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
                                 index,
                               ).then((returnValue) async {
                                 if (returnValue == true) {
-                                  await provider
-                                      .loadResolutionModelList()
-                                      .whenComplete(() {
-                                    ref
-                                        .watch(resolutionListViewModelProvider)
-                                        .isLoadingView = false;
+                                  await provider.loadResolutionModelList().whenComplete(() {
+                                    ref.watch(resolutionListViewModelProvider).isLoadingView = false;
                                   });
                                 } else {
                                   //
@@ -131,12 +118,8 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
                               index,
                             ).then((returnValue) async {
                               if (returnValue == true) {
-                                await provider
-                                    .loadResolutionModelList()
-                                    .whenComplete(() {
-                                  ref
-                                      .watch(resolutionListViewModelProvider)
-                                      .isLoadingView = false;
+                                await provider.loadResolutionModelList().whenComplete(() {
+                                  ref.watch(resolutionListViewModelProvider).isLoadingView = false;
                                 });
                               } else {
                                 //
@@ -145,8 +128,7 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
                           }
                         },
                         child: ResolutionListCellWidget(
-                          resolutionEntity:
-                              viewModel.resolutionModelList![index].entity,
+                          resolutionEntity: viewModel.resolutionModelList![index].entity,
                           showDetails: false,
                         ),
                       ),
@@ -161,16 +143,10 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
                             builder: (context) => const AddResolutionView(),
                           ),
                         ).whenComplete(() async {
-                          await ref
-                              .watch(myPageViewModelProvider.notifier)
-                              .getMyResolutionListUsecase();
-                          await provider
-                              .loadResolutionModelList()
-                              .whenComplete(() {
+                          await ref.watch(myPageViewModelProvider.notifier).getMyResolutionListUsecase();
+                          await provider.loadResolutionModelList().whenComplete(() {
                             setState(() {
-                              ref
-                                  .watch(resolutionListViewModelProvider)
-                                  .isLoadingView = false;
+                              ref.watch(resolutionListViewModelProvider).isLoadingView = false;
                             });
                           });
                         });
@@ -245,21 +221,17 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
           Column(
             children: [
               Text(
-                viewModel.resolutionModelList![index].entity.resolutionName ??
-                    '',
+                viewModel.resolutionModelList![index].entity.resolutionName ?? '',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: PointColors.colorList[
-                      viewModel.resolutionModelList![index].entity.colorIndex ??
-                          0],
+                  color: PointColors.colorList[viewModel.resolutionModelList![index].entity.colorIndex ?? 0],
                   fontSize: 18.0,
                   fontWeight: FontWeight.w600,
                 ),
               ),
               const SizedBox(height: 4.0),
               Text(
-                viewModel.resolutionModelList![index].entity.goalStatement ??
-                    '',
+                viewModel.resolutionModelList![index].entity.goalStatement ?? '',
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   color: CustomColors.whWhite,
@@ -327,8 +299,7 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (context) {
                           return WritingConfirmPostView(
-                            entity:
-                                viewModel.resolutionModelList![index].entity,
+                            entity: viewModel.resolutionModelList![index].entity,
                             hasRested: true,
                           );
                         },

@@ -33,14 +33,12 @@ mixin _$UserDataEntity {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $UserDataEntityCopyWith<UserDataEntity> get copyWith =>
-      throw _privateConstructorUsedError;
+  $UserDataEntityCopyWith<UserDataEntity> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $UserDataEntityCopyWith<$Res> {
-  factory $UserDataEntityCopyWith(
-          UserDataEntity value, $Res Function(UserDataEntity) then) =
+  factory $UserDataEntityCopyWith(UserDataEntity value, $Res Function(UserDataEntity) then) =
       _$UserDataEntityCopyWithImpl<$Res, UserDataEntity>;
   @useResult
   $Res call(
@@ -57,8 +55,7 @@ abstract class $UserDataEntityCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$UserDataEntityCopyWithImpl<$Res, $Val extends UserDataEntity>
-    implements $UserDataEntityCopyWith<$Res> {
+class _$UserDataEntityCopyWithImpl<$Res, $Val extends UserDataEntity> implements $UserDataEntityCopyWith<$Res> {
   _$UserDataEntityCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
@@ -126,10 +123,8 @@ class _$UserDataEntityCopyWithImpl<$Res, $Val extends UserDataEntity>
 }
 
 /// @nodoc
-abstract class _$$UserDataEntityImplCopyWith<$Res>
-    implements $UserDataEntityCopyWith<$Res> {
-  factory _$$UserDataEntityImplCopyWith(_$UserDataEntityImpl value,
-          $Res Function(_$UserDataEntityImpl) then) =
+abstract class _$$UserDataEntityImplCopyWith<$Res> implements $UserDataEntityCopyWith<$Res> {
+  factory _$$UserDataEntityImplCopyWith(_$UserDataEntityImpl value, $Res Function(_$UserDataEntityImpl) then) =
       __$$UserDataEntityImplCopyWithImpl<$Res>;
   @override
   @useResult
@@ -147,11 +142,9 @@ abstract class _$$UserDataEntityImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$UserDataEntityImplCopyWithImpl<$Res>
-    extends _$UserDataEntityCopyWithImpl<$Res, _$UserDataEntityImpl>
+class __$$UserDataEntityImplCopyWithImpl<$Res> extends _$UserDataEntityCopyWithImpl<$Res, _$UserDataEntityImpl>
     implements _$$UserDataEntityImplCopyWith<$Res> {
-  __$$UserDataEntityImplCopyWithImpl(
-      _$UserDataEntityImpl _value, $Res Function(_$UserDataEntityImpl) _then)
+  __$$UserDataEntityImplCopyWithImpl(_$UserDataEntityImpl _value, $Res Function(_$UserDataEntityImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -229,8 +222,7 @@ class _$UserDataEntityImpl implements _UserDataEntity {
       this.cumulativePosts,
       this.cumulativeReactions});
 
-  factory _$UserDataEntityImpl.fromJson(Map<String, dynamic> json) =>
-      _$$UserDataEntityImplFromJson(json);
+  factory _$UserDataEntityImpl.fromJson(Map<String, dynamic> json) => _$$UserDataEntityImplFromJson(json);
 
   @override
   final String? handle;
@@ -265,44 +257,27 @@ class _$UserDataEntityImpl implements _UserDataEntity {
             other is _$UserDataEntityImpl &&
             (identical(other.handle, handle) || other.handle == handle) &&
             (identical(other.userId, userId) || other.userId == userId) &&
-            (identical(other.userName, userName) ||
-                other.userName == userName) &&
-            (identical(other.userImageUrl, userImageUrl) ||
-                other.userImageUrl == userImageUrl) &&
+            (identical(other.userName, userName) || other.userName == userName) &&
+            (identical(other.userImageUrl, userImageUrl) || other.userImageUrl == userImageUrl) &&
             (identical(other.aboutMe, aboutMe) || other.aboutMe == aboutMe) &&
-            (identical(other.messageToken, messageToken) ||
-                other.messageToken == messageToken) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt) &&
-            (identical(other.cumulativeGoals, cumulativeGoals) ||
-                other.cumulativeGoals == cumulativeGoals) &&
-            (identical(other.cumulativePosts, cumulativePosts) ||
-                other.cumulativePosts == cumulativePosts) &&
+            (identical(other.messageToken, messageToken) || other.messageToken == messageToken) &&
+            (identical(other.createdAt, createdAt) || other.createdAt == createdAt) &&
+            (identical(other.cumulativeGoals, cumulativeGoals) || other.cumulativeGoals == cumulativeGoals) &&
+            (identical(other.cumulativePosts, cumulativePosts) || other.cumulativePosts == cumulativePosts) &&
             (identical(other.cumulativeReactions, cumulativeReactions) ||
                 other.cumulativeReactions == cumulativeReactions));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      handle,
-      userId,
-      userName,
-      userImageUrl,
-      aboutMe,
-      messageToken,
-      createdAt,
-      cumulativeGoals,
-      cumulativePosts,
-      cumulativeReactions);
+  int get hashCode => Object.hash(runtimeType, handle, userId, userName, userImageUrl, aboutMe, messageToken, createdAt,
+      cumulativeGoals, cumulativePosts, cumulativeReactions);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$UserDataEntityImplCopyWith<_$UserDataEntityImpl> get copyWith =>
-      __$$UserDataEntityImplCopyWithImpl<_$UserDataEntityImpl>(
-          this, _$identity);
+      __$$UserDataEntityImplCopyWithImpl<_$UserDataEntityImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -325,8 +300,7 @@ abstract class _UserDataEntity implements UserDataEntity {
       final int? cumulativePosts,
       final int? cumulativeReactions}) = _$UserDataEntityImpl;
 
-  factory _UserDataEntity.fromJson(Map<String, dynamic> json) =
-      _$UserDataEntityImpl.fromJson;
+  factory _UserDataEntity.fromJson(Map<String, dynamic> json) = _$UserDataEntityImpl.fromJson;
 
   @override
   String? get handle;
@@ -350,6 +324,5 @@ abstract class _UserDataEntity implements UserDataEntity {
   int? get cumulativeReactions;
   @override
   @JsonKey(ignore: true)
-  _$$UserDataEntityImplCopyWith<_$UserDataEntityImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$UserDataEntityImplCopyWith<_$UserDataEntityImpl> get copyWith => throw _privateConstructorUsedError;
 }

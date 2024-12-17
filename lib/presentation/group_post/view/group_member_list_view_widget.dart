@@ -21,12 +21,10 @@ class GroupMemberListBottomSheet extends ConsumerStatefulWidget {
   final Function(GroupEntity) updateParentViewGroupEntity;
 
   @override
-  ConsumerState<GroupMemberListBottomSheet> createState() =>
-      _GroupMemberListBottomSheetState();
+  ConsumerState<GroupMemberListBottomSheet> createState() => _GroupMemberListBottomSheetState();
 }
 
-class _GroupMemberListBottomSheetState
-    extends ConsumerState<GroupMemberListBottomSheet> {
+class _GroupMemberListBottomSheetState extends ConsumerState<GroupMemberListBottomSheet> {
   bool isManager = false;
   bool isManagingMode = false;
   List<String> appliedUidList = [];
@@ -35,10 +33,7 @@ class _GroupMemberListBottomSheetState
   void didChangeDependencies() {
     super.didChangeDependencies();
     unawaited(
-      ref
-          .read(checkWeatherUserIsMnagerOfGroupEntityUsecaseProvider)
-          (widget.groupEntity)
-          .then(
+      ref.read(checkWeatherUserIsMnagerOfGroupEntityUsecaseProvider)(widget.groupEntity).then(
         (result) {
           return result.fold((failure) => false, (result) => result);
         },
@@ -50,10 +45,7 @@ class _GroupMemberListBottomSheetState
         }
       }).whenComplete(() async {
         if (isManager) {
-          appliedUidList = await ref
-              .watch(getAppliedUserListForGroupEntityUsecaseProvider)
-              (widget.groupEntity)
-              .then(
+          appliedUidList = await ref.watch(getAppliedUserListForGroupEntityUsecaseProvider)(widget.groupEntity).then(
                 (result) => result.fold((failure) => [], (uidList) => uidList),
               );
           if (mounted) {
@@ -222,8 +214,7 @@ class _GroupMemberListBottomSheetState
                       (index) => Padding(
                         padding: const EdgeInsets.only(bottom: 12.0),
                         child: GroupMemberListCellWidget(
-                          memberId:
-                              widget.groupEntity.groupMemberUidList[index],
+                          memberId: widget.groupEntity.groupMemberUidList[index],
                           groupManagerUid: widget.groupEntity.groupManagerUid,
                           groupEntity: widget.groupEntity,
                           isManagingMode: isManagingMode,
@@ -274,12 +265,10 @@ class GroupMemberListCellWidget extends ConsumerStatefulWidget {
   final Function(GroupEntity, String) updateGroupEntity;
 
   @override
-  ConsumerState<GroupMemberListCellWidget> createState() =>
-      _GroupMemberListCellWidgetState();
+  ConsumerState<GroupMemberListCellWidget> createState() => _GroupMemberListCellWidgetState();
 }
 
-class _GroupMemberListCellWidgetState
-    extends ConsumerState<GroupMemberListCellWidget> {
+class _GroupMemberListCellWidgetState extends ConsumerState<GroupMemberListCellWidget> {
   UserDataEntity? userEntity;
   double? achievePercentage;
 
@@ -363,14 +352,12 @@ class _GroupMemberListCellWidgetState
                       )
                           .then((result) {
                         if (result.isRight()) {
-                          final List<String> uidList = widget
-                              .groupEntity.groupMemberUidList
+                          final List<String> uidList = widget.groupEntity.groupMemberUidList
                               .where((element) => element != widget.memberId)
                               .toList();
 
                           widget.updateGroupEntity(
-                            widget.groupEntity
-                                .copyWith(groupMemberUidList: uidList),
+                            widget.groupEntity.copyWith(groupMemberUidList: uidList),
                             widget.memberId,
                           );
                         }
@@ -413,14 +400,11 @@ class _GroupMemberListCellWidgetState
                   )
                       .then((result) {
                     if (result.isRight()) {
-                      final List<String> uidList = widget
-                          .groupEntity.groupMemberUidList
-                          .append(widget.memberId)
-                          .toList();
+                      final List<String> uidList =
+                          widget.groupEntity.groupMemberUidList.append(widget.memberId).toList();
 
                       widget.updateGroupEntity(
-                        widget.groupEntity
-                            .copyWith(groupMemberUidList: uidList),
+                        widget.groupEntity.copyWith(groupMemberUidList: uidList),
                         widget.memberId,
                       );
                     }
@@ -435,8 +419,7 @@ class _GroupMemberListCellWidgetState
   }
 
   Future<void> loadEntity(String userId) async {
-    GetUserDataFromIdUsecase getUserDataFromIdUsecase =
-        ref.watch(getUserDataFromIdUsecaseProvider);
+    GetUserDataFromIdUsecase getUserDataFromIdUsecase = ref.watch(getUserDataFromIdUsecaseProvider);
     userEntity = await getUserDataFromIdUsecase.call(widget.memberId).then(
           (result) => result.fold((failure) => null, (entity) => entity),
         );
@@ -447,8 +430,7 @@ class _GroupMemberListCellWidgetState
   }
 
   Future<void> loadAchievePercentage() async {
-    GetAchievementPercentageForGroupMemberUsecase
-        getAchievementPercentageForGroupMemberUsecase =
+    GetAchievementPercentageForGroupMemberUsecase getAchievementPercentageForGroupMemberUsecase =
         ref.watch(getAchievementPercentageForGroupMemberUsecaseProvider);
 
     achievePercentage = await getAchievementPercentageForGroupMemberUsecase(

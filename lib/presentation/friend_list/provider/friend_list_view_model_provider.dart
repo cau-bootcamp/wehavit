@@ -48,8 +48,7 @@ class FriendListViewModelProvider extends StateNotifier<FriendListViewModel> {
   }
 
   Future<void> getAppliedFriendList() async {
-    state.appliedFutureUserList =
-        await _getAppliedUserListForFriendUsecase().then(
+    state.appliedFutureUserList = await _getAppliedUserListForFriendUsecase().then(
       (result) => result.fold(
         (failure) => null,
         (list) => list,

@@ -16,6 +16,5 @@ class QuickshotPresetItemEntity with _$QuickshotPresetItemEntity {
     required DateTime? createdAt,
   }) = _QuickshotPresetItemEntity;
 
-  factory QuickshotPresetItemEntity.fromJson(Map<String, dynamic> json) =>
-      _$QuickshotPresetItemEntityFromJson(json);
+  factory QuickshotPresetItemEntity.fromJson(Map<String, dynamic> json) => _$QuickshotPresetItemEntityFromJson(json);
 }

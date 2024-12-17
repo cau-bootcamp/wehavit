@@ -19,8 +19,7 @@ class FriendListCellWidget extends ConsumerStatefulWidget {
   final FriendListCellState cellState;
 
   @override
-  ConsumerState<FriendListCellWidget> createState() =>
-      _FriendListCellWidgetState();
+  ConsumerState<FriendListCellWidget> createState() => _FriendListCellWidgetState();
 }
 
 class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
@@ -102,9 +101,7 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
                         ),
                         Expanded(
                           child: Text(
-                            userEntity.handle != null
-                                ? ' • ${userEntity.handle}'
-                                : '',
+                            userEntity.handle != null ? ' • ${userEntity.handle}' : '',
                             style: const TextStyle(
                               color: CustomColors.whSemiWhite,
                               fontSize: 16,
@@ -148,8 +145,7 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
               buttonLabel: '수락',
               onPressed: () async {
                 if (entity.userId != null) {
-                  final parentState =
-                      context.findAncestorStateOfType<FrinedListViewState>();
+                  final parentState = context.findAncestorStateOfType<FrinedListViewState>();
 
                   await provider.acceptToBeFriendWith(
                     targetUid: entity.userId!,
@@ -169,8 +165,7 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
               backgroundColor: CustomColors.whBrightGrey,
               onPressed: () async {
                 if (entity.userId != null) {
-                  final parentState =
-                      context.findAncestorStateOfType<FrinedListViewState>();
+                  final parentState = context.findAncestorStateOfType<FrinedListViewState>();
 
                   await provider.rejectToBeFriendWith(
                     targetUid: entity.userId!,
@@ -190,8 +185,7 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
           backgroundColor: CustomColors.whBrightGrey,
           onPressed: () async {
             if (entity.userId != null) {
-              final parentState =
-                  context.findAncestorStateOfType<FrinedListViewState>();
+              final parentState = context.findAncestorStateOfType<FrinedListViewState>();
 
               await provider.removeFromFriendList(targetUid: entity.userId!);
 
@@ -206,12 +200,9 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
           buttonLabel: '요청',
           onPressed: () async {
             if (entity.userId != null) {
-              final parentState =
-                  context.findAncestorStateOfType<FrinedListViewState>();
+              final parentState = context.findAncestorStateOfType<FrinedListViewState>();
 
-              await provider
-                  .applyToBeFriendWith(targetUid: entity.userId!)
-                  .then((result) {
+              await provider.applyToBeFriendWith(targetUid: entity.userId!).then((result) {
                 if (result.isRight()) {
                   showToastMessage(
                     context,
@@ -316,8 +307,7 @@ class FriendListTextFieldWidget extends StatelessWidget {
                     height: 1.4,
                   ),
                   floatingLabelAlignment: FloatingLabelAlignment.center,
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 8, horizontal: -8),
+                  contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: -8),
                   border: InputBorder.none,
                 ),
                 style: const TextStyle(

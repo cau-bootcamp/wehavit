@@ -17,10 +17,8 @@ class GroupAnnouncementEntity with _$GroupAnnouncementEntity {
     required String content,
     @TimestampConverter() required DateTime createdAt,
     required List<String> readByUidList,
-    @JsonKey(includeFromJson: true, includeToJson: false)
-    required String groupAnnouncementId,
+    @JsonKey(includeFromJson: true, includeToJson: false) required String groupAnnouncementId,
   }) = _GroupAnnouncementEntity;
 
-  factory GroupAnnouncementEntity.fromJson(Map<String, dynamic> json) =>
-      _$GroupAnnouncementEntityFromJson(json);
+  factory GroupAnnouncementEntity.fromJson(Map<String, dynamic> json) => _$GroupAnnouncementEntityFromJson(json);
 }

@@ -18,12 +18,10 @@ class ShareTargetGroupCellWidget extends ConsumerStatefulWidget {
   final ResolutionEntity entity;
 
   @override
-  ConsumerState<ShareTargetGroupCellWidget> createState() =>
-      _ShareTargetGroupCellWidgetState();
+  ConsumerState<ShareTargetGroupCellWidget> createState() => _ShareTargetGroupCellWidgetState();
 }
 
-class _ShareTargetGroupCellWidgetState
-    extends ConsumerState<ShareTargetGroupCellWidget> {
+class _ShareTargetGroupCellWidgetState extends ConsumerState<ShareTargetGroupCellWidget> {
   List<GroupListViewCellWidgetModel>? sharingTargetGroupModelList;
 
   @override
@@ -97,10 +95,7 @@ class _ShareTargetGroupCellWidgetState
 
     sharingTargetGroupModelList = (await Future.wait(
       entityList.map(
-        (entity) => ref
-            .read(getGroupListViewCellWidgetModelUsecaseProvider)
-            .call(groupEntity: entity)
-            .then(
+        (entity) => ref.read(getGroupListViewCellWidgetModelUsecaseProvider).call(groupEntity: entity).then(
               (result) => result.fold(
                 (failure) => null,
                 (model) => model,

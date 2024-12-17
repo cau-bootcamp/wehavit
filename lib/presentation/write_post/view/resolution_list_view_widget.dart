@@ -67,12 +67,10 @@ class ResolutionSummaryCardTextWidget extends StatefulWidget {
   final String unit;
 
   @override
-  State<ResolutionSummaryCardTextWidget> createState() =>
-      _ResolutionSummaryCardTextWidgetState();
+  State<ResolutionSummaryCardTextWidget> createState() => _ResolutionSummaryCardTextWidgetState();
 }
 
-class _ResolutionSummaryCardTextWidgetState
-    extends State<ResolutionSummaryCardTextWidget> {
+class _ResolutionSummaryCardTextWidgetState extends State<ResolutionSummaryCardTextWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(

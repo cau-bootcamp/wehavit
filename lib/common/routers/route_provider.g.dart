@@ -33,8 +33,7 @@ extension $HomeRouteExtension on HomeRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -55,8 +54,7 @@ extension $SplashRouteExtension on SplashRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -77,8 +75,7 @@ extension $AuthRouteExtension on AuthRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -99,8 +96,7 @@ extension $TestPageRouteExtension on TestPageRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -111,8 +107,7 @@ RouteBase get $addResolutionRoute => GoRouteData.$route(
     );
 
 extension $AddResolutionRouteExtension on AddResolutionRoute {
-  static AddResolutionRoute _fromState(GoRouterState state) =>
-      const AddResolutionRoute();
+  static AddResolutionRoute _fromState(GoRouterState state) => const AddResolutionRoute();
 
   String get location => GoRouteData.$location(
         '/addResolution',
@@ -122,8 +117,7 @@ extension $AddResolutionRouteExtension on AddResolutionRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -134,8 +128,7 @@ RouteBase get $animationSampleViewRoute => GoRouteData.$route(
     );
 
 extension $AnimationSampleViewRouteExtension on AnimationSampleViewRoute {
-  static AnimationSampleViewRoute _fromState(GoRouterState state) =>
-      const AnimationSampleViewRoute();
+  static AnimationSampleViewRoute _fromState(GoRouterState state) => const AnimationSampleViewRoute();
 
   String get location => GoRouteData.$location(
         '/animationSampleView',
@@ -145,8 +138,7 @@ extension $AnimationSampleViewRouteExtension on AnimationSampleViewRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -157,8 +149,7 @@ RouteBase get $reactionSampleViewRoute => GoRouteData.$route(
     );
 
 extension $ReactionSampleViewRouteExtension on ReactionSampleViewRoute {
-  static ReactionSampleViewRoute _fromState(GoRouterState state) =>
-      const ReactionSampleViewRoute();
+  static ReactionSampleViewRoute _fromState(GoRouterState state) => const ReactionSampleViewRoute();
 
   String get location => GoRouteData.$location(
         '/reactionSampleView',
@@ -168,8 +159,7 @@ extension $ReactionSampleViewRouteExtension on ReactionSampleViewRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -180,8 +170,7 @@ RouteBase get $groupSampleViewRoute => GoRouteData.$route(
     );
 
 extension $GroupSampleViewRouteExtension on GroupSampleViewRoute {
-  static GroupSampleViewRoute _fromState(GoRouterState state) =>
-      const GroupSampleViewRoute();
+  static GroupSampleViewRoute _fromState(GoRouterState state) => const GroupSampleViewRoute();
 
   String get location => GoRouteData.$location(
         '/groupSampleView',
@@ -191,8 +180,7 @@ extension $GroupSampleViewRouteExtension on GroupSampleViewRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }

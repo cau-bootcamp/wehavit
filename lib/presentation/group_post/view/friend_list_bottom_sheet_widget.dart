@@ -17,8 +17,7 @@ class FriendListBottomSheet extends ConsumerStatefulWidget {
   final Map<String, List<String>> friendIdResolutionMap;
 
   @override
-  ConsumerState<FriendListBottomSheet> createState() =>
-      _FriendListBottomSheetState();
+  ConsumerState<FriendListBottomSheet> createState() => _FriendListBottomSheetState();
 }
 
 class _FriendListBottomSheetState extends ConsumerState<FriendListBottomSheet> {
@@ -89,9 +88,7 @@ class _FriendListBottomSheetState extends ConsumerState<FriendListBottomSheet> {
                         padding: const EdgeInsets.only(bottom: 12.0),
                         child: FriendListBottomSheetCellWidget(
                           memberId: friendIdList[index],
-                          resolutionIdList: widget
-                                  .friendIdResolutionMap[friendIdList[index]] ??
-                              [],
+                          resolutionIdList: widget.friendIdResolutionMap[friendIdList[index]] ?? [],
                         ),
                         // child: GroupMemberManageListCellWidget(),
                       ),
@@ -118,12 +115,10 @@ class FriendListBottomSheetCellWidget extends ConsumerStatefulWidget {
   final List<String> resolutionIdList;
 
   @override
-  ConsumerState<FriendListBottomSheetCellWidget> createState() =>
-      _FriendListCellWidgetState();
+  ConsumerState<FriendListBottomSheetCellWidget> createState() => _FriendListCellWidgetState();
 }
 
-class _FriendListCellWidgetState
-    extends ConsumerState<FriendListBottomSheetCellWidget> {
+class _FriendListCellWidgetState extends ConsumerState<FriendListBottomSheetCellWidget> {
   UserDataEntity? userEntity;
   double? achievePercentage;
 
@@ -179,9 +174,7 @@ class _FriendListCellWidgetState
 
         // Apply Mode
         Text(
-          achievePercentage == null
-              ? '...'
-              : '${(achievePercentage! * 100).ceil().toString()}%',
+          achievePercentage == null ? '...' : '${(achievePercentage! * 100).ceil().toString()}%',
           style: const TextStyle(
             color: CustomColors.whWhite,
             fontSize: 16.0,
@@ -193,8 +186,7 @@ class _FriendListCellWidgetState
   }
 
   Future<void> loadEntity(String userId) async {
-    GetUserDataFromIdUsecase getUserDataFromIdUsecase =
-        ref.watch(getUserDataFromIdUsecaseProvider);
+    GetUserDataFromIdUsecase getUserDataFromIdUsecase = ref.watch(getUserDataFromIdUsecaseProvider);
     userEntity = await getUserDataFromIdUsecase.call(widget.memberId).then(
           (result) => result.fold((failure) => null, (entity) => entity),
         );
@@ -205,8 +197,7 @@ class _FriendListCellWidgetState
   }
 
   Future<void> loadAchievePercentage() async {
-    GetTargetResolutionDoneListForWeekUsecase
-        getTargetResolutionDoneListForWeekUsecase =
+    GetTargetResolutionDoneListForWeekUsecase getTargetResolutionDoneListForWeekUsecase =
         ref.read(getTargetResolutionDoneListForWeekUsecaseProvider);
 
     GetTargetResolutionEntityUsecase getTargetResolutionEntityUsecase =

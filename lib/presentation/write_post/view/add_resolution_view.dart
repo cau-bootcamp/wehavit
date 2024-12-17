@@ -41,8 +41,7 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
           children: [
             Expanded(
               child: ListView(
-                keyboardDismissBehavior:
-                    ScrollViewKeyboardDismissBehavior.onDrag,
+                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                 children: [
                   Visibility(
                     maintainState: true,
@@ -256,9 +255,7 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                             style: TextStyle(
                               fontSize: 13.0 + viewmodel.times,
                               color: CustomColors.whWhite,
-                              fontWeight: viewmodel.times > 4
-                                  ? FontWeight.w600
-                                  : FontWeight.w400,
+                              fontWeight: viewmodel.times > 4 ? FontWeight.w600 : FontWeight.w400,
                             ),
                           ),
                         ),
@@ -323,8 +320,7 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                                 style: TextButton.styleFrom(
                                   minimumSize: Size.zero,
                                   padding: EdgeInsets.zero,
-                                  tapTargetSize:
-                                      MaterialTapTargetSize.shrinkWrap,
+                                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                 ),
                                 onPressed: () {
                                   setState(() {
@@ -392,8 +388,7 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                                 style: TextButton.styleFrom(
                                   minimumSize: Size.zero,
                                   padding: EdgeInsets.zero,
-                                  tapTargetSize:
-                                      MaterialTapTargetSize.shrinkWrap,
+                                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                 ),
                                 onPressed: () {
                                   setState(() {
@@ -410,14 +405,12 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12.0),
                                     border: Border.all(
-                                      color: viewmodel.iconIndex == index
-                                          ? CustomColors.whYellow
-                                          : CustomColors.whWhite,
+                                      color:
+                                          viewmodel.iconIndex == index ? CustomColors.whYellow : CustomColors.whWhite,
                                       width: 2.0,
                                     ),
-                                    color: viewmodel.iconIndex == index
-                                        ? CustomColors.whYellowDark
-                                        : CustomColors.whGrey,
+                                    color:
+                                        viewmodel.iconIndex == index ? CustomColors.whYellowDark : CustomColors.whGrey,
                                   ),
                                   child: Image.asset(
                                     CustomIconImage.resolutionIcons[index],
@@ -467,13 +460,11 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                   else {
                     provider.uploadResolution().then((resolutionEntity) {
                       if (resolutionEntity != null) {
-                        updateResolutionEntity(resolutionEntity)
-                            .whenComplete(() {
+                        updateResolutionEntity(resolutionEntity).whenComplete(() {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  const AddResolutionDoneView(),
+                              builder: (context) => const AddResolutionDoneView(),
                             ),
                           );
                         });
@@ -548,7 +539,6 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
   }
 
   Future<void> updateResolutionEntity(ResolutionEntity resolutionEntity) async {
-    ref.watch(addResolutionDoneViewModelProvider).resolutionEntity =
-        resolutionEntity;
+    ref.watch(addResolutionDoneViewModelProvider).resolutionEntity = resolutionEntity;
   }
 }

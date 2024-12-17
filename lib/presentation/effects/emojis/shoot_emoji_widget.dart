@@ -20,8 +20,7 @@ class ShootEmojiWidget extends StatefulWidget {
   State<ShootEmojiWidget> createState() => _ShootEmojiWidgetState();
 }
 
-class _ShootEmojiWidgetState extends State<ShootEmojiWidget>
-    with TickerProviderStateMixin {
+class _ShootEmojiWidgetState extends State<ShootEmojiWidget> with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation _yAnimation, _xAnimation;
   late Function disposeWidgetFromParent;
@@ -80,8 +79,7 @@ class _ShootEmojiWidgetState extends State<ShootEmojiWidget>
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: (widget.currentPos.y.toDouble()) * (1 - _yAnimation.value) -
-          (widget.targetPos.y * 1.0 * _yAnimation.value),
+      top: (widget.currentPos.y.toDouble()) * (1 - _yAnimation.value) - (widget.targetPos.y * 1.0 * _yAnimation.value),
       left: widget.targetPos.x.toDouble() * _xAnimation.value +
           (widget.currentPos.x.toDouble()) * (1 - _xAnimation.value) -
           emojiSize / 2,

@@ -27,8 +27,7 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
         title: '친구 목록',
         trailingTitle: isManagingMode ? '완료' : null,
         trailingIcon: isManagingMode ? null : Icons.manage_accounts_outlined,
-        trailingIconBadgeCount:
-            isManagingMode ? null : viewModel.appliedFutureUserList?.length,
+        trailingIconBadgeCount: isManagingMode ? null : viewModel.appliedFutureUserList?.length,
         trailingAction: () {
           setState(() {
             isManagingMode = !isManagingMode;
@@ -91,10 +90,8 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
                         height: 16.0,
                       ),
                       Visibility(
-                        replacement:
-                            const Center(child: FriendListPlaceholderWidget()),
-                        visible:
-                            viewModel.friendFutureUserList?.isNotEmpty ?? false,
+                        replacement: const Center(child: FriendListPlaceholderWidget()),
+                        visible: viewModel.friendFutureUserList?.isNotEmpty ?? false,
                         child: Expanded(
                           child: RefreshIndicator(
                             onRefresh: () async {
@@ -110,8 +107,7 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
                               itemCount: viewModel.friendFutureUserList!.length,
                               itemBuilder: (context, index) {
                                 return FriendListCellWidget(
-                                  futureUserEntity:
-                                      viewModel.friendFutureUserList![index],
+                                  futureUserEntity: viewModel.friendFutureUserList![index],
                                   cellState: FriendListCellState.normal,
                                 );
                               },
@@ -135,10 +131,7 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
                     .whenComplete(() => setState(() {})),
               );
               unawaited(
-                ref
-                    .read(friendListViewModelProvider.notifier)
-                    .getFriendList()
-                    .whenComplete(() => setState(() {})),
+                ref.read(friendListViewModelProvider.notifier).getFriendList().whenComplete(() => setState(() {})),
               );
             },
             child: ListView(
@@ -161,8 +154,7 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
                       margin: const EdgeInsets.only(bottom: 4.0),
                       child: FriendListTextFieldWidget(
                         searchCallback: (searchedHandle) async {
-                          if (searchedHandle != null &&
-                              searchedHandle.isNotEmpty) {
+                          if (searchedHandle != null && searchedHandle.isNotEmpty) {
                             provider
                                 .searchUserByHandle(
                                   handle: searchedHandle,
@@ -179,16 +171,14 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
                         children: List<Widget>.generate(
                           viewModel.searchedFutureUserList!.length,
                           (index) => FriendListCellWidget(
-                            futureUserEntity:
-                                viewModel.searchedFutureUserList![index],
+                            futureUserEntity: viewModel.searchedFutureUserList![index],
                             cellState: FriendListCellState.toApply,
                           ),
                         ),
                       ),
                   ],
                 ),
-                if (viewModel.appliedFutureUserList == null ||
-                    viewModel.appliedFutureUserList!.isEmpty)
+                if (viewModel.appliedFutureUserList == null || viewModel.appliedFutureUserList!.isEmpty)
                   Container()
                 else
                   Column(
@@ -210,16 +200,14 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
                         children: List<Widget>.generate(
                           viewModel.appliedFutureUserList!.length,
                           (index) => FriendListCellWidget(
-                            futureUserEntity:
-                                viewModel.appliedFutureUserList![index],
+                            futureUserEntity: viewModel.appliedFutureUserList![index],
                             cellState: FriendListCellState.applied,
                           ),
                         ),
                       ),
                     ],
                   ),
-                if (viewModel.friendFutureUserList == null ||
-                    viewModel.friendFutureUserList!.isEmpty)
+                if (viewModel.friendFutureUserList == null || viewModel.friendFutureUserList!.isEmpty)
                   Container()
                 else
                   Column(
@@ -240,8 +228,7 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
                         children: List<Widget>.generate(
                           viewModel.friendFutureUserList!.length,
                           (index) => FriendListCellWidget(
-                            futureUserEntity:
-                                viewModel.friendFutureUserList![index],
+                            futureUserEntity: viewModel.friendFutureUserList![index],
                             cellState: FriendListCellState.managing,
                           ),
                         ),

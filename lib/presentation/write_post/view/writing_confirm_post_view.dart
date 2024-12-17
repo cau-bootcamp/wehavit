@@ -16,12 +16,10 @@ class WritingConfirmPostView extends ConsumerStatefulWidget {
   final bool hasRested;
 
   @override
-  ConsumerState<WritingConfirmPostView> createState() =>
-      _WritingConfirmPostViewState();
+  ConsumerState<WritingConfirmPostView> createState() => _WritingConfirmPostViewState();
 }
 
-class _WritingConfirmPostViewState
-    extends ConsumerState<WritingConfirmPostView> {
+class _WritingConfirmPostViewState extends ConsumerState<WritingConfirmPostView> {
   FocusNode contentFieldFocusNode = FocusNode();
 
   @override
@@ -90,25 +88,18 @@ class _WritingConfirmPostViewState
                     ),
                     TextButton.icon(
                       onPressed: () {
-                        viewModel.isWritingYesterdayPost =
-                            !viewModel.isWritingYesterdayPost;
+                        viewModel.isWritingYesterdayPost = !viewModel.isWritingYesterdayPost;
                         setState(() {});
                       },
                       icon: Icon(
                         size: 20,
-                        viewModel.isWritingYesterdayPost
-                            ? Icons.check_box
-                            : Icons.check_box_outline_blank,
-                        color: viewModel.isWritingYesterdayPost
-                            ? CustomColors.whYellow
-                            : CustomColors.whSemiWhite,
+                        viewModel.isWritingYesterdayPost ? Icons.check_box : Icons.check_box_outline_blank,
+                        color: viewModel.isWritingYesterdayPost ? CustomColors.whYellow : CustomColors.whSemiWhite,
                       ),
                       label: Text(
                         '전날 기록하기',
                         style: TextStyle(
-                          color: viewModel.isWritingYesterdayPost
-                              ? CustomColors.whYellow
-                              : CustomColors.whSemiWhite,
+                          color: viewModel.isWritingYesterdayPost ? CustomColors.whYellow : CustomColors.whSemiWhite,
                           fontSize: 16.0,
                         ),
                       ),
@@ -194,9 +185,7 @@ class _WritingConfirmPostViewState
                       },
                       icon: Icon(
                         Icons.add_photo_alternate_outlined,
-                        color: widget.hasRested
-                            ? CustomColors.whGrey
-                            : CustomColors.whWhite,
+                        color: widget.hasRested ? CustomColors.whGrey : CustomColors.whWhite,
                       ),
                       style: IconButton.styleFrom(
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -206,9 +195,7 @@ class _WritingConfirmPostViewState
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        widget.hasRested
-                            ? '반성글에서는 인증샷을 공유할 수 없어요'
-                            : '인증샷은 최대 3장까지 공유할 수 있어요',
+                        widget.hasRested ? '반성글에서는 인증샷을 공유할 수 없어요' : '인증샷은 최대 3장까지 공유할 수 있어요',
                         style: const TextStyle(
                           fontSize: 12.0,
                           fontWeight: FontWeight.w500,
@@ -221,10 +208,7 @@ class _WritingConfirmPostViewState
                         viewModel.isUploading = true;
                         setState(() {});
 
-                        final myUserEntity = await ref
-                            .read(myPageViewModelProvider)
-                            .futureMyUserDataEntity
-                            ?.then(
+                        final myUserEntity = await ref.read(myPageViewModelProvider).futureMyUserDataEntity?.then(
                               (result) => result.fold(
                                 (failure) => null,
                                 (entity) => entity,

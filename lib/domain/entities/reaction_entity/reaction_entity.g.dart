@@ -6,8 +6,7 @@ part of 'reaction_entity.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ReactionEntityImpl _$$ReactionEntityImplFromJson(Map<String, dynamic> json) =>
-    _$ReactionEntityImpl(
+_$ReactionEntityImpl _$$ReactionEntityImplFromJson(Map<String, dynamic> json) => _$ReactionEntityImpl(
       complimenterUid: json['complimenterUid'] as String,
       reactionType: (json['reactionType'] as num).toInt(),
       quickShotUrl: json['quickShotUrl'] as String? ?? '',
@@ -18,9 +17,7 @@ _$ReactionEntityImpl _$$ReactionEntityImplFromJson(Map<String, dynamic> json) =>
           const {},
     );
 
-Map<String, dynamic> _$$ReactionEntityImplToJson(
-        _$ReactionEntityImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$$ReactionEntityImplToJson(_$ReactionEntityImpl instance) => <String, dynamic>{
       'complimenterUid': instance.complimenterUid,
       'reactionType': instance.reactionType,
       'quickShotUrl': instance.quickShotUrl,

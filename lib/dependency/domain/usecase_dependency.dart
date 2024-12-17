@@ -34,14 +34,12 @@ final logInWithAppleUsecaseProvider = Provider<LogInWithAppleUsecase>((ref) {
   return LogInWithAppleUsecase(authRepository);
 });
 
-final emailAndPasswordRegisterUseCaseProvider =
-    Provider<SignUpWithEmailAndPasswordUsecase>((ref) {
+final emailAndPasswordRegisterUseCaseProvider = Provider<SignUpWithEmailAndPasswordUsecase>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
   return SignUpWithEmailAndPasswordUsecase(authRepository);
 });
 
-final emailAndPasswordLogInUseCaseProvider =
-    Provider<LogInWithEmailUsecase>((ref) {
+final emailAndPasswordLogInUseCaseProvider = Provider<LogInWithEmailUsecase>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
   return LogInWithEmailUsecase(authRepository);
 });
@@ -53,8 +51,7 @@ final emailAndPasswordLogInUseCaseProvider =
 //   },
 // );
 
-final uploadResolutionUsecaseProvider =
-    Provider<UploadResolutionUseCase>((ref) {
+final uploadResolutionUsecaseProvider = Provider<UploadResolutionUseCase>((ref) {
   final resolutionRepository = ref.watch(resolutionRepositoryProvider);
   final userModelRepository = ref.watch(userModelRepositoryProvider);
   return UploadResolutionUseCase(
@@ -75,8 +72,7 @@ final uploadConfirmPostUseCaseProvider = Provider<UploadConfirmPostUseCase>(
   ),
 );
 
-final sendQuickShotReactionToConfirmPostUsecaseProvider =
-    Provider<SendQuickShotReactionToConfirmPostUsecase>((ref) {
+final sendQuickShotReactionToConfirmPostUsecaseProvider = Provider<SendQuickShotReactionToConfirmPostUsecase>((ref) {
   final reactionRepository = ref.watch(reactionRepositoryProvider);
   final userModelRepository = ref.watch(userModelRepositoryProvider);
   final photoRepository = ref.watch(photoRepositoryProvider);
@@ -90,8 +86,7 @@ final sendQuickShotReactionToConfirmPostUsecaseProvider =
   );
 });
 
-final sendEmojiReactionToConfirmPostUsecaseProvider =
-    Provider<SendEmojiReactionToConfirmPostUsecase>((ref) {
+final sendEmojiReactionToConfirmPostUsecaseProvider = Provider<SendEmojiReactionToConfirmPostUsecase>((ref) {
   final reactionRepository = ref.watch(reactionRepositoryProvider);
   final userModelRepository = ref.watch(userModelRepositoryProvider);
   final resolutionRepository = ref.watch(resolutionRepositoryProvider);
@@ -102,8 +97,7 @@ final sendEmojiReactionToConfirmPostUsecaseProvider =
   );
 });
 
-final sendCommentReactionToConfirmPostUsecaseProvider =
-    Provider<SendCommentReactionToConfirmPostUsecase>((ref) {
+final sendCommentReactionToConfirmPostUsecaseProvider = Provider<SendCommentReactionToConfirmPostUsecase>((ref) {
   final reactionRepository = ref.watch(reactionRepositoryProvider);
   final userModelRepository = ref.watch(userModelRepositoryProvider);
   final resolutionRepository = ref.watch(resolutionRepositoryProvider);
@@ -114,26 +108,22 @@ final sendCommentReactionToConfirmPostUsecaseProvider =
   );
 });
 
-final getUnreadReactionListUsecaseProvider =
-    Provider<GetUnreadReactionListUsecase>((ref) {
+final getUnreadReactionListUsecaseProvider = Provider<GetUnreadReactionListUsecase>((ref) {
   final repository = ref.watch(reactionRepositoryProvider);
   return GetUnreadReactionListUsecase(repository);
 });
 
-final getResolutionListByUserIdUsecaseProvider =
-    Provider<GetResolutionListByUserIdUsecase>((ref) {
+final getResolutionListByUserIdUsecaseProvider = Provider<GetResolutionListByUserIdUsecase>((ref) {
   final resolutionRepository = ref.watch(resolutionRepositoryProvider);
   return GetResolutionListByUserIdUsecase(resolutionRepository);
 });
 
-final getReactionListFromConfirmPostUsecaseProvider =
-    Provider<GetReactionListFromConfirmPostUsecase>((ref) {
+final getReactionListFromConfirmPostUsecaseProvider = Provider<GetReactionListFromConfirmPostUsecase>((ref) {
   final repository = ref.watch(reactionRepositoryProvider);
   return GetReactionListFromConfirmPostUsecase(repository);
 });
 
-final getMyResolutionListUsecaseProvider =
-    Provider<GetMyResolutionListUsecase>((ref) {
+final getMyResolutionListUsecaseProvider = Provider<GetMyResolutionListUsecase>((ref) {
   final resolutionRepository = ref.watch(resolutionRepositoryProvider);
   final userModelRepository = ref.watch(userModelRepositoryProvider);
   return GetMyResolutionListUsecase(
@@ -147,20 +137,17 @@ final getFriendListUseCaseProvider = Provider<GetFriendListUsecase>((ref) {
   return GetFriendListUsecase(resolutionRepository);
 });
 
-final getGroupConfirmPostListByDateUsecaseProvider =
-    Provider<GetGroupConfirmPostListByDateUsecase>((ref) {
+final getGroupConfirmPostListByDateUsecaseProvider = Provider<GetGroupConfirmPostListByDateUsecase>((ref) {
   final confirmPostRepository = ref.watch(confirmPostRepositoryProvider);
   return GetGroupConfirmPostListByDateUsecase(confirmPostRepository);
 });
 
-final getConfirmPostListForResolutionIdUsecaseProvider =
-    Provider<GetConfirmPostListForResolutionIdUsecase>((ref) {
+final getConfirmPostListForResolutionIdUsecaseProvider = Provider<GetConfirmPostListForResolutionIdUsecase>((ref) {
   final confirmPostRepository = ref.watch(confirmPostRepositoryProvider);
   return GetConfirmPostListForResolutionIdUsecase(confirmPostRepository);
 });
 
-final getUserDataFromIdUsecaseProvider =
-    Provider<GetUserDataFromIdUsecase>((ref) {
+final getUserDataFromIdUsecaseProvider = Provider<GetUserDataFromIdUsecase>((ref) {
   final repository = ref.watch(userModelRepositoryProvider);
   return GetUserDataFromIdUsecase(repository);
 });
@@ -181,26 +168,22 @@ final createGroupUsecaseProvider = Provider<CreateGroupUsecase>((ref) {
   return CreateGroupUsecase(groupRepository, userModelRepository);
 });
 
-final applyForJoiningGroupUsecaseProvider =
-    Provider<ApplyForJoiningGroupUsecase>((ref) {
+final applyForJoiningGroupUsecaseProvider = Provider<ApplyForJoiningGroupUsecase>((ref) {
   final groupRepository = ref.watch(groupRepositoryProvider);
   return ApplyForJoiningGroupUsecase(groupRepository);
 });
 
-final acceptApplyingForJoiningGroupUsecaseProvider =
-    Provider<AcceptApplyingForJoiningGroupUsecase>((ref) {
+final acceptApplyingForJoiningGroupUsecaseProvider = Provider<AcceptApplyingForJoiningGroupUsecase>((ref) {
   final groupRepository = ref.watch(groupRepositoryProvider);
   return AcceptApplyingForJoiningGroupUsecase(groupRepository);
 });
 
-final rejectApplyingForJoiningGroupUsecaseProvider =
-    Provider<RejectApplyingForJoiningGroupUsecase>((ref) {
+final rejectApplyingForJoiningGroupUsecaseProvider = Provider<RejectApplyingForJoiningGroupUsecase>((ref) {
   final groupRepository = ref.watch(groupRepositoryProvider);
   return RejectApplyingForJoiningGroupUsecase(groupRepository);
 });
 
-final withdrawalFromGroupUsecaseProvider =
-    Provider<WithdrawalTargetUserFromGroupUsecase>((ref) {
+final withdrawalFromGroupUsecaseProvider = Provider<WithdrawalTargetUserFromGroupUsecase>((ref) {
   final groupRepository = ref.watch(groupRepositoryProvider);
   return WithdrawalTargetUserFromGroupUsecase(groupRepository);
 });
@@ -210,33 +193,28 @@ final getGroupListUseCaseProvider = Provider<GetGroupListUsecase>((ref) {
   return GetGroupListUsecase(groupRepository);
 });
 
-final uploadGroupAnnouncementUsecaseProvider =
-    Provider<UploadGroupAnnouncementUsecase>((ref) {
+final uploadGroupAnnouncementUsecaseProvider = Provider<UploadGroupAnnouncementUsecase>((ref) {
   final groupRepository = ref.watch(groupRepositoryProvider);
   final userModelRepository = ref.watch(userModelRepositoryProvider);
   return UploadGroupAnnouncementUsecase(groupRepository, userModelRepository);
 });
 
-final getGroupAnnouncementListUsecaseProvider =
-    Provider<GetGroupAnnouncementListUsecase>((ref) {
+final getGroupAnnouncementListUsecaseProvider = Provider<GetGroupAnnouncementListUsecase>((ref) {
   final groupRepository = ref.watch(groupRepositoryProvider);
   return GetGroupAnnouncementListUsecase(groupRepository);
 });
 
-final readGroupAnnouncementUsecaseProvider =
-    Provider<ReadGroupAnnouncementUsecase>((ref) {
+final readGroupAnnouncementUsecaseProvider = Provider<ReadGroupAnnouncementUsecase>((ref) {
   final groupRepository = ref.watch(groupRepositoryProvider);
   return ReadGroupAnnouncementUsecase(groupRepository);
 });
 
-final getGroupWeeklyReportUsecaseProvider =
-    Provider<GetGroupWeeklyReportUsecase>((ref) {
+final getGroupWeeklyReportUsecaseProvider = Provider<GetGroupWeeklyReportUsecase>((ref) {
   final groupRepository = ref.watch(groupRepositoryProvider);
   return GetGroupWeeklyReportUsecase(groupRepository);
 });
 
-final getGroupListViewCellWidgetModelUsecaseProvider =
-    Provider<GetGroupListViewCellWidgetModelUsecase>((ref) {
+final getGroupListViewCellWidgetModelUsecaseProvider = Provider<GetGroupListViewCellWidgetModelUsecase>((ref) {
   final groupRepository = ref.watch(groupRepositoryProvider);
   return GetGroupListViewCellWidgetModelUsecase(groupRepository);
 });
@@ -247,14 +225,12 @@ final getGroupListViewFriendCellWidgetModelUsecaseProvider =
   return GetGroupListViewFriendCellWidgetModelUsecase(groupRepository);
 });
 
-final getGroupEntityByIdUsecaseProvider =
-    Provider<GetGroupEntityByIdUsecase>((ref) {
+final getGroupEntityByIdUsecaseProvider = Provider<GetGroupEntityByIdUsecase>((ref) {
   final groupRepository = ref.watch(groupRepositoryProvider);
   return GetGroupEntityByIdUsecase(groupRepository);
 });
 
-final getGroupEntityByGroupNameUsecaseProvider =
-    Provider<GetGroupEntityByGroupNameUsecase>((ref) {
+final getGroupEntityByGroupNameUsecaseProvider = Provider<GetGroupEntityByGroupNameUsecase>((ref) {
   final groupRepository = ref.watch(groupRepositoryProvider);
   return GetGroupEntityByGroupNameUsecase(groupRepository);
 });
@@ -265,14 +241,12 @@ final checkWhetherAlreadyRegisteredToGroupUsecaseProvider =
   return CheckWhetherAlreadyRegisteredToGroupUsecase(groupRepository);
 });
 
-final checkWhetherAlreadyAppliedToGroupUsecaseProvider =
-    Provider<CheckWhetherAlreadyAppliedToGroupUsecase>((ref) {
+final checkWhetherAlreadyAppliedToGroupUsecaseProvider = Provider<CheckWhetherAlreadyAppliedToGroupUsecase>((ref) {
   final groupRepository = ref.watch(groupRepositoryProvider);
   return CheckWhetherAlreadyAppliedToGroupUsecase(groupRepository);
 });
 
-final getTargetResolutionDoneListForWeekUsecaseProvider =
-    Provider<GetTargetResolutionDoneListForWeekUsecase>((ref) {
+final getTargetResolutionDoneListForWeekUsecaseProvider = Provider<GetTargetResolutionDoneListForWeekUsecase>((ref) {
   final resolutionRepository = ref.watch(resolutionRepositoryProvider);
   return GetTargetResolutionDoneListForWeekUsecase(resolutionRepository);
 });
@@ -283,8 +257,7 @@ final getSharedResolutionIdListFromFriendUidUsecaseProvider =
   return GetSharedResolutionIdListFromFriendUidUsecase(resolutionRepository);
 });
 
-final getToWhomResolutionWillBeSharedUsecaseProvider =
-    Provider<GetToWhomResolutionWillBeSharedUsecase>((ref) {
+final getToWhomResolutionWillBeSharedUsecaseProvider = Provider<GetToWhomResolutionWillBeSharedUsecase>((ref) {
   final resolutionRepository = ref.watch(resolutionRepositoryProvider);
   return GetToWhomResolutionWillBeSharedUsecase(resolutionRepository);
 });
@@ -297,8 +270,7 @@ final checkWeatherUserIsMnagerOfGroupEntityUsecaseProvider =
   );
 });
 
-final getAppliedUserListForGroupEntityUsecaseProvider =
-    Provider<GetAppliedUserListForGroupEntityUsecase>((ref) {
+final getAppliedUserListForGroupEntityUsecaseProvider = Provider<GetAppliedUserListForGroupEntityUsecase>((ref) {
   final groupRepository = ref.watch(groupRepositoryProvider);
   final userModelRepository = ref.watch(userModelRepositoryProvider);
   return GetAppliedUserListForGroupEntityUsecase(
@@ -313,8 +285,7 @@ final getAchievementPercentageForGroupMemberUsecaseProvider =
   return GetAchievementPercentageForGroupMemberUsecase(groupRepository);
 });
 
-final getTargetResolutionEntityUsecaseProvider =
-    Provider<GetTargetResolutionEntityUsecase>((ref) {
+final getTargetResolutionEntityUsecaseProvider = Provider<GetTargetResolutionEntityUsecase>((ref) {
   final resolutionRepository = ref.watch(resolutionRepositoryProvider);
   return GetTargetResolutionEntityUsecase(resolutionRepository);
 });
@@ -324,14 +295,12 @@ final updateAboutMeUsecaseProvider = Provider<UpdateAboutMeUsecase>((ref) {
   return UpdateAboutMeUsecase(userModelRepository);
 });
 
-final getAppliedUserListForFriendUsecaseProvider =
-    Provider<GetAppliedUserListForFriendUsecase>((ref) {
+final getAppliedUserListForFriendUsecaseProvider = Provider<GetAppliedUserListForFriendUsecase>((ref) {
   final userModelRepository = ref.watch(userModelRepositoryProvider);
   return GetAppliedUserListForFriendUsecase(userModelRepository);
 });
 
-final applyForUserFriendUsecaseProvider =
-    Provider<ApplyForUserFriendUsecase>((ref) {
+final applyForUserFriendUsecaseProvider = Provider<ApplyForUserFriendUsecase>((ref) {
   final userModelRepository = ref.watch(userModelRepositoryProvider);
   return ApplyForUserFriendUsecase(userModelRepository);
 });
@@ -341,32 +310,27 @@ final removeFriendUsecaseProvider = Provider<RemoveFriendUsecase>((ref) {
   return RemoveFriendUsecase(userModelRepository);
 });
 
-final searchUserDataListByNicknameUsecaseProvider =
-    Provider<SearchUserDataListByNicknameUsecase>((ref) {
+final searchUserDataListByNicknameUsecaseProvider = Provider<SearchUserDataListByNicknameUsecase>((ref) {
   final userModelRepository = ref.watch(userModelRepositoryProvider);
   return SearchUserDataListByNicknameUsecase(userModelRepository);
 });
 
-final searchUserDataListByHandleUsecaseProvider =
-    Provider<SearchUserDataListByHandleUsecase>((ref) {
+final searchUserDataListByHandleUsecaseProvider = Provider<SearchUserDataListByHandleUsecase>((ref) {
   final userModelRepository = ref.watch(userModelRepositoryProvider);
   return SearchUserDataListByHandleUsecase(userModelRepository);
 });
 
-final acceptApplyingForFriendUsecaseProvider =
-    Provider<AcceptApplyingForFriendUsecase>((ref) {
+final acceptApplyingForFriendUsecaseProvider = Provider<AcceptApplyingForFriendUsecase>((ref) {
   final userModelRepository = ref.watch(userModelRepositoryProvider);
   return AcceptApplyingForFriendUsecase(userModelRepository);
 });
 
-final rejectApplyingForFriendUsecaseProvider =
-    Provider<RejectApplyingForFriendUsecase>((ref) {
+final rejectApplyingForFriendUsecaseProvider = Provider<RejectApplyingForFriendUsecase>((ref) {
   final userModelRepository = ref.watch(userModelRepositoryProvider);
   return RejectApplyingForFriendUsecase(userModelRepository);
 });
 
-final signUpWithEmailAndPasswordUsecaseProvider =
-    Provider<SignUpWithEmailAndPasswordUsecase>((ref) {
+final signUpWithEmailAndPasswordUsecaseProvider = Provider<SignUpWithEmailAndPasswordUsecase>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
   return SignUpWithEmailAndPasswordUsecase(authRepository);
 });
@@ -376,68 +340,57 @@ final uploadUserDataUsecaseProvider = Provider<UploadUserDataUsecase>((ref) {
   return UploadUserDataUsecase(userModelRepository);
 });
 
-final removeCurrentUserDataUsecaseProvider =
-    Provider<RemoveCurrentUserDataUsecase>((ref) {
+final removeCurrentUserDataUsecaseProvider = Provider<RemoveCurrentUserDataUsecase>((ref) {
   final userModelRepository = ref.watch(userModelRepositoryProvider);
   return RemoveCurrentUserDataUsecase(userModelRepository);
 });
 
-final logInWithEmailAndPasswordUsecaseProvider =
-    Provider<LogInWithEmailUsecase>((ref) {
+final logInWithEmailAndPasswordUsecaseProvider = Provider<LogInWithEmailUsecase>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
   return LogInWithEmailUsecase(authRepository);
 });
 
-final shareResolutionToGroupUsecaseProvider =
-    Provider<ShareResolutionToGroupUsecase>((ref) {
+final shareResolutionToGroupUsecaseProvider = Provider<ShareResolutionToGroupUsecase>((ref) {
   final resolutionRepository = ref.watch(resolutionRepositoryProvider);
   return ShareResolutionToGroupUsecase(resolutionRepository);
 });
 
-final unshareResolutionToGroupUsecaseProvider =
-    Provider<UnshareResolutionToGroupUsecase>((ref) {
+final unshareResolutionToGroupUsecaseProvider = Provider<UnshareResolutionToGroupUsecase>((ref) {
   final resolutionRepository = ref.watch(resolutionRepositoryProvider);
   return UnshareResolutionToGroupUsecase(resolutionRepository);
 });
 
-final shareResolutionToFriendUsecaseProvider =
-    Provider<ShareResolutionToFriendUsecase>((ref) {
+final shareResolutionToFriendUsecaseProvider = Provider<ShareResolutionToFriendUsecase>((ref) {
   final resolutionRepository = ref.watch(resolutionRepositoryProvider);
   return ShareResolutionToFriendUsecase(resolutionRepository);
 });
 
-final unshareResolutionToFriendUsecaseProvider =
-    Provider<UnshareResolutionToFriendUsecase>((ref) {
+final unshareResolutionToFriendUsecaseProvider = Provider<UnshareResolutionToFriendUsecase>((ref) {
   final resolutionRepository = ref.watch(resolutionRepositoryProvider);
   return UnshareResolutionToFriendUsecase(resolutionRepository);
 });
 
-final searchGroupEntityListByGroupNameUsecaseProvider =
-    Provider<SearchGroupEntityListByGroupNameUsecase>((ref) {
+final searchGroupEntityListByGroupNameUsecaseProvider = Provider<SearchGroupEntityListByGroupNameUsecase>((ref) {
   final groupRepository = ref.watch(groupRepositoryProvider);
   return SearchGroupEntityListByGroupNameUsecase(groupRepository);
 });
 
-final getFriendConfirmPostListByDateUsecaseProvider =
-    Provider<GetFriendConfirmPostListByDateUsecase>((ref) {
+final getFriendConfirmPostListByDateUsecaseProvider = Provider<GetFriendConfirmPostListByDateUsecase>((ref) {
   final confirmPostRepository = ref.watch(confirmPostRepositoryProvider);
   return GetFriendConfirmPostListByDateUsecase(confirmPostRepository);
 });
 
-final revokeAppleSignInUsecaseProvider =
-    Provider<RevokeAppleSignInUsecase>((ref) {
+final revokeAppleSignInUsecaseProvider = Provider<RevokeAppleSignInUsecase>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
   return RevokeAppleSignInUsecase(authRepository);
 });
 
-final updateResolutionUseCaseProvider =
-    Provider<UpdateResolutionUseCase>((ref) {
+final updateResolutionUseCaseProvider = Provider<UpdateResolutionUseCase>((ref) {
   final resolutionRepository = ref.watch(resolutionRepositoryProvider);
   return UpdateResolutionUseCase(resolutionRepository);
 });
 
-final setResolutionDeactiveUsecaseProvider =
-    Provider<SetResolutionDeactiveUsecase>((ref) {
+final setResolutionDeactiveUsecaseProvider = Provider<SetResolutionDeactiveUsecase>((ref) {
   final resolutionRepository = ref.watch(resolutionRepositoryProvider);
   return SetResolutionDeactiveUsecase(resolutionRepository);
 });
@@ -455,8 +408,7 @@ final updateFCMTokenUsecaseProvider = Provider<UpdateFCMTokenUsecase>((ref) {
   return UpdateFCMTokenUsecase(userModelRepository);
 });
 
-final sendNotificationToSharedUsersUsecaseProvider =
-    Provider<SendNotificationToSharedUsersUsecase>((ref) {
+final sendNotificationToSharedUsersUsecaseProvider = Provider<SendNotificationToSharedUsersUsecase>((ref) {
   final userModelRepository = ref.watch(userModelRepositoryProvider);
   final notificationRepository = ref.watch(notificationRepositoryProvider);
   return SendNotificationToSharedUsersUsecase(
@@ -465,16 +417,14 @@ final sendNotificationToSharedUsersUsecaseProvider =
   );
 });
 
-final sendNotificationToTargetUserUsecaseProvider =
-    Provider<SendNotificationToTargetUserUsecase>((ref) {
+final sendNotificationToTargetUserUsecaseProvider = Provider<SendNotificationToTargetUserUsecase>((ref) {
   final notificationRepository = ref.watch(notificationRepositoryProvider);
   return SendNotificationToTargetUserUsecase(
     notificationRepository,
   );
 });
 
-final getQuickshotPresetsUsecaseProvider =
-    Provider<GetQuickshotPresetsUsecase>((ref) {
+final getQuickshotPresetsUsecaseProvider = Provider<GetQuickshotPresetsUsecase>((ref) {
   final userModelRepository = ref.watch(userModelRepositoryProvider);
 
   return GetQuickshotPresetsUsecase(
@@ -482,8 +432,7 @@ final getQuickshotPresetsUsecaseProvider =
   );
 });
 
-final removeQuickshotPresetUsecaseProvider =
-    Provider<RemoveQuickshotPresetUsecase>((ref) {
+final removeQuickshotPresetUsecaseProvider = Provider<RemoveQuickshotPresetUsecase>((ref) {
   final userModelRepository = ref.watch(userModelRepositoryProvider);
 
   return RemoveQuickshotPresetUsecase(
@@ -491,8 +440,7 @@ final removeQuickshotPresetUsecaseProvider =
   );
 });
 
-final uploadQuickshotPresetUsecaseProvider =
-    Provider<UploadQuickshotPresetUsecase>((ref) {
+final uploadQuickshotPresetUsecaseProvider = Provider<UploadQuickshotPresetUsecase>((ref) {
   final userModelRepository = ref.watch(userModelRepositoryProvider);
   final photoRepository = ref.watch(photoRepositoryProvider);
   return UploadQuickshotPresetUsecase(

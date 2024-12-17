@@ -14,9 +14,7 @@ class GetGroupListViewCellWidgetModelUsecase {
     required GroupEntity groupEntity,
   }) async {
     final (EitherFuture<int>, EitherFuture<int>)? countTuple =
-        await _groupRepository
-            .getGroupListViewCellModelData(groupEntity.groupId)
-            .then(
+        await _groupRepository.getGroupListViewCellModelData(groupEntity.groupId).then(
               (value) => value.fold(
                 (failure) => null,
                 (data) => data,

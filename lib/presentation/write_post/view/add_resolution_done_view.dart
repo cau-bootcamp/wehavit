@@ -11,8 +11,7 @@ class AddResolutionDoneView extends ConsumerStatefulWidget {
   const AddResolutionDoneView({super.key});
 
   @override
-  ConsumerState<AddResolutionDoneView> createState() =>
-      _AddResolutionDoneViewState();
+  ConsumerState<AddResolutionDoneView> createState() => _AddResolutionDoneViewState();
 }
 
 class _AddResolutionDoneViewState extends ConsumerState<AddResolutionDoneView> {
@@ -85,8 +84,7 @@ class _AddResolutionDoneViewState extends ConsumerState<AddResolutionDoneView> {
                       builder: (context) => GradientBottomSheet(
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.82,
-                          child:
-                              const ShareResolutionToFriendBottomSheetWidget(),
+                          child: const ShareResolutionToFriendBottomSheetWidget(),
                         ),
                       ),
                     );
@@ -110,8 +108,7 @@ class _AddResolutionDoneViewState extends ConsumerState<AddResolutionDoneView> {
                       builder: (context) => GradientBottomSheet(
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.82,
-                          child:
-                              const ShareResolutionToGroupBottomSheetWidget(),
+                          child: const ShareResolutionToGroupBottomSheetWidget(),
                         ),
                       ),
                     );
@@ -136,8 +133,7 @@ class ShareResolutionToFriendBottomSheetWidget extends ConsumerStatefulWidget {
       _ShareResolutionToFriendBottomSheetWidgetState();
 }
 
-class _ShareResolutionToFriendBottomSheetWidgetState
-    extends ConsumerState<ShareResolutionToFriendBottomSheetWidget> {
+class _ShareResolutionToFriendBottomSheetWidgetState extends ConsumerState<ShareResolutionToFriendBottomSheetWidget> {
   @override
   Widget build(BuildContext context) {
     final viewmodel = ref.watch(addResolutionDoneViewModelProvider);
@@ -223,9 +219,8 @@ class _ShareResolutionToFriendBottomSheetWidgetState
                           height: 24,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: viewmodel.tempSelectedFriendList![index]
-                                ? CustomColors.whYellow
-                                : Colors.transparent,
+                            color:
+                                viewmodel.tempSelectedFriendList![index] ? CustomColors.whYellow : Colors.transparent,
                             border: Border.all(
                               color: CustomColors.whBrightGrey,
                             ),
@@ -261,8 +256,7 @@ class ShareResolutionToGroupBottomSheetWidget extends ConsumerStatefulWidget {
       _ShareResolutionToGroupBottomSheetWidgetState();
 }
 
-class _ShareResolutionToGroupBottomSheetWidgetState
-    extends ConsumerState<ShareResolutionToGroupBottomSheetWidget> {
+class _ShareResolutionToGroupBottomSheetWidgetState extends ConsumerState<ShareResolutionToGroupBottomSheetWidget> {
   @override
   Widget build(BuildContext context) {
     final viewmodel = ref.watch(addResolutionDoneViewModelProvider);
@@ -345,9 +339,7 @@ class _ShareResolutionToGroupBottomSheetWidgetState
                         height: 24,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: viewmodel.tempSelectedGroupList![index]
-                              ? CustomColors.whYellow
-                              : Colors.transparent,
+                          color: viewmodel.tempSelectedGroupList![index] ? CustomColors.whYellow : Colors.transparent,
                           border: Border.all(
                             color: CustomColors.whBrightGrey,
                           ),

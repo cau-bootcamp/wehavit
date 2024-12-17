@@ -11,8 +11,7 @@ class WritingPostGuideView extends StatefulWidget {
   State<WritingPostGuideView> createState() => _WritingPostGuideViewState();
 }
 
-class _WritingPostGuideViewState extends State<WritingPostGuideView>
-    with TickerProviderStateMixin {
+class _WritingPostGuideViewState extends State<WritingPostGuideView> with TickerProviderStateMixin {
   PageController? pageController;
   final lastPageIndex = 2;
   int currentPageIndex = 0;

@@ -50,8 +50,7 @@ abstract class GroupRepository {
   );
 
   // 현재 그룹 내에 공유중인 목표 수, 지금까지 그룹 내 인증글 수를 반환
-  EitherFuture<(EitherFuture<int>, EitherFuture<int>)>
-      getGroupListViewCellModelData(String groupId);
+  EitherFuture<(EitherFuture<int>, EitherFuture<int>)> getGroupListViewCellModelData(String groupId);
 
   EitherFuture<bool> checkWhetherAlreadyAppliedToGroup({
     required String groupId,
@@ -74,6 +73,6 @@ abstract class GroupRepository {
     required String keyword,
   });
 
-  EitherFuture<(EitherFuture<int>, EitherFuture<int>)>
-      getGroupListViewFriendCellModelData(List<String> sharedResolutionIdList);
+  EitherFuture<(EitherFuture<int>, EitherFuture<int>)> getGroupListViewFriendCellModelData(
+      List<String> sharedResolutionIdList);
 }

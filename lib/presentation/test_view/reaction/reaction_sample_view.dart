@@ -23,16 +23,11 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
   Widget build(BuildContext context) {
     // final getConfirmPostListUsecase =
     //     ref.watch(getConfirmPostListUsecaseProvider);
-    final sendEmojiReactionToConfirmPostUsecase =
-        ref.watch(sendEmojiReactionToConfirmPostUsecaseProvider);
-    final sendQuickShotReactionToConfirmPostUsecase =
-        ref.watch(sendQuickShotReactionToConfirmPostUsecaseProvider);
-    final sendCommentReactionToConfrimPostUsecase =
-        ref.watch(sendCommentReactionToConfirmPostUsecaseProvider);
-    final getUnreadReactionListUsecase =
-        ref.watch(getUnreadReactionListUsecaseProvider);
-    final getUnreadReactionListFromConfirmPostUsecase =
-        ref.watch(getReactionListFromConfirmPostUsecaseProvider);
+    final sendEmojiReactionToConfirmPostUsecase = ref.watch(sendEmojiReactionToConfirmPostUsecaseProvider);
+    final sendQuickShotReactionToConfirmPostUsecase = ref.watch(sendQuickShotReactionToConfirmPostUsecaseProvider);
+    final sendCommentReactionToConfrimPostUsecase = ref.watch(sendCommentReactionToConfirmPostUsecaseProvider);
+    final getUnreadReactionListUsecase = ref.watch(getUnreadReactionListUsecaseProvider);
+    final getUnreadReactionListFromConfirmPostUsecase = ref.watch(getReactionListFromConfirmPostUsecaseProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Reaction Sample View')),
@@ -56,9 +51,7 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
                   child: const Text('load element'),
                 ),
                 Text(
-                  targetPostEntity != null
-                      ? targetPostEntity!.content!
-                      : 'no element',
+                  targetPostEntity != null ? targetPostEntity!.content! : 'no element',
                 ),
               ],
             ),
@@ -110,8 +103,7 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
             ),
             ElevatedButton(
               onPressed: () async {
-                final reactionList =
-                    await getUnreadReactionListUsecase(NoParams());
+                final reactionList = await getUnreadReactionListUsecase(NoParams());
                 print("DEBUG");
                 print(reactionList);
               },
@@ -119,8 +111,7 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
             ),
             ElevatedButton(
               onPressed: () async {
-                final reactionList =
-                    await getUnreadReactionListFromConfirmPostUsecase(
+                final reactionList = await getUnreadReactionListFromConfirmPostUsecase(
                   targetPostEntity!,
                 );
                 print("DEBUG");
@@ -135,8 +126,7 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
   }
 
   Future<String?> getPhotoLibraryImage() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       return pickedFile.path;
     } else {
@@ -265,8 +255,7 @@ class _ReactionSampleViewState extends ConsumerState<ReactionSampleView> {
                                         children: [
                                           Image(
                                             image: AssetImage(
-                                              Emojis
-                                                  .emojiList[index * 5 + jndex],
+                                              Emojis.emojiList[index * 5 + jndex],
                                             ),
                                           ),
                                         ],

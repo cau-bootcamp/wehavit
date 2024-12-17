@@ -4,8 +4,7 @@ import 'package:wehavit/domain/usecases/usecases.dart';
 import 'package:wehavit/presentation/group/group.dart';
 
 class CreateGroupViewModelProvider extends StateNotifier<CreateGroupViewModel> {
-  CreateGroupViewModelProvider(this._createGroupUsecase)
-      : super(CreateGroupViewModel());
+  CreateGroupViewModelProvider(this._createGroupUsecase) : super(CreateGroupViewModel());
 
   final CreateGroupUsecase _createGroupUsecase;
 
@@ -68,8 +67,7 @@ class CreateGroupViewModelProvider extends StateNotifier<CreateGroupViewModel> {
   // }
 
   void scrollDown() {
-    state.scrollController
-        .jumpTo(state.scrollController.position.maxScrollExtent);
+    state.scrollController.jumpTo(state.scrollController.position.maxScrollExtent);
   }
 
   Future<GroupEntity?> createGroup() async {
@@ -89,9 +87,8 @@ class CreateGroupViewModelProvider extends StateNotifier<CreateGroupViewModel> {
   }
 
   void checkIsMovableToNextStep() {
-    state.isMovableToNextStep = state.inputConditions
-        .sublist(0, state.currentStep + 1)
-        .reduce((value, element) => value & element);
+    state.isMovableToNextStep =
+        state.inputConditions.sublist(0, state.currentStep + 1).reduce((value, element) => value & element);
   }
 
   void setFocusedStep(int value) {

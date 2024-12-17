@@ -99,10 +99,8 @@ class _JoinGroupViewState extends ConsumerState<JoinGroupView> {
                           visible: groupNameFieldController.text.isEmpty,
                           child: IconButton(
                             onPressed: () async {
-                              final clipboardData =
-                                  await Clipboard.getData(Clipboard.kTextPlain);
-                              groupNameFieldController.text =
-                                  clipboardData?.text ?? '';
+                              final clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
+                              groupNameFieldController.text = clipboardData?.text ?? '';
                               setState(() {});
                             },
                             icon: const Icon(
@@ -129,8 +127,7 @@ class _JoinGroupViewState extends ConsumerState<JoinGroupView> {
                             ),
                           );
 
-                      if (groupEntityList == null ||
-                          (groupEntityList.isEmpty)) {
+                      if (groupEntityList == null || (groupEntityList.isEmpty)) {
                         // 그룹 정보를 불러올 수 없는 경우 (데이터가 없다거나?)
                         setState(() {
                           isSearchDone = true;
@@ -190,9 +187,7 @@ class _JoinGroupViewState extends ConsumerState<JoinGroupView> {
                   icon: Icon(
                     Icons.search,
                     size: 28,
-                    color: groupNameFieldController.text.isEmpty
-                        ? CustomColors.whGrey
-                        : CustomColors.whWhite,
+                    color: groupNameFieldController.text.isEmpty ? CustomColors.whGrey : CustomColors.whWhite,
                   ),
                 ),
               ],
@@ -258,9 +253,7 @@ class _JoinGroupViewState extends ConsumerState<JoinGroupView> {
                                 builder: (context) {
                                   return GradientBottomSheet(
                                     SizedBox(
-                                      height:
-                                          MediaQuery.sizeOf(context).height *
-                                              0.80,
+                                      height: MediaQuery.sizeOf(context).height * 0.80,
                                       child: JoinGroupIntroduceView(
                                         groupModel: cellModel,
                                       ),
@@ -290,12 +283,10 @@ class JoinGroupIntroduceView extends ConsumerStatefulWidget {
   final GroupListViewCellWidgetModel groupModel;
 
   @override
-  ConsumerState<JoinGroupIntroduceView> createState() =>
-      _JoinGroupIntroduceViewState();
+  ConsumerState<JoinGroupIntroduceView> createState() => _JoinGroupIntroduceViewState();
 }
 
-class _JoinGroupIntroduceViewState
-    extends ConsumerState<JoinGroupIntroduceView> {
+class _JoinGroupIntroduceViewState extends ConsumerState<JoinGroupIntroduceView> {
   EitherFuture<UserDataEntity>? groupManagerEntity;
   Future<bool>? isRegisteredFuture;
   Future<bool>? isAppliedFuture;
@@ -307,10 +298,8 @@ class _JoinGroupIntroduceViewState
   }
 
   Future<void> initializeData() async {
-    groupManagerEntity = ref
-        .read(getUserDataFromIdUsecaseProvider)
-        (widget.groupModel.groupEntity.groupManagerUid)
-        .whenComplete(() {
+    groupManagerEntity =
+        ref.read(getUserDataFromIdUsecaseProvider)(widget.groupModel.groupEntity.groupManagerUid).whenComplete(() {
       setState(() {});
     });
 

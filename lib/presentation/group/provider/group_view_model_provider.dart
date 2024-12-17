@@ -13,12 +13,9 @@ class GroupViewModelProvider extends StateNotifier<GroupViewModel> {
   ) : super(GroupViewModel());
 
   final GetGroupListUsecase getGroupListUsecase;
-  final GetGroupListViewCellWidgetModelUsecase
-      getGroupListViewCellWidgetModelUsecase;
-  final GetGroupListViewFriendCellWidgetModelUsecase
-      getGroupListViewFriendCellWidgetModelUsecase;
-  final GetSharedResolutionIdListFromFriendUidUsecase
-      getSharedResolutionIdListFromFriendUidUsecase;
+  final GetGroupListViewCellWidgetModelUsecase getGroupListViewCellWidgetModelUsecase;
+  final GetGroupListViewFriendCellWidgetModelUsecase getGroupListViewFriendCellWidgetModelUsecase;
+  final GetSharedResolutionIdListFromFriendUidUsecase getSharedResolutionIdListFromFriendUidUsecase;
 
   Future<void> loadMyGroupCellList() async {
     state.myGroupList = await getGroupListUsecase(NoParams()).then(
@@ -74,11 +71,9 @@ class GroupViewModelProvider extends StateNotifier<GroupViewModel> {
       }),
     );
 
-    state.groupListViewFriendCellModel =
-        await getGroupListViewFriendCellWidgetModelUsecase(
+    state.groupListViewFriendCellModel = await getGroupListViewFriendCellWidgetModelUsecase(
       userIdList: friendUidList,
-      sharedResolutionIdList:
-          sharedResolutionIdMap.values.expand((list) => list).toList(),
+      sharedResolutionIdList: sharedResolutionIdMap.values.expand((list) => list).toList(),
     ).then((result) {
       return result.fold((failure) {
         return null;
@@ -87,14 +82,11 @@ class GroupViewModelProvider extends StateNotifier<GroupViewModel> {
       });
     });
 
-    state.groupListViewFriendCellModel?.friendIdResolutionMap =
-        sharedResolutionIdMap;
+    state.groupListViewFriendCellModel?.friendIdResolutionMap = sharedResolutionIdMap;
   }
 
   Future<void> updateGroupEntity({required GroupEntity forEntity}) async {
-    final groupIndex = state.myGroupList
-            ?.indexWhere((element) => element.groupId == forEntity.groupId) ??
-        -1;
+    final groupIndex = state.myGroupList?.indexWhere((element) => element.groupId == forEntity.groupId) ?? -1;
 
     if (groupIndex >= 0) {
       state.myGroupList?[groupIndex] = forEntity;

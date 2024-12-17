@@ -23,10 +23,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   EitherFuture<List<EitherFuture<UserDataEntity>>> getFriendModelList() {
     // users에서 내 user 정보 접근해서 friends 리스트 받아오기
     try {
-      return firestore
-          .collection(FirebaseCollectionName.friends)
-          .get()
-          .then((friendDocument) {
+      return firestore.collection(FirebaseCollectionName.friends).get().then((friendDocument) {
         return right(
           friendDocument.docs.map((doc) {
             return fetchUserDataEntityByUserId(
@@ -98,23 +95,15 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     DateTime selectedDate,
   ) async {
     try {
-      DateTime startDate =
-          DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+      DateTime startDate = DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
 
-      DateTime endDate =
-          DateTime(startDate.year, startDate.month, startDate.day)
-              .add(const Duration(days: 1));
+      DateTime endDate = DateTime(startDate.year, startDate.month, startDate.day).add(const Duration(days: 1));
 
       final uid = getMyUserId();
 
       // 사용자가 속한 그룹에 속한 멤버들의 uid List
-      final groupMemberUidList = await firestore
-          .collection(FirebaseCollectionName.groups)
-          .doc(groupId)
-          .get()
-          .then(
-            (value) => (value.data()?[FirebaseGroupFieldName.memberUidList]
-                    as List<dynamic>)
+      final groupMemberUidList = await firestore.collection(FirebaseCollectionName.groups).doc(groupId).get().then(
+            (value) => (value.data()?[FirebaseGroupFieldName.memberUidList] as List<dynamic>)
                 .map((e) => e.toString())
                 .toList(),
           );
@@ -174,11 +163,9 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       List<ConfirmPostEntity> confirmPosts = await Future.wait(
         fetchResult.docs.map(
           (doc) async {
-            final confirmPostModel =
-                FirebaseConfirmPostModel.fromFireStoreDocument(doc);
+            final confirmPostModel = FirebaseConfirmPostModel.fromFireStoreDocument(doc);
 
-            final ownerUserEntity =
-                (await getUserEntityByUserId(confirmPostModel.owner!))!;
+            final ownerUserEntity = (await getUserEntityByUserId(confirmPostModel.owner!))!;
 
             final entity = confirmPostModel.toConfirmPostEntity(
               doc.reference.id,
@@ -218,8 +205,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           (doc) async {
             final model = FirebaseConfirmPostModel.fromFireStoreDocument(doc);
 
-            final ownerUserEntity =
-                (await getUserEntityByUserId(model.owner!))!;
+            final ownerUserEntity = (await getUserEntityByUserId(model.owner!))!;
             final entity = model.toConfirmPostEntity(
               doc.reference.id,
               ownerUserEntity,
@@ -251,8 +237,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       );
 
       Timestamp endDate = Timestamp.fromDate(
-        DateTime(targetDate.year, targetDate.month, targetDate.day)
-            .add(const Duration(days: 1)),
+        DateTime(targetDate.year, targetDate.month, targetDate.day).add(const Duration(days: 1)),
       );
 
       final fetchResult = await firestore
@@ -296,9 +281,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   EitherFuture<bool> uploadConfirmPost(ConfirmPostEntity entity) async {
     try {
       final model = FirebaseConfirmPostModel.fromConfirmPostEntity(entity);
-      await firestore
-          .collection(FirebaseCollectionName.confirmPosts)
-          .add(model.toFirestoreMap());
+      await firestore.collection(FirebaseCollectionName.confirmPosts).add(model.toFirestoreMap());
 
       return Future(() => right(true));
     } on Exception catch (e) {
@@ -313,10 +296,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     try {
       final model = FirebaseConfirmPostModel.fromConfirmPostEntity(entity);
 
-      await firestore
-          .collection(FirebaseCollectionName.confirmPosts)
-          .doc(entity.id)
-          .update(model.toFirestoreMap());
+      await firestore.collection(FirebaseCollectionName.confirmPosts).doc(entity.id).update(model.toFirestoreMap());
 
       return Future(() => right(true));
     } on Exception catch (e) {
@@ -332,8 +312,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     ReactionEntity reactionEntity,
   ) async {
     try {
-      final reactionModel =
-          FirebaseReactionModel.fromReactionEntity(reactionEntity);
+      final reactionModel = FirebaseReactionModel.fromReactionEntity(reactionEntity);
 
       await firestore
           .collection(
@@ -384,8 +363,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
 
                 final shareFriendEntityList = (await Future.wait(
                   model.shareFriendIdList!.map((uid) async {
-                    final entity = (await fetchUserDataEntityByUserId(uid))
-                        .fold((failure) => null, (entity) => entity);
+                    final entity = (await fetchUserDataEntityByUserId(uid)).fold((failure) => null, (entity) => entity);
 
                     if (entity != null) {
                       return entity;
@@ -397,8 +375,8 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
 
                 final shareGroupEntityList = (await Future.wait(
                   (model.shareGroupIdList ?? []).map((groupId) async {
-                    final entity = (await fetchGroupEntityByGroupId(groupId))
-                        .fold((failure) => null, (entity) => entity);
+                    final entity =
+                        (await fetchGroupEntityByGroupId(groupId)).fold((failure) => null, (entity) => entity);
 
                     if (entity != null) {
                       return entity;
@@ -422,8 +400,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       return Future(() => right(resolutionList));
     } on Exception {
       return Future(
-        () =>
-            left(const Failure('catch error on getActiveResolutionEntityList')),
+        () => left(const Failure('catch error on getActiveResolutionEntityList')),
       );
     }
   }
@@ -431,8 +408,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   @override
   EitherFuture<String> uploadResolutionEntity(ResolutionEntity entity) async {
     try {
-      FirebaseResolutionModel resolutionModel =
-          FirebaseResolutionModel.fromEntity(entity);
+      FirebaseResolutionModel resolutionModel = FirebaseResolutionModel.fromEntity(entity);
 
       return firestore
           .collection(FirebaseCollectionName.myResolutions)
@@ -451,10 +427,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     String targetUserId,
   ) async {
     try {
-      final friendDocument = await firestore
-          .collection(FirebaseCollectionName.users)
-          .doc(targetUserId)
-          .get();
+      final friendDocument = await firestore.collection(FirebaseCollectionName.users).doc(targetUserId).get();
 
       final model = FirebaseUserModel.fromFireStoreDocument(friendDocument);
       final entity = model.toUserDataEntity(
@@ -469,13 +442,9 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
 
   Future<UserDataEntity?> getUserEntityByUserId(String targetUserId) async {
     try {
-      final friendDocument = await firestore
-          .collection(FirebaseCollectionName.users)
-          .doc(targetUserId)
-          .get();
+      final friendDocument = await firestore.collection(FirebaseCollectionName.users).doc(targetUserId).get();
 
-      final result = FirebaseUserModel.fromFireStoreDocument(friendDocument)
-          .toUserDataEntity(userId: targetUserId);
+      final result = FirebaseUserModel.fromFireStoreDocument(friendDocument).toUserDataEntity(userId: targetUserId);
 
       return result;
     } on Exception {
@@ -506,10 +475,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
         );
       }
 
-      await firestore
-          .collection(FirebaseCollectionName.confirmPosts)
-          .doc(entity.id)
-          .delete();
+      await firestore.collection(FirebaseCollectionName.confirmPosts).doc(entity.id).delete();
 
       return Future(() => right(true));
     } on Exception {
@@ -538,8 +504,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
         throw Exception('no file');
       }
 
-      String storagePath =
-          FirebaseStorageName.getConfirmPostQuickShotReactionStorageName(
+      String storagePath = FirebaseStorageName.getConfirmPostQuickShotReactionStorageName(
         entity.owner!,
         entity.id!,
       );
@@ -568,8 +533,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
 
       final reactionEntityList = await Future.wait(
         reactions.docs.map((doc) async {
-          final reactionModel = FirebaseReactionModel.fromFireStoreDocument(doc)
-              .toReactionEntity();
+          final reactionModel = FirebaseReactionModel.fromFireStoreDocument(doc).toReactionEntity();
 
           return reactionModel;
         }).toList(),
@@ -597,8 +561,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       final reactionEntityList = await Future.wait(
         reactions.docs.map((doc) async {
           await doc.reference.delete();
-          final reactionModel = FirebaseReactionModel.fromFireStoreDocument(doc)
-              .toReactionEntity();
+          final reactionModel = FirebaseReactionModel.fromFireStoreDocument(doc).toReactionEntity();
 
           return reactionModel;
         }).toList(),
@@ -620,8 +583,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   ) async {
     try {
       final uid = getMyUserId();
-      String storagePath =
-          FirebaseConfirmPostImagePathName.storagePath(uid: uid);
+      String storagePath = FirebaseConfirmPostImagePathName.storagePath(uid: uid);
       final ref = FirebaseStorage.instance.ref(storagePath);
       await ref.putFile(File(localFileUrl));
 
@@ -650,10 +612,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       groupCreatedAt: groupCreatedAt,
     );
 
-    final groupId = (await firestore
-            .collection(FirebaseCollectionName.groups)
-            .add(groupModel.toJson()))
-        .id;
+    final groupId = (await firestore.collection(FirebaseCollectionName.groups).add(groupModel.toJson())).id;
 
     final entity = GroupEntity(
       groupName: groupModel.groupName,
@@ -666,9 +625,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       groupCreatedAt: groupCreatedAt,
     );
 
-    firestore
-        .collection(FirebaseCollectionName.userGroups)
-        .add({'groupId': groupId});
+    firestore.collection(FirebaseCollectionName.userGroups).add({'groupId': groupId});
 
     return Future(() => right(entity));
   }
@@ -695,13 +652,8 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     try {
       final myUid = getMyUserId();
 
-      final isManager = await firestore
-          .collection(FirebaseCollectionName.groups)
-          .doc(groupId)
-          .get()
-          .then(
-            (value) =>
-                value.data()?[FirebaseGroupFieldName.managerUid] == myUid,
+      final isManager = await firestore.collection(FirebaseCollectionName.groups).doc(groupId).get().then(
+            (value) => value.data()?[FirebaseGroupFieldName.managerUid] == myUid,
           );
 
       if (!isManager) {
@@ -727,10 +679,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       });
 
       if (isAccepted) {
-        firestore
-            .collection(FirebaseCollectionName.groups)
-            .doc(groupId)
-            .update({
+        firestore.collection(FirebaseCollectionName.groups).doc(groupId).update({
           FirebaseGroupFieldName.memberUidList: FieldValue.arrayUnion([uid]),
         });
 
@@ -755,13 +704,8 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     try {
       final myUid = getMyUserId();
 
-      final isManager = await firestore
-          .collection(FirebaseCollectionName.groups)
-          .doc(groupId)
-          .get()
-          .then(
-            (value) =>
-                value.data()?[FirebaseGroupFieldName.managerUid] == myUid,
+      final isManager = await firestore.collection(FirebaseCollectionName.groups).doc(groupId).get().then(
+            (value) => value.data()?[FirebaseGroupFieldName.managerUid] == myUid,
           );
 
       if (!isManager) {
@@ -800,11 +744,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
         });
       });
 
-      final remainings = await firestore
-          .collection(FirebaseCollectionName.groups)
-          .doc(groupId)
-          .get()
-          .then((group) {
+      final remainings = await firestore.collection(FirebaseCollectionName.groups).doc(groupId).get().then((group) {
         return group.data()?[FirebaseGroupFieldName.memberUidList]?.length;
       });
 
@@ -831,20 +771,13 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
             doc.reference.delete();
           });
         }).then(
-          (_) => firestore
-              .collection(FirebaseCollectionName.groups)
-              .doc(groupId)
-              .delete(),
+          (_) => firestore.collection(FirebaseCollectionName.groups).doc(groupId).delete(),
         );
       }
       // 현재 그룹에 남아있는 인원이 여러 명인 경우
       else if (remainings > 1) {
-        firestore
-            .collection(FirebaseCollectionName.groups)
-            .doc(groupId)
-            .update({
-          FirebaseGroupFieldName.memberUidList:
-              FieldValue.arrayRemove([targetUserId]),
+        firestore.collection(FirebaseCollectionName.groups).doc(groupId).update({
+          FirebaseGroupFieldName.memberUidList: FieldValue.arrayRemove([targetUserId]),
         });
       }
       // 남은 인원이 음수인 경우는 없음
@@ -864,10 +797,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     String targetGroupId,
   ) async {
     try {
-      final groupDocument = await firestore
-          .collection(FirebaseCollectionName.groups)
-          .doc(targetGroupId)
-          .get();
+      final groupDocument = await firestore.collection(FirebaseCollectionName.groups).doc(targetGroupId).get();
 
       final model = FirebaseGroupModel.fromFireStoreDocument(groupDocument);
       final entity = model.toGroupEntity(
@@ -883,13 +813,8 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   @override
   EitherFuture<List<GroupEntity>> getGroupEntityList() async {
     try {
-      final groupIdList = await firestore
-          .collection(FirebaseCollectionName.userGroups)
-          .get()
-          .then(
-            (result) => result.docs
-                .map((doc) => doc.data()['groupId'].toString())
-                .toList(),
+      final groupIdList = await firestore.collection(FirebaseCollectionName.userGroups).get().then(
+            (result) => result.docs.map((doc) => doc.data()['groupId'].toString()).toList(),
           );
 
       final groupEntityList = (await Future.wait(
@@ -927,20 +852,12 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }) {
     try {
       if (toShareState == true) {
-        firestore
-            .collection(FirebaseCollectionName.myResolutions)
-            .doc(resolutionId)
-            .update({
-          FirebaseResolutionFieldName.resolutionShareGroupIdList:
-              FieldValue.arrayUnion([groupId]),
+        firestore.collection(FirebaseCollectionName.myResolutions).doc(resolutionId).update({
+          FirebaseResolutionFieldName.resolutionShareGroupIdList: FieldValue.arrayUnion([groupId]),
         });
       } else {
-        firestore
-            .collection(FirebaseCollectionName.myResolutions)
-            .doc(resolutionId)
-            .update({
-          FirebaseResolutionFieldName.resolutionShareGroupIdList:
-              FieldValue.arrayRemove([groupId]),
+        firestore.collection(FirebaseCollectionName.myResolutions).doc(resolutionId).update({
+          FirebaseResolutionFieldName.resolutionShareGroupIdList: FieldValue.arrayRemove([groupId]),
         });
       }
 
@@ -962,20 +879,12 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }) {
     try {
       if (toShareState == true) {
-        firestore
-            .collection(FirebaseCollectionName.myResolutions)
-            .doc(resolutionId)
-            .update({
-          FirebaseResolutionFieldName.resolutionShareFriendIdList:
-              FieldValue.arrayUnion([friendId]),
+        firestore.collection(FirebaseCollectionName.myResolutions).doc(resolutionId).update({
+          FirebaseResolutionFieldName.resolutionShareFriendIdList: FieldValue.arrayUnion([friendId]),
         });
       } else {
-        firestore
-            .collection(FirebaseCollectionName.myResolutions)
-            .doc(resolutionId)
-            .update({
-          FirebaseResolutionFieldName.resolutionShareFriendIdList:
-              FieldValue.arrayRemove([friendId]),
+        firestore.collection(FirebaseCollectionName.myResolutions).doc(resolutionId).update({
+          FirebaseResolutionFieldName.resolutionShareFriendIdList: FieldValue.arrayRemove([friendId]),
         });
       }
 
@@ -996,17 +905,10 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     try {
       final model = FirebaseGroupAnnouncementModel.fromEntity(entity);
       final myUid = getMyUserId();
-      final hasPermission = await firestore
-          .collection(FirebaseCollectionName.groups)
-          .doc(entity.groupId)
-          .get()
-          .then((result) {
-        final isMember = (result.data()![FirebaseGroupFieldName.memberUidList]
-                as List<String>)
-            .contains(myUid);
-        final isManager =
-            (result.data()![FirebaseGroupFieldName.managerUid] as String) ==
-                myUid;
+      final hasPermission =
+          await firestore.collection(FirebaseCollectionName.groups).doc(entity.groupId).get().then((result) {
+        final isMember = (result.data()![FirebaseGroupFieldName.memberUidList] as List<String>).contains(myUid);
+        final isManager = (result.data()![FirebaseGroupFieldName.managerUid] as String) == myUid;
 
         // 공지글 작성 권한을 여기에서 수정할 수 있음!
         return isMember | isManager;
@@ -1044,13 +946,8 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   ) async {
     try {
       final myUid = getMyUserId();
-      final isMemberOfGroup = await firestore
-          .collection(FirebaseCollectionName.groups)
-          .doc(groupId)
-          .get()
-          .then(
-            (result) => (result.data()![FirebaseGroupFieldName.memberUidList]
-                    as List<dynamic>)
+      final isMemberOfGroup = await firestore.collection(FirebaseCollectionName.groups).doc(groupId).get().then(
+            (result) => (result.data()![FirebaseGroupFieldName.memberUidList] as List<dynamic>)
                 .map((e) => e.toString())
                 .contains(myUid),
           );
@@ -1090,13 +987,8 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   ) async {
     try {
       final myUid = getMyUserId();
-      final isMemberOfGroup = await firestore
-          .collection(FirebaseCollectionName.groups)
-          .doc(entity.groupId)
-          .get()
-          .then(
-            (result) => (result.data()![FirebaseGroupFieldName.memberUidList]
-                    as List<dynamic>)
+      final isMemberOfGroup = await firestore.collection(FirebaseCollectionName.groups).doc(entity.groupId).get().then(
+            (result) => (result.data()![FirebaseGroupFieldName.memberUidList] as List<dynamic>)
                 .map((e) => e.toString())
                 .contains(myUid),
           );
@@ -1118,8 +1010,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           .doc(entity.groupAnnouncementId)
           .update(
         {
-          FirebaseGroupAnnouncementFieldName.readByUidList:
-              FieldValue.arrayUnion([getMyUserId()]),
+          FirebaseGroupAnnouncementFieldName.readByUidList: FieldValue.arrayUnion([getMyUserId()]),
         },
       );
 
@@ -1143,18 +1034,15 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     int difference = now.weekday - DateTime.sunday;
     // 만약 현재 날짜가 일요일이면 현재 날짜를 반환
     if (difference == 0) {
-      endDate =
-          DateTime(now.year, now.month, now.day).add(const Duration(days: 2));
+      endDate = DateTime(now.year, now.month, now.day).add(const Duration(days: 2));
     } else {
       // 현재 날짜에서 일요일까지의 차이를 뺀 값을 반환
       final date = now.add(Duration(days: difference));
-      endDate = DateTime(date.year, date.month, date.day)
-          .add(const Duration(days: 2));
+      endDate = DateTime(date.year, date.month, date.day).add(const Duration(days: 2));
     }
 
     // ignore: unused_local_variable
-    DateTime startDate = DateTime(endDate.year, endDate.month, endDate.day)
-        .subtract(const Duration(days: 7));
+    DateTime startDate = DateTime(endDate.year, endDate.month, endDate.day).subtract(const Duration(days: 7));
 
     return startDate;
   }
@@ -1168,18 +1056,12 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       DateTime endDate = startDate.add(const Duration(days: 7));
 
       // 그룹 맴버들에 대해서
-      final memberList = (await firestore
-              .collection(FirebaseCollectionName.groups)
-              .doc(groupId)
-              .get()
-              .then(
+      final memberList = (await firestore.collection(FirebaseCollectionName.groups).doc(groupId).get().then(
                 (result) async => await Future.wait(
-                  (result.data()![FirebaseGroupFieldName.memberUidList]
-                          as List<dynamic>)
+                  (result.data()![FirebaseGroupFieldName.memberUidList] as List<dynamic>)
                       .map((e) => e.toString())
                       .map((targetUid) async {
-                    final fetchUserEntity =
-                        await fetchUserDataEntityByUserId(targetUid).then(
+                    final fetchUserEntity = await fetchUserDataEntityByUserId(targetUid).then(
                       (result) => result.fold(
                         (l) => null,
                         (entity) => entity,
@@ -1214,12 +1096,11 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
                 (result) async => await Future.wait(
                   result.docs.map((doc) async {
                     final shareFriendEntityList = (await Future.wait(
-                      (doc.data()[FirebaseResolutionFieldName
-                              .resolutionShareFriendIdList] as List<dynamic>)
+                      (doc.data()[FirebaseResolutionFieldName.resolutionShareFriendIdList] as List<dynamic>)
                           .map((e) => e.toString())
                           .map((uid) async {
-                        final entity = (await fetchUserDataEntityByUserId(uid))
-                            .fold((failure) => null, (entity) => entity);
+                        final entity =
+                            (await fetchUserDataEntityByUserId(uid)).fold((failure) => null, (entity) => entity);
 
                         if (entity != null) {
                           return entity;
@@ -1230,13 +1111,11 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
                         .toList();
 
                     final shareGroupEntityList = (await Future.wait(
-                      (doc.data()[FirebaseResolutionFieldName
-                              .resolutionShareGroupIdList] as List<dynamic>)
+                      (doc.data()[FirebaseResolutionFieldName.resolutionShareGroupIdList] as List<dynamic>)
                           .map((e) => e.toString())
                           .map((groupId) async {
                         final entity =
-                            (await fetchGroupEntityByGroupId(groupId))
-                                .fold((failure) => null, (entity) => entity);
+                            (await fetchGroupEntityByGroupId(groupId)).fold((failure) => null, (entity) => entity);
 
                         if (entity != null) {
                           return entity;
@@ -1246,8 +1125,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
                         .nonNulls
                         .toList();
 
-                    return FirebaseResolutionModel.fromFireStoreDocument(doc)
-                        .toResolutionEntity(
+                    return FirebaseResolutionModel.fromFireStoreDocument(doc).toResolutionEntity(
                       documentId: doc.reference.id,
                       shareFriendEntityList: shareFriendEntityList,
                       shareGroupEntityList: shareGroupEntityList,
@@ -1272,10 +1150,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
                     (result) => result.docs.map(
                       (doc) {
                         final weekday =
-                            (doc.data()[FirebaseConfirmPostFieldName.createdAt]
-                                    as Timestamp)
-                                .toDate()
-                                .weekday;
+                            (doc.data()[FirebaseConfirmPostFieldName.createdAt] as Timestamp).toDate().weekday;
                         doneListForWeek[weekday] = true;
                       },
                     ).toList(),
@@ -1287,15 +1162,10 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
 
           // 각 목표의 달성 여부를 체크하고
           // {목표Id : T/F} 의 형식으로 map을 만들어 저장
-          final successResolutionList =
-              sharedResolutionList.mapWithIndex((resolution, index) {
-            final numOfActionsForThisWeek = doneListForWeek[index]
-                .where((element) => element == true)
-                .length;
+          final successResolutionList = sharedResolutionList.mapWithIndex((resolution, index) {
+            final numOfActionsForThisWeek = doneListForWeek[index].where((element) => element == true).length;
 
-            return ((resolution.actionPerWeek ?? 7) <= numOfActionsForThisWeek)
-                ? true
-                : false;
+            return ((resolution.actionPerWeek ?? 7) <= numOfActionsForThisWeek) ? true : false;
           }).toList();
 
           final successResolutionMap = Map.fromIterables(
@@ -1306,19 +1176,16 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           // 각 요일별로 인증 여부를 체크하고
           // [[월요일에 인증한 목표Id1, 월요일에 인증한 목표Id2], [화요일에 인증한 목표id3], [] ... ]
           // 의 형식으로 double list를 만들어 저장
-          List<List<String>> doneResolutionIdListForEachDay =
-              List.generate(7, (_) => []);
+          List<List<String>> doneResolutionIdListForEachDay = List.generate(7, (_) => []);
 
           doneListForWeek.mapWithIndex((doneForResolution, index) {
             doneForResolution.forEachIndexed((jndex, element) {
               if (element == true) {
                 // 추가 안됨
-                doneResolutionIdListForEachDay[jndex]
-                    .append(sharedResolutionList[index].resolutionId!);
+                doneResolutionIdListForEachDay[jndex].append(sharedResolutionList[index].resolutionId!);
 
                 // 추가 됨
-                doneResolutionIdListForEachDay[jndex]
-                    .add(sharedResolutionList[index].resolutionId!);
+                doneResolutionIdListForEachDay[jndex].add(sharedResolutionList[index].resolutionId!);
               }
             });
           }).toList();
@@ -1441,13 +1308,8 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
 
   Future<List<String>> getGroupSharedMemberUidList(String groupId) async {
     try {
-      final groupMemberUidList = firestore
-          .collection(FirebaseCollectionName.groups)
-          .doc(groupId)
-          .get()
-          .then(
-            (result) => (result.data()![FirebaseGroupFieldName.memberUidList]
-                    as List<dynamic>)
+      final groupMemberUidList = firestore.collection(FirebaseCollectionName.groups).doc(groupId).get().then(
+            (result) => (result.data()![FirebaseGroupFieldName.memberUidList] as List<dynamic>)
                 .map((e) => e.toString())
                 .toList(),
           );
@@ -1463,13 +1325,8 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     required String groupId,
   }) async {
     try {
-      final groupEntity = await firestore
-          .collection(FirebaseCollectionName.groups)
-          .doc(groupId)
-          .get()
-          .then(
-            (result) =>
-                FirebaseGroupModel.fromFireStoreDocument(result).toGroupEntity(
+      final groupEntity = await firestore.collection(FirebaseCollectionName.groups).doc(groupId).get().then(
+            (result) => FirebaseGroupModel.fromFireStoreDocument(result).toGroupEntity(
               groupId: groupId,
             ),
           );
@@ -1510,11 +1367,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     try {
       final uid = getMyUserId();
 
-      final isRegistered = await firestore
-          .collection(FirebaseCollectionName.groups)
-          .doc(groupId)
-          .get()
-          .then((result) {
+      final isRegistered = await firestore.collection(FirebaseCollectionName.groups).doc(groupId).get().then((result) {
         return List.castFrom(
           result.data()?[FirebaseGroupFieldName.memberUidList] as List,
         ).contains(uid);
@@ -1561,12 +1414,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
         final dList = List.generate(7, (index) => false);
 
         for (var element in vList) {
-          final docsDate =
-              (element.data()[FirebaseConfirmPostFieldName.createdAt]
-                          as Timestamp)
-                      .toDate()
-                      .weekday -
-                  1;
+          final docsDate = (element.data()[FirebaseConfirmPostFieldName.createdAt] as Timestamp).toDate().weekday - 1;
           if (docsDate >= 0 && docsDate < 7) {
             dList[docsDate] = true;
           }
@@ -1593,13 +1441,8 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     String resolutionId,
   ) async {
     try {
-      final fetchResult = await firestore
-          .collection(FirebaseCollectionName.myResolutions)
-          .doc(resolutionId)
-          .get()
-          .then(
-            (result) => result.data()?[FirebaseResolutionFieldName
-                .resolutionShareGroupIdList] as List<dynamic>?,
+      final fetchResult = await firestore.collection(FirebaseCollectionName.myResolutions).doc(resolutionId).get().then(
+            (result) => result.data()?[FirebaseResolutionFieldName.resolutionShareGroupIdList] as List<dynamic>?,
           );
 
       if (fetchResult == null) {
@@ -1613,8 +1456,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       final groupEntityList = (await Future.wait(
         groupIdList
             .map(
-              (groupId) async =>
-                  await getGroupEntityById(groupId: groupId).then(
+              (groupId) async => await getGroupEntityById(groupId: groupId).then(
                 (result) => result.fold(
                   (failure) => null,
                   (groupEntity) => groupEntity,
@@ -1650,9 +1492,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           )
           .get()
           .then(
-            (data) => data.docs
-                .map((e) => e.data()[FirebaseGroupFieldName.applyUid] as String)
-                .toList(),
+            (data) => data.docs.map((e) => e.data()[FirebaseGroupFieldName.applyUid] as String).toList(),
           )
           .then((result) {
         return right(result);
@@ -1687,8 +1527,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       for (final doc in querySnapshot.docs) {
         final data = doc.data();
 
-        final sharedGroupList =
-            data[FirebaseResolutionFieldName.resolutionShareGroupIdList];
+        final sharedGroupList = data[FirebaseResolutionFieldName.resolutionShareGroupIdList];
 
         if (sharedGroupList == null) {
           return Future(() => right(0));
@@ -1705,8 +1544,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
             ),
           );
           successCount += success;
-          total +=
-              data[FirebaseResolutionFieldName.resolutionActionPerWeek] as int;
+          total += data[FirebaseResolutionFieldName.resolutionActionPerWeek] as int;
         }
       }
 
@@ -1821,17 +1659,10 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           targetFieldName = FirebaseUserFieldName.cumulativeReactions;
       }
 
-      firestore
-          .collection(FirebaseCollectionName.users)
-          .doc(myUid)
-          .get()
-          .then((result) {
+      firestore.collection(FirebaseCollectionName.users).doc(myUid).get().then((result) {
         return (result.data()?[targetFieldName] as int) + 1;
       }).then((newValue) {
-        firestore
-            .collection(FirebaseCollectionName.users)
-            .doc(myUid)
-            .update({targetFieldName: newValue});
+        firestore.collection(FirebaseCollectionName.users).doc(myUid).update({targetFieldName: newValue});
       });
 
       return Future(() => right(null));
@@ -1846,10 +1677,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   EitherFuture<void> updateAboutMe({required String newAboutMe}) {
     try {
       final myUid = getMyUserId();
-      firestore
-          .collection(FirebaseCollectionName.users)
-          .doc(myUid)
-          .update({FirebaseUserFieldName.aboutMe: newAboutMe});
+      firestore.collection(FirebaseCollectionName.users).doc(myUid).update({FirebaseUserFieldName.aboutMe: newAboutMe});
 
       return Future(() => right(null));
     } on Exception catch (e) {
@@ -1894,8 +1722,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
         (result) {
           final uidList = result.docs
               .map((doc) {
-                final uid =
-                    doc.data()[FirebaseUserFieldName.applyUid] as String?;
+                final uid = doc.data()[FirebaseUserFieldName.applyUid] as String?;
 
                 if (uid != null) return uid;
               })
@@ -1999,8 +1826,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           .limit(6)
           .get()
           .then((users) {
-        List<EitherFuture<UserDataEntity>> userFutureList =
-            users.docs.map((doc) {
+        List<EitherFuture<UserDataEntity>> userFutureList = users.docs.map((doc) {
           return Future<Either<Failure, UserDataEntity>>(() {
             try {
               if (doc.reference.id == myUid) {
@@ -2012,8 +1838,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
               }
 
               UserDataEntity userDataEntity =
-                  FirebaseUserModel.fromFireStoreDocument(doc)
-                      .toUserDataEntity(userId: doc.reference.id);
+                  FirebaseUserModel.fromFireStoreDocument(doc).toUserDataEntity(userId: doc.reference.id);
 
               if ((userDataEntity.userName ?? '').startsWith(nickname)) {
                 return Future(() => right(userDataEntity));
@@ -2155,8 +1980,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           .then(
             (result) => result.docs
                 .map(
-                  (doc) => FirebaseGroupModel.fromFireStoreDocument(doc)
-                      .toGroupEntity(
+                  (doc) => FirebaseGroupModel.fromFireStoreDocument(doc).toGroupEntity(
                     groupId: doc.id,
                   ),
                 )
@@ -2187,13 +2011,10 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           .limit(5)
           .get()
           .then((groups) {
-        List<EitherFuture<GroupEntity>> futureGroupList =
-            groups.docs.map((doc) {
+        List<EitherFuture<GroupEntity>> futureGroupList = groups.docs.map((doc) {
           return EitherFuture<GroupEntity>(() {
             try {
-              GroupEntity groupEntity =
-                  FirebaseGroupModel.fromFireStoreDocument(doc)
-                      .toGroupEntity(groupId: doc.id);
+              GroupEntity groupEntity = FirebaseGroupModel.fromFireStoreDocument(doc).toGroupEntity(groupId: doc.id);
 
               if (groupEntity.groupName.startsWith(keyword)) {
                 return Future(() => right(groupEntity));
@@ -2243,8 +2064,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           .limit(6)
           .get()
           .then((users) {
-        List<EitherFuture<UserDataEntity>> userFutureList =
-            users.docs.map((doc) {
+        List<EitherFuture<UserDataEntity>> userFutureList = users.docs.map((doc) {
           return Future<Either<Failure, UserDataEntity>>(() {
             try {
               if (doc.reference.id == myUid) {
@@ -2256,8 +2076,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
               }
 
               UserDataEntity userDataEntity =
-                  FirebaseUserModel.fromFireStoreDocument(doc)
-                      .toUserDataEntity(userId: doc.reference.id);
+                  FirebaseUserModel.fromFireStoreDocument(doc).toUserDataEntity(userId: doc.reference.id);
 
               if ((userDataEntity.handle ?? '').startsWith(handle)) {
                 return Future(() => right(userDataEntity));
@@ -2292,12 +2111,9 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     DateTime selectedDate,
   ) async {
     try {
-      DateTime startDate =
-          DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+      DateTime startDate = DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
 
-      DateTime endDate =
-          DateTime(startDate.year, startDate.month, startDate.day)
-              .add(const Duration(days: 1));
+      DateTime endDate = DateTime(startDate.year, startDate.month, startDate.day).add(const Duration(days: 1));
 
       final uid = getMyUserId();
 
@@ -2332,11 +2148,9 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       List<ConfirmPostEntity> confirmPosts = await Future.wait(
         fetchResult.docs.map(
           (doc) async {
-            final confirmPostModel =
-                FirebaseConfirmPostModel.fromFireStoreDocument(doc);
+            final confirmPostModel = FirebaseConfirmPostModel.fromFireStoreDocument(doc);
 
-            final ownerUserEntity =
-                (await getUserEntityByUserId(confirmPostModel.owner!))!;
+            final ownerUserEntity = (await getUserEntityByUserId(confirmPostModel.owner!))!;
 
             final entity = confirmPostModel.toConfirmPostEntity(
               doc.reference.id,
@@ -2453,8 +2267,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           .doc(targetResolutionId)
           .get()
           .then(
-            (doc) => doc.data()?[
-                FirebaseResolutionFieldName.resolutionWrittenPostCount] as int?,
+            (doc) => doc.data()?[FirebaseResolutionFieldName.resolutionWrittenPostCount] as int?,
           );
 
       if (currentPostCount == null) {
@@ -2469,15 +2282,13 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           )
           .doc(targetResolutionId)
           .update({
-        FirebaseResolutionFieldName.resolutionWrittenPostCount:
-            currentPostCount + 1,
+        FirebaseResolutionFieldName.resolutionWrittenPostCount: currentPostCount + 1,
       });
 
       return Future(() => right(null));
     } on Exception {
       return Future(
-        () =>
-            left(const Failure('catch error on incrementResolutionPostcount')),
+        () => left(const Failure('catch error on incrementResolutionPostcount')),
       );
     }
   }
@@ -2496,14 +2307,12 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           .doc(targetResolutionId)
           .get()
           .then(
-            (doc) => doc.data()?[FirebaseResolutionFieldName
-                .resolutionReceivedReactionCount] as int?,
+            (doc) => doc.data()?[FirebaseResolutionFieldName.resolutionReceivedReactionCount] as int?,
           );
 
       if (currentPostCount == null) {
         return Future(
-          () =>
-              left(const Failure('can\'t get current received reaction count')),
+          () => left(const Failure('can\'t get current received reaction count')),
         );
       }
 
@@ -2513,8 +2322,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           )
           .doc(targetResolutionId)
           .update({
-        FirebaseResolutionFieldName.resolutionReceivedReactionCount:
-            currentPostCount + 1,
+        FirebaseResolutionFieldName.resolutionReceivedReactionCount: currentPostCount + 1,
       });
 
       return Future(() => right(null));
@@ -2541,10 +2349,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           .doc(targetResolutionId)
           .get()
           .then(
-            (doc) =>
-                doc.data()?[FirebaseResolutionFieldName.resolutionActionPerWeek]
-                    as int? ??
-                8,
+            (doc) => doc.data()?[FirebaseResolutionFieldName.resolutionActionPerWeek] as int? ?? 8,
           );
 
       final currentWeeklyPostCount = await firestore
@@ -2559,8 +2364,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
               ),
               Filter(
                 FirebaseConfirmPostFieldName.createdAt,
-                isGreaterThanOrEqualTo:
-                    Timestamp.fromDate(DateTime.now().getMondayDateTime()),
+                isGreaterThanOrEqualTo: Timestamp.fromDate(DateTime.now().getMondayDateTime()),
               ),
             ),
           )
@@ -2577,16 +2381,14 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           );
 
       if (resolutionActionPerWeek <= currentWeeklyPostCount) {
-        final thisMondayTimestamp =
-            Timestamp.fromDate(DateTime.now().getMondayDateTime());
+        final thisMondayTimestamp = Timestamp.fromDate(DateTime.now().getMondayDateTime());
         await firestore
             .collection(
               FirebaseCollectionName.getTargetResolutionCollectionName(myUid),
             )
             .doc(targetResolutionId)
             .update({
-          FirebaseResolutionFieldName.resolutionWeekSuccessList:
-              FieldValue.arrayUnion([thisMondayTimestamp]),
+          FirebaseResolutionFieldName.resolutionWeekSuccessList: FieldValue.arrayUnion([thisMondayTimestamp]),
         });
       }
 
@@ -2623,8 +2425,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           .then((doc) {
         final data = doc.data();
         if (data != null) {
-          final list =
-              data[FirebaseResolutionFieldName.resolutionWeeklyPostcountList];
+          final list = data[FirebaseResolutionFieldName.resolutionWeeklyPostcountList];
           if (list is List) {
             return list.map((item) => item as int).toList();
           }
@@ -2660,8 +2461,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }) async {
     try {
       final myUid = getMyUserId();
-      DateTime startDate =
-          DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+      DateTime startDate = DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
 
       final fetchResult = await firestore
           .collection(FirebaseCollectionName.confirmPosts)
@@ -2721,19 +2521,13 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       String myUid = getMyUserId();
 
       if (delete) {
-        await firestore
-            .collection(FirebaseCollectionName.users)
-            .doc(myUid)
-            .update({
+        await firestore.collection(FirebaseCollectionName.users).doc(myUid).update({
           FirebaseUserFieldName.messageToken: null,
         });
       } else {
         String? firebaseToken = await FirebaseMessaging.instance.getToken();
 
-        await firestore
-            .collection(FirebaseCollectionName.users)
-            .doc(myUid)
-            .update({
+        await firestore.collection(FirebaseCollectionName.users).doc(myUid).update({
           FirebaseUserFieldName.messageToken: firebaseToken,
         });
       }
@@ -2747,13 +2541,8 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   @override
   EitherFuture<String> getUserFCMMessageToken({required String uid}) async {
     try {
-      final token = await firestore
-          .collection(FirebaseCollectionName.users)
-          .doc(uid)
-          .get()
-          .then((snapshot) {
-        return snapshot.data()?[FirebaseUserFieldName.messageToken] ??
-            null as String?;
+      final token = await firestore.collection(FirebaseCollectionName.users).doc(uid).get().then((snapshot) {
+        return snapshot.data()?[FirebaseUserFieldName.messageToken] ?? null as String?;
       });
 
       if (token == null) {
@@ -2773,8 +2562,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     try {
       final id = getMyUserId();
 
-      String storagePath =
-          FirebaseStorageName.getUserQuickshotPresetStorageName(id);
+      String storagePath = FirebaseStorageName.getUserQuickshotPresetStorageName(id);
       String filePath = '$storagePath/${DateTime.now().toIso8601String()}';
 
       final ref = FirebaseStorage.instance.ref(filePath);
@@ -2828,8 +2616,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           .get()
           .then((snapshot) {
         return snapshot.docs.map((doc) {
-          return QuickshotPresetItemEntity.fromJson(doc.data())
-              .copyWith(id: doc.id);
+          return QuickshotPresetItemEntity.fromJson(doc.data()).copyWith(id: doc.id);
         }).toList();
       }).then((result) {
         return right(result);

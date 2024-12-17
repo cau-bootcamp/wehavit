@@ -14,8 +14,7 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-GroupAnnouncementEntity _$GroupAnnouncementEntityFromJson(
-    Map<String, dynamic> json) {
+GroupAnnouncementEntity _$GroupAnnouncementEntityFromJson(Map<String, dynamic> json) {
   return _GroupAnnouncementEntity.fromJson(json);
 }
 
@@ -33,14 +32,12 @@ mixin _$GroupAnnouncementEntity {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $GroupAnnouncementEntityCopyWith<GroupAnnouncementEntity> get copyWith =>
-      throw _privateConstructorUsedError;
+  $GroupAnnouncementEntityCopyWith<GroupAnnouncementEntity> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $GroupAnnouncementEntityCopyWith<$Res> {
-  factory $GroupAnnouncementEntityCopyWith(GroupAnnouncementEntity value,
-          $Res Function(GroupAnnouncementEntity) then) =
+  factory $GroupAnnouncementEntityCopyWith(GroupAnnouncementEntity value, $Res Function(GroupAnnouncementEntity) then) =
       _$GroupAnnouncementEntityCopyWithImpl<$Res, GroupAnnouncementEntity>;
   @useResult
   $Res call(
@@ -50,13 +47,11 @@ abstract class $GroupAnnouncementEntityCopyWith<$Res> {
       String content,
       @TimestampConverter() DateTime createdAt,
       List<String> readByUidList,
-      @JsonKey(includeFromJson: true, includeToJson: false)
-      String groupAnnouncementId});
+      @JsonKey(includeFromJson: true, includeToJson: false) String groupAnnouncementId});
 }
 
 /// @nodoc
-class _$GroupAnnouncementEntityCopyWithImpl<$Res,
-        $Val extends GroupAnnouncementEntity>
+class _$GroupAnnouncementEntityCopyWithImpl<$Res, $Val extends GroupAnnouncementEntity>
     implements $GroupAnnouncementEntityCopyWith<$Res> {
   _$GroupAnnouncementEntityCopyWithImpl(this._value, this._then);
 
@@ -110,11 +105,9 @@ class _$GroupAnnouncementEntityCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$GroupAnnouncementEntityImplCopyWith<$Res>
-    implements $GroupAnnouncementEntityCopyWith<$Res> {
+abstract class _$$GroupAnnouncementEntityImplCopyWith<$Res> implements $GroupAnnouncementEntityCopyWith<$Res> {
   factory _$$GroupAnnouncementEntityImplCopyWith(
-          _$GroupAnnouncementEntityImpl value,
-          $Res Function(_$GroupAnnouncementEntityImpl) then) =
+          _$GroupAnnouncementEntityImpl value, $Res Function(_$GroupAnnouncementEntityImpl) then) =
       __$$GroupAnnouncementEntityImplCopyWithImpl<$Res>;
   @override
   @useResult
@@ -125,18 +118,15 @@ abstract class _$$GroupAnnouncementEntityImplCopyWith<$Res>
       String content,
       @TimestampConverter() DateTime createdAt,
       List<String> readByUidList,
-      @JsonKey(includeFromJson: true, includeToJson: false)
-      String groupAnnouncementId});
+      @JsonKey(includeFromJson: true, includeToJson: false) String groupAnnouncementId});
 }
 
 /// @nodoc
 class __$$GroupAnnouncementEntityImplCopyWithImpl<$Res>
-    extends _$GroupAnnouncementEntityCopyWithImpl<$Res,
-        _$GroupAnnouncementEntityImpl>
+    extends _$GroupAnnouncementEntityCopyWithImpl<$Res, _$GroupAnnouncementEntityImpl>
     implements _$$GroupAnnouncementEntityImplCopyWith<$Res> {
   __$$GroupAnnouncementEntityImplCopyWithImpl(
-      _$GroupAnnouncementEntityImpl _value,
-      $Res Function(_$GroupAnnouncementEntityImpl) _then)
+      _$GroupAnnouncementEntityImpl _value, $Res Function(_$GroupAnnouncementEntityImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -194,8 +184,7 @@ class _$GroupAnnouncementEntityImpl implements _GroupAnnouncementEntity {
       required this.content,
       @TimestampConverter() required this.createdAt,
       required final List<String> readByUidList,
-      @JsonKey(includeFromJson: true, includeToJson: false)
-      required this.groupAnnouncementId})
+      @JsonKey(includeFromJson: true, includeToJson: false) required this.groupAnnouncementId})
       : _readByUidList = readByUidList;
 
   factory _$GroupAnnouncementEntityImpl.fromJson(Map<String, dynamic> json) =>
@@ -235,36 +224,25 @@ class _$GroupAnnouncementEntityImpl implements _GroupAnnouncementEntity {
         (other.runtimeType == runtimeType &&
             other is _$GroupAnnouncementEntityImpl &&
             (identical(other.groupId, groupId) || other.groupId == groupId) &&
-            (identical(other.writerUid, writerUid) ||
-                other.writerUid == writerUid) &&
+            (identical(other.writerUid, writerUid) || other.writerUid == writerUid) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.content, content) || other.content == content) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt) &&
-            const DeepCollectionEquality()
-                .equals(other._readByUidList, _readByUidList) &&
+            (identical(other.createdAt, createdAt) || other.createdAt == createdAt) &&
+            const DeepCollectionEquality().equals(other._readByUidList, _readByUidList) &&
             (identical(other.groupAnnouncementId, groupAnnouncementId) ||
                 other.groupAnnouncementId == groupAnnouncementId));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      groupId,
-      writerUid,
-      title,
-      content,
-      createdAt,
-      const DeepCollectionEquality().hash(_readByUidList),
-      groupAnnouncementId);
+  int get hashCode => Object.hash(runtimeType, groupId, writerUid, title, content, createdAt,
+      const DeepCollectionEquality().hash(_readByUidList), groupAnnouncementId);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$GroupAnnouncementEntityImplCopyWith<_$GroupAnnouncementEntityImpl>
-      get copyWith => __$$GroupAnnouncementEntityImplCopyWithImpl<
-          _$GroupAnnouncementEntityImpl>(this, _$identity);
+  _$$GroupAnnouncementEntityImplCopyWith<_$GroupAnnouncementEntityImpl> get copyWith =>
+      __$$GroupAnnouncementEntityImplCopyWithImpl<_$GroupAnnouncementEntityImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -282,12 +260,10 @@ abstract class _GroupAnnouncementEntity implements GroupAnnouncementEntity {
           required final String content,
           @TimestampConverter() required final DateTime createdAt,
           required final List<String> readByUidList,
-          @JsonKey(includeFromJson: true, includeToJson: false)
-          required final String groupAnnouncementId}) =
+          @JsonKey(includeFromJson: true, includeToJson: false) required final String groupAnnouncementId}) =
       _$GroupAnnouncementEntityImpl;
 
-  factory _GroupAnnouncementEntity.fromJson(Map<String, dynamic> json) =
-      _$GroupAnnouncementEntityImpl.fromJson;
+  factory _GroupAnnouncementEntity.fromJson(Map<String, dynamic> json) = _$GroupAnnouncementEntityImpl.fromJson;
 
   @override
   String get groupId;
@@ -307,6 +283,6 @@ abstract class _GroupAnnouncementEntity implements GroupAnnouncementEntity {
   String get groupAnnouncementId;
   @override
   @JsonKey(ignore: true)
-  _$$GroupAnnouncementEntityImplCopyWith<_$GroupAnnouncementEntityImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  _$$GroupAnnouncementEntityImplCopyWith<_$GroupAnnouncementEntityImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }

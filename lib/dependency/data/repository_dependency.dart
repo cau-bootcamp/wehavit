@@ -14,40 +14,33 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
 });
 
 final confirmPostRepositoryProvider = Provider<ConfirmPostRepository>((ref) {
-  final WehavitDatasource wehavitDatasource =
-      ref.watch(wehavitDatasourceProvider);
+  final WehavitDatasource wehavitDatasource = ref.watch(wehavitDatasourceProvider);
   return ConfirmPostRepositoryImpl(wehavitDatasource);
 });
 
 final friendRepositoryProvider = Provider<FriendRepository>((ref) {
-  final WehavitDatasource wehavitDatasource =
-      ref.watch(wehavitDatasourceProvider);
+  final WehavitDatasource wehavitDatasource = ref.watch(wehavitDatasourceProvider);
   return FriendRepositoryImpl(wehavitDatasource);
 });
 
 final photoRepositoryProvider = Provider<PhotoRepository>((ref) {
-  final WehavitDatasource wehavitDatasource =
-      ref.watch(wehavitDatasourceProvider);
+  final WehavitDatasource wehavitDatasource = ref.watch(wehavitDatasourceProvider);
   return PhotoRepositoryImpl(wehavitDatasource);
 });
 
 final reactionRepositoryProvider = Provider<ReactionRepository>((ref) {
-  final WehavitDatasource wehavitDatasource =
-      ref.watch(wehavitDatasourceProvider);
+  final WehavitDatasource wehavitDatasource = ref.watch(wehavitDatasourceProvider);
   return ReactionRepositoryImpl(wehavitDatasource);
 });
 
 final resolutionRepositoryProvider = Provider<ResolutionRepository>((ref) {
-  final WehavitDatasource wehavitDatasource =
-      ref.watch(wehavitDatasourceProvider);
+  final WehavitDatasource wehavitDatasource = ref.watch(wehavitDatasourceProvider);
   return ResolutionRepositoryImpl(wehavitDatasource);
 });
 
 final userModelRepositoryProvider = Provider<UserModelRepository>((ref) {
-  final WehavitDatasource wehavitDatasource =
-      ref.watch(wehavitDatasourceProvider);
-  final AuthDataSource wehavitAuthDatasource =
-      ref.watch(wehavitAuthDatasourceProvider);
+  final WehavitDatasource wehavitDatasource = ref.watch(wehavitDatasourceProvider);
+  final AuthDataSource wehavitAuthDatasource = ref.watch(wehavitAuthDatasourceProvider);
 
   return UserModelRepositoryImpl(
     wehavitDatasource,
@@ -56,8 +49,7 @@ final userModelRepositoryProvider = Provider<UserModelRepository>((ref) {
 });
 
 final groupRepositoryProvider = Provider<GroupRepository>((ref) {
-  final WehavitDatasource wehavitDatasource =
-      ref.watch(wehavitDatasourceProvider);
+  final WehavitDatasource wehavitDatasource = ref.watch(wehavitDatasourceProvider);
   return GroupRepositoryImpl(wehavitDatasource);
 });
 

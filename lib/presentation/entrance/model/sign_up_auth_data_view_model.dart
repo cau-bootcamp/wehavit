@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 class SignUpAuthDataViewModel {
   TextEditingController emailInputController = TextEditingController();
   TextEditingController passwordInputController = TextEditingController();
-  TextEditingController passwordValidatorInputController =
-      TextEditingController();
+  TextEditingController passwordValidatorInputController = TextEditingController();
 
   RegisterFailReason? registerFailReason;
   bool isEmailEntered = false;

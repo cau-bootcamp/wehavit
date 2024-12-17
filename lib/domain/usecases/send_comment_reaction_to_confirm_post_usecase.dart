@@ -3,8 +3,7 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
 
-class SendCommentReactionToConfirmPostUsecase
-    extends FutureUseCase<void, (ConfirmPostEntity, String)> {
+class SendCommentReactionToConfirmPostUsecase extends FutureUseCase<void, (ConfirmPostEntity, String)> {
   SendCommentReactionToConfirmPostUsecase(
     this._reactionRepository,
     this._userModelRepository,

@@ -3,8 +3,7 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
 
-class SendEmojiReactionToConfirmPostUsecase
-    extends FutureUseCase<void, (ConfirmPostEntity, List<int>)> {
+class SendEmojiReactionToConfirmPostUsecase extends FutureUseCase<void, (ConfirmPostEntity, List<int>)> {
   SendEmojiReactionToConfirmPostUsecase(
     this._reactionRepository,
     this._userModelRepository,
@@ -27,8 +26,7 @@ class SendEmojiReactionToConfirmPostUsecase
     }
 
     final emojiMap = {
-      for (var entry in params.$2.asMap().entries)
-        entry.key.toString().padLeft(3, '0'): entry.value,
+      for (var entry in params.$2.asMap().entries) entry.key.toString().padLeft(3, '0'): entry.value,
     };
 
     final reactionEntity = ReactionEntity.emojiType(

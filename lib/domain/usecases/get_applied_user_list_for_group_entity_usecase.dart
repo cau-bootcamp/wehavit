@@ -13,9 +13,8 @@ class GetAppliedUserListForGroupEntityUsecase {
   final GroupRepository _groupRepository;
 
   EitherFuture<List<String>> call(GroupEntity groupEntity) async {
-    final myUid = await _userModelRepository
-        .getMyUserId()
-        .then((result) => result.fold((failure) => null, (uid) => uid));
+    final myUid =
+        await _userModelRepository.getMyUserId().then((result) => result.fold((failure) => null, (uid) => uid));
     if (myUid == null) {
       return Future(() => left(const Failure('fail to get my uid')));
     }

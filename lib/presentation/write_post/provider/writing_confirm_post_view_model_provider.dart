@@ -6,8 +6,7 @@ import 'package:wehavit/domain/usecases/usecases.dart';
 
 import 'package:wehavit/presentation/write_post/write_post.dart';
 
-class WritingConfirmPostViewModelProvider
-    extends StateNotifier<WritingConfirmPostViewModel> {
+class WritingConfirmPostViewModelProvider extends StateNotifier<WritingConfirmPostViewModel> {
   WritingConfirmPostViewModelProvider(
     this._uploadConfirmPostUseCase,
     this._sendNotificationToSharedUsersUsecase,
@@ -15,8 +14,7 @@ class WritingConfirmPostViewModelProvider
 
   final int maxImagesCount = 3;
   final UploadConfirmPostUseCase _uploadConfirmPostUseCase;
-  final SendNotificationToSharedUsersUsecase
-      _sendNotificationToSharedUsersUsecase;
+  final SendNotificationToSharedUsersUsecase _sendNotificationToSharedUsersUsecase;
 
   Future<void> pickPhotos() async {
     final ImagePicker picker = ImagePicker();
@@ -36,14 +34,12 @@ class WritingConfirmPostViewModelProvider
       resolutionGoalStatement: state.entity?.goalStatement ?? '',
       resolutionId: state.entity?.resolutionId ?? '',
       content: state.postContent,
-      localFileUrlList:
-          state.imageMediaList.map((media) => media.path.toString()).toList(),
+      localFileUrlList: state.imageMediaList.map((media) => media.path.toString()).toList(),
       hasRested: hasRested,
       isPostingForYesterday: state.isWritingYesterdayPost,
     ).then(
       (result) {
-        final isPostingSuccess =
-            result.fold((failure) => false, (value) => value);
+        final isPostingSuccess = result.fold((failure) => false, (value) => value);
 
         if (isPostingSuccess) {
           sendNotiToSharedUsers(myUserEntity: myUserEntity);

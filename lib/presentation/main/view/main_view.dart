@@ -17,8 +17,7 @@ class MainView extends ConsumerStatefulWidget {
   ConsumerState<MainView> createState() => MainViewState();
 }
 
-class MainViewState extends ConsumerState<MainView>
-    with TickerProviderStateMixin {
+class MainViewState extends ConsumerState<MainView> with TickerProviderStateMixin {
   late TabController tabController;
 
   Future<void> updateFCMMessageToken() async {
@@ -26,8 +25,7 @@ class MainViewState extends ConsumerState<MainView>
         .collection(FirebaseCollectionName.users)
         .doc(FirebaseAuth.instance.currentUser?.uid)
         .update({
-      FirebaseUserFieldName.messageToken:
-          await FirebaseMessaging.instance.getToken(),
+      FirebaseUserFieldName.messageToken: await FirebaseMessaging.instance.getToken(),
     });
   }
 
@@ -56,10 +54,7 @@ class MainViewState extends ConsumerState<MainView>
 
   Future<void> loadResolutionData() async {
     // 인증 리스트의 목표 셀 로드
-    ref
-        .read(resolutionListViewModelProvider.notifier)
-        .loadResolutionModelList()
-        .whenComplete(() {
+    ref.read(resolutionListViewModelProvider.notifier).loadResolutionModelList().whenComplete(() {
       setState(() {
         ref.watch(resolutionListViewModelProvider).isLoadingView = false;
       });
@@ -68,30 +63,18 @@ class MainViewState extends ConsumerState<MainView>
 
   Future<void> loadGroupData() async {
     // 그룹리스트의 그룹 셀 로드
-    ref
-        .read(groupViewModelProvider.notifier)
-        .loadMyGroupCellList()
-        .whenComplete(() => setState(() {}));
+    ref.read(groupViewModelProvider.notifier).loadMyGroupCellList().whenComplete(() => setState(() {}));
   }
 
   Future<void> loadFriendData() async {
     // 친구리스트 셀 로드
-    ref
-        .read(friendListViewModelProvider.notifier)
-        .getAppliedFriendList()
-        .whenComplete(() => setState(() {}));
+    ref.read(friendListViewModelProvider.notifier).getAppliedFriendList().whenComplete(() => setState(() {}));
 
-    await ref
-        .read(friendListViewModelProvider.notifier)
-        .getFriendList()
-        .whenComplete(() => setState(() {}));
+    await ref.read(friendListViewModelProvider.notifier).getFriendList().whenComplete(() => setState(() {}));
 
     // 그룹리스트의 친구 셀 로드
     final userIdList = await Future.wait(
-      ref
-              .read(friendListViewModelProvider)
-              .friendFutureUserList
-              ?.map((futureFriendEntity) async {
+      ref.read(friendListViewModelProvider).friendFutureUserList?.map((futureFriendEntity) async {
             final result = await futureFriendEntity;
             return result.fold(
               (failure) => null,
@@ -101,8 +84,7 @@ class MainViewState extends ConsumerState<MainView>
           [],
     );
 
-    final userIdListWithoutNull =
-        userIdList.where((userId) => userId != null).cast<String>().toList();
+    final userIdListWithoutNull = userIdList.where((userId) => userId != null).cast<String>().toList();
 
     ref.watch(groupViewModelProvider).friendUidList = userIdListWithoutNull;
 
@@ -171,8 +153,7 @@ class MainViewState extends ConsumerState<MainView>
                             ),
                             TabBarProfileImageButton(
                               isSelected: tabController.index == 3,
-                              futureUserDataEntity:
-                                  myPageViewModel.futureMyUserDataEntity!,
+                              futureUserDataEntity: myPageViewModel.futureMyUserDataEntity!,
                             ),
                           ],
                         ),
@@ -184,9 +165,7 @@ class MainViewState extends ConsumerState<MainView>
             ),
           ),
           ReactionAnimationWidget(
-            key: context
-                .findAncestorStateOfType<MyAppState>()
-                ?.reactionWidgetChildKey,
+            key: context.findAncestorStateOfType<MyAppState>()?.reactionWidgetChildKey,
           ),
         ],
       ),

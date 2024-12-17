@@ -20,18 +20,12 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
     this._removeQuickshotPresetUsecase,
   ) : super(GroupPostViewModel());
 
-  final GetGroupConfirmPostListByDateUsecase
-      _getGroupConfirmPostListByDateUsecase;
-  final SendEmojiReactionToConfirmPostUsecase
-      _sendEmojiReactionToConfirmPostUsecase;
-  final SendQuickShotReactionToConfirmPostUsecase
-      _sendQuickShotReactionToConfirmPostUsecase;
-  final SendCommentReactionToConfirmPostUsecase
-      _sendCommentReactionToConfirmPostUsecase;
-  final GetAppliedUserListForGroupEntityUsecase
-      getAppliedUserListForGroupEntityUsecase;
-  final SendNotificationToTargetUserUsecase
-      _sendNotificationToTargetUserUsecase;
+  final GetGroupConfirmPostListByDateUsecase _getGroupConfirmPostListByDateUsecase;
+  final SendEmojiReactionToConfirmPostUsecase _sendEmojiReactionToConfirmPostUsecase;
+  final SendQuickShotReactionToConfirmPostUsecase _sendQuickShotReactionToConfirmPostUsecase;
+  final SendCommentReactionToConfirmPostUsecase _sendCommentReactionToConfirmPostUsecase;
+  final GetAppliedUserListForGroupEntityUsecase getAppliedUserListForGroupEntityUsecase;
+  final SendNotificationToTargetUserUsecase _sendNotificationToTargetUserUsecase;
   final GetUserDataFromIdUsecase _getUserDataFromIdUsecase;
   final UploadQuickshotPresetUsecase _uploadQuickshotPresetUsecase;
   final GetQuickshotPresetsUsecase _getQuickshotPresetsUsecase;
@@ -42,8 +36,7 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
   }) async {
     final selectedDate = DateTime(dateTime.year, dateTime.month, dateTime.day);
 
-    state.confirmPostList[selectedDate] =
-        _getGroupConfirmPostListByDateUsecase(state.groupId, selectedDate);
+    state.confirmPostList[selectedDate] = _getGroupConfirmPostListByDateUsecase(state.groupId, selectedDate);
   }
 
   // Reactions
@@ -234,11 +227,9 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
   }
 
   Future<void> loadAppliedUserCount({required GroupEntity entity}) async {
-    state.appliedUserCountForManager =
-        await getAppliedUserListForGroupEntityUsecase.call(entity).then(
-              (result) =>
-                  result.fold((failure) => 0, (uidList) => uidList.length),
-            );
+    state.appliedUserCountForManager = await getAppliedUserListForGroupEntityUsecase.call(entity).then(
+          (result) => result.fold((failure) => 0, (uidList) => uidList.length),
+        );
   }
 
   Future<void> sendReactionNotification({

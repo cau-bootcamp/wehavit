@@ -14,8 +14,7 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-QuickshotPresetItemEntity _$QuickshotPresetItemEntityFromJson(
-    Map<String, dynamic> json) {
+QuickshotPresetItemEntity _$QuickshotPresetItemEntityFromJson(Map<String, dynamic> json) {
   return _QuickshotPresetItemEntity.fromJson(json);
 }
 
@@ -27,22 +26,20 @@ mixin _$QuickshotPresetItemEntity {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $QuickshotPresetItemEntityCopyWith<QuickshotPresetItemEntity> get copyWith =>
-      throw _privateConstructorUsedError;
+  $QuickshotPresetItemEntityCopyWith<QuickshotPresetItemEntity> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $QuickshotPresetItemEntityCopyWith<$Res> {
-  factory $QuickshotPresetItemEntityCopyWith(QuickshotPresetItemEntity value,
-          $Res Function(QuickshotPresetItemEntity) then) =
+  factory $QuickshotPresetItemEntityCopyWith(
+          QuickshotPresetItemEntity value, $Res Function(QuickshotPresetItemEntity) then) =
       _$QuickshotPresetItemEntityCopyWithImpl<$Res, QuickshotPresetItemEntity>;
   @useResult
   $Res call({String url, String id, DateTime? createdAt});
 }
 
 /// @nodoc
-class _$QuickshotPresetItemEntityCopyWithImpl<$Res,
-        $Val extends QuickshotPresetItemEntity>
+class _$QuickshotPresetItemEntityCopyWithImpl<$Res, $Val extends QuickshotPresetItemEntity>
     implements $QuickshotPresetItemEntityCopyWith<$Res> {
   _$QuickshotPresetItemEntityCopyWithImpl(this._value, this._then);
 
@@ -76,11 +73,9 @@ class _$QuickshotPresetItemEntityCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$QuickshotPresetItemEntityImplCopyWith<$Res>
-    implements $QuickshotPresetItemEntityCopyWith<$Res> {
+abstract class _$$QuickshotPresetItemEntityImplCopyWith<$Res> implements $QuickshotPresetItemEntityCopyWith<$Res> {
   factory _$$QuickshotPresetItemEntityImplCopyWith(
-          _$QuickshotPresetItemEntityImpl value,
-          $Res Function(_$QuickshotPresetItemEntityImpl) then) =
+          _$QuickshotPresetItemEntityImpl value, $Res Function(_$QuickshotPresetItemEntityImpl) then) =
       __$$QuickshotPresetItemEntityImplCopyWithImpl<$Res>;
   @override
   @useResult
@@ -89,12 +84,10 @@ abstract class _$$QuickshotPresetItemEntityImplCopyWith<$Res>
 
 /// @nodoc
 class __$$QuickshotPresetItemEntityImplCopyWithImpl<$Res>
-    extends _$QuickshotPresetItemEntityCopyWithImpl<$Res,
-        _$QuickshotPresetItemEntityImpl>
+    extends _$QuickshotPresetItemEntityCopyWithImpl<$Res, _$QuickshotPresetItemEntityImpl>
     implements _$$QuickshotPresetItemEntityImplCopyWith<$Res> {
   __$$QuickshotPresetItemEntityImplCopyWithImpl(
-      _$QuickshotPresetItemEntityImpl _value,
-      $Res Function(_$QuickshotPresetItemEntityImpl) _then)
+      _$QuickshotPresetItemEntityImpl _value, $Res Function(_$QuickshotPresetItemEntityImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -126,8 +119,7 @@ class __$$QuickshotPresetItemEntityImplCopyWithImpl<$Res>
 @JsonSerializable()
 @TimestampConverter()
 class _$QuickshotPresetItemEntityImpl implements _QuickshotPresetItemEntity {
-  _$QuickshotPresetItemEntityImpl(
-      {this.url = '', this.id = '', required this.createdAt});
+  _$QuickshotPresetItemEntityImpl({this.url = '', this.id = '', required this.createdAt});
 
   factory _$QuickshotPresetItemEntityImpl.fromJson(Map<String, dynamic> json) =>
       _$$QuickshotPresetItemEntityImplFromJson(json);
@@ -153,8 +145,7 @@ class _$QuickshotPresetItemEntityImpl implements _QuickshotPresetItemEntity {
             other is _$QuickshotPresetItemEntityImpl &&
             (identical(other.url, url) || other.url == url) &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+            (identical(other.createdAt, createdAt) || other.createdAt == createdAt));
   }
 
   @JsonKey(ignore: true)
@@ -164,9 +155,8 @@ class _$QuickshotPresetItemEntityImpl implements _QuickshotPresetItemEntity {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$QuickshotPresetItemEntityImplCopyWith<_$QuickshotPresetItemEntityImpl>
-      get copyWith => __$$QuickshotPresetItemEntityImplCopyWithImpl<
-          _$QuickshotPresetItemEntityImpl>(this, _$identity);
+  _$$QuickshotPresetItemEntityImplCopyWith<_$QuickshotPresetItemEntityImpl> get copyWith =>
+      __$$QuickshotPresetItemEntityImplCopyWithImpl<_$QuickshotPresetItemEntityImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -177,13 +167,10 @@ class _$QuickshotPresetItemEntityImpl implements _QuickshotPresetItemEntity {
 }
 
 abstract class _QuickshotPresetItemEntity implements QuickshotPresetItemEntity {
-  factory _QuickshotPresetItemEntity(
-      {final String url,
-      final String id,
-      required final DateTime? createdAt}) = _$QuickshotPresetItemEntityImpl;
+  factory _QuickshotPresetItemEntity({final String url, final String id, required final DateTime? createdAt}) =
+      _$QuickshotPresetItemEntityImpl;
 
-  factory _QuickshotPresetItemEntity.fromJson(Map<String, dynamic> json) =
-      _$QuickshotPresetItemEntityImpl.fromJson;
+  factory _QuickshotPresetItemEntity.fromJson(Map<String, dynamic> json) = _$QuickshotPresetItemEntityImpl.fromJson;
 
   @override
   String get url;
@@ -193,6 +180,6 @@ abstract class _QuickshotPresetItemEntity implements QuickshotPresetItemEntity {
   DateTime? get createdAt;
   @override
   @JsonKey(ignore: true)
-  _$$QuickshotPresetItemEntityImplCopyWith<_$QuickshotPresetItemEntityImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  _$$QuickshotPresetItemEntityImplCopyWith<_$QuickshotPresetItemEntityImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
