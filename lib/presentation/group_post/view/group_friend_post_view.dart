@@ -17,8 +17,7 @@ class GroupFriendPostView extends ConsumerStatefulWidget {
   GroupEntity groupEntity;
 
   @override
-  ConsumerState<GroupFriendPostView> createState() =>
-      _GroupFriendPostViewState();
+  ConsumerState<GroupFriendPostView> createState() => _GroupFriendPostViewState();
 }
 
 class _GroupFriendPostViewState extends ConsumerState<GroupFriendPostView> {
@@ -30,9 +29,7 @@ class _GroupFriendPostViewState extends ConsumerState<GroupFriendPostView> {
     viewModel.groupId = widget.groupEntity.groupId;
 
     unawaited(
-      provider
-          .loadAppliedUserCount(entity: widget.groupEntity)
-          .whenComplete(() {
+      provider.loadAppliedUserCount(entity: widget.groupEntity).whenComplete(() {
         setState(() {});
       }),
     );
@@ -60,8 +57,7 @@ class _GroupFriendPostViewState extends ConsumerState<GroupFriendPostView> {
   Widget build(BuildContext context) {
     final viewModel = ref.watch(groupPostViewModelProvider);
     final provider = ref.read(groupPostViewModelProvider.notifier);
-    final reactionCameraViewModel =
-        ref.watch(reactionCameraWidgetModelProvider);
+    final reactionCameraViewModel = ref.watch(reactionCameraWidgetModelProvider);
 
     return Stack(
       children: [
@@ -115,14 +111,11 @@ class _GroupFriendPostViewState extends ConsumerState<GroupFriendPostView> {
                           IconButton(
                             onPressed: () {
                               setState(() {
-                                viewModel.isShowingCalendar =
-                                    !viewModel.isShowingCalendar;
+                                viewModel.isShowingCalendar = !viewModel.isShowingCalendar;
                               });
                             },
                             icon: Icon(
-                              viewModel.isShowingCalendar
-                                  ? Icons.keyboard_arrow_up
-                                  : Icons.keyboard_arrow_down,
+                              viewModel.isShowingCalendar ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
                               color: CustomColors.whWhite,
                             ),
                           ),
@@ -234,8 +227,7 @@ class _GroupFriendPostViewState extends ConsumerState<GroupFriendPostView> {
     );
   }
 
-  AnimatedContainer putScrollCalendarWidget(
-      GroupPostViewModel viewModel, GroupPostViewModelProvider provider) {
+  AnimatedContainer putScrollCalendarWidget(GroupPostViewModel viewModel, GroupPostViewModelProvider provider) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 250),
       curve: Curves.fastOutSlowIn,
@@ -308,14 +300,11 @@ class _GroupFriendPostViewState extends ConsumerState<GroupFriendPostView> {
                               child: FittedBox(
                                 fit: BoxFit.scaleDown,
                                 child: Text(
-                                  cellDate.day == 1
-                                      ? '${cellDate.month}/${cellDate.day}'
-                                      : cellDate.day.toString(),
+                                  cellDate.day == 1 ? '${cellDate.month}/${cellDate.day}' : cellDate.day.toString(),
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
-                                    color: isFuture ||
-                                            cellDate != viewModel.selectedDate
+                                    color: isFuture || cellDate != viewModel.selectedDate
                                         ? CustomColors.whPlaceholderGrey
                                         : CustomColors.whBlack,
                                   ),
@@ -334,14 +323,12 @@ class _GroupFriendPostViewState extends ConsumerState<GroupFriendPostView> {
                                       fontFamily: 'Giants',
                                       fontSize: 24,
                                       fontWeight: FontWeight.w700,
-                                      color: isFuture ||
-                                              cellDate != viewModel.selectedDate
+                                      color: isFuture || cellDate != viewModel.selectedDate
                                           ? CustomColors.whPlaceholderGrey
                                           : CustomColors.whBlack,
                                     ),
                                   ),
-                                  child: EitherFutureBuilder<
-                                      List<ConfirmPostEntity>>(
+                                  child: EitherFutureBuilder<List<ConfirmPostEntity>>(
                                     target: viewModel.confirmPostList[cellDate],
                                     forWaiting: const SizedBox(
                                       width: 20,
@@ -363,9 +350,7 @@ class _GroupFriendPostViewState extends ConsumerState<GroupFriendPostView> {
                                         fontFamily: 'Giants',
                                         fontSize: 24,
                                         fontWeight: FontWeight.w700,
-                                        color: isFuture ||
-                                                cellDate !=
-                                                    viewModel.selectedDate
+                                        color: isFuture || cellDate != viewModel.selectedDate
                                             ? CustomColors.whPlaceholderGrey
                                             : CustomColors.whBlack,
                                       ),
@@ -416,8 +401,6 @@ class _GroupFriendPostViewState extends ConsumerState<GroupFriendPostView> {
 
   Future<void> updateGroupEntity(GroupEntity groupEntity) async {
     widget.groupEntity = groupEntity;
-    ref
-        .read(groupViewModelProvider.notifier)
-        .updateGroupEntity(forEntity: groupEntity);
+    ref.read(groupViewModelProvider.notifier).updateGroupEntity(forEntity: groupEntity);
   }
 }

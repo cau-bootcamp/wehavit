@@ -115,8 +115,7 @@ class MyProfileWidget extends StatelessWidget {
         }
 
         if (snapshot.hasData && snapshot.data!.isRight()) {
-          final userModel =
-              snapshot.data!.getOrElse((l) => UserDataEntity.dummyModel);
+          final userModel = snapshot.data!.getOrElse((l) => UserDataEntity.dummyModel);
 
           return Row(
             children: [

@@ -116,8 +116,7 @@ class CreateGroupSampleView extends ConsumerStatefulWidget {
   const CreateGroupSampleView({super.key});
 
   @override
-  ConsumerState<CreateGroupSampleView> createState() =>
-      CreateGroupSampleViewState();
+  ConsumerState<CreateGroupSampleView> createState() => CreateGroupSampleViewState();
 }
 
 class CreateGroupSampleViewState extends ConsumerState<CreateGroupSampleView> {
@@ -146,8 +145,7 @@ class CreateGroupSampleViewState extends ConsumerState<CreateGroupSampleView> {
             ])),
             ElevatedButton(
                 onPressed: () async {
-                  final groupEntity =
-                      await ref.read(createGroupUsecaseProvider)(
+                  final groupEntity = await ref.read(createGroupUsecaseProvider)(
                     groupName: titleController.text,
                     groupDescription: descriptionController.text,
                     groupRule: ruleController.text,
@@ -167,8 +165,7 @@ class JoinGroupSampleView extends ConsumerStatefulWidget {
   const JoinGroupSampleView({super.key});
 
   @override
-  ConsumerState<JoinGroupSampleView> createState() =>
-      _JoinGroupSampleViewState();
+  ConsumerState<JoinGroupSampleView> createState() => _JoinGroupSampleViewState();
 }
 
 class _JoinGroupSampleViewState extends ConsumerState<JoinGroupSampleView> {
@@ -201,8 +198,7 @@ class AcceptGroupSampleView extends ConsumerStatefulWidget {
   const AcceptGroupSampleView({super.key});
 
   @override
-  ConsumerState<AcceptGroupSampleView> createState() =>
-      _AcceptGroupSampleViewState();
+  ConsumerState<AcceptGroupSampleView> createState() => _AcceptGroupSampleViewState();
 }
 
 class _AcceptGroupSampleViewState extends ConsumerState<AcceptGroupSampleView> {
@@ -233,8 +229,7 @@ class _AcceptGroupSampleViewState extends ConsumerState<AcceptGroupSampleView> {
                   print(groupEntity);
 
                   final acceptList = (await FirebaseFirestore.instance
-                          .collection(FirebaseCollectionName
-                              .getGroupApplyWaitingCollectionName(groupId))
+                          .collection(FirebaseCollectionName.getGroupApplyWaitingCollectionName(groupId))
                           .get())
                       .docs
                       .map((doc) => doc['uid'] as String)
@@ -243,9 +238,8 @@ class _AcceptGroupSampleViewState extends ConsumerState<AcceptGroupSampleView> {
 
                   final userList = await Future.wait(
                     acceptList.map((uid) async {
-                      final entity = (await ref
-                              .read(getUserDataFromIdUsecaseProvider)(uid))
-                          .fold((l) => null, (entity) => entity);
+                      final entity =
+                          (await ref.read(getUserDataFromIdUsecaseProvider)(uid)).fold((l) => null, (entity) => entity);
 
                       if (entity != null) {
                         return entity;
@@ -267,8 +261,7 @@ class _AcceptGroupSampleViewState extends ConsumerState<AcceptGroupSampleView> {
                         Spacer(),
                         ElevatedButton(
                             onPressed: () async {
-                              ref.read(
-                                  acceptApplyingForJoiningGroupUsecaseProvider)(
+                              ref.read(acceptApplyingForJoiningGroupUsecaseProvider)(
                                 groupId: groupIdController.text,
                                 userId: e.userId!,
                               );
@@ -279,8 +272,7 @@ class _AcceptGroupSampleViewState extends ConsumerState<AcceptGroupSampleView> {
                             child: Text("Accept")),
                         ElevatedButton(
                             onPressed: () async {
-                              ref.read(
-                                  rejectApplyingForJoiningGroupUsecaseProvider)(
+                              ref.read(rejectApplyingForJoiningGroupUsecaseProvider)(
                                 groupId: groupIdController.text,
                                 userId: e.userId!,
                               );
@@ -304,12 +296,10 @@ class WithdrawalGroupSampleView extends ConsumerStatefulWidget {
   const WithdrawalGroupSampleView({super.key});
 
   @override
-  ConsumerState<WithdrawalGroupSampleView> createState() =>
-      _WithdrawalGroupSampleViewState();
+  ConsumerState<WithdrawalGroupSampleView> createState() => _WithdrawalGroupSampleViewState();
 }
 
-class _WithdrawalGroupSampleViewState
-    extends ConsumerState<WithdrawalGroupSampleView> {
+class _WithdrawalGroupSampleViewState extends ConsumerState<WithdrawalGroupSampleView> {
   final groupIdController = TextEditingController();
   List<UserDataEntity> applyList = [];
 
@@ -343,12 +333,10 @@ class AnnouncementGroupSampleView extends ConsumerStatefulWidget {
   const AnnouncementGroupSampleView({super.key});
 
   @override
-  ConsumerState<AnnouncementGroupSampleView> createState() =>
-      _AnnouncementGroupSampleViewState();
+  ConsumerState<AnnouncementGroupSampleView> createState() => _AnnouncementGroupSampleViewState();
 }
 
-class _AnnouncementGroupSampleViewState
-    extends ConsumerState<AnnouncementGroupSampleView> {
+class _AnnouncementGroupSampleViewState extends ConsumerState<AnnouncementGroupSampleView> {
   final groupIdController = TextEditingController();
   List<GroupAnnouncementEntity> groupAnnouncmenetList = [];
 
@@ -378,8 +366,7 @@ class _AnnouncementGroupSampleViewState
                 onPressed: () async {
                   final groupId = groupIdController.text;
                   groupAnnouncmenetList = await ref
-                      .read(getGroupAnnouncementListUsecaseProvider)
-                      (groupId: groupId)
+                      .read(getGroupAnnouncementListUsecaseProvider)(groupId: groupId)
                       .then((result) => result.fold((l) => [], (r) => r));
                   setState(() {});
                 },
@@ -391,8 +378,7 @@ class _AnnouncementGroupSampleViewState
                   final report = await ref
                       .read(getGroupWeeklyReportUsecaseProvider)
                       .call(groupId: groupId)
-                      .then((value) =>
-                          value.fold((l) => null, (report) => report));
+                      .then((value) => value.fold((l) => null, (report) => report));
                   print(report);
                 },
                 child: const Text('report'),
@@ -426,12 +412,10 @@ class CellWidgetGroupSampleView extends ConsumerStatefulWidget {
   const CellWidgetGroupSampleView({super.key});
 
   @override
-  ConsumerState<CellWidgetGroupSampleView> createState() =>
-      _CellWidgetGroupSampleViewState();
+  ConsumerState<CellWidgetGroupSampleView> createState() => _CellWidgetGroupSampleViewState();
 }
 
-class _CellWidgetGroupSampleViewState
-    extends ConsumerState<CellWidgetGroupSampleView> {
+class _CellWidgetGroupSampleViewState extends ConsumerState<CellWidgetGroupSampleView> {
   final groupIdController = TextEditingController();
 
   List<Widget> groupListViewCellList = [

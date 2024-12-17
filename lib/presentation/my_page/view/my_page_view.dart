@@ -18,8 +18,7 @@ class MyPageView extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => MyPageScreenState();
 }
 
-class MyPageScreenState extends ConsumerState<MyPageView>
-    with AutomaticKeepAliveClientMixin<MyPageView> {
+class MyPageScreenState extends ConsumerState<MyPageView> with AutomaticKeepAliveClientMixin<MyPageView> {
   @override
   bool get wantKeepAlive => true;
 
@@ -63,8 +62,7 @@ class MyPageScreenState extends ConsumerState<MyPageView>
             trailingIcon: Icons.menu,
             trailingAction: () async {
               // 변경사항을 TabBar에 알리기 위해 mainViewState를 참조
-              MainViewState? mainViewState =
-                  context.findAncestorStateOfType<MainViewState>();
+              MainViewState? mainViewState = context.findAncestorStateOfType<MainViewState>();
               showMyPageMenuBottomSheet(
                 context,
                 mainViewState,
@@ -119,8 +117,7 @@ class MyPageScreenState extends ConsumerState<MyPageView>
                                   backgroundColor: CustomColors.whSemiBlack,
                                   shadowColor: Colors.transparent,
                                   surfaceTintColor: Colors.transparent,
-                                  overlayColor: PointColors.colorList[
-                                      resolutionList[index].colorIndex ?? 0],
+                                  overlayColor: PointColors.colorList[resolutionList[index].colorIndex ?? 0],
                                   padding: const EdgeInsets.all(0),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(16.0),
@@ -130,8 +127,7 @@ class MyPageScreenState extends ConsumerState<MyPageView>
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          ResolutionDetailView(
+                                      builder: (context) => ResolutionDetailView(
                                         entity: resolutionList[index],
                                       ),
                                     ),
@@ -172,10 +168,7 @@ class MyPageScreenState extends ConsumerState<MyPageView>
                 buttonTitle: '내 정보 수정하기',
                 buttonIcon: Icons.person,
                 onPressed: () async {
-                  final userEntity = await ref
-                      .read(getMyUserDataUsecaseProvider)
-                      .call()
-                      .then((result) {
+                  final userEntity = await ref.read(getMyUserDataUsecaseProvider).call().then((result) {
                     return result.fold((failure) {
                       return null;
                     }, (entity) {
@@ -202,10 +195,7 @@ class MyPageScreenState extends ConsumerState<MyPageView>
                       if (result == true) {
                         mainViewState?.setState(() {});
 
-                        ref
-                            .read(myPageViewModelProvider.notifier)
-                            .getMyUserData()
-                            .whenComplete(() {
+                        ref.read(myPageViewModelProvider.notifier).getMyUserData().whenComplete(() {
                           setState(() {});
                         });
                       }

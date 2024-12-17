@@ -70,8 +70,7 @@ class DoneCreatingGroupView extends ConsumerWidget {
                                   style: TextStyle(
                                     fontSize: 28.0,
                                     fontWeight: FontWeight.w700,
-                                    color: PointColors
-                                        .colorList[groupEntity.groupColor],
+                                    color: PointColors.colorList[groupEntity.groupColor],
                                   ),
                                 ),
                                 Padding(
@@ -79,8 +78,7 @@ class DoneCreatingGroupView extends ConsumerWidget {
                                     vertical: 12.0,
                                   ),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       const Text(
                                         '그룹 소개',
@@ -91,8 +89,7 @@ class DoneCreatingGroupView extends ConsumerWidget {
                                         ),
                                       ),
                                       Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 16.0),
+                                        padding: const EdgeInsets.only(left: 16.0),
                                         child: Text(
                                           groupEntity.groupDescription ?? '',
                                           style: const TextStyle(
@@ -110,8 +107,7 @@ class DoneCreatingGroupView extends ConsumerWidget {
                                     vertical: 12.0,
                                   ),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       const Text(
                                         '그룹 리더',
@@ -139,8 +135,7 @@ class DoneCreatingGroupView extends ConsumerWidget {
                                     vertical: 12.0,
                                   ),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       const Text(
                                         '그룹 규칙',
@@ -151,8 +146,7 @@ class DoneCreatingGroupView extends ConsumerWidget {
                                         ),
                                       ),
                                       Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 16.0),
+                                        padding: const EdgeInsets.only(left: 16.0),
                                         child: Text(
                                           groupEntity.groupRule ?? '',
                                           style: const TextStyle(

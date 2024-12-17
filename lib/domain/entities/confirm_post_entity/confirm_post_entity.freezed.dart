@@ -38,21 +38,18 @@ mixin _$ConfirmPostEntity {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $ConfirmPostEntityCopyWith<ConfirmPostEntity> get copyWith =>
-      throw _privateConstructorUsedError;
+  $ConfirmPostEntityCopyWith<ConfirmPostEntity> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $ConfirmPostEntityCopyWith<$Res> {
-  factory $ConfirmPostEntityCopyWith(
-          ConfirmPostEntity value, $Res Function(ConfirmPostEntity) then) =
+  factory $ConfirmPostEntityCopyWith(ConfirmPostEntity value, $Res Function(ConfirmPostEntity) then) =
       _$ConfirmPostEntityCopyWithImpl<$Res, ConfirmPostEntity>;
   @useResult
   $Res call(
       {@JsonKey(includeFromJson: false, includeToJson: false) String? id,
       @JsonKey(includeFromJson: false, includeToJson: false) String? userName,
-      @JsonKey(includeFromJson: false, includeToJson: false)
-      String? userImageUrl,
+      @JsonKey(includeFromJson: false, includeToJson: false) String? userImageUrl,
       String? resolutionGoalStatement,
       String? resolutionId,
       String? content,
@@ -144,18 +141,15 @@ class _$ConfirmPostEntityCopyWithImpl<$Res, $Val extends ConfirmPostEntity>
 }
 
 /// @nodoc
-abstract class _$$ConfirmPostEntityImplCopyWith<$Res>
-    implements $ConfirmPostEntityCopyWith<$Res> {
-  factory _$$ConfirmPostEntityImplCopyWith(_$ConfirmPostEntityImpl value,
-          $Res Function(_$ConfirmPostEntityImpl) then) =
+abstract class _$$ConfirmPostEntityImplCopyWith<$Res> implements $ConfirmPostEntityCopyWith<$Res> {
+  factory _$$ConfirmPostEntityImplCopyWith(_$ConfirmPostEntityImpl value, $Res Function(_$ConfirmPostEntityImpl) then) =
       __$$ConfirmPostEntityImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
       {@JsonKey(includeFromJson: false, includeToJson: false) String? id,
       @JsonKey(includeFromJson: false, includeToJson: false) String? userName,
-      @JsonKey(includeFromJson: false, includeToJson: false)
-      String? userImageUrl,
+      @JsonKey(includeFromJson: false, includeToJson: false) String? userImageUrl,
       String? resolutionGoalStatement,
       String? resolutionId,
       String? content,
@@ -168,11 +162,9 @@ abstract class _$$ConfirmPostEntityImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$ConfirmPostEntityImplCopyWithImpl<$Res>
-    extends _$ConfirmPostEntityCopyWithImpl<$Res, _$ConfirmPostEntityImpl>
+class __$$ConfirmPostEntityImplCopyWithImpl<$Res> extends _$ConfirmPostEntityCopyWithImpl<$Res, _$ConfirmPostEntityImpl>
     implements _$$ConfirmPostEntityImplCopyWith<$Res> {
-  __$$ConfirmPostEntityImplCopyWithImpl(_$ConfirmPostEntityImpl _value,
-      $Res Function(_$ConfirmPostEntityImpl) _then)
+  __$$ConfirmPostEntityImplCopyWithImpl(_$ConfirmPostEntityImpl _value, $Res Function(_$ConfirmPostEntityImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -252,8 +244,7 @@ class _$ConfirmPostEntityImpl implements _ConfirmPostEntity {
   _$ConfirmPostEntityImpl(
       {@JsonKey(includeFromJson: false, includeToJson: false) this.id = '',
       @JsonKey(includeFromJson: false, includeToJson: false) this.userName = '',
-      @JsonKey(includeFromJson: false, includeToJson: false)
-      this.userImageUrl = '',
+      @JsonKey(includeFromJson: false, includeToJson: false) this.userImageUrl = '',
       required this.resolutionGoalStatement,
       required this.resolutionId,
       required this.content,
@@ -263,20 +254,16 @@ class _$ConfirmPostEntityImpl implements _ConfirmPostEntity {
       required this.createdAt,
       required this.updatedAt,
       this.hasRested = false})
-      : assert(resolutionGoalStatement != null,
-            'resolutionGoalStatement must not be null'),
-        assert(resolutionGoalStatement!.isNotEmpty,
-            'resolutionGoalStatement must not be empty'),
+      : assert(resolutionGoalStatement != null, 'resolutionGoalStatement must not be null'),
+        assert(resolutionGoalStatement!.isNotEmpty, 'resolutionGoalStatement must not be empty'),
         assert(recentStrike != null, 'recentStrike must not be null'),
-        assert(recentStrike! >= 0 && recentStrike! <= 170,
-            'recentStrike must be between b0000000 and b1111111'),
+        assert(recentStrike! >= 0 && recentStrike! <= 170, 'recentStrike must be between b0000000 and b1111111'),
         assert(createdAt != null, 'createdAt must not be null'),
         assert(updatedAt != null, 'createdAt must not be null'),
         assert(owner != null, 'roles(owner) must not be null'),
         _imageUrlList = imageUrlList;
 
-  factory _$ConfirmPostEntityImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ConfirmPostEntityImplFromJson(json);
+  factory _$ConfirmPostEntityImpl.fromJson(Map<String, dynamic> json) => _$$ConfirmPostEntityImplFromJson(json);
 
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -326,27 +313,18 @@ class _$ConfirmPostEntityImpl implements _ConfirmPostEntity {
         (other.runtimeType == runtimeType &&
             other is _$ConfirmPostEntityImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.userName, userName) ||
-                other.userName == userName) &&
-            (identical(other.userImageUrl, userImageUrl) ||
-                other.userImageUrl == userImageUrl) &&
-            (identical(
-                    other.resolutionGoalStatement, resolutionGoalStatement) ||
+            (identical(other.userName, userName) || other.userName == userName) &&
+            (identical(other.userImageUrl, userImageUrl) || other.userImageUrl == userImageUrl) &&
+            (identical(other.resolutionGoalStatement, resolutionGoalStatement) ||
                 other.resolutionGoalStatement == resolutionGoalStatement) &&
-            (identical(other.resolutionId, resolutionId) ||
-                other.resolutionId == resolutionId) &&
+            (identical(other.resolutionId, resolutionId) || other.resolutionId == resolutionId) &&
             (identical(other.content, content) || other.content == content) &&
-            const DeepCollectionEquality()
-                .equals(other._imageUrlList, _imageUrlList) &&
+            const DeepCollectionEquality().equals(other._imageUrlList, _imageUrlList) &&
             (identical(other.owner, owner) || other.owner == owner) &&
-            (identical(other.recentStrike, recentStrike) ||
-                other.recentStrike == recentStrike) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt) &&
-            (identical(other.updatedAt, updatedAt) ||
-                other.updatedAt == updatedAt) &&
-            (identical(other.hasRested, hasRested) ||
-                other.hasRested == hasRested));
+            (identical(other.recentStrike, recentStrike) || other.recentStrike == recentStrike) &&
+            (identical(other.createdAt, createdAt) || other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt) &&
+            (identical(other.hasRested, hasRested) || other.hasRested == hasRested));
   }
 
   @JsonKey(ignore: true)
@@ -370,8 +348,7 @@ class _$ConfirmPostEntityImpl implements _ConfirmPostEntity {
   @override
   @pragma('vm:prefer-inline')
   _$$ConfirmPostEntityImplCopyWith<_$ConfirmPostEntityImpl> get copyWith =>
-      __$$ConfirmPostEntityImplCopyWithImpl<_$ConfirmPostEntityImpl>(
-          this, _$identity);
+      __$$ConfirmPostEntityImplCopyWithImpl<_$ConfirmPostEntityImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -384,10 +361,8 @@ class _$ConfirmPostEntityImpl implements _ConfirmPostEntity {
 abstract class _ConfirmPostEntity implements ConfirmPostEntity {
   factory _ConfirmPostEntity(
       {@JsonKey(includeFromJson: false, includeToJson: false) final String? id,
-      @JsonKey(includeFromJson: false, includeToJson: false)
-      final String? userName,
-      @JsonKey(includeFromJson: false, includeToJson: false)
-      final String? userImageUrl,
+      @JsonKey(includeFromJson: false, includeToJson: false) final String? userName,
+      @JsonKey(includeFromJson: false, includeToJson: false) final String? userImageUrl,
       required final String? resolutionGoalStatement,
       required final String? resolutionId,
       required final String? content,
@@ -398,8 +373,7 @@ abstract class _ConfirmPostEntity implements ConfirmPostEntity {
       required final DateTime? updatedAt,
       final bool hasRested}) = _$ConfirmPostEntityImpl;
 
-  factory _ConfirmPostEntity.fromJson(Map<String, dynamic> json) =
-      _$ConfirmPostEntityImpl.fromJson;
+  factory _ConfirmPostEntity.fromJson(Map<String, dynamic> json) = _$ConfirmPostEntityImpl.fromJson;
 
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -430,6 +404,5 @@ abstract class _ConfirmPostEntity implements ConfirmPostEntity {
   bool get hasRested;
   @override
   @JsonKey(ignore: true)
-  _$$ConfirmPostEntityImplCopyWith<_$ConfirmPostEntityImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$ConfirmPostEntityImplCopyWith<_$ConfirmPostEntityImpl> get copyWith => throw _privateConstructorUsedError;
 }

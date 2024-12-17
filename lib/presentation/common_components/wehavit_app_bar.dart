@@ -74,8 +74,7 @@ AppBar WehavitAppBar({
                     color: CustomColors.whWhite,
                     size: trailingIcon != null ? 28.0 : 0,
                   ),
-                  if (trailingIconBadgeCount != null &&
-                      trailingIconBadgeCount > 0)
+                  if (trailingIconBadgeCount != null && trailingIconBadgeCount > 0)
                     Positioned(
                       right: -6,
                       top: -4,

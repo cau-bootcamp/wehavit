@@ -98,9 +98,7 @@ class _GroupViewState extends ConsumerState<GroupView> {
             child: viewModel.groupListViewCellModelList != null
                 ? RefreshIndicator(
                     onRefresh: () async {
-                      provider
-                          .loadMyGroupCellList()
-                          .whenComplete(() => setState(() {}));
+                      provider.loadMyGroupCellList().whenComplete(() => setState(() {}));
 
                       loadFriendCellList();
                     },
@@ -190,18 +188,12 @@ class _GroupViewState extends ConsumerState<GroupView> {
   }
 
   Future<void> loadGroupCellList() async {
-    ref
-        .read(groupViewModelProvider.notifier)
-        .loadMyGroupCellList()
-        .whenComplete(() => setState(() {}));
+    ref.read(groupViewModelProvider.notifier).loadMyGroupCellList().whenComplete(() => setState(() {}));
   }
 
   Future<void> loadFriendCellList() async {
     final userIdList = await Future.wait(
-      ref
-              .read(friendListViewModelProvider)
-              .friendFutureUserList
-              ?.map((futureFriendEntity) async {
+      ref.read(friendListViewModelProvider).friendFutureUserList?.map((futureFriendEntity) async {
             final result = await futureFriendEntity;
             return result.fold(
               (failure) => null,
@@ -211,8 +203,7 @@ class _GroupViewState extends ConsumerState<GroupView> {
           [],
     );
 
-    final userIdListWithoutNull =
-        userIdList.where((userId) => userId != null).cast<String>().toList();
+    final userIdListWithoutNull = userIdList.where((userId) => userId != null).cast<String>().toList();
 
     ref.watch(groupViewModelProvider).friendUidList = userIdListWithoutNull;
 

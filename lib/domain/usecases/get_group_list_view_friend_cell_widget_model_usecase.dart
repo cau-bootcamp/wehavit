@@ -14,9 +14,7 @@ class GetGroupListViewFriendCellWidgetModelUsecase {
     required List<String> sharedResolutionIdList,
   }) async {
     final (EitherFuture<int>, EitherFuture<int>)? countTuple =
-        await _groupRepository
-            .getGroupListViewFriendCellModelData(sharedResolutionIdList)
-            .then(
+        await _groupRepository.getGroupListViewFriendCellModelData(sharedResolutionIdList).then(
               (value) => value.fold(
                 (failure) => null,
                 (data) => data,

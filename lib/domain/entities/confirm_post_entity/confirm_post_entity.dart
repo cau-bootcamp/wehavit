@@ -26,15 +26,9 @@ class ConfirmPostEntity with _$ConfirmPostEntity {
   @TimestampConverter()
   @DocumentReferenceJsonConverter()
   factory ConfirmPostEntity({
-    @JsonKey(includeFromJson: false, includeToJson: false)
-    @Default('')
-    String? id,
-    @Default('')
-    @JsonKey(includeFromJson: false, includeToJson: false)
-    String? userName,
-    @Default('')
-    @JsonKey(includeFromJson: false, includeToJson: false)
-    String? userImageUrl,
+    @JsonKey(includeFromJson: false, includeToJson: false) @Default('') String? id,
+    @Default('') @JsonKey(includeFromJson: false, includeToJson: false) String? userName,
+    @Default('') @JsonKey(includeFromJson: false, includeToJson: false) String? userImageUrl,
     required String? resolutionGoalStatement,
     required String? resolutionId,
     required String? content,
@@ -46,17 +40,14 @@ class ConfirmPostEntity with _$ConfirmPostEntity {
     @Default(false) bool hasRested,
   }) = _ConfirmPostEntity;
 
-  factory ConfirmPostEntity.fromJson(Map<String, dynamic> json) =>
-      _$ConfirmPostEntityFromJson(json);
+  factory ConfirmPostEntity.fromJson(Map<String, dynamic> json) => _$ConfirmPostEntityFromJson(json);
 }
 
 T? tryCast<T>(value) {
   return value == null ? null : value as T;
 }
 
-class DocumentReferenceJsonConverter
-    implements
-        JsonConverter<DocumentReference<Map<String, dynamic>>?, Object?> {
+class DocumentReferenceJsonConverter implements JsonConverter<DocumentReference<Map<String, dynamic>>?, Object?> {
   const DocumentReferenceJsonConverter();
 
   @override

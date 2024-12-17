@@ -45,8 +45,7 @@ class ReactionEntity with _$ReactionEntity {
         comment: comment,
       );
 
-  factory ReactionEntity.fromJson(Map<String, dynamic> json) =>
-      _$ReactionEntityFromJson(json);
+  factory ReactionEntity.fromJson(Map<String, dynamic> json) => _$ReactionEntityFromJson(json);
 }
 
 enum ReactionType {

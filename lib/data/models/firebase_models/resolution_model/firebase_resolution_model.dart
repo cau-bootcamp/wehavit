@@ -26,8 +26,7 @@ class FirebaseResolutionModel with _$FirebaseResolutionModel {
     required List<int>? weeklyPostCountList,
   }) = _FirebaseResolutionModel;
 
-  factory FirebaseResolutionModel.fromJson(Map<String, dynamic> json) =>
-      _$FirebaseResolutionModelFromJson(json);
+  factory FirebaseResolutionModel.fromJson(Map<String, dynamic> json) => _$FirebaseResolutionModelFromJson(json);
 
   factory FirebaseResolutionModel.fromFireStoreDocument(DocumentSnapshot doc) {
     if (doc.data() == null) throw Exception('Document data was null');
@@ -35,8 +34,7 @@ class FirebaseResolutionModel with _$FirebaseResolutionModel {
     return FirebaseResolutionModel.fromJson(doc.data() as Map<String, Object?>);
   }
 
-  factory FirebaseResolutionModel.fromEntity(ResolutionEntity entity) =>
-      FirebaseResolutionModel(
+  factory FirebaseResolutionModel.fromEntity(ResolutionEntity entity) => FirebaseResolutionModel(
         resolutionName: entity.resolutionName,
         goalStatement: entity.goalStatement,
         actionStatement: entity.actionStatement,
@@ -45,14 +43,8 @@ class FirebaseResolutionModel with _$FirebaseResolutionModel {
         startDate: entity.startDate,
         colorIndex: entity.colorIndex,
         iconIndex: entity.iconIndex,
-        shareFriendIdList: entity.shareFriendEntityList
-                ?.map((friendEntity) => friendEntity.userId!)
-                .toList() ??
-            [],
-        shareGroupIdList: entity.shareGroupEntityList
-                ?.map((groupEntity) => groupEntity.groupId)
-                .toList() ??
-            [],
+        shareFriendIdList: entity.shareFriendEntityList?.map((friendEntity) => friendEntity.userId!).toList() ?? [],
+        shareGroupIdList: entity.shareGroupEntityList?.map((groupEntity) => groupEntity.groupId).toList() ?? [],
         writtenPostCount: entity.writtenPostCount,
         receivedReactionCount: entity.receivedReactionCount,
         successWeekMondayList: entity.successWeekMondayList,

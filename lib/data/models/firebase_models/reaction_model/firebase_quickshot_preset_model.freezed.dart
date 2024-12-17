@@ -14,8 +14,7 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-FirebaseQuickshotPresetModel _$FirebaseQuickshotPresetModelFromJson(
-    Map<String, dynamic> json) {
+FirebaseQuickshotPresetModel _$FirebaseQuickshotPresetModelFromJson(Map<String, dynamic> json) {
   return _FirebaseQuickshotPresetModel.fromJson(json);
 }
 
@@ -27,24 +26,21 @@ mixin _$FirebaseQuickshotPresetModel {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $FirebaseQuickshotPresetModelCopyWith<FirebaseQuickshotPresetModel>
-      get copyWith => throw _privateConstructorUsedError;
+  $FirebaseQuickshotPresetModelCopyWith<FirebaseQuickshotPresetModel> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $FirebaseQuickshotPresetModelCopyWith<$Res> {
   factory $FirebaseQuickshotPresetModelCopyWith(
-          FirebaseQuickshotPresetModel value,
-          $Res Function(FirebaseQuickshotPresetModel) then) =
-      _$FirebaseQuickshotPresetModelCopyWithImpl<$Res,
-          FirebaseQuickshotPresetModel>;
+          FirebaseQuickshotPresetModel value, $Res Function(FirebaseQuickshotPresetModel) then) =
+      _$FirebaseQuickshotPresetModelCopyWithImpl<$Res, FirebaseQuickshotPresetModel>;
   @useResult
   $Res call({String url, @TimestampConverter() DateTime? createdAt});
 }
 
 /// @nodoc
-class _$FirebaseQuickshotPresetModelCopyWithImpl<$Res,
-        $Val extends FirebaseQuickshotPresetModel>
+class _$FirebaseQuickshotPresetModelCopyWithImpl<$Res, $Val extends FirebaseQuickshotPresetModel>
     implements $FirebaseQuickshotPresetModelCopyWith<$Res> {
   _$FirebaseQuickshotPresetModelCopyWithImpl(this._value, this._then);
 
@@ -76,8 +72,7 @@ class _$FirebaseQuickshotPresetModelCopyWithImpl<$Res,
 abstract class _$$FirebaseQuickshotPresetModelImplCopyWith<$Res>
     implements $FirebaseQuickshotPresetModelCopyWith<$Res> {
   factory _$$FirebaseQuickshotPresetModelImplCopyWith(
-          _$FirebaseQuickshotPresetModelImpl value,
-          $Res Function(_$FirebaseQuickshotPresetModelImpl) then) =
+          _$FirebaseQuickshotPresetModelImpl value, $Res Function(_$FirebaseQuickshotPresetModelImpl) then) =
       __$$FirebaseQuickshotPresetModelImplCopyWithImpl<$Res>;
   @override
   @useResult
@@ -86,12 +81,10 @@ abstract class _$$FirebaseQuickshotPresetModelImplCopyWith<$Res>
 
 /// @nodoc
 class __$$FirebaseQuickshotPresetModelImplCopyWithImpl<$Res>
-    extends _$FirebaseQuickshotPresetModelCopyWithImpl<$Res,
-        _$FirebaseQuickshotPresetModelImpl>
+    extends _$FirebaseQuickshotPresetModelCopyWithImpl<$Res, _$FirebaseQuickshotPresetModelImpl>
     implements _$$FirebaseQuickshotPresetModelImplCopyWith<$Res> {
   __$$FirebaseQuickshotPresetModelImplCopyWithImpl(
-      _$FirebaseQuickshotPresetModelImpl _value,
-      $Res Function(_$FirebaseQuickshotPresetModelImpl) _then)
+      _$FirebaseQuickshotPresetModelImpl _value, $Res Function(_$FirebaseQuickshotPresetModelImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -116,13 +109,10 @@ class __$$FirebaseQuickshotPresetModelImplCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable()
-class _$FirebaseQuickshotPresetModelImpl
-    implements _FirebaseQuickshotPresetModel {
-  const _$FirebaseQuickshotPresetModelImpl(
-      {required this.url, @TimestampConverter() required this.createdAt});
+class _$FirebaseQuickshotPresetModelImpl implements _FirebaseQuickshotPresetModel {
+  const _$FirebaseQuickshotPresetModelImpl({required this.url, @TimestampConverter() required this.createdAt});
 
-  factory _$FirebaseQuickshotPresetModelImpl.fromJson(
-          Map<String, dynamic> json) =>
+  factory _$FirebaseQuickshotPresetModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$FirebaseQuickshotPresetModelImplFromJson(json);
 
   @override
@@ -142,8 +132,7 @@ class _$FirebaseQuickshotPresetModelImpl
         (other.runtimeType == runtimeType &&
             other is _$FirebaseQuickshotPresetModelImpl &&
             (identical(other.url, url) || other.url == url) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+            (identical(other.createdAt, createdAt) || other.createdAt == createdAt));
   }
 
   @JsonKey(ignore: true)
@@ -153,10 +142,8 @@ class _$FirebaseQuickshotPresetModelImpl
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$FirebaseQuickshotPresetModelImplCopyWith<
-          _$FirebaseQuickshotPresetModelImpl>
-      get copyWith => __$$FirebaseQuickshotPresetModelImplCopyWithImpl<
-          _$FirebaseQuickshotPresetModelImpl>(this, _$identity);
+  _$$FirebaseQuickshotPresetModelImplCopyWith<_$FirebaseQuickshotPresetModelImpl> get copyWith =>
+      __$$FirebaseQuickshotPresetModelImplCopyWithImpl<_$FirebaseQuickshotPresetModelImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -166,12 +153,10 @@ class _$FirebaseQuickshotPresetModelImpl
   }
 }
 
-abstract class _FirebaseQuickshotPresetModel
-    implements FirebaseQuickshotPresetModel {
+abstract class _FirebaseQuickshotPresetModel implements FirebaseQuickshotPresetModel {
   const factory _FirebaseQuickshotPresetModel(
-          {required final String url,
-          @TimestampConverter() required final DateTime? createdAt}) =
-      _$FirebaseQuickshotPresetModelImpl;
+      {required final String url,
+      @TimestampConverter() required final DateTime? createdAt}) = _$FirebaseQuickshotPresetModelImpl;
 
   factory _FirebaseQuickshotPresetModel.fromJson(Map<String, dynamic> json) =
       _$FirebaseQuickshotPresetModelImpl.fromJson;
@@ -183,7 +168,6 @@ abstract class _FirebaseQuickshotPresetModel
   DateTime? get createdAt;
   @override
   @JsonKey(ignore: true)
-  _$$FirebaseQuickshotPresetModelImplCopyWith<
-          _$FirebaseQuickshotPresetModelImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  _$$FirebaseQuickshotPresetModelImplCopyWith<_$FirebaseQuickshotPresetModelImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }

@@ -47,8 +47,7 @@ Future<String?> setFirebaseCloudMessaging(
     //   importance: Importance.low,
     // );
 
-    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-        FlutterLocalNotificationsPlugin();
+    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
     await flutterLocalNotificationsPlugin.initialize(
       const InitializationSettings(
@@ -63,9 +62,7 @@ Future<String?> setFirebaseCloudMessaging(
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      (reactionWidgetChildKey as GlobalKey<ReactionAnimationWidgetState>)
-          .currentState
-          ?.showUnreadReactions();
+      (reactionWidgetChildKey as GlobalKey<ReactionAnimationWidgetState>).currentState?.showUnreadReactions();
     });
 
     // background 상태. Notification 서랍에서 메시지 터치하여 앱으로 돌아왔을 때의 동작은 여기서.
@@ -76,12 +73,9 @@ Future<String?> setFirebaseCloudMessaging(
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       // RemoteNotification? notification = message.notification;
 
-      (reactionWidgetChildKey as GlobalKey<ReactionAnimationWidgetState>)
-          .currentState
-          ?.showUnreadReactions();
+      (reactionWidgetChildKey as GlobalKey<ReactionAnimationWidgetState>).currentState?.showUnreadReactions();
     });
-  } else if (DefaultFirebaseOptions.currentPlatform ==
-      DefaultFirebaseOptions.android) {
+  } else if (DefaultFirebaseOptions.currentPlatform == DefaultFirebaseOptions.android) {
     const AndroidNotificationChannel channel = AndroidNotificationChannel(
       'wehavit_notification',
       'wehavit_notification',
@@ -89,11 +83,9 @@ Future<String?> setFirebaseCloudMessaging(
       importance: Importance.low,
     );
 
-    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-        FlutterLocalNotificationsPlugin();
+    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
+        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
 
     messaging.getInitialMessage().then((RemoteMessage? message) {
@@ -102,9 +94,7 @@ Future<String?> setFirebaseCloudMessaging(
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      (reactionWidgetChildKey as GlobalKey<ReactionAnimationWidgetState>)
-          .currentState
-          ?.showUnreadReactions();
+      (reactionWidgetChildKey as GlobalKey<ReactionAnimationWidgetState>).currentState?.showUnreadReactions();
     });
 
     // background 상태. Notification 서랍에서 메시지 터치하여 앱으로 돌아왔을 때의 동작은 여기서.
@@ -115,9 +105,7 @@ Future<String?> setFirebaseCloudMessaging(
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       // RemoteNotification? notification = message.notification;
 
-      (reactionWidgetChildKey as GlobalKey<ReactionAnimationWidgetState>)
-          .currentState
-          ?.showUnreadReactions();
+      (reactionWidgetChildKey as GlobalKey<ReactionAnimationWidgetState>).currentState?.showUnreadReactions();
     });
   }
 
@@ -135,8 +123,7 @@ Future<void> setTerminatedStateMessageHandler() async {
     // RemoteMessage? initialMessage =
     //     await FirebaseMessaging.instance.getInitialMessage();
     // if (initialMessage != null) {}
-  } else if (DefaultFirebaseOptions.currentPlatform ==
-      DefaultFirebaseOptions.android) {
+  } else if (DefaultFirebaseOptions.currentPlatform == DefaultFirebaseOptions.android) {
     //
   }
 }

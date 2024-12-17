@@ -24,9 +24,7 @@ class UploadConfirmPostUseCase {
     try {
       final networkImageUrlList = await Future.wait(
         localFileUrlList.map((url) async {
-          final networkImageUrl = await _confirmPostRepository
-              .uploadConfirmPostImage(localFileUrl: url)
-              .then(
+          final networkImageUrl = await _confirmPostRepository.uploadConfirmPostImage(localFileUrl: url).then(
                 (value) => value.fold(
                   (failure) => null,
                   (imageUrl) => imageUrl,
@@ -59,15 +57,12 @@ class UploadConfirmPostUseCase {
         imageUrlList: networkImageUrlList,
         owner: uid,
         recentStrike: 0,
-        createdAt: DateTime.now()
-            .subtract(Duration(days: isPostingForYesterday ? 1 : 0)),
+        createdAt: DateTime.now().subtract(Duration(days: isPostingForYesterday ? 1 : 0)),
         updatedAt: DateTime.now(),
         hasRested: hasRested,
       );
 
-      return await _confirmPostRepository
-          .createConfirmPost(confirmPost)
-          .then((result) {
+      return await _confirmPostRepository.createConfirmPost(confirmPost).then((result) {
         return result.fold((failure) {
           return left(failure);
         }, (success) {

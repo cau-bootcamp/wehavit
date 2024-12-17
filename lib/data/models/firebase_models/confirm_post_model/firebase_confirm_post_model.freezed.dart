@@ -14,8 +14,7 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-FirebaseConfirmPostModel _$FirebaseConfirmPostModelFromJson(
-    Map<String, dynamic> json) {
+FirebaseConfirmPostModel _$FirebaseConfirmPostModelFromJson(Map<String, dynamic> json) {
   return _FirebaseConfirmPostModel.fromJson(json);
 }
 
@@ -35,14 +34,13 @@ mixin _$FirebaseConfirmPostModel {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $FirebaseConfirmPostModelCopyWith<FirebaseConfirmPostModel> get copyWith =>
-      throw _privateConstructorUsedError;
+  $FirebaseConfirmPostModelCopyWith<FirebaseConfirmPostModel> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $FirebaseConfirmPostModelCopyWith<$Res> {
-  factory $FirebaseConfirmPostModelCopyWith(FirebaseConfirmPostModel value,
-          $Res Function(FirebaseConfirmPostModel) then) =
+  factory $FirebaseConfirmPostModelCopyWith(
+          FirebaseConfirmPostModel value, $Res Function(FirebaseConfirmPostModel) then) =
       _$FirebaseConfirmPostModelCopyWithImpl<$Res, FirebaseConfirmPostModel>;
   @useResult
   $Res call(
@@ -58,8 +56,7 @@ abstract class $FirebaseConfirmPostModelCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$FirebaseConfirmPostModelCopyWithImpl<$Res,
-        $Val extends FirebaseConfirmPostModel>
+class _$FirebaseConfirmPostModelCopyWithImpl<$Res, $Val extends FirebaseConfirmPostModel>
     implements $FirebaseConfirmPostModelCopyWith<$Res> {
   _$FirebaseConfirmPostModelCopyWithImpl(this._value, this._then);
 
@@ -123,11 +120,9 @@ class _$FirebaseConfirmPostModelCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$FirebaseConfirmPostModelImplCopyWith<$Res>
-    implements $FirebaseConfirmPostModelCopyWith<$Res> {
+abstract class _$$FirebaseConfirmPostModelImplCopyWith<$Res> implements $FirebaseConfirmPostModelCopyWith<$Res> {
   factory _$$FirebaseConfirmPostModelImplCopyWith(
-          _$FirebaseConfirmPostModelImpl value,
-          $Res Function(_$FirebaseConfirmPostModelImpl) then) =
+          _$FirebaseConfirmPostModelImpl value, $Res Function(_$FirebaseConfirmPostModelImpl) then) =
       __$$FirebaseConfirmPostModelImplCopyWithImpl<$Res>;
   @override
   @useResult
@@ -145,12 +140,10 @@ abstract class _$$FirebaseConfirmPostModelImplCopyWith<$Res>
 
 /// @nodoc
 class __$$FirebaseConfirmPostModelImplCopyWithImpl<$Res>
-    extends _$FirebaseConfirmPostModelCopyWithImpl<$Res,
-        _$FirebaseConfirmPostModelImpl>
+    extends _$FirebaseConfirmPostModelCopyWithImpl<$Res, _$FirebaseConfirmPostModelImpl>
     implements _$$FirebaseConfirmPostModelImplCopyWith<$Res> {
   __$$FirebaseConfirmPostModelImplCopyWithImpl(
-      _$FirebaseConfirmPostModelImpl _value,
-      $Res Function(_$FirebaseConfirmPostModelImpl) _then)
+      _$FirebaseConfirmPostModelImpl _value, $Res Function(_$FirebaseConfirmPostModelImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -273,23 +266,16 @@ class _$FirebaseConfirmPostModelImpl implements _FirebaseConfirmPostModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$FirebaseConfirmPostModelImpl &&
-            (identical(
-                    other.resolutionGoalStatement, resolutionGoalStatement) ||
+            (identical(other.resolutionGoalStatement, resolutionGoalStatement) ||
                 other.resolutionGoalStatement == resolutionGoalStatement) &&
-            (identical(other.resolutionId, resolutionId) ||
-                other.resolutionId == resolutionId) &&
+            (identical(other.resolutionId, resolutionId) || other.resolutionId == resolutionId) &&
             (identical(other.content, content) || other.content == content) &&
-            const DeepCollectionEquality()
-                .equals(other._imageUrlList, _imageUrlList) &&
+            const DeepCollectionEquality().equals(other._imageUrlList, _imageUrlList) &&
             (identical(other.owner, owner) || other.owner == owner) &&
-            (identical(other.recentStrike, recentStrike) ||
-                other.recentStrike == recentStrike) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt) &&
-            (identical(other.updatedAt, updatedAt) ||
-                other.updatedAt == updatedAt) &&
-            const DeepCollectionEquality()
-                .equals(other._attributes, _attributes));
+            (identical(other.recentStrike, recentStrike) || other.recentStrike == recentStrike) &&
+            (identical(other.createdAt, createdAt) || other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt) &&
+            const DeepCollectionEquality().equals(other._attributes, _attributes));
   }
 
   @JsonKey(ignore: true)
@@ -309,9 +295,8 @@ class _$FirebaseConfirmPostModelImpl implements _FirebaseConfirmPostModel {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$FirebaseConfirmPostModelImplCopyWith<_$FirebaseConfirmPostModelImpl>
-      get copyWith => __$$FirebaseConfirmPostModelImplCopyWithImpl<
-          _$FirebaseConfirmPostModelImpl>(this, _$identity);
+  _$$FirebaseConfirmPostModelImplCopyWith<_$FirebaseConfirmPostModelImpl> get copyWith =>
+      __$$FirebaseConfirmPostModelImplCopyWithImpl<_$FirebaseConfirmPostModelImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -323,19 +308,17 @@ class _$FirebaseConfirmPostModelImpl implements _FirebaseConfirmPostModel {
 
 abstract class _FirebaseConfirmPostModel implements FirebaseConfirmPostModel {
   const factory _FirebaseConfirmPostModel(
-          {required final String? resolutionGoalStatement,
-          required final String? resolutionId,
-          required final String? content,
-          required final List<String>? imageUrlList,
-          required final String? owner,
-          required final int? recentStrike,
-          @TimestampConverter() required final DateTime? createdAt,
-          @TimestampConverter() required final DateTime? updatedAt,
-          required final Map<String, bool>? attributes}) =
-      _$FirebaseConfirmPostModelImpl;
+      {required final String? resolutionGoalStatement,
+      required final String? resolutionId,
+      required final String? content,
+      required final List<String>? imageUrlList,
+      required final String? owner,
+      required final int? recentStrike,
+      @TimestampConverter() required final DateTime? createdAt,
+      @TimestampConverter() required final DateTime? updatedAt,
+      required final Map<String, bool>? attributes}) = _$FirebaseConfirmPostModelImpl;
 
-  factory _FirebaseConfirmPostModel.fromJson(Map<String, dynamic> json) =
-      _$FirebaseConfirmPostModelImpl.fromJson;
+  factory _FirebaseConfirmPostModel.fromJson(Map<String, dynamic> json) = _$FirebaseConfirmPostModelImpl.fromJson;
 
   @override
   String? get resolutionGoalStatement;
@@ -359,6 +342,6 @@ abstract class _FirebaseConfirmPostModel implements FirebaseConfirmPostModel {
   Map<String, bool>? get attributes;
   @override
   @JsonKey(ignore: true)
-  _$$FirebaseConfirmPostModelImplCopyWith<_$FirebaseConfirmPostModelImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  _$$FirebaseConfirmPostModelImplCopyWith<_$FirebaseConfirmPostModelImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }

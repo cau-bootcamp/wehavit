@@ -42,10 +42,8 @@ class UploadResolutionUseCase {
     );
 
     return _resolutionRepository.uploadResolutionEntity(entity).then(
-          (result) => result.fold(
-              (failure) =>
-                  left(const Failure("can't get resolution entity id")),
-              (resolutionId) async {
+          (result) =>
+              result.fold((failure) => left(const Failure("can't get resolution entity id")), (resolutionId) async {
             await _userModelRepository.incrementUserDataCounter(
               type: UserIncrementalDataType.goal,
             );

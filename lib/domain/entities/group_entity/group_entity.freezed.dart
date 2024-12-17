@@ -32,14 +32,12 @@ mixin _$GroupEntity {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $GroupEntityCopyWith<GroupEntity> get copyWith =>
-      throw _privateConstructorUsedError;
+  $GroupEntityCopyWith<GroupEntity> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $GroupEntityCopyWith<$Res> {
-  factory $GroupEntityCopyWith(
-          GroupEntity value, $Res Function(GroupEntity) then) =
+  factory $GroupEntityCopyWith(GroupEntity value, $Res Function(GroupEntity) then) =
       _$GroupEntityCopyWithImpl<$Res, GroupEntity>;
   @useResult
   $Res call(
@@ -54,8 +52,7 @@ abstract class $GroupEntityCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$GroupEntityCopyWithImpl<$Res, $Val extends GroupEntity>
-    implements $GroupEntityCopyWith<$Res> {
+class _$GroupEntityCopyWithImpl<$Res, $Val extends GroupEntity> implements $GroupEntityCopyWith<$Res> {
   _$GroupEntityCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
@@ -113,10 +110,8 @@ class _$GroupEntityCopyWithImpl<$Res, $Val extends GroupEntity>
 }
 
 /// @nodoc
-abstract class _$$GroupEntityImplCopyWith<$Res>
-    implements $GroupEntityCopyWith<$Res> {
-  factory _$$GroupEntityImplCopyWith(
-          _$GroupEntityImpl value, $Res Function(_$GroupEntityImpl) then) =
+abstract class _$$GroupEntityImplCopyWith<$Res> implements $GroupEntityCopyWith<$Res> {
+  factory _$$GroupEntityImplCopyWith(_$GroupEntityImpl value, $Res Function(_$GroupEntityImpl) then) =
       __$$GroupEntityImplCopyWithImpl<$Res>;
   @override
   @useResult
@@ -132,11 +127,9 @@ abstract class _$$GroupEntityImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$GroupEntityImplCopyWithImpl<$Res>
-    extends _$GroupEntityCopyWithImpl<$Res, _$GroupEntityImpl>
+class __$$GroupEntityImplCopyWithImpl<$Res> extends _$GroupEntityCopyWithImpl<$Res, _$GroupEntityImpl>
     implements _$$GroupEntityImplCopyWith<$Res> {
-  __$$GroupEntityImplCopyWithImpl(
-      _$GroupEntityImpl _value, $Res Function(_$GroupEntityImpl) _then)
+  __$$GroupEntityImplCopyWithImpl(_$GroupEntityImpl _value, $Res Function(_$GroupEntityImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -200,12 +193,10 @@ class _$GroupEntityImpl implements _GroupEntity {
       required final List<String> groupMemberUidList,
       required this.groupCreatedAt,
       required this.groupColor,
-      @JsonKey(includeFromJson: true, includeToJson: false)
-      required this.groupId})
+      @JsonKey(includeFromJson: true, includeToJson: false) required this.groupId})
       : _groupMemberUidList = groupMemberUidList;
 
-  factory _$GroupEntityImpl.fromJson(Map<String, dynamic> json) =>
-      _$$GroupEntityImplFromJson(json);
+  factory _$GroupEntityImpl.fromJson(Map<String, dynamic> json) => _$$GroupEntityImplFromJson(json);
 
   @override
   final String groupName;
@@ -220,8 +211,7 @@ class _$GroupEntityImpl implements _GroupEntity {
   final List<String> _groupMemberUidList;
   @override
   List<String> get groupMemberUidList {
-    if (_groupMemberUidList is EqualUnmodifiableListView)
-      return _groupMemberUidList;
+    if (_groupMemberUidList is EqualUnmodifiableListView) return _groupMemberUidList;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_groupMemberUidList);
   }
@@ -244,35 +234,20 @@ class _$GroupEntityImpl implements _GroupEntity {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$GroupEntityImpl &&
-            (identical(other.groupName, groupName) ||
-                other.groupName == groupName) &&
-            (identical(other.groupDescription, groupDescription) ||
-                other.groupDescription == groupDescription) &&
-            (identical(other.groupRule, groupRule) ||
-                other.groupRule == groupRule) &&
-            (identical(other.groupManagerUid, groupManagerUid) ||
-                other.groupManagerUid == groupManagerUid) &&
-            const DeepCollectionEquality()
-                .equals(other._groupMemberUidList, _groupMemberUidList) &&
-            (identical(other.groupCreatedAt, groupCreatedAt) ||
-                other.groupCreatedAt == groupCreatedAt) &&
-            (identical(other.groupColor, groupColor) ||
-                other.groupColor == groupColor) &&
+            (identical(other.groupName, groupName) || other.groupName == groupName) &&
+            (identical(other.groupDescription, groupDescription) || other.groupDescription == groupDescription) &&
+            (identical(other.groupRule, groupRule) || other.groupRule == groupRule) &&
+            (identical(other.groupManagerUid, groupManagerUid) || other.groupManagerUid == groupManagerUid) &&
+            const DeepCollectionEquality().equals(other._groupMemberUidList, _groupMemberUidList) &&
+            (identical(other.groupCreatedAt, groupCreatedAt) || other.groupCreatedAt == groupCreatedAt) &&
+            (identical(other.groupColor, groupColor) || other.groupColor == groupColor) &&
             (identical(other.groupId, groupId) || other.groupId == groupId));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      groupName,
-      groupDescription,
-      groupRule,
-      groupManagerUid,
-      const DeepCollectionEquality().hash(_groupMemberUidList),
-      groupCreatedAt,
-      groupColor,
-      groupId);
+  int get hashCode => Object.hash(runtimeType, groupName, groupDescription, groupRule, groupManagerUid,
+      const DeepCollectionEquality().hash(_groupMemberUidList), groupCreatedAt, groupColor, groupId);
 
   @JsonKey(ignore: true)
   @override
@@ -297,11 +272,9 @@ abstract class _GroupEntity implements GroupEntity {
       required final List<String> groupMemberUidList,
       required final DateTime groupCreatedAt,
       required final int groupColor,
-      @JsonKey(includeFromJson: true, includeToJson: false)
-      required final String groupId}) = _$GroupEntityImpl;
+      @JsonKey(includeFromJson: true, includeToJson: false) required final String groupId}) = _$GroupEntityImpl;
 
-  factory _GroupEntity.fromJson(Map<String, dynamic> json) =
-      _$GroupEntityImpl.fromJson;
+  factory _GroupEntity.fromJson(Map<String, dynamic> json) = _$GroupEntityImpl.fromJson;
 
   @override
   String get groupName;
@@ -322,6 +295,5 @@ abstract class _GroupEntity implements GroupEntity {
   String get groupId;
   @override
   @JsonKey(ignore: true)
-  _$$GroupEntityImplCopyWith<_$GroupEntityImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$GroupEntityImplCopyWith<_$GroupEntityImpl> get copyWith => throw _privateConstructorUsedError;
 }

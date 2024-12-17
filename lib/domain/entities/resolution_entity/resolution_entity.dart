@@ -28,6 +28,5 @@ class ResolutionEntity with _$ResolutionEntity {
     List<int>? weeklyPostCountList,
   }) = _ResolutionEntity;
 
-  factory ResolutionEntity.fromJson(Map<String, dynamic> json) =>
-      _$ResolutionEntityFromJson(json);
+  factory ResolutionEntity.fromJson(Map<String, dynamic> json) => _$ResolutionEntityFromJson(json);
 }

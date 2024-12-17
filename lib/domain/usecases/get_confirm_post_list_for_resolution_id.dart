@@ -2,8 +2,7 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
 
-class GetConfirmPostListForResolutionIdUsecase
-    extends FutureUseCase<List<ConfirmPostEntity>, String> {
+class GetConfirmPostListForResolutionIdUsecase extends FutureUseCase<List<ConfirmPostEntity>, String> {
   GetConfirmPostListForResolutionIdUsecase(this._confirmPostRepository);
 
   final ConfirmPostRepository _confirmPostRepository;

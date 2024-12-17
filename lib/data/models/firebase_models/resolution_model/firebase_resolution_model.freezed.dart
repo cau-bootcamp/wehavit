@@ -14,8 +14,7 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-FirebaseResolutionModel _$FirebaseResolutionModelFromJson(
-    Map<String, dynamic> json) {
+FirebaseResolutionModel _$FirebaseResolutionModelFromJson(Map<String, dynamic> json) {
   return _FirebaseResolutionModel.fromJson(json);
 }
 
@@ -35,20 +34,17 @@ mixin _$FirebaseResolutionModel {
   int? get writtenPostCount => throw _privateConstructorUsedError;
   int? get receivedReactionCount => throw _privateConstructorUsedError;
   @TimestampConverter()
-  List<DateTime>? get successWeekMondayList =>
-      throw _privateConstructorUsedError;
+  List<DateTime>? get successWeekMondayList => throw _privateConstructorUsedError;
   List<int>? get weeklyPostCountList => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $FirebaseResolutionModelCopyWith<FirebaseResolutionModel> get copyWith =>
-      throw _privateConstructorUsedError;
+  $FirebaseResolutionModelCopyWith<FirebaseResolutionModel> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $FirebaseResolutionModelCopyWith<$Res> {
-  factory $FirebaseResolutionModelCopyWith(FirebaseResolutionModel value,
-          $Res Function(FirebaseResolutionModel) then) =
+  factory $FirebaseResolutionModelCopyWith(FirebaseResolutionModel value, $Res Function(FirebaseResolutionModel) then) =
       _$FirebaseResolutionModelCopyWithImpl<$Res, FirebaseResolutionModel>;
   @useResult
   $Res call(
@@ -69,8 +65,7 @@ abstract class $FirebaseResolutionModelCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$FirebaseResolutionModelCopyWithImpl<$Res,
-        $Val extends FirebaseResolutionModel>
+class _$FirebaseResolutionModelCopyWithImpl<$Res, $Val extends FirebaseResolutionModel>
     implements $FirebaseResolutionModelCopyWith<$Res> {
   _$FirebaseResolutionModelCopyWithImpl(this._value, this._then);
 
@@ -159,11 +154,9 @@ class _$FirebaseResolutionModelCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$FirebaseResolutionModelImplCopyWith<$Res>
-    implements $FirebaseResolutionModelCopyWith<$Res> {
+abstract class _$$FirebaseResolutionModelImplCopyWith<$Res> implements $FirebaseResolutionModelCopyWith<$Res> {
   factory _$$FirebaseResolutionModelImplCopyWith(
-          _$FirebaseResolutionModelImpl value,
-          $Res Function(_$FirebaseResolutionModelImpl) then) =
+          _$FirebaseResolutionModelImpl value, $Res Function(_$FirebaseResolutionModelImpl) then) =
       __$$FirebaseResolutionModelImplCopyWithImpl<$Res>;
   @override
   @useResult
@@ -186,12 +179,10 @@ abstract class _$$FirebaseResolutionModelImplCopyWith<$Res>
 
 /// @nodoc
 class __$$FirebaseResolutionModelImplCopyWithImpl<$Res>
-    extends _$FirebaseResolutionModelCopyWithImpl<$Res,
-        _$FirebaseResolutionModelImpl>
+    extends _$FirebaseResolutionModelCopyWithImpl<$Res, _$FirebaseResolutionModelImpl>
     implements _$$FirebaseResolutionModelImplCopyWith<$Res> {
   __$$FirebaseResolutionModelImplCopyWithImpl(
-      _$FirebaseResolutionModelImpl _value,
-      $Res Function(_$FirebaseResolutionModelImpl) _then)
+      _$FirebaseResolutionModelImpl _value, $Res Function(_$FirebaseResolutionModelImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -290,8 +281,7 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
       required final List<String>? shareGroupIdList,
       required this.writtenPostCount,
       required this.receivedReactionCount,
-      @TimestampConverter()
-      required final List<DateTime>? successWeekMondayList,
+      @TimestampConverter() required final List<DateTime>? successWeekMondayList,
       required final List<int>? weeklyPostCountList})
       : _shareFriendIdList = shareFriendIdList,
         _shareGroupIdList = shareGroupIdList,
@@ -323,8 +313,7 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
   List<String>? get shareFriendIdList {
     final value = _shareFriendIdList;
     if (value == null) return null;
-    if (_shareFriendIdList is EqualUnmodifiableListView)
-      return _shareFriendIdList;
+    if (_shareFriendIdList is EqualUnmodifiableListView) return _shareFriendIdList;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(value);
   }
@@ -334,8 +323,7 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
   List<String>? get shareGroupIdList {
     final value = _shareGroupIdList;
     if (value == null) return null;
-    if (_shareGroupIdList is EqualUnmodifiableListView)
-      return _shareGroupIdList;
+    if (_shareGroupIdList is EqualUnmodifiableListView) return _shareGroupIdList;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(value);
   }
@@ -350,8 +338,7 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
   List<DateTime>? get successWeekMondayList {
     final value = _successWeekMondayList;
     if (value == null) return null;
-    if (_successWeekMondayList is EqualUnmodifiableListView)
-      return _successWeekMondayList;
+    if (_successWeekMondayList is EqualUnmodifiableListView) return _successWeekMondayList;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(value);
   }
@@ -361,8 +348,7 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
   List<int>? get weeklyPostCountList {
     final value = _weeklyPostCountList;
     if (value == null) return null;
-    if (_weeklyPostCountList is EqualUnmodifiableListView)
-      return _weeklyPostCountList;
+    if (_weeklyPostCountList is EqualUnmodifiableListView) return _weeklyPostCountList;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(value);
   }
@@ -377,34 +363,21 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$FirebaseResolutionModelImpl &&
-            (identical(other.resolutionName, resolutionName) ||
-                other.resolutionName == resolutionName) &&
-            (identical(other.goalStatement, goalStatement) ||
-                other.goalStatement == goalStatement) &&
-            (identical(other.actionStatement, actionStatement) ||
-                other.actionStatement == actionStatement) &&
-            (identical(other.isActive, isActive) ||
-                other.isActive == isActive) &&
-            (identical(other.colorIndex, colorIndex) ||
-                other.colorIndex == colorIndex) &&
-            (identical(other.iconIndex, iconIndex) ||
-                other.iconIndex == iconIndex) &&
-            (identical(other.actionPerWeek, actionPerWeek) ||
-                other.actionPerWeek == actionPerWeek) &&
-            (identical(other.startDate, startDate) ||
-                other.startDate == startDate) &&
-            const DeepCollectionEquality()
-                .equals(other._shareFriendIdList, _shareFriendIdList) &&
-            const DeepCollectionEquality()
-                .equals(other._shareGroupIdList, _shareGroupIdList) &&
-            (identical(other.writtenPostCount, writtenPostCount) ||
-                other.writtenPostCount == writtenPostCount) &&
+            (identical(other.resolutionName, resolutionName) || other.resolutionName == resolutionName) &&
+            (identical(other.goalStatement, goalStatement) || other.goalStatement == goalStatement) &&
+            (identical(other.actionStatement, actionStatement) || other.actionStatement == actionStatement) &&
+            (identical(other.isActive, isActive) || other.isActive == isActive) &&
+            (identical(other.colorIndex, colorIndex) || other.colorIndex == colorIndex) &&
+            (identical(other.iconIndex, iconIndex) || other.iconIndex == iconIndex) &&
+            (identical(other.actionPerWeek, actionPerWeek) || other.actionPerWeek == actionPerWeek) &&
+            (identical(other.startDate, startDate) || other.startDate == startDate) &&
+            const DeepCollectionEquality().equals(other._shareFriendIdList, _shareFriendIdList) &&
+            const DeepCollectionEquality().equals(other._shareGroupIdList, _shareGroupIdList) &&
+            (identical(other.writtenPostCount, writtenPostCount) || other.writtenPostCount == writtenPostCount) &&
             (identical(other.receivedReactionCount, receivedReactionCount) ||
                 other.receivedReactionCount == receivedReactionCount) &&
-            const DeepCollectionEquality()
-                .equals(other._successWeekMondayList, _successWeekMondayList) &&
-            const DeepCollectionEquality()
-                .equals(other._weeklyPostCountList, _weeklyPostCountList));
+            const DeepCollectionEquality().equals(other._successWeekMondayList, _successWeekMondayList) &&
+            const DeepCollectionEquality().equals(other._weeklyPostCountList, _weeklyPostCountList));
   }
 
   @JsonKey(ignore: true)
@@ -429,9 +402,8 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$FirebaseResolutionModelImplCopyWith<_$FirebaseResolutionModelImpl>
-      get copyWith => __$$FirebaseResolutionModelImplCopyWithImpl<
-          _$FirebaseResolutionModelImpl>(this, _$identity);
+  _$$FirebaseResolutionModelImplCopyWith<_$FirebaseResolutionModelImpl> get copyWith =>
+      __$$FirebaseResolutionModelImplCopyWithImpl<_$FirebaseResolutionModelImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -443,25 +415,22 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
 
 abstract class _FirebaseResolutionModel implements FirebaseResolutionModel {
   const factory _FirebaseResolutionModel(
-          {required final String? resolutionName,
-          required final String? goalStatement,
-          required final String? actionStatement,
-          required final bool? isActive,
-          required final int? colorIndex,
-          required final int? iconIndex,
-          required final int? actionPerWeek,
-          @TimestampConverter() required final DateTime? startDate,
-          required final List<String>? shareFriendIdList,
-          required final List<String>? shareGroupIdList,
-          required final int? writtenPostCount,
-          required final int? receivedReactionCount,
-          @TimestampConverter()
-          required final List<DateTime>? successWeekMondayList,
-          required final List<int>? weeklyPostCountList}) =
-      _$FirebaseResolutionModelImpl;
+      {required final String? resolutionName,
+      required final String? goalStatement,
+      required final String? actionStatement,
+      required final bool? isActive,
+      required final int? colorIndex,
+      required final int? iconIndex,
+      required final int? actionPerWeek,
+      @TimestampConverter() required final DateTime? startDate,
+      required final List<String>? shareFriendIdList,
+      required final List<String>? shareGroupIdList,
+      required final int? writtenPostCount,
+      required final int? receivedReactionCount,
+      @TimestampConverter() required final List<DateTime>? successWeekMondayList,
+      required final List<int>? weeklyPostCountList}) = _$FirebaseResolutionModelImpl;
 
-  factory _FirebaseResolutionModel.fromJson(Map<String, dynamic> json) =
-      _$FirebaseResolutionModelImpl.fromJson;
+  factory _FirebaseResolutionModel.fromJson(Map<String, dynamic> json) = _$FirebaseResolutionModelImpl.fromJson;
 
   @override
   String? get resolutionName;
@@ -495,6 +464,6 @@ abstract class _FirebaseResolutionModel implements FirebaseResolutionModel {
   List<int>? get weeklyPostCountList;
   @override
   @JsonKey(ignore: true)
-  _$$FirebaseResolutionModelImplCopyWith<_$FirebaseResolutionModelImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  _$$FirebaseResolutionModelImplCopyWith<_$FirebaseResolutionModelImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }

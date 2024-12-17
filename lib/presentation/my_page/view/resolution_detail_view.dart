@@ -550,7 +550,9 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
-                                  color: (isFuture || isPast) || cellDate != viewModel.selectedDate ? CustomColors.whPlaceholderGrey : CustomColors.whBlack,
+                                  color: (isFuture || isPast) || cellDate != viewModel.selectedDate
+                                      ? CustomColors.whPlaceholderGrey
+                                      : CustomColors.whBlack,
                                 ),
                               ),
                             ),
@@ -567,7 +569,9 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                                     fontFamily: 'Giants',
                                     fontSize: 24,
                                     fontWeight: FontWeight.w700,
-                                    color: (isFuture || isPast) || cellDate != viewModel.selectedDate ? CustomColors.whPlaceholderGrey : CustomColors.whBlack,
+                                    color: (isFuture || isPast) || cellDate != viewModel.selectedDate
+                                        ? CustomColors.whPlaceholderGrey
+                                        : CustomColors.whBlack,
                                   ),
                                 ),
                                 child: EitherFutureBuilder<List<ConfirmPostEntity>>(
@@ -592,7 +596,9 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                                       fontFamily: 'Giants',
                                       fontSize: 24,
                                       fontWeight: FontWeight.w700,
-                                      color: (isFuture || isPast) || cellDate != viewModel.selectedDate ? CustomColors.whPlaceholderGrey : CustomColors.whBlack,
+                                      color: (isFuture || isPast) || cellDate != viewModel.selectedDate
+                                          ? CustomColors.whPlaceholderGrey
+                                          : CustomColors.whBlack,
                                     ),
                                   ),
                                 ),

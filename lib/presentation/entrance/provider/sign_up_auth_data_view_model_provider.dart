@@ -1,8 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/presentation/entrance/entrance.dart';
 
-class SignUpAuthDataViewModelProvider
-    extends StateNotifier<SignUpAuthDataViewModel> {
+class SignUpAuthDataViewModelProvider extends StateNotifier<SignUpAuthDataViewModel> {
   SignUpAuthDataViewModelProvider() : super(SignUpAuthDataViewModel());
 
   void checkEmailEntered() {

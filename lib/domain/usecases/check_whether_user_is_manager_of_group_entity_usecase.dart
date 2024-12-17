@@ -9,9 +9,8 @@ class CheckWeatherUserIsMnagerOfGroupEntityUsecase {
   final UserModelRepository _userModelRepository;
 
   EitherFuture<bool> call(GroupEntity groupEntity) async {
-    String? userId = await _userModelRepository
-        .getMyUserId()
-        .then((value) => value.fold((failure) => null, (userId) => userId));
+    String? userId =
+        await _userModelRepository.getMyUserId().then((value) => value.fold((failure) => null, (userId) => userId));
 
     if (userId == null) {
       return Future(() => left(const Failure('cannot get user id')));

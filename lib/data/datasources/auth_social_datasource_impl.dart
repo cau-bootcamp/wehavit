@@ -123,8 +123,7 @@ class AuthSocialDataSourceImpl implements AuthSocialDataSource {
 
       // 사용자 재인증
       try {
-        await FirebaseAuth.instance.currentUser
-            ?.reauthenticateWithCredential(oauthCredential);
+        await FirebaseAuth.instance.currentUser?.reauthenticateWithCredential(oauthCredential);
       } on Exception catch (e) {
         return left(
           Failure(

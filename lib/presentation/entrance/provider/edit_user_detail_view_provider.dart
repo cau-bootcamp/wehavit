@@ -10,8 +10,7 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
 import 'package:wehavit/presentation/entrance/entrance.dart';
 
-class EditUserDataViewModelProvider
-    extends StateNotifier<EditUserDetailViewModel> {
+class EditUserDataViewModelProvider extends StateNotifier<EditUserDetailViewModel> {
   EditUserDataViewModelProvider(
     this.uploadUserDataUsecase,
     this.removeCurrentUserDataUsecase,

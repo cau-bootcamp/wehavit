@@ -4,8 +4,7 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
 import 'package:wehavit/presentation/write_post/write_post.dart';
 
-class ResolutionListViewModelProvider
-    extends StateNotifier<ResolutionListViewModel> {
+class ResolutionListViewModelProvider extends StateNotifier<ResolutionListViewModel> {
   ResolutionListViewModelProvider(
     this._getMyResolutionListUsecase,
     this._getTargetResolutionDoneListForWeekUsecase,
@@ -13,8 +12,7 @@ class ResolutionListViewModelProvider
   ) : super(ResolutionListViewModel());
 
   final GetMyResolutionListUsecase _getMyResolutionListUsecase;
-  final GetTargetResolutionDoneListForWeekUsecase
-      _getTargetResolutionDoneListForWeekUsecase;
+  final GetTargetResolutionDoneListForWeekUsecase _getTargetResolutionDoneListForWeekUsecase;
   final UploadConfirmPostUseCase _uploadConfirmPostUseCase;
 
   Future<void> loadResolutionModelList() async {

@@ -111,12 +111,9 @@ class GroupRepositoryImpl implements GroupRepository {
   }
 
   @override
-  EitherFuture<(EitherFuture<int>, EitherFuture<int>)>
-      getGroupListViewCellModelData(String groupId) {
-    final sharedResolutionsCount =
-        _wehavitDatasource.getGroupSharedResolutionCount(groupId);
-    final sharedPostsCount =
-        _wehavitDatasource.getGroupSharedPostCount(groupId);
+  EitherFuture<(EitherFuture<int>, EitherFuture<int>)> getGroupListViewCellModelData(String groupId) {
+    final sharedResolutionsCount = _wehavitDatasource.getGroupSharedResolutionCount(groupId);
+    final sharedPostsCount = _wehavitDatasource.getGroupSharedPostCount(groupId);
 
     return Future(() => right((sharedResolutionsCount, sharedPostsCount)));
   }
@@ -177,12 +174,10 @@ class GroupRepositoryImpl implements GroupRepository {
   }
 
   @override
-  EitherFuture<(EitherFuture<int>, EitherFuture<int>)>
-      getGroupListViewFriendCellModelData(
+  EitherFuture<(EitherFuture<int>, EitherFuture<int>)> getGroupListViewFriendCellModelData(
     List<String> sharedResolutionIdList,
   ) {
-    final sharedPostsCount =
-        _wehavitDatasource.getFriendSharedPostCount(sharedResolutionIdList);
+    final sharedPostsCount = _wehavitDatasource.getFriendSharedPostCount(sharedResolutionIdList);
 
     return Future(
       () => right(

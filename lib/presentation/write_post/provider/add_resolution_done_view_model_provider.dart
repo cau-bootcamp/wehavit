@@ -3,8 +3,7 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/domain.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
-class AddResolutionDoneViewModelProvider
-    extends StateNotifier<AddResolutionDoneViewModel> {
+class AddResolutionDoneViewModelProvider extends StateNotifier<AddResolutionDoneViewModel> {
   AddResolutionDoneViewModelProvider(
     this.getFriendListUsecase,
     this.getGroupListUsecase,
@@ -27,15 +26,13 @@ class AddResolutionDoneViewModelProvider
 
   void toggleFriendSelection(index) {
     if (state.tempSelectedFriendList != null) {
-      state.tempSelectedFriendList![index] =
-          !state.tempSelectedFriendList![index];
+      state.tempSelectedFriendList![index] = !state.tempSelectedFriendList![index];
     }
   }
 
   void toggleGroupSelection(index) {
     if (state.tempSelectedGroupList != null) {
-      state.tempSelectedGroupList![index] =
-          !state.tempSelectedGroupList![index];
+      state.tempSelectedGroupList![index] = !state.tempSelectedGroupList![index];
     }
   }
 
@@ -47,12 +44,9 @@ class AddResolutionDoneViewModelProvider
           ),
         );
 
-    final sharedFriendList = state.resolutionEntity?.shareFriendEntityList
-        ?.map((entity) => entity.userId)
-        .toList();
+    final sharedFriendList = state.resolutionEntity?.shareFriendEntityList?.map((entity) => entity.userId).toList();
 
-    final futureSelectedFriendList =
-        state.friendList?.map((futureEntity) async {
+    final futureSelectedFriendList = state.friendList?.map((futureEntity) async {
       final result = await futureEntity;
       return result.fold(
         (failure) => false,
@@ -60,9 +54,7 @@ class AddResolutionDoneViewModelProvider
       );
     }).toList();
 
-    state.selectedFriendList = futureSelectedFriendList == null
-        ? null
-        : await Future.wait(futureSelectedFriendList);
+    state.selectedFriendList = futureSelectedFriendList == null ? null : await Future.wait(futureSelectedFriendList);
   }
 
   Future<void> loadGroupList() async {
@@ -72,9 +64,7 @@ class AddResolutionDoneViewModelProvider
             (groupList) {
               return Future.wait(
                 groupList.map((groupEntity) async {
-                  return getGroupListViewCellWidgetModelUsecase
-                      .call(groupEntity: groupEntity)
-                      .then(
+                  return getGroupListViewCellWidgetModelUsecase.call(groupEntity: groupEntity).then(
                         (result) => result.fold(
                           (failure) => GroupListViewCellWidgetModel.dummyModel,
                           (model) => model,
@@ -86,9 +76,7 @@ class AddResolutionDoneViewModelProvider
           ),
         );
 
-    final sharedGroupList = state.resolutionEntity?.shareGroupEntityList
-        ?.map((entity) => entity.groupId)
-        .toList();
+    final sharedGroupList = state.resolutionEntity?.shareGroupEntityList?.map((entity) => entity.groupId).toList();
 
     final selectedGroupList = state.groupModelList?.map((model) {
       return sharedGroupList?.contains(model.groupEntity.groupId) ?? false;
@@ -106,11 +94,9 @@ class AddResolutionDoneViewModelProvider
   }
 
   Future<void> applyChangedSharingOfFriends() async {
-    List<UserDataEntity> currentSharedFriendList =
-        state.resolutionEntity!.shareFriendEntityList?.toList() ?? [];
+    List<UserDataEntity> currentSharedFriendList = state.resolutionEntity!.shareFriendEntityList?.toList() ?? [];
 
-    await Future.forEach(state.selectedFriendList!.asMap().entries,
-        (entry) async {
+    await Future.forEach(state.selectedFriendList!.asMap().entries, (entry) async {
       final index = entry.key;
       final value = entry.value;
 
@@ -133,8 +119,7 @@ class AddResolutionDoneViewModelProvider
             shareResult.fold(
               (failure) => null,
               (success) {
-                state.selectedFriendList?[index] =
-                    state.tempSelectedFriendList![index];
+                state.selectedFriendList?[index] = state.tempSelectedFriendList![index];
               },
             );
 
@@ -159,28 +144,23 @@ class AddResolutionDoneViewModelProvider
             unshareResult.fold(
               (failure) => null,
               (success) {
-                state.selectedFriendList?[index] =
-                    state.tempSelectedFriendList![index];
+                state.selectedFriendList?[index] = state.tempSelectedFriendList![index];
               },
             );
 
-            currentSharedFriendList
-                .removeWhere((entity) => entity.userId == userId);
+            currentSharedFriendList.removeWhere((entity) => entity.userId == userId);
           }
         }
       }
     });
 
-    state.resolutionEntity = state.resolutionEntity
-        ?.copyWith(shareFriendEntityList: currentSharedFriendList);
+    state.resolutionEntity = state.resolutionEntity?.copyWith(shareFriendEntityList: currentSharedFriendList);
   }
 
   Future<void> applyChangedSharingOfGroups() async {
-    List<GroupEntity> currentSharedGroupList =
-        state.resolutionEntity!.shareGroupEntityList?.toList() ?? [];
+    List<GroupEntity> currentSharedGroupList = state.resolutionEntity!.shareGroupEntityList?.toList() ?? [];
 
-    await Future.forEach(state.selectedGroupList!.asMap().entries,
-        (entry) async {
+    await Future.forEach(state.selectedGroupList!.asMap().entries, (entry) async {
       final index = entry.key;
       final value = entry.value;
 
@@ -198,13 +178,11 @@ class AddResolutionDoneViewModelProvider
             shareResult.fold(
               (failure) => null,
               (success) {
-                state.selectedGroupList?[index] =
-                    state.tempSelectedGroupList![index];
+                state.selectedGroupList?[index] = state.tempSelectedGroupList![index];
               },
             );
 
-            currentSharedGroupList
-                .add(state.groupModelList![index].groupEntity);
+            currentSharedGroupList.add(state.groupModelList![index].groupEntity);
           }
           // 공유 취소하기
           else {
@@ -216,19 +194,16 @@ class AddResolutionDoneViewModelProvider
             unshareResult.fold(
               (failure) => null,
               (success) {
-                state.selectedGroupList?[index] =
-                    state.tempSelectedGroupList![index];
+                state.selectedGroupList?[index] = state.tempSelectedGroupList![index];
               },
             );
 
-            currentSharedGroupList
-                .removeWhere((entity) => entity.groupId == groupId);
+            currentSharedGroupList.removeWhere((entity) => entity.groupId == groupId);
           }
         }
       }
     });
 
-    state.resolutionEntity = state.resolutionEntity
-        ?.copyWith(shareGroupEntityList: currentSharedGroupList);
+    state.resolutionEntity = state.resolutionEntity?.copyWith(shareGroupEntityList: currentSharedGroupList);
   }
 }

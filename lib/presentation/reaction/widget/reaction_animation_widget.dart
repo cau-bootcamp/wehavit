@@ -12,12 +12,10 @@ class ReactionAnimationWidget extends ConsumerStatefulWidget {
   const ReactionAnimationWidget({super.key});
 
   @override
-  ConsumerState<ReactionAnimationWidget> createState() =>
-      ReactionAnimationWidgetState();
+  ConsumerState<ReactionAnimationWidget> createState() => ReactionAnimationWidgetState();
 }
 
-class ReactionAnimationWidgetState
-    extends ConsumerState<ReactionAnimationWidget> {
+class ReactionAnimationWidgetState extends ConsumerState<ReactionAnimationWidget> {
   late Map<Key, BalloonWidget> _balloonWidgets;
   late Map<Key, TextBubbleFrameWidget> _textBubbleWidgets;
 
@@ -67,11 +65,9 @@ class ReactionAnimationWidgetState
     _balloonManager.onTapCallbackWithTappedPositionOffset = _callBackFunction;
 
     _textBubbleWidgets = ref.watch(textBubbleAnimationManagerProvider);
-    _textBubbleAnimationManager =
-        ref.read(textBubbleAnimationManagerProvider.notifier);
+    _textBubbleAnimationManager = ref.read(textBubbleAnimationManagerProvider.notifier);
 
-    _reactionAnimationWidgetManager =
-        ref.read(reactionAnimationWidgetManagerProvider.notifier);
+    _reactionAnimationWidgetManager = ref.read(reactionAnimationWidgetManagerProvider.notifier);
     _fetchUserDataFromIdUsecase = ref.watch(getUserDataFromIdUsecaseProvider);
 
     unawaited(showUnreadReactions());
@@ -99,8 +95,7 @@ class ReactionAnimationWidgetState
               children: [
                 IgnorePointer(
                   child: Stack(
-                    children:
-                        emojiFireWorkManager.fireworkWidgets.values.toList(),
+                    children: emojiFireWorkManager.fireworkWidgets.values.toList(),
                   ),
                 ),
                 Stack(
@@ -140,8 +135,7 @@ class ReactionAnimationWidgetState
   }
 
   Future<void> showUnreadReactions() async {
-    final fetchResult =
-        await _reactionAnimationWidgetManager.getUnreadReactionGroupList();
+    final fetchResult = await _reactionAnimationWidgetManager.getUnreadReactionGroupList();
 
     for (var reactionGroupModel in fetchResult) {
       final fetchUserModelResult = await _fetchUserDataFromIdUsecase.call(

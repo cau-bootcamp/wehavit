@@ -20,8 +20,7 @@ class UserDataEntity with _$UserDataEntity {
     int? cumulativeReactions,
   }) = _UserDataEntity;
 
-  factory UserDataEntity.fromJson(Map<String, dynamic> json) =>
-      _$UserDataEntityFromJson(json);
+  factory UserDataEntity.fromJson(Map<String, dynamic> json) => _$UserDataEntityFromJson(json);
 
   static UserDataEntity dummyModel = UserDataEntity(
     userName: 'dummy user',

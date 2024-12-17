@@ -21,14 +21,12 @@ class FirebaseUserModel with _$FirebaseUserModel {
     int? cumulativeReactions,
   }) = _FirebaseUserModel;
 
-  factory FirebaseUserModel.fromJson(Map<String, dynamic> json) =>
-      _$FirebaseUserModelFromJson(json);
+  factory FirebaseUserModel.fromJson(Map<String, dynamic> json) => _$FirebaseUserModelFromJson(json);
 
   factory FirebaseUserModel.fromFireStoreDocument(DocumentSnapshot doc) {
     if (doc.data() == null) throw Exception('Document data was null');
 
-    return FirebaseUserModel.fromJson(doc.data() as Map<String, Object?>)
-        .copyWith();
+    return FirebaseUserModel.fromJson(doc.data() as Map<String, Object?>).copyWith();
   }
 }
 

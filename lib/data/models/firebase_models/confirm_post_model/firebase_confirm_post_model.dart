@@ -22,14 +22,12 @@ class FirebaseConfirmPostModel with _$FirebaseConfirmPostModel {
     required Map<String, bool>? attributes,
   }) = _FirebaseConfirmPostModel;
 
-  factory FirebaseConfirmPostModel.fromJson(Map<String, dynamic> json) =>
-      _$FirebaseConfirmPostModelFromJson(json);
+  factory FirebaseConfirmPostModel.fromJson(Map<String, dynamic> json) => _$FirebaseConfirmPostModelFromJson(json);
 
   factory FirebaseConfirmPostModel.fromFireStoreDocument(DocumentSnapshot doc) {
     if (doc.data() == null) throw Exception('Document data was null');
 
-    return FirebaseConfirmPostModel.fromJson(doc.data() as Map<String, Object?>)
-        .copyWith();
+    return FirebaseConfirmPostModel.fromJson(doc.data() as Map<String, Object?>).copyWith();
   }
 
   factory FirebaseConfirmPostModel.fromConfirmPostEntity(
@@ -68,18 +66,14 @@ extension FirebaseConfirmPostModelConvert on FirebaseConfirmPostModel {
       recentStrike: recentStrike,
       createdAt: createdAt,
       updatedAt: updatedAt,
-      hasRested:
-          attributes?[FirebaseConfirmPostFieldName.attributesHasRested] ??
-              false,
+      hasRested: attributes?[FirebaseConfirmPostFieldName.attributesHasRested] ?? false,
     );
   }
 
   Map<String, dynamic> toFirestoreMap() {
     Map<String, dynamic> result = toJson();
-    result[FirebaseConfirmPostFieldName.updatedAt] =
-        Timestamp.fromDate(updatedAt!);
-    result[FirebaseConfirmPostFieldName.createdAt] =
-        Timestamp.fromDate(createdAt!);
+    result[FirebaseConfirmPostFieldName.updatedAt] = Timestamp.fromDate(updatedAt!);
+    result[FirebaseConfirmPostFieldName.createdAt] = Timestamp.fromDate(createdAt!);
 
     return result;
   }

@@ -16,24 +16,18 @@ class ResolutionListCellWidget extends ConsumerStatefulWidget {
   final bool showDetails;
 
   @override
-  ConsumerState<ResolutionListCellWidget> createState() =>
-      _ResolutionListCellWidgetState();
+  ConsumerState<ResolutionListCellWidget> createState() => _ResolutionListCellWidgetState();
 }
 
-class _ResolutionListCellWidgetState
-    extends ConsumerState<ResolutionListCellWidget> {
+class _ResolutionListCellWidgetState extends ConsumerState<ResolutionListCellWidget> {
   @override
   Widget build(BuildContext context) {
-    EitherFuture<List<bool>> futureDoneList =
-        ref.watch(getTargetResolutionDoneListForWeekUsecaseProvider)(
+    EitherFuture<List<bool>> futureDoneList = ref.watch(getTargetResolutionDoneListForWeekUsecaseProvider)(
       resolutionId: widget.resolutionEntity.resolutionId ?? '',
       startMonday: DateTime.now().getMondayDateTime(),
     );
 
-    final daysSinceFirstDay = DateTime.now()
-            .difference(widget.resolutionEntity.startDate ?? DateTime.now())
-            .inDays +
-        1;
+    final daysSinceFirstDay = DateTime.now().difference(widget.resolutionEntity.startDate ?? DateTime.now()).inDays + 1;
 
     return Container(
       width: double.infinity,
@@ -58,8 +52,7 @@ class _ResolutionListCellWidgetState
                   goalStatement: widget.resolutionEntity.goalStatement ?? '',
                   resolutionName: widget.resolutionEntity.resolutionName ?? '',
                   showGoalStatement: widget.showDetails,
-                  pointColor: PointColors
-                      .colorList[widget.resolutionEntity.colorIndex ?? 0],
+                  pointColor: PointColors.colorList[widget.resolutionEntity.colorIndex ?? 0],
                   iconIndex: widget.resolutionEntity.iconIndex ?? 0,
                 ),
                 const SizedBox(
@@ -78,9 +71,7 @@ class _ResolutionListCellWidgetState
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        daysSinceFirstDay == 1
-                            ? '오늘부터 도전'
-                            : '$daysSinceFirstDay일째 도전 중',
+                        daysSinceFirstDay == 1 ? '오늘부터 도전' : '$daysSinceFirstDay일째 도전 중',
                         style: const TextStyle(
                           color: CustomColors.whWhite,
                           fontSize: 14.0,
@@ -89,8 +80,7 @@ class _ResolutionListCellWidgetState
                       ),
                       ResolutionListWeeklyDoneWidget(
                         futureDoneList: futureDoneList,
-                        pointColor: PointColors
-                            .colorList[widget.resolutionEntity.colorIndex ?? 0],
+                        pointColor: PointColors.colorList[widget.resolutionEntity.colorIndex ?? 0],
                       ),
                     ],
                   ),
@@ -391,8 +381,7 @@ class ResolutionLinearGaugeWidget extends StatelessWidget {
         ],
       ),
       mainWidgetCallback: (successList) {
-        final successCount =
-            successList.where((element) => element == true).length;
+        final successCount = successList.where((element) => element == true).length;
 
         return Column(
           children: [
@@ -447,13 +436,11 @@ class ResolutionLinearGaugeWidget extends StatelessWidget {
                         flex: successCount,
                         child: Container(
                           height: 7,
-                          color: PointColors
-                              .colorList[resolutionEntity?.colorIndex ?? 0],
+                          color: PointColors.colorList[resolutionEntity?.colorIndex ?? 0],
                         ),
                       ),
                       Flexible(
-                        flex: (resolutionEntity?.actionPerWeek ?? 1) -
-                            successCount,
+                        flex: (resolutionEntity?.actionPerWeek ?? 1) - successCount,
                         child: Container(
                           height: 7,
                           color: Colors.transparent,

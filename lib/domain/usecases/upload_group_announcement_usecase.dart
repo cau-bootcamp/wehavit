@@ -17,9 +17,7 @@ class UploadGroupAnnouncementUsecase {
     required String title,
     required String content,
   }) async {
-    final uid = await _userModelRepository
-        .getMyUserId()
-        .then((value) => value.fold((l) => null, (uid) => uid));
+    final uid = await _userModelRepository.getMyUserId().then((value) => value.fold((l) => null, (uid) => uid));
 
     if (uid == null) {
       return Future(() => left(const Failure('cannot get uid')));

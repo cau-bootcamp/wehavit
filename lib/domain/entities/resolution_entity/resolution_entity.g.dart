@@ -6,9 +6,7 @@ part of 'resolution_entity.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ResolutionEntityImpl _$$ResolutionEntityImplFromJson(
-        Map<String, dynamic> json) =>
-    _$ResolutionEntityImpl(
+_$ResolutionEntityImpl _$$ResolutionEntityImplFromJson(Map<String, dynamic> json) => _$ResolutionEntityImpl(
       resolutionId: json['resolutionId'] as String?,
       resolutionName: json['resolutionName'] as String?,
       goalStatement: json['goalStatement'] as String?,
@@ -17,8 +15,7 @@ _$ResolutionEntityImpl _$$ResolutionEntityImplFromJson(
       actionPerWeek: (json['actionPerWeek'] as num?)?.toInt(),
       colorIndex: (json['colorIndex'] as num?)?.toInt(),
       iconIndex: (json['iconIndex'] as num?)?.toInt(),
-      startDate: _$JsonConverterFromJson<Timestamp, DateTime>(
-          json['startDate'], const TimestampConverter().fromJson),
+      startDate: _$JsonConverterFromJson<Timestamp, DateTime>(json['startDate'], const TimestampConverter().fromJson),
       shareFriendEntityList: (json['shareFriendEntityList'] as List<dynamic>?)
           ?.map((e) => UserDataEntity.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -30,14 +27,10 @@ _$ResolutionEntityImpl _$$ResolutionEntityImplFromJson(
       successWeekMondayList: (json['successWeekMondayList'] as List<dynamic>?)
           ?.map((e) => const TimestampConverter().fromJson(e as Timestamp))
           .toList(),
-      weeklyPostCountList: (json['weeklyPostCountList'] as List<dynamic>?)
-          ?.map((e) => (e as num).toInt())
-          .toList(),
+      weeklyPostCountList: (json['weeklyPostCountList'] as List<dynamic>?)?.map((e) => (e as num).toInt()).toList(),
     );
 
-Map<String, dynamic> _$$ResolutionEntityImplToJson(
-        _$ResolutionEntityImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$$ResolutionEntityImplToJson(_$ResolutionEntityImpl instance) => <String, dynamic>{
       'resolutionId': instance.resolutionId,
       'resolutionName': instance.resolutionName,
       'goalStatement': instance.goalStatement,
@@ -46,15 +39,12 @@ Map<String, dynamic> _$$ResolutionEntityImplToJson(
       'actionPerWeek': instance.actionPerWeek,
       'colorIndex': instance.colorIndex,
       'iconIndex': instance.iconIndex,
-      'startDate': _$JsonConverterToJson<Timestamp, DateTime>(
-          instance.startDate, const TimestampConverter().toJson),
+      'startDate': _$JsonConverterToJson<Timestamp, DateTime>(instance.startDate, const TimestampConverter().toJson),
       'shareFriendEntityList': instance.shareFriendEntityList,
       'shareGroupEntityList': instance.shareGroupEntityList,
       'writtenPostCount': instance.writtenPostCount,
       'receivedReactionCount': instance.receivedReactionCount,
-      'successWeekMondayList': instance.successWeekMondayList
-          ?.map(const TimestampConverter().toJson)
-          .toList(),
+      'successWeekMondayList': instance.successWeekMondayList?.map(const TimestampConverter().toJson).toList(),
       'weeklyPostCountList': instance.weeklyPostCountList,
     };
 

@@ -22,10 +22,7 @@ class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
 
     ref.watch(signUpAuthDataViewModelProvider).emailInputController.clear();
     ref.watch(signUpAuthDataViewModelProvider).passwordInputController.clear();
-    ref
-        .watch(signUpAuthDataViewModelProvider)
-        .passwordValidatorInputController
-        .clear();
+    ref.watch(signUpAuthDataViewModelProvider).passwordValidatorInputController.clear();
   }
 
   @override
@@ -170,9 +167,7 @@ class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
                         style: TextStyle(
                           fontWeight: FontWeight.w400,
                           color: viewmodel.isPasswordValid != null
-                              ? (viewmodel.isPasswordValid!
-                                  ? PointColors.green
-                                  : PointColors.red)
+                              ? (viewmodel.isPasswordValid! ? PointColors.green : PointColors.red)
                               : CustomColors.whPlaceholderGrey,
                           fontSize: 14,
                         ),
@@ -240,17 +235,12 @@ class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
                     Container(
                       padding: const EdgeInsets.only(left: 8),
                       child: Visibility(
-                        visible: viewmodel
-                            .passwordValidatorInputController.text.isNotEmpty,
+                        visible: viewmodel.passwordValidatorInputController.text.isNotEmpty,
                         child: Text(
-                          viewmodel.isPasswordMatched
-                              ? '일치합니다'
-                              : '비밀번호와 일치하지 않습니다',
+                          viewmodel.isPasswordMatched ? '일치합니다' : '비밀번호와 일치하지 않습니다',
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
-                            color: viewmodel.isPasswordMatched
-                                ? PointColors.green
-                                : PointColors.red,
+                            color: viewmodel.isPasswordMatched ? PointColors.green : PointColors.red,
                             fontSize: 14,
                           ),
                         ),
@@ -260,10 +250,9 @@ class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
                 ),
                 Expanded(child: Container()),
                 WideColoredButton(
-                  isDiminished: !(viewmodel.isEmailEntered &
-                          (viewmodel.isPasswordValid ?? false) &
-                          viewmodel.isPasswordMatched) |
-                      viewmodel.isProcessing,
+                  isDiminished:
+                      !(viewmodel.isEmailEntered & (viewmodel.isPasswordValid ?? false) & viewmodel.isPasswordMatched) |
+                          viewmodel.isProcessing,
                   buttonTitle: viewmodel.isProcessing ? '처리 중' : '다음',
                   backgroundColor: CustomColors.whYellow,
                   foregroundColor: CustomColors.whBlack,
@@ -284,8 +273,7 @@ class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
                       });
 
                       return result.fold((failure) {
-                        viewmodel.registerFailReason =
-                            RegisterFailReasonConverter.fromExceptionCode(
+                        viewmodel.registerFailReason = RegisterFailReasonConverter.fromExceptionCode(
                           failure.message,
                         );
 

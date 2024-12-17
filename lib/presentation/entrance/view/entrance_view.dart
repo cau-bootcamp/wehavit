@@ -220,8 +220,7 @@ class _AutoEmojiFireworkViewState extends State<AutoEmojiFireworkView> {
               children: [
                 IgnorePointer(
                   child: Stack(
-                    children:
-                        emojiFireWorkManager.fireworkWidgets.values.toList(),
+                    children: emojiFireWorkManager.fireworkWidgets.values.toList(),
                   ),
                 ),
               ],

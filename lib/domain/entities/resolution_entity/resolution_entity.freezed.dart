@@ -29,26 +29,21 @@ mixin _$ResolutionEntity {
   int? get colorIndex => throw _privateConstructorUsedError;
   int? get iconIndex => throw _privateConstructorUsedError;
   DateTime? get startDate => throw _privateConstructorUsedError;
-  List<UserDataEntity>? get shareFriendEntityList =>
-      throw _privateConstructorUsedError;
-  List<GroupEntity>? get shareGroupEntityList =>
-      throw _privateConstructorUsedError;
+  List<UserDataEntity>? get shareFriendEntityList => throw _privateConstructorUsedError;
+  List<GroupEntity>? get shareGroupEntityList => throw _privateConstructorUsedError;
   int? get writtenPostCount => throw _privateConstructorUsedError;
   int? get receivedReactionCount => throw _privateConstructorUsedError;
-  List<DateTime>? get successWeekMondayList =>
-      throw _privateConstructorUsedError;
+  List<DateTime>? get successWeekMondayList => throw _privateConstructorUsedError;
   List<int>? get weeklyPostCountList => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $ResolutionEntityCopyWith<ResolutionEntity> get copyWith =>
-      throw _privateConstructorUsedError;
+  $ResolutionEntityCopyWith<ResolutionEntity> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $ResolutionEntityCopyWith<$Res> {
-  factory $ResolutionEntityCopyWith(
-          ResolutionEntity value, $Res Function(ResolutionEntity) then) =
+  factory $ResolutionEntityCopyWith(ResolutionEntity value, $Res Function(ResolutionEntity) then) =
       _$ResolutionEntityCopyWithImpl<$Res, ResolutionEntity>;
   @useResult
   $Res call(
@@ -70,8 +65,7 @@ abstract class $ResolutionEntityCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$ResolutionEntityCopyWithImpl<$Res, $Val extends ResolutionEntity>
-    implements $ResolutionEntityCopyWith<$Res> {
+class _$ResolutionEntityCopyWithImpl<$Res, $Val extends ResolutionEntity> implements $ResolutionEntityCopyWith<$Res> {
   _$ResolutionEntityCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
@@ -164,10 +158,8 @@ class _$ResolutionEntityCopyWithImpl<$Res, $Val extends ResolutionEntity>
 }
 
 /// @nodoc
-abstract class _$$ResolutionEntityImplCopyWith<$Res>
-    implements $ResolutionEntityCopyWith<$Res> {
-  factory _$$ResolutionEntityImplCopyWith(_$ResolutionEntityImpl value,
-          $Res Function(_$ResolutionEntityImpl) then) =
+abstract class _$$ResolutionEntityImplCopyWith<$Res> implements $ResolutionEntityCopyWith<$Res> {
+  factory _$$ResolutionEntityImplCopyWith(_$ResolutionEntityImpl value, $Res Function(_$ResolutionEntityImpl) then) =
       __$$ResolutionEntityImplCopyWithImpl<$Res>;
   @override
   @useResult
@@ -190,11 +182,9 @@ abstract class _$$ResolutionEntityImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$ResolutionEntityImplCopyWithImpl<$Res>
-    extends _$ResolutionEntityCopyWithImpl<$Res, _$ResolutionEntityImpl>
+class __$$ResolutionEntityImplCopyWithImpl<$Res> extends _$ResolutionEntityCopyWithImpl<$Res, _$ResolutionEntityImpl>
     implements _$$ResolutionEntityImplCopyWith<$Res> {
-  __$$ResolutionEntityImplCopyWithImpl(_$ResolutionEntityImpl _value,
-      $Res Function(_$ResolutionEntityImpl) _then)
+  __$$ResolutionEntityImplCopyWithImpl(_$ResolutionEntityImpl _value, $Res Function(_$ResolutionEntityImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -307,8 +297,7 @@ class _$ResolutionEntityImpl implements _ResolutionEntity {
         _successWeekMondayList = successWeekMondayList,
         _weeklyPostCountList = weeklyPostCountList;
 
-  factory _$ResolutionEntityImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ResolutionEntityImplFromJson(json);
+  factory _$ResolutionEntityImpl.fromJson(Map<String, dynamic> json) => _$$ResolutionEntityImplFromJson(json);
 
   @override
   final String? resolutionId;
@@ -333,8 +322,7 @@ class _$ResolutionEntityImpl implements _ResolutionEntity {
   List<UserDataEntity>? get shareFriendEntityList {
     final value = _shareFriendEntityList;
     if (value == null) return null;
-    if (_shareFriendEntityList is EqualUnmodifiableListView)
-      return _shareFriendEntityList;
+    if (_shareFriendEntityList is EqualUnmodifiableListView) return _shareFriendEntityList;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(value);
   }
@@ -344,8 +332,7 @@ class _$ResolutionEntityImpl implements _ResolutionEntity {
   List<GroupEntity>? get shareGroupEntityList {
     final value = _shareGroupEntityList;
     if (value == null) return null;
-    if (_shareGroupEntityList is EqualUnmodifiableListView)
-      return _shareGroupEntityList;
+    if (_shareGroupEntityList is EqualUnmodifiableListView) return _shareGroupEntityList;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(value);
   }
@@ -359,8 +346,7 @@ class _$ResolutionEntityImpl implements _ResolutionEntity {
   List<DateTime>? get successWeekMondayList {
     final value = _successWeekMondayList;
     if (value == null) return null;
-    if (_successWeekMondayList is EqualUnmodifiableListView)
-      return _successWeekMondayList;
+    if (_successWeekMondayList is EqualUnmodifiableListView) return _successWeekMondayList;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(value);
   }
@@ -370,8 +356,7 @@ class _$ResolutionEntityImpl implements _ResolutionEntity {
   List<int>? get weeklyPostCountList {
     final value = _weeklyPostCountList;
     if (value == null) return null;
-    if (_weeklyPostCountList is EqualUnmodifiableListView)
-      return _weeklyPostCountList;
+    if (_weeklyPostCountList is EqualUnmodifiableListView) return _weeklyPostCountList;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(value);
   }
@@ -386,36 +371,22 @@ class _$ResolutionEntityImpl implements _ResolutionEntity {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ResolutionEntityImpl &&
-            (identical(other.resolutionId, resolutionId) ||
-                other.resolutionId == resolutionId) &&
-            (identical(other.resolutionName, resolutionName) ||
-                other.resolutionName == resolutionName) &&
-            (identical(other.goalStatement, goalStatement) ||
-                other.goalStatement == goalStatement) &&
-            (identical(other.actionStatement, actionStatement) ||
-                other.actionStatement == actionStatement) &&
-            (identical(other.isActive, isActive) ||
-                other.isActive == isActive) &&
-            (identical(other.actionPerWeek, actionPerWeek) ||
-                other.actionPerWeek == actionPerWeek) &&
-            (identical(other.colorIndex, colorIndex) ||
-                other.colorIndex == colorIndex) &&
-            (identical(other.iconIndex, iconIndex) ||
-                other.iconIndex == iconIndex) &&
-            (identical(other.startDate, startDate) ||
-                other.startDate == startDate) &&
-            const DeepCollectionEquality()
-                .equals(other._shareFriendEntityList, _shareFriendEntityList) &&
-            const DeepCollectionEquality()
-                .equals(other._shareGroupEntityList, _shareGroupEntityList) &&
-            (identical(other.writtenPostCount, writtenPostCount) ||
-                other.writtenPostCount == writtenPostCount) &&
+            (identical(other.resolutionId, resolutionId) || other.resolutionId == resolutionId) &&
+            (identical(other.resolutionName, resolutionName) || other.resolutionName == resolutionName) &&
+            (identical(other.goalStatement, goalStatement) || other.goalStatement == goalStatement) &&
+            (identical(other.actionStatement, actionStatement) || other.actionStatement == actionStatement) &&
+            (identical(other.isActive, isActive) || other.isActive == isActive) &&
+            (identical(other.actionPerWeek, actionPerWeek) || other.actionPerWeek == actionPerWeek) &&
+            (identical(other.colorIndex, colorIndex) || other.colorIndex == colorIndex) &&
+            (identical(other.iconIndex, iconIndex) || other.iconIndex == iconIndex) &&
+            (identical(other.startDate, startDate) || other.startDate == startDate) &&
+            const DeepCollectionEquality().equals(other._shareFriendEntityList, _shareFriendEntityList) &&
+            const DeepCollectionEquality().equals(other._shareGroupEntityList, _shareGroupEntityList) &&
+            (identical(other.writtenPostCount, writtenPostCount) || other.writtenPostCount == writtenPostCount) &&
             (identical(other.receivedReactionCount, receivedReactionCount) ||
                 other.receivedReactionCount == receivedReactionCount) &&
-            const DeepCollectionEquality()
-                .equals(other._successWeekMondayList, _successWeekMondayList) &&
-            const DeepCollectionEquality()
-                .equals(other._weeklyPostCountList, _weeklyPostCountList));
+            const DeepCollectionEquality().equals(other._successWeekMondayList, _successWeekMondayList) &&
+            const DeepCollectionEquality().equals(other._weeklyPostCountList, _weeklyPostCountList));
   }
 
   @JsonKey(ignore: true)
@@ -442,8 +413,7 @@ class _$ResolutionEntityImpl implements _ResolutionEntity {
   @override
   @pragma('vm:prefer-inline')
   _$$ResolutionEntityImplCopyWith<_$ResolutionEntityImpl> get copyWith =>
-      __$$ResolutionEntityImplCopyWithImpl<_$ResolutionEntityImpl>(
-          this, _$identity);
+      __$$ResolutionEntityImplCopyWithImpl<_$ResolutionEntityImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -471,8 +441,7 @@ abstract class _ResolutionEntity implements ResolutionEntity {
       final List<DateTime>? successWeekMondayList,
       final List<int>? weeklyPostCountList}) = _$ResolutionEntityImpl;
 
-  factory _ResolutionEntity.fromJson(Map<String, dynamic> json) =
-      _$ResolutionEntityImpl.fromJson;
+  factory _ResolutionEntity.fromJson(Map<String, dynamic> json) = _$ResolutionEntityImpl.fromJson;
 
   @override
   String? get resolutionId;
@@ -506,6 +475,5 @@ abstract class _ResolutionEntity implements ResolutionEntity {
   List<int>? get weeklyPostCountList;
   @override
   @JsonKey(ignore: true)
-  _$$ResolutionEntityImplCopyWith<_$ResolutionEntityImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$ResolutionEntityImplCopyWith<_$ResolutionEntityImpl> get copyWith => throw _privateConstructorUsedError;
 }

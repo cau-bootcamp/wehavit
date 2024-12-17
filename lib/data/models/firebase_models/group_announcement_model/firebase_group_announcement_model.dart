@@ -21,8 +21,7 @@ class FirebaseGroupAnnouncementModel with _$FirebaseGroupAnnouncementModel {
   factory FirebaseGroupAnnouncementModel.fromJson(Map<String, dynamic> json) =>
       _$FirebaseGroupAnnouncementModelFromJson(json);
 
-  factory FirebaseGroupAnnouncementModel.fromFireStoreDocument(
-      DocumentSnapshot doc) {
+  factory FirebaseGroupAnnouncementModel.fromFireStoreDocument(DocumentSnapshot doc) {
     if (doc.data() == null) throw Exception('Document data was null');
 
     return FirebaseGroupAnnouncementModel.fromJson(
@@ -44,8 +43,7 @@ class FirebaseGroupAnnouncementModel with _$FirebaseGroupAnnouncementModel {
   }
 }
 
-extension FirebaseGroupAnnouncementModelConverter
-    on FirebaseGroupAnnouncementModel {
+extension FirebaseGroupAnnouncementModelConverter on FirebaseGroupAnnouncementModel {
   GroupAnnouncementEntity toEntity({required String announcementId}) {
     return GroupAnnouncementEntity(
       groupId: groupId,

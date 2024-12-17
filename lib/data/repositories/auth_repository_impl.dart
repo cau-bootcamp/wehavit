@@ -41,8 +41,7 @@ class AuthRepositoryImpl implements AuthRepository {
       case LogInType.google:
         try {
           futureResult = Future(
-            () async => (await _authSocialDataSource.googleLogInAndSignUp())
-                .map((authResult) => (authResult, null)),
+            () async => (await _authSocialDataSource.googleLogInAndSignUp()).map((authResult) => (authResult, null)),
           );
         } catch (e) {
           return left(Failure(AuthResult.failure.name));
