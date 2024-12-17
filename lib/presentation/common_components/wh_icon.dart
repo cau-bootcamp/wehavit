@@ -1,6 +1,5 @@
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:wehavit/common/constants/constants.dart';
 
 enum WHIconsize {
@@ -62,6 +61,62 @@ class WHIcon extends StatelessWidget {
             ),
           ),
       ],
+    );
+  }
+}
+
+class WhIconButton extends StatelessWidget {
+  const WhIconButton({
+    required this.size,
+    required this.iconData,
+    this.buttonLabel = '',
+    this.badgeCount = 0,
+    required this.onPressed,
+    super.key,
+  });
+
+  final WHIconsize size;
+  final IconData iconData;
+  final int badgeCount;
+  final String buttonLabel;
+  final Function onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final labelTextStyle = switch (size) {
+      WHIconsize.large => context.labelLarge?.bold,
+      WHIconsize.medium => context.labelLarge,
+      WHIconsize.small => context.labelMedium,
+    };
+    final contentGap = switch (size) {
+      WHIconsize.large => 8.0,
+      WHIconsize.medium => 6.0,
+      WHIconsize.small => 4.0,
+    };
+
+    return TextButton(
+      style: TextButton.styleFrom(
+        minimumSize: Size.zero,
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+        tapTargetSize: MaterialTapTargetSize.padded,
+      ),
+      onPressed: () {
+        onPressed;
+      },
+      child: buttonLabel.isEmpty
+          ? WHIcon(size: size, iconData: iconData)
+          : Row(
+              children: [
+                WHIcon(size: size, iconData: iconData),
+                SizedBox(
+                  width: contentGap,
+                ),
+                Text(
+                  buttonLabel,
+                  style: labelTextStyle,
+                ),
+              ],
+            ),
     );
   }
 }
