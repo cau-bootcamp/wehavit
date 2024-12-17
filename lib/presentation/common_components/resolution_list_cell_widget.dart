@@ -52,7 +52,7 @@ class _ResolutionListCellWidgetState extends ConsumerState<ResolutionListCellWid
                   goalStatement: widget.resolutionEntity.goalStatement ?? '',
                   resolutionName: widget.resolutionEntity.resolutionName ?? '',
                   showGoalStatement: widget.showDetails,
-                  pointColor: PointColors.colorList[widget.resolutionEntity.colorIndex ?? 0],
+                  pointColor: CustomColors.pointColorList[widget.resolutionEntity.colorIndex ?? 0],
                   iconIndex: widget.resolutionEntity.iconIndex ?? 0,
                 ),
                 const SizedBox(
@@ -80,7 +80,7 @@ class _ResolutionListCellWidgetState extends ConsumerState<ResolutionListCellWid
                       ),
                       ResolutionListWeeklyDoneWidget(
                         futureDoneList: futureDoneList,
-                        pointColor: PointColors.colorList[widget.resolutionEntity.colorIndex ?? 0],
+                        pointColor: CustomColors.pointColorList[widget.resolutionEntity.colorIndex ?? 0],
                       ),
                     ],
                   ),
@@ -344,7 +344,7 @@ class ResolutionLinearGaugeWidget extends StatelessWidget {
           ),
           LinearProgressIndicator(
             minHeight: 7,
-            color: PointColors.colorList[resolutionEntity?.colorIndex ?? 0],
+            color: CustomColors.pointColorList[resolutionEntity?.colorIndex ?? 0],
             backgroundColor: CustomColors.whDarkBlack,
             borderRadius: BorderRadius.circular(4.0),
           ),
@@ -436,7 +436,7 @@ class ResolutionLinearGaugeWidget extends StatelessWidget {
                         flex: successCount,
                         child: Container(
                           height: 7,
-                          color: PointColors.colorList[resolutionEntity?.colorIndex ?? 0],
+                          color: CustomColors.pointColorList[resolutionEntity?.colorIndex ?? 0],
                         ),
                       ),
                       Flexible(

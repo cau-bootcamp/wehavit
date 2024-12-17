@@ -124,7 +124,7 @@ class ShareTargetGroupListCellWidget extends StatelessWidget {
         Text(
           groupModel.groupEntity.groupName,
           style: TextStyle(
-            color: PointColors.colorList[groupModel.groupEntity.groupColor],
+            color: CustomColors.pointColorList[groupModel.groupEntity.groupColor],
             fontSize: 16.0,
             fontWeight: FontWeight.w700,
           ),

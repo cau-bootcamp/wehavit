@@ -175,7 +175,7 @@ class _LogInViewState extends ConsumerState<LogInView> {
                             text: toastMessage,
                             icon: const Icon(
                               Icons.not_interested,
-                              color: PointColors.red,
+                              color: CustomColors.pointRed,
                             ),
                           );
                         },

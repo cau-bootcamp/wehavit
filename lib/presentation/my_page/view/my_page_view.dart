@@ -117,7 +117,7 @@ class MyPageScreenState extends ConsumerState<MyPageView> with AutomaticKeepAliv
                                   backgroundColor: CustomColors.whSemiBlack,
                                   shadowColor: Colors.transparent,
                                   surfaceTintColor: Colors.transparent,
-                                  overlayColor: PointColors.colorList[resolutionList[index].colorIndex ?? 0],
+                                  overlayColor: CustomColors.pointColorList[resolutionList[index].colorIndex ?? 0],
                                   padding: const EdgeInsets.all(0),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(16.0),
@@ -226,7 +226,7 @@ class MyPageScreenState extends ConsumerState<MyPageView> with AutomaticKeepAliv
               WideColoredButton(
                 buttonTitle: '회원탈퇴',
                 buttonIcon: Icons.no_accounts_outlined,
-                foregroundColor: PointColors.red,
+                foregroundColor: CustomColors.pointRed,
                 onPressed: () async {
                   showCupertinoDialog(
                     context: context,
@@ -237,7 +237,7 @@ class MyPageScreenState extends ConsumerState<MyPageView> with AutomaticKeepAliv
                         actions: [
                           CupertinoDialogAction(
                             textStyle: const TextStyle(
-                              color: PointColors.blue,
+                              color: CustomColors.blue,
                             ),
                             isDefaultAction: true,
                             child: const Text('취소'),

@@ -70,7 +70,7 @@ class DoneCreatingGroupView extends ConsumerWidget {
                                   style: TextStyle(
                                     fontSize: 28.0,
                                     fontWeight: FontWeight.w700,
-                                    color: PointColors.colorList[groupEntity.groupColor],
+                                    color: CustomColors.pointColorList[groupEntity.groupColor],
                                   ),
                                 ),
                                 Padding(

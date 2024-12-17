@@ -73,7 +73,7 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
                           shadowColor: Colors.transparent,
                           surfaceTintColor: Colors.transparent,
                           overlayColor:
-                              PointColors.colorList[viewModel.resolutionModelList![index].entity.colorIndex ?? 0],
+                              CustomColors.pointColorList[viewModel.resolutionModelList![index].entity.colorIndex ?? 0],
                           padding: const EdgeInsets.all(0),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16.0),
@@ -224,7 +224,7 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
                 viewModel.resolutionModelList![index].entity.resolutionName ?? '',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: PointColors.colorList[viewModel.resolutionModelList![index].entity.colorIndex ?? 0],
+                  color: CustomColors.pointColorList[viewModel.resolutionModelList![index].entity.colorIndex ?? 0],
                   fontSize: 18.0,
                   fontWeight: FontWeight.w600,
                 ),

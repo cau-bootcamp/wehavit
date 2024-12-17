@@ -186,7 +186,7 @@ class CreateGroupColorSelectorWidget extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: List<Widget>.generate(
-                PointColors.colorList.length,
+                CustomColors.pointColorList.length,
                 (index) => Padding(
                   padding: const EdgeInsets.only(
                     right: 8.0,
@@ -203,7 +203,7 @@ class CreateGroupColorSelectorWidget extends StatelessWidget {
                         Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: PointColors.colorList[index],
+                            color: CustomColors.pointColorList[index],
                           ),
                           width: 36,
                           height: 36,

@@ -122,7 +122,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                                 '⛳️ 나의 목표',
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
-                                  color: PointColors.colorList[widget.entity.colorIndex ?? 0],
+                                  color: CustomColors.pointColorList[widget.entity.colorIndex ?? 0],
                                   fontSize: 16,
                                 ),
                               ),
@@ -147,7 +147,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                                 '📋 나의 실천 계획',
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
-                                  color: PointColors.colorList[widget.entity.colorIndex ?? 0],
+                                  color: CustomColors.pointColorList[widget.entity.colorIndex ?? 0],
                                   fontSize: 16,
                                 ),
                               ),
@@ -173,7 +173,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                                 '📅 도전 시작일',
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
-                                  color: PointColors.colorList[widget.entity.colorIndex ?? 0],
+                                  color: CustomColors.pointColorList[widget.entity.colorIndex ?? 0],
                                   fontSize: 16,
                                 ),
                               ),
@@ -291,7 +291,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          color: PointColors.colorList[widget.entity.colorIndex ?? 0],
+                          color: CustomColors.pointColorList[widget.entity.colorIndex ?? 0],
                           dataSource: List<ChartData>.generate(
                             widget.entity.weeklyPostCountList?.length ?? 0,
                             (index) => ChartData(
@@ -723,7 +723,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
               WideColoredButton(
                 buttonTitle: '목표 삭제하기',
                 buttonIcon: Icons.flag_outlined,
-                foregroundColor: PointColors.red,
+                foregroundColor: CustomColors.pointRed,
                 onPressed: () async {
                   showCupertinoDialog(
                     context: context,
@@ -734,7 +734,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                         actions: [
                           CupertinoDialogAction(
                             textStyle: const TextStyle(
-                              color: PointColors.blue,
+                              color: CustomColors.pointBlue,
                             ),
                             isDefaultAction: true,
                             child: const Text('취소'),

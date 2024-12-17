@@ -356,7 +356,7 @@ class _EditUserDetailViewState extends ConsumerState<EditUserDetailView> {
                                 text: toastMessage,
                                 icon: const Icon(
                                   Icons.not_interested,
-                                  color: PointColors.red,
+                                  color: CustomColors.pointRed,
                                 ),
                               );
                             },

@@ -315,7 +315,7 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                         SingleChildScrollView(
                           child: Row(
                             children: List<Widget>.generate(
-                              PointColors.colorList.length,
+                              CustomColors.pointColorList.length,
                               (int index) => TextButton(
                                 style: TextButton.styleFrom(
                                   minimumSize: Size.zero,
@@ -335,7 +335,7 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                                   width: 36,
                                   height: 36,
                                   decoration: BoxDecoration(
-                                    color: PointColors.colorList[index],
+                                    color: CustomColors.pointColorList[index],
                                     shape: BoxShape.circle,
                                   ),
                                   child: Visibility(

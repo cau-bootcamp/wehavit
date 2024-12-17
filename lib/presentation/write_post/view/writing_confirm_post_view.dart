@@ -114,7 +114,7 @@ class _WritingConfirmPostViewState extends ConsumerState<WritingConfirmPostView>
                 Text(
                   widget.entity.goalStatement ?? '',
                   style: TextStyle(
-                    color: PointColors.colorList[widget.entity.colorIndex ?? 0],
+                    color: CustomColors.pointColorList[widget.entity.colorIndex ?? 0],
                     fontSize: 16.0,
                     fontWeight: FontWeight.w600,
                   ),
