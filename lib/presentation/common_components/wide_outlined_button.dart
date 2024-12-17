@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:wehavit/common/constants/constants.dart';
 import 'package:wehavit/presentation/common_components/wh_icon.dart';
 
-class WideColoredButton extends StatelessWidget {
-  const WideColoredButton({
+class WideOutlinedButton extends StatelessWidget {
+  const WideOutlinedButton({
     super.key,
-    this.backgroundColor = CustomColors.whYellow500,
     this.foregroundColor = CustomColors.whGrey800,
     required this.buttonTitle,
     required this.onPressed,
@@ -14,7 +13,6 @@ class WideColoredButton extends StatelessWidget {
     this.isDiminished = false,
   });
 
-  final Color backgroundColor;
   final Color foregroundColor;
   final String buttonTitle;
   final IconData? buttonIcon;
@@ -32,9 +30,13 @@ class WideColoredButton extends StatelessWidget {
               Radius.circular(20.0),
             ),
           ),
-          backgroundColor: CustomColors.whGrey,
+          backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
           surfaceTintColor: Colors.transparent,
+          side: const BorderSide(
+            color: CustomColors.whGrey500,
+            width: 2,
+          ),
         ),
         child: Container(
           alignment: Alignment.center,
@@ -42,10 +44,8 @@ class WideColoredButton extends StatelessWidget {
           height: 58,
           child: Text(
             buttonTitle,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: CustomColors.whPlaceholderGrey,
+            style: context.bodyLarge?.bold.copyWith(
+              color: CustomColors.whGrey500,
             ),
           ),
         ),
@@ -56,13 +56,17 @@ class WideColoredButton extends StatelessWidget {
           onPressed();
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: backgroundColor,
+          backgroundColor: Colors.transparent,
           foregroundColor: foregroundColor,
           shadowColor: Colors.transparent,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(20.0),
             ),
+          ),
+          side: BorderSide(
+            color: foregroundColor,
+            width: 2,
           ),
         ),
         child: Container(
@@ -79,7 +83,7 @@ class WideColoredButton extends StatelessWidget {
                   children: [
                     Text(
                       buttonTitle,
-                      style: context.bodyLarge?.bold,
+                      style: context.bodyLarge?.bold.copyWith(color: foregroundColor),
                     ),
                     const SizedBox(width: 8),
                     WHIcon(

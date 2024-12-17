@@ -12,12 +12,14 @@ class WHIcon extends StatelessWidget {
   const WHIcon({
     required this.size,
     required this.iconData,
+    this.iconColor = CustomColors.whGrey900,
     this.badgeCount = 0,
     super.key,
   });
 
   final WHIconsize size;
   final IconData iconData;
+  final Color iconColor;
   final int badgeCount;
 
   @override
@@ -44,7 +46,7 @@ class WHIcon extends StatelessWidget {
         Icon(
           iconData,
           size: iconSize,
-          color: CustomColors.whGrey900,
+          color: iconColor,
         ),
         if (badgeCount > 0)
           Positioned(
