@@ -36,14 +36,14 @@ class SmallColoredButtonWidget extends StatelessWidget {
           if (isDisabled != false) onPressed();
         },
         child: Container(
-          height: 30,
           padding: const EdgeInsets.symmetric(
-            horizontal: 16.0,
+            horizontal: 8.0,
+            vertical: 6.0,
           ),
           alignment: Alignment.center,
           child: Text(
             buttonLabel,
-            style: context.labelLarge?.bold.copyWith(color: foregroundColor),
+            style: context.labelMedium?.bold.copyWith(color: foregroundColor),
           ),
         ),
       ),

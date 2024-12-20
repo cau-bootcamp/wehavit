@@ -9,6 +9,9 @@ class WHIcons {
   static String quickshot = '􀌞';
   static String shareTo = '􀜄';
 
+  static String menu = '􀌇';
+  static String more = '􀍠';
+  static String back = '􀆉';
   static String checkMark = '􀆅';
   static String xMark = '􀆄';
   static String xMarkCircle = '􀁡';

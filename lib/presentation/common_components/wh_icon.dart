@@ -36,6 +36,7 @@ class WHIcon extends StatelessWidget {
         style: TextStyle(
           fontFamily: 'SF-Pro',
           color: iconColor,
+          fontWeight: FontWeight.w500,
           fontSize: iconSize,
         ),
       ),
@@ -67,9 +68,9 @@ class WhIconButton extends StatelessWidget {
       WHIconsize.small => context.labelMedium,
     };
     final contentGap = switch (size) {
-      WHIconsize.large => 8.0,
-      WHIconsize.medium => 6.0,
-      WHIconsize.small => 4.0,
+      WHIconsize.large => 12.0,
+      WHIconsize.medium => 10.0,
+      WHIconsize.small => 8.0,
     };
     final badgeTextStyle = switch (size) {
       WHIconsize.large => context.labelMedium?.bold,
@@ -108,22 +109,24 @@ class WhIconButton extends StatelessWidget {
         tapTargetSize: MaterialTapTargetSize.padded,
       ),
       onPressed: () {
-        onPressed;
+        onPressed();
       },
-      child: buttonLabel.isEmpty
-          ? whIcon
-          : Row(
-              children: [
-                whIcon,
-                SizedBox(
-                  width: contentGap,
-                ),
-                Text(
-                  buttonLabel,
-                  style: labelTextStyle,
-                ),
-              ],
-            ),
+      child: switch ((buttonLabel.isNotEmpty, iconString.isNotEmpty)) {
+        (true, true) => Row(
+            children: [
+              whIcon,
+              SizedBox(width: contentGap),
+              Text(buttonLabel, style: labelTextStyle),
+            ],
+          ),
+        (false, true) => whIcon,
+        (true, false) => Text(
+            buttonLabel,
+            style: labelTextStyle,
+            textAlign: TextAlign.left,
+          ),
+        (false, false) => throw UnimplementedError(),
+      },
     );
   }
 }
