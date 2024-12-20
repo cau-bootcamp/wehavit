@@ -10,14 +10,14 @@ class WideColoredButton extends StatelessWidget {
     this.foregroundColor = CustomColors.whGrey800,
     required this.buttonTitle,
     required this.onPressed,
-    this.buttonIcon,
+    this.iconString = '',
     this.isDiminished = false,
   });
 
   final Color backgroundColor;
   final Color foregroundColor;
   final String buttonTitle;
-  final IconData? buttonIcon;
+  final String iconString;
   final Function onPressed;
   final bool isDiminished;
 
@@ -69,7 +69,7 @@ class WideColoredButton extends StatelessWidget {
           alignment: Alignment.center,
           width: double.infinity,
           height: 58,
-          child: buttonIcon == null
+          child: iconString.isEmpty
               ? Text(
                   buttonTitle,
                   style: context.bodyLarge?.bold.copyWith(color: foregroundColor),
@@ -84,7 +84,7 @@ class WideColoredButton extends StatelessWidget {
                     const SizedBox(width: 8),
                     WHIcon(
                       size: WHIconsize.medium,
-                      iconData: buttonIcon!,
+                      iconString: iconString,
                       iconColor: foregroundColor,
                     ),
                   ],

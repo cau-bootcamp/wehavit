@@ -20,7 +20,7 @@ class CustomColors {
   static const Color whYellow100 = Color(0xFF564626);
   static const Color whYellow200 = Color(0xFF8C6500);
   static const Color whYellow300 = Color(0xFFB18000);
-  static const Color whYellow500 = Color(0xFFFFB700);
+  static const Color whYellow500 = Color(0xFFFFB800);
   static const Color whYellow700 = Color(0xFFFFDC85);
 
   // legacy
@@ -61,7 +61,7 @@ class CustomColors {
 
   static const Color pointRed = Color(0xFFF74F3F);
   static const Color pointOrange = Color(0xFFE56229);
-  static const Color pointYellow = Color(0xFFE6AE1C);
+  static const Color pointYellow = Color(0xFFFFB800);
   static const Color pointGreen = Color(0xFF28A954);
   static const Color pointBlue = Color(0xFF2F74DB);
   static const Color pointPurple = Color(0xFF8861FD);

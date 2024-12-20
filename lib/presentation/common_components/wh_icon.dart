@@ -11,16 +11,14 @@ enum WHIconsize {
 class WHIcon extends StatelessWidget {
   const WHIcon({
     required this.size,
-    required this.iconData,
+    required this.iconString,
     this.iconColor = CustomColors.whGrey900,
-    this.badgeCount = 0,
     super.key,
   });
 
   final WHIconsize size;
-  final IconData iconData;
+  final String iconString;
   final Color iconColor;
-  final int badgeCount;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +26,50 @@ class WHIcon extends StatelessWidget {
       WHIconsize.large => 28.0,
       WHIconsize.medium => 22.0,
       WHIconsize.small => 16.0,
+    };
+
+    return SizedBox(
+      width: iconSize,
+      height: iconSize,
+      child: Text(
+        iconString,
+        style: TextStyle(
+          fontFamily: 'SF-Pro',
+          color: iconColor,
+          fontSize: iconSize,
+        ),
+      ),
+    );
+  }
+}
+
+class WhIconButton extends StatelessWidget {
+  const WhIconButton({
+    required this.size,
+    required this.iconString,
+    this.buttonLabel = '',
+    this.badgeCount = 0,
+    required this.onPressed,
+    super.key,
+  });
+
+  final WHIconsize size;
+  final String iconString;
+  final int badgeCount;
+  final String buttonLabel;
+  final Function onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final labelTextStyle = switch (size) {
+      WHIconsize.large => context.labelLarge,
+      WHIconsize.medium => context.labelLarge,
+      WHIconsize.small => context.labelMedium,
+    };
+    final contentGap = switch (size) {
+      WHIconsize.large => 8.0,
+      WHIconsize.medium => 6.0,
+      WHIconsize.small => 4.0,
     };
     final badgeTextStyle = switch (size) {
       WHIconsize.large => context.labelMedium?.bold,
@@ -39,15 +81,9 @@ class WHIcon extends StatelessWidget {
       WHIconsize.medium => 3.0,
       WHIconsize.small => 2.0,
     };
-
-    return Stack(
-      clipBehavior: Clip.none,
+    final whIcon = Stack(
       children: [
-        Icon(
-          iconData,
-          size: iconSize,
-          color: iconColor,
-        ),
+        WHIcon(size: size, iconString: iconString),
         if (badgeCount > 0)
           Positioned(
             right: -1.5 * badgePadding,
@@ -64,37 +100,6 @@ class WHIcon extends StatelessWidget {
           ),
       ],
     );
-  }
-}
-
-class WhIconButton extends StatelessWidget {
-  const WhIconButton({
-    required this.size,
-    required this.iconData,
-    this.buttonLabel = '',
-    this.badgeCount = 0,
-    required this.onPressed,
-    super.key,
-  });
-
-  final WHIconsize size;
-  final IconData iconData;
-  final int badgeCount;
-  final String buttonLabel;
-  final Function onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    final labelTextStyle = switch (size) {
-      WHIconsize.large => context.labelLarge?.bold,
-      WHIconsize.medium => context.labelLarge,
-      WHIconsize.small => context.labelMedium,
-    };
-    final contentGap = switch (size) {
-      WHIconsize.large => 8.0,
-      WHIconsize.medium => 6.0,
-      WHIconsize.small => 4.0,
-    };
 
     return TextButton(
       style: TextButton.styleFrom(
@@ -106,10 +111,10 @@ class WhIconButton extends StatelessWidget {
         onPressed;
       },
       child: buttonLabel.isEmpty
-          ? WHIcon(size: size, iconData: iconData)
+          ? whIcon
           : Row(
               children: [
-                WHIcon(size: size, iconData: iconData),
+                whIcon,
                 SizedBox(
                   width: contentGap,
                 ),
