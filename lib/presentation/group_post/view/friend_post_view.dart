@@ -91,7 +91,7 @@ class _FriendPostViewState extends ConsumerState<FriendPostView> {
   Widget build(BuildContext context) {
     final viewModel = ref.watch(friendPostViewModelProvider);
     final provider = ref.read(friendPostViewModelProvider.notifier);
-    final reactionCameraViewModel = ref.watch(reactionCameraWidgetModelProvider);
+    // final reactionCameraViewModel = ref.watch(reactionCameraWidgetModelProvider);
 
     return Stack(
       children: [
@@ -227,9 +227,9 @@ class _FriendPostViewState extends ConsumerState<FriendPostView> {
                         ),
                         child: SingleChildScrollView(
                           padding: const EdgeInsets.only(bottom: 20.0),
-                          physics: reactionCameraViewModel.isFocusingMode
-                              ? const NeverScrollableScrollPhysics()
-                              : const AlwaysScrollableScrollPhysics(),
+                          // physics: reactionCameraViewModel.isFocusingMode
+                          //     ? const NeverScrollableScrollPhysics()
+                          //     : const AlwaysScrollableScrollPhysics(),
                           child: Column(
                             children: List<Widget>.generate(
                               entityList.length,
@@ -251,7 +251,16 @@ class _FriendPostViewState extends ConsumerState<FriendPostView> {
             ),
           ),
         ),
-        const ReactionCameraWidget(),
+        ValueListenableBuilder(
+          valueListenable: reactionCameraWidgetModeNotifier,
+          builder: (context, value, child) {
+            if (value != ReactionCameraWidgetMode.none) {
+              return const ReactionCameraWidget();
+            } else {
+              return Container();
+            }
+          },
+        ),
       ],
     );
   }
