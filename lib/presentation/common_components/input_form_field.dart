@@ -9,7 +9,8 @@ class InputFormField extends StatefulWidget {
   const InputFormField({
     required this.textEditingController,
     this.placeholder = '',
-    this.type = TextInputType.text,
+    this.textInputType = TextInputType.text,
+    this.textInputAction = TextInputAction.done,
     this.isObscure = false,
     this.maxLines = 1,
     this.maxLength = 100,
@@ -19,7 +20,8 @@ class InputFormField extends StatefulWidget {
 
   final TextEditingController textEditingController;
   final String placeholder;
-  final TextInputType type;
+  final TextInputType textInputType;
+  final TextInputAction textInputAction;
   final int maxLines;
   final int maxLength;
   final bool isObscure;
@@ -33,7 +35,8 @@ class InputFormField extends StatefulWidget {
   State<InputFormField> createState() => _InputFormFieldState(
         textEditingController,
         placeholder,
-        type,
+        textInputType,
+        textInputAction,
         isObscure,
         descrptionHandler,
       );
@@ -43,14 +46,16 @@ class _InputFormFieldState extends State<InputFormField> {
   _InputFormFieldState(
     this.controller,
     this.placeholder,
-    this.type,
+    this.textInputType,
+    this.textInputAction,
     this.isObscure,
     this.descrptionHandler,
   );
 
   final TextEditingController controller;
   final String placeholder;
-  final TextInputType type;
+  final TextInputType textInputType;
+  final TextInputAction textInputAction;
   final bool isObscure;
   final (String, FormFieldDescriptionType)? Function(String)? descrptionHandler;
   Timer? _debounce;
@@ -111,7 +116,8 @@ class _InputFormFieldState extends State<InputFormField> {
             ),
           ),
           controller: controller,
-          keyboardType: type,
+          keyboardType: textInputType,
+          textInputAction: textInputAction,
           obscureText: isObscure,
           onChanged: onChanged,
         ),
