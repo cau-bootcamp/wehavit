@@ -1,10 +1,13 @@
 export 'circle_profile_image.dart';
 export 'either_future_builder.dart';
 export 'gradient_bottom_sheet.dart';
+export 'input_form_field.dart';
 export 'loading_widget.dart';
 export 'resolution_list_cell_widget.dart';
 export 'show_toast_message.dart';
 export 'small_colored_button.dart';
 export 'user_profile_bar.dart';
 export 'wehavit_app_bar.dart';
+export 'wh_icon.dart';
 export 'wide_colored_button.dart';
+export 'wide_outlined_button.dart';
