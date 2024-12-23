@@ -5,7 +5,7 @@ class WehavitTheme {
   static final defaultTheme = ThemeData(
     textTheme: const TextTheme(
       displayLarge: TextStyle(
-        fontFamily: 'Giant',
+        fontFamily: 'Giants',
         fontSize: 45.0,
         fontWeight: FontWeight.w400,
         height: 1.0,
@@ -13,7 +13,7 @@ class WehavitTheme {
         color: CustomColors.whWhite,
       ),
       displayMedium: TextStyle(
-        fontFamily: 'Pretendard',
+        fontFamily: 'Giants',
         fontSize: 30.0,
         fontWeight: FontWeight.w400,
         height: 1.8,
@@ -21,7 +21,7 @@ class WehavitTheme {
         color: CustomColors.whWhite,
       ),
       displaySmall: TextStyle(
-        fontFamily: 'Pretendard',
+        fontFamily: 'Giants',
         fontSize: 24.0,
         fontWeight: FontWeight.w700,
         height: 1.0,
