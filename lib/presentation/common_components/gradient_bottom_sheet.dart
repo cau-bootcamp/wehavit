@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wehavit/common/common.dart';
 
 class GradientBottomSheet extends StatelessWidget {
-  GradientBottomSheet(
+  const GradientBottomSheet(
     this.content, {
     super.key,
   });
@@ -21,8 +21,8 @@ class GradientBottomSheet extends StatelessWidget {
             width: double.infinity,
             decoration: const BoxDecoration(
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20.0),
-                topRight: Radius.circular(20.0),
+                topLeft: Radius.circular(16.0),
+                topRight: Radius.circular(16.0),
               ),
               gradient: CustomColors.bottomSheetGradient,
             ),
@@ -32,16 +32,16 @@ class GradientBottomSheet extends StatelessWidget {
                 constraints: const BoxConstraints.expand(),
                 child: Column(
                   children: [
-                    Container(
-                      height: 5,
-                      width: 72,
-                      decoration: const BoxDecoration(
-                        color: CustomColors.whPlaceholderGrey,
-                        borderRadius: BorderRadius.all(Radius.circular(2.0)),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16.0),
+                      child: Container(
+                        height: 4,
+                        width: 32,
+                        decoration: const BoxDecoration(
+                          color: CustomColors.whGrey900,
+                          borderRadius: BorderRadius.all(Radius.circular(2.0)),
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 16,
                     ),
                     content,
                   ],
