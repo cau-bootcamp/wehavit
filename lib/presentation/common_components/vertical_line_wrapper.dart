@@ -4,9 +4,11 @@ import 'package:wehavit/common/common.dart';
 class VerticalLineWrapper extends StatelessWidget {
   const VerticalLineWrapper({
     required this.contents,
+    this.color = CustomColors.pointYellow,
     super.key,
   });
 
+  final Color color;
   final List<Widget> contents;
 
   @override
@@ -16,9 +18,9 @@ class VerticalLineWrapper extends StatelessWidget {
         children: [
           Container(
             width: 4.0,
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(2.0)),
-              color: CustomColors.whGrey400,
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(2.0)),
+              color: color,
             ),
           ),
           const SizedBox(width: 16),

@@ -95,6 +95,7 @@ class GroupListCellContent extends StatelessWidget {
             height: 12,
           ),
           VerticalLineWrapper(
+            color: CustomColors.whGrey400,
             contents: [
               Container(
                 width: 70,
