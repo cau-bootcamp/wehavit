@@ -103,7 +103,7 @@ class WehavitTheme {
       labelLarge: TextStyle(
         fontFamily: 'Pretendard',
         fontSize: 16.0,
-        fontWeight: FontWeight.w800,
+        fontWeight: FontWeight.w600,
         height: 1.0,
         letterSpacing: 0,
         color: CustomColors.whWhite,
