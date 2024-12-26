@@ -4,7 +4,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/either_future_builder.dart';
-import 'package:wehavit/presentation/group/model/group_list_view_cell_widget_model.dart';
+import 'package:wehavit/presentation/common_components/vertical_line_wrapper.dart';
 
 class GroupListCellModel {
   GroupListCellModel({
@@ -94,53 +94,35 @@ class GroupListCellContent extends StatelessWidget {
           const SizedBox(
             height: 12,
           ),
-          IntrinsicHeight(
-            child: Row(
-              children: [
-                Container(
-                  width: 4.0,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(2.0)),
-                    color: CustomColors.whGrey400,
-                  ),
+          VerticalLineWrapper(
+            contents: [
+              Container(
+                width: 70,
+                height: 22,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(4)),
+                  color: CustomColors.whGrey400,
                 ),
-                const SizedBox(width: 16),
-                Padding(
-                  padding: const EdgeInsets.symmetric(),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: 70,
-                        height: 22,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(4)),
-                          color: CustomColors.whGrey400,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Container(
-                        width: 100,
-                        height: 22,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(4)),
-                          color: CustomColors.whGrey400,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Container(
-                        width: 126,
-                        height: 22,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(4)),
-                          color: CustomColors.whGrey400,
-                        ),
-                      ),
-                    ],
-                  ),
+              ),
+              const SizedBox(height: 8),
+              Container(
+                width: 100,
+                height: 22,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(4)),
+                  color: CustomColors.whGrey400,
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 8),
+              Container(
+                width: 126,
+                height: 22,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(4)),
+                  color: CustomColors.whGrey400,
+                ),
+              ),
+            ],
           ),
         ],
       ),
