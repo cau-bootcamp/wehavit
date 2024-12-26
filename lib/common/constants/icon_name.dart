@@ -33,4 +33,6 @@ class WHIcons {
   static const String emojiPigeon = '🕊️';
   static const String emojiEyes = '👀';
   static const String emojiClap = '👏';
+  static const String emojiFlag = '⛳️';
+  static const String emojiClipboard = '📋';
 }
