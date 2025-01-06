@@ -28,7 +28,12 @@ class WHIcons {
   static const String logout = '􀜗';
   static const String withdraw = '􀁎';
 
-// test
+  // reaction
+  static const String reactionComment = '􀌤';
+  static const String reactionEmoji = '􀎸';
+  static const String reactionQuickshot = '􀌞';
+
+  // test
   static const String emojiCalendar = '📅';
   static const String emojiPigeon = '🕊️';
   static const String emojiEyes = '👀';
