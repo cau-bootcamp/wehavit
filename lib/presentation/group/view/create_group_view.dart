@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
+import 'package:wehavit/presentation/common_components/color_selection_list_cell.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/group/group.dart';
 
@@ -23,7 +24,7 @@ class _CreateGroupViewState extends ConsumerState<CreateGroupView> {
     return Scaffold(
       backgroundColor: CustomColors.whDarkBlack,
       appBar: WehavitAppBar(
-        title: '그룹 만들기',
+        titleLabel: '그룹 만들기',
         leadingTitle: '취소',
         leadingAction: () {
           Navigator.pop(context);
@@ -137,7 +138,6 @@ class _CreateGroupViewState extends ConsumerState<CreateGroupView> {
                         // ignore: use_build_context_synchronously
                         context,
                         text: '잠시 후 다시 시도해주세요',
-                        icon: const Icon(Icons.not_interested),
                       );
                     }
                   }
@@ -186,39 +186,48 @@ class CreateGroupColorSelectorWidget extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: List<Widget>.generate(
-                PointColors.colorList.length,
+                CustomColors.pointColorList.length,
                 (index) => Padding(
                   padding: const EdgeInsets.only(
                     right: 8.0,
                   ),
-                  child: GestureDetector(
-                    onTapUp: (details) {
+                  child: ColorSelectionListCell(
+                    isSelected: index == viewModel.groupColorIndex,
+                    backgroundColor: CustomColors.pointColorList[index],
+                    onTap: () {
                       provider.setGroupColorIndex(index);
-
                       onPressed();
                     },
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: PointColors.colorList[index],
-                          ),
-                          width: 36,
-                          height: 36,
-                        ),
-                        Visibility(
-                          visible: index == viewModel.groupColorIndex,
-                          child: const Icon(
-                            Icons.check_circle_outline,
-                            color: CustomColors.whBlack,
-                            size: 36,
-                          ),
-                        ),
-                      ],
-                    ),
                   ),
+
+                  // GestureDetector(
+                  //   onTapUp: (details) {
+                  //     provider.setGroupColorIndex(index);
+
+                  //     onPressed();
+                  //   },
+                  //   child: Stack(
+                  //     alignment: Alignment.center,
+                  //     children: [
+                  //       Container(
+                  //         decoration: BoxDecoration(
+                  //           shape: BoxShape.circle,
+                  //           color: CustomColors.pointColorList[index],
+                  //         ),
+                  //         width: 36,
+                  //         height: 36,
+                  //       ),
+                  //       Visibility(
+                  //         visible: index == viewModel.groupColorIndex,
+                  //         child: const Icon(
+                  //           Icons.check_circle_outline,
+                  //           color: CustomColors.whBlack,
+                  //           size: 36,
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                 ),
               ),
             ),

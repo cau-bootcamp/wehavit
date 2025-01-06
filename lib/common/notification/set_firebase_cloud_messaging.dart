@@ -10,7 +10,7 @@ import 'package:wehavit/presentation/reaction/reaction.dart';
 /// 알림 권한 요청 및 푸쉬 알림으로 앱 진입 시 라우팅을 처리하는 로직
 ///
 Future<String?> setFirebaseCloudMessaging(
-  GlobalKey reactionWidgetChildKey,
+  Key reactionWidgetChildKey,
 ) async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

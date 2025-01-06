@@ -1,14 +1,15 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/widgets.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
 
-class ProfileImageCircleWidget extends StatelessWidget {
-  const ProfileImageCircleWidget({
+class CircleProfileImage extends StatelessWidget {
+  const CircleProfileImage({
     required this.size,
     required this.url,
     super.key,
   });
 
-  final String? url;
+  final String url;
   final double size;
 
   @override
@@ -18,17 +19,14 @@ class ProfileImageCircleWidget extends StatelessWidget {
       height: size,
       decoration: const BoxDecoration(
         shape: BoxShape.circle,
-        color: CustomColors.whBrightGrey,
+        color: CustomColors.whGrey600,
       ),
       clipBehavior: Clip.hardEdge,
-      child: Image.network(
-        url ?? '',
+      child: CachedNetworkImage(
+        imageUrl: url,
         fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) {
-          return Container(
-            color: CustomColors.whBrightGrey,
-          );
-        },
+        placeholder: (context, _) => Container(color: CustomColors.whGrey600),
+        errorWidget: (context, _, __) => Container(color: CustomColors.whGrey600),
       ),
     );
   }

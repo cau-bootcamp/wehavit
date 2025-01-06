@@ -1,122 +1,71 @@
 import 'package:flutter/material.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:wehavit/common/constants/constants.dart';
+import 'package:wehavit/presentation/common_components/common_components.dart';
 
-AppBar WehavitAppBar({
-  required String title,
-  String? leadingTitle,
-  Function? leadingAction,
-  IconData? leadingIcon,
-  String? trailingTitle,
-  Function? trailingAction,
-  IconData? trailingIcon,
-  int? trailingIconBadgeCount,
-}) {
-  return AppBar(
-    scrolledUnderElevation: 0,
-    elevation: 0,
-    title: Text(
-      title,
-      style: const TextStyle(
-        fontWeight: FontWeight.w600,
-        color: Colors.white,
-        fontSize: 20,
+class WehavitAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const WehavitAppBar({
+    required this.titleLabel,
+    this.leadingTitle = '',
+    this.leadingAction,
+    this.leadingIconString = '',
+    this.trailingTitle = '',
+    this.trailingAction,
+    this.trailingIconString = '',
+    this.trailingIconBadgeCount = 0,
+    super.key,
+  });
+
+  final String titleLabel;
+  final String leadingTitle;
+  final String leadingIconString;
+  final Function? leadingAction;
+  final String trailingTitle;
+  final String trailingIconString;
+  final Function? trailingAction;
+  final int trailingIconBadgeCount;
+
+  @override
+  Widget build(BuildContext context) {
+    final isLeadingVisible = leadingTitle.isNotEmpty || leadingIconString.isNotEmpty;
+    final isTrailingVisible = trailingTitle.isNotEmpty || trailingIconString.isNotEmpty;
+
+    const Assert('isLeadingVisible && leadingAction != null', 'WehavitAppBar의 Leading Action이 포함되지 않았어요');
+    const Assert('isTrailingVisible && trailingAction != null', 'WehavitAppBar의 Trailing Action이 포함되지 않았어요');
+
+    return AppBar(
+      scrolledUnderElevation: 0,
+      elevation: 0,
+      title: Text(
+        titleLabel,
+        style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: CustomColors.whGrey900),
       ),
-    ),
-    centerTitle: leadingTitle != null ? true : false,
-    leadingWidth: leadingTitle != null ? 100 : 0,
-    leading: Visibility(
-      visible: leadingTitle != null,
-      child: TextButton.icon(
-        style: TextButton.styleFrom(
-          padding: const EdgeInsets.only(
-            left: 8,
-          ),
-          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          alignment: Alignment.centerLeft,
-        ),
-        icon: Icon(
-          leadingIcon,
-          color: CustomColors.whWhite,
-          size: leadingIcon != null ? 24.0 : 0,
-        ),
-        label: Text(
-          leadingTitle ?? '',
-          style: const TextStyle(
-            fontSize: 17.0,
-            fontWeight: FontWeight.w400,
-            color: CustomColors.whWhite,
-          ),
-        ),
-        onPressed: () {
-          if (leadingAction != null) {
-            leadingAction();
-          }
-        },
-      ),
-    ),
-    actions: [
-      Visibility(
-        visible: trailingTitle != null || trailingIcon != null,
-        child: Container(
-          margin: const EdgeInsets.only(right: 8.0),
-          child: Directionality(
-            textDirection: TextDirection.rtl,
-            child: TextButton.icon(
-              style: TextButton.styleFrom(
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                alignment: Alignment.centerLeft,
-              ),
-              icon: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Icon(
-                    trailingIcon,
-                    color: CustomColors.whWhite,
-                    size: trailingIcon != null ? 28.0 : 0,
-                  ),
-                  if (trailingIconBadgeCount != null && trailingIconBadgeCount > 0)
-                    Positioned(
-                      right: -6,
-                      top: -4,
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: 17,
-                        height: 17,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: CustomColors.whRed,
-                        ),
-                        child: Text(
-                          trailingIconBadgeCount.toString(),
-                          style: const TextStyle(
-                            fontSize: 12.0,
-                            fontWeight: FontWeight.w800,
-                            color: CustomColors.whWhite,
-                            height: 0.2,
-                          ),
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-              label: Text(
-                trailingTitle ?? '',
-                style: const TextStyle(
-                  fontSize: 17.0,
-                  fontWeight: FontWeight.w400,
-                  color: CustomColors.whWhite,
-                ),
-              ),
-              onPressed: () {
-                if (trailingAction != null) {
-                  trailingAction();
-                }
-              },
+      centerTitle: isLeadingVisible ? true : false,
+      leadingWidth: isLeadingVisible ? 80 : 0,
+      leading: isLeadingVisible
+          ? WhIconButton(
+              size: WHIconsize.medium,
+              buttonLabel: leadingTitle,
+              iconString: leadingIconString,
+              onPressed: leadingAction ?? () {},
+            )
+          : Container(),
+      actions: [
+        if (isTrailingVisible)
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: WhIconButton(
+              size: WHIconsize.medium,
+              buttonLabel: trailingTitle,
+              iconString: trailingIconString,
+              onPressed: trailingAction ?? () {},
             ),
           ),
-        ),
-      ),
-    ],
-    backgroundColor: Colors.transparent,
-  );
+      ],
+      backgroundColor: Colors.transparent,
+    );
+  }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

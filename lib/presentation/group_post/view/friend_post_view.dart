@@ -98,14 +98,13 @@ class _FriendPostViewState extends ConsumerState<FriendPostView> {
         Scaffold(
           backgroundColor: CustomColors.whBlack,
           appBar: WehavitAppBar(
-            title: '내 친구들',
-            leadingIcon: Icons.chevron_left,
+            titleLabel: '내 친구들',
+            leadingIconString: WHIcons.back,
             leadingTitle: '',
             leadingAction: () {
               Navigator.pop(context);
             },
-            trailingTitle: '',
-            trailingIcon: Icons.people_outline,
+            trailingIconString: WHIcons.friend,
             trailingAction: () async {
               showModalBottomSheet(
                 isScrollControlled: true,

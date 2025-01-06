@@ -34,9 +34,8 @@ class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
       resizeToAvoidBottomInset: false,
       backgroundColor: CustomColors.whDarkBlack,
       appBar: WehavitAppBar(
-        title: '회원가입',
-        leadingTitle: '',
-        leadingIcon: Icons.chevron_left,
+        titleLabel: '회원가입',
+        leadingIconString: WHIcons.back,
         leadingAction: () async {
           Navigator.pop(context);
         },
@@ -121,7 +120,7 @@ class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
                       obscuringCharacter: '*',
                       inputFormatters: <TextInputFormatter>[
                         FilteringTextInputFormatter.allow(
-                          RegExp(r'[0-9a-zA-Z!@#$%^&*(),.?":{}|<>]'),
+                          RegExp(r'[0-9a-zA-Z!@#$%^&*(),.?":{}<>]'),
                         ),
                       ],
                       onChanged: (value) {
@@ -167,7 +166,7 @@ class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
                         style: TextStyle(
                           fontWeight: FontWeight.w400,
                           color: viewmodel.isPasswordValid != null
-                              ? (viewmodel.isPasswordValid! ? PointColors.green : PointColors.red)
+                              ? (viewmodel.isPasswordValid! ? CustomColors.pointGreen : CustomColors.pointRed)
                               : CustomColors.whPlaceholderGrey,
                           fontSize: 14,
                         ),
@@ -240,7 +239,7 @@ class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
                           viewmodel.isPasswordMatched ? '일치합니다' : '비밀번호와 일치하지 않습니다',
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
-                            color: viewmodel.isPasswordMatched ? PointColors.green : PointColors.red,
+                            color: viewmodel.isPasswordMatched ? CustomColors.pointGreen : CustomColors.pointRed,
                             fontSize: 14,
                           ),
                         ),
@@ -293,10 +292,6 @@ class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
                         showToastMessage(
                           context,
                           text: alertMessage,
-                          icon: const Icon(
-                            Icons.warning,
-                            color: CustomColors.whYellow,
-                          ),
                         );
 
                         return false;

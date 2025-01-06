@@ -29,7 +29,7 @@ class _JoinGroupViewState extends ConsumerState<JoinGroupView> {
       resizeToAvoidBottomInset: true,
       backgroundColor: CustomColors.whDarkBlack,
       appBar: WehavitAppBar(
-        title: '그룹에 참여하기',
+        titleLabel: '그룹에 참여하기',
         leadingTitle: '닫기',
         leadingAction: () {
           Navigator.pop(context);
@@ -462,10 +462,11 @@ class _JoinGroupIntroduceViewState extends ConsumerState<JoinGroupIntroduceView>
                         ),
                       );
                     } else if (snapshot.hasError) {
-                      return const WideColoredButton(
+                      return WideColoredButton(
                         buttonTitle: '신청 여부 조회에 문제가 발생하였습니다',
                         foregroundColor: CustomColors.whBlack,
                         backgroundColor: CustomColors.whPlaceholderGrey,
+                        onPressed: () {},
                       );
                     } else {
                       return Container(
@@ -480,17 +481,19 @@ class _JoinGroupIntroduceViewState extends ConsumerState<JoinGroupIntroduceView>
                   },
                 );
               } else {
-                return const WideColoredButton(
+                return WideColoredButton(
                   buttonTitle: '이미 그룹에 참여중입니다',
                   foregroundColor: CustomColors.whBlack,
                   backgroundColor: CustomColors.whPlaceholderGrey,
+                  onPressed: () {},
                 );
               }
             } else if (snapshot.hasError) {
-              return const WideColoredButton(
+              return WideColoredButton(
                 buttonTitle: '가입 여부 조회에 문제가 발생하였습니다',
                 foregroundColor: CustomColors.whBlack,
                 backgroundColor: CustomColors.whPlaceholderGrey,
+                onPressed: () {},
               );
             } else {
               return Container(

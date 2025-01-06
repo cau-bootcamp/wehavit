@@ -11,8 +11,7 @@ class ReactionGuideView extends StatefulWidget {
   State<ReactionGuideView> createState() => _ReactionGuideViewState();
 }
 
-class _ReactionGuideViewState extends State<ReactionGuideView>
-    with TickerProviderStateMixin {
+class _ReactionGuideViewState extends State<ReactionGuideView> with TickerProviderStateMixin {
   PageController? pageController;
   final lastPageIndex = 3;
   int currentPageIndex = 0;

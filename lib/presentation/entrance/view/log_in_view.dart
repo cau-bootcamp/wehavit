@@ -10,6 +10,7 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
+import 'package:wehavit/presentation/common_components/sns_login_button.dart';
 import 'package:wehavit/presentation/entrance/entrance.dart';
 import 'package:wehavit/presentation/main/main.dart';
 
@@ -38,9 +39,8 @@ class _LogInViewState extends ConsumerState<LogInView> {
       resizeToAvoidBottomInset: false,
       backgroundColor: CustomColors.whDarkBlack,
       appBar: WehavitAppBar(
-        title: 'WeHavit',
-        leadingTitle: '',
-        leadingIcon: Icons.chevron_left,
+        titleLabel: 'WeHavit',
+        leadingIconString: WHIcons.back,
         leadingAction: () {
           Navigator.pop(context);
         },
@@ -173,10 +173,6 @@ class _LogInViewState extends ConsumerState<LogInView> {
                           showToastMessage(
                             context,
                             text: toastMessage,
-                            icon: const Icon(
-                              Icons.not_interested,
-                              color: PointColors.red,
-                            ),
                           );
                         },
                         (success) => navigateToMainView(),
@@ -253,49 +249,41 @@ class _LogInViewState extends ConsumerState<LogInView> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Visibility(
-                          visible: false,
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 12.0),
-                            width: 45,
-                            height: 45,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: CustomColors.whDarkBlack,
-                            ),
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                provider.logOut();
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.transparent,
-                                padding: const EdgeInsets.all(0),
-                              ),
-                              child: Image.asset(
-                                CustomIconImage.kakaoLogInLogoIcon,
-                              ),
-                            ),
-                          ),
+                        SNSLoginButton(
+                          onPressed: () async {
+                            setState(() {
+                              provider.setIsProcessing(true);
+                            });
+
+                            provider.logInWithGoogle().then((result) {
+                              return getUserIdFromAuthResult(
+                                provider,
+                                result,
+                              );
+                            }).then((userInfo) {
+                              if (userInfo.$1 != null) {
+                                navigateBasedOnUserState(
+                                  provider,
+                                  userInfo.$1!,
+                                  userInfo.$2,
+                                );
+                              }
+                            });
+
+                            setState(() {
+                              provider.setIsProcessing(false);
+                            });
+                          },
+                          snsAuthType: SNSAuthType.google,
                         ),
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 12.0),
-                          width: 45,
-                          height: 45,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: CustomColors.whDarkBlack,
-                          ),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.transparent,
-                              padding: const EdgeInsets.all(0),
-                            ),
+                        if (Platform.isIOS)
+                          SNSLoginButton(
                             onPressed: () async {
                               setState(() {
                                 provider.setIsProcessing(true);
                               });
 
-                              provider.logInWithGoogle().then((result) {
+                              provider.logInWithApple().then((result) {
                                 return getUserIdFromAuthResult(
                                   provider,
                                   result,
@@ -314,56 +302,8 @@ class _LogInViewState extends ConsumerState<LogInView> {
                                 provider.setIsProcessing(false);
                               });
                             },
-                            child: Image.asset(
-                              CustomIconImage.googleLogInLogoIcon,
-                            ),
+                            snsAuthType: SNSAuthType.apple,
                           ),
-                        ),
-                        Visibility(
-                          visible: Platform.isIOS,
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 12.0),
-                            width: 45,
-                            height: 45,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: CustomColors.whPlaceholderGrey,
-                            ),
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.transparent,
-                                padding: const EdgeInsets.all(0),
-                              ),
-                              onPressed: () async {
-                                setState(() {
-                                  provider.setIsProcessing(true);
-                                });
-
-                                provider.logInWithApple().then((result) {
-                                  return getUserIdFromAuthResult(
-                                    provider,
-                                    result,
-                                  );
-                                }).then((userInfo) {
-                                  if (userInfo.$1 != null) {
-                                    navigateBasedOnUserState(
-                                      provider,
-                                      userInfo.$1!,
-                                      userInfo.$2,
-                                    );
-                                  }
-                                });
-
-                                setState(() {
-                                  provider.setIsProcessing(false);
-                                });
-                              },
-                              child: Image.asset(
-                                CustomIconImage.appleLogInLogoIcon,
-                              ),
-                            ),
-                          ),
-                        ),
                       ],
                     ),
                   ],

@@ -134,7 +134,7 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListBottomSheetCell
   Widget build(BuildContext context) {
     return Row(
       children: [
-        ProfileImageCircleWidget(
+        CircleProfileImage(
           size: 60,
           url: userEntity?.userImageUrl ?? '',
         ),

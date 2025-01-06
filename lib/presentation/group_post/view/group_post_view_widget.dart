@@ -10,6 +10,7 @@ import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
+import 'package:wehavit/presentation/common_components/resolution_linear_gauge_indicator.dart';
 import 'package:wehavit/presentation/effects/effects.dart';
 import 'package:wehavit/presentation/group_post/group_post.dart';
 
@@ -164,7 +165,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
                             Stack(
                               alignment: Alignment.centerRight,
                               children: [
-                                UserProfileBar(
+                                MyProfileBlock(
                                   futureUserEntity: futureUserDataEntity,
                                   secondaryText:
                                       // ignore: lines_longer_than_80_chars
@@ -192,7 +193,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
                                   ),
                               ],
                             ),
-                            ResolutionLinearGaugeWidget(
+                            ResolutionLinearGaugeIndicator(
                               resolutionEntity: resolutionEntity,
                               futureDoneList: resolutionDoneListForWrittenWeek,
                             ),
@@ -244,10 +245,6 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
                                             showToastMessage(
                                               context,
                                               text: '친구에게 퀵샷으로 응원을 보냈어요',
-                                              icon: const Icon(
-                                                Icons.emoji_emotions,
-                                                color: CustomColors.whYellow,
-                                              ),
                                             );
                                           });
                                         },
@@ -286,7 +283,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
                                           );
                                         },
                                         padding: EdgeInsets.zero,
-                                        child: ProfileImageCircleWidget(
+                                        child: CircleProfileImage(
                                           size: 40,
                                           url: entity.url,
                                         ),
@@ -314,10 +311,6 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
                                         showToastMessage(
                                           context,
                                           text: '추가 버튼을 누른 채로 드래그 해주세요!',
-                                          icon: const Icon(
-                                            Icons.warning,
-                                            color: CustomColors.whYellow,
-                                          ),
                                         );
                                       },
                                       onLongPressStart: (_) async {
@@ -353,10 +346,6 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
                                               showToastMessage(
                                                 context,
                                                 text: '퀵샷을 저장했어요',
-                                                icon: const Icon(
-                                                  Icons.emoji_emotions,
-                                                  color: CustomColors.whYellow,
-                                                ),
                                               );
                                             }
                                             setState(() {});
@@ -428,10 +417,6 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
                               showToastMessage(
                                 context,
                                 text: '친구에게 퀵샷으로 응원을 보냈어요',
-                                icon: const Icon(
-                                  Icons.emoji_emotions,
-                                  color: CustomColors.whYellow,
-                                ),
                               );
                             }
                           });
@@ -506,10 +491,6 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
       showToastMessage(
         context,
         text: '친구에게 메시지로 응원을 보냈어요',
-        icon: const Icon(
-          Icons.emoji_emotions,
-          color: CustomColors.whYellow,
-        ),
       );
     });
   }
@@ -644,10 +625,6 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
             showToastMessage(
               context,
               text: '친구에게 이모지로 응원을 보냈어요',
-              icon: const Icon(
-                Icons.emoji_emotions,
-                color: CustomColors.whYellow,
-              ),
             );
           },
         );

@@ -116,17 +116,17 @@ class AuthRoute extends GoRouteData {
 //   }
 // }
 
-@TypedGoRoute<TestPageRoute>(path: TestPageRoute.path)
-class TestPageRoute extends GoRouteData {
-  const TestPageRoute();
+// @TypedGoRoute<TestPageRoute>(path: TestPageRoute.path)
+// class TestPageRoute extends GoRouteData {
+//   const TestPageRoute();
 
-  static const path = RouteLocation.testPage;
+//   static const path = RouteLocation.testPage;
 
-  @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return const TestPage();
-  }
-}
+//   @override
+//   Widget build(BuildContext context, GoRouterState state) {
+//     return const TestPage();
+//   }
+// }
 
 @TypedGoRoute<AddResolutionRoute>(path: AddResolutionRoute.path)
 class AddResolutionRoute extends GoRouteData {
@@ -164,29 +164,29 @@ class AnimationSampleViewRoute extends GoRouteData {
   }
 }
 
-@TypedGoRoute<ReactionSampleViewRoute>(path: ReactionSampleViewRoute.path)
-class ReactionSampleViewRoute extends GoRouteData {
-  const ReactionSampleViewRoute();
+// @TypedGoRoute<ReactionSampleViewRoute>(path: ReactionSampleViewRoute.path)
+// class ReactionSampleViewRoute extends GoRouteData {
+//   const ReactionSampleViewRoute();
 
-  static const path = RouteLocation.reactionSampleView;
+//   static const path = RouteLocation.reactionSampleView;
 
-  @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return const ReactionSampleView();
-  }
-}
+//   @override
+//   Widget build(BuildContext context, GoRouterState state) {
+//     return const ReactionSampleView();
+//   }
+// }
 
-@TypedGoRoute<GroupSampleViewRoute>(path: GroupSampleViewRoute.path)
-class GroupSampleViewRoute extends GoRouteData {
-  const GroupSampleViewRoute();
+// @TypedGoRoute<GroupSampleViewRoute>(path: GroupSampleViewRoute.path)
+// class GroupSampleViewRoute extends GoRouteData {
+//   const GroupSampleViewRoute();
 
-  static const path = RouteLocation.groupSampleView;
+//   static const path = RouteLocation.groupSampleView;
 
-  @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return const SampleGroupWidget();
-  }
-}
+//   @override
+//   Widget build(BuildContext context, GoRouterState state) {
+//     return const SampleGroupWidget();
+//   }
+// }
 
 // @TypedGoRoute<GroupViewRoute>(path: GroupViewRoute.path)
 // class GroupViewRoute extends GoRouteData {

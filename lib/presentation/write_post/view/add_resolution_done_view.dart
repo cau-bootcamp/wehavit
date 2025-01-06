@@ -36,7 +36,7 @@ class _AddResolutionDoneViewState extends ConsumerState<AddResolutionDoneView> {
       resizeToAvoidBottomInset: true,
       backgroundColor: CustomColors.whDarkBlack,
       appBar: WehavitAppBar(
-        title: '도전 추가하기 완료',
+        titleLabel: '도전 추가하기 완료',
         leadingTitle: '',
         trailingTitle: '닫기',
         trailingAction: () {
@@ -62,9 +62,10 @@ class _AddResolutionDoneViewState extends ConsumerState<AddResolutionDoneView> {
                     color: CustomColors.whSemiBlack,
                     borderRadius: BorderRadius.circular(16.0),
                   ),
-                  child: ResolutionListCellWidget(
+                  child: ResolutionListCell(
                     resolutionEntity: viewmodel.resolutionEntity!,
                     showDetails: true,
+                    onPressed: () {},
                   ),
                 ),
               ),
@@ -90,7 +91,7 @@ class _AddResolutionDoneViewState extends ConsumerState<AddResolutionDoneView> {
                     );
                   },
                   buttonTitle: '친구에게 공유하기',
-                  buttonIcon: Icons.search,
+                  iconString: WHIcons.friend,
                 ),
               ),
               Container(
@@ -114,7 +115,7 @@ class _AddResolutionDoneViewState extends ConsumerState<AddResolutionDoneView> {
                     );
                   },
                   buttonTitle: '그룹에게 공유하기',
-                  buttonIcon: Icons.flag_outlined,
+                  iconString: WHIcons.group,
                 ),
               ),
             ],

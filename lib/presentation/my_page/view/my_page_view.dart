@@ -6,6 +6,7 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wehavit/presentation/common_components/my_wehavit_summary.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 class MyPageView extends ConsumerStatefulWidget {
@@ -57,9 +58,8 @@ class MyPageScreenState extends ConsumerState<MyPageView> with AutomaticKeepAliv
         Scaffold(
           backgroundColor: CustomColors.whDarkBlack,
           appBar: WehavitAppBar(
-            title: '내 정보',
-            trailingTitle: '',
-            trailingIcon: Icons.menu,
+            titleLabel: '내 정보',
+            trailingIconString: WHIcons.menu,
             trailingAction: () async {
               // 변경사항을 TabBar에 알리기 위해 mainViewState를 참조
               MainViewState? mainViewState = context.findAncestorStateOfType<MainViewState>();
@@ -68,6 +68,8 @@ class MyPageScreenState extends ConsumerState<MyPageView> with AutomaticKeepAliv
                 mainViewState,
                 deleteAccount,
               );
+              //   showToastMessage(context,
+              //       text: '안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요');
             },
           ),
           body: Container(
@@ -82,8 +84,11 @@ class MyPageScreenState extends ConsumerState<MyPageView> with AutomaticKeepAliv
                 padding: const EdgeInsets.only(bottom: 64.0),
                 children: [
                   // 내 프로필
-                  MyPageWehavitSummaryWidget(
-                    futureUserEntity: viewModel.futureMyUserDataEntity,
+                  // MyPageWehavitSummaryWidget(
+                  //   futureUserEntity: viewModel.futureMyUserDataEntity,
+                  // ),
+                  MyWehavitSummary(
+                    futureUserEntity: viewModel.futureMyUserDataEntity!,
                   ),
                   const SizedBox(
                     height: 16,
@@ -112,17 +117,9 @@ class MyPageScreenState extends ConsumerState<MyPageView> with AutomaticKeepAliv
                             resolutionList.length,
                             (index) => Container(
                               margin: const EdgeInsets.only(bottom: 16.0),
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  backgroundColor: CustomColors.whSemiBlack,
-                                  shadowColor: Colors.transparent,
-                                  surfaceTintColor: Colors.transparent,
-                                  overlayColor: PointColors.colorList[resolutionList[index].colorIndex ?? 0],
-                                  padding: const EdgeInsets.all(0),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16.0),
-                                  ),
-                                ),
+                              child: ResolutionListCell(
+                                resolutionEntity: resolutionList[index],
+                                showDetails: true,
                                 onPressed: () async {
                                   Navigator.push(
                                     context,
@@ -133,10 +130,6 @@ class MyPageScreenState extends ConsumerState<MyPageView> with AutomaticKeepAliv
                                     ),
                                   );
                                 },
-                                child: ResolutionListCellWidget(
-                                  resolutionEntity: resolutionList[index],
-                                  showDetails: true,
-                                ),
                               ),
                             ),
                           ),
@@ -166,7 +159,7 @@ class MyPageScreenState extends ConsumerState<MyPageView> with AutomaticKeepAliv
             children: [
               WideColoredButton(
                 buttonTitle: '내 정보 수정하기',
-                buttonIcon: Icons.person,
+                iconString: WHIcons.manageMyInfo,
                 onPressed: () async {
                   final userEntity = await ref.read(getMyUserDataUsecaseProvider).call().then((result) {
                     return result.fold((failure) {
@@ -211,12 +204,13 @@ class MyPageScreenState extends ConsumerState<MyPageView> with AutomaticKeepAliv
               ),
               WideColoredButton(
                 buttonTitle: '로그아웃',
-                buttonIcon: Icons.person_off_outlined,
+                iconString: WHIcons.logout,
                 onPressed: () async {
                   await ref.read(logOutUseCaseProvider).call();
                   if (mounted) {
                     // ignore: use_build_context_synchronously
-                    Navigator.pushReplacementNamed(context, '/entrance');
+                    Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+                    Navigator.pushNamed(context, '/entrance');
                   }
                 },
               ),
@@ -225,8 +219,8 @@ class MyPageScreenState extends ConsumerState<MyPageView> with AutomaticKeepAliv
               ),
               WideColoredButton(
                 buttonTitle: '회원탈퇴',
-                buttonIcon: Icons.no_accounts_outlined,
-                foregroundColor: PointColors.red,
+                iconString: WHIcons.withdraw,
+                foregroundColor: CustomColors.pointRed,
                 onPressed: () async {
                   showCupertinoDialog(
                     context: context,
@@ -237,7 +231,7 @@ class MyPageScreenState extends ConsumerState<MyPageView> with AutomaticKeepAliv
                         actions: [
                           CupertinoDialogAction(
                             textStyle: const TextStyle(
-                              color: PointColors.blue,
+                              color: CustomColors.pointBlue,
                             ),
                             isDefaultAction: true,
                             child: const Text('취소'),
@@ -258,10 +252,6 @@ class MyPageScreenState extends ConsumerState<MyPageView> with AutomaticKeepAliv
                       showToastMessage(
                         context,
                         text: '오류 발생, 문의 부탁드립니다',
-                        icon: const Icon(
-                          Icons.report_problem,
-                          color: CustomColors.whYellow,
-                        ),
                       );
                     }
                   });

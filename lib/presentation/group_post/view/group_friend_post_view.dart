@@ -64,14 +64,14 @@ class _GroupFriendPostViewState extends ConsumerState<GroupFriendPostView> {
         Scaffold(
           backgroundColor: CustomColors.whBlack,
           appBar: WehavitAppBar(
-            title: widget.groupEntity.groupName,
-            leadingIcon: Icons.chevron_left,
+            titleLabel: widget.groupEntity.groupName,
+            leadingIconString: WHIcons.back,
             leadingTitle: '',
             leadingAction: () {
               Navigator.pop(context);
             },
             trailingTitle: '',
-            trailingIcon: Icons.people_outline,
+            trailingIconString: WHIcons.friend,
             trailingAction: () async {
               showModalBottomSheet(
                 isScrollControlled: true,

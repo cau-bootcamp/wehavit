@@ -6,8 +6,7 @@ import 'package:wehavit/domain/usecases/usecases.dart';
 
 class ReactionAnimationWidgetManager extends StateNotifier<void> {
   ReactionAnimationWidgetManager(Ref ref) : super([]) {
-    getUnreadReactionListUsecase =
-        ref.watch(getUnreadReactionListUsecaseProvider);
+    getUnreadReactionListUsecase = ref.watch(getUnreadReactionListUsecaseProvider);
   }
 
   late GetUnreadReactionListUsecase getUnreadReactionListUsecase;
@@ -27,13 +26,11 @@ class ReactionAnimationWidgetManager extends StateNotifier<void> {
       },
     );
 
-    final complimenterList =
-        reactionModelList.map((e) => e.complimenterUid).toSet().toList();
+    final complimenterList = reactionModelList.map((e) => e.complimenterUid).toSet().toList();
 
     final reactionGroupModelList = complimenterList
         .map(
-          (complimenterUid) =>
-              ReactionGroupModel(complimenterUid: complimenterUid),
+          (complimenterUid) => ReactionGroupModel(complimenterUid: complimenterUid),
         )
         .toList();
 

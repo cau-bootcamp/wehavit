@@ -25,7 +25,7 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
       resizeToAvoidBottomInset: true,
       backgroundColor: CustomColors.whDarkBlack,
       appBar: WehavitAppBar(
-        title: '도전 추가하기',
+        titleLabel: '도전 추가하기',
         leadingTitle: '취소',
         leadingAction: () async {
           Navigator.pop(context);
@@ -315,7 +315,7 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                         SingleChildScrollView(
                           child: Row(
                             children: List<Widget>.generate(
-                              PointColors.colorList.length,
+                              CustomColors.pointColorList.length,
                               (int index) => TextButton(
                                 style: TextButton.styleFrom(
                                   minimumSize: Size.zero,
@@ -335,7 +335,7 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                                   width: 36,
                                   height: 36,
                                   decoration: BoxDecoration(
-                                    color: PointColors.colorList[index],
+                                    color: CustomColors.pointColorList[index],
                                     shape: BoxShape.circle,
                                   ),
                                   child: Visibility(
@@ -472,7 +472,6 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                         showToastMessage(
                           context,
                           text: '잠시 후 다시 시도해주세요',
-                          icon: const Icon(Icons.not_interested),
                         );
                       }
                     });

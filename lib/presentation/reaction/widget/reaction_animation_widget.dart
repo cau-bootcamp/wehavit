@@ -15,6 +15,14 @@ class ReactionAnimationWidget extends ConsumerStatefulWidget {
   ConsumerState<ReactionAnimationWidget> createState() => ReactionAnimationWidgetState();
 }
 
+final reactionAnimationWidgetKeyProvider = Provider<GlobalKey<ReactionAnimationWidgetState>>((ref) {
+  ref.onRemoveListener(() {
+    print("DEBUG HELLo");
+  });
+
+  return GlobalKey<ReactionAnimationWidgetState>();
+});
+
 class ReactionAnimationWidgetState extends ConsumerState<ReactionAnimationWidget> {
   late Map<Key, BalloonWidget> _balloonWidgets;
   late Map<Key, TextBubbleFrameWidget> _textBubbleWidgets;

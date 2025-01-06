@@ -47,7 +47,7 @@ class GroupListViewCellContentWidget extends StatelessWidget {
           // ignore: lines_longer_than_80_chars
           '함께한 지 ${DateTime.now().difference(cellModel.groupEntity.groupCreatedAt).inDays + 1}일 째',
           style: TextStyle(
-            color: PointColors.colorList[cellModel.groupEntity.groupColor],
+            color: CustomColors.pointColorList[cellModel.groupEntity.groupColor],
             fontWeight: FontWeight.w500,
             fontSize: 14,
           ),
@@ -55,7 +55,7 @@ class GroupListViewCellContentWidget extends StatelessWidget {
         Text(
           cellModel.groupEntity.groupName,
           style: TextStyle(
-            color: PointColors.colorList[cellModel.groupEntity.groupColor],
+            color: CustomColors.pointColorList[cellModel.groupEntity.groupColor],
             fontWeight: FontWeight.w700,
             fontSize: 24,
           ),
@@ -69,7 +69,7 @@ class GroupListViewCellContentWidget extends StatelessWidget {
               VerticalDivider(
                 thickness: 4,
                 width: 16,
-                color: PointColors.colorList[cellModel.groupEntity.groupColor],
+                color: CustomColors.pointColorList[cellModel.groupEntity.groupColor],
               ),
               const SizedBox(width: 8),
               Padding(
@@ -150,7 +150,7 @@ class GroupListViewFriendCellContentWidget extends StatelessWidget {
         //   // ignore: lines_longer_than_80_chars
         //   '함께한 지 ${DateTime.now().difference(cellModel.groupEntity.groupCreatedAt).inDays + 1}일 째',
         //   style: TextStyle(
-        //     color: PointColors.colorList[cellModel.groupEntity.groupColor],
+        //     color: CustomColors.pointColorList[cellModel.groupEntity.groupColor],
         //     fontWeight: FontWeight.w500,
         //     fontSize: 14,
         //   ),
@@ -158,7 +158,7 @@ class GroupListViewFriendCellContentWidget extends StatelessWidget {
         const Text(
           '내 친구들',
           style: TextStyle(
-            color: PointColors.yellow,
+            color: CustomColors.pointYellow,
             fontWeight: FontWeight.w700,
             fontSize: 24,
           ),
@@ -172,7 +172,7 @@ class GroupListViewFriendCellContentWidget extends StatelessWidget {
               const VerticalDivider(
                 thickness: 4,
                 width: 16,
-                color: PointColors.yellow,
+                color: CustomColors.pointYellow,
               ),
               const SizedBox(width: 8),
               Padding(

@@ -7,8 +7,7 @@ class TimestampSerializer implements JsonConverter<DateTime, dynamic> {
   @override
   DateTime fromJson(dynamic timestamp) {
     if (timestamp.runtimeType == String) {
-      Timestamp newTimestamp =
-          Timestamp.fromDate(DateTime.parse(timestamp as String));
+      Timestamp newTimestamp = Timestamp.fromDate(DateTime.parse(timestamp as String));
 
       DateTime dateTime = newTimestamp.toDate();
       return dateTime;

@@ -286,7 +286,7 @@ class _GroupMemberListCellWidgetState extends ConsumerState<GroupMemberListCellW
   Widget build(BuildContext context) {
     return Row(
       children: [
-        ProfileImageCircleWidget(
+        CircleProfileImage(
           size: 60,
           url: userEntity?.userImageUrl ?? '',
         ),
@@ -341,7 +341,7 @@ class _GroupMemberListCellWidgetState extends ConsumerState<GroupMemberListCellW
               children: [
                 Visibility(
                   visible: widget.groupManagerUid != widget.memberId,
-                  child: SmallColoredButtonWidget(
+                  child: SmallColoredButton(
                     buttonLabel: '내보내기',
                     backgroundColor: CustomColors.whBrightGrey,
                     onPressed: () async {
@@ -370,7 +370,7 @@ class _GroupMemberListCellWidgetState extends ConsumerState<GroupMemberListCellW
           ),
           child: Row(
             children: [
-              SmallColoredButtonWidget(
+              SmallColoredButton(
                 buttonLabel: '거절',
                 backgroundColor: CustomColors.whBrightGrey,
                 onPressed: () async {
@@ -390,7 +390,7 @@ class _GroupMemberListCellWidgetState extends ConsumerState<GroupMemberListCellW
                 },
               ),
               const SizedBox(width: 4.0),
-              SmallColoredButtonWidget(
+              SmallColoredButton(
                 buttonLabel: '수락',
                 onPressed: () async {
                   await ref
