@@ -4,7 +4,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:wehavit/common/constants/constants.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
@@ -23,11 +22,11 @@ class ResolutionDetailView extends ConsumerStatefulWidget {
   ConsumerState<ResolutionDetailView> createState() => _ResolutionDetailViewState();
 }
 
-class ChartData {
-  ChartData(this.x, this.y);
-  final String x;
-  final double? y;
-}
+// class ChartData {
+//   ChartData(this.x, this.y);
+//   final String x;
+//   final double? y;
+// }
 
 class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
   @override
@@ -67,14 +66,12 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
 
     return Scaffold(
       appBar: WehavitAppBar(
-        title: widget.entity.resolutionName ?? '나의 도전',
-        leadingIcon: Icons.chevron_left,
+        titleLabel: widget.entity.resolutionName ?? '나의 도전',
+        leadingIconString: WHIcons.back,
         leadingAction: () {
           Navigator.pop(context);
         },
-        leadingTitle: '',
-        trailingTitle: '',
-        trailingIcon: Icons.more_horiz,
+        trailingIconString: WHIcons.more,
         trailingAction: () async {
           showModifyResolutionBottomSheet(
             context,
@@ -103,97 +100,26 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                 const SizedBox(
                   height: 16,
                 ),
-                Column(
+                ResolutionInfo(
+                  resolutionEntity: widget.entity,
+                ),
+                const SizedBox(
+                  height: 16.0,
+                ),
+                Row(
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(20.0),
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16.0),
-                        color: CustomColors.whGrey,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '⛳️ 나의 목표',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  color: CustomColors.pointColorList[widget.entity.colorIndex ?? 0],
-                                  fontSize: 16,
-                                ),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.only(left: 16.0),
-                                child: Text(
-                                  widget.entity.goalStatement ?? '',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 20),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '📋 나의 실천 계획',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  color: CustomColors.pointColorList[widget.entity.colorIndex ?? 0],
-                                  fontSize: 16,
-                                ),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.only(left: 16.0),
-                                child: Text(
-                                  // ignore: lines_longer_than_80_chars
-                                  '${widget.entity.actionStatement ?? ''}\n일주일에 ${widget.entity.actionPerWeek ?? 0}회 실천하기',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 20),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '📅 도전 시작일',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  color: CustomColors.pointColorList[widget.entity.colorIndex ?? 0],
-                                  fontSize: 16,
-                                ),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.only(left: 16.0),
-                                child: Text(
-                                  DateFormat('yyyy년 M월 d일').format(
-                                    widget.entity.startDate ?? DateTime.now(),
-                                  ),
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                    CountAndDescription(
+                      count: widget.entity.writtenPostCount ?? 0,
+                      unit: '회',
+                      description: '실천 인증 횟수',
+                    ),
+                    const SizedBox(
+                      width: 16.0,
+                    ),
+                    CountAndDescription(
+                      count: widget.entity.successWeekMondayList?.length ?? 0,
+                      unit: '일',
+                      description: '주간 목표 달성 횟수',
                     ),
                   ],
                 ),
@@ -202,36 +128,18 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                 ),
                 Row(
                   children: [
-                    ResolutionSingleStatisticCellWidget(
-                      primary: '${widget.entity.writtenPostCount}회',
-                      secondary: '실천 인증 횟수',
+                    CountAndDescription(
+                      count: widget.entity.receivedReactionCount!,
+                      unit: '회',
+                      description: '받은 격려 수',
                     ),
                     const SizedBox(
                       width: 16.0,
                     ),
-                    ResolutionSingleStatisticCellWidget(
-                      primary: '${widget.entity.successWeekMondayList?.length}회',
-                      secondary: '주간 목표 달성 횟수',
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 16.0,
-                ),
-                Row(
-                  children: [
-                    ResolutionSingleStatisticCellWidget(
-                      primary: '${widget.entity.receivedReactionCount}회',
-                      secondary: '받은 격려 수',
-                    ),
-                    const SizedBox(
-                      width: 16.0,
-                    ),
-                    ResolutionSingleStatisticCellWidget(
-                      primary:
-                          // ignore: lines_longer_than_80_chars
-                          '${DateTime.now().difference(widget.entity.startDate ?? DateTime.now()).inDays + 1}일',
-                      secondary: '도전을 함께한 일 수',
+                    CountAndDescription(
+                      count: DateTime.now().difference(widget.entity.startDate ?? DateTime.now()).inDays + 1,
+                      unit: '일',
+                      description: '도전을 함께한 일 수',
                     ),
                   ],
                 ),
@@ -662,7 +570,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
             children: [
               WideColoredButton(
                 buttonTitle: '목표 공유 친구 수정하기',
-                buttonIcon: Icons.people_alt_outlined,
+                iconString: WHIcons.friend,
                 onPressed: () async {
                   provider.loadFriendList().whenComplete(() async {
                     await provider.resetTempFriendList();
@@ -692,7 +600,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
               ),
               WideColoredButton(
                 buttonTitle: '목표 공유 그룹 수정하기',
-                buttonIcon: Icons.flag_outlined,
+                iconString: WHIcons.group,
                 onPressed: () async {
                   provider.loadGroupList().whenComplete(() async {
                     await provider.resetTempGroupList();
@@ -722,7 +630,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
               ),
               WideColoredButton(
                 buttonTitle: '목표 삭제하기',
-                buttonIcon: Icons.flag_outlined,
+                iconString: WHIcons.delete,
                 foregroundColor: CustomColors.pointRed,
                 onPressed: () async {
                   showCupertinoDialog(
@@ -757,6 +665,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                                     )
                                     .loadResolutionModelList();
                                 await ref.read(myPageViewModelProvider.notifier).loadData().whenComplete(() {
+                                  // ignore: use_build_context_synchronously
                                   context.findAncestorStateOfType<MyPageScreenState>()?.setState(() {});
                                 });
                                 // ignore: use_build_context_synchronously
@@ -774,12 +683,9 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                   ).then((result) {
                     if (result == false) {
                       showToastMessage(
+                        // ignore: use_build_context_synchronously
                         context,
                         text: '오류 발생, 문의 부탁드립니다',
-                        icon: const Icon(
-                          Icons.report_problem,
-                          color: CustomColors.whYellow,
-                        ),
                       );
                     }
                   });

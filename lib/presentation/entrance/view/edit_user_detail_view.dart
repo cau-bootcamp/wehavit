@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/constants/constants.dart';
 import 'package:wehavit/dependency/dependency.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
+import 'package:wehavit/presentation/common_components/search_form_field.dart';
 import 'package:wehavit/presentation/main/main.dart';
 
 class EditUserDetailView extends ConsumerStatefulWidget {
@@ -29,9 +30,15 @@ class EditUserDetailView extends ConsumerStatefulWidget {
 }
 
 class _EditUserDetailViewState extends ConsumerState<EditUserDetailView> {
+  final nameTextEditingController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
+    nameTextEditingController.text = widget.name ?? '';
+    nameTextEditingController.addListener(() {
+      print("HELLO ${nameTextEditingController.text}");
+    });
   }
 
   @override
@@ -74,9 +81,8 @@ class _EditUserDetailViewState extends ConsumerState<EditUserDetailView> {
           resizeToAvoidBottomInset: true,
           backgroundColor: CustomColors.whDarkBlack,
           appBar: WehavitAppBar(
-            title: widget.isModifying ? '내 정보 수정' : '회원가입',
-            leadingTitle: '',
-            leadingIcon: Icons.chevron_left,
+            titleLabel: widget.isModifying ? '내 정보 수정' : '회원가입',
+            leadingIconString: WHIcons.back,
             leadingAction: () async {
               if (!widget.isModifying) {
                 try {
@@ -170,39 +176,21 @@ class _EditUserDetailViewState extends ConsumerState<EditUserDetailView> {
                           Container(
                             height: 8.0,
                           ),
-                          TextFormField(
-                            initialValue: widget.name,
-                            onChanged: (value) {
-                              provider.setName(value);
-                              setState(() {});
-                            },
-                            cursorColor: CustomColors.whWhite,
-                            textAlignVertical: TextAlignVertical.center,
-                            style: const TextStyle(
-                              color: CustomColors.whWhite,
-                              fontSize: 16.0,
-                            ),
-                            decoration: InputDecoration(
-                              hintText: '친구들에게 보여지는 이름이예요',
-                              hintStyle: const TextStyle(
-                                fontSize: 16,
-                                color: CustomColors.whPlaceholderGrey,
-                              ),
-                              filled: true,
-                              fillColor: CustomColors.whGrey,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                  width: 0,
-                                  style: BorderStyle.none,
-                                ),
-                              ),
-                              isCollapsed: true,
-                              contentPadding: const EdgeInsets.symmetric(
-                                vertical: 12.0,
-                                horizontal: 16.0,
-                              ),
-                            ),
+                          // InputFormField(
+                          //   textEditingController: nameTextEditingController,
+                          //   descrptionHandler: (input) {
+                          //     if (input.length > 12)
+                          //       return ('너무 길다', FormFieldDescriptionType.warning);
+                          //     else if (input.length < 6)
+                          //       return ('6자 이상 12자 이하', FormFieldDescriptionType.normal);
+                          //     else {
+                          //       return ('6자 이상 12자 이하', FormFieldDescriptionType.clear);
+                          //     }
+                          //   },
+                          // ),
+                          SearchFormField(
+                            textEditingController: nameTextEditingController,
+                            placeholder: '검색어를 입력해주세요',
                           ),
                         ],
                       ),
@@ -354,10 +342,6 @@ class _EditUserDetailViewState extends ConsumerState<EditUserDetailView> {
                               showToastMessage(
                                 context,
                                 text: toastMessage,
-                                icon: const Icon(
-                                  Icons.not_interested,
-                                  color: CustomColors.pointRed,
-                                ),
                               );
                             },
                             (success) async {

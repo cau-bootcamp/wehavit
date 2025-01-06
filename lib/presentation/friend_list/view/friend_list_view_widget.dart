@@ -76,9 +76,9 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
           margin: const EdgeInsets.symmetric(vertical: 6.0),
           child: Row(
             children: [
-              ProfileImageCircleWidget(
+              CircleProfileImage(
                 size: 60,
-                url: userEntity.userImageUrl,
+                url: userEntity.userImageUrl ?? '',
               ),
               const SizedBox(
                 width: 12,
@@ -141,7 +141,7 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
       case FriendListCellState.applied:
         return Row(
           children: [
-            SmallColoredButtonWidget(
+            SmallColoredButton(
               buttonLabel: '수락',
               onPressed: () async {
                 if (entity.userId != null) {
@@ -160,7 +160,7 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
             const SizedBox(
               width: 8,
             ),
-            SmallColoredButtonWidget(
+            SmallColoredButton(
               buttonLabel: '거절',
               backgroundColor: CustomColors.whBrightGrey,
               onPressed: () async {
@@ -180,7 +180,7 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
           ],
         );
       case FriendListCellState.managing:
-        return SmallColoredButtonWidget(
+        return SmallColoredButton(
           buttonLabel: '삭제',
           backgroundColor: CustomColors.whBrightGrey,
           onPressed: () async {
@@ -196,7 +196,7 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
           },
         );
       case FriendListCellState.toApply:
-        return SmallColoredButtonWidget(
+        return SmallColoredButton(
           buttonLabel: '요청',
           onPressed: () async {
             if (entity.userId != null) {
@@ -207,10 +207,6 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
                   showToastMessage(
                     context,
                     text: '친구 신청을 보냈어요',
-                    icon: const Icon(
-                      Icons.mail,
-                      color: CustomColors.whWhite,
-                    ),
                   );
                 }
               });
@@ -383,7 +379,7 @@ class FriendListMyProfileWidget extends StatelessWidget {
       mainWidgetCallback: (userEntity) {
         return Row(
           children: [
-            ProfileImageCircleWidget(
+            CircleProfileImage(
               url: userEntity.userImageUrl ?? '',
               size: 50,
             ),

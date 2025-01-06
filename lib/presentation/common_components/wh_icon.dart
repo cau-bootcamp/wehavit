@@ -13,12 +13,14 @@ class WHIcon extends StatelessWidget {
     required this.size,
     required this.iconString,
     this.iconColor = CustomColors.whGrey900,
+    this.iconWeight = FontWeight.w500,
     super.key,
   });
 
   final WHIconsize size;
   final String iconString;
   final Color iconColor;
+  final FontWeight iconWeight;
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +31,14 @@ class WHIcon extends StatelessWidget {
     };
 
     return SizedBox(
-      width: iconSize,
-      height: iconSize,
+      // width: iconSize,
+      // height: iconSize,
       child: Text(
         iconString,
         style: TextStyle(
           fontFamily: 'SF-Pro',
           color: iconColor,
-          fontWeight: FontWeight.w500,
+          fontWeight: iconWeight,
           fontSize: iconSize,
         ),
       ),
@@ -51,6 +53,7 @@ class WhIconButton extends StatelessWidget {
     this.buttonLabel = '',
     this.badgeCount = 0,
     required this.onPressed,
+    this.color = CustomColors.whGrey900,
     super.key,
   });
 
@@ -59,18 +62,19 @@ class WhIconButton extends StatelessWidget {
   final int badgeCount;
   final String buttonLabel;
   final Function onPressed;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
     final labelTextStyle = switch (size) {
-      WHIconsize.large => context.labelLarge,
-      WHIconsize.medium => context.labelLarge,
-      WHIconsize.small => context.labelMedium,
+      WHIconsize.large => context.labelLarge?.copyWith(color: color),
+      WHIconsize.medium => context.labelLarge?.copyWith(color: color),
+      WHIconsize.small => context.labelMedium?.copyWith(color: color),
     };
     final contentGap = switch (size) {
-      WHIconsize.large => 12.0,
-      WHIconsize.medium => 10.0,
-      WHIconsize.small => 8.0,
+      WHIconsize.large => 16.0,
+      WHIconsize.medium => 14.0,
+      WHIconsize.small => 10.0,
     };
     final badgeTextStyle = switch (size) {
       WHIconsize.large => context.labelMedium?.bold,
@@ -84,7 +88,11 @@ class WhIconButton extends StatelessWidget {
     };
     final whIcon = Stack(
       children: [
-        WHIcon(size: size, iconString: iconString),
+        WHIcon(
+          size: size,
+          iconString: iconString,
+          iconColor: color,
+        ),
         if (badgeCount > 0)
           Positioned(
             right: -1.5 * badgePadding,
@@ -106,7 +114,7 @@ class WhIconButton extends StatelessWidget {
       style: TextButton.styleFrom(
         minimumSize: Size.zero,
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-        tapTargetSize: MaterialTapTargetSize.padded,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       ),
       onPressed: () {
         onPressed();

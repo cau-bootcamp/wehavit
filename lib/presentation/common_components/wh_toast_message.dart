@@ -37,6 +37,5 @@ class WhToastMessage extends StatelessWidget {
         ],
       ),
     );
-    ;
   }
 }

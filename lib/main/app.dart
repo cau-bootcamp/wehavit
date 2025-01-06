@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/common/constants/theme.dart';
-import 'package:wehavit/common/notification/set_firebase_cloud_messaging.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 class MyApp extends ConsumerStatefulWidget {
@@ -13,15 +11,13 @@ class MyApp extends ConsumerStatefulWidget {
 }
 
 class MyAppState extends ConsumerState<MyApp> {
-  final GlobalKey<ReactionAnimationWidgetState> reactionWidgetChildKey = GlobalKey<ReactionAnimationWidgetState>();
-
   @override
   void initState() {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // ignore: discarded_futures
-      setFirebaseCloudMessaging(reactionWidgetChildKey);
+      setFirebaseCloudMessaging(ref.watch(reactionAnimationWidgetKeyProvider));
       // ignore: discarded_futures
       setTerminatedStateMessageHandler();
     });

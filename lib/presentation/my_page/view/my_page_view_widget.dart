@@ -58,10 +58,6 @@ class MyPageWehavitSummaryWidget extends StatelessWidget {
               showToastMessage(
                 context,
                 text: '현재 개발중인 기능입니다!',
-                icon: const Icon(
-                  Icons.warning,
-                  color: CustomColors.whYellow,
-                ),
               );
             },
             child: const Flex(
@@ -119,8 +115,8 @@ class MyProfileWidget extends StatelessWidget {
 
           return Row(
             children: [
-              ProfileImageCircleWidget(
-                url: userModel.userImageUrl,
+              CircleProfileImage(
+                url: userModel.userImageUrl ?? '',
                 size: 50,
               ),
               const SizedBox(width: 16.0),

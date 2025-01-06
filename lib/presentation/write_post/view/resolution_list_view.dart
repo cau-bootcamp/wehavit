@@ -7,6 +7,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/common/utils/preference_key.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
+import 'package:wehavit/presentation/common_components/list_dash_outlined_cell.dart';
+import 'package:wehavit/presentation/common_components/resolution_linear_gauge_indicator.dart';
+import 'package:wehavit/presentation/common_components/weekly_resolution_summary_card.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 class ResolutionListView extends ConsumerStatefulWidget {
@@ -27,7 +30,7 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
     return Scaffold(
       backgroundColor: CustomColors.whDarkBlack,
       appBar: WehavitAppBar(
-        title: '인증 남기기',
+        titleLabel: '인증 남기기',
       ),
       body: SafeArea(
         minimum: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -41,7 +44,7 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
           },
           child: ListView(
             children: [
-              ResolutionSummaryCardWidget(
+              WeeklyResolutionSummaryCard(
                 futureDoneRatio: viewModel.futureDoneRatio,
                 futureDoneCount: viewModel.futureDoneCount,
               ),
@@ -67,18 +70,18 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
                     viewModel.resolutionModelList?.length ?? 0,
                     (index) => Container(
                       margin: const EdgeInsets.only(bottom: 16.0),
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                          backgroundColor: CustomColors.whSemiBlack,
-                          shadowColor: Colors.transparent,
-                          surfaceTintColor: Colors.transparent,
-                          overlayColor:
-                              CustomColors.pointColorList[viewModel.resolutionModelList![index].entity.colorIndex ?? 0],
-                          padding: const EdgeInsets.all(0),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16.0),
-                          ),
-                        ),
+                      child: ResolutionListCell(
+                        // style: TextButton.styleFrom(
+                        //   backgroundColor: CustomColors.whSemiBlack,
+                        //   shadowColor: Colors.transparent,
+                        //   surfaceTintColor: Colors.transparent,
+                        //   overlayColor:
+                        //       CustomColors.pointColorList[viewModel.resolutionModelList![index].entity.colorIndex ?? 0],
+                        //   padding: const EdgeInsets.all(0),
+                        //   shape: RoundedRectangleBorder(
+                        //     borderRadius: BorderRadius.circular(16.0),
+                        //   ),
+                        // ),
                         onPressed: () async {
                           final isGuideShown = await SharedPreferences.getInstance().then((instance) {
                             return instance.getBool(PreferenceKey.isWritingPostGuideShown);
@@ -127,32 +130,33 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
                             });
                           }
                         },
-                        child: ResolutionListCellWidget(
-                          resolutionEntity: viewModel.resolutionModelList![index].entity,
-                          showDetails: false,
-                        ),
+                        resolutionEntity: viewModel.resolutionModelList![index].entity,
+                        showDetails: false,
                       ),
                     ),
-                  ).append(
-                    AddResolutionCellWidget(
-                      tapAddResolutionCallback: () async {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            fullscreenDialog: true,
-                            builder: (context) => const AddResolutionView(),
-                          ),
-                        ).whenComplete(() async {
-                          await ref.watch(myPageViewModelProvider.notifier).getMyResolutionListUsecase();
-                          await provider.loadResolutionModelList().whenComplete(() {
-                            setState(() {
-                              ref.watch(resolutionListViewModelProvider).isLoadingView = false;
+                  )
+                      .append(
+                        ListDashOutlinedCell(
+                          buttonLabel: '새로운 목표 추가하기',
+                          onPressed: () async {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                fullscreenDialog: true,
+                                builder: (context) => const AddResolutionView(),
+                              ),
+                            ).whenComplete(() async {
+                              await ref.watch(myPageViewModelProvider.notifier).getMyResolutionListUsecase();
+                              await provider.loadResolutionModelList().whenComplete(() {
+                                setState(() {
+                                  ref.watch(resolutionListViewModelProvider).isLoadingView = false;
+                                });
+                              });
                             });
-                          });
-                        });
-                      },
-                    ),
-                  ).toList(),
+                          },
+                        ),
+                      )
+                      .toList(),
                 ),
               ),
               Container(
@@ -242,7 +246,7 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
               const SizedBox(
                 height: 16,
               ),
-              ResolutionLinearGaugeWidget(
+              ResolutionLinearGaugeIndicator(
                 resolutionEntity: viewModel.resolutionModelList![index].entity,
                 futureDoneList: viewModel.resolutionModelList![index].doneList,
               ),
@@ -275,10 +279,6 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
                   // ignore: use_build_context_synchronously
                   context,
                   text: '성공적으로 인증글을 공유했어요',
-                  icon: const Icon(
-                    Icons.check_circle,
-                    color: CustomColors.whYellow,
-                  ),
                 );
               }
             },
@@ -310,10 +310,6 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
                         // ignore: use_build_context_synchronously
                         context,
                         text: '성공적으로 반성글을 공유했어요',
-                        icon: const Icon(
-                          Icons.check_circle,
-                          color: CustomColors.whYellow,
-                        ),
                       );
                     }
                   },
@@ -338,10 +334,6 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
                         showToastMessage(
                           context,
                           text: '성공적으로 인증을 남겼어요',
-                          icon: const Icon(
-                            Icons.check_circle,
-                            color: CustomColors.whYellow,
-                          ),
                         );
                       });
                     },

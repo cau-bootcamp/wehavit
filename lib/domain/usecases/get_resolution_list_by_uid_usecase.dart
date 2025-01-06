@@ -2,8 +2,7 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
 
-class GetResolutionListByUserIdUsecase
-    extends FutureUseCase<List<ResolutionEntity>, String> {
+class GetResolutionListByUserIdUsecase extends FutureUseCase<List<ResolutionEntity>, String> {
   GetResolutionListByUserIdUsecase(
     this._resolutionRepository,
   );

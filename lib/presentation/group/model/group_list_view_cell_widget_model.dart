@@ -2,6 +2,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 
+// TODO: GroupEntity에 공유중인 Post 개수 / Resolution 개수 넣기
 class GroupListViewCellWidgetModel {
   GroupListViewCellWidgetModel({
     required this.groupEntity,

@@ -8,5 +8,4 @@ export 'main/main.dart';
 export 'my_page/my_page.dart';
 export 'reaction/reaction.dart';
 export 'splash/splash.dart';
-export 'test_view/test_view.dart';
 export 'write_post/write_post.dart';

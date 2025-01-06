@@ -2,8 +2,8 @@ import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:wehavit/common/common.dart';
 
-class SmallColoredButtonWidget extends StatelessWidget {
-  const SmallColoredButtonWidget({
+class SmallColoredButton extends StatelessWidget {
+  const SmallColoredButton({
     super.key,
     required this.buttonLabel,
     this.backgroundColor = CustomColors.whYellow,
@@ -22,22 +22,23 @@ class SmallColoredButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 30,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.all(0.0),
-          backgroundColor: isDisabled ? CustomColors.whGrey600 : backgroundColor,
-          foregroundColor: foregroundColor,
+      child: TextButton(
+        onPressed: () {
+          if (isDisabled != false) onPressed();
+        },
+        style: TextButton.styleFrom(
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          padding: EdgeInsets.zero,
           shadowColor: Colors.transparent,
+          backgroundColor: isDisabled ? CustomColors.whGrey600 : backgroundColor,
+          minimumSize: Size.zero,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(20.0)),
           ),
         ),
-        onPressed: () {
-          if (isDisabled != false) onPressed();
-        },
         child: Container(
           padding: const EdgeInsets.symmetric(
-            horizontal: 8.0,
+            horizontal: 10,
             vertical: 6.0,
           ),
           alignment: Alignment.center,

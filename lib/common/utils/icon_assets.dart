@@ -2,17 +2,13 @@ class CustomIconImage {
   static const String approvalIcon = 'assets/images/icons/icon_approval.png';
   static const String linkIcon = 'assets/images/icons/icon_link.png';
 
-  static const String appleLogInLogoIcon =
-      'assets/images/icons/social_apple_log_in_logo.png';
-  static const String googleLogInLogoIcon =
-      'assets/images/icons/social_google_log_in_logo.png';
-  static const String kakaoLogInLogoIcon =
-      'assets/images/icons/social_kakao_log_in_logo.png';
+  static const String appleLogInLogoIcon = 'assets/images/icons/social_apple_log_in_logo.png';
+  static const String googleLogInLogoIcon = 'assets/images/icons/social_google_log_in_logo.png';
+  static const String kakaoLogInLogoIcon = 'assets/images/icons/social_kakao_log_in_logo.png';
 
   static const String iconNone = 'assets/images/icons/icon_none.png';
   static const String iconBag = 'assets/images/icons/icon_bag.png';
-  static const String iconBikeInside =
-      'assets/images/icons/icon_bike_inside.png';
+  static const String iconBikeInside = 'assets/images/icons/icon_bike_inside.png';
   static const String iconBike = 'assets/images/icons/icon_bike.png';
   static const String iconBook = 'assets/images/icons/icon_book.png';
   static const String iconChinese = 'assets/images/icons/icon_chinese.png';

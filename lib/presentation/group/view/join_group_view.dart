@@ -29,7 +29,7 @@ class _JoinGroupViewState extends ConsumerState<JoinGroupView> {
       resizeToAvoidBottomInset: true,
       backgroundColor: CustomColors.whDarkBlack,
       appBar: WehavitAppBar(
-        title: '그룹에 참여하기',
+        titleLabel: '그룹에 참여하기',
         leadingTitle: '닫기',
         leadingAction: () {
           Navigator.pop(context);

@@ -17,16 +17,12 @@ class FirebaseCollectionName {
       : 'invalid_address';
 
   static String getTargetFriendsCollectionName(String fId) {
-    final targetFriends = FirebaseAuth.instance.currentUser != null
-        ? 'users/$fId/friends'
-        : 'invalid_address';
+    final targetFriends = FirebaseAuth.instance.currentUser != null ? 'users/$fId/friends' : 'invalid_address';
     return targetFriends;
   }
 
   static String getTargetResolutionCollectionName(String userId) {
-    final targetFriends = FirebaseAuth.instance.currentUser != null
-        ? 'users/$userId/resolutions'
-        : 'invalid_address';
+    final targetFriends = FirebaseAuth.instance.currentUser != null ? 'users/$userId/resolutions' : 'invalid_address';
     return targetFriends;
   }
 
@@ -51,9 +47,7 @@ class FirebaseCollectionName {
     return 'users/$targetUid/groups';
   }
 
-  static String get confirmPostImageStorageName => FirebaseAuth
-              .instance.currentUser !=
-          null
+  static String get confirmPostImageStorageName => FirebaseAuth.instance.currentUser != null
       ? '${FirebaseAuth.instance.currentUser?.uid}/confirm_post/_${DateTime.now().toIso8601String()}'
       : 'invalid_address';
 
@@ -69,17 +63,11 @@ class FirebaseCollectionName {
     return '$groups/$groupId/announcements';
   }
 
-  static final confirmPosts = FirebaseAuth.instance.currentUser != null
-      ? 'confirm_posts'
-      : 'invalid_address';
-  static final encourages = FirebaseAuth.instance.currentUser != null
-      ? 'encourages'
-      : 'invalid_address';
+  static final confirmPosts = FirebaseAuth.instance.currentUser != null ? 'confirm_posts' : 'invalid_address';
+  static final encourages = FirebaseAuth.instance.currentUser != null ? 'encourages' : 'invalid_address';
   static const liveConfirmPosts = 'live_confirm_posts';
 
-  static final liveWaitingUsers = FirebaseAuth.instance.currentUser != null
-      ? 'live_waiting_users'
-      : 'invalid_address';
+  static final liveWaitingUsers = FirebaseAuth.instance.currentUser != null ? 'live_waiting_users' : 'invalid_address';
 
   static String getTargetUserQuickshotPresetCollectionName(String targetUid) {
     return 'users/$targetUid/quickshot_presets';

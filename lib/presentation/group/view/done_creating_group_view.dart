@@ -24,7 +24,7 @@ class DoneCreatingGroupView extends ConsumerWidget {
       child: Scaffold(
         backgroundColor: CustomColors.whDarkBlack,
         appBar: WehavitAppBar(
-          title: '그룹 만들기 완료',
+          titleLabel: '그룹 만들기 완료',
           trailingTitle: '닫기',
           trailingAction: () async {
             ref.read(groupViewModelProvider.notifier).loadMyGroupCellList();

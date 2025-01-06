@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
+import 'package:wehavit/presentation/common_components/group_list_cell.dart';
 import 'package:wehavit/presentation/group/group.dart';
 import 'package:wehavit/presentation/group_post/group_post.dart';
 
@@ -44,6 +45,9 @@ class _GroupViewState extends ConsumerState<GroupView> {
             cellModel: viewModel.groupListViewFriendCellModel!,
           ),
         ),
+      GroupListCell(
+        cellModel: GroupListCellModel.dummyModel,
+      ),
       ...viewModel.groupListViewCellModelList
               ?.map(
                 (cellModel) => GestureDetector(
@@ -84,7 +88,7 @@ class _GroupViewState extends ConsumerState<GroupView> {
     return Scaffold(
       backgroundColor: CustomColors.whDarkBlack,
       appBar: WehavitAppBar(
-        title: '참여중인 그룹 목록',
+        titleLabel: '참여중인 그룹 목록',
       ),
       body: SafeArea(
         minimum: const EdgeInsets.symmetric(horizontal: 16),
@@ -134,7 +138,7 @@ class _GroupViewState extends ConsumerState<GroupView> {
             children: [
               WideColoredButton(
                 buttonTitle: '기존 그룹에 참여하기',
-                buttonIcon: Icons.search,
+                iconString: WHIcons.search,
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -153,7 +157,7 @@ class _GroupViewState extends ConsumerState<GroupView> {
               ),
               WideColoredButton(
                 buttonTitle: '새로운 그룹 만들기',
-                buttonIcon: Icons.flag_outlined,
+                iconString: WHIcons.group,
                 onPressed: () {
                   Navigator.push(
                     context,

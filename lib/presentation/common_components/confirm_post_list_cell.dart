@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/presentation/common_components/resolution_linear_gauge_indicator.dart';
-import 'package:wehavit/presentation/common_components/user_profile_cell.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 class ConfirmPostListCell extends StatefulWidget {
@@ -118,7 +116,7 @@ class _ConfirmPostListCellState extends State<ConfirmPostListCell> {
               ),
               if (widget.showActions)
                 ConfirmPostReactionButtonList(
-                  onCommentPressed: () {},
+                  onCommentPressed: widget.onCommentPressed,
                   onEmojiPressed: () {},
                   onQuickshotTapUp: (_) {
                     setState(() {

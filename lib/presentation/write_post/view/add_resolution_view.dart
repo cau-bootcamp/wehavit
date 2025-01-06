@@ -25,7 +25,7 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
       resizeToAvoidBottomInset: true,
       backgroundColor: CustomColors.whDarkBlack,
       appBar: WehavitAppBar(
-        title: '도전 추가하기',
+        titleLabel: '도전 추가하기',
         leadingTitle: '취소',
         leadingAction: () async {
           Navigator.pop(context);
@@ -472,7 +472,6 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                         showToastMessage(
                           context,
                           text: '잠시 후 다시 시도해주세요',
-                          icon: const Icon(Icons.not_interested),
                         );
                       }
                     });

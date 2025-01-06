@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
+import 'package:wehavit/presentation/common_components/user_profile_cell.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 class FriendListView extends ConsumerStatefulWidget {
@@ -24,10 +25,10 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
     return Scaffold(
       backgroundColor: CustomColors.whDarkBlack,
       appBar: WehavitAppBar(
-        title: '친구 목록',
-        trailingTitle: isManagingMode ? '완료' : null,
-        trailingIcon: isManagingMode ? null : Icons.manage_accounts_outlined,
-        trailingIconBadgeCount: isManagingMode ? null : viewModel.appliedFutureUserList?.length,
+        titleLabel: '친구 목록',
+        trailingTitle: isManagingMode ? '완료' : '',
+        trailingIconString: isManagingMode ? '' : WHIcons.friend,
+        trailingIconBadgeCount: isManagingMode ? 0 : viewModel.appliedFutureUserList?.length ?? 0,
         trailingAction: () {
           setState(() {
             isManagingMode = !isManagingMode;
@@ -43,27 +44,8 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
           visible: isManagingMode,
           replacement: Column(
             children: [
-              ElevatedButton(
-                // TODO: 친구초대용 링크 복사 기능 삽입하기
-                onPressed: () async {},
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16.0),
-                  ),
-                  backgroundColor: CustomColors.whGrey,
-                  shadowColor: Colors.transparent,
-                  surfaceTintColor: Colors.transparent,
-                  foregroundColor: CustomColors.whYellow,
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16.0),
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: FriendListMyProfileWidget(
-                    futureUserEntity: viewModel.futureMyUserDataEntity,
-                  ),
-                ),
+              MyProfileBlock(
+                futureUserEntity: viewModel.futureMyUserDataEntity!,
               ),
               const SizedBox(
                 height: 32.0,
@@ -106,10 +88,11 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
                               padding: const EdgeInsets.only(bottom: 64),
                               itemCount: viewModel.friendFutureUserList!.length,
                               itemBuilder: (context, index) {
-                                return FriendListCellWidget(
-                                  futureUserEntity: viewModel.friendFutureUserList![index],
-                                  cellState: FriendListCellState.normal,
-                                );
+                                // return FriendListCellWidget(
+                                //   futureUserEntity: viewModel.friendFutureUserList![index],
+                                //   cellState: FriendListCellState.normal,
+                                // );
+                                return UserProfileCell(type: UserProfileCellType.loading);
                               },
                             ),
                           ),
