@@ -1,6 +1,8 @@
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
+import 'package:wehavit/common/utils/datetime+.dart';
+import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 enum UserProfileCellType {
@@ -41,7 +43,7 @@ class UserProfileCell extends StatelessWidget {
           Container(
             width: 40,
             height: 40,
-            decoration: BoxDecoration(shape: BoxShape.circle, color: CustomColors.whGrey400),
+            decoration: const BoxDecoration(shape: BoxShape.circle, color: CustomColors.whGrey400),
           ),
           Expanded(
             child: Padding(
@@ -110,6 +112,50 @@ class UserProfileCell extends StatelessWidget {
           ),
         ),
         actions,
+      ],
+    );
+  }
+}
+
+class ConfirmPostUserProfile extends StatelessWidget {
+  const ConfirmPostUserProfile({
+    required this.userEntity,
+    required this.uploadedAt,
+    super.key,
+  });
+
+  final UserDataEntity userEntity;
+  final DateTime uploadedAt;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const CircleProfileImage(size: 40, url: 'https://cdn.sisain.co.kr/news/photo/202405/53124_99734_5711.jpg'),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      userEntity.userName ?? '',
+                      style: context.bodyMedium?.bold,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  uploadedAt.formatToKoreanTime(),
+                  style: context.labelSmall?.copyWith(color: CustomColors.whGrey800),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }

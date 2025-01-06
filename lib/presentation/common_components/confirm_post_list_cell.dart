@@ -69,18 +69,22 @@ class _ConfirmPostListCellState extends State<ConfirmPostListCell> {
                         Stack(
                           alignment: Alignment.centerRight,
                           children: [
-                            const UserProfileCell(type: UserProfileCellType.normal),
-                            Container(
-                              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 6),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: CustomColors.whRed300,
-                              ),
-                              child: Text(
-                                '오늘 실천 실패',
-                                style: context.labelSmall?.bold,
-                              ),
+                            ConfirmPostUserProfile(
+                              userEntity: UserDataEntity.dummyModel,
+                              uploadedAt: widget.confirmPostEntity.updatedAt ?? DateTime.now(),
                             ),
+                            if (widget.confirmPostEntity.hasRested)
+                              Container(
+                                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 6),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: CustomColors.whRed300,
+                                ),
+                                child: Text(
+                                  '오늘 실천 실패',
+                                  style: context.labelSmall?.bold,
+                                ),
+                              ),
                           ],
                         ),
                         const SizedBox(height: 12.0),
