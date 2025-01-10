@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/presentation.dart';
+import 'package:wehavit/presentation/state/user_data/my_user_data_provider.dart';
 
 class MainView extends ConsumerStatefulWidget {
   const MainView({super.key});
@@ -48,7 +49,7 @@ class MainViewState extends ConsumerState<MainView> with TickerProviderStateMixi
 
   Future<void> loadUserData() async {
     ref.read(myPageViewModelProvider.notifier).loadData();
-    ref.read(friendListViewModelProvider.notifier).getMyUserDataEntity();
+    // ref.read(friendListViewModelProvider.notifier).getMyUserDataEntity();
   }
 
   Future<void> loadResolutionData() async {
@@ -95,7 +96,7 @@ class MainViewState extends ConsumerState<MainView> with TickerProviderStateMixi
 
   @override
   Widget build(BuildContext context) {
-    final myPageViewModel = ref.watch(myPageViewModelProvider);
+    // final myPageViewModel = ref.watch(myPageViewModelProvider);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: CustomColors.whDarkBlack,
@@ -152,7 +153,7 @@ class MainViewState extends ConsumerState<MainView> with TickerProviderStateMixi
                             ),
                             TabBarProfileImageButton(
                               isSelected: tabController.index == 3,
-                              futureUserDataEntity: myPageViewModel.futureMyUserDataEntity!,
+                              futureUserDataEntity: ref.read(getMyUserDataProvider).value!,
                             ),
                           ],
                         ),

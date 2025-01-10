@@ -6,8 +6,8 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/presentation/common_components/my_wehavit_summary.dart';
 import 'package:wehavit/presentation/presentation.dart';
+import 'package:wehavit/presentation/state/user_data/my_user_data_provider.dart';
 
 class MyPageView extends ConsumerStatefulWidget {
   const MyPageView(this.index, this.tabController, {super.key});
@@ -68,8 +68,6 @@ class MyPageScreenState extends ConsumerState<MyPageView> with AutomaticKeepAliv
                 mainViewState,
                 deleteAccount,
               );
-              //   showToastMessage(context,
-              //       text: '안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요');
             },
           ),
           body: Container(
@@ -84,12 +82,12 @@ class MyPageScreenState extends ConsumerState<MyPageView> with AutomaticKeepAliv
                 padding: const EdgeInsets.only(bottom: 64.0),
                 children: [
                   // 내 프로필
-                  // MyPageWehavitSummaryWidget(
-                  //   futureUserEntity: viewModel.futureMyUserDataEntity,
-                  // ),
-                  MyWehavitSummary(
-                    futureUserEntity: viewModel.futureMyUserDataEntity!,
+                  MyPageWehavitSummaryWidget(
+                    futureUserEntity: ref.read(getMyUserDataProvider).value,
                   ),
+                  // MyWehavitSummary(
+                  //   futureUserEntity: ref.read(getMyUserDataProvider).value!,
+                  // ),
                   const SizedBox(
                     height: 16,
                   ),
@@ -187,10 +185,6 @@ class MyPageScreenState extends ConsumerState<MyPageView> with AutomaticKeepAliv
                     ).then((result) {
                       if (result == true) {
                         mainViewState?.setState(() {});
-
-                        ref.read(myPageViewModelProvider.notifier).getMyUserData().whenComplete(() {
-                          setState(() {});
-                        });
                       }
 
                       Navigator.pop(context);

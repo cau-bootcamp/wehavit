@@ -8,7 +8,6 @@ class FriendListViewModelProvider extends StateNotifier<FriendListViewModel> {
   FriendListViewModelProvider(
     this._getFriendListUsecase,
     this._searchUserDataListByHandleUsecase,
-    this._getMyUserDataUsecase,
     this._getAppliedUserListForFriendUsecase,
     this._acceptApplyingForFriendUsecase,
     this._rejectApplyingForFriendUsecase,
@@ -20,7 +19,6 @@ class FriendListViewModelProvider extends StateNotifier<FriendListViewModel> {
   final GetFriendListUsecase _getFriendListUsecase;
   final GetAppliedUserListForFriendUsecase _getAppliedUserListForFriendUsecase;
   final SearchUserDataListByHandleUsecase _searchUserDataListByHandleUsecase;
-  final GetMyUserDataUsecase _getMyUserDataUsecase;
   final AcceptApplyingForFriendUsecase _acceptApplyingForFriendUsecase;
   final RejectApplyingForFriendUsecase _rejectApplyingForFriendUsecase;
   final RemoveFriendUsecase _removeFriendUsecase;
@@ -54,10 +52,6 @@ class FriendListViewModelProvider extends StateNotifier<FriendListViewModel> {
         (list) => list,
       ),
     );
-  }
-
-  Future<void> getMyUserDataEntity() async {
-    state.futureMyUserDataEntity = _getMyUserDataUsecase();
   }
 
   Future<void> rejectToBeFriendWith({required String targetUid}) async {
