@@ -29,8 +29,12 @@ mixin _$FirebaseGroupModel {
   @TimestampConverter()
   DateTime get groupCreatedAt => throw _privateConstructorUsedError;
 
+  /// Serializes this FirebaseGroupModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of FirebaseGroupModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $FirebaseGroupModelCopyWith<FirebaseGroupModel> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -59,6 +63,8 @@ class _$FirebaseGroupModelCopyWithImpl<$Res, $Val extends FirebaseGroupModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of FirebaseGroupModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -127,6 +133,8 @@ class __$$FirebaseGroupModelImplCopyWithImpl<$Res>
   __$$FirebaseGroupModelImplCopyWithImpl(_$FirebaseGroupModelImpl _value, $Res Function(_$FirebaseGroupModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of FirebaseGroupModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -228,12 +236,14 @@ class _$FirebaseGroupModelImpl implements _FirebaseGroupModel {
             (identical(other.groupCreatedAt, groupCreatedAt) || other.groupCreatedAt == groupCreatedAt));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, groupName, groupDescription, groupRule, groupManagerUid, groupColor,
       const DeepCollectionEquality().hash(_groupMemberUidList), groupCreatedAt);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FirebaseGroupModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FirebaseGroupModelImplCopyWith<_$FirebaseGroupModelImpl> get copyWith =>
@@ -274,7 +284,10 @@ abstract class _FirebaseGroupModel implements FirebaseGroupModel {
   @override
   @TimestampConverter()
   DateTime get groupCreatedAt;
+
+  /// Create a copy of FirebaseGroupModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FirebaseGroupModelImplCopyWith<_$FirebaseGroupModelImpl> get copyWith => throw _privateConstructorUsedError;
 }

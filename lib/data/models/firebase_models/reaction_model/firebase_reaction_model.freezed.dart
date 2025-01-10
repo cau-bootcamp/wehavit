@@ -26,8 +26,12 @@ mixin _$FirebaseReactionModel {
   String get comment => throw _privateConstructorUsedError;
   Map<String, int> get emoji => throw _privateConstructorUsedError;
 
+  /// Serializes this FirebaseReactionModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of FirebaseReactionModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $FirebaseReactionModelCopyWith<FirebaseReactionModel> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -49,6 +53,8 @@ class _$FirebaseReactionModelCopyWithImpl<$Res, $Val extends FirebaseReactionMod
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of FirebaseReactionModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -101,6 +107,8 @@ class __$$FirebaseReactionModelImplCopyWithImpl<$Res>
       _$FirebaseReactionModelImpl _value, $Res Function(_$FirebaseReactionModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of FirebaseReactionModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -182,12 +190,14 @@ class _$FirebaseReactionModelImpl implements _FirebaseReactionModel {
             const DeepCollectionEquality().equals(other._emoji, _emoji));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType, complimenterUid, reactionType, quickShotUrl, comment, const DeepCollectionEquality().hash(_emoji));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FirebaseReactionModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FirebaseReactionModelImplCopyWith<_$FirebaseReactionModelImpl> get copyWith =>
@@ -221,7 +231,10 @@ abstract class _FirebaseReactionModel implements FirebaseReactionModel {
   String get comment;
   @override
   Map<String, int> get emoji;
+
+  /// Create a copy of FirebaseReactionModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FirebaseReactionModelImplCopyWith<_$FirebaseReactionModelImpl> get copyWith => throw _privateConstructorUsedError;
 }

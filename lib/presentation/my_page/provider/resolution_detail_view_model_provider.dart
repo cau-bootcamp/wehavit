@@ -36,7 +36,7 @@ class ResolutionDetailViewModelProvider extends StateNotifier<ResolutionDetailVi
     }
 
     state.confirmPostList[selectedDate] = getConfirmPostOfDatetimeFromTargetResolutionUsecase.call(
-      resolutionId: state.resolutionEntity!.resolutionId!,
+      resolutionId: state.resolutionEntity!.resolutionId,
       targetDateTime: dateTime,
     );
   }

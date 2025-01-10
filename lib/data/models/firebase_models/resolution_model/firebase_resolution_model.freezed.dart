@@ -37,8 +37,12 @@ mixin _$FirebaseResolutionModel {
   List<DateTime>? get successWeekMondayList => throw _privateConstructorUsedError;
   List<int>? get weeklyPostCountList => throw _privateConstructorUsedError;
 
+  /// Serializes this FirebaseResolutionModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of FirebaseResolutionModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $FirebaseResolutionModelCopyWith<FirebaseResolutionModel> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -74,6 +78,8 @@ class _$FirebaseResolutionModelCopyWithImpl<$Res, $Val extends FirebaseResolutio
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of FirebaseResolutionModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -185,6 +191,8 @@ class __$$FirebaseResolutionModelImplCopyWithImpl<$Res>
       _$FirebaseResolutionModelImpl _value, $Res Function(_$FirebaseResolutionModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of FirebaseResolutionModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -380,7 +388,7 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
             const DeepCollectionEquality().equals(other._weeklyPostCountList, _weeklyPostCountList));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -399,7 +407,9 @@ class _$FirebaseResolutionModelImpl implements _FirebaseResolutionModel {
       const DeepCollectionEquality().hash(_successWeekMondayList),
       const DeepCollectionEquality().hash(_weeklyPostCountList));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FirebaseResolutionModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FirebaseResolutionModelImplCopyWith<_$FirebaseResolutionModelImpl> get copyWith =>
@@ -462,8 +472,11 @@ abstract class _FirebaseResolutionModel implements FirebaseResolutionModel {
   List<DateTime>? get successWeekMondayList;
   @override
   List<int>? get weeklyPostCountList;
+
+  /// Create a copy of FirebaseResolutionModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FirebaseResolutionModelImplCopyWith<_$FirebaseResolutionModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

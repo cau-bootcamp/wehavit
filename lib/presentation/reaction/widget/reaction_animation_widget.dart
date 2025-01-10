@@ -16,10 +16,6 @@ class ReactionAnimationWidget extends ConsumerStatefulWidget {
 }
 
 final reactionAnimationWidgetKeyProvider = Provider<GlobalKey<ReactionAnimationWidgetState>>((ref) {
-  ref.onRemoveListener(() {
-    print("DEBUG HELLo");
-  });
-
   return GlobalKey<ReactionAnimationWidgetState>();
 });
 
@@ -176,7 +172,7 @@ class ReactionAnimationWidgetState extends ConsumerState<ReactionAnimationWidget
               return 'https://png.pngtree.com/thumb_back/fh260/background/20210409/pngtree-rules-of-biotex-cat-image_600076.jpg';
             },
             (userModel) {
-              return userModel.userImageUrl!;
+              return userModel.userImageUrl;
             },
           );
         }

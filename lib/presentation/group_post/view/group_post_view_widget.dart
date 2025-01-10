@@ -10,7 +10,6 @@ import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
-import 'package:wehavit/presentation/common_components/resolution_linear_gauge_indicator.dart';
 import 'package:wehavit/presentation/effects/effects.dart';
 import 'package:wehavit/presentation/group_post/group_post.dart';
 
@@ -50,13 +49,13 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
     );
 
     resolutionDoneListForWrittenWeek = ref.read(getTargetResolutionDoneListForWeekUsecaseProvider).call(
-          resolutionId: widget.confirmPostEntity.resolutionId!,
+          resolutionId: widget.confirmPostEntity.resolutionId,
           startMonday: widget.createdDate.getMondayDateTime(),
         );
 
     futureResolutionEntity = ref.read(getTargetResolutionEntityUsecaseProvider)(
       targetUserId: widget.confirmPostEntity.owner!,
-      targetResolutionId: widget.confirmPostEntity.resolutionId!,
+      targetResolutionId: widget.confirmPostEntity.resolutionId,
     );
 
     myUserEntity = await ref.read(myPageViewModelProvider).futureMyUserDataEntity?.then(
@@ -700,15 +699,14 @@ class _ConfirmPostContentWidgetState extends State<ConfirmPostContentWidget> {
   @override
   void initState() {
     super.initState();
-    imageList = widget.confirmPostEntity.imageUrlList?.map((imageUrl) {
-          return NetworkImage(imageUrl);
-        }).toList() ??
-        [];
+    imageList = widget.confirmPostEntity.imageUrlList.map((imageUrl) {
+      return NetworkImage(imageUrl);
+    }).toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.confirmPostEntity.content != null && widget.confirmPostEntity.content != '') {
+    if (widget.confirmPostEntity.content != '') {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -718,7 +716,7 @@ class _ConfirmPostContentWidgetState extends State<ConfirmPostContentWidget> {
                 minHeight: 100,
               ),
               child: Text(
-                widget.confirmPostEntity.content!,
+                widget.confirmPostEntity.content,
                 textAlign: TextAlign.start,
                 style: const TextStyle(
                   color: CustomColors.whWhite,
@@ -731,7 +729,7 @@ class _ConfirmPostContentWidgetState extends State<ConfirmPostContentWidget> {
           const SizedBox(
             width: 4.0,
           ),
-          if (widget.confirmPostEntity.imageUrlList!.isNotEmpty)
+          if (widget.confirmPostEntity.imageUrlList.isNotEmpty)
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.all(0),
@@ -772,7 +770,7 @@ class _ConfirmPostContentWidgetState extends State<ConfirmPostContentWidget> {
                           return Stack(
                             children: [
                               child,
-                              if (widget.confirmPostEntity.imageUrlList!.length > 1)
+                              if (widget.confirmPostEntity.imageUrlList.length > 1)
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Container(
@@ -785,7 +783,7 @@ class _ConfirmPostContentWidgetState extends State<ConfirmPostContentWidget> {
                                     ),
                                     child: Text(
                                       // ignore: lines_longer_than_80_chars
-                                      '+${widget.confirmPostEntity.imageUrlList!.length - 1}',
+                                      '+${widget.confirmPostEntity.imageUrlList.length - 1}',
                                       style: const TextStyle(
                                         color: CustomColors.whWhite,
                                         fontSize: 12.0,
@@ -816,7 +814,7 @@ class _ConfirmPostContentWidgetState extends State<ConfirmPostContentWidget> {
                       width: 150,
                       height: 100,
                       image: NetworkImage(
-                        widget.confirmPostEntity.imageUrlList!.first,
+                        widget.confirmPostEntity.imageUrlList.first,
                       ),
                     ),
                   ),
@@ -826,7 +824,7 @@ class _ConfirmPostContentWidgetState extends State<ConfirmPostContentWidget> {
         ],
       );
     } else {
-      if (widget.confirmPostEntity.imageUrlList!.length == 1) {
+      if (widget.confirmPostEntity.imageUrlList.length == 1) {
         return ElevatedButton(
           style: ElevatedButton.styleFrom(
             padding: const EdgeInsets.all(0),
@@ -880,12 +878,12 @@ class _ConfirmPostContentWidgetState extends State<ConfirmPostContentWidget> {
                   }
                 },
                 fit: BoxFit.cover,
-                image: NetworkImage(widget.confirmPostEntity.imageUrlList![0]),
+                image: NetworkImage(widget.confirmPostEntity.imageUrlList[0]),
               ),
             ),
           ),
         );
-      } else if (widget.confirmPostEntity.imageUrlList!.length == 2) {
+      } else if (widget.confirmPostEntity.imageUrlList.length == 2) {
         return Column(
           children: [
             ElevatedButton(
@@ -942,7 +940,7 @@ class _ConfirmPostContentWidgetState extends State<ConfirmPostContentWidget> {
                     },
                     fit: BoxFit.cover,
                     image: NetworkImage(
-                      widget.confirmPostEntity.imageUrlList![0],
+                      widget.confirmPostEntity.imageUrlList[0],
                     ),
                   ),
                 ),
@@ -1005,7 +1003,7 @@ class _ConfirmPostContentWidgetState extends State<ConfirmPostContentWidget> {
                     },
                     fit: BoxFit.cover,
                     image: NetworkImage(
-                      widget.confirmPostEntity.imageUrlList![1],
+                      widget.confirmPostEntity.imageUrlList[1],
                     ),
                   ),
                 ),
@@ -1013,7 +1011,7 @@ class _ConfirmPostContentWidgetState extends State<ConfirmPostContentWidget> {
             ),
           ],
         );
-      } else if (widget.confirmPostEntity.imageUrlList!.length == 3) {
+      } else if (widget.confirmPostEntity.imageUrlList.length == 3) {
         return IntrinsicHeight(
           child: Row(
             children: [
@@ -1074,7 +1072,7 @@ class _ConfirmPostContentWidgetState extends State<ConfirmPostContentWidget> {
                       },
                       fit: BoxFit.cover,
                       image: NetworkImage(
-                        widget.confirmPostEntity.imageUrlList![0],
+                        widget.confirmPostEntity.imageUrlList[0],
                       ),
                     ),
                   ),
@@ -1140,7 +1138,7 @@ class _ConfirmPostContentWidgetState extends State<ConfirmPostContentWidget> {
                             },
                             fit: BoxFit.cover,
                             image: NetworkImage(
-                              widget.confirmPostEntity.imageUrlList![1],
+                              widget.confirmPostEntity.imageUrlList[1],
                             ),
                           ),
                         ),
@@ -1203,7 +1201,7 @@ class _ConfirmPostContentWidgetState extends State<ConfirmPostContentWidget> {
                             },
                             fit: BoxFit.cover,
                             image: NetworkImage(
-                              widget.confirmPostEntity.imageUrlList![2],
+                              widget.confirmPostEntity.imageUrlList[2],
                             ),
                           ),
                         ),

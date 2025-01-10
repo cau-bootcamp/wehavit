@@ -142,7 +142,7 @@ class ConfirmPostListCellContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (confirmPostEntity.content != null && confirmPostEntity.content!.isNotEmpty) {
+    if (confirmPostEntity.content.isNotEmpty) {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -152,7 +152,7 @@ class ConfirmPostListCellContent extends StatelessWidget {
                 minHeight: 100,
               ),
               child: Text(
-                confirmPostEntity.content ?? '',
+                confirmPostEntity.content,
                 textAlign: TextAlign.start,
                 style: context.bodyMedium?.copyWith(color: CustomColors.whGrey900),
               ),
@@ -161,7 +161,7 @@ class ConfirmPostListCellContent extends StatelessWidget {
           const SizedBox(
             width: 4.0,
           ),
-          if (confirmPostEntity.imageUrlList!.isNotEmpty)
+          if (confirmPostEntity.imageUrlList.isNotEmpty)
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.all(0),
@@ -178,14 +178,14 @@ class ConfirmPostListCellContent extends StatelessWidget {
                     clipBehavior: Clip.hardEdge,
                     child: Image(
                       image: NetworkImage(
-                        confirmPostEntity.imageUrlList!.first,
+                        confirmPostEntity.imageUrlList.first,
                       ),
                       loadingBuilder: (context, image, loadingProgress) {
                         if (loadingProgress == null) {
                           return Stack(
                             children: [
                               image,
-                              if (confirmPostEntity.imageUrlList!.length > 1)
+                              if (confirmPostEntity.imageUrlList.length > 1)
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Container(
@@ -195,7 +195,7 @@ class ConfirmPostListCellContent extends StatelessWidget {
                                       color: CustomColors.whBlack,
                                     ),
                                     child: Text(
-                                      '+${confirmPostEntity.imageUrlList!.length - 1}',
+                                      '+${confirmPostEntity.imageUrlList.length - 1}',
                                       style: context.labelMedium?.bold,
                                     ),
                                   ),
@@ -227,10 +227,9 @@ class ConfirmPostListCellContent extends StatelessWidget {
               ),
               onPressed: () async {
                 // TODO: 이미지 보여주는 페이지로 이동
-                final imageList = confirmPostEntity.imageUrlList?.map((imageUrl) {
-                      return NetworkImage(imageUrl);
-                    }).toList() ??
-                    [];
+                final imageList = confirmPostEntity.imageUrlList.map((imageUrl) {
+                  return NetworkImage(imageUrl);
+                }).toList();
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -245,9 +244,9 @@ class ConfirmPostListCellContent extends StatelessWidget {
         ],
       );
     }
-    if (confirmPostEntity.imageUrlList != null && confirmPostEntity.imageUrlList!.isNotEmpty) {
+    if (confirmPostEntity.imageUrlList.isNotEmpty) {
       return Column(
-        children: List<Widget>.generate(confirmPostEntity.imageUrlList?.length ?? 0, (index) {
+        children: List<Widget>.generate(confirmPostEntity.imageUrlList.length, (index) {
           return Container(
             padding: EdgeInsets.only(top: index == 0 ? 0.0 : 12.0),
             child: ElevatedButton(
@@ -265,7 +264,7 @@ class ConfirmPostListCellContent extends StatelessWidget {
                   clipBehavior: Clip.hardEdge,
                   child: Image(
                     image: NetworkImage(
-                      confirmPostEntity.imageUrlList!.first,
+                      confirmPostEntity.imageUrlList.first,
                     ),
                     loadingBuilder: (context, image, loadingProgress) {
                       if (loadingProgress == null) {

@@ -6,8 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/presentation/common_components/upload_photo_bottom_toolbar.dart';
-import 'package:wehavit/presentation/common_components/upload_photo_cell.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 class WritingConfirmPostView extends ConsumerStatefulWidget {
@@ -119,15 +117,15 @@ class _WritingConfirmPostViewState extends ConsumerState<WritingConfirmPostView>
                         ],
                       ),
                       Text(
-                        widget.entity.goalStatement ?? '',
+                        widget.entity.goalStatement,
                         style: TextStyle(
-                          color: CustomColors.pointColorList[widget.entity.colorIndex ?? 0],
+                          color: CustomColors.pointColorList[widget.entity.colorIndex],
                           fontSize: 16.0,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                       Text(
-                        widget.entity.actionStatement ?? '',
+                        widget.entity.actionStatement,
                         style: const TextStyle(
                           color: CustomColors.whSemiWhite,
                           fontSize: 16.0,

@@ -32,8 +32,12 @@ mixin _$FirebaseConfirmPostModel {
   DateTime? get updatedAt => throw _privateConstructorUsedError;
   Map<String, bool>? get attributes => throw _privateConstructorUsedError;
 
+  /// Serializes this FirebaseConfirmPostModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of FirebaseConfirmPostModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $FirebaseConfirmPostModelCopyWith<FirebaseConfirmPostModel> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -65,6 +69,8 @@ class _$FirebaseConfirmPostModelCopyWithImpl<$Res, $Val extends FirebaseConfirmP
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of FirebaseConfirmPostModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -146,6 +152,8 @@ class __$$FirebaseConfirmPostModelImplCopyWithImpl<$Res>
       _$FirebaseConfirmPostModelImpl _value, $Res Function(_$FirebaseConfirmPostModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of FirebaseConfirmPostModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -278,7 +286,7 @@ class _$FirebaseConfirmPostModelImpl implements _FirebaseConfirmPostModel {
             const DeepCollectionEquality().equals(other._attributes, _attributes));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -292,7 +300,9 @@ class _$FirebaseConfirmPostModelImpl implements _FirebaseConfirmPostModel {
       updatedAt,
       const DeepCollectionEquality().hash(_attributes));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FirebaseConfirmPostModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FirebaseConfirmPostModelImplCopyWith<_$FirebaseConfirmPostModelImpl> get copyWith =>
@@ -340,8 +350,11 @@ abstract class _FirebaseConfirmPostModel implements FirebaseConfirmPostModel {
   DateTime? get updatedAt;
   @override
   Map<String, bool>? get attributes;
+
+  /// Create a copy of FirebaseConfirmPostModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FirebaseConfirmPostModelImplCopyWith<_$FirebaseConfirmPostModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

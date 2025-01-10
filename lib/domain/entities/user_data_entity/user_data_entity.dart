@@ -8,16 +8,16 @@ class UserDataEntity with _$UserDataEntity {
   // ignore: invalid_annotation_target
   @JsonSerializable()
   factory UserDataEntity({
-    String? handle,
-    String? userId,
-    String? userName,
-    String? userImageUrl,
-    String? aboutMe,
-    String? messageToken,
-    DateTime? createdAt,
-    int? cumulativeGoals,
-    int? cumulativePosts,
-    int? cumulativeReactions,
+    @Default('') String handle,
+    @Default('') String userId,
+    @Default('') String userName,
+    @Default('') String userImageUrl,
+    @Default('') String aboutMe,
+    @Default('') String messageToken,
+    required DateTime createdAt,
+    @Default(0) int cumulativeGoals,
+    @Default(0) int cumulativePosts,
+    @Default(0) int cumulativeReactions,
   }) = _UserDataEntity;
 
   factory UserDataEntity.fromJson(Map<String, dynamic> json) => _$UserDataEntityFromJson(json);

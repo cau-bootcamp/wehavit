@@ -22,6 +22,8 @@ class GroupListViewCellWidgetModel {
       groupColor: 5,
       groupId: '12345',
       groupCreatedAt: DateTime.now().subtract(const Duration(days: 3)),
+      groupDescription: '',
+      groupRule: '',
     ),
     sharedResolutionCount: Future.delayed(
       const Duration(seconds: 2),

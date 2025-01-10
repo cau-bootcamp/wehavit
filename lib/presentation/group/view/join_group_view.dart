@@ -357,7 +357,7 @@ class _JoinGroupIntroduceViewState extends ConsumerState<JoinGroupIntroduceView>
                           ),
                         ),
                         Text(
-                          widget.groupModel.groupEntity.groupDescription ?? '',
+                          widget.groupModel.groupEntity.groupDescription,
                           style: const TextStyle(
                             fontSize: 14.0,
                             fontWeight: FontWeight.w300,
@@ -402,7 +402,7 @@ class _JoinGroupIntroduceViewState extends ConsumerState<JoinGroupIntroduceView>
                           ),
                         ),
                         Text(
-                          widget.groupModel.groupEntity.groupRule ?? '',
+                          widget.groupModel.groupEntity.groupRule,
                           style: const TextStyle(
                             fontSize: 14.0,
                             fontWeight: FontWeight.w300,
@@ -436,7 +436,6 @@ class _JoinGroupIntroduceViewState extends ConsumerState<JoinGroupIntroduceView>
                         child: WideColoredButton(
                           buttonTitle: '참여 신청하기',
                           foregroundColor: CustomColors.whBlack,
-                          backgroundColor: CustomColors.whYellow,
                           onPressed: () async {
                             ref.read(applyForJoiningGroupUsecaseProvider)(
                               widget.groupModel.groupEntity.groupId,

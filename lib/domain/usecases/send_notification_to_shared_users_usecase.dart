@@ -30,8 +30,8 @@ class SendNotificationToSharedUsersUsecase {
 
     List<String> sharingUserTokenList = [];
 
-    final groupEntityList = resolutionEntity.shareGroupEntityList ?? [];
-    final friendEntityList = resolutionEntity.shareFriendEntityList ?? [];
+    final groupEntityList = resolutionEntity.shareGroupEntityList;
+    final friendEntityList = resolutionEntity.shareFriendEntityList;
 
     await Future.forEach(groupEntityList, (GroupEntity groupEntity) async {
       await Future.forEach(groupEntity.groupMemberUidList, (String uid) async {
@@ -49,9 +49,7 @@ class SendNotificationToSharedUsersUsecase {
     });
 
     await Future.forEach(friendEntityList, (UserDataEntity userEntity) async {
-      if (userEntity.messageToken != null) {
-        sharingUserTokenList.add(userEntity.messageToken!);
-      }
+      sharingUserTokenList.add(userEntity.messageToken);
     });
 
     sharingUserTokenList = sharingUserTokenList.toSet().toList();
@@ -60,7 +58,7 @@ class SendNotificationToSharedUsersUsecase {
       title: messageTitleTemplate,
       content: messageContentTemplate.replaceFirst(
         'NAME',
-        myUserEntity.userName ?? 'NULL',
+        myUserEntity.userName,
       ),
       targetTokenList: sharingUserTokenList,
     );

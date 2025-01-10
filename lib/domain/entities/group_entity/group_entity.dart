@@ -10,8 +10,8 @@ class GroupEntity with _$GroupEntity {
   @JsonSerializable()
   factory GroupEntity({
     required String groupName,
-    @Default('') String? groupDescription,
-    @Default('') String? groupRule,
+    required String groupDescription,
+    required String groupRule,
     required String groupManagerUid,
     required List<String> groupMemberUidList,
     required DateTime groupCreatedAt,
@@ -24,6 +24,8 @@ class GroupEntity with _$GroupEntity {
   static GroupEntity dummy = GroupEntity(
     groupName: 'dummy name',
     groupManagerUid: '',
+    groupDescription: '',
+    groupRule: '',
     groupMemberUidList: [],
     groupCreatedAt: DateTime.now(),
     groupColor: 0,

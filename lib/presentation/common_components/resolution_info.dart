@@ -15,7 +15,7 @@ class ResolutionInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pointColor = CustomColors.pointColorList[resolutionEntity.colorIndex ?? 0];
+    final pointColor = CustomColors.pointColorList[resolutionEntity.colorIndex];
 
     return Container(
       padding: const EdgeInsets.all(20.0),
@@ -44,7 +44,7 @@ class ResolutionInfo extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    resolutionEntity.goalStatement ?? '',
+                    resolutionEntity.goalStatement,
                     style: context.bodyMedium,
                   ),
                 ],
@@ -69,7 +69,7 @@ class ResolutionInfo extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '${resolutionEntity.actionStatement ?? ''}\n일주일에 ${resolutionEntity.actionPerWeek ?? 0}회 실천하기',
+                    '${resolutionEntity.actionStatement}\n일주일에 ${resolutionEntity.actionPerWeek}회 실천하기',
                     style: context.bodyMedium,
                   ),
                 ],
@@ -95,7 +95,7 @@ class ResolutionInfo extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     DateFormat('yyyy년 M월 d일').format(
-                      resolutionEntity.startDate ?? DateTime.now(),
+                      resolutionEntity.startDate,
                     ),
                     style: context.bodyMedium,
                   ),

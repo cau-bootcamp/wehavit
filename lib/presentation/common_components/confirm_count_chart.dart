@@ -46,12 +46,12 @@ class ConfirmCountChart extends StatelessWidget {
                 isVisible: true,
                 textStyle: context.labelLarge,
               ),
-              color: CustomColors.pointColorList[resolutionEntity.colorIndex ?? 0],
+              color: CustomColors.pointColorList[resolutionEntity.colorIndex],
               dataSource: List<ChartData>.generate(
-                resolutionEntity.weeklyPostCountList?.length ?? 0,
+                resolutionEntity.weeklyPostCountList.length,
                 (index) => ChartData(
                   weekdayString[index],
-                  resolutionEntity.weeklyPostCountList![index].toDouble(),
+                  resolutionEntity.weeklyPostCountList[index].toDouble(),
                 ),
               ),
               xValueMapper: (ChartData data, _) => data.x,

@@ -35,16 +35,16 @@ extension ConvertFirebaseUserModel on FirebaseUserModel {
     required String userId,
   }) {
     return UserDataEntity(
-      handle: handle,
-      userImageUrl: imageUrl,
-      userName: displayName,
+      handle: handle ?? '',
+      userImageUrl: imageUrl ?? '',
+      userName: displayName ?? '',
       userId: userId,
-      aboutMe: aboutMe,
-      createdAt: createdAt,
-      messageToken: messageToken,
-      cumulativeGoals: cumulativeGoals,
-      cumulativePosts: cumulativePosts,
-      cumulativeReactions: cumulativeReactions,
+      aboutMe: aboutMe ?? '',
+      createdAt: createdAt ?? DateTime.now(),
+      messageToken: messageToken ?? '',
+      cumulativeGoals: cumulativeGoals ?? 0,
+      cumulativePosts: cumulativePosts ?? 0,
+      cumulativeReactions: cumulativeReactions ?? 0,
     );
   }
 }

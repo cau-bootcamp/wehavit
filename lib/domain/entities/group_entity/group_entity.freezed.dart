@@ -21,8 +21,8 @@ GroupEntity _$GroupEntityFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$GroupEntity {
   String get groupName => throw _privateConstructorUsedError;
-  String? get groupDescription => throw _privateConstructorUsedError;
-  String? get groupRule => throw _privateConstructorUsedError;
+  String get groupDescription => throw _privateConstructorUsedError;
+  String get groupRule => throw _privateConstructorUsedError;
   String get groupManagerUid => throw _privateConstructorUsedError;
   List<String> get groupMemberUidList => throw _privateConstructorUsedError;
   DateTime get groupCreatedAt => throw _privateConstructorUsedError;
@@ -30,8 +30,12 @@ mixin _$GroupEntity {
   @JsonKey(includeFromJson: true, includeToJson: false)
   String get groupId => throw _privateConstructorUsedError;
 
+  /// Serializes this GroupEntity to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of GroupEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $GroupEntityCopyWith<GroupEntity> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -42,8 +46,8 @@ abstract class $GroupEntityCopyWith<$Res> {
   @useResult
   $Res call(
       {String groupName,
-      String? groupDescription,
-      String? groupRule,
+      String groupDescription,
+      String groupRule,
       String groupManagerUid,
       List<String> groupMemberUidList,
       DateTime groupCreatedAt,
@@ -60,12 +64,14 @@ class _$GroupEntityCopyWithImpl<$Res, $Val extends GroupEntity> implements $Grou
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of GroupEntity
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? groupName = null,
-    Object? groupDescription = freezed,
-    Object? groupRule = freezed,
+    Object? groupDescription = null,
+    Object? groupRule = null,
     Object? groupManagerUid = null,
     Object? groupMemberUidList = null,
     Object? groupCreatedAt = null,
@@ -77,14 +83,14 @@ class _$GroupEntityCopyWithImpl<$Res, $Val extends GroupEntity> implements $Grou
           ? _value.groupName
           : groupName // ignore: cast_nullable_to_non_nullable
               as String,
-      groupDescription: freezed == groupDescription
+      groupDescription: null == groupDescription
           ? _value.groupDescription
           : groupDescription // ignore: cast_nullable_to_non_nullable
-              as String?,
-      groupRule: freezed == groupRule
+              as String,
+      groupRule: null == groupRule
           ? _value.groupRule
           : groupRule // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       groupManagerUid: null == groupManagerUid
           ? _value.groupManagerUid
           : groupManagerUid // ignore: cast_nullable_to_non_nullable
@@ -117,8 +123,8 @@ abstract class _$$GroupEntityImplCopyWith<$Res> implements $GroupEntityCopyWith<
   @useResult
   $Res call(
       {String groupName,
-      String? groupDescription,
-      String? groupRule,
+      String groupDescription,
+      String groupRule,
       String groupManagerUid,
       List<String> groupMemberUidList,
       DateTime groupCreatedAt,
@@ -132,12 +138,14 @@ class __$$GroupEntityImplCopyWithImpl<$Res> extends _$GroupEntityCopyWithImpl<$R
   __$$GroupEntityImplCopyWithImpl(_$GroupEntityImpl _value, $Res Function(_$GroupEntityImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of GroupEntity
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? groupName = null,
-    Object? groupDescription = freezed,
-    Object? groupRule = freezed,
+    Object? groupDescription = null,
+    Object? groupRule = null,
     Object? groupManagerUid = null,
     Object? groupMemberUidList = null,
     Object? groupCreatedAt = null,
@@ -149,14 +157,14 @@ class __$$GroupEntityImplCopyWithImpl<$Res> extends _$GroupEntityCopyWithImpl<$R
           ? _value.groupName
           : groupName // ignore: cast_nullable_to_non_nullable
               as String,
-      groupDescription: freezed == groupDescription
+      groupDescription: null == groupDescription
           ? _value.groupDescription
           : groupDescription // ignore: cast_nullable_to_non_nullable
-              as String?,
-      groupRule: freezed == groupRule
+              as String,
+      groupRule: null == groupRule
           ? _value.groupRule
           : groupRule // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       groupManagerUid: null == groupManagerUid
           ? _value.groupManagerUid
           : groupManagerUid // ignore: cast_nullable_to_non_nullable
@@ -187,8 +195,8 @@ class __$$GroupEntityImplCopyWithImpl<$Res> extends _$GroupEntityCopyWithImpl<$R
 class _$GroupEntityImpl implements _GroupEntity {
   _$GroupEntityImpl(
       {required this.groupName,
-      this.groupDescription = '',
-      this.groupRule = '',
+      required this.groupDescription,
+      required this.groupRule,
       required this.groupManagerUid,
       required final List<String> groupMemberUidList,
       required this.groupCreatedAt,
@@ -201,11 +209,9 @@ class _$GroupEntityImpl implements _GroupEntity {
   @override
   final String groupName;
   @override
-  @JsonKey()
-  final String? groupDescription;
+  final String groupDescription;
   @override
-  @JsonKey()
-  final String? groupRule;
+  final String groupRule;
   @override
   final String groupManagerUid;
   final List<String> _groupMemberUidList;
@@ -244,12 +250,14 @@ class _$GroupEntityImpl implements _GroupEntity {
             (identical(other.groupId, groupId) || other.groupId == groupId));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, groupName, groupDescription, groupRule, groupManagerUid,
       const DeepCollectionEquality().hash(_groupMemberUidList), groupCreatedAt, groupColor, groupId);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of GroupEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$GroupEntityImplCopyWith<_$GroupEntityImpl> get copyWith =>
@@ -266,8 +274,8 @@ class _$GroupEntityImpl implements _GroupEntity {
 abstract class _GroupEntity implements GroupEntity {
   factory _GroupEntity(
       {required final String groupName,
-      final String? groupDescription,
-      final String? groupRule,
+      required final String groupDescription,
+      required final String groupRule,
       required final String groupManagerUid,
       required final List<String> groupMemberUidList,
       required final DateTime groupCreatedAt,
@@ -279,9 +287,9 @@ abstract class _GroupEntity implements GroupEntity {
   @override
   String get groupName;
   @override
-  String? get groupDescription;
+  String get groupDescription;
   @override
-  String? get groupRule;
+  String get groupRule;
   @override
   String get groupManagerUid;
   @override
@@ -293,7 +301,10 @@ abstract class _GroupEntity implements GroupEntity {
   @override
   @JsonKey(includeFromJson: true, includeToJson: false)
   String get groupId;
+
+  /// Create a copy of GroupEntity
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$GroupEntityImplCopyWith<_$GroupEntityImpl> get copyWith => throw _privateConstructorUsedError;
 }

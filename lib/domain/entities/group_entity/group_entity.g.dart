@@ -8,8 +8,8 @@ part of 'group_entity.dart';
 
 _$GroupEntityImpl _$$GroupEntityImplFromJson(Map<String, dynamic> json) => _$GroupEntityImpl(
       groupName: json['groupName'] as String,
-      groupDescription: json['groupDescription'] as String? ?? '',
-      groupRule: json['groupRule'] as String? ?? '',
+      groupDescription: json['groupDescription'] as String,
+      groupRule: json['groupRule'] as String,
       groupManagerUid: json['groupManagerUid'] as String,
       groupMemberUidList: (json['groupMemberUidList'] as List<dynamic>).map((e) => e as String).toList(),
       groupCreatedAt: DateTime.parse(json['groupCreatedAt'] as String),

@@ -12,7 +12,7 @@ _$GroupAnnouncementEntityImpl _$$GroupAnnouncementEntityImplFromJson(Map<String,
       writerUid: json['writerUid'] as String,
       title: json['title'] as String,
       content: json['content'] as String,
-      createdAt: const TimestampConverter().fromJson(json['createdAt'] as Timestamp),
+      createdAt: DateTime.parse(json['createdAt'] as String),
       readByUidList: (json['readByUidList'] as List<dynamic>).map((e) => e as String).toList(),
       groupAnnouncementId: json['groupAnnouncementId'] as String,
     );
@@ -22,6 +22,6 @@ Map<String, dynamic> _$$GroupAnnouncementEntityImplToJson(_$GroupAnnouncementEnt
       'writerUid': instance.writerUid,
       'title': instance.title,
       'content': instance.content,
-      'createdAt': const TimestampConverter().toJson(instance.createdAt),
+      'createdAt': instance.createdAt.toIso8601String(),
       'readByUidList': instance.readByUidList,
     };

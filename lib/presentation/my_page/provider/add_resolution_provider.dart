@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 
 class AddResolutionNotifier extends StateNotifier<ResolutionEntity> {
-  AddResolutionNotifier(Ref ref) : super(const ResolutionEntity());
+  AddResolutionNotifier(Ref ref) : super(ResolutionEntity(startDate: DateTime.now()));
 
   void changeFanList(List<UserDataEntity> newFanList) {
     state = state.copyWith(shareFriendEntityList: newFanList);

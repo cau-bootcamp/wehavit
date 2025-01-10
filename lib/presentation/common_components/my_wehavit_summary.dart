@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/presentation/common_components/user_profile_cell.dart';
-import 'package:wehavit/presentation/common_components/vertical_line_wrapper.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 class MyWehavitSummary extends StatelessWidget {
@@ -58,8 +56,7 @@ class MyWehavitSummary extends StatelessWidget {
                         _MyWehavitSummaryBullet(
                           iconString: WHIcons.emojiCalendar,
                           preText: '위해빗과 함께한 지 ',
-                          highlightedText:
-                              '${DateTime.now().difference(userEntity.createdAt ?? DateTime.now()).inDays + 1}일째',
+                          highlightedText: '${DateTime.now().difference(userEntity.createdAt).inDays + 1}일째',
                           postText: '가 되었어요.',
                         ),
                         const SizedBox(height: 12),

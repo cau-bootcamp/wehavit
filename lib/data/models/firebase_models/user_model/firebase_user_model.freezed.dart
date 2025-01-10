@@ -31,8 +31,12 @@ mixin _$FirebaseUserModel {
   int? get cumulativePosts => throw _privateConstructorUsedError;
   int? get cumulativeReactions => throw _privateConstructorUsedError;
 
+  /// Serializes this FirebaseUserModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of FirebaseUserModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $FirebaseUserModelCopyWith<FirebaseUserModel> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -63,6 +67,8 @@ class _$FirebaseUserModelCopyWithImpl<$Res, $Val extends FirebaseUserModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of FirebaseUserModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -141,6 +147,8 @@ class __$$FirebaseUserModelImplCopyWithImpl<$Res> extends _$FirebaseUserModelCop
   __$$FirebaseUserModelImplCopyWithImpl(_$FirebaseUserModelImpl _value, $Res Function(_$FirebaseUserModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of FirebaseUserModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -254,12 +262,14 @@ class _$FirebaseUserModelImpl implements _FirebaseUserModel {
                 other.cumulativeReactions == cumulativeReactions));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, handle, displayName, imageUrl, aboutMe, messageToken, createdAt,
       cumulativeGoals, cumulativePosts, cumulativeReactions);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FirebaseUserModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FirebaseUserModelImplCopyWith<_$FirebaseUserModelImpl> get copyWith =>
@@ -306,7 +316,10 @@ abstract class _FirebaseUserModel implements FirebaseUserModel {
   int? get cumulativePosts;
   @override
   int? get cumulativeReactions;
+
+  /// Create a copy of FirebaseUserModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FirebaseUserModelImplCopyWith<_$FirebaseUserModelImpl> get copyWith => throw _privateConstructorUsedError;
 }

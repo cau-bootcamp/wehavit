@@ -51,7 +51,7 @@ class ResolutionListViewModelProvider extends StateNotifier<ResolutionListViewMo
     int tempTotalCount = 0;
     state.futureDoneCount = Future(() async {
       final dones = modelList.map((model) {
-        tempTotalCount += model.entity.actionPerWeek ?? 0;
+        tempTotalCount += model.entity.actionPerWeek;
         return model.doneList;
       }).toList();
 
@@ -88,8 +88,8 @@ class ResolutionListViewModelProvider extends StateNotifier<ResolutionListViewMo
     required ResolutionListCellWidgetModel model,
   }) async {
     _uploadConfirmPostUseCase(
-      resolutionGoalStatement: model.entity.goalStatement ?? '',
-      resolutionId: model.entity.resolutionId ?? '',
+      resolutionGoalStatement: model.entity.goalStatement,
+      resolutionId: model.entity.resolutionId,
       content: '',
       localFileUrlList: [],
       hasRested: false,

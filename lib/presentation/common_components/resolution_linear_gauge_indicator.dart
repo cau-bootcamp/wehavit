@@ -23,7 +23,7 @@ class ResolutionLinearGaugeIndicator extends StatelessWidget {
           Row(
             children: [
               Text(
-                resolutionEntity.actionStatement ?? '',
+                resolutionEntity.actionStatement,
                 textAlign: TextAlign.left,
                 style: context.bodyMedium?.copyWith(
                   color: CustomColors.whGrey900,
@@ -37,7 +37,7 @@ class ResolutionLinearGaugeIndicator extends StatelessWidget {
           ),
           LinearProgressIndicator(
             minHeight: 8,
-            color: CustomColors.pointColorList[resolutionEntity.colorIndex ?? 0],
+            color: CustomColors.pointColorList[resolutionEntity.colorIndex],
             backgroundColor: CustomColors.whGrey100,
           ),
         ],
@@ -69,7 +69,7 @@ class ResolutionLinearGaugeIndicator extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    resolutionEntity.actionStatement ?? '',
+                    resolutionEntity.actionStatement,
                     style: context.bodyMedium?.copyWith(
                       color: CustomColors.whGrey900,
                       overflow: TextOverflow.ellipsis,
@@ -80,7 +80,7 @@ class ResolutionLinearGaugeIndicator extends StatelessWidget {
                   width: 4.0,
                 ),
                 Text(
-                  '주 ${resolutionEntity.actionPerWeek ?? '-'}회 중 $successCount회 실천',
+                  '주 ${resolutionEntity.actionPerWeek}회 중 $successCount회 실천',
                   style: context.bodySmall?.copyWith(
                     color: CustomColors.whGrey900,
                     overflow: TextOverflow.ellipsis,
@@ -109,11 +109,11 @@ class ResolutionLinearGaugeIndicator extends StatelessWidget {
                         flex: successCount,
                         child: Container(
                           height: 8,
-                          color: CustomColors.pointColorList[resolutionEntity.colorIndex ?? 0],
+                          color: CustomColors.pointColorList[resolutionEntity.colorIndex],
                         ),
                       ),
                       Flexible(
-                        flex: (resolutionEntity.actionPerWeek ?? 1) - successCount,
+                        flex: (resolutionEntity.actionPerWeek) - successCount,
                         child: Container(
                           height: 8,
                           color: Colors.transparent,

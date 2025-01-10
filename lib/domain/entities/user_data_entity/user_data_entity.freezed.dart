@@ -20,19 +20,23 @@ UserDataEntity _$UserDataEntityFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$UserDataEntity {
-  String? get handle => throw _privateConstructorUsedError;
-  String? get userId => throw _privateConstructorUsedError;
-  String? get userName => throw _privateConstructorUsedError;
-  String? get userImageUrl => throw _privateConstructorUsedError;
-  String? get aboutMe => throw _privateConstructorUsedError;
-  String? get messageToken => throw _privateConstructorUsedError;
-  DateTime? get createdAt => throw _privateConstructorUsedError;
-  int? get cumulativeGoals => throw _privateConstructorUsedError;
-  int? get cumulativePosts => throw _privateConstructorUsedError;
-  int? get cumulativeReactions => throw _privateConstructorUsedError;
+  String get handle => throw _privateConstructorUsedError;
+  String get userId => throw _privateConstructorUsedError;
+  String get userName => throw _privateConstructorUsedError;
+  String get userImageUrl => throw _privateConstructorUsedError;
+  String get aboutMe => throw _privateConstructorUsedError;
+  String get messageToken => throw _privateConstructorUsedError;
+  DateTime get createdAt => throw _privateConstructorUsedError;
+  int get cumulativeGoals => throw _privateConstructorUsedError;
+  int get cumulativePosts => throw _privateConstructorUsedError;
+  int get cumulativeReactions => throw _privateConstructorUsedError;
 
+  /// Serializes this UserDataEntity to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of UserDataEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $UserDataEntityCopyWith<UserDataEntity> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -42,16 +46,16 @@ abstract class $UserDataEntityCopyWith<$Res> {
       _$UserDataEntityCopyWithImpl<$Res, UserDataEntity>;
   @useResult
   $Res call(
-      {String? handle,
-      String? userId,
-      String? userName,
-      String? userImageUrl,
-      String? aboutMe,
-      String? messageToken,
-      DateTime? createdAt,
-      int? cumulativeGoals,
-      int? cumulativePosts,
-      int? cumulativeReactions});
+      {String handle,
+      String userId,
+      String userName,
+      String userImageUrl,
+      String aboutMe,
+      String messageToken,
+      DateTime createdAt,
+      int cumulativeGoals,
+      int cumulativePosts,
+      int cumulativeReactions});
 }
 
 /// @nodoc
@@ -63,61 +67,63 @@ class _$UserDataEntityCopyWithImpl<$Res, $Val extends UserDataEntity> implements
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of UserDataEntity
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? handle = freezed,
-    Object? userId = freezed,
-    Object? userName = freezed,
-    Object? userImageUrl = freezed,
-    Object? aboutMe = freezed,
-    Object? messageToken = freezed,
-    Object? createdAt = freezed,
-    Object? cumulativeGoals = freezed,
-    Object? cumulativePosts = freezed,
-    Object? cumulativeReactions = freezed,
+    Object? handle = null,
+    Object? userId = null,
+    Object? userName = null,
+    Object? userImageUrl = null,
+    Object? aboutMe = null,
+    Object? messageToken = null,
+    Object? createdAt = null,
+    Object? cumulativeGoals = null,
+    Object? cumulativePosts = null,
+    Object? cumulativeReactions = null,
   }) {
     return _then(_value.copyWith(
-      handle: freezed == handle
+      handle: null == handle
           ? _value.handle
           : handle // ignore: cast_nullable_to_non_nullable
-              as String?,
-      userId: freezed == userId
+              as String,
+      userId: null == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      userName: freezed == userName
+              as String,
+      userName: null == userName
           ? _value.userName
           : userName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      userImageUrl: freezed == userImageUrl
+              as String,
+      userImageUrl: null == userImageUrl
           ? _value.userImageUrl
           : userImageUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
-      aboutMe: freezed == aboutMe
+              as String,
+      aboutMe: null == aboutMe
           ? _value.aboutMe
           : aboutMe // ignore: cast_nullable_to_non_nullable
-              as String?,
-      messageToken: freezed == messageToken
+              as String,
+      messageToken: null == messageToken
           ? _value.messageToken
           : messageToken // ignore: cast_nullable_to_non_nullable
-              as String?,
-      createdAt: freezed == createdAt
+              as String,
+      createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      cumulativeGoals: freezed == cumulativeGoals
+              as DateTime,
+      cumulativeGoals: null == cumulativeGoals
           ? _value.cumulativeGoals
           : cumulativeGoals // ignore: cast_nullable_to_non_nullable
-              as int?,
-      cumulativePosts: freezed == cumulativePosts
+              as int,
+      cumulativePosts: null == cumulativePosts
           ? _value.cumulativePosts
           : cumulativePosts // ignore: cast_nullable_to_non_nullable
-              as int?,
-      cumulativeReactions: freezed == cumulativeReactions
+              as int,
+      cumulativeReactions: null == cumulativeReactions
           ? _value.cumulativeReactions
           : cumulativeReactions // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
     ) as $Val);
   }
 }
@@ -129,16 +135,16 @@ abstract class _$$UserDataEntityImplCopyWith<$Res> implements $UserDataEntityCop
   @override
   @useResult
   $Res call(
-      {String? handle,
-      String? userId,
-      String? userName,
-      String? userImageUrl,
-      String? aboutMe,
-      String? messageToken,
-      DateTime? createdAt,
-      int? cumulativeGoals,
-      int? cumulativePosts,
-      int? cumulativeReactions});
+      {String handle,
+      String userId,
+      String userName,
+      String userImageUrl,
+      String aboutMe,
+      String messageToken,
+      DateTime createdAt,
+      int cumulativeGoals,
+      int cumulativePosts,
+      int cumulativeReactions});
 }
 
 /// @nodoc
@@ -147,61 +153,63 @@ class __$$UserDataEntityImplCopyWithImpl<$Res> extends _$UserDataEntityCopyWithI
   __$$UserDataEntityImplCopyWithImpl(_$UserDataEntityImpl _value, $Res Function(_$UserDataEntityImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of UserDataEntity
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? handle = freezed,
-    Object? userId = freezed,
-    Object? userName = freezed,
-    Object? userImageUrl = freezed,
-    Object? aboutMe = freezed,
-    Object? messageToken = freezed,
-    Object? createdAt = freezed,
-    Object? cumulativeGoals = freezed,
-    Object? cumulativePosts = freezed,
-    Object? cumulativeReactions = freezed,
+    Object? handle = null,
+    Object? userId = null,
+    Object? userName = null,
+    Object? userImageUrl = null,
+    Object? aboutMe = null,
+    Object? messageToken = null,
+    Object? createdAt = null,
+    Object? cumulativeGoals = null,
+    Object? cumulativePosts = null,
+    Object? cumulativeReactions = null,
   }) {
     return _then(_$UserDataEntityImpl(
-      handle: freezed == handle
+      handle: null == handle
           ? _value.handle
           : handle // ignore: cast_nullable_to_non_nullable
-              as String?,
-      userId: freezed == userId
+              as String,
+      userId: null == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      userName: freezed == userName
+              as String,
+      userName: null == userName
           ? _value.userName
           : userName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      userImageUrl: freezed == userImageUrl
+              as String,
+      userImageUrl: null == userImageUrl
           ? _value.userImageUrl
           : userImageUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
-      aboutMe: freezed == aboutMe
+              as String,
+      aboutMe: null == aboutMe
           ? _value.aboutMe
           : aboutMe // ignore: cast_nullable_to_non_nullable
-              as String?,
-      messageToken: freezed == messageToken
+              as String,
+      messageToken: null == messageToken
           ? _value.messageToken
           : messageToken // ignore: cast_nullable_to_non_nullable
-              as String?,
-      createdAt: freezed == createdAt
+              as String,
+      createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      cumulativeGoals: freezed == cumulativeGoals
+              as DateTime,
+      cumulativeGoals: null == cumulativeGoals
           ? _value.cumulativeGoals
           : cumulativeGoals // ignore: cast_nullable_to_non_nullable
-              as int?,
-      cumulativePosts: freezed == cumulativePosts
+              as int,
+      cumulativePosts: null == cumulativePosts
           ? _value.cumulativePosts
           : cumulativePosts // ignore: cast_nullable_to_non_nullable
-              as int?,
-      cumulativeReactions: freezed == cumulativeReactions
+              as int,
+      cumulativeReactions: null == cumulativeReactions
           ? _value.cumulativeReactions
           : cumulativeReactions // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
     ));
   }
 }
@@ -211,39 +219,48 @@ class __$$UserDataEntityImplCopyWithImpl<$Res> extends _$UserDataEntityCopyWithI
 @JsonSerializable()
 class _$UserDataEntityImpl implements _UserDataEntity {
   _$UserDataEntityImpl(
-      {this.handle,
-      this.userId,
-      this.userName,
-      this.userImageUrl,
-      this.aboutMe,
-      this.messageToken,
-      this.createdAt,
-      this.cumulativeGoals,
-      this.cumulativePosts,
-      this.cumulativeReactions});
+      {this.handle = '',
+      this.userId = '',
+      this.userName = '',
+      this.userImageUrl = '',
+      this.aboutMe = '',
+      this.messageToken = '',
+      required this.createdAt,
+      this.cumulativeGoals = 0,
+      this.cumulativePosts = 0,
+      this.cumulativeReactions = 0});
 
   factory _$UserDataEntityImpl.fromJson(Map<String, dynamic> json) => _$$UserDataEntityImplFromJson(json);
 
   @override
-  final String? handle;
+  @JsonKey()
+  final String handle;
   @override
-  final String? userId;
+  @JsonKey()
+  final String userId;
   @override
-  final String? userName;
+  @JsonKey()
+  final String userName;
   @override
-  final String? userImageUrl;
+  @JsonKey()
+  final String userImageUrl;
   @override
-  final String? aboutMe;
+  @JsonKey()
+  final String aboutMe;
   @override
-  final String? messageToken;
+  @JsonKey()
+  final String messageToken;
   @override
-  final DateTime? createdAt;
+  final DateTime createdAt;
   @override
-  final int? cumulativeGoals;
+  @JsonKey()
+  final int cumulativeGoals;
   @override
-  final int? cumulativePosts;
+  @JsonKey()
+  final int cumulativePosts;
   @override
-  final int? cumulativeReactions;
+  @JsonKey()
+  final int cumulativeReactions;
 
   @override
   String toString() {
@@ -268,12 +285,14 @@ class _$UserDataEntityImpl implements _UserDataEntity {
                 other.cumulativeReactions == cumulativeReactions));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, handle, userId, userName, userImageUrl, aboutMe, messageToken, createdAt,
       cumulativeGoals, cumulativePosts, cumulativeReactions);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UserDataEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$UserDataEntityImplCopyWith<_$UserDataEntityImpl> get copyWith =>
@@ -289,40 +308,43 @@ class _$UserDataEntityImpl implements _UserDataEntity {
 
 abstract class _UserDataEntity implements UserDataEntity {
   factory _UserDataEntity(
-      {final String? handle,
-      final String? userId,
-      final String? userName,
-      final String? userImageUrl,
-      final String? aboutMe,
-      final String? messageToken,
-      final DateTime? createdAt,
-      final int? cumulativeGoals,
-      final int? cumulativePosts,
-      final int? cumulativeReactions}) = _$UserDataEntityImpl;
+      {final String handle,
+      final String userId,
+      final String userName,
+      final String userImageUrl,
+      final String aboutMe,
+      final String messageToken,
+      required final DateTime createdAt,
+      final int cumulativeGoals,
+      final int cumulativePosts,
+      final int cumulativeReactions}) = _$UserDataEntityImpl;
 
   factory _UserDataEntity.fromJson(Map<String, dynamic> json) = _$UserDataEntityImpl.fromJson;
 
   @override
-  String? get handle;
+  String get handle;
   @override
-  String? get userId;
+  String get userId;
   @override
-  String? get userName;
+  String get userName;
   @override
-  String? get userImageUrl;
+  String get userImageUrl;
   @override
-  String? get aboutMe;
+  String get aboutMe;
   @override
-  String? get messageToken;
+  String get messageToken;
   @override
-  DateTime? get createdAt;
+  DateTime get createdAt;
   @override
-  int? get cumulativeGoals;
+  int get cumulativeGoals;
   @override
-  int? get cumulativePosts;
+  int get cumulativePosts;
   @override
-  int? get cumulativeReactions;
+  int get cumulativeReactions;
+
+  /// Create a copy of UserDataEntity
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UserDataEntityImplCopyWith<_$UserDataEntityImpl> get copyWith => throw _privateConstructorUsedError;
 }

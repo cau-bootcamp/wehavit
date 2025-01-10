@@ -41,14 +41,15 @@ class _ShareTargetGroupCellWidgetState extends ConsumerState<ShareTargetGroupCel
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Center(
-              child: Text(
-            '공유 대상',
-            style: TextStyle(
-              color: CustomColors.whWhite,
-              fontSize: 20.0,
-              fontWeight: FontWeight.w700,
+            child: Text(
+              '공유 대상',
+              style: TextStyle(
+                color: CustomColors.whWhite,
+                fontSize: 20.0,
+                fontWeight: FontWeight.w700,
+              ),
             ),
-          )),
+          ),
           const SizedBox(
             height: 24,
           ),
@@ -80,7 +81,7 @@ class _ShareTargetGroupCellWidgetState extends ConsumerState<ShareTargetGroupCel
   Future<void> loadEntityList() async {
     final entityList = await ref
         .read(getToWhomResolutionWillBeSharedUsecaseProvider)
-        .call(resolutionId: widget.entity.resolutionId ?? '')
+        .call(resolutionId: widget.entity.resolutionId)
         .then(
           (result) => result.fold(
             (failure) => null,

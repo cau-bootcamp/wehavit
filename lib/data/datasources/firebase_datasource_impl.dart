@@ -317,7 +317,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       await firestore
           .collection(
             FirebaseCollectionName.getConfirmPostReactionCollectionName(
-              targetEntity.id!,
+              targetEntity.id,
             ),
           )
           .add(reactionModel.toJson());
@@ -506,7 +506,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
 
       String storagePath = FirebaseStorageName.getConfirmPostQuickShotReactionStorageName(
         entity.owner!,
-        entity.id!,
+        entity.id,
       );
       final ref = FirebaseStorage.instance.ref(storagePath);
 
@@ -526,7 +526,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       final reactions = await firestore
           .collection(
             FirebaseCollectionName.getConfirmPostReactionCollectionName(
-              entity.id!,
+              entity.id,
             ),
           )
           .get();
@@ -1084,7 +1084,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           final sharedResolutionList = await firestore
               .collection(
                 FirebaseCollectionName.getTargetResolutionCollectionName(
-                  userEntity.userId!,
+                  userEntity.userId,
                 ),
               )
               .where(
@@ -1165,11 +1165,13 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           final successResolutionList = sharedResolutionList.mapWithIndex((resolution, index) {
             final numOfActionsForThisWeek = doneListForWeek[index].where((element) => element == true).length;
 
-            return ((resolution.actionPerWeek ?? 7) <= numOfActionsForThisWeek) ? true : false;
+            return (resolution.actionPerWeek <= numOfActionsForThisWeek && resolution.actionPerWeek != 0)
+                ? true
+                : false;
           }).toList();
 
           final successResolutionMap = Map.fromIterables(
-            sharedResolutionList.map((e) => e.resolutionId!),
+            sharedResolutionList.map((e) => e.resolutionId),
             successResolutionList,
           );
 
@@ -1182,10 +1184,10 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
             doneForResolution.forEachIndexed((jndex, element) {
               if (element == true) {
                 // 추가 안됨
-                doneResolutionIdListForEachDay[jndex].append(sharedResolutionList[index].resolutionId!);
+                doneResolutionIdListForEachDay[jndex].append(sharedResolutionList[index].resolutionId);
 
                 // 추가 됨
-                doneResolutionIdListForEachDay[jndex].add(sharedResolutionList[index].resolutionId!);
+                doneResolutionIdListForEachDay[jndex].add(sharedResolutionList[index].resolutionId);
               }
             });
           }).toList();
@@ -1840,7 +1842,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
               UserDataEntity userDataEntity =
                   FirebaseUserModel.fromFireStoreDocument(doc).toUserDataEntity(userId: doc.reference.id);
 
-              if ((userDataEntity.userName ?? '').startsWith(nickname)) {
+              if (userDataEntity.userName.startsWith(nickname)) {
                 return Future(() => right(userDataEntity));
               } else {
                 return Future(
@@ -2078,7 +2080,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
               UserDataEntity userDataEntity =
                   FirebaseUserModel.fromFireStoreDocument(doc).toUserDataEntity(userId: doc.reference.id);
 
-              if ((userDataEntity.handle ?? '').startsWith(handle)) {
+              if (userDataEntity.handle.startsWith(handle)) {
                 return Future(() => right(userDataEntity));
               } else {
                 return Future(
