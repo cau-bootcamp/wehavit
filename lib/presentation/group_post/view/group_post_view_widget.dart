@@ -12,6 +12,7 @@ import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/effects/effects.dart';
 import 'package:wehavit/presentation/group_post/group_post.dart';
+import 'package:wehavit/presentation/state/user_data/my_user_data_provider.dart';
 
 class ConfirmPostWidget extends ConsumerStatefulWidget {
   const ConfirmPostWidget({
@@ -58,7 +59,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
       targetResolutionId: widget.confirmPostEntity.resolutionId,
     );
 
-    myUserEntity = await ref.read(myPageViewModelProvider).futureMyUserDataEntity?.then(
+    myUserEntity = await ref.read(getMyUserDataProvider).value!.then(
           (result) => result.fold(
             (failure) => null,
             (entity) => entity,

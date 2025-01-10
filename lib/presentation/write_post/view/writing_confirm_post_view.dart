@@ -7,6 +7,7 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
+import 'package:wehavit/presentation/state/user_data/my_user_data_provider.dart';
 
 class WritingConfirmPostView extends ConsumerStatefulWidget {
   const WritingConfirmPostView({
@@ -207,7 +208,7 @@ class _WritingConfirmPostViewState extends ConsumerState<WritingConfirmPostView>
                   viewModel.isUploading = true;
                   setState(() {});
 
-                  final myUserEntity = await ref.read(myPageViewModelProvider).futureMyUserDataEntity?.then(
+                  final myUserEntity = await ref.read(getMyUserDataProvider).value!.then(
                         (result) => result.fold(
                           (failure) => null,
                           (entity) => entity,

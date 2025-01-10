@@ -326,7 +326,6 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
                       )
                           .whenComplete(() {
                         Navigator.pop(context, true);
-
                         showToastMessage(
                           context,
                           text: '성공적으로 인증을 남겼어요',

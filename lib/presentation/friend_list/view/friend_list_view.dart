@@ -6,6 +6,7 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/common_components/user_profile_cell.dart';
 import 'package:wehavit/presentation/presentation.dart';
+import 'package:wehavit/presentation/state/user_data/my_user_data_provider.dart';
 
 class FriendListView extends ConsumerStatefulWidget {
   const FriendListView({super.key});
@@ -45,7 +46,8 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
           replacement: Column(
             children: [
               MyProfileBlock(
-                futureUserEntity: viewModel.futureMyUserDataEntity!,
+                // futureUserEntity: viewModel.futureMyUserDataEntity!,
+                futureUserEntity: ref.read(getMyUserDataProvider).value!,
               ),
               const SizedBox(
                 height: 32.0,
