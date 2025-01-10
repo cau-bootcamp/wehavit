@@ -42,7 +42,6 @@ final addFriendProvider = StateNotifierProvider.autoDispose<AddFriendNotifier, S
 final friendListViewModelProvider = StateNotifierProvider<FriendListViewModelProvider, FriendListViewModel>((ref) {
   final getFriendListUsecase = ref.read(getFriendListUseCaseProvider);
   final searchUserDataListByHandleUsecase = ref.read(searchUserDataListByHandleUsecaseProvider);
-  final getMyUserDataUsecase = ref.read(getMyUserDataUsecaseProvider);
   final getAppliedUserListForFriendUsecase = ref.read(getAppliedUserListForFriendUsecaseProvider);
   final AcceptApplyingForFriendUsecase acceptApplyingForFriendUsecase =
       ref.read(acceptApplyingForFriendUsecaseProvider);
@@ -54,7 +53,6 @@ final friendListViewModelProvider = StateNotifierProvider<FriendListViewModelPro
   return FriendListViewModelProvider(
     getFriendListUsecase,
     searchUserDataListByHandleUsecase,
-    getMyUserDataUsecase,
     getAppliedUserListForFriendUsecase,
     acceptApplyingForFriendUsecase,
     rejectApplyingForFriendUsecase,

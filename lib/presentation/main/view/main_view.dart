@@ -49,7 +49,7 @@ class MainViewState extends ConsumerState<MainView> with TickerProviderStateMixi
 
   Future<void> loadUserData() async {
     ref.read(myPageViewModelProvider.notifier).loadData();
-    ref.read(friendListViewModelProvider.notifier).getMyUserDataEntity();
+    // ref.read(friendListViewModelProvider.notifier).getMyUserDataEntity();
   }
 
   Future<void> loadResolutionData() async {

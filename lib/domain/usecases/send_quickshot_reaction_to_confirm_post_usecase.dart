@@ -58,7 +58,7 @@ class SendQuickShotReactionToConfirmPostUsecase extends FutureUseCase<void, (Con
         type: UserIncrementalDataType.reaction,
       );
       _resolutionRepository.incrementReceivedReactionCount(
-        targetResolutionId: params.$1.resolutionId ?? '',
+        targetResolutionId: params.$1.resolutionId,
       );
     });
   }

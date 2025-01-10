@@ -34,7 +34,8 @@ class MyWehavitSummary extends StatelessWidget {
             ),
             child: Column(
               children: [
-                const UserProfileCell(
+                UserProfileCell(
+                  futureUserEntity,
                   type: UserProfileCellType.profile,
                 ),
                 const SizedBox(

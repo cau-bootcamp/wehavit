@@ -30,8 +30,9 @@ class MyProfileBlock extends StatelessWidget {
         padding: const EdgeInsets.all(12),
         child: EitherFutureBuilder<UserDataEntity>(
           target: futureUserEntity,
-          forWaiting: const UserProfileCell(
-            type: UserProfileCellType.loading,
+          forWaiting: UserProfileCell(
+            futureUserEntity,
+            type: UserProfileCellType.profile,
           ),
           forFail: Container(
             alignment: Alignment.center,
@@ -43,7 +44,7 @@ class MyProfileBlock extends StatelessWidget {
           mainWidgetCallback: (userEntity) {
             return Row(
               children: [
-                const Expanded(child: UserProfileCell(type: UserProfileCellType.profile)),
+                Expanded(child: UserProfileCell(futureUserEntity, type: UserProfileCellType.profile)),
                 Column(
                   children: [
                     Image.asset(

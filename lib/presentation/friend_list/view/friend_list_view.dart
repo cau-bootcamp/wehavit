@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
-import 'package:wehavit/presentation/common_components/user_profile_cell.dart';
 import 'package:wehavit/presentation/presentation.dart';
 import 'package:wehavit/presentation/state/user_data/my_user_data_provider.dart';
 
@@ -82,7 +81,7 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
                               unawaited(
                                 ref
                                     .read(friendListViewModelProvider.notifier)
-                                    .getAppliedFriendList()
+                                    .getFriendList()
                                     .whenComplete(() => setState(() {})),
                               );
                             },
@@ -90,11 +89,13 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
                               padding: const EdgeInsets.only(bottom: 64),
                               itemCount: viewModel.friendFutureUserList!.length,
                               itemBuilder: (context, index) {
-                                // return FriendListCellWidget(
-                                //   futureUserEntity: viewModel.friendFutureUserList![index],
-                                //   cellState: FriendListCellState.normal,
-                                // );
-                                return UserProfileCell(type: UserProfileCellType.loading);
+                                return Container(
+                                  padding: const EdgeInsets.only(bottom: 12.0),
+                                  child: UserProfileCell(
+                                    viewModel.friendFutureUserList![index],
+                                    type: UserProfileCellType.normal,
+                                  ),
+                                );
                               },
                             ),
                           ),
