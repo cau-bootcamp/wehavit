@@ -28,6 +28,8 @@ class GroupListCellModel {
           groupColor: 5,
           groupId: '12345',
           groupCreatedAt: DateTime.now().subtract(const Duration(days: 3)),
+          groupDescription: '',
+          groupRule: '',
         ),
         sharedResolutionCount: 13,
         sharedPostCount: 15,

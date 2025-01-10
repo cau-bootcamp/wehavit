@@ -13,7 +13,7 @@ class QuickshotPresetItemEntity with _$QuickshotPresetItemEntity {
   factory QuickshotPresetItemEntity({
     @Default('') String url,
     @Default('') String id,
-    required DateTime? createdAt,
+    required DateTime createdAt,
   }) = _QuickshotPresetItemEntity;
 
   factory QuickshotPresetItemEntity.fromJson(Map<String, dynamic> json) => _$QuickshotPresetItemEntityFromJson(json);

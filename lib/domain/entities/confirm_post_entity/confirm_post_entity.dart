@@ -26,15 +26,15 @@ class ConfirmPostEntity with _$ConfirmPostEntity {
   @TimestampConverter()
   @DocumentReferenceJsonConverter()
   factory ConfirmPostEntity({
-    @JsonKey(includeFromJson: false, includeToJson: false) @Default('') String? id,
-    @Default('') @JsonKey(includeFromJson: false, includeToJson: false) String? userName,
-    @Default('') @JsonKey(includeFromJson: false, includeToJson: false) String? userImageUrl,
-    required String? resolutionGoalStatement,
-    required String? resolutionId,
-    required String? content,
-    required List<String>? imageUrlList,
-    required String? owner,
-    required int? recentStrike,
+    @JsonKey(includeFromJson: false, includeToJson: false) @Default('') String id,
+    @Default('') @JsonKey(includeFromJson: false, includeToJson: false) String userName,
+    @Default('') @JsonKey(includeFromJson: false, includeToJson: false) String userImageUrl,
+    @Default('') String resolutionGoalStatement,
+    @Default('') String resolutionId,
+    @Default('') String content,
+    @Default([]) List<String> imageUrlList,
+    @Default('') String? owner,
+    @Default(0) int? recentStrike,
     required DateTime? createdAt,
     required DateTime? updatedAt,
     @Default(false) bool hasRested,
@@ -69,9 +69,7 @@ class TimestampConverter implements JsonConverter<DateTime, Timestamp> {
 
   @override
   Timestamp toJson(DateTime date) => Timestamp.fromDate(date);
-}
 
-extension ConfirmPostEntityDummy on ConfirmPostEntity {
   static ConfirmPostEntity dummy = ConfirmPostEntity(
     resolutionGoalStatement: 'dummy goal statement',
     resolutionId: 'vR3lA2WTqm7wDC4ve1LN',

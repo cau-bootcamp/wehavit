@@ -21,23 +21,27 @@ ConfirmPostEntity _$ConfirmPostEntityFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ConfirmPostEntity {
   @JsonKey(includeFromJson: false, includeToJson: false)
-  String? get id => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
   @JsonKey(includeFromJson: false, includeToJson: false)
-  String? get userName => throw _privateConstructorUsedError;
+  String get userName => throw _privateConstructorUsedError;
   @JsonKey(includeFromJson: false, includeToJson: false)
-  String? get userImageUrl => throw _privateConstructorUsedError;
-  String? get resolutionGoalStatement => throw _privateConstructorUsedError;
-  String? get resolutionId => throw _privateConstructorUsedError;
-  String? get content => throw _privateConstructorUsedError;
-  List<String>? get imageUrlList => throw _privateConstructorUsedError;
+  String get userImageUrl => throw _privateConstructorUsedError;
+  String get resolutionGoalStatement => throw _privateConstructorUsedError;
+  String get resolutionId => throw _privateConstructorUsedError;
+  String get content => throw _privateConstructorUsedError;
+  List<String> get imageUrlList => throw _privateConstructorUsedError;
   String? get owner => throw _privateConstructorUsedError;
   int? get recentStrike => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
   DateTime? get updatedAt => throw _privateConstructorUsedError;
   bool get hasRested => throw _privateConstructorUsedError;
 
+  /// Serializes this ConfirmPostEntity to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ConfirmPostEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ConfirmPostEntityCopyWith<ConfirmPostEntity> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -47,13 +51,13 @@ abstract class $ConfirmPostEntityCopyWith<$Res> {
       _$ConfirmPostEntityCopyWithImpl<$Res, ConfirmPostEntity>;
   @useResult
   $Res call(
-      {@JsonKey(includeFromJson: false, includeToJson: false) String? id,
-      @JsonKey(includeFromJson: false, includeToJson: false) String? userName,
-      @JsonKey(includeFromJson: false, includeToJson: false) String? userImageUrl,
-      String? resolutionGoalStatement,
-      String? resolutionId,
-      String? content,
-      List<String>? imageUrlList,
+      {@JsonKey(includeFromJson: false, includeToJson: false) String id,
+      @JsonKey(includeFromJson: false, includeToJson: false) String userName,
+      @JsonKey(includeFromJson: false, includeToJson: false) String userImageUrl,
+      String resolutionGoalStatement,
+      String resolutionId,
+      String content,
+      List<String> imageUrlList,
       String? owner,
       int? recentStrike,
       DateTime? createdAt,
@@ -71,16 +75,18 @@ class _$ConfirmPostEntityCopyWithImpl<$Res, $Val extends ConfirmPostEntity>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ConfirmPostEntity
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? userName = freezed,
-    Object? userImageUrl = freezed,
-    Object? resolutionGoalStatement = freezed,
-    Object? resolutionId = freezed,
-    Object? content = freezed,
-    Object? imageUrlList = freezed,
+    Object? id = null,
+    Object? userName = null,
+    Object? userImageUrl = null,
+    Object? resolutionGoalStatement = null,
+    Object? resolutionId = null,
+    Object? content = null,
+    Object? imageUrlList = null,
     Object? owner = freezed,
     Object? recentStrike = freezed,
     Object? createdAt = freezed,
@@ -88,34 +94,34 @@ class _$ConfirmPostEntityCopyWithImpl<$Res, $Val extends ConfirmPostEntity>
     Object? hasRested = null,
   }) {
     return _then(_value.copyWith(
-      id: freezed == id
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String?,
-      userName: freezed == userName
+              as String,
+      userName: null == userName
           ? _value.userName
           : userName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      userImageUrl: freezed == userImageUrl
+              as String,
+      userImageUrl: null == userImageUrl
           ? _value.userImageUrl
           : userImageUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
-      resolutionGoalStatement: freezed == resolutionGoalStatement
+              as String,
+      resolutionGoalStatement: null == resolutionGoalStatement
           ? _value.resolutionGoalStatement
           : resolutionGoalStatement // ignore: cast_nullable_to_non_nullable
-              as String?,
-      resolutionId: freezed == resolutionId
+              as String,
+      resolutionId: null == resolutionId
           ? _value.resolutionId
           : resolutionId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      content: freezed == content
+              as String,
+      content: null == content
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
-              as String?,
-      imageUrlList: freezed == imageUrlList
+              as String,
+      imageUrlList: null == imageUrlList
           ? _value.imageUrlList
           : imageUrlList // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<String>,
       owner: freezed == owner
           ? _value.owner
           : owner // ignore: cast_nullable_to_non_nullable
@@ -147,13 +153,13 @@ abstract class _$$ConfirmPostEntityImplCopyWith<$Res> implements $ConfirmPostEnt
   @override
   @useResult
   $Res call(
-      {@JsonKey(includeFromJson: false, includeToJson: false) String? id,
-      @JsonKey(includeFromJson: false, includeToJson: false) String? userName,
-      @JsonKey(includeFromJson: false, includeToJson: false) String? userImageUrl,
-      String? resolutionGoalStatement,
-      String? resolutionId,
-      String? content,
-      List<String>? imageUrlList,
+      {@JsonKey(includeFromJson: false, includeToJson: false) String id,
+      @JsonKey(includeFromJson: false, includeToJson: false) String userName,
+      @JsonKey(includeFromJson: false, includeToJson: false) String userImageUrl,
+      String resolutionGoalStatement,
+      String resolutionId,
+      String content,
+      List<String> imageUrlList,
       String? owner,
       int? recentStrike,
       DateTime? createdAt,
@@ -167,16 +173,18 @@ class __$$ConfirmPostEntityImplCopyWithImpl<$Res> extends _$ConfirmPostEntityCop
   __$$ConfirmPostEntityImplCopyWithImpl(_$ConfirmPostEntityImpl _value, $Res Function(_$ConfirmPostEntityImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ConfirmPostEntity
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? userName = freezed,
-    Object? userImageUrl = freezed,
-    Object? resolutionGoalStatement = freezed,
-    Object? resolutionId = freezed,
-    Object? content = freezed,
-    Object? imageUrlList = freezed,
+    Object? id = null,
+    Object? userName = null,
+    Object? userImageUrl = null,
+    Object? resolutionGoalStatement = null,
+    Object? resolutionId = null,
+    Object? content = null,
+    Object? imageUrlList = null,
     Object? owner = freezed,
     Object? recentStrike = freezed,
     Object? createdAt = freezed,
@@ -184,34 +192,34 @@ class __$$ConfirmPostEntityImplCopyWithImpl<$Res> extends _$ConfirmPostEntityCop
     Object? hasRested = null,
   }) {
     return _then(_$ConfirmPostEntityImpl(
-      id: freezed == id
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String?,
-      userName: freezed == userName
+              as String,
+      userName: null == userName
           ? _value.userName
           : userName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      userImageUrl: freezed == userImageUrl
+              as String,
+      userImageUrl: null == userImageUrl
           ? _value.userImageUrl
           : userImageUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
-      resolutionGoalStatement: freezed == resolutionGoalStatement
+              as String,
+      resolutionGoalStatement: null == resolutionGoalStatement
           ? _value.resolutionGoalStatement
           : resolutionGoalStatement // ignore: cast_nullable_to_non_nullable
-              as String?,
-      resolutionId: freezed == resolutionId
+              as String,
+      resolutionId: null == resolutionId
           ? _value.resolutionId
           : resolutionId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      content: freezed == content
+              as String,
+      content: null == content
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
-              as String?,
-      imageUrlList: freezed == imageUrlList
+              as String,
+      imageUrlList: null == imageUrlList
           ? _value._imageUrlList
           : imageUrlList // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<String>,
       owner: freezed == owner
           ? _value.owner
           : owner // ignore: cast_nullable_to_non_nullable
@@ -245,12 +253,12 @@ class _$ConfirmPostEntityImpl implements _ConfirmPostEntity {
       {@JsonKey(includeFromJson: false, includeToJson: false) this.id = '',
       @JsonKey(includeFromJson: false, includeToJson: false) this.userName = '',
       @JsonKey(includeFromJson: false, includeToJson: false) this.userImageUrl = '',
-      required this.resolutionGoalStatement,
-      required this.resolutionId,
-      required this.content,
-      required final List<String>? imageUrlList,
-      required this.owner,
-      required this.recentStrike,
+      this.resolutionGoalStatement = '',
+      this.resolutionId = '',
+      this.content = '',
+      final List<String> imageUrlList = const [],
+      this.owner = '',
+      this.recentStrike = 0,
       required this.createdAt,
       required this.updatedAt,
       this.hasRested = false})
@@ -267,32 +275,36 @@ class _$ConfirmPostEntityImpl implements _ConfirmPostEntity {
 
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  final String? id;
+  final String id;
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  final String? userName;
+  final String userName;
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  final String? userImageUrl;
+  final String userImageUrl;
   @override
-  final String? resolutionGoalStatement;
+  @JsonKey()
+  final String resolutionGoalStatement;
   @override
-  final String? resolutionId;
+  @JsonKey()
+  final String resolutionId;
   @override
-  final String? content;
-  final List<String>? _imageUrlList;
+  @JsonKey()
+  final String content;
+  final List<String> _imageUrlList;
   @override
-  List<String>? get imageUrlList {
-    final value = _imageUrlList;
-    if (value == null) return null;
+  @JsonKey()
+  List<String> get imageUrlList {
     if (_imageUrlList is EqualUnmodifiableListView) return _imageUrlList;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
+    return EqualUnmodifiableListView(_imageUrlList);
   }
 
   @override
+  @JsonKey()
   final String? owner;
   @override
+  @JsonKey()
   final int? recentStrike;
   @override
   final DateTime? createdAt;
@@ -327,7 +339,7 @@ class _$ConfirmPostEntityImpl implements _ConfirmPostEntity {
             (identical(other.hasRested, hasRested) || other.hasRested == hasRested));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -344,7 +356,9 @@ class _$ConfirmPostEntityImpl implements _ConfirmPostEntity {
       updatedAt,
       hasRested);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ConfirmPostEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ConfirmPostEntityImplCopyWith<_$ConfirmPostEntityImpl> get copyWith =>
@@ -360,15 +374,15 @@ class _$ConfirmPostEntityImpl implements _ConfirmPostEntity {
 
 abstract class _ConfirmPostEntity implements ConfirmPostEntity {
   factory _ConfirmPostEntity(
-      {@JsonKey(includeFromJson: false, includeToJson: false) final String? id,
-      @JsonKey(includeFromJson: false, includeToJson: false) final String? userName,
-      @JsonKey(includeFromJson: false, includeToJson: false) final String? userImageUrl,
-      required final String? resolutionGoalStatement,
-      required final String? resolutionId,
-      required final String? content,
-      required final List<String>? imageUrlList,
-      required final String? owner,
-      required final int? recentStrike,
+      {@JsonKey(includeFromJson: false, includeToJson: false) final String id,
+      @JsonKey(includeFromJson: false, includeToJson: false) final String userName,
+      @JsonKey(includeFromJson: false, includeToJson: false) final String userImageUrl,
+      final String resolutionGoalStatement,
+      final String resolutionId,
+      final String content,
+      final List<String> imageUrlList,
+      final String? owner,
+      final int? recentStrike,
       required final DateTime? createdAt,
       required final DateTime? updatedAt,
       final bool hasRested}) = _$ConfirmPostEntityImpl;
@@ -377,21 +391,21 @@ abstract class _ConfirmPostEntity implements ConfirmPostEntity {
 
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  String? get id;
+  String get id;
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  String? get userName;
+  String get userName;
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  String? get userImageUrl;
+  String get userImageUrl;
   @override
-  String? get resolutionGoalStatement;
+  String get resolutionGoalStatement;
   @override
-  String? get resolutionId;
+  String get resolutionId;
   @override
-  String? get content;
+  String get content;
   @override
-  List<String>? get imageUrlList;
+  List<String> get imageUrlList;
   @override
   String? get owner;
   @override
@@ -402,7 +416,10 @@ abstract class _ConfirmPostEntity implements ConfirmPostEntity {
   DateTime? get updatedAt;
   @override
   bool get hasRested;
+
+  /// Create a copy of ConfirmPostEntity
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ConfirmPostEntityImplCopyWith<_$ConfirmPostEntityImpl> get copyWith => throw _privateConstructorUsedError;
 }

@@ -22,10 +22,14 @@ QuickshotPresetItemEntity _$QuickshotPresetItemEntityFromJson(Map<String, dynami
 mixin _$QuickshotPresetItemEntity {
   String get url => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
-  DateTime? get createdAt => throw _privateConstructorUsedError;
+  DateTime get createdAt => throw _privateConstructorUsedError;
 
+  /// Serializes this QuickshotPresetItemEntity to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of QuickshotPresetItemEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $QuickshotPresetItemEntityCopyWith<QuickshotPresetItemEntity> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -35,7 +39,7 @@ abstract class $QuickshotPresetItemEntityCopyWith<$Res> {
           QuickshotPresetItemEntity value, $Res Function(QuickshotPresetItemEntity) then) =
       _$QuickshotPresetItemEntityCopyWithImpl<$Res, QuickshotPresetItemEntity>;
   @useResult
-  $Res call({String url, String id, DateTime? createdAt});
+  $Res call({String url, String id, DateTime createdAt});
 }
 
 /// @nodoc
@@ -48,12 +52,14 @@ class _$QuickshotPresetItemEntityCopyWithImpl<$Res, $Val extends QuickshotPreset
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of QuickshotPresetItemEntity
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? url = null,
     Object? id = null,
-    Object? createdAt = freezed,
+    Object? createdAt = null,
   }) {
     return _then(_value.copyWith(
       url: null == url
@@ -64,10 +70,10 @@ class _$QuickshotPresetItemEntityCopyWithImpl<$Res, $Val extends QuickshotPreset
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      createdAt: freezed == createdAt
+      createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+              as DateTime,
     ) as $Val);
   }
 }
@@ -79,7 +85,7 @@ abstract class _$$QuickshotPresetItemEntityImplCopyWith<$Res> implements $Quicks
       __$$QuickshotPresetItemEntityImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String url, String id, DateTime? createdAt});
+  $Res call({String url, String id, DateTime createdAt});
 }
 
 /// @nodoc
@@ -90,12 +96,14 @@ class __$$QuickshotPresetItemEntityImplCopyWithImpl<$Res>
       _$QuickshotPresetItemEntityImpl _value, $Res Function(_$QuickshotPresetItemEntityImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of QuickshotPresetItemEntity
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? url = null,
     Object? id = null,
-    Object? createdAt = freezed,
+    Object? createdAt = null,
   }) {
     return _then(_$QuickshotPresetItemEntityImpl(
       url: null == url
@@ -106,10 +114,10 @@ class __$$QuickshotPresetItemEntityImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      createdAt: freezed == createdAt
+      createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+              as DateTime,
     ));
   }
 }
@@ -131,7 +139,7 @@ class _$QuickshotPresetItemEntityImpl implements _QuickshotPresetItemEntity {
   @JsonKey()
   final String id;
   @override
-  final DateTime? createdAt;
+  final DateTime createdAt;
 
   @override
   String toString() {
@@ -148,11 +156,13 @@ class _$QuickshotPresetItemEntityImpl implements _QuickshotPresetItemEntity {
             (identical(other.createdAt, createdAt) || other.createdAt == createdAt));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, url, id, createdAt);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of QuickshotPresetItemEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$QuickshotPresetItemEntityImplCopyWith<_$QuickshotPresetItemEntityImpl> get copyWith =>
@@ -167,7 +177,7 @@ class _$QuickshotPresetItemEntityImpl implements _QuickshotPresetItemEntity {
 }
 
 abstract class _QuickshotPresetItemEntity implements QuickshotPresetItemEntity {
-  factory _QuickshotPresetItemEntity({final String url, final String id, required final DateTime? createdAt}) =
+  factory _QuickshotPresetItemEntity({final String url, final String id, required final DateTime createdAt}) =
       _$QuickshotPresetItemEntityImpl;
 
   factory _QuickshotPresetItemEntity.fromJson(Map<String, dynamic> json) = _$QuickshotPresetItemEntityImpl.fromJson;
@@ -177,9 +187,12 @@ abstract class _QuickshotPresetItemEntity implements QuickshotPresetItemEntity {
   @override
   String get id;
   @override
-  DateTime? get createdAt;
+  DateTime get createdAt;
+
+  /// Create a copy of QuickshotPresetItemEntity
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$QuickshotPresetItemEntityImplCopyWith<_$QuickshotPresetItemEntityImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

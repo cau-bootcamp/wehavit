@@ -26,8 +26,12 @@ mixin _$ReactionEntity {
   String get comment => throw _privateConstructorUsedError;
   Map<String, int> get emoji => throw _privateConstructorUsedError;
 
+  /// Serializes this ReactionEntity to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ReactionEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ReactionEntityCopyWith<ReactionEntity> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -48,6 +52,8 @@ class _$ReactionEntityCopyWithImpl<$Res, $Val extends ReactionEntity> implements
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ReactionEntity
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -97,6 +103,8 @@ class __$$ReactionEntityImplCopyWithImpl<$Res> extends _$ReactionEntityCopyWithI
   __$$ReactionEntityImplCopyWithImpl(_$ReactionEntityImpl _value, $Res Function(_$ReactionEntityImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ReactionEntity
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -181,12 +189,14 @@ class _$ReactionEntityImpl implements _ReactionEntity {
             const DeepCollectionEquality().equals(other._emoji, _emoji));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType, complimenterUid, reactionType, quickShotUrl, comment, const DeepCollectionEquality().hash(_emoji));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ReactionEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ReactionEntityImplCopyWith<_$ReactionEntityImpl> get copyWith =>
@@ -220,7 +230,10 @@ abstract class _ReactionEntity implements ReactionEntity {
   String get comment;
   @override
   Map<String, int> get emoji;
+
+  /// Create a copy of ReactionEntity
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ReactionEntityImplCopyWith<_$ReactionEntityImpl> get copyWith => throw _privateConstructorUsedError;
 }

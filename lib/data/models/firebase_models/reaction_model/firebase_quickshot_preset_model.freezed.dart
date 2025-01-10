@@ -24,8 +24,12 @@ mixin _$FirebaseQuickshotPresetModel {
   @TimestampConverter()
   DateTime? get createdAt => throw _privateConstructorUsedError;
 
+  /// Serializes this FirebaseQuickshotPresetModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of FirebaseQuickshotPresetModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $FirebaseQuickshotPresetModelCopyWith<FirebaseQuickshotPresetModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -49,6 +53,8 @@ class _$FirebaseQuickshotPresetModelCopyWithImpl<$Res, $Val extends FirebaseQuic
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of FirebaseQuickshotPresetModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -87,6 +93,8 @@ class __$$FirebaseQuickshotPresetModelImplCopyWithImpl<$Res>
       _$FirebaseQuickshotPresetModelImpl _value, $Res Function(_$FirebaseQuickshotPresetModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of FirebaseQuickshotPresetModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -135,11 +143,13 @@ class _$FirebaseQuickshotPresetModelImpl implements _FirebaseQuickshotPresetMode
             (identical(other.createdAt, createdAt) || other.createdAt == createdAt));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, url, createdAt);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FirebaseQuickshotPresetModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FirebaseQuickshotPresetModelImplCopyWith<_$FirebaseQuickshotPresetModelImpl> get copyWith =>
@@ -166,8 +176,11 @@ abstract class _FirebaseQuickshotPresetModel implements FirebaseQuickshotPresetM
   @override
   @TimestampConverter()
   DateTime? get createdAt;
+
+  /// Create a copy of FirebaseQuickshotPresetModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FirebaseQuickshotPresetModelImplCopyWith<_$FirebaseQuickshotPresetModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

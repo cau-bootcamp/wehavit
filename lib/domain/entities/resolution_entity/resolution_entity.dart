@@ -11,21 +11,21 @@ class ResolutionEntity with _$ResolutionEntity {
   @TimestampConverter()
   @DocumentReferenceJsonConverter()
   const factory ResolutionEntity({
-    String? resolutionId,
-    String? resolutionName,
-    String? goalStatement,
-    String? actionStatement,
-    bool? isActive,
-    int? actionPerWeek,
-    int? colorIndex,
-    int? iconIndex,
-    DateTime? startDate,
-    List<UserDataEntity>? shareFriendEntityList,
-    List<GroupEntity>? shareGroupEntityList,
-    int? writtenPostCount,
-    int? receivedReactionCount,
-    List<DateTime>? successWeekMondayList,
-    List<int>? weeklyPostCountList,
+    @Default('') String resolutionId,
+    @Default('') String resolutionName,
+    @Default('') String goalStatement,
+    @Default('') String actionStatement,
+    @Default(false) bool isActive,
+    @Default(0) int actionPerWeek,
+    @Default(0) int colorIndex,
+    @Default(0) int iconIndex,
+    required DateTime startDate,
+    @Default([]) List<UserDataEntity> shareFriendEntityList,
+    @Default([]) List<GroupEntity> shareGroupEntityList,
+    @Default(0) int writtenPostCount,
+    @Default(0) int receivedReactionCount,
+    @Default([]) List<DateTime> successWeekMondayList,
+    @Default([]) List<int> weeklyPostCountList,
   }) = _ResolutionEntity;
 
   factory ResolutionEntity.fromJson(Map<String, dynamic> json) => _$ResolutionEntityFromJson(json);

@@ -20,24 +20,28 @@ ResolutionEntity _$ResolutionEntityFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ResolutionEntity {
-  String? get resolutionId => throw _privateConstructorUsedError;
-  String? get resolutionName => throw _privateConstructorUsedError;
-  String? get goalStatement => throw _privateConstructorUsedError;
-  String? get actionStatement => throw _privateConstructorUsedError;
-  bool? get isActive => throw _privateConstructorUsedError;
-  int? get actionPerWeek => throw _privateConstructorUsedError;
-  int? get colorIndex => throw _privateConstructorUsedError;
-  int? get iconIndex => throw _privateConstructorUsedError;
-  DateTime? get startDate => throw _privateConstructorUsedError;
-  List<UserDataEntity>? get shareFriendEntityList => throw _privateConstructorUsedError;
-  List<GroupEntity>? get shareGroupEntityList => throw _privateConstructorUsedError;
-  int? get writtenPostCount => throw _privateConstructorUsedError;
-  int? get receivedReactionCount => throw _privateConstructorUsedError;
-  List<DateTime>? get successWeekMondayList => throw _privateConstructorUsedError;
-  List<int>? get weeklyPostCountList => throw _privateConstructorUsedError;
+  String get resolutionId => throw _privateConstructorUsedError;
+  String get resolutionName => throw _privateConstructorUsedError;
+  String get goalStatement => throw _privateConstructorUsedError;
+  String get actionStatement => throw _privateConstructorUsedError;
+  bool get isActive => throw _privateConstructorUsedError;
+  int get actionPerWeek => throw _privateConstructorUsedError;
+  int get colorIndex => throw _privateConstructorUsedError;
+  int get iconIndex => throw _privateConstructorUsedError;
+  DateTime get startDate => throw _privateConstructorUsedError;
+  List<UserDataEntity> get shareFriendEntityList => throw _privateConstructorUsedError;
+  List<GroupEntity> get shareGroupEntityList => throw _privateConstructorUsedError;
+  int get writtenPostCount => throw _privateConstructorUsedError;
+  int get receivedReactionCount => throw _privateConstructorUsedError;
+  List<DateTime> get successWeekMondayList => throw _privateConstructorUsedError;
+  List<int> get weeklyPostCountList => throw _privateConstructorUsedError;
 
+  /// Serializes this ResolutionEntity to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ResolutionEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ResolutionEntityCopyWith<ResolutionEntity> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -47,21 +51,21 @@ abstract class $ResolutionEntityCopyWith<$Res> {
       _$ResolutionEntityCopyWithImpl<$Res, ResolutionEntity>;
   @useResult
   $Res call(
-      {String? resolutionId,
-      String? resolutionName,
-      String? goalStatement,
-      String? actionStatement,
-      bool? isActive,
-      int? actionPerWeek,
-      int? colorIndex,
-      int? iconIndex,
-      DateTime? startDate,
-      List<UserDataEntity>? shareFriendEntityList,
-      List<GroupEntity>? shareGroupEntityList,
-      int? writtenPostCount,
-      int? receivedReactionCount,
-      List<DateTime>? successWeekMondayList,
-      List<int>? weeklyPostCountList});
+      {String resolutionId,
+      String resolutionName,
+      String goalStatement,
+      String actionStatement,
+      bool isActive,
+      int actionPerWeek,
+      int colorIndex,
+      int iconIndex,
+      DateTime startDate,
+      List<UserDataEntity> shareFriendEntityList,
+      List<GroupEntity> shareGroupEntityList,
+      int writtenPostCount,
+      int receivedReactionCount,
+      List<DateTime> successWeekMondayList,
+      List<int> weeklyPostCountList});
 }
 
 /// @nodoc
@@ -73,86 +77,88 @@ class _$ResolutionEntityCopyWithImpl<$Res, $Val extends ResolutionEntity> implem
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ResolutionEntity
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? resolutionId = freezed,
-    Object? resolutionName = freezed,
-    Object? goalStatement = freezed,
-    Object? actionStatement = freezed,
-    Object? isActive = freezed,
-    Object? actionPerWeek = freezed,
-    Object? colorIndex = freezed,
-    Object? iconIndex = freezed,
-    Object? startDate = freezed,
-    Object? shareFriendEntityList = freezed,
-    Object? shareGroupEntityList = freezed,
-    Object? writtenPostCount = freezed,
-    Object? receivedReactionCount = freezed,
-    Object? successWeekMondayList = freezed,
-    Object? weeklyPostCountList = freezed,
+    Object? resolutionId = null,
+    Object? resolutionName = null,
+    Object? goalStatement = null,
+    Object? actionStatement = null,
+    Object? isActive = null,
+    Object? actionPerWeek = null,
+    Object? colorIndex = null,
+    Object? iconIndex = null,
+    Object? startDate = null,
+    Object? shareFriendEntityList = null,
+    Object? shareGroupEntityList = null,
+    Object? writtenPostCount = null,
+    Object? receivedReactionCount = null,
+    Object? successWeekMondayList = null,
+    Object? weeklyPostCountList = null,
   }) {
     return _then(_value.copyWith(
-      resolutionId: freezed == resolutionId
+      resolutionId: null == resolutionId
           ? _value.resolutionId
           : resolutionId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      resolutionName: freezed == resolutionName
+              as String,
+      resolutionName: null == resolutionName
           ? _value.resolutionName
           : resolutionName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      goalStatement: freezed == goalStatement
+              as String,
+      goalStatement: null == goalStatement
           ? _value.goalStatement
           : goalStatement // ignore: cast_nullable_to_non_nullable
-              as String?,
-      actionStatement: freezed == actionStatement
+              as String,
+      actionStatement: null == actionStatement
           ? _value.actionStatement
           : actionStatement // ignore: cast_nullable_to_non_nullable
-              as String?,
-      isActive: freezed == isActive
+              as String,
+      isActive: null == isActive
           ? _value.isActive
           : isActive // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      actionPerWeek: freezed == actionPerWeek
+              as bool,
+      actionPerWeek: null == actionPerWeek
           ? _value.actionPerWeek
           : actionPerWeek // ignore: cast_nullable_to_non_nullable
-              as int?,
-      colorIndex: freezed == colorIndex
+              as int,
+      colorIndex: null == colorIndex
           ? _value.colorIndex
           : colorIndex // ignore: cast_nullable_to_non_nullable
-              as int?,
-      iconIndex: freezed == iconIndex
+              as int,
+      iconIndex: null == iconIndex
           ? _value.iconIndex
           : iconIndex // ignore: cast_nullable_to_non_nullable
-              as int?,
-      startDate: freezed == startDate
+              as int,
+      startDate: null == startDate
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      shareFriendEntityList: freezed == shareFriendEntityList
+              as DateTime,
+      shareFriendEntityList: null == shareFriendEntityList
           ? _value.shareFriendEntityList
           : shareFriendEntityList // ignore: cast_nullable_to_non_nullable
-              as List<UserDataEntity>?,
-      shareGroupEntityList: freezed == shareGroupEntityList
+              as List<UserDataEntity>,
+      shareGroupEntityList: null == shareGroupEntityList
           ? _value.shareGroupEntityList
           : shareGroupEntityList // ignore: cast_nullable_to_non_nullable
-              as List<GroupEntity>?,
-      writtenPostCount: freezed == writtenPostCount
+              as List<GroupEntity>,
+      writtenPostCount: null == writtenPostCount
           ? _value.writtenPostCount
           : writtenPostCount // ignore: cast_nullable_to_non_nullable
-              as int?,
-      receivedReactionCount: freezed == receivedReactionCount
+              as int,
+      receivedReactionCount: null == receivedReactionCount
           ? _value.receivedReactionCount
           : receivedReactionCount // ignore: cast_nullable_to_non_nullable
-              as int?,
-      successWeekMondayList: freezed == successWeekMondayList
+              as int,
+      successWeekMondayList: null == successWeekMondayList
           ? _value.successWeekMondayList
           : successWeekMondayList // ignore: cast_nullable_to_non_nullable
-              as List<DateTime>?,
-      weeklyPostCountList: freezed == weeklyPostCountList
+              as List<DateTime>,
+      weeklyPostCountList: null == weeklyPostCountList
           ? _value.weeklyPostCountList
           : weeklyPostCountList // ignore: cast_nullable_to_non_nullable
-              as List<int>?,
+              as List<int>,
     ) as $Val);
   }
 }
@@ -164,21 +170,21 @@ abstract class _$$ResolutionEntityImplCopyWith<$Res> implements $ResolutionEntit
   @override
   @useResult
   $Res call(
-      {String? resolutionId,
-      String? resolutionName,
-      String? goalStatement,
-      String? actionStatement,
-      bool? isActive,
-      int? actionPerWeek,
-      int? colorIndex,
-      int? iconIndex,
-      DateTime? startDate,
-      List<UserDataEntity>? shareFriendEntityList,
-      List<GroupEntity>? shareGroupEntityList,
-      int? writtenPostCount,
-      int? receivedReactionCount,
-      List<DateTime>? successWeekMondayList,
-      List<int>? weeklyPostCountList});
+      {String resolutionId,
+      String resolutionName,
+      String goalStatement,
+      String actionStatement,
+      bool isActive,
+      int actionPerWeek,
+      int colorIndex,
+      int iconIndex,
+      DateTime startDate,
+      List<UserDataEntity> shareFriendEntityList,
+      List<GroupEntity> shareGroupEntityList,
+      int writtenPostCount,
+      int receivedReactionCount,
+      List<DateTime> successWeekMondayList,
+      List<int> weeklyPostCountList});
 }
 
 /// @nodoc
@@ -187,86 +193,88 @@ class __$$ResolutionEntityImplCopyWithImpl<$Res> extends _$ResolutionEntityCopyW
   __$$ResolutionEntityImplCopyWithImpl(_$ResolutionEntityImpl _value, $Res Function(_$ResolutionEntityImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ResolutionEntity
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? resolutionId = freezed,
-    Object? resolutionName = freezed,
-    Object? goalStatement = freezed,
-    Object? actionStatement = freezed,
-    Object? isActive = freezed,
-    Object? actionPerWeek = freezed,
-    Object? colorIndex = freezed,
-    Object? iconIndex = freezed,
-    Object? startDate = freezed,
-    Object? shareFriendEntityList = freezed,
-    Object? shareGroupEntityList = freezed,
-    Object? writtenPostCount = freezed,
-    Object? receivedReactionCount = freezed,
-    Object? successWeekMondayList = freezed,
-    Object? weeklyPostCountList = freezed,
+    Object? resolutionId = null,
+    Object? resolutionName = null,
+    Object? goalStatement = null,
+    Object? actionStatement = null,
+    Object? isActive = null,
+    Object? actionPerWeek = null,
+    Object? colorIndex = null,
+    Object? iconIndex = null,
+    Object? startDate = null,
+    Object? shareFriendEntityList = null,
+    Object? shareGroupEntityList = null,
+    Object? writtenPostCount = null,
+    Object? receivedReactionCount = null,
+    Object? successWeekMondayList = null,
+    Object? weeklyPostCountList = null,
   }) {
     return _then(_$ResolutionEntityImpl(
-      resolutionId: freezed == resolutionId
+      resolutionId: null == resolutionId
           ? _value.resolutionId
           : resolutionId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      resolutionName: freezed == resolutionName
+              as String,
+      resolutionName: null == resolutionName
           ? _value.resolutionName
           : resolutionName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      goalStatement: freezed == goalStatement
+              as String,
+      goalStatement: null == goalStatement
           ? _value.goalStatement
           : goalStatement // ignore: cast_nullable_to_non_nullable
-              as String?,
-      actionStatement: freezed == actionStatement
+              as String,
+      actionStatement: null == actionStatement
           ? _value.actionStatement
           : actionStatement // ignore: cast_nullable_to_non_nullable
-              as String?,
-      isActive: freezed == isActive
+              as String,
+      isActive: null == isActive
           ? _value.isActive
           : isActive // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      actionPerWeek: freezed == actionPerWeek
+              as bool,
+      actionPerWeek: null == actionPerWeek
           ? _value.actionPerWeek
           : actionPerWeek // ignore: cast_nullable_to_non_nullable
-              as int?,
-      colorIndex: freezed == colorIndex
+              as int,
+      colorIndex: null == colorIndex
           ? _value.colorIndex
           : colorIndex // ignore: cast_nullable_to_non_nullable
-              as int?,
-      iconIndex: freezed == iconIndex
+              as int,
+      iconIndex: null == iconIndex
           ? _value.iconIndex
           : iconIndex // ignore: cast_nullable_to_non_nullable
-              as int?,
-      startDate: freezed == startDate
+              as int,
+      startDate: null == startDate
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      shareFriendEntityList: freezed == shareFriendEntityList
+              as DateTime,
+      shareFriendEntityList: null == shareFriendEntityList
           ? _value._shareFriendEntityList
           : shareFriendEntityList // ignore: cast_nullable_to_non_nullable
-              as List<UserDataEntity>?,
-      shareGroupEntityList: freezed == shareGroupEntityList
+              as List<UserDataEntity>,
+      shareGroupEntityList: null == shareGroupEntityList
           ? _value._shareGroupEntityList
           : shareGroupEntityList // ignore: cast_nullable_to_non_nullable
-              as List<GroupEntity>?,
-      writtenPostCount: freezed == writtenPostCount
+              as List<GroupEntity>,
+      writtenPostCount: null == writtenPostCount
           ? _value.writtenPostCount
           : writtenPostCount // ignore: cast_nullable_to_non_nullable
-              as int?,
-      receivedReactionCount: freezed == receivedReactionCount
+              as int,
+      receivedReactionCount: null == receivedReactionCount
           ? _value.receivedReactionCount
           : receivedReactionCount // ignore: cast_nullable_to_non_nullable
-              as int?,
-      successWeekMondayList: freezed == successWeekMondayList
+              as int,
+      successWeekMondayList: null == successWeekMondayList
           ? _value._successWeekMondayList
           : successWeekMondayList // ignore: cast_nullable_to_non_nullable
-              as List<DateTime>?,
-      weeklyPostCountList: freezed == weeklyPostCountList
+              as List<DateTime>,
+      weeklyPostCountList: null == weeklyPostCountList
           ? _value._weeklyPostCountList
           : weeklyPostCountList // ignore: cast_nullable_to_non_nullable
-              as List<int>?,
+              as List<int>,
     ));
   }
 }
@@ -277,21 +285,21 @@ class __$$ResolutionEntityImplCopyWithImpl<$Res> extends _$ResolutionEntityCopyW
 @DocumentReferenceJsonConverter()
 class _$ResolutionEntityImpl implements _ResolutionEntity {
   const _$ResolutionEntityImpl(
-      {this.resolutionId,
-      this.resolutionName,
-      this.goalStatement,
-      this.actionStatement,
-      this.isActive,
-      this.actionPerWeek,
-      this.colorIndex,
-      this.iconIndex,
-      this.startDate,
-      final List<UserDataEntity>? shareFriendEntityList,
-      final List<GroupEntity>? shareGroupEntityList,
-      this.writtenPostCount,
-      this.receivedReactionCount,
-      final List<DateTime>? successWeekMondayList,
-      final List<int>? weeklyPostCountList})
+      {this.resolutionId = '',
+      this.resolutionName = '',
+      this.goalStatement = '',
+      this.actionStatement = '',
+      this.isActive = false,
+      this.actionPerWeek = 0,
+      this.colorIndex = 0,
+      this.iconIndex = 0,
+      required this.startDate,
+      final List<UserDataEntity> shareFriendEntityList = const [],
+      final List<GroupEntity> shareGroupEntityList = const [],
+      this.writtenPostCount = 0,
+      this.receivedReactionCount = 0,
+      final List<DateTime> successWeekMondayList = const [],
+      final List<int> weeklyPostCountList = const []})
       : _shareFriendEntityList = shareFriendEntityList,
         _shareGroupEntityList = shareGroupEntityList,
         _successWeekMondayList = successWeekMondayList,
@@ -300,65 +308,71 @@ class _$ResolutionEntityImpl implements _ResolutionEntity {
   factory _$ResolutionEntityImpl.fromJson(Map<String, dynamic> json) => _$$ResolutionEntityImplFromJson(json);
 
   @override
-  final String? resolutionId;
+  @JsonKey()
+  final String resolutionId;
   @override
-  final String? resolutionName;
+  @JsonKey()
+  final String resolutionName;
   @override
-  final String? goalStatement;
+  @JsonKey()
+  final String goalStatement;
   @override
-  final String? actionStatement;
+  @JsonKey()
+  final String actionStatement;
   @override
-  final bool? isActive;
+  @JsonKey()
+  final bool isActive;
   @override
-  final int? actionPerWeek;
+  @JsonKey()
+  final int actionPerWeek;
   @override
-  final int? colorIndex;
+  @JsonKey()
+  final int colorIndex;
   @override
-  final int? iconIndex;
+  @JsonKey()
+  final int iconIndex;
   @override
-  final DateTime? startDate;
-  final List<UserDataEntity>? _shareFriendEntityList;
+  final DateTime startDate;
+  final List<UserDataEntity> _shareFriendEntityList;
   @override
-  List<UserDataEntity>? get shareFriendEntityList {
-    final value = _shareFriendEntityList;
-    if (value == null) return null;
+  @JsonKey()
+  List<UserDataEntity> get shareFriendEntityList {
     if (_shareFriendEntityList is EqualUnmodifiableListView) return _shareFriendEntityList;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
+    return EqualUnmodifiableListView(_shareFriendEntityList);
   }
 
-  final List<GroupEntity>? _shareGroupEntityList;
+  final List<GroupEntity> _shareGroupEntityList;
   @override
-  List<GroupEntity>? get shareGroupEntityList {
-    final value = _shareGroupEntityList;
-    if (value == null) return null;
+  @JsonKey()
+  List<GroupEntity> get shareGroupEntityList {
     if (_shareGroupEntityList is EqualUnmodifiableListView) return _shareGroupEntityList;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
+    return EqualUnmodifiableListView(_shareGroupEntityList);
   }
 
   @override
-  final int? writtenPostCount;
+  @JsonKey()
+  final int writtenPostCount;
   @override
-  final int? receivedReactionCount;
-  final List<DateTime>? _successWeekMondayList;
+  @JsonKey()
+  final int receivedReactionCount;
+  final List<DateTime> _successWeekMondayList;
   @override
-  List<DateTime>? get successWeekMondayList {
-    final value = _successWeekMondayList;
-    if (value == null) return null;
+  @JsonKey()
+  List<DateTime> get successWeekMondayList {
     if (_successWeekMondayList is EqualUnmodifiableListView) return _successWeekMondayList;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
+    return EqualUnmodifiableListView(_successWeekMondayList);
   }
 
-  final List<int>? _weeklyPostCountList;
+  final List<int> _weeklyPostCountList;
   @override
-  List<int>? get weeklyPostCountList {
-    final value = _weeklyPostCountList;
-    if (value == null) return null;
+  @JsonKey()
+  List<int> get weeklyPostCountList {
     if (_weeklyPostCountList is EqualUnmodifiableListView) return _weeklyPostCountList;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
+    return EqualUnmodifiableListView(_weeklyPostCountList);
   }
 
   @override
@@ -389,7 +403,7 @@ class _$ResolutionEntityImpl implements _ResolutionEntity {
             const DeepCollectionEquality().equals(other._weeklyPostCountList, _weeklyPostCountList));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -409,7 +423,9 @@ class _$ResolutionEntityImpl implements _ResolutionEntity {
       const DeepCollectionEquality().hash(_successWeekMondayList),
       const DeepCollectionEquality().hash(_weeklyPostCountList));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ResolutionEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ResolutionEntityImplCopyWith<_$ResolutionEntityImpl> get copyWith =>
@@ -425,55 +441,58 @@ class _$ResolutionEntityImpl implements _ResolutionEntity {
 
 abstract class _ResolutionEntity implements ResolutionEntity {
   const factory _ResolutionEntity(
-      {final String? resolutionId,
-      final String? resolutionName,
-      final String? goalStatement,
-      final String? actionStatement,
-      final bool? isActive,
-      final int? actionPerWeek,
-      final int? colorIndex,
-      final int? iconIndex,
-      final DateTime? startDate,
-      final List<UserDataEntity>? shareFriendEntityList,
-      final List<GroupEntity>? shareGroupEntityList,
-      final int? writtenPostCount,
-      final int? receivedReactionCount,
-      final List<DateTime>? successWeekMondayList,
-      final List<int>? weeklyPostCountList}) = _$ResolutionEntityImpl;
+      {final String resolutionId,
+      final String resolutionName,
+      final String goalStatement,
+      final String actionStatement,
+      final bool isActive,
+      final int actionPerWeek,
+      final int colorIndex,
+      final int iconIndex,
+      required final DateTime startDate,
+      final List<UserDataEntity> shareFriendEntityList,
+      final List<GroupEntity> shareGroupEntityList,
+      final int writtenPostCount,
+      final int receivedReactionCount,
+      final List<DateTime> successWeekMondayList,
+      final List<int> weeklyPostCountList}) = _$ResolutionEntityImpl;
 
   factory _ResolutionEntity.fromJson(Map<String, dynamic> json) = _$ResolutionEntityImpl.fromJson;
 
   @override
-  String? get resolutionId;
+  String get resolutionId;
   @override
-  String? get resolutionName;
+  String get resolutionName;
   @override
-  String? get goalStatement;
+  String get goalStatement;
   @override
-  String? get actionStatement;
+  String get actionStatement;
   @override
-  bool? get isActive;
+  bool get isActive;
   @override
-  int? get actionPerWeek;
+  int get actionPerWeek;
   @override
-  int? get colorIndex;
+  int get colorIndex;
   @override
-  int? get iconIndex;
+  int get iconIndex;
   @override
-  DateTime? get startDate;
+  DateTime get startDate;
   @override
-  List<UserDataEntity>? get shareFriendEntityList;
+  List<UserDataEntity> get shareFriendEntityList;
   @override
-  List<GroupEntity>? get shareGroupEntityList;
+  List<GroupEntity> get shareGroupEntityList;
   @override
-  int? get writtenPostCount;
+  int get writtenPostCount;
   @override
-  int? get receivedReactionCount;
+  int get receivedReactionCount;
   @override
-  List<DateTime>? get successWeekMondayList;
+  List<DateTime> get successWeekMondayList;
   @override
-  List<int>? get weeklyPostCountList;
+  List<int> get weeklyPostCountList;
+
+  /// Create a copy of ResolutionEntity
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ResolutionEntityImplCopyWith<_$ResolutionEntityImpl> get copyWith => throw _privateConstructorUsedError;
 }

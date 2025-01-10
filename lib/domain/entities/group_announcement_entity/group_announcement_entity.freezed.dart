@@ -24,14 +24,17 @@ mixin _$GroupAnnouncementEntity {
   String get writerUid => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get content => throw _privateConstructorUsedError;
-  @TimestampConverter()
   DateTime get createdAt => throw _privateConstructorUsedError;
   List<String> get readByUidList => throw _privateConstructorUsedError;
   @JsonKey(includeFromJson: true, includeToJson: false)
   String get groupAnnouncementId => throw _privateConstructorUsedError;
 
+  /// Serializes this GroupAnnouncementEntity to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of GroupAnnouncementEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $GroupAnnouncementEntityCopyWith<GroupAnnouncementEntity> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -45,7 +48,7 @@ abstract class $GroupAnnouncementEntityCopyWith<$Res> {
       String writerUid,
       String title,
       String content,
-      @TimestampConverter() DateTime createdAt,
+      DateTime createdAt,
       List<String> readByUidList,
       @JsonKey(includeFromJson: true, includeToJson: false) String groupAnnouncementId});
 }
@@ -60,6 +63,8 @@ class _$GroupAnnouncementEntityCopyWithImpl<$Res, $Val extends GroupAnnouncement
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of GroupAnnouncementEntity
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -116,7 +121,7 @@ abstract class _$$GroupAnnouncementEntityImplCopyWith<$Res> implements $GroupAnn
       String writerUid,
       String title,
       String content,
-      @TimestampConverter() DateTime createdAt,
+      DateTime createdAt,
       List<String> readByUidList,
       @JsonKey(includeFromJson: true, includeToJson: false) String groupAnnouncementId});
 }
@@ -129,6 +134,8 @@ class __$$GroupAnnouncementEntityImplCopyWithImpl<$Res>
       _$GroupAnnouncementEntityImpl _value, $Res Function(_$GroupAnnouncementEntityImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of GroupAnnouncementEntity
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -182,7 +189,7 @@ class _$GroupAnnouncementEntityImpl implements _GroupAnnouncementEntity {
       required this.writerUid,
       required this.title,
       required this.content,
-      @TimestampConverter() required this.createdAt,
+      required this.createdAt,
       required final List<String> readByUidList,
       @JsonKey(includeFromJson: true, includeToJson: false) required this.groupAnnouncementId})
       : _readByUidList = readByUidList;
@@ -199,7 +206,6 @@ class _$GroupAnnouncementEntityImpl implements _GroupAnnouncementEntity {
   @override
   final String content;
   @override
-  @TimestampConverter()
   final DateTime createdAt;
   final List<String> _readByUidList;
   @override
@@ -233,12 +239,14 @@ class _$GroupAnnouncementEntityImpl implements _GroupAnnouncementEntity {
                 other.groupAnnouncementId == groupAnnouncementId));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, groupId, writerUid, title, content, createdAt,
       const DeepCollectionEquality().hash(_readByUidList), groupAnnouncementId);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of GroupAnnouncementEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$GroupAnnouncementEntityImplCopyWith<_$GroupAnnouncementEntityImpl> get copyWith =>
@@ -258,7 +266,7 @@ abstract class _GroupAnnouncementEntity implements GroupAnnouncementEntity {
           required final String writerUid,
           required final String title,
           required final String content,
-          @TimestampConverter() required final DateTime createdAt,
+          required final DateTime createdAt,
           required final List<String> readByUidList,
           @JsonKey(includeFromJson: true, includeToJson: false) required final String groupAnnouncementId}) =
       _$GroupAnnouncementEntityImpl;
@@ -274,15 +282,17 @@ abstract class _GroupAnnouncementEntity implements GroupAnnouncementEntity {
   @override
   String get content;
   @override
-  @TimestampConverter()
   DateTime get createdAt;
   @override
   List<String> get readByUidList;
   @override
   @JsonKey(includeFromJson: true, includeToJson: false)
   String get groupAnnouncementId;
+
+  /// Create a copy of GroupAnnouncementEntity
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$GroupAnnouncementEntityImplCopyWith<_$GroupAnnouncementEntityImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

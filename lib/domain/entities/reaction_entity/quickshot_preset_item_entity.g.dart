@@ -10,24 +10,12 @@ _$QuickshotPresetItemEntityImpl _$$QuickshotPresetItemEntityImplFromJson(Map<Str
     _$QuickshotPresetItemEntityImpl(
       url: json['url'] as String? ?? '',
       id: json['id'] as String? ?? '',
-      createdAt: _$JsonConverterFromJson<Timestamp, DateTime>(json['createdAt'], const TimestampConverter().fromJson),
+      createdAt: const TimestampConverter().fromJson(json['createdAt'] as Timestamp),
     );
 
 Map<String, dynamic> _$$QuickshotPresetItemEntityImplToJson(_$QuickshotPresetItemEntityImpl instance) =>
     <String, dynamic>{
       'url': instance.url,
       'id': instance.id,
-      'createdAt': _$JsonConverterToJson<Timestamp, DateTime>(instance.createdAt, const TimestampConverter().toJson),
+      'createdAt': const TimestampConverter().toJson(instance.createdAt),
     };
-
-Value? _$JsonConverterFromJson<Json, Value>(
-  Object? json,
-  Value? Function(Json json) fromJson,
-) =>
-    json == null ? null : fromJson(json as Json);
-
-Json? _$JsonConverterToJson<Json, Value>(
-  Value? value,
-  Json? Function(Value value) toJson,
-) =>
-    value == null ? null : toJson(value);

@@ -1,8 +1,5 @@
 // ignore_for_file: invalid_annotation_target
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:wehavit/domain/entities/entities.dart';
 
 part 'group_announcement_entity.freezed.dart';
 part 'group_announcement_entity.g.dart';
@@ -15,7 +12,7 @@ class GroupAnnouncementEntity with _$GroupAnnouncementEntity {
     required String writerUid,
     required String title,
     required String content,
-    @TimestampConverter() required DateTime createdAt,
+    required DateTime createdAt,
     required List<String> readByUidList,
     @JsonKey(includeFromJson: true, includeToJson: false) required String groupAnnouncementId,
   }) = _GroupAnnouncementEntity;
