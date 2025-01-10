@@ -44,7 +44,7 @@ class AddResolutionDoneViewModelProvider extends StateNotifier<AddResolutionDone
           ),
         );
 
-    final sharedFriendList = state.resolutionEntity?.shareFriendEntityList?.map((entity) => entity.userId).toList();
+    final sharedFriendList = state.resolutionEntity?.shareFriendEntityList.map((entity) => entity.userId).toList();
 
     final futureSelectedFriendList = state.friendList?.map((futureEntity) async {
       final result = await futureEntity;
@@ -76,7 +76,7 @@ class AddResolutionDoneViewModelProvider extends StateNotifier<AddResolutionDone
           ),
         );
 
-    final sharedGroupList = state.resolutionEntity?.shareGroupEntityList?.map((entity) => entity.groupId).toList();
+    final sharedGroupList = state.resolutionEntity?.shareGroupEntityList.map((entity) => entity.groupId).toList();
 
     final selectedGroupList = state.groupModelList?.map((model) {
       return sharedGroupList?.contains(model.groupEntity.groupId) ?? false;
@@ -94,7 +94,7 @@ class AddResolutionDoneViewModelProvider extends StateNotifier<AddResolutionDone
   }
 
   Future<void> applyChangedSharingOfFriends() async {
-    List<UserDataEntity> currentSharedFriendList = state.resolutionEntity!.shareFriendEntityList?.toList() ?? [];
+    List<UserDataEntity> currentSharedFriendList = state.resolutionEntity!.shareFriendEntityList.toList();
 
     await Future.forEach(state.selectedFriendList!.asMap().entries, (entry) async {
       final index = entry.key;
@@ -112,7 +112,7 @@ class AddResolutionDoneViewModelProvider extends StateNotifier<AddResolutionDone
           // 공유하기
           if (state.tempSelectedFriendList![index]) {
             final shareResult = await shareResolutionToFriendUsecase.call(
-              resolutionId: state.resolutionEntity!.resolutionId!,
+              resolutionId: state.resolutionEntity!.resolutionId,
               friendId: userId,
             );
 
@@ -137,7 +137,7 @@ class AddResolutionDoneViewModelProvider extends StateNotifier<AddResolutionDone
           // 공유 취소하기
           else {
             final unshareResult = await unshareResolutionToFriendUsecase.call(
-              resolutionId: state.resolutionEntity!.resolutionId!,
+              resolutionId: state.resolutionEntity!.resolutionId,
               friendId: userId,
             );
 
@@ -158,7 +158,7 @@ class AddResolutionDoneViewModelProvider extends StateNotifier<AddResolutionDone
   }
 
   Future<void> applyChangedSharingOfGroups() async {
-    List<GroupEntity> currentSharedGroupList = state.resolutionEntity!.shareGroupEntityList?.toList() ?? [];
+    List<GroupEntity> currentSharedGroupList = state.resolutionEntity!.shareGroupEntityList.toList();
 
     await Future.forEach(state.selectedGroupList!.asMap().entries, (entry) async {
       final index = entry.key;
@@ -171,7 +171,7 @@ class AddResolutionDoneViewModelProvider extends StateNotifier<AddResolutionDone
           // 공유하기
           if (state.tempSelectedGroupList![index]) {
             final shareResult = await shareResolutionToGroupUsecase.call(
-              resolutionId: state.resolutionEntity!.resolutionId!,
+              resolutionId: state.resolutionEntity!.resolutionId,
               groupId: groupId,
             );
 
@@ -187,7 +187,7 @@ class AddResolutionDoneViewModelProvider extends StateNotifier<AddResolutionDone
           // 공유 취소하기
           else {
             final unshareResult = await unshareResolutionToGroupUsecase.call(
-              resolutionId: state.resolutionEntity!.resolutionId!,
+              resolutionId: state.resolutionEntity!.resolutionId,
               groupId: groupId,
             );
 

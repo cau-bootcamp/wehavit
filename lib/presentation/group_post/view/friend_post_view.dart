@@ -63,9 +63,7 @@ class _FriendPostViewState extends ConsumerState<FriendPostView> {
     viewModel.sharedResolutionIdList = widget.cellModel.friendIdResolutionMap.values.expand((list) => list).toList();
 
     ref.watch(resolutionListViewModelProvider).resolutionModelList?.forEach((model) {
-      if (model.entity.resolutionId != null) {
-        viewModel.sharedResolutionIdList.add(model.entity.resolutionId!);
-      }
+      viewModel.sharedResolutionIdList.add(model.entity.resolutionId);
     });
 
     unawaited(
@@ -100,7 +98,6 @@ class _FriendPostViewState extends ConsumerState<FriendPostView> {
           appBar: WehavitAppBar(
             titleLabel: '내 친구들',
             leadingIconString: WHIcons.back,
-            leadingTitle: '',
             leadingAction: () {
               Navigator.pop(context);
             },

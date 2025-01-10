@@ -66,7 +66,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
 
     return Scaffold(
       appBar: WehavitAppBar(
-        titleLabel: widget.entity.resolutionName ?? '나의 도전',
+        titleLabel: widget.entity.resolutionName,
         leadingIconString: WHIcons.back,
         leadingAction: () {
           Navigator.pop(context);
@@ -109,7 +109,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                 Row(
                   children: [
                     CountAndDescription(
-                      count: widget.entity.writtenPostCount ?? 0,
+                      count: widget.entity.writtenPostCount,
                       unit: '회',
                       description: '실천 인증 횟수',
                     ),
@@ -117,7 +117,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                       width: 16.0,
                     ),
                     CountAndDescription(
-                      count: widget.entity.successWeekMondayList?.length ?? 0,
+                      count: widget.entity.successWeekMondayList.length,
                       unit: '일',
                       description: '주간 목표 달성 횟수',
                     ),
@@ -129,7 +129,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                 Row(
                   children: [
                     CountAndDescription(
-                      count: widget.entity.receivedReactionCount!,
+                      count: widget.entity.receivedReactionCount,
                       unit: '회',
                       description: '받은 격려 수',
                     ),
@@ -137,7 +137,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                       width: 16.0,
                     ),
                     CountAndDescription(
-                      count: DateTime.now().difference(widget.entity.startDate ?? DateTime.now()).inDays + 1,
+                      count: DateTime.now().difference(widget.entity.startDate).inDays + 1,
                       unit: '일',
                       description: '도전을 함께한 일 수',
                     ),
@@ -199,12 +199,12 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          color: CustomColors.pointColorList[widget.entity.colorIndex ?? 0],
+                          color: CustomColors.pointColorList[widget.entity.colorIndex],
                           dataSource: List<ChartData>.generate(
-                            widget.entity.weeklyPostCountList?.length ?? 0,
+                            widget.entity.weeklyPostCountList.length,
                             (index) => ChartData(
                               weekdayString[index],
-                              widget.entity.weeklyPostCountList![index].toDouble(),
+                              widget.entity.weeklyPostCountList[index].toDouble(),
                             ),
                           ),
                           xValueMapper: (ChartData data, _) => data.x,
@@ -397,7 +397,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                 ),
               );
               final isFuture = viewModel.todayDate.isBefore(cellDate);
-              final isPast = widget.entity.startDate?.subtract(const Duration(days: 1)).isAfter(cellDate) ?? true;
+              final isPast = widget.entity.startDate.subtract(const Duration(days: 1)).isAfter(cellDate);
 
               return Expanded(
                 child: GestureDetector(
@@ -530,7 +530,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
           reverse: true,
           onPageChanged: (index, reason) async {
             if (index == viewModel.calendartMondayDateList.length - 1) {
-              if (widget.entity.startDate?.isAfter(viewModel.calendartMondayDateList.first) ?? true) {
+              if (widget.entity.startDate.isAfter(viewModel.calendartMondayDateList.first)) {
                 return;
               }
               // 마지막 페이지에 도달했을 때 추가 요소를 추가합니다.

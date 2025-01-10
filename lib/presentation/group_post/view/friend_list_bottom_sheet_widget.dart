@@ -232,7 +232,7 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListBottomSheetCell
             ),
           );
 
-          totalPostCount += resolutionEntity.actionPerWeek ?? 0;
+          totalPostCount += resolutionEntity.actionPerWeek;
           donePostCount += doneList.where((element) => element == true).length;
         }
       }),

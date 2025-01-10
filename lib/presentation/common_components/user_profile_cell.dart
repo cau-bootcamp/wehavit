@@ -141,7 +141,7 @@ class ConfirmPostUserProfile extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      userEntity.userName ?? '',
+                      userEntity.userName,
                       style: context.bodyMedium?.bold,
                     ),
                   ],

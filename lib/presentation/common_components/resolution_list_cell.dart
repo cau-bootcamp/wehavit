@@ -4,9 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/presentation/common_components/circular_status_indicator.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
-import 'package:wehavit/presentation/common_components/resolution_linear_gauge_indicator.dart';
 
 class ResolutionListCell extends ConsumerStatefulWidget {
   const ResolutionListCell({
@@ -28,18 +26,18 @@ class _ResolutionListCellWidgetState extends ConsumerState<ResolutionListCell> {
   @override
   Widget build(BuildContext context) {
     EitherFuture<List<bool>> futureDoneList = ref.watch(getTargetResolutionDoneListForWeekUsecaseProvider)(
-      resolutionId: widget.resolutionEntity.resolutionId ?? '',
+      resolutionId: widget.resolutionEntity.resolutionId,
       startMonday: DateTime.now().getMondayDateTime(),
     );
 
-    final daysSinceFirstDay = DateTime.now().difference(widget.resolutionEntity.startDate ?? DateTime.now()).inDays + 1;
+    final daysSinceFirstDay = DateTime.now().difference(widget.resolutionEntity.startDate).inDays + 1;
 
     return TextButton(
       style: TextButton.styleFrom(
         shadowColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
         backgroundColor: CustomColors.whGrey300,
-        overlayColor: CustomColors.pointColorList[widget.resolutionEntity.colorIndex ?? 0],
+        overlayColor: CustomColors.pointColorList[widget.resolutionEntity.colorIndex],
         padding: const EdgeInsets.all(0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16.0),
@@ -55,10 +53,10 @@ class _ResolutionListCellWidgetState extends ConsumerState<ResolutionListCell> {
         child: Column(
           children: [
             ResolutionListCellHeadWidget(
-              goalStatement: widget.resolutionEntity.goalStatement ?? '',
-              resolutionName: widget.resolutionEntity.resolutionName ?? '',
-              pointColor: CustomColors.pointColorList[widget.resolutionEntity.colorIndex ?? 0],
-              iconIndex: widget.resolutionEntity.iconIndex ?? 0,
+              goalStatement: widget.resolutionEntity.goalStatement,
+              resolutionName: widget.resolutionEntity.resolutionName,
+              pointColor: CustomColors.pointColorList[widget.resolutionEntity.colorIndex],
+              iconIndex: widget.resolutionEntity.iconIndex,
             ),
             const SizedBox(height: 20),
             ResolutionLinearGaugeIndicator(
@@ -80,7 +78,7 @@ class _ResolutionListCellWidgetState extends ConsumerState<ResolutionListCell> {
                       ),
                       ResolutionListWeeklyDoneWidget(
                         futureDoneList: futureDoneList,
-                        pointColor: CustomColors.pointColorList[widget.resolutionEntity.colorIndex ?? 0],
+                        pointColor: CustomColors.pointColorList[widget.resolutionEntity.colorIndex],
                       ),
                     ],
                   ),

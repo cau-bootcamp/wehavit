@@ -7,9 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/common/utils/preference_key.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
-import 'package:wehavit/presentation/common_components/list_dash_outlined_cell.dart';
-import 'package:wehavit/presentation/common_components/resolution_linear_gauge_indicator.dart';
-import 'package:wehavit/presentation/common_components/weekly_resolution_summary_card.dart';
 import 'package:wehavit/presentation/presentation.dart';
 
 class ResolutionListView extends ConsumerStatefulWidget {
@@ -29,7 +26,7 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
 
     return Scaffold(
       backgroundColor: CustomColors.whDarkBlack,
-      appBar: WehavitAppBar(
+      appBar: const WehavitAppBar(
         titleLabel: '인증 남기기',
       ),
       body: SafeArea(
@@ -225,17 +222,17 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
           Column(
             children: [
               Text(
-                viewModel.resolutionModelList![index].entity.resolutionName ?? '',
+                viewModel.resolutionModelList![index].entity.resolutionName,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: CustomColors.pointColorList[viewModel.resolutionModelList![index].entity.colorIndex ?? 0],
+                  color: CustomColors.pointColorList[viewModel.resolutionModelList![index].entity.colorIndex],
                   fontSize: 18.0,
                   fontWeight: FontWeight.w600,
                 ),
               ),
               const SizedBox(height: 4.0),
               Text(
-                viewModel.resolutionModelList![index].entity.goalStatement ?? '',
+                viewModel.resolutionModelList![index].entity.goalStatement,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   color: CustomColors.whWhite,
@@ -257,7 +254,6 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
           ),
           WideColoredButton(
             buttonTitle: '인증글 작성하기',
-            backgroundColor: CustomColors.whYellow,
             foregroundColor: CustomColors.whBlack,
             onPressed: () async {
               final bool result = await Navigator.push(
@@ -330,7 +326,7 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
                       )
                           .whenComplete(() {
                         Navigator.pop(context, true);
-                        // ignore: use_build_context_synchronously
+
                         showToastMessage(
                           context,
                           text: '성공적으로 인증을 남겼어요',

@@ -15,7 +15,7 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
   EitherFuture<bool> createConfirmPost(
     ConfirmPostEntity confirmPostEntity,
   ) async {
-    final String resolutionId = confirmPostEntity.resolutionId!;
+    final String resolutionId = confirmPostEntity.resolutionId;
     try {
       final existingPost = await _wehavitDatasource.getConfirmPostOfTargetDateByResolutionGoalId(
         confirmPostEntity.createdAt!,

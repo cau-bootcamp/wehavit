@@ -116,7 +116,7 @@ class MyProfileWidget extends StatelessWidget {
           return Row(
             children: [
               CircleProfileImage(
-                url: userModel.userImageUrl ?? '',
+                url: userModel.userImageUrl,
                 size: 50,
               ),
               const SizedBox(width: 16.0),
@@ -124,7 +124,7 @@ class MyProfileWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    userModel.userName ?? '',
+                    userModel.userName,
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -133,7 +133,7 @@ class MyProfileWidget extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    userModel.aboutMe ?? '',
+                    userModel.aboutMe,
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w300,
@@ -237,7 +237,7 @@ class MySimpleStatisticsWidget extends StatelessWidget {
                       preText: '위해빗과 함께한 지 ',
                       highlightedText:
                           // ignore: lines_longer_than_80_chars
-                          '${DateTime.now().difference(userEntity.createdAt ?? DateTime.now()).inDays + 1}일째',
+                          '${DateTime.now().difference(userEntity.createdAt).inDays + 1}일째',
                       postText: '가 되었어요.',
                     ),
                     const SizedBox(

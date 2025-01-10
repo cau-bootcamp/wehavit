@@ -91,7 +91,7 @@ class DoneCreatingGroupView extends ConsumerWidget {
                                       Padding(
                                         padding: const EdgeInsets.only(left: 16.0),
                                         child: Text(
-                                          groupEntity.groupDescription ?? '',
+                                          groupEntity.groupDescription,
                                           style: const TextStyle(
                                             fontSize: 14.0,
                                             fontWeight: FontWeight.w300,
@@ -148,7 +148,7 @@ class DoneCreatingGroupView extends ConsumerWidget {
                                       Padding(
                                         padding: const EdgeInsets.only(left: 16.0),
                                         child: Text(
-                                          groupEntity.groupRule ?? '',
+                                          groupEntity.groupRule,
                                           style: const TextStyle(
                                             fontSize: 14.0,
                                             fontWeight: FontWeight.w300,

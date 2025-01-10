@@ -78,7 +78,7 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
             children: [
               CircleProfileImage(
                 size: 60,
-                url: userEntity.userImageUrl ?? '',
+                url: userEntity.userImageUrl,
               ),
               const SizedBox(
                 width: 12,
@@ -91,7 +91,7 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          '${userEntity.userName}',
+                          userEntity.userName,
                           style: const TextStyle(
                             color: CustomColors.whWhite,
                             fontSize: 16,
@@ -101,7 +101,7 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
                         ),
                         Expanded(
                           child: Text(
-                            userEntity.handle != null ? ' • ${userEntity.handle}' : '',
+                            ' • ${userEntity.handle}',
                             style: const TextStyle(
                               color: CustomColors.whSemiWhite,
                               fontSize: 16,
@@ -113,7 +113,7 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
                       ],
                     ),
                     Text(
-                      userEntity.aboutMe ?? '',
+                      userEntity.aboutMe,
                       style: const TextStyle(
                         color: CustomColors.whPlaceholderGrey,
                         fontSize: 14,
@@ -144,16 +144,12 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
             SmallColoredButton(
               buttonLabel: '수락',
               onPressed: () async {
-                if (entity.userId != null) {
-                  final parentState = context.findAncestorStateOfType<FrinedListViewState>();
+                final parentState = context.findAncestorStateOfType<FrinedListViewState>();
 
-                  await provider.acceptToBeFriendWith(
-                    targetUid: entity.userId!,
-                  );
+                await provider.acceptToBeFriendWith(targetUid: entity.userId);
 
-                  if (mounted) {
-                    parentState?.setState(() {});
-                  }
+                if (mounted) {
+                  parentState?.setState(() {});
                 }
               },
             ),
@@ -164,16 +160,14 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
               buttonLabel: '거절',
               backgroundColor: CustomColors.whBrightGrey,
               onPressed: () async {
-                if (entity.userId != null) {
-                  final parentState = context.findAncestorStateOfType<FrinedListViewState>();
+                final parentState = context.findAncestorStateOfType<FrinedListViewState>();
 
-                  await provider.rejectToBeFriendWith(
-                    targetUid: entity.userId!,
-                  );
+                await provider.rejectToBeFriendWith(
+                  targetUid: entity.userId,
+                );
 
-                  if (mounted) {
-                    parentState?.setState(() {});
-                  }
+                if (mounted) {
+                  parentState?.setState(() {});
                 }
               },
             ),
@@ -184,14 +178,12 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
           buttonLabel: '삭제',
           backgroundColor: CustomColors.whBrightGrey,
           onPressed: () async {
-            if (entity.userId != null) {
-              final parentState = context.findAncestorStateOfType<FrinedListViewState>();
+            final parentState = context.findAncestorStateOfType<FrinedListViewState>();
 
-              await provider.removeFromFriendList(targetUid: entity.userId!);
+            await provider.removeFromFriendList(targetUid: entity.userId);
 
-              if (mounted) {
-                parentState?.setState(() {});
-              }
+            if (mounted) {
+              parentState?.setState(() {});
             }
           },
         );
@@ -199,21 +191,19 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListCellWidget> {
         return SmallColoredButton(
           buttonLabel: '요청',
           onPressed: () async {
-            if (entity.userId != null) {
-              final parentState = context.findAncestorStateOfType<FrinedListViewState>();
+            final parentState = context.findAncestorStateOfType<FrinedListViewState>();
 
-              await provider.applyToBeFriendWith(targetUid: entity.userId!).then((result) {
-                if (result.isRight()) {
-                  showToastMessage(
-                    context,
-                    text: '친구 신청을 보냈어요',
-                  );
-                }
-              });
-
-              if (mounted) {
-                parentState?.setState(() {});
+            await provider.applyToBeFriendWith(targetUid: entity.userId).then((result) {
+              if (result.isRight()) {
+                showToastMessage(
+                  context,
+                  text: '친구 신청을 보냈어요',
+                );
               }
+            });
+
+            if (mounted) {
+              parentState?.setState(() {});
             }
           },
         );
@@ -365,9 +355,9 @@ class FriendListMyProfileWidget extends StatelessWidget {
           ),
         ],
       ),
-      forFail: Container(
+      forFail: const SizedBox(
         width: double.infinity,
-        child: const Text(
+        child: Text(
           '정보를 가져오지 못했어요\n잠시 후 다시 시도해주세요',
           style: TextStyle(
             color: CustomColors.whWhite,
@@ -380,7 +370,7 @@ class FriendListMyProfileWidget extends StatelessWidget {
         return Row(
           children: [
             CircleProfileImage(
-              url: userEntity.userImageUrl ?? '',
+              url: userEntity.userImageUrl,
               size: 50,
             ),
             const SizedBox(width: 16.0),
@@ -389,7 +379,7 @@ class FriendListMyProfileWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    userEntity.userName ?? '',
+                    userEntity.userName,
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -398,7 +388,7 @@ class FriendListMyProfileWidget extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    userEntity.aboutMe ?? '',
+                    userEntity.aboutMe,
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w300,
