@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/constants/constants.dart';
 import 'package:wehavit/dependency/dependency.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
-import 'package:wehavit/presentation/common_components/search_form_field.dart';
 import 'package:wehavit/presentation/main/main.dart';
 
 class EditUserDetailView extends ConsumerStatefulWidget {
@@ -36,9 +35,6 @@ class _EditUserDetailViewState extends ConsumerState<EditUserDetailView> {
   void initState() {
     super.initState();
     nameTextEditingController.text = widget.name ?? '';
-    nameTextEditingController.addListener(() {
-      print("HELLO ${nameTextEditingController.text}");
-    });
   }
 
   @override
@@ -86,8 +82,7 @@ class _EditUserDetailViewState extends ConsumerState<EditUserDetailView> {
             leadingAction: () async {
               if (!widget.isModifying) {
                 try {
-                  await provider.removeUserData();
-                  await provider.logOut();
+                  await provider.rollbackSignUp();
                 } on Exception catch (e) {
                   // ignore: avoid_print
                   print('DEBUG: ${e.toString()}');
