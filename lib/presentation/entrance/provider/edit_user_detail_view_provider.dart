@@ -70,11 +70,16 @@ class EditUserDataViewModelProvider extends StateNotifier<EditUserDetailViewMode
     });
   }
 
-  EitherFuture<void> removeUserData() async {
+  Future<void> rollbackSignUp() async {
+    _removeUserData();
+    _logOut();
+  }
+
+  EitherFuture<void> _removeUserData() async {
     return removeCurrentUserDataUsecase.call();
   }
 
-  Future<void> logOut() {
+  Future<void> _logOut() {
     return logOutUseCase.call();
   }
 
