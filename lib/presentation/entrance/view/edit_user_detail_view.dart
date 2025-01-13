@@ -5,6 +5,7 @@ import 'package:wehavit/common/constants/constants.dart';
 import 'package:wehavit/dependency/dependency.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/main/main.dart';
+import 'package:wehavit/presentation/state/user_data/my_user_data_provider.dart';
 
 class EditUserDetailView extends ConsumerStatefulWidget {
   const EditUserDetailView({
@@ -340,6 +341,7 @@ class _EditUserDetailViewState extends ConsumerState<EditUserDetailView> {
                               );
                             },
                             (success) async {
+                              ref.invalidate(getMyUserDataProvider);
                               if (widget.isModifying) {
                                 Navigator.pop(context, true);
                               } else {
@@ -362,7 +364,6 @@ class _EditUserDetailViewState extends ConsumerState<EditUserDetailView> {
                       !((viewmodel.name.isNotEmpty & viewmodel.handle.isNotEmpty) & (viewmodel.profileImage != null)) |
                           viewmodel.isProcessing,
                   buttonTitle: viewmodel.isProcessing ? '처리 중' : '완료',
-                  backgroundColor: CustomColors.whYellow,
                   foregroundColor: CustomColors.whBlack,
                 ),
               ],
