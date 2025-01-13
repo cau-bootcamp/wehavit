@@ -35,8 +35,10 @@ class ResolutionListViewModelProvider extends StateNotifier<ResolutionListViewMo
     final List<ResolutionListCellWidgetModel> modelList = await Future.wait(
       resolutionList.map((entity) async {
         doneList = _getTargetResolutionDoneListForWeekUsecase(
-          resolutionId: entity.resolutionId,
-          startMonday: DateTime.now().getMondayDateTime(),
+          param: GetTargetResolutionDoneListForWeekUsecaseParams(
+            resolutionId: entity.resolutionId,
+            startMonday: DateTime.now().getMondayDateTime(),
+          ),
         );
 
         return ResolutionListCellWidgetModel(

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wehavit/domain/usecases/get_target_resolution_done_list_for_week_usecase.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 
 class ResolutionListCell extends ConsumerStatefulWidget {
@@ -25,10 +26,12 @@ class ResolutionListCell extends ConsumerStatefulWidget {
 class _ResolutionListCellWidgetState extends ConsumerState<ResolutionListCell> {
   @override
   Widget build(BuildContext context) {
-    EitherFuture<List<bool>> futureDoneList = ref.watch(getTargetResolutionDoneListForWeekUsecaseProvider)(
-      resolutionId: widget.resolutionEntity.resolutionId,
-      startMonday: DateTime.now().getMondayDateTime(),
-    );
+    // EitherFuture<List<bool>> futureDoneList = ref.watch(getTargetResolutionDoneListForWeekUsecaseProvider)(
+    //   param: GetTargetResolutionDoneListForWeekUsecaseParams(
+    //     resolutionId: widget.resolutionEntity.resolutionId,
+    //     startMonday: DateTime.now().getMondayDateTime(),
+    //   ),
+    // );
 
     final daysSinceFirstDay = DateTime.now().difference(widget.resolutionEntity.startDate).inDays + 1;
 
@@ -59,9 +62,18 @@ class _ResolutionListCellWidgetState extends ConsumerState<ResolutionListCell> {
               iconIndex: widget.resolutionEntity.iconIndex,
             ),
             const SizedBox(height: 20),
-            ResolutionLinearGaugeIndicator(
-              resolutionEntity: widget.resolutionEntity,
-              futureDoneList: futureDoneList,
+            Consumer(
+              builder: (context, ref, _) {
+                return ResolutionLinearGaugeIndicator(
+                  resolutionEntity: widget.resolutionEntity,
+                  futureDoneList: ref.watch(getTargetResolutionDoneListForWeekUsecaseProvider)(
+                    param: GetTargetResolutionDoneListForWeekUsecaseParams(
+                      resolutionId: widget.resolutionEntity.resolutionId,
+                      startMonday: DateTime.now().getMondayDateTime(),
+                    ),
+                  ),
+                );
+              },
             ),
             if (widget.showDetails)
               Column(
@@ -76,9 +88,18 @@ class _ResolutionListCellWidgetState extends ConsumerState<ResolutionListCell> {
                           color: CustomColors.whGrey700,
                         ),
                       ),
-                      ResolutionListWeeklyDoneWidget(
-                        futureDoneList: futureDoneList,
-                        pointColor: CustomColors.pointColorList[widget.resolutionEntity.colorIndex],
+                      Consumer(
+                        builder: (context, ref, _) {
+                          return ResolutionListWeeklyDoneWidget(
+                            futureDoneList: ref.watch(getTargetResolutionDoneListForWeekUsecaseProvider)(
+                              param: GetTargetResolutionDoneListForWeekUsecaseParams(
+                                resolutionId: widget.resolutionEntity.resolutionId,
+                                startMonday: DateTime.now().getMondayDateTime(),
+                              ),
+                            ),
+                            pointColor: CustomColors.pointColorList[widget.resolutionEntity.colorIndex],
+                          );
+                        },
                       ),
                     ],
                   ),

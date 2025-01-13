@@ -1,4 +1,3 @@
-import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
 
@@ -9,16 +8,17 @@ class GetTargetResolutionDoneListForWeekUsecase {
 
   final ResolutionRepository _resolutionRepository;
 
-  EitherFuture<List<bool>> call({
-    required String? resolutionId,
-    required DateTime startMonday,
-  }) {
-    if (resolutionId == null) {
-      return Future(() => left(const Failure('resolution id is null')));
-    }
+  EitherFuture<List<bool>> call({required GetTargetResolutionDoneListForWeekUsecaseParams param}) {
     return _resolutionRepository.getResolutionDoneListForWeek(
-      resolutionId: resolutionId,
-      startMonday: startMonday,
+      resolutionId: param.resolutionId,
+      startMonday: param.startMonday,
     );
   }
+}
+
+class GetTargetResolutionDoneListForWeekUsecaseParams {
+  GetTargetResolutionDoneListForWeekUsecaseParams({required this.resolutionId, required this.startMonday});
+
+  String resolutionId;
+  DateTime startMonday;
 }

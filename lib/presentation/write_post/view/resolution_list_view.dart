@@ -8,6 +8,7 @@ import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/common/utils/preference_key.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/presentation.dart';
+import 'package:wehavit/presentation/state/resolution_list/resolution_list_provider.dart';
 
 class ResolutionListView extends ConsumerStatefulWidget {
   const ResolutionListView({super.key});
@@ -64,21 +65,10 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
                 ),
                 child: Column(
                   children: List<Widget>.generate(
-                    viewModel.resolutionModelList?.length ?? 0,
+                    ref.read(resolutionListNotifierProvider).value?.length ?? 0,
                     (index) => Container(
                       margin: const EdgeInsets.only(bottom: 16.0),
                       child: ResolutionListCell(
-                        // style: TextButton.styleFrom(
-                        //   backgroundColor: CustomColors.whSemiBlack,
-                        //   shadowColor: Colors.transparent,
-                        //   surfaceTintColor: Colors.transparent,
-                        //   overlayColor:
-                        //       CustomColors.pointColorList[viewModel.resolutionModelList![index].entity.colorIndex ?? 0],
-                        //   padding: const EdgeInsets.all(0),
-                        //   shape: RoundedRectangleBorder(
-                        //     borderRadius: BorderRadius.circular(16.0),
-                        //   ),
-                        // ),
                         onPressed: () async {
                           final isGuideShown = await SharedPreferences.getInstance().then((instance) {
                             return instance.getBool(PreferenceKey.isWritingPostGuideShown);
@@ -127,7 +117,7 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
                             });
                           }
                         },
-                        resolutionEntity: viewModel.resolutionModelList![index].entity,
+                        resolutionEntity: ref.read(resolutionListNotifierProvider).value![index],
                         showDetails: false,
                       ),
                     ),

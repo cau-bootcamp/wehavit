@@ -223,9 +223,10 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListBottomSheetCell
 
         if (resolutionEntity != null) {
           final doneList = await getTargetResolutionDoneListForWeekUsecase(
+              param: GetTargetResolutionDoneListForWeekUsecaseParams(
             resolutionId: id,
             startMonday: DateTime.now().getMondayDateTime(),
-          ).then(
+          )).then(
             (result) => result.fold(
               (failure) => [] as List<bool>,
               (doneList) => doneList,
