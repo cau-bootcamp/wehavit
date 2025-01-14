@@ -197,8 +197,8 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListBottomSheetCell
   }
 
   Future<void> loadAchievePercentage() async {
-    GetTargetResolutionDoneListForWeekUsecase getTargetResolutionDoneListForWeekUsecase =
-        ref.read(getTargetResolutionDoneListForWeekUsecaseProvider);
+    // GetTargetResolutionDoneListForWeekUsecase getTargetResolutionDoneListForWeekUsecase =
+    //     ref.read(getTargetResolutionDoneListForWeekUsecaseProvider);
 
     GetTargetResolutionEntityUsecase getTargetResolutionEntityUsecase =
         ref.read(getTargetResolutionEntityUsecaseProvider);
@@ -222,19 +222,19 @@ class _FriendListCellWidgetState extends ConsumerState<FriendListBottomSheetCell
             );
 
         if (resolutionEntity != null) {
-          final doneList = await getTargetResolutionDoneListForWeekUsecase(
-              param: GetTargetResolutionDoneListForWeekUsecaseParams(
-            resolutionId: id,
-            startMonday: DateTime.now().getMondayDateTime(),
-          )).then(
-            (result) => result.fold(
-              (failure) => [] as List<bool>,
-              (doneList) => doneList,
-            ),
-          );
+          // final doneList = await getTargetResolutionDoneListForWeekUsecase(
+          //     param: GetTargetResolutionDoneListForWeekUsecaseParams(
+          //   resolutionId: id,
+          //   startMonday: DateTime.now().getMondayDateTime(),
+          // )).then(
+          //   (result) => result.fold(
+          //     (failure) => [] as List<bool>,
+          //     (doneList) => doneList,
+          //   ),
+          // );
 
-          totalPostCount += resolutionEntity.actionPerWeek;
-          donePostCount += doneList.where((element) => element == true).length;
+          // totalPostCount += resolutionEntity.actionPerWeek;
+          // donePostCount += doneList.where((element) => element == true).length;
         }
       }),
     );

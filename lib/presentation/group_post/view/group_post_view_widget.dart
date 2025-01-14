@@ -198,7 +198,9 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
                             ),
                             ResolutionLinearGaugeIndicator(
                               resolutionEntity: resolutionEntity,
-                              futureDoneList: resolutionDoneListForWrittenWeek,
+                              // weeklyDoneList: resolutionDoneListForWrittenWeek,
+                              // TODO: edit
+                              targetDate: DateTime.now(),
                             ),
                             const SizedBox(height: 12.0),
                             ConfirmPostContentWidget(confirmPostEntity: widget.confirmPostEntity),

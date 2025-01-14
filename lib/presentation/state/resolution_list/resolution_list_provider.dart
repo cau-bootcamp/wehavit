@@ -15,8 +15,8 @@ final resolutionListNotifierProvider = FutureProvider<List<ResolutionEntity>>(
 final weeklyResolutionInfoProvider = FutureProvider.family<List<bool>, GetTargetResolutionDoneListForWeekUsecaseParams>(
   (ref, param) async {
     return ref.read(getTargetResolutionDoneListForWeekUsecaseProvider).call(param: param).then(
-          (result) => result.fold(
-            (failure) => Future.error(Exception('실천 정보를 조회하는데 실패했습니다')),
+          (value) => value.fold(
+            (failure) => Future.error(failure.message),
             (success) => success,
           ),
         );

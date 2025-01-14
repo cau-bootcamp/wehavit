@@ -19,6 +19,18 @@ class GetTargetResolutionDoneListForWeekUsecase {
 class GetTargetResolutionDoneListForWeekUsecaseParams {
   GetTargetResolutionDoneListForWeekUsecaseParams({required this.resolutionId, required this.startMonday});
 
-  String resolutionId;
-  DateTime startMonday;
+  final String resolutionId;
+  final DateTime startMonday;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is GetTargetResolutionDoneListForWeekUsecaseParams &&
+        other.resolutionId == resolutionId &&
+        other.startMonday == startMonday;
+  }
+
+  @override
+  int get hashCode => resolutionId.hashCode ^ startMonday.hashCode;
 }

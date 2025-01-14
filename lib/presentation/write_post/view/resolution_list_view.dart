@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
+import 'package:wehavit/common/routers/route_provider.dart';
+import 'package:wehavit/common/utils/datetime+.dart';
 import 'package:wehavit/common/utils/preference_key.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/presentation.dart';
@@ -235,7 +237,9 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
               ),
               ResolutionLinearGaugeIndicator(
                 resolutionEntity: viewModel.resolutionModelList![index].entity,
-                futureDoneList: viewModel.resolutionModelList![index].doneList,
+                // TODO: edit
+                targetDate: DateTime.now().getMondayDateTime(),
+                // weeklyDoneList: viewModel.resolutionModelList![index].doneList,
               ),
             ],
           ),
