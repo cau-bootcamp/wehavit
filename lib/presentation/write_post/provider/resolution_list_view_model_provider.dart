@@ -2,15 +2,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
+import 'package:wehavit/presentation/state/resolution_list/resolution_list_provider.dart';
 import 'package:wehavit/presentation/write_post/write_post.dart';
 
 class ResolutionListViewModelProvider extends StateNotifier<ResolutionListViewModel> {
   ResolutionListViewModelProvider(
+    this.ref,
     this._getMyResolutionListUsecase,
     this._getTargetResolutionDoneListForWeekUsecase,
     this._uploadConfirmPostUseCase,
   ) : super(ResolutionListViewModel());
 
+  final Ref ref;
   final GetMyResolutionListUsecase _getMyResolutionListUsecase;
   final GetTargetResolutionDoneListForWeekUsecase _getTargetResolutionDoneListForWeekUsecase;
   final UploadConfirmPostUseCase _uploadConfirmPostUseCase;
@@ -96,6 +99,19 @@ class ResolutionListViewModelProvider extends StateNotifier<ResolutionListViewMo
       localFileUrlList: [],
       hasRested: false,
       isPostingForYesterday: false,
-    );
+    ).then((result) {
+      final isPostingSuccess = result.fold((failure) => false, (value) => value);
+
+      if (isPostingSuccess) {
+        ref.invalidate(
+          weeklyResolutionInfoProvider.call(
+            GetTargetResolutionDoneListForWeekUsecaseParams(
+              resolutionId: model.entity.resolutionId,
+              startMonday: DateTime.now().getMondayDateTime(),
+            ),
+          ),
+        );
+      }
+    });
   }
 }

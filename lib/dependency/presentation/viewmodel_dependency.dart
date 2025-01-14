@@ -110,6 +110,7 @@ final resolutionListViewModelProvider =
   final getTargetResolutionDoneCountForWeekUsecase = ref.watch(getTargetResolutionDoneListForWeekUsecaseProvider);
   final uploadConfirmPostUsecase = ref.watch(uploadConfirmPostUseCaseProvider);
   return ResolutionListViewModelProvider(
+    ref,
     getMyResolutionListUsecase,
     getTargetResolutionDoneCountForWeekUsecase,
     uploadConfirmPostUsecase,
@@ -121,6 +122,7 @@ final writingConfirmPostViewModelProvider =
   final uploadConfirmPostUsecase = ref.watch(uploadConfirmPostUseCaseProvider);
   final sendNotificationToSharedUsersUsecase = ref.watch(sendNotificationToSharedUsersUsecaseProvider);
   return WritingConfirmPostViewModelProvider(
+    ref,
     uploadConfirmPostUsecase,
     sendNotificationToSharedUsersUsecase,
   );
