@@ -1,10 +1,11 @@
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/presentation/common_components/either_future_builder.dart';
 import 'package:wehavit/presentation/common_components/vertical_line_wrapper.dart';
+import 'package:wehavit/presentation/state/group_list/group_list_provider.dart';
 
 class GroupListCellModel {
   GroupListCellModel({
@@ -41,10 +42,10 @@ class GroupListCellModel {
 class GroupListCell extends StatelessWidget {
   const GroupListCell({
     super.key,
-    required this.cellModel,
+    required this.groupEntity,
   });
 
-  final EitherFuture<GroupListCellModel> cellModel;
+  final GroupEntity groupEntity;
 
   @override
   Widget build(BuildContext context) {
@@ -54,8 +55,14 @@ class GroupListCell extends StatelessWidget {
         color: CustomColors.whGrey300,
       ),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-      child: GroupListCellContent(
-        futureCellModel: cellModel,
+      child: Consumer(
+        builder: (context, ref, child) {
+          final AsyncValue<GroupListCellModel> cellModel = ref.watch(groupListCellModelProvider(groupEntity));
+
+          return GroupListCellContent(
+            asyncCellModel: cellModel,
+          );
+        },
       ),
     );
   }
@@ -64,73 +71,15 @@ class GroupListCell extends StatelessWidget {
 class GroupListCellContent extends StatelessWidget {
   const GroupListCellContent({
     super.key,
-    required this.futureCellModel,
+    required this.asyncCellModel,
   });
 
-  final EitherFuture<GroupListCellModel> futureCellModel;
+  final AsyncValue<GroupListCellModel> asyncCellModel;
 
   @override
   Widget build(BuildContext context) {
-    return EitherFutureBuilder<GroupListCellModel>(
-      target: futureCellModel,
-      forWaiting: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 110,
-            height: 16,
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(4)),
-              color: CustomColors.whGrey400,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Container(
-            width: 160,
-            height: 30,
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(4)),
-              color: CustomColors.whGrey400,
-            ),
-          ),
-          const SizedBox(
-            height: 12,
-          ),
-          VerticalLineWrapper(
-            color: CustomColors.whGrey400,
-            contents: [
-              Container(
-                width: 70,
-                height: 22,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(4)),
-                  color: CustomColors.whGrey400,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Container(
-                width: 100,
-                height: 22,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(4)),
-                  color: CustomColors.whGrey400,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Container(
-                width: 126,
-                height: 22,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(4)),
-                  color: CustomColors.whGrey400,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-      forFail: Container(),
-      mainWidgetCallback: (cellModel) {
+    return asyncCellModel.when(
+      data: (cellModel) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -221,6 +170,67 @@ class GroupListCellContent extends StatelessWidget {
                   ),
                 ],
               ),
+            ),
+          ],
+        );
+      },
+      error: (_, __) {
+        return Container();
+      },
+      loading: () {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 110,
+              height: 16,
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(4)),
+                color: CustomColors.whGrey400,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Container(
+              width: 160,
+              height: 30,
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(4)),
+                color: CustomColors.whGrey400,
+              ),
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            VerticalLineWrapper(
+              color: CustomColors.whGrey400,
+              contents: [
+                Container(
+                  width: 70,
+                  height: 22,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(4)),
+                    color: CustomColors.whGrey400,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  width: 100,
+                  height: 22,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(4)),
+                    color: CustomColors.whGrey400,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  width: 126,
+                  height: 22,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(4)),
+                    color: CustomColors.whGrey400,
+                  ),
+                ),
+              ],
             ),
           ],
         );

@@ -18,7 +18,7 @@ class JoinGroupView extends ConsumerStatefulWidget {
 
 class _JoinGroupViewState extends ConsumerState<JoinGroupView> {
   final groupNameFieldController = TextEditingController();
-  List<GroupListViewCellWidgetModel> groupListCellWidgetModelList = [];
+  List<GroupListCellModel> groupListCellWidgetModelList = [];
 
   bool isSearchDone = false;
   bool isSearchSuccessed = false;
@@ -243,8 +243,8 @@ class _JoinGroupViewState extends ConsumerState<JoinGroupView> {
                         (cellModel) => Container(
                           padding: const EdgeInsets.only(bottom: 16),
                           child: GestureDetector(
-                            child: GroupListViewCellWidget(
-                              cellModel: cellModel,
+                            child: GroupListCell(
+                              groupEntity: cellModel.groupEntity,
                             ),
                             onTapUp: (details) async {
                               showModalBottomSheet(
@@ -280,7 +280,7 @@ class _JoinGroupViewState extends ConsumerState<JoinGroupView> {
 class JoinGroupIntroduceView extends ConsumerStatefulWidget {
   const JoinGroupIntroduceView({super.key, required this.groupModel});
 
-  final GroupListViewCellWidgetModel groupModel;
+  final GroupListCellModel groupModel;
 
   @override
   ConsumerState<JoinGroupIntroduceView> createState() => _JoinGroupIntroduceViewState();
@@ -339,8 +339,8 @@ class _JoinGroupIntroduceViewState extends ConsumerState<JoinGroupIntroduceView>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  GroupListViewCellContentWidget(
-                    cellModel: widget.groupModel,
+                  GroupListCell(
+                    groupEntity: widget.groupModel.groupEntity,
                   ),
                   const SizedBox(height: 20),
                   Padding(

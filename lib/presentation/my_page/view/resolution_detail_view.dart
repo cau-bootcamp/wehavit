@@ -622,7 +622,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                 iconString: WHIcons.friend,
                 onPressed: () async {
                   provider.loadFriendList().whenComplete(() async {
-                    await provider.resetTempFriendList();
+                    // await provider.resetTempFriendList();
                     showModalBottomSheet(
                       isScrollControlled: true,
                       // ignore: use_build_context_synchronously
@@ -651,27 +651,27 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                 buttonTitle: '목표 공유 그룹 수정하기',
                 iconString: WHIcons.group,
                 onPressed: () async {
-                  provider.loadGroupList().whenComplete(() async {
-                    await provider.resetTempGroupList();
-                    showModalBottomSheet(
-                      isScrollControlled: true,
-                      // ignore: use_build_context_synchronously
-                      context: context,
-                      builder: (context) => GradientBottomSheet(
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.82,
-                          child: const ShareResolutionToGroupBottomSheetWidget(),
-                        ),
-                      ),
-                    ).then((newEntity) {
-                      if (newEntity != null && newEntity is ResolutionEntity) {
-                        ref.watch(addResolutionDoneViewModelProvider).resolutionEntity = newEntity;
-                        ref.read(myPageViewModelProvider.notifier).getResolutionList().whenComplete(() {
-                          setState(() {});
-                        });
-                      }
-                    });
-                  });
+                  // provider.loadGroupList().whenComplete(() async {
+                  //   // await provider.resetTempGroupList();
+                  //   showModalBottomSheet(
+                  //     isScrollControlled: true,
+                  //     // ignore: use_build_context_synchronously
+                  //     context: context,
+                  //     builder: (context) => GradientBottomSheet(
+                  //       SizedBox(
+                  //         height: MediaQuery.of(context).size.height * 0.82,
+                  //         child: const ShareResolutionToGroupBottomSheetWidget(),
+                  //       ),
+                  //     ),
+                  //   ).then((newEntity) {
+                  //     if (newEntity != null && newEntity is ResolutionEntity) {
+                  //       ref.watch(addResolutionDoneViewModelProvider).resolutionEntity = newEntity;
+                  //       ref.read(myPageViewModelProvider.notifier).getResolutionList().whenComplete(() {
+                  //         setState(() {});
+                  //       });
+                  //     }
+                  //   });
+                  // });
                 },
               ),
               const SizedBox(

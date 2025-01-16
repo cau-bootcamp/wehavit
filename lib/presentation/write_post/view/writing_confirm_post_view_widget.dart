@@ -94,18 +94,18 @@ class _ShareTargetGroupCellWidgetState extends ConsumerState<ShareTargetGroupCel
       return;
     }
 
-    sharingTargetGroupModelList = (await Future.wait(
-      entityList.map(
-        (entity) => ref.read(getGroupListViewCellWidgetModelUsecaseProvider).call(groupEntity: entity).then(
-              (result) => result.fold(
-                (failure) => null,
-                (model) => model,
-              ),
-            ),
-      ),
-    ))
-        .nonNulls
-        .toList();
+    // sharingTargetGroupModelList = (await Future.wait(
+    //   entityList.map(
+    //     (entity) => ref.read(getGroupListViewCellWidgetModelUsecaseProvider).call(groupEntity: entity).then(
+    //           (result) => result.fold(
+    //             (failure) => null,
+    //             (model) => model,
+    //           ),
+    //         ),
+    //   ),
+    // ))
+    //     .nonNulls
+    //     .toList();
   }
 }
 

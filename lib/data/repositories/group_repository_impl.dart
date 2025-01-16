@@ -111,11 +111,17 @@ class GroupRepositoryImpl implements GroupRepository {
   }
 
   @override
-  EitherFuture<(EitherFuture<int>, EitherFuture<int>)> getGroupListViewCellModelData(String groupId) {
-    final sharedResolutionsCount = _wehavitDatasource.getGroupSharedResolutionCount(groupId);
-    final sharedPostsCount = _wehavitDatasource.getGroupSharedPostCount(groupId);
+  EitherFuture<(int, int)> getGroupListViewCellModelData(String groupId) async {
+    final sharedResolutionsCount = await _wehavitDatasource.getGroupSharedResolutionCount(groupId);
+    final sharedPostsCount = await _wehavitDatasource.getGroupSharedPostCount(groupId);
 
-    return Future(() => right((sharedResolutionsCount, sharedPostsCount)));
+    if (sharedResolutionsCount.isLeft()) return Future(() => left(const Failure('공유중인 목표 수를 가져오는데에 실패했습니다')));
+    if (sharedPostsCount.isLeft()) return Future(() => left(const Failure('공유중인 인증글 수를 가져오는데에 실패했습니다')));
+
+    final resolutionCount = sharedResolutionsCount.fold((_) => 0, (value) => value);
+    final postCount = sharedPostsCount.fold((_) => 0, (value) => value);
+
+    return Future(() => right((resolutionCount, postCount)));
   }
 
   @override

@@ -482,7 +482,6 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                     ? '다음 (${viewmodel.currentStep + 1}/${viewmodel.maxStep + 1})'
                     : '도전 만들기',
                 foregroundColor: CustomColors.whBlack,
-                backgroundColor: CustomColors.whYellow,
                 isDiminished: !viewmodel.isMovableToNextStep,
               ),
             ),

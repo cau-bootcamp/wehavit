@@ -56,100 +56,105 @@ class AddResolutionDoneViewModelProvider extends StateNotifier<AddResolutionDone
     state.selectedFriendList = futureSelectedFriendList;
   }
 
-  Future<void> loadGroupList() async {
-    state.groupModelList = await getGroupListUsecase.call(NoParams()).then(
-          (result) => result.fold(
-            (failure) => null,
-            (groupList) {
-              return Future.wait(
-                groupList.map((groupEntity) async {
-                  return getGroupListViewCellWidgetModelUsecase.call(groupEntity: groupEntity).then(
-                        (result) => result.fold(
-                          (failure) => GroupListViewCellWidgetModel.dummyModel,
-                          (model) => model,
-                        ),
-                      );
-                }).toList(),
-              );
-            },
-          ),
-        );
+  // Future<void> loadGroupList() async {
+  //   state.groupModelList = await getGroupListUsecase.call(NoParams()).then(
+  //         (result) => result.fold(
+  //           (failure) => null,
+  //           (groupList) {
+  //             return Future.wait(
+  //               groupList.map((groupEntity) async {
+  //                 return getGroupListViewCellWidgetModelUsecase.call(groupEntity: groupEntity).then(
+  //                       (result) => result.fold(
+  //                         (failure) => GroupListViewCellWidgetModel.dummyModel,
+  //                         (model) => model,
+  //                       ),
+  //                     );
+  //               }).toList(),
+  //             );
+  //           },
+  //         ),
+  //       );
 
-    final sharedGroupList = state.resolutionEntity?.shareGroupEntityList.map((entity) => entity.groupId).toList();
+  //   final sharedGroupList = state.resolutionEntity?.shareGroupEntityList.map((entity) => entity.groupId).toList();
 
-    final selectedGroupList = state.groupModelList?.map((model) {
-      return sharedGroupList?.contains(model.groupEntity.groupId) ?? false;
-    }).toList();
+  //   final selectedGroupList = state.groupModelList?.map((model) {
+  //     return sharedGroupList?.contains(model.groupEntity.groupId) ?? false;
+  //   }).toList();
 
-    state.selectedGroupList = selectedGroupList;
-  }
+  //   state.selectedGroupList = selectedGroupList;
+  // }
 
-  Future<void> resetTempFriendList() async {
-    state.tempSelectedFriendList = state.selectedFriendList?.toList();
-  }
+  // Future<void> resetTempFriendList() async {
+  //   state.tempSelectedFriendList = state.selectedFriendList?.toList();
+  // }
 
-  Future<void> resetTempGroupList() async {
-    state.tempSelectedGroupList = state.selectedGroupList?.toList();
-  }
+  // Future<void> resetTempGroupList() async {
+  //   state.tempSelectedGroupList = state.selectedGroupList?.toList();
+  // }
 
-  Future<void> applyChangedSharingOfFriends() async {
-    List<UserDataEntity> currentSharedFriendList = state.resolutionEntity!.shareFriendEntityList.toList();
+  // Future<void> applyChangedSharingOfFriends() async {
+  //   List<UserDataEntity> currentSharedFriendList = state.resolutionEntity!.shareFriendEntityList.toList();
 
-    await Future.forEach(state.selectedFriendList!.asMap().entries, (entry) async {
-      final index = entry.key;
-      final value = entry.value;
+  //   await Future.forEach(state.selectedFriendList!.asMap().entries, (entry) async {
+  //     final index = entry.key;
+  //     final value = entry.value;
 
-      if (state.tempSelectedFriendList![index] != value) {
-        final userId = state.friendList?[index].userId;
+  //     if (state.tempSelectedFriendList![index] != value) {
+  //       final userId = await state.friendList?[index].then(
+  //         (value) => value.fold(
+  //           (failure) => null,
+  //           (entity) => entity.userId,
+  //         ),
+  //       );
 
-        if (userId != null && state.resolutionEntity?.resolutionId != null) {
-          // 공유하기
-          if (state.tempSelectedFriendList![index]) {
-            final shareResult = await shareResolutionToFriendUsecase.call(
-              resolutionId: state.resolutionEntity!.resolutionId,
-              friendId: userId,
-            );
+  //       if (userId != null && state.resolutionEntity?.resolutionId != null) {
+  //         // 공유하기
+  //         if (state.tempSelectedFriendList![index]) {
+  //           final shareResult = await shareResolutionToFriendUsecase.call(
+  //             resolutionId: state.resolutionEntity!.resolutionId,
+  //             friendId: userId,
+  //           );
 
-            shareResult.fold(
-              (failure) => null,
-              (success) {
-                state.selectedFriendList?[index] = state.tempSelectedFriendList![index];
-              },
-            );
+  //           shareResult.fold(
+  //             (failure) => null,
+  //             (success) {
+  //               state.selectedFriendList?[index] = state.tempSelectedFriendList![index];
+  //             },
+  //           );
 
-            final userEntity = await getUserDataFromIdUsecase.call(userId).then(
-                  (result) => result.fold(
-                    (failure) => null,
-                    (entity) => entity,
-                  ),
-                );
+  //           final userEntity = await getUserDataFromIdUsecase.call(userId).then(
+  //                 (result) => result.fold(
+  //                   (failure) => null,
+  //                   (entity) => entity,
+  //                 ),
+  //               );
 
-            if (userEntity != null) {
-              currentSharedFriendList.add(userEntity);
-            }
-          }
-          // 공유 취소하기
-          else {
-            final unshareResult = await unshareResolutionToFriendUsecase.call(
-              resolutionId: state.resolutionEntity!.resolutionId,
-              friendId: userId,
-            );
+  //           if (userEntity != null) {
+  //             currentSharedFriendList.add(userEntity);
+  //           }
+  //         }
+  //         // 공유 취소하기
+  //         else {
+  //           final unshareResult = await unshareResolutionToFriendUsecase.call(
+  //             resolutionId: state.resolutionEntity!.resolutionId,
+  //             friendId: userId,
+  //           );
 
-            unshareResult.fold(
-              (failure) => null,
-              (success) {
-                state.selectedFriendList?[index] = state.tempSelectedFriendList![index];
-              },
-            );
+  //           unshareResult.fold(
+  //             (failure) => null,
+  //             (success) {
+  //               state.selectedFriendList?[index] = state.tempSelectedFriendList![index];
+  //             },
+  //           );
 
-            currentSharedFriendList.removeWhere((entity) => entity.userId == userId);
-          }
-        }
-      }
-    });
+  //           currentSharedFriendList.removeWhere((entity) => entity.userId == userId);
+  //         }
+  //       }
+  //     }
+  //   });
 
-    state.resolutionEntity = state.resolutionEntity?.copyWith(shareFriendEntityList: currentSharedFriendList);
-  }
+  //   state.resolutionEntity = state.resolutionEntity?.copyWith(shareFriendEntityList: currentSharedFriendList);
+  // }
 
   Future<void> applyChangedSharingOfGroups() async {
     List<GroupEntity> currentSharedGroupList = state.resolutionEntity!.shareGroupEntityList.toList();

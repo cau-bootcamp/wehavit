@@ -5,9 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
-import 'package:wehavit/presentation/common_components/group_list_cell.dart';
 import 'package:wehavit/presentation/group/group.dart';
 import 'package:wehavit/presentation/group_post/group_post.dart';
+import 'package:wehavit/presentation/state/group_list/group_list_provider.dart';
 
 class GroupView extends ConsumerStatefulWidget {
   const GroupView({super.key});
@@ -22,105 +22,105 @@ class _GroupViewState extends ConsumerState<GroupView> {
     final viewModel = ref.watch(groupViewModelProvider);
     final provider = ref.read(groupViewModelProvider.notifier);
 
-    List<Widget> groupListViewCellList = [
-      if (viewModel.groupListViewFriendCellModel != null)
-        GestureDetector(
-          onTapUp: (details) async {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return FriendPostView(
-                    cellModel: viewModel.groupListViewFriendCellModel!,
-                  );
-                },
-              ),
-            ).whenComplete(
-              () => setState(
-                () {},
-              ),
-            );
-          },
-          child: GroupListViewFriendCellWidget(
-            cellModel: viewModel.groupListViewFriendCellModel!,
-          ),
-        ),
-      GroupListCell(
-        cellModel: GroupListCellModel.dummyModel,
-      ),
-      ...viewModel.groupListViewCellModelList
-              ?.map(
-                (cellModel) => GestureDetector(
-                  onTapUp: (details) async {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return GroupPostView(
-                            groupEntity: cellModel.groupEntity,
-                          );
-                        },
-                      ),
-                    ).whenComplete(
-                      () => setState(
-                        () {},
-                      ),
-                    );
-                  },
-                  child: GroupListViewCellWidget(cellModel: cellModel),
-                ),
-              )
-              .toList() ??
-          List<Widget>.empty(),
-      GroupListViewAddCellWidget(
-        tapAddGroupCallback: () async {
-          showAddMenuBottomSheet(
-            context,
-            setStateCallback: () async {
-              await provider.loadMyGroupCellList();
-              setState(() {});
-            },
-          );
-        },
-      ),
-    ];
-
     return Scaffold(
       backgroundColor: CustomColors.whDarkBlack,
-      appBar: WehavitAppBar(
+      appBar: const WehavitAppBar(
         titleLabel: '참여중인 그룹 목록',
       ),
       body: SafeArea(
         minimum: const EdgeInsets.symmetric(horizontal: 16),
-        child: Visibility(
-          visible: viewModel.groupListViewCellModelList != null,
-          replacement: const Center(
-            child: Text('something went wrong'),
-          ),
-          child: Visibility(
-            visible: viewModel.groupListViewCellModelList != null,
-            child: viewModel.groupListViewCellModelList != null
-                ? RefreshIndicator(
-                    onRefresh: () async {
-                      provider.loadMyGroupCellList().whenComplete(() => setState(() {}));
+        child: Consumer(
+          builder: (context, ref, child) {
+            final asyncGroupList = ref.watch(groupListProvider);
 
-                      loadFriendCellList();
+            return asyncGroupList.when(
+              data: (groupList) {
+                List<Widget> groupListViewCellList = [
+                  GestureDetector(
+                    onTapUp: (details) async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return FriendPostView(
+                              cellModel: viewModel.groupListViewFriendCellModel!,
+                            );
+                          },
+                        ),
+                      ).whenComplete(
+                        () => setState(
+                          () {},
+                        ),
+                      );
                     },
-                    child: ListView.builder(
-                      padding: const EdgeInsets.only(bottom: 60.0),
-                      itemCount: groupListViewCellList.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(
-                            bottom: 12,
+                    child: GroupListViewFriendCellWidget(
+                      cellModel: viewModel.groupListViewFriendCellModel!,
+                    ),
+                  ),
+                  ...groupList.map(
+                    (entity) => GestureDetector(
+                      onTapUp: (details) async {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return GroupPostView(
+                                groupEntity: entity,
+                              );
+                            },
                           ),
-                          child: groupListViewCellList[index],
+                        ).whenComplete(
+                          () => setState(
+                            () {},
+                          ),
                         );
                       },
+                      child: GroupListCell(groupEntity: entity),
                     ),
-                  )
-                : Container(), // 빈 컨테이너 반환
-          ),
+                  ),
+                  GroupListViewAddCellWidget(
+                    tapAddGroupCallback: () async {
+                      showAddMenuBottomSheet(
+                        context,
+                        setStateCallback: () async {
+                          await provider.loadMyGroupCellList();
+                          setState(() {});
+                        },
+                      );
+                    },
+                  ),
+                ];
+
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    provider.loadMyGroupCellList().whenComplete(() => setState(() {}));
+
+                    loadFriendCellList();
+                  },
+                  child: ListView.builder(
+                    padding: const EdgeInsets.only(bottom: 60.0),
+                    itemCount: groupListViewCellList.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(
+                          bottom: 12,
+                        ),
+                        child: groupListViewCellList[index],
+                      );
+                    },
+                  ),
+                );
+              },
+              error: (_, __) {
+                return const Center(
+                  child: Text('something went wrong'),
+                );
+              },
+              loading: () {
+                return Container();
+              },
+            );
+          },
         ),
       ),
     );

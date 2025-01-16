@@ -1,35 +1,25 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/constants/constants.dart';
 import 'package:wehavit/common/utils/utils.dart';
+import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/group/group.dart';
+import 'package:wehavit/presentation/state/group_list/group_list_provider.dart';
 
 class GroupListViewCellWidget extends StatelessWidget {
-  const GroupListViewCellWidget({super.key, required this.cellModel});
+  const GroupListViewCellWidget({
+    super.key,
+    required this.groupEntity,
+  });
 
-  final GroupListViewCellWidgetModel cellModel;
+  final GroupEntity groupEntity;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        color: CustomColors.whSemiBlack,
-        boxShadow: const [
-          BoxShadow(
-            color: CustomColors.whBlack,
-            blurRadius: 4,
-            offset: Offset(2, 4),
-          ),
-        ],
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-      child: GroupListViewCellContentWidget(
-        cellModel: cellModel,
-      ),
-    );
+    return GroupListCell(groupEntity: groupEntity);
   }
 }
 
