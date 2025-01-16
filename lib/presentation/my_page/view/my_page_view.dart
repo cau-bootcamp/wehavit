@@ -5,8 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
-import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
+import 'package:wehavit/presentation/state/resolution_list/resolution_list_provider.dart';
 import 'package:wehavit/presentation/state/user_data/my_user_data_provider.dart';
 
 class MyPageView extends ConsumerStatefulWidget {
@@ -50,7 +50,7 @@ class MyPageScreenState extends ConsumerState<MyPageView> with AutomaticKeepAliv
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final viewModel = ref.watch(myPageViewModelProvider);
+    // final viewModel = ref.watch(myPageViewModelProvider);
     final provider = ref.watch(myPageViewModelProvider.notifier);
 
     return Stack(
@@ -102,39 +102,77 @@ class MyPageScreenState extends ConsumerState<MyPageView> with AutomaticKeepAliv
                   const SizedBox(
                     height: 16,
                   ),
-                  EitherFutureBuilder<List<ResolutionEntity>>(
-                    target: viewModel.futureMyyResolutionList,
-                    forWaiting: Container(),
-                    forFail: Container(),
-                    mainWidgetCallback: (resolutionList) {
-                      return Visibility(
-                        replacement: const ResolutionListPlaceholderWidget(),
-                        visible: resolutionList.isNotEmpty,
-                        child: Column(
-                          children: List<Widget>.generate(
-                            resolutionList.length,
-                            (index) => Container(
-                              margin: const EdgeInsets.only(bottom: 16.0),
-                              child: ResolutionListCell(
-                                resolutionEntity: resolutionList[index],
-                                showDetails: true,
-                                onPressed: () async {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ResolutionDetailView(
-                                        entity: resolutionList[index],
-                                      ),
-                                    ),
-                                  );
-                                },
+                  Consumer(
+                    builder: (context, ref, child) {
+                      final asyncResolutionList = ref.watch(resolutionListNotifierProvider);
+
+                      return asyncResolutionList.when(
+                        data: (resolutionList) {
+                          return Visibility(
+                            replacement: const ResolutionListPlaceholderWidget(),
+                            visible: resolutionList.isNotEmpty,
+                            child: Column(
+                              children: List<Widget>.generate(
+                                resolutionList.length,
+                                (index) => Container(
+                                  margin: const EdgeInsets.only(bottom: 16.0),
+                                  child: ResolutionListCell(
+                                    resolutionEntity: resolutionList[index],
+                                    showDetails: true,
+                                    onPressed: () async {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ResolutionDetailView(
+                                            entity: resolutionList[index],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        ),
+                          );
+                        },
+                        error: (_, __) => Container(),
+                        loading: () => Container(),
                       );
                     },
                   ),
+                  // EitherFutureBuilder<List<ResolutionEntity>>(
+                  //   target: viewModel.futureMyyResolutionList,
+                  //   forWaiting: Container(),
+                  //   forFail: Container(),
+                  //   mainWidgetCallback: (resolutionList) {
+                  //     return Visibility(
+                  //       replacement: const ResolutionListPlaceholderWidget(),
+                  //       visible: resolutionList.isNotEmpty,
+                  //       child: Column(
+                  //         children: List<Widget>.generate(
+                  //           resolutionList.length,
+                  //           (index) => Container(
+                  //             margin: const EdgeInsets.only(bottom: 16.0),
+                  //             child: ResolutionListCell(
+                  //               resolutionEntity: resolutionList[index],
+                  //               showDetails: true,
+                  //               onPressed: () async {
+                  //                 Navigator.push(
+                  //                   context,
+                  //                   MaterialPageRoute(
+                  //                     builder: (context) => ResolutionDetailView(
+                  //                       entity: resolutionList[index],
+                  //                     ),
+                  //                   ),
+                  //                 );
+                  //               },
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     );
+                  //   },
+                  // ),
                 ],
               ),
             ),
