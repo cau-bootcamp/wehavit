@@ -5,7 +5,8 @@ import 'package:wehavit/common/constants/constants.dart';
 enum WHIconsize {
   large,
   medium,
-  small;
+  small,
+  extraSmall;
 }
 
 class WHIcon extends StatelessWidget {
@@ -28,6 +29,7 @@ class WHIcon extends StatelessWidget {
       WHIconsize.large => 28.0,
       WHIconsize.medium => 22.0,
       WHIconsize.small => 16.0,
+      WHIconsize.extraSmall => 13.0,
     };
 
     return SizedBox(
@@ -70,21 +72,25 @@ class WhIconButton extends StatelessWidget {
       WHIconsize.large => context.labelLarge?.copyWith(color: color),
       WHIconsize.medium => context.labelLarge?.copyWith(color: color),
       WHIconsize.small => context.labelMedium?.copyWith(color: color),
+      WHIconsize.extraSmall => context.labelSmall?.copyWith(color: color),
     };
     final contentGap = switch (size) {
       WHIconsize.large => 16.0,
       WHIconsize.medium => 14.0,
       WHIconsize.small => 10.0,
+      WHIconsize.extraSmall => 8.0,
     };
     final badgeTextStyle = switch (size) {
       WHIconsize.large => context.labelMedium?.bold,
       WHIconsize.medium => context.labelSmall?.bold,
       WHIconsize.small => context.labelSmall?.copyWith(fontSize: 9.0).bold,
+      WHIconsize.extraSmall => context.labelSmall,
     };
     final badgePadding = switch (size) {
       WHIconsize.large => 4.0,
       WHIconsize.medium => 3.0,
       WHIconsize.small => 2.0,
+      WHIconsize.extraSmall => 2.0,
     };
     final whIcon = Stack(
       children: [
