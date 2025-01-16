@@ -1,9 +1,7 @@
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/usecases/get_target_resolution_done_list_for_week_usecase.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
@@ -88,13 +86,8 @@ class ResolutionListCell extends ConsumerWidget {
                       Consumer(
                         builder: (context, ref, _) {
                           return ResolutionListWeeklyDoneWidget(
-                            futureDoneList: ref.watch(getTargetResolutionDoneListForWeekUsecaseProvider)(
-                              param: GetTargetResolutionDoneListForWeekUsecaseParams(
-                                resolutionId: resolutionEntity.resolutionId,
-                                startMonday: DateTime.now().getMondayDateTime(),
-                              ),
-                            ),
                             pointColor: CustomColors.pointColorList[resolutionEntity.colorIndex],
+                            resolutionEntity: resolutionEntity,
                           );
                         },
                       ),
@@ -177,15 +170,16 @@ class ResolutionListCellHeadWidget extends StatelessWidget {
 class ResolutionListWeeklyDoneWidget extends StatelessWidget {
   const ResolutionListWeeklyDoneWidget({
     super.key,
-    required this.futureDoneList,
+    required this.resolutionEntity,
     required this.pointColor,
   });
 
-  final EitherFuture<List<bool>> futureDoneList;
+  final ResolutionEntity resolutionEntity;
   final Color pointColor;
 
   @override
   Widget build(BuildContext context) {
+    final targetDate = DateTime.now().getMondayDateTime();
     final indicatorPlaceholder = Row(
       children: List<Widget>.generate(
         7,
@@ -196,23 +190,33 @@ class ResolutionListWeeklyDoneWidget extends StatelessWidget {
       ),
     );
 
-    return EitherFutureBuilder<List<bool>>(
-      target: futureDoneList,
-      forWaiting: indicatorPlaceholder,
-      forFail: indicatorPlaceholder,
-      mainWidgetCallback: (doneList) {
-        return Row(
-          children: List<Widget>.generate(
-            7,
-            (index) => Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 2.0),
-              child: CircularStatusIndicator(
-                isDone: doneList[index],
-                pointColor: pointColor,
-                innerLabel: weekdayKorean[index],
+    return Consumer(
+      builder: (BuildContext context, WidgetRef ref, Widget? child) {
+        final param = GetTargetResolutionDoneListForWeekUsecaseParams(
+          resolutionId: resolutionEntity.resolutionId,
+          startMonday: targetDate.getMondayDateTime(),
+        );
+
+        final weeklyDoneList = ref.watch(weeklyResolutionInfoProvider(param));
+
+        return weeklyDoneList.when(
+          data: (doneList) {
+            return Row(
+              children: List<Widget>.generate(
+                7,
+                (index) => Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                  child: CircularStatusIndicator(
+                    isDone: doneList[index],
+                    pointColor: pointColor,
+                    innerLabel: weekdayKorean[index],
+                  ),
+                ),
               ),
-            ),
-          ),
+            );
+          },
+          error: (_, __) => indicatorPlaceholder,
+          loading: () => indicatorPlaceholder,
         );
       },
     );

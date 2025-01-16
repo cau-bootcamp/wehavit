@@ -19,7 +19,7 @@ class ResolutionLinearGaugeIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer(
-      builder: (BuildContext context, WidgetRef ref, Widget? child) {
+      builder: (BuildContext context, WidgetRef ref, _) {
         final param = GetTargetResolutionDoneListForWeekUsecaseParams(
           resolutionId: resolutionEntity.resolutionId,
           startMonday: targetDate.getMondayDateTime(),
