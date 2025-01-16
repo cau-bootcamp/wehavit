@@ -5,9 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
+import 'package:wehavit/common/utils/datetime+.dart';
 import 'package:wehavit/common/utils/preference_key.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/presentation.dart';
+import 'package:wehavit/presentation/state/resolution_list/resolution_list_provider.dart';
 
 class ResolutionListView extends ConsumerStatefulWidget {
   const ResolutionListView({super.key});
@@ -62,98 +64,186 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
                     ),
                   ),
                 ),
-                child: Column(
-                  children: List<Widget>.generate(
-                    viewModel.resolutionModelList?.length ?? 0,
-                    (index) => Container(
-                      margin: const EdgeInsets.only(bottom: 16.0),
-                      child: ResolutionListCell(
-                        // style: TextButton.styleFrom(
-                        //   backgroundColor: CustomColors.whSemiBlack,
-                        //   shadowColor: Colors.transparent,
-                        //   surfaceTintColor: Colors.transparent,
-                        //   overlayColor:
-                        //       CustomColors.pointColorList[viewModel.resolutionModelList![index].entity.colorIndex ?? 0],
-                        //   padding: const EdgeInsets.all(0),
-                        //   shape: RoundedRectangleBorder(
-                        //     borderRadius: BorderRadius.circular(16.0),
-                        //   ),
-                        // ),
-                        onPressed: () async {
-                          final isGuideShown = await SharedPreferences.getInstance().then((instance) {
-                            return instance.getBool(PreferenceKey.isWritingPostGuideShown);
-                          });
+                child: Consumer(
+                  builder: (context, ref, child) {
+                    final asyncResolutionList = ref.watch(resolutionListNotifierProvider);
 
-                          if (isGuideShown == null || isGuideShown == false) {
-                            // ignore: use_build_context_synchronously
-                            showGuideBottomSheet(context).whenComplete(() async {
-                              await SharedPreferences.getInstance().then((instance) {
-                                instance.setBool(
-                                  PreferenceKey.isWritingPostGuideShown,
-                                  true,
-                                );
-                              });
-                              showWritingOptionBottomSheet(
-                                // ignore: use_build_context_synchronously
-                                context,
-                                viewModel,
-                                provider,
-                                index,
-                              ).then((returnValue) async {
-                                if (returnValue == true) {
-                                  await provider.loadResolutionModelList().whenComplete(() {
-                                    ref.watch(resolutionListViewModelProvider).isLoadingView = false;
+                    return asyncResolutionList.when(
+                      data: (resolutionList) {
+                        return Column(
+                          children: List<Widget>.generate(
+                            resolutionList.length,
+                            (index) => Container(
+                              margin: const EdgeInsets.only(bottom: 16.0),
+                              child: ResolutionListCell(
+                                onPressed: () async {
+                                  final isGuideShown = await SharedPreferences.getInstance().then((instance) {
+                                    return instance.getBool(PreferenceKey.isWritingPostGuideShown);
                                   });
-                                } else {
-                                  //
-                                }
-                              });
-                            });
-                          } else {
-                            showWritingOptionBottomSheet(
-                              // ignore: use_build_context_synchronously
-                              context,
-                              viewModel,
-                              provider,
-                              index,
-                            ).then((returnValue) async {
-                              if (returnValue == true) {
-                                await provider.loadResolutionModelList().whenComplete(() {
-                                  ref.watch(resolutionListViewModelProvider).isLoadingView = false;
-                                });
-                              } else {
-                                //
-                              }
-                            });
-                          }
-                        },
-                        resolutionEntity: viewModel.resolutionModelList![index].entity,
-                        showDetails: false,
-                      ),
-                    ),
-                  )
-                      .append(
-                        ListDashOutlinedCell(
-                          buttonLabel: '새로운 목표 추가하기',
-                          onPressed: () async {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                fullscreenDialog: true,
-                                builder: (context) => const AddResolutionView(),
+
+                                  if (isGuideShown == null || isGuideShown == false) {
+                                    // ignore: use_build_context_synchronously
+                                    showGuideBottomSheet(context).whenComplete(() async {
+                                      await SharedPreferences.getInstance().then((instance) {
+                                        instance.setBool(
+                                          PreferenceKey.isWritingPostGuideShown,
+                                          true,
+                                        );
+                                      });
+                                      showWritingOptionBottomSheet(
+                                        // ignore: use_build_context_synchronously
+                                        context,
+                                        viewModel,
+                                        provider,
+                                        index,
+                                      ).then((returnValue) async {
+                                        if (returnValue == true) {
+                                          await provider.loadResolutionModelList().whenComplete(() {
+                                            ref.watch(resolutionListViewModelProvider).isLoadingView = false;
+                                          });
+                                        } else {
+                                          //
+                                        }
+                                      });
+                                    });
+                                  } else {
+                                    showWritingOptionBottomSheet(
+                                      // ignore: use_build_context_synchronously
+                                      context,
+                                      viewModel,
+                                      provider,
+                                      index,
+                                    ).then((returnValue) async {
+                                      if (returnValue == true) {
+                                        await provider.loadResolutionModelList().whenComplete(() {
+                                          ref.watch(resolutionListViewModelProvider).isLoadingView = false;
+                                        });
+                                      } else {
+                                        //
+                                      }
+                                    });
+                                  }
+                                },
+                                resolutionEntity: ref.watch(resolutionListNotifierProvider).value![index],
+                                showDetails: false,
                               ),
-                            ).whenComplete(() async {
-                              await ref.watch(myPageViewModelProvider.notifier).getMyResolutionListUsecase();
-                              await provider.loadResolutionModelList().whenComplete(() {
-                                setState(() {
-                                  ref.watch(resolutionListViewModelProvider).isLoadingView = false;
-                                });
-                              });
-                            });
-                          },
-                        ),
-                      )
-                      .toList(),
+                            ),
+                          )
+                              .append(
+                                ListDashOutlinedCell(
+                                  buttonLabel: '새로운 목표 추가하기',
+                                  onPressed: () async {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        fullscreenDialog: true,
+                                        builder: (context) => const AddResolutionView(),
+                                      ),
+                                    ).whenComplete(() async {
+                                      await ref.watch(myPageViewModelProvider.notifier).getMyResolutionListUsecase();
+                                      await provider.loadResolutionModelList().whenComplete(() {
+                                        setState(() {
+                                          ref.watch(resolutionListViewModelProvider).isLoadingView = false;
+                                        });
+                                      });
+                                    });
+                                  },
+                                ),
+                              )
+                              .toList(),
+                        );
+                      },
+                      error: (_, __) {
+                        return Container();
+                      },
+                      loading: () {
+                        return Container();
+                      },
+                    );
+                  },
+                  // child:
+                  // Column(
+                  //   children: List<Widget>.generate(
+                  //     ref.read(resolutionListNotifierProvider).value?.length ?? 0,
+                  //     (index) => Container(
+                  //       margin: const EdgeInsets.only(bottom: 16.0),
+                  //       child: ResolutionListCell(
+                  //         onPressed: () async {
+                  //           final isGuideShown = await SharedPreferences.getInstance().then((instance) {
+                  //             return instance.getBool(PreferenceKey.isWritingPostGuideShown);
+                  //           });
+
+                  //           if (isGuideShown == null || isGuideShown == false) {
+                  //             // ignore: use_build_context_synchronously
+                  //             showGuideBottomSheet(context).whenComplete(() async {
+                  //               await SharedPreferences.getInstance().then((instance) {
+                  //                 instance.setBool(
+                  //                   PreferenceKey.isWritingPostGuideShown,
+                  //                   true,
+                  //                 );
+                  //               });
+                  //               showWritingOptionBottomSheet(
+                  //                 // ignore: use_build_context_synchronously
+                  //                 context,
+                  //                 viewModel,
+                  //                 provider,
+                  //                 index,
+                  //               ).then((returnValue) async {
+                  //                 if (returnValue == true) {
+                  //                   await provider.loadResolutionModelList().whenComplete(() {
+                  //                     ref.watch(resolutionListViewModelProvider).isLoadingView = false;
+                  //                   });
+                  //                 } else {
+                  //                   //
+                  //                 }
+                  //               });
+                  //             });
+                  //           } else {
+                  //             showWritingOptionBottomSheet(
+                  //               // ignore: use_build_context_synchronously
+                  //               context,
+                  //               viewModel,
+                  //               provider,
+                  //               index,
+                  //             ).then((returnValue) async {
+                  //               if (returnValue == true) {
+                  //                 await provider.loadResolutionModelList().whenComplete(() {
+                  //                   ref.watch(resolutionListViewModelProvider).isLoadingView = false;
+                  //                 });
+                  //               } else {
+                  //                 //
+                  //               }
+                  //             });
+                  //           }
+                  //         },
+                  //         resolutionEntity: ref.read(resolutionListNotifierProvider).value![index],
+                  //         showDetails: false,
+                  //       ),
+                  //     ),
+                  //   )
+                  //       .append(
+                  //         ListDashOutlinedCell(
+                  //           buttonLabel: '새로운 목표 추가하기',
+                  //           onPressed: () async {
+                  //             Navigator.push(
+                  //               context,
+                  //               MaterialPageRoute(
+                  //                 fullscreenDialog: true,
+                  //                 builder: (context) => const AddResolutionView(),
+                  //               ),
+                  //             ).whenComplete(() async {
+                  //               await ref.watch(myPageViewModelProvider.notifier).getMyResolutionListUsecase();
+                  //               await provider.loadResolutionModelList().whenComplete(() {
+                  //                 setState(() {
+                  //                   ref.watch(resolutionListViewModelProvider).isLoadingView = false;
+                  //                 });
+                  //               });
+                  //             });
+                  //           },
+                  //         ),
+                  //       )
+                  //       .toList(),
+                  // ),
                 ),
               ),
               Container(
@@ -245,7 +335,9 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
               ),
               ResolutionLinearGaugeIndicator(
                 resolutionEntity: viewModel.resolutionModelList![index].entity,
-                futureDoneList: viewModel.resolutionModelList![index].doneList,
+                // TODO: edit
+                targetDate: DateTime.now().getMondayDateTime(),
+                // weeklyDoneList: viewModel.resolutionModelList![index].doneList,
               ),
             ],
           ),

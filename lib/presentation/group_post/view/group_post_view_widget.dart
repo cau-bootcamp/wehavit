@@ -9,6 +9,7 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wehavit/domain/usecases/get_target_resolution_done_list_for_week_usecase.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/effects/effects.dart';
 import 'package:wehavit/presentation/group_post/group_post.dart';
@@ -50,8 +51,10 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
     );
 
     resolutionDoneListForWrittenWeek = ref.read(getTargetResolutionDoneListForWeekUsecaseProvider).call(
-          resolutionId: widget.confirmPostEntity.resolutionId,
-          startMonday: widget.createdDate.getMondayDateTime(),
+          param: GetTargetResolutionDoneListForWeekUsecaseParams(
+            resolutionId: widget.confirmPostEntity.resolutionId,
+            startMonday: widget.createdDate.getMondayDateTime(),
+          ),
         );
 
     futureResolutionEntity = ref.read(getTargetResolutionEntityUsecaseProvider)(
@@ -195,7 +198,9 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
                             ),
                             ResolutionLinearGaugeIndicator(
                               resolutionEntity: resolutionEntity,
-                              futureDoneList: resolutionDoneListForWrittenWeek,
+                              // weeklyDoneList: resolutionDoneListForWrittenWeek,
+                              // TODO: edit
+                              targetDate: DateTime.now(),
                             ),
                             const SizedBox(height: 12.0),
                             ConfirmPostContentWidget(confirmPostEntity: widget.confirmPostEntity),

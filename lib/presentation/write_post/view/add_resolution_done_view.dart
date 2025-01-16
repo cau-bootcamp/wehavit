@@ -6,6 +6,7 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
+import 'package:wehavit/presentation/state/resolution_list/resolution_list_provider.dart';
 
 class AddResolutionDoneView extends ConsumerStatefulWidget {
   const AddResolutionDoneView({super.key});
@@ -37,9 +38,9 @@ class _AddResolutionDoneViewState extends ConsumerState<AddResolutionDoneView> {
       backgroundColor: CustomColors.whDarkBlack,
       appBar: WehavitAppBar(
         titleLabel: '도전 추가하기 완료',
-        leadingTitle: '',
         trailingTitle: '닫기',
         trailingAction: () {
+          ref.invalidate(resolutionListNotifierProvider);
           Navigator.pop(context);
           Navigator.pop(context);
         },

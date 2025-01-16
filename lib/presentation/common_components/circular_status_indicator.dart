@@ -27,18 +27,18 @@ class CircularStatusIndicator extends StatelessWidget {
           width: isDone ? 0 : 1,
         ),
       ),
-      width: 25,
-      height: 25,
+      width: 20,
+      height: 20,
       alignment: Alignment.center,
       child: isDone
           ? WHIcon(
-              size: WHIconsize.small,
+              size: WHIconsize.extraSmall,
               iconString: WHIcons.checkMark,
               iconColor: isDone ? CustomColors.whGrey900 : CustomColors.whGrey600,
             )
           : Text(
               innerLabel,
-              style: context.labelLarge?.copyWith(
+              style: context.labelMedium?.copyWith(
                 color: isDone ? CustomColors.whGrey900 : CustomColors.whGrey600,
                 fontWeight: FontWeight.w400,
                 height: 0.8,

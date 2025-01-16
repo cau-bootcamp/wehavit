@@ -1,18 +1,21 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:wehavit/common/utils/datetime+.dart';
 import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/domain/usecases/send_notification_to_shared_users_usecase.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
+import 'package:wehavit/presentation/state/resolution_list/resolution_list_provider.dart';
 
 import 'package:wehavit/presentation/write_post/write_post.dart';
 
 class WritingConfirmPostViewModelProvider extends StateNotifier<WritingConfirmPostViewModel> {
   WritingConfirmPostViewModelProvider(
+    this.ref,
     this._uploadConfirmPostUseCase,
     this._sendNotificationToSharedUsersUsecase,
   ) : super(WritingConfirmPostViewModel());
 
   final int maxImagesCount = 3;
+  final Ref ref;
   final UploadConfirmPostUseCase _uploadConfirmPostUseCase;
   final SendNotificationToSharedUsersUsecase _sendNotificationToSharedUsersUsecase;
 
@@ -42,6 +45,15 @@ class WritingConfirmPostViewModelProvider extends StateNotifier<WritingConfirmPo
         final isPostingSuccess = result.fold((failure) => false, (value) => value);
 
         if (isPostingSuccess) {
+          ref.invalidate(
+            weeklyResolutionInfoProvider.call(
+              GetTargetResolutionDoneListForWeekUsecaseParams(
+                resolutionId: state.entity!.resolutionId,
+                startMonday: DateTime.now().getMondayDateTime(),
+              ),
+            ),
+          );
+
           sendNotiToSharedUsers(myUserEntity: myUserEntity);
         }
       },
