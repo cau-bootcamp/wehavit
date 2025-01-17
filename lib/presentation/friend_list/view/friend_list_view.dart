@@ -46,10 +46,7 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
           visible: isManagingMode,
           replacement: Column(
             children: [
-              MyProfileBlock(
-                // futureUserEntity: viewModel.futureMyUserDataEntity!,
-                futureUserEntity: ref.read(getMyUserDataProvider).value!,
-              ),
+              const MyProfileBlock(),
               const SizedBox(
                 height: 32.0,
               ),
@@ -76,11 +73,11 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
                       ),
                       Consumer(
                         builder: (context, ref, child) {
-                          final asyncFriendList = ref.watch(friendListProvider);
+                          final asyncFriendUidList = ref.watch(friendUidListProvider);
 
-                          return asyncFriendList.when(
-                            data: (friendList) {
-                              if (friendList.isEmpty) {
+                          return asyncFriendUidList.when(
+                            data: (friendUidList) {
+                              if (friendUidList.isEmpty) {
                                 return const Center(child: FriendListPlaceholderWidget());
                               }
                               return Expanded(
@@ -95,12 +92,12 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
                                   },
                                   child: ListView.builder(
                                     padding: const EdgeInsets.only(bottom: 64),
-                                    itemCount: friendList.length,
+                                    itemCount: friendUidList.length,
                                     itemBuilder: (context, index) {
                                       return Container(
                                         padding: const EdgeInsets.only(bottom: 12.0),
                                         child: UserProfileCell(
-                                          Future(() => right(friendList[index])),
+                                          friendUidList[index],
                                           type: UserProfileCellType.normal,
                                         ),
                                       );
@@ -232,11 +229,11 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
                     ),
                     Consumer(
                       builder: (context, ref, child) {
-                        final asyncFriendList = ref.watch(friendListProvider);
+                        final asyncFriendList = ref.watch(friendUidListProvider);
 
                         return asyncFriendList.when(
-                          data: (friendList) {
-                            if (friendList.isEmpty) {
+                          data: (friendUidList) {
+                            if (friendUidList.isEmpty) {
                               return const Center(child: FriendListPlaceholderWidget());
                             }
                             return Expanded(
@@ -251,12 +248,12 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
                                 },
                                 child: ListView.builder(
                                   padding: const EdgeInsets.only(bottom: 64),
-                                  itemCount: friendList.length,
+                                  itemCount: friendUidList.length,
                                   itemBuilder: (context, index) {
                                     return Container(
                                       padding: const EdgeInsets.only(bottom: 12.0),
                                       child: UserProfileCell(
-                                        Future(() => right(friendList[index])),
+                                        friendUidList[index],
                                         type: UserProfileCellType.normal,
                                       ),
                                     );

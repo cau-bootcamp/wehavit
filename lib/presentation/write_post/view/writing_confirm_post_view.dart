@@ -208,12 +208,7 @@ class _WritingConfirmPostViewState extends ConsumerState<WritingConfirmPostView>
                   viewModel.isUploading = true;
                   setState(() {});
 
-                  final myUserEntity = await ref.read(getMyUserDataProvider).value!.then(
-                        (result) => result.fold(
-                          (failure) => null,
-                          (entity) => entity,
-                        ),
-                      );
+                  final myUserEntity = await ref.read(getMyUserDataProvider.future);
 
                   await provider
                       .uploadPost(

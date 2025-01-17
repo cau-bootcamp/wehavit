@@ -82,9 +82,7 @@ class MyPageScreenState extends ConsumerState<MyPageView> with AutomaticKeepAliv
                 padding: const EdgeInsets.only(bottom: 64.0),
                 children: [
                   // 내 프로필
-                  MyPageWehavitSummaryWidget(
-                    futureUserEntity: ref.read(getMyUserDataProvider).value,
-                  ),
+                  const MyWehavitSummary(),
                   // MyWehavitSummary(
                   //   futureUserEntity: ref.read(getMyUserDataProvider).value!,
                   // ),

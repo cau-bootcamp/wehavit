@@ -1,23 +1,26 @@
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/common/utils/utils.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
+import 'package:wehavit/presentation/state/friend/friend_list_provider.dart';
 
 enum UserProfileCellType {
   normal,
   deleteMode,
   invited,
   inviting,
-  profile;
+  profile,
+  loading;
 }
 
 class UserProfileCell extends StatelessWidget {
-  const UserProfileCell(this.futureUserEntity, {required this.type, super.key});
+  const UserProfileCell(this.userId, {required this.type, super.key});
 
   final UserProfileCellType type;
-  final EitherFuture<UserDataEntity> futureUserEntity;
+  final String userId;
 
   @override
   Widget build(BuildContext context) {
@@ -34,120 +37,64 @@ class UserProfileCell extends StatelessWidget {
             SmallColoredButton(buttonLabel: '거절', onPressed: () {}, backgroundColor: CustomColors.whGrey600),
           ],
         ),
+      UserProfileCellType.loading => Container(),
     };
 
-    return EitherFutureBuilder<UserDataEntity>(
-      target: futureUserEntity,
-      forWaiting: Row(
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: const BoxDecoration(shape: BoxShape.circle, color: CustomColors.whGrey400),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        width: 90,
-                        height: 18,
-                        decoration:
-                            BoxDecoration(color: CustomColors.whGrey400, borderRadius: BorderRadius.circular(4)),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 2),
-                  Container(
-                    width: 140,
-                    height: 14,
-                    decoration: BoxDecoration(color: CustomColors.whGrey400, borderRadius: BorderRadius.circular(4)),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          actions,
-        ],
-      ),
-      forFail: Row(
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: const BoxDecoration(shape: BoxShape.circle, color: CustomColors.whGrey400),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        width: 90,
-                        height: 18,
-                        decoration:
-                            BoxDecoration(color: CustomColors.whGrey400, borderRadius: BorderRadius.circular(4)),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 2),
-                  Container(
-                    width: 140,
-                    height: 14,
-                    decoration: BoxDecoration(color: CustomColors.whGrey400, borderRadius: BorderRadius.circular(4)),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          actions,
-        ],
-      ),
-      mainWidgetCallback: (entity) {
-        return Row(
-          children: [
-            CircleProfileImage(size: 40, url: entity.userImageUrl),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+    if (type == UserProfileCellType.loading) {
+      return loadingCell(actions);
+    }
+
+    return Consumer(
+      builder: (context, ref, child) {
+        final asyncUserEntity = ref.watch(userDataEntityProvider(userId));
+
+        return asyncUserEntity.when(
+          data: (entity) {
+            return Row(
+              children: [
+                CircleProfileImage(size: 40, url: entity.userImageUrl),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          entity.userName,
-                          style: context.bodyMedium?.bold,
+                        Row(
+                          children: [
+                            Text(
+                              entity.userName,
+                              style: context.bodyMedium?.bold,
+                            ),
+                            const SizedBox(width: 4),
+                            // profile 유형이 아닐 때에만 아이디를 노출
+                            if (type != UserProfileCellType.profile)
+                              Text(
+                                entity.handle,
+                                overflow: TextOverflow.ellipsis,
+                                style: context.bodySmall,
+                              ),
+                          ],
                         ),
-                        const SizedBox(width: 4),
-                        // profile 유형이 아닐 때에만 아이디를 노출
-                        if (type != UserProfileCellType.profile)
-                          Text(
-                            entity.handle,
-                            overflow: TextOverflow.ellipsis,
-                            style: context.bodySmall,
-                          ),
+                        const SizedBox(height: 2),
+                        Text(
+                          entity.aboutMe,
+                          style: context.labelSmall?.copyWith(color: CustomColors.whGrey800),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ],
                     ),
-                    const SizedBox(height: 2),
-                    Text(
-                      entity.aboutMe,
-                      style: context.labelSmall?.copyWith(color: CustomColors.whGrey800),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-            actions,
-          ],
+                actions,
+              ],
+            );
+          },
+          error: (_, __) {
+            return loadingCell(actions);
+          },
+          loading: () {
+            return loadingCell(actions);
+          },
         );
       },
     );
@@ -229,6 +176,44 @@ class UserProfileCell extends StatelessWidget {
     //     actions,
     //   ],
     // );
+  }
+
+  Row loadingCell(Widget actions) {
+    return Row(
+      children: [
+        Container(
+          width: 40,
+          height: 40,
+          decoration: const BoxDecoration(shape: BoxShape.circle, color: CustomColors.whGrey400),
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 90,
+                      height: 18,
+                      decoration: BoxDecoration(color: CustomColors.whGrey400, borderRadius: BorderRadius.circular(4)),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 2),
+                Container(
+                  width: 140,
+                  height: 14,
+                  decoration: BoxDecoration(color: CustomColors.whGrey400, borderRadius: BorderRadius.circular(4)),
+                ),
+              ],
+            ),
+          ),
+        ),
+        actions,
+      ],
+    );
   }
 }
 

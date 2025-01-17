@@ -17,6 +17,11 @@ final myUserDataStateProvider = StateNotifierProvider<MyUserDataNotifier, UserDa
   ),
 );
 
-final getMyUserDataProvider = FutureProvider<EitherFuture<UserDataEntity>>(
-  (ref) => ref.read(getMyUserDataUsecaseProvider).call(),
+final getMyUserDataProvider = FutureProvider<UserDataEntity>(
+  (ref) => ref.read(getMyUserDataUsecaseProvider).call().then(
+        (result) => result.fold(
+          (failure) => Future.error(failure.message),
+          (success) => success,
+        ),
+      ),
 );
