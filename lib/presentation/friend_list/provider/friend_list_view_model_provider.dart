@@ -26,12 +26,7 @@ class FriendListViewModelProvider extends StateNotifier<FriendListViewModel> {
   final GetUserDataFromIdUsecase _getUserDataFromIdUsecase;
 
   Future<void> getFriendList() async {
-    state.friendFutureUserList = await _getFriendListUsecase().then(
-      (result) => result.fold(
-        (failure) => null,
-        (list) => list,
-      ),
-    );
+    state.friendFutureUserList = _getFriendListUsecase().then((result) => result);
   }
 
   Future<void> searchUserByHandle({required String handle}) async {
@@ -71,7 +66,10 @@ class FriendListViewModelProvider extends StateNotifier<FriendListViewModel> {
       from: state.appliedFutureUserList,
     );
 
-    state.friendFutureUserList?.add(_getUserDataFromIdUsecase(targetUid));
+// TODO: 친구 추가 후 상태 업데이트 로직 추가
+    // _getUserDataFromIdUsecase.call(targetUid).then((result) => result.fold((failure) {}, (success) {
+    //       state.friendFutureUserList.add(success);
+    //     }));
   }
 
   Future<void> removeTargetUserFrom({
@@ -107,10 +105,12 @@ class FriendListViewModelProvider extends StateNotifier<FriendListViewModel> {
   Future<void> removeFromFriendList({required String targetUid}) async {
     await _removeFriendUsecase(targetUid: targetUid);
 
-    await removeTargetUserFrom(
-      target: targetUid,
-      from: state.friendFutureUserList,
-    );
+    // TODO: 친구 삭제 후 상태 업데이트 로직 추가
+
+    // await removeTargetUserFrom(
+    //   target: targetUid,
+    //   from: state.friendFutureUserList,
+    // );
   }
 
   void resetFriendSearchData() {

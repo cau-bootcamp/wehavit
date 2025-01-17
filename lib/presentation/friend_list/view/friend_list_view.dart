@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/presentation.dart';
+import 'package:wehavit/presentation/state/friend/friend_list_provider.dart';
 import 'package:wehavit/presentation/state/user_data/my_user_data_provider.dart';
 
 class FriendListView extends ConsumerStatefulWidget {
@@ -72,34 +74,49 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
                       const SizedBox(
                         height: 16.0,
                       ),
-                      Visibility(
-                        replacement: const Center(child: FriendListPlaceholderWidget()),
-                        visible: viewModel.friendFutureUserList?.isNotEmpty ?? false,
-                        child: Expanded(
-                          child: RefreshIndicator(
-                            onRefresh: () async {
-                              unawaited(
-                                ref
-                                    .read(friendListViewModelProvider.notifier)
-                                    .getFriendList()
-                                    .whenComplete(() => setState(() {})),
+                      Consumer(
+                        builder: (context, ref, child) {
+                          final asyncFriendList = ref.watch(friendListProvider);
+
+                          return asyncFriendList.when(
+                            data: (friendList) {
+                              if (friendList.isEmpty) {
+                                return const Center(child: FriendListPlaceholderWidget());
+                              }
+                              return Expanded(
+                                child: RefreshIndicator(
+                                  onRefresh: () async {
+                                    unawaited(
+                                      ref
+                                          .read(friendListViewModelProvider.notifier)
+                                          .getFriendList()
+                                          .whenComplete(() => setState(() {})),
+                                    );
+                                  },
+                                  child: ListView.builder(
+                                    padding: const EdgeInsets.only(bottom: 64),
+                                    itemCount: friendList.length,
+                                    itemBuilder: (context, index) {
+                                      return Container(
+                                        padding: const EdgeInsets.only(bottom: 12.0),
+                                        child: UserProfileCell(
+                                          Future(() => right(friendList[index])),
+                                          type: UserProfileCellType.normal,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
                               );
                             },
-                            child: ListView.builder(
-                              padding: const EdgeInsets.only(bottom: 64),
-                              itemCount: viewModel.friendFutureUserList!.length,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  padding: const EdgeInsets.only(bottom: 12.0),
-                                  child: UserProfileCell(
-                                    viewModel.friendFutureUserList![index],
-                                    type: UserProfileCellType.normal,
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        ),
+                            error: (_, __) {
+                              return Container();
+                            },
+                            loading: () {
+                              return Container();
+                            },
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -193,16 +210,15 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
                       ),
                     ],
                   ),
-                if (viewModel.friendFutureUserList == null || viewModel.friendFutureUserList!.isEmpty)
-                  Container()
-                else
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 32,
-                      ),
-                      const Text(
+                // if (viewModel.friendFutureUserList == null || viewModel.friendFutureUserList!.isEmpty)
+                //   Container()
+                // else
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: const Text(
                         '내 친구들',
                         style: TextStyle(
                           fontSize: 16.0,
@@ -210,17 +226,56 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
                           color: CustomColors.whWhite,
                         ),
                       ),
-                      Column(
-                        children: List<Widget>.generate(
-                          viewModel.friendFutureUserList!.length,
-                          (index) => FriendListCellWidget(
-                            futureUserEntity: viewModel.friendFutureUserList![index],
-                            cellState: FriendListCellState.managing,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(
+                      height: 16.0,
+                    ),
+                    Consumer(
+                      builder: (context, ref, child) {
+                        final asyncFriendList = ref.watch(friendListProvider);
+
+                        return asyncFriendList.when(
+                          data: (friendList) {
+                            if (friendList.isEmpty) {
+                              return const Center(child: FriendListPlaceholderWidget());
+                            }
+                            return Expanded(
+                              child: RefreshIndicator(
+                                onRefresh: () async {
+                                  unawaited(
+                                    ref
+                                        .read(friendListViewModelProvider.notifier)
+                                        .getFriendList()
+                                        .whenComplete(() => setState(() {})),
+                                  );
+                                },
+                                child: ListView.builder(
+                                  padding: const EdgeInsets.only(bottom: 64),
+                                  itemCount: friendList.length,
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      padding: const EdgeInsets.only(bottom: 12.0),
+                                      child: UserProfileCell(
+                                        Future(() => right(friendList[index])),
+                                        type: UserProfileCellType.normal,
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            );
+                          },
+                          error: (_, __) {
+                            return Container();
+                          },
+                          loading: () {
+                            return Container();
+                          },
+                        );
+                      },
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 60),
               ],
             ),

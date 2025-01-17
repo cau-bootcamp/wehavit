@@ -4,7 +4,7 @@ import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 
 abstract class WehavitDatasource {
-  EitherFuture<List<EitherFuture<UserDataEntity>>> getFriendModelList();
+  EitherFuture<List<UserDataEntity>> getFriendModelList();
 
   EitherFuture<bool> registerFriend(
     String email,

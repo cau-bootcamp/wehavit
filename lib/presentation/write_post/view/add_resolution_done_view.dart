@@ -204,41 +204,42 @@ class _ShareResolutionToFriendBottomSheetWidgetState extends ConsumerState<Share
                 child: Stack(
                   alignment: Alignment.centerRight,
                   children: [
-                    FriendListCellWidget(
-                      futureUserEntity: viewmodel.friendList![index],
-                      cellState: FriendListCellState.normal,
-                    ),
-                    EitherFutureBuilder<UserDataEntity>(
-                      target: viewmodel.friendList![index],
-                      forFail: Container(),
-                      forWaiting: Container(),
-                      mainWidgetCallback: (_) {
-                        return Container(
-                          margin: const EdgeInsets.only(
-                            right: 8.0,
-                          ),
-                          width: 24,
-                          height: 24,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color:
-                                viewmodel.tempSelectedFriendList![index] ? CustomColors.whYellow : Colors.transparent,
-                            border: Border.all(
-                              color: CustomColors.whBrightGrey,
-                            ),
-                          ),
-                          child: Visibility(
-                            visible: viewmodel.tempSelectedFriendList![index],
-                            child: const Icon(
-                              Icons.check,
-                              color: CustomColors.whWhite,
-                              size: 20,
-                              weight: 500,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+                    // TODO: 수정하기
+                    // FriendListCellWidget(
+                    //   futureUserEntity: viewmodel.friendList![index],
+                    //   cellState: FriendListCellState.normal,
+                    // ),
+                    // EitherFutureBuilder<UserDataEntity>(
+                    //   target: viewmodel.friendList![index],
+                    //   forFail: Container(),
+                    //   forWaiting: Container(),
+                    //   mainWidgetCallback: (_) {
+                    //     return Container(
+                    //       margin: const EdgeInsets.only(
+                    //         right: 8.0,
+                    //       ),
+                    //       width: 24,
+                    //       height: 24,
+                    //       decoration: BoxDecoration(
+                    //         shape: BoxShape.circle,
+                    //         color:
+                    //             viewmodel.tempSelectedFriendList![index] ? CustomColors.whYellow : Colors.transparent,
+                    //         border: Border.all(
+                    //           color: CustomColors.whBrightGrey,
+                    //         ),
+                    //       ),
+                    //       child: Visibility(
+                    //         visible: viewmodel.tempSelectedFriendList![index],
+                    //         child: const Icon(
+                    //           Icons.check,
+                    //           color: CustomColors.whWhite,
+                    //           size: 20,
+                    //           weight: 500,
+                    //         ),
+                    //       ),
+                    //     );
+                    //   },
+                    // ),
                   ],
                 ),
               ),

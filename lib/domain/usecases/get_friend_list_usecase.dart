@@ -7,7 +7,7 @@ class GetFriendListUsecase {
 
   final FriendRepository _friendRepository;
 
-  EitherFuture<List<EitherFuture<UserDataEntity>>> call() async {
+  EitherFuture<List<UserDataEntity>> call() async {
     return _friendRepository.getFriendEntityList();
   }
 }

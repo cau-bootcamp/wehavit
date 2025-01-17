@@ -5,7 +5,7 @@ import 'package:wehavit/presentation/group/model/model.dart';
 class AddResolutionDoneViewModel {
   ResolutionEntity? resolutionEntity;
 
-  List<EitherFuture<UserDataEntity>>? friendList;
+  List<UserDataEntity>? friendList;
 
   List<bool>? selectedFriendList;
   List<bool>? tempSelectedFriendList;

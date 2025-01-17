@@ -368,7 +368,7 @@ class AddResolutionScreen extends HookConsumerWidget {
 //   }
 // }
 
-EitherFuture<List<EitherFuture<UserDataEntity>>> getFriendList(WidgetRef ref) {
+EitherFuture<List<UserDataEntity>> getFriendList(WidgetRef ref) {
   return ref.read(getFriendListUseCaseProvider)();
 }
 

@@ -196,24 +196,25 @@ class _GroupViewState extends ConsumerState<GroupView> {
   }
 
   Future<void> loadFriendCellList() async {
-    final userIdList = await Future.wait(
-      ref.read(friendListViewModelProvider).friendFutureUserList?.map((futureFriendEntity) async {
-            final result = await futureFriendEntity;
-            return result.fold(
-              (failure) => null,
-              (entity) => entity.userId,
-            );
-          }).toList() ??
-          [],
-    );
+    // TODO: FriendCellList 로직을 State로 분리
+    // // final userIdList = await Future.wait(
+    // //   ref.read(friendListViewModelProvider).friendFutureUserList?.map((futureFriendEntity) async {
+    // //         final result = await futureFriendEntity;
+    // //         return result.fold(
+    // //           (failure) => null,
+    // //           (entity) => entity.userId,
+    // //         );
+    // //       }).toList() ??
+    // //       [],
+    // // );
 
-    final userIdListWithoutNull = userIdList.where((userId) => userId != null).cast<String>().toList();
+    // final userIdListWithoutNull = userIdList.where((userId) => userId != null).cast<String>().toList();
 
-    ref.watch(groupViewModelProvider).friendUidList = userIdListWithoutNull;
+    // ref.watch(groupViewModelProvider).friendUidList = userIdListWithoutNull;
 
-    await ref
-        .read(groupViewModelProvider.notifier)
-        .loadFriendCellWidgetModel(friendUidList: userIdListWithoutNull)
-        .whenComplete(() => setState(() {}));
+    // await ref
+    //     .read(groupViewModelProvider.notifier)
+    //     .loadFriendCellWidgetModel(friendUidList: userIdListWithoutNull)
+    //     .whenComplete(() => setState(() {}));
   }
 }
