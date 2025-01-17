@@ -242,4 +242,6 @@ abstract class WehavitDatasource {
   EitherFuture<void> removeQuickshotPreset({
     required QuickshotPresetItemEntity entity,
   });
+
+  EitherFuture<List<String>> getFriendUidList();
 }

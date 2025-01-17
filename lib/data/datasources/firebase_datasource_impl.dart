@@ -20,6 +20,25 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   int get maxDay => 27;
 
   @override
+  EitherFuture<List<String>> getFriendUidList() async {
+    try {
+      final friendUidList = await firestore.collection(FirebaseCollectionName.friends).get().then((friendDocument) {
+        return friendDocument.docs.map((doc) {
+          return doc.data()[FirebaseUserFieldName.friendUid] as String;
+        }).toList();
+      });
+
+      return right(friendUidList);
+    } on Exception catch (e) {
+      return Future(
+        () => left(
+          Failure('catch error on registerFriend : ${e.toString()}'),
+        ),
+      );
+    }
+  }
+
+  @override
   EitherFuture<List<UserDataEntity>> getFriendModelList() async {
     // users에서 내 user 정보 접근해서 friends 리스트 받아오기
     try {

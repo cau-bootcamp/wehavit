@@ -17,4 +17,9 @@ class FriendRepositoryImpl implements FriendRepository {
   EitherFuture<bool> registerFriend(String email) async {
     return _wehavitDatasource.registerFriend(email);
   }
+
+  @override
+  EitherFuture<List<String>> getFriendUidList() {
+    return _wehavitDatasource.getFriendUidList();
+  }
 }

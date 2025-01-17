@@ -5,4 +5,6 @@ abstract class FriendRepository {
   EitherFuture<List<UserDataEntity>> getFriendEntityList();
 
   EitherFuture<bool> registerFriend(String email);
+
+  EitherFuture<List<String>> getFriendUidList();
 }
