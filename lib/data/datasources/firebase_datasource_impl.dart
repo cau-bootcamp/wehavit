@@ -1741,7 +1741,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }
 
   @override
-  EitherFuture<List<EitherFuture<UserDataEntity>>> getAppliedUserList({
+  EitherFuture<List<String>> getAppliedUserIdList({
     required String forUser,
   }) {
     try {
@@ -1760,12 +1760,11 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
 
                 if (uid != null) return uid;
               })
+              .nonNulls
               .toSet()
               .toList();
 
-          return right(
-            uidList.map((uid) => fetchUserDataEntityByUserId(uid!)).toList(),
-          );
+          return right(uidList);
         },
       );
     } on Exception catch (e) {
@@ -2082,7 +2081,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }
 
   @override
-  EitherFuture<List<EitherFuture<UserDataEntity>>> getUserDataListByHandle({
+  EitherFuture<List<String>> getUidListByHandle({
     required String handle,
   }) {
     // users에서 내 user 정보 접근해서 friends 리스트 받아오기
@@ -2098,38 +2097,39 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           .limit(6)
           .get()
           .then((users) {
-        List<EitherFuture<UserDataEntity>> userFutureList = users.docs.map((doc) {
-          return Future<Either<Failure, UserDataEntity>>(() {
-            try {
-              if (doc.reference.id == myUid) {
-                return Future(
-                  () => left(
-                    const Failure('my profile is searched'),
-                  ),
-                );
-              }
+        List<String> userFutureList = users.docs.map((doc) => doc.reference.id).toList();
+        // users.docs.map((doc) {
+        //   return Future<Either<Failure, UserDataEntity>>(() {
+        //     try {
+        //       if (doc.reference.id == myUid) {
+        //         return Future(
+        //           () => left(
+        //             const Failure('my profile is searched'),
+        //           ),
+        //         );
+        //       }
 
-              UserDataEntity userDataEntity =
-                  FirebaseUserModel.fromFireStoreDocument(doc).toUserDataEntity(userId: doc.reference.id);
+        //       UserDataEntity userDataEntity =
+        //           FirebaseUserModel.fromFireStoreDocument(doc).toUserDataEntity(userId: doc.reference.id);
 
-              if (userDataEntity.handle.startsWith(handle)) {
-                return Future(() => right(userDataEntity));
-              } else {
-                return Future(
-                  () => left(
-                    const Failure('doesn\'t match paatern'),
-                  ),
-                );
-              }
-            } on Exception catch (e) {
-              return Future(
-                () => left(
-                  Failure('Error processing document: ${e.toString()}'),
-                ),
-              );
-            }
-          });
-        }).toList();
+        //       if (userDataEntity.handle.startsWith(handle)) {
+        //         return Future(() => right(userDataEntity));
+        //       } else {
+        //         return Future(
+        //           () => left(
+        //             const Failure('doesn\'t match pattern'),
+        //           ),
+        //         );
+        //       }
+        //     } on Exception catch (e) {
+        //       return Future(
+        //         () => left(
+        //           Failure('Error processing document: ${e.toString()}'),
+        //         ),
+        //       );
+        //     }
+        //   });
+        // }).toList();
         return right(userFutureList);
       });
     } on Exception catch (e) {

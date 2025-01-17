@@ -150,7 +150,7 @@ abstract class WehavitDatasource {
 
   EitherFuture<void> applyForFriend({required String of});
 
-  EitherFuture<List<EitherFuture<UserDataEntity>>> getAppliedUserList({
+  EitherFuture<List<String>> getAppliedUserIdList({
     required String forUser,
   });
 
@@ -179,7 +179,7 @@ abstract class WehavitDatasource {
     required String keyword,
   });
 
-  EitherFuture<List<EitherFuture<UserDataEntity>>> getUserDataListByHandle({
+  EitherFuture<List<String>> getUidListByHandle({
     required String handle,
   });
 
