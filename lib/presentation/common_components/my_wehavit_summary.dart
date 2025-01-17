@@ -158,15 +158,15 @@ class _MyWehavitSummaryBullet extends StatelessWidget {
             children: [
               TextSpan(
                 text: preText,
-                style: context.bodyLarge?.copyWith(color: CustomColors.whGrey900),
+                style: context.bodyMedium?.copyWith(color: CustomColors.whGrey900),
               ),
               TextSpan(
                 text: highlightedText,
-                style: context.titleMedium?.copyWith(color: CustomColors.whYellow500),
+                style: context.titleSmall?.copyWith(color: CustomColors.whYellow500),
               ),
               TextSpan(
                 text: postText,
-                style: context.bodyLarge?.copyWith(color: CustomColors.whGrey900, overflow: TextOverflow.ellipsis),
+                style: context.bodyMedium?.copyWith(color: CustomColors.whGrey900, overflow: TextOverflow.ellipsis),
               ),
             ],
           ),

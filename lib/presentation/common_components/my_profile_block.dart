@@ -2,7 +2,6 @@ import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/user_profile_cell.dart';
 import 'package:wehavit/presentation/state/user_data/my_user_data_provider.dart';
 
@@ -38,18 +37,9 @@ class MyProfileBlock extends StatelessWidget {
                     Expanded(child: UserProfileCell(myUserData.userId, type: UserProfileCellType.profile)),
                     Column(
                       children: [
-                        Image.asset(
-                          CustomIconImage.linkIcon,
-                          width: 20,
-                          height: 20,
-                        ),
-                        const SizedBox(
-                          height: 4,
-                        ),
-                        Text(
-                          '초대하기',
-                          style: context.labelMedium,
-                        ),
+                        Image.asset(CustomIconImage.linkIcon, width: 20, height: 20),
+                        const SizedBox(height: 4),
+                        Text('초대하기', style: context.labelMedium),
                       ],
                     ),
                   ],

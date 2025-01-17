@@ -23,7 +23,7 @@ class VerticalLineWrapper extends StatelessWidget {
               color: color,
             ),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 10),
           Padding(
             padding: const EdgeInsets.symmetric(),
             child: Column(

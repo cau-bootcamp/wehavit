@@ -7,7 +7,6 @@ import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/presentation.dart';
 import 'package:wehavit/presentation/state/resolution_list/resolution_list_provider.dart';
-import 'package:wehavit/presentation/state/user_data/my_user_data_provider.dart';
 
 class MyPageView extends ConsumerStatefulWidget {
   const MyPageView(this.index, this.tabController, {super.key});

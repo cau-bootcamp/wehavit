@@ -9,7 +9,6 @@ import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/presentation.dart';
-import 'package:wehavit/presentation/state/friend/friend_list_provider.dart';
 import 'package:wehavit/presentation/state/user_data/my_user_data_provider.dart';
 
 class MainView extends ConsumerStatefulWidget {
