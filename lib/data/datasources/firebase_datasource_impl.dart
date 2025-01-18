@@ -1722,11 +1722,11 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }
 
   @override
-  EitherFuture<void> applyForFriend({required String of}) {
+  EitherFuture<void> applyForFriend({required String of}) async {
     try {
       final myUid = getMyUserId();
 
-      firestore
+      await firestore
           .collection(
         FirebaseCollectionName.getUserApplyWaitingCollectionName(of),
       )
@@ -1818,17 +1818,25 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }
 
   @override
-  EitherFuture<void> removeFriend({required String targetUid}) {
+  EitherFuture<void> removeFriend({required String targetUid}) async {
     try {
       final myUid = getMyUserId();
 
-      firestore
-          .collection(
-            FirebaseCollectionName.getTargetFriendsCollectionName(
-              myUid,
-            ),
-          )
+      // 나의 친구 목록에서 친구를 제거하고
+      await firestore
+          .collection(FirebaseCollectionName.getTargetFriendsCollectionName(myUid))
           .where(FirebaseUserFieldName.friendUid, isEqualTo: targetUid)
+          .get()
+          .then((result) {
+        for (var element in result.docs) {
+          element.reference.delete();
+        }
+      });
+
+      // 친구의 친구 목록에서 나를 제거
+      await firestore
+          .collection(FirebaseCollectionName.getTargetFriendsCollectionName(targetUid))
+          .where(FirebaseUserFieldName.friendUid, isEqualTo: myUid)
           .get()
           .then((result) {
         for (var element in result.docs) {

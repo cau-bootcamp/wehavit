@@ -1,6 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
 import 'package:wehavit/presentation/friend_list/model/friend_list_view_model.dart';
 import 'package:wehavit/presentation/state/friend/friend_list_provider.dart';
@@ -9,25 +7,17 @@ import 'package:wehavit/presentation/state/friend/friend_manage_list_provider.da
 class FriendListViewModelProvider extends StateNotifier<FriendListViewModel> {
   FriendListViewModelProvider(
     this.ref,
-    this._getFriendListUsecase,
-    this._searchUserDataListByHandleUsecase,
-    this._getAppliedUserListForFriendUsecase,
     this._acceptApplyingForFriendUsecase,
     this._rejectApplyingForFriendUsecase,
     this._removeFriendUsecase,
     this._applyForUserFriendUsecase,
-    this._getUserDataFromIdUsecase,
   ) : super(FriendListViewModel());
 
   final Ref ref;
-  final GetFriendListUsecase _getFriendListUsecase;
-  final GetAppliedUserUidListForFriendUsecase _getAppliedUserListForFriendUsecase;
-  final SearchUserByHandleUsecase _searchUserDataListByHandleUsecase;
   final AcceptApplyingForFriendUsecase _acceptApplyingForFriendUsecase;
   final RejectApplyingForFriendUsecase _rejectApplyingForFriendUsecase;
   final RemoveFriendUsecase _removeFriendUsecase;
   final ApplyForUserFriendUsecase _applyForUserFriendUsecase;
-  final GetUserDataFromIdUsecase _getUserDataFromIdUsecase;
 
   Future<void> removeFriend({required String targetUid}) async {
     await _removeFriendUsecase(targetUid: targetUid).then(

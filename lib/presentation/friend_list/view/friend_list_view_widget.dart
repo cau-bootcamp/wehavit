@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
-import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/presentation/common_components/common_components.dart';
-import 'package:wehavit/presentation/friend_list/view/friend_list_view.dart';
 
 class FriendListFailPlaceholderWidget extends StatelessWidget {
   const FriendListFailPlaceholderWidget({

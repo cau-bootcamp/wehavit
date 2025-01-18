@@ -139,6 +139,15 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
                         child: UserProfileCell(
                           uidList[index],
                           type: UserProfileCellType.inviting,
+                          onRequest: () async {
+                            ref
+                                .read(friendListViewModelProvider.notifier)
+                                .applyToBeFrendWith(targetUid: uidList[index])
+                                .whenComplete(() {
+                              // ignore: use_build_context_synchronously
+                              showToastMessage(context, text: '성공적으로 친구 요청을 보냈어요');
+                            });
+                          },
                         ),
                       ),
                     ),
@@ -272,12 +281,7 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
                         friendUidList[index],
                         type: isManagingMode ? UserProfileCellType.deleteMode : UserProfileCellType.normal,
                         onDelete: () async {
-                          ref
-                              .read(friendListViewModelProvider.notifier)
-                              .removeFriend(targetUid: friendUidList[index])
-                              .whenComplete(() {
-                            setState(() {});
-                          });
+                          ref.read(friendListViewModelProvider.notifier).removeFriend(targetUid: friendUidList[index]);
                         },
                       ),
                     );
