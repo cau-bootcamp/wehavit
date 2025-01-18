@@ -24,7 +24,7 @@ class SmallColoredButton extends StatelessWidget {
       height: 30,
       child: TextButton(
         onPressed: () {
-          if (isDisabled != false) onPressed();
+          if (isDisabled == false) onPressed();
         },
         style: TextButton.styleFrom(
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,

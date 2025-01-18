@@ -5,7 +5,7 @@ import 'package:wehavit/domain/entities/entities.dart';
 final friendUidListProvider = FutureProvider<List<String>>(
   (ref) => ref.read(getFriendUidListUseCaseProvider).call().then(
         (result) => result.fold(
-          (failure) => [],
+          (failure) => Future.error(failure.message),
           (success) => success,
         ),
       ),
@@ -20,11 +20,11 @@ final userDataEntityProvider = FutureProvider.family<UserDataEntity, String>(
       ),
 );
 
-final friendListProvider = FutureProvider<List<UserDataEntity>>(
-  (ref) => ref.read(getFriendListUseCaseProvider).call().then(
-        (result) => result.fold(
-          (failure) => [],
-          (success) => success,
-        ),
-      ),
-);
+// final friendListProvider = FutureProvider<List<UserDataEntity>>(
+//   (ref) => ref.read(getFriendListUseCaseProvider).call().then(
+//         (result) => result.fold(
+//           (failure) => Future.error(failure.message),
+//           (success) => success,
+//         ),
+//       ),
+// );

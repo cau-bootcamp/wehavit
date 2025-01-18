@@ -72,7 +72,7 @@ class MainViewState extends ConsumerState<MainView> with TickerProviderStateMixi
     // 친구리스트 셀 로드
     // ref.read(friendListViewModelProvider.notifier).getAppliedFriendList().whenComplete(() => setState(() {}));
 
-    await ref.read(friendListViewModelProvider.notifier).getFriendList().whenComplete(() => setState(() {}));
+    // await ref.read(friendListViewModelProvider.notifier).getFriendList().whenComplete(() => setState(() {}));
 
     // 그룹리스트의 친구 셀 로드
     // final userIdList = ref.read(friendListProvider).whenData((data) => data.map((e) => e.userId).toList());

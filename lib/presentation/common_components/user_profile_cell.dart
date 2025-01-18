@@ -17,24 +17,44 @@ enum UserProfileCellType {
 }
 
 class UserProfileCell extends StatelessWidget {
-  const UserProfileCell(this.userId, {required this.type, super.key});
+  const UserProfileCell(
+    this.userId, {
+    required this.type,
+    this.onDelete,
+    this.onRequest,
+    this.onAccept,
+    this.onRefuse,
+    super.key,
+  });
 
   final UserProfileCellType type;
   final String userId;
+
+  final Function? onDelete;
+  final Function? onRequest;
+  final Function? onAccept;
+  final Function? onRefuse;
 
   @override
   Widget build(BuildContext context) {
     final actions = switch (type) {
       UserProfileCellType.normal => Container(),
       UserProfileCellType.profile => Container(),
-      UserProfileCellType.deleteMode =>
-        SmallColoredButton(buttonLabel: '친구 삭제', onPressed: () {}, backgroundColor: CustomColors.whGrey600),
-      UserProfileCellType.inviting => SmallColoredButton(buttonLabel: '친구 요청', onPressed: () {}),
+      UserProfileCellType.deleteMode => SmallColoredButton(
+          buttonLabel: '친구 삭제',
+          onPressed: onDelete ?? () {},
+          backgroundColor: CustomColors.whGrey600,
+        ),
+      UserProfileCellType.inviting => SmallColoredButton(buttonLabel: '친구 요청', onPressed: onRequest ?? () {}),
       UserProfileCellType.invited => Row(
           children: [
-            SmallColoredButton(buttonLabel: '수락', onPressed: () {}),
+            SmallColoredButton(buttonLabel: '수락', onPressed: onAccept ?? () {}),
             const SizedBox(width: 8),
-            SmallColoredButton(buttonLabel: '거절', onPressed: () {}, backgroundColor: CustomColors.whGrey600),
+            SmallColoredButton(
+              buttonLabel: '거절',
+              onPressed: onRefuse ?? () {},
+              backgroundColor: CustomColors.whGrey600,
+            ),
           ],
         ),
       UserProfileCellType.loading => Container(),

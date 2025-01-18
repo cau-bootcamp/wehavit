@@ -51,6 +51,7 @@ final friendListViewModelProvider = StateNotifierProvider<FriendListViewModelPro
   final ApplyForUserFriendUsecase applyForUserFriendUsecase = ref.read(applyForUserFriendUsecaseProvider);
   final GetUserDataFromIdUsecase getUserDataFromIdUsecase = ref.read(getUserDataFromIdUsecaseProvider);
   return FriendListViewModelProvider(
+    ref,
     getFriendListUsecase,
     searchUserDataListByHandleUsecase,
     getAppliedUserListForFriendUsecase,

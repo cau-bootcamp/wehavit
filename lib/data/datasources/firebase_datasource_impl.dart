@@ -1778,11 +1778,11 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   EitherFuture<void> handleFriendJoinRequest({
     required String targetUid,
     required bool isAccept,
-  }) {
+  }) async {
     try {
       final myUid = getMyUserId();
 
-      firestore
+      await firestore
           .collection(
             FirebaseCollectionName.getUserApplyWaitingCollectionName(myUid),
           )
@@ -1797,14 +1797,14 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
 
       if (isAccept) {
         // 내 친구 목록에 친구 UID 추가
-        firestore
+        await firestore
             .collection(
           FirebaseCollectionName.getTargetFriendsCollectionName(myUid),
         )
             .add({FirebaseUserFieldName.friendUid: targetUid});
 
         // 친구의 친구 목록에 내 UID 추가
-        firestore
+        await firestore
             .collection(
           FirebaseCollectionName.getTargetFriendsCollectionName(targetUid),
         )
