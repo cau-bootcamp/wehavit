@@ -381,10 +381,11 @@ class _JoinGroupIntroduceViewState extends ConsumerState<JoinGroupIntroduceView>
                           ),
                         ),
                         const SizedBox(height: 8.0),
-                        FriendListCellWidget(
-                          futureUserEntity: groupManagerEntity!,
-                          cellState: FriendListCellState.normal,
-                        ),
+                        // TODO: 그룹 리더 다시 넣어주기
+                        // FriendListCellWidget(
+                        //   futureUserEntity: groupManagerEntity!,
+                        //   cellState: FriendListCellState.normal,
+                        // ),
                       ],
                     ),
                   ),

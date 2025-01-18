@@ -70,7 +70,7 @@ class MainViewState extends ConsumerState<MainView> with TickerProviderStateMixi
 // TODO: 제거하기
   Future<void> loadFriendData() async {
     // 친구리스트 셀 로드
-    ref.read(friendListViewModelProvider.notifier).getAppliedFriendList().whenComplete(() => setState(() {}));
+    // ref.read(friendListViewModelProvider.notifier).getAppliedFriendList().whenComplete(() => setState(() {}));
 
     await ref.read(friendListViewModelProvider.notifier).getFriendList().whenComplete(() => setState(() {}));
 

@@ -17,8 +17,8 @@ class FriendListViewModelProvider extends StateNotifier<FriendListViewModel> {
   ) : super(FriendListViewModel());
 
   final GetFriendListUsecase _getFriendListUsecase;
-  final GetAppliedUserListForFriendUsecase _getAppliedUserListForFriendUsecase;
-  final SearchUserDataListByHandleUsecase _searchUserDataListByHandleUsecase;
+  final GetAppliedUserUidListForFriendUsecase _getAppliedUserListForFriendUsecase;
+  final SearchUserByHandleUsecase _searchUserDataListByHandleUsecase;
   final AcceptApplyingForFriendUsecase _acceptApplyingForFriendUsecase;
   final RejectApplyingForFriendUsecase _rejectApplyingForFriendUsecase;
   final RemoveFriendUsecase _removeFriendUsecase;
@@ -29,25 +29,25 @@ class FriendListViewModelProvider extends StateNotifier<FriendListViewModel> {
     state.friendFutureUserList = _getFriendListUsecase().then((result) => result);
   }
 
-  Future<void> searchUserByHandle({required String handle}) async {
-    state.searchedFutureUserList = await _searchUserDataListByHandleUsecase(
-      handle: handle,
-    ).then(
-      (result) => result.fold(
-        (failure) => null,
-        (list) => list,
-      ),
-    );
-  }
+  // Future<void> searchUserByHandle({required String handle}) async {
+  //   state.searchedFutureUserList = await _searchUserDataListByHandleUsecase(
+  //     handle: handle,
+  //   ).then(
+  //     (result) => result.fold(
+  //       (failure) => null,
+  //       (list) => list,
+  //     ),
+  //   );
+  // }
 
-  Future<void> getAppliedFriendList() async {
-    state.appliedFutureUserList = await _getAppliedUserListForFriendUsecase().then(
-      (result) => result.fold(
-        (failure) => null,
-        (list) => list,
-      ),
-    );
-  }
+  // Future<void> getAppliedFriendList() async {
+  //   state.appliedFutureUserList = await _getAppliedUserListForFriendUsecase().then(
+  //     (result) => result.fold(
+  //       (failure) => null,
+  //       (list) => list,
+  //     ),
+  //   );
+  // }
 
   Future<void> rejectToBeFriendWith({required String targetUid}) async {
     _rejectApplyingForFriendUsecase(targetUid: targetUid);

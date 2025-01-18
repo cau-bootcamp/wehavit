@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
-import 'package:wehavit/dependency/domain/domain.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
+import 'package:wehavit/presentation/state/user_data/my_user_data_provider.dart';
 
 class DoneCreatingGroupView extends ConsumerWidget {
   const DoneCreatingGroupView({super.key, required this.groupEntity});
@@ -14,7 +14,6 @@ class DoneCreatingGroupView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // ignore: discarded_futures
-    final futureUserModel = ref.read(getMyUserDataUsecaseProvider)();
 
     return PopScope(
       canPop: false,
@@ -122,9 +121,21 @@ class DoneCreatingGroupView extends ConsumerWidget {
                                           left: 16.0,
                                           top: 8.0,
                                         ),
-                                        child: FriendListCellWidget(
-                                          futureUserEntity: futureUserModel,
-                                          cellState: FriendListCellState.normal,
+                                        child: Consumer(
+                                          builder: (context, ref, child) {
+                                            final userData = ref.watch(getMyUserDataProvider);
+
+                                            return userData.when(
+                                              data: (data) {
+                                                return UserProfileCell(
+                                                  data.userId,
+                                                  type: UserProfileCellType.normal,
+                                                );
+                                              },
+                                              error: (_, __) => Container(),
+                                              loading: () => Container(),
+                                            );
+                                          },
                                         ),
                                       ),
                                     ],
