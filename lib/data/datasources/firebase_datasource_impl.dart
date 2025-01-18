@@ -2097,40 +2097,23 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
           .limit(6)
           .get()
           .then((users) {
-        List<String> userFutureList = users.docs.map((doc) => doc.reference.id).toList();
-        // users.docs.map((doc) {
-        //   return Future<Either<Failure, UserDataEntity>>(() {
-        //     try {
-        //       if (doc.reference.id == myUid) {
-        //         return Future(
-        //           () => left(
-        //             const Failure('my profile is searched'),
-        //           ),
-        //         );
-        //       }
+        return right(
+          users.docs
+              .map((doc) {
+                if (doc.reference.id == myUid) {
+                  return null;
+                }
 
-        //       UserDataEntity userDataEntity =
-        //           FirebaseUserModel.fromFireStoreDocument(doc).toUserDataEntity(userId: doc.reference.id);
+                UserDataEntity userDataEntity =
+                    FirebaseUserModel.fromFireStoreDocument(doc).toUserDataEntity(userId: doc.reference.id);
 
-        //       if (userDataEntity.handle.startsWith(handle)) {
-        //         return Future(() => right(userDataEntity));
-        //       } else {
-        //         return Future(
-        //           () => left(
-        //             const Failure('doesn\'t match pattern'),
-        //           ),
-        //         );
-        //       }
-        //     } on Exception catch (e) {
-        //       return Future(
-        //         () => left(
-        //           Failure('Error processing document: ${e.toString()}'),
-        //         ),
-        //       );
-        //     }
-        //   });
-        // }).toList();
-        return right(userFutureList);
+                if (userDataEntity.handle.startsWith(handle)) {
+                  return doc.reference.id;
+                }
+              })
+              .nonNulls
+              .toList(),
+        );
       });
     } on Exception catch (e) {
       return Future.value(

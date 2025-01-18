@@ -1,6 +1,5 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
 
 class GetAppliedUserUidListForFriendUsecase {
