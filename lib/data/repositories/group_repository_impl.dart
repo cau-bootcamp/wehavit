@@ -173,7 +173,7 @@ class GroupRepositoryImpl implements GroupRepository {
   }
 
   @override
-  EitherFuture<List<EitherFuture<GroupEntity>>> getGroupEntityListByGroupName({
+  EitherFuture<List<GroupEntity>> getGroupEntityListByGroupName({
     required String keyword,
   }) {
     return _wehavitDatasource.getGroupEntityListByGroupName(keyword: keyword);

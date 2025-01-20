@@ -6,7 +6,7 @@ import 'package:wehavit/domain/entities/entities.dart';
 final groupListProvider = FutureProvider<List<GroupEntity>>(
   (ref) => ref.read(getGroupListUseCaseProvider).call(NoParams()).then(
         (result) => result.fold(
-          (failure) => [],
+          (failure) => Future.error(failure.message),
           (success) => success,
         ),
       ),

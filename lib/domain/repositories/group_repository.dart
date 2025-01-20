@@ -69,7 +69,7 @@ abstract class GroupRepository {
     required String userId,
   });
 
-  EitherFuture<List<EitherFuture<GroupEntity>>> getGroupEntityListByGroupName({
+  EitherFuture<List<GroupEntity>> getGroupEntityListByGroupName({
     required String keyword,
   });
 

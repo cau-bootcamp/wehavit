@@ -30,6 +30,7 @@ class _GroupViewState extends ConsumerState<GroupView> {
           onRefresh: () async {
             ref.invalidate(groupListFriendCellModelProvider);
             ref.invalidate(groupListCellModelProvider);
+            ref.invalidate(groupListProvider);
           },
           child: Consumer(
             builder: (context, ref, child) {

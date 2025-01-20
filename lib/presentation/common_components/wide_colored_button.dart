@@ -13,7 +13,6 @@ class WideColoredButton extends StatefulWidget {
     required this.onPressed,
     this.iconString = '',
     this.isDiminished = false,
-    this.isProgressing = false,
   });
 
   final Color backgroundColor;
@@ -22,7 +21,6 @@ class WideColoredButton extends StatefulWidget {
   final String iconString;
   final Function onPressed;
   final bool isDiminished;
-  final bool isProgressing;
 
   @override
   State<WideColoredButton> createState() => _WideColoredButtonState();
@@ -64,12 +62,10 @@ class _WideColoredButtonState extends State<WideColoredButton> {
         onPressed: () async {
           setState(() {
             isProgressing = true;
-            print("HE");
           });
           await Future.value(widget.onPressed()).whenComplete(() {
             setState(() {
               isProgressing = false;
-              print("HO");
             });
           });
         },

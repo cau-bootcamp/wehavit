@@ -2039,7 +2039,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   }
 
   @override
-  EitherFuture<List<EitherFuture<GroupEntity>>> getGroupEntityListByGroupName({
+  EitherFuture<List<GroupEntity>> getGroupEntityListByGroupName({
     required String keyword,
   }) {
     try {
@@ -2049,34 +2049,48 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
             FirebaseGroupFieldName.name,
             isGreaterThanOrEqualTo: keyword,
           )
-          .limit(5)
+          .limit(6)
           .get()
           .then((groups) {
-        List<EitherFuture<GroupEntity>> futureGroupList = groups.docs.map((doc) {
-          return EitherFuture<GroupEntity>(() {
-            try {
-              GroupEntity groupEntity = FirebaseGroupModel.fromFireStoreDocument(doc).toGroupEntity(groupId: doc.id);
+        return right(
+          groups.docs
+              .map((doc) {
+                GroupEntity groupEntity =
+                    FirebaseGroupModel.fromFireStoreDocument(doc).toGroupEntity(groupId: doc.reference.id);
 
-              if (groupEntity.groupName.startsWith(keyword)) {
-                return Future(() => right(groupEntity));
-              } else {
-                return Future(
-                  () => left(
-                    const Failure('doesn\'t match pattern'),
-                  ),
-                );
-              }
-            } on Exception catch (e) {
-              return Future(
-                () => left(
-                  Failure('Error processing document: ${e.toString()}'),
-                ),
-              );
-            }
-          });
-        }).toList();
-        return right(futureGroupList);
+                if (groupEntity.groupName.startsWith(keyword)) {
+                  return groupEntity;
+                }
+              })
+              .nonNulls
+              .toList(),
+        );
       });
+      // List<EitherFuture<GroupEntity>> futureGroupList = groups.docs.map((doc) {
+      //   return EitherFuture<GroupEntity>(() {
+      //     try {
+      //       GroupEntity groupEntity = FirebaseGroupModel.fromFireStoreDocument(doc).toGroupEntity(groupId: doc.id);
+
+      //       if (groupEntity.groupName.startsWith(keyword)) {
+      //         return Future(() => right(groupEntity));
+      //       } else {
+      //         return Future(
+      //           () => left(
+      //             const Failure('doesn\'t match pattern'),
+      //           ),
+      //         );
+      //       }
+      //     } on Exception catch (e) {
+      //       return Future(
+      //         () => left(
+      //           Failure('Error processing document: ${e.toString()}'),
+      //         ),
+      //       );
+      //     }
+      //   });
+      // }).toList();
+      // return right(futureGroupList);
+      // });
     } on Exception catch (e) {
       return Future.value(
         left(
