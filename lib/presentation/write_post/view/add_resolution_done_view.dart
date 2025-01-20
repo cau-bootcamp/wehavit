@@ -31,7 +31,7 @@ class _AddResolutionDoneViewState extends ConsumerState<AddResolutionDoneView> {
   @override
   Widget build(BuildContext context) {
     final viewmodel = ref.watch(addResolutionDoneViewModelProvider);
-    final provider = ref.watch(addResolutionDoneViewModelProvider.notifier);
+    // final provider = ref.watch(addResolutionDoneViewModelProvider.notifier);
 
     return Scaffold(
       resizeToAvoidBottomInset: true,

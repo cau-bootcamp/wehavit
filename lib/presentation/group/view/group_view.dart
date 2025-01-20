@@ -20,8 +20,8 @@ class GroupView extends ConsumerStatefulWidget {
 class _GroupViewState extends ConsumerState<GroupView> {
   @override
   Widget build(BuildContext context) {
-    final viewModel = ref.watch(groupViewModelProvider);
-    final provider = ref.read(groupViewModelProvider.notifier);
+    // final viewModel = ref.watch(groupViewModelProvider);
+    // final provider = ref.read(groupViewModelProvider.notifier);
 
     return Scaffold(
       backgroundColor: CustomColors.whDarkBlack,
@@ -30,73 +30,61 @@ class _GroupViewState extends ConsumerState<GroupView> {
       ),
       body: SafeArea(
         minimum: const EdgeInsets.symmetric(horizontal: 16),
-        child: Consumer(
-          builder: (context, ref, child) {
-            final asyncGroupList = ref.watch(groupListProvider);
+        child: RefreshIndicator(
+          onRefresh: () async {
+            ref.invalidate(groupListFriendCellModelProvider);
+            ref.invalidate(groupListCellModelProvider);
+          },
+          child: Consumer(
+            builder: (context, ref, child) {
+              final asyncGroupList = ref.watch(groupListProvider);
 
-            return asyncGroupList.when(
-              data: (groupList) {
-                List<Widget> groupListViewCellList = [
-                  GestureDetector(
-                    onTapUp: (details) async {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return FriendPostView(
-                              cellModel: viewModel.groupListViewFriendCellModel!,
-                            );
-                          },
-                        ),
-                      ).whenComplete(
-                        () => setState(
-                          () {},
-                        ),
-                      );
-                    },
-                    child: const GroupListFriendCell(),
-                  ),
-                  ...groupList.map(
-                    (entity) => GestureDetector(
-                      onTapUp: (details) async {
+              return asyncGroupList.when(
+                data: (groupList) {
+                  List<Widget> groupListViewCellList = [
+                    GroupListFriendCell(
+                      onPressed: () async {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return GroupPostView(
-                                groupEntity: entity,
-                              );
+                              return const FriendPostView();
                             },
                           ),
                         ).whenComplete(
-                          () => setState(
-                            () {},
-                          ),
+                          () => ref.invalidate(groupListFriendCellModelProvider),
                         );
                       },
-                      child: GroupListCell(groupEntity: entity),
                     ),
-                  ),
-                  ListDashOutlinedCell(
-                    buttonLabel: '그룹 추가하기',
-                    onPressed: () async {
-                      showAddMenuBottomSheet(
-                        context,
-                        setStateCallback: () async {
-                          await provider.loadMyGroupCellList();
-                          setState(() {});
+                    ...groupList.map(
+                      (entity) => GroupListCell(
+                        groupEntity: entity,
+                        onPressed: () async {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return GroupPostView(groupEntity: entity);
+                              },
+                            ),
+                          ).whenComplete(() => ref.invalidate(groupListCellModelProvider(entity)));
                         },
-                      );
-                    },
-                  ),
-                ];
+                      ),
+                    ),
+                    ListDashOutlinedCell(
+                      buttonLabel: '그룹 추가하기',
+                      onPressed: () async {
+                        showAddMenuBottomSheet(
+                          context,
+                          setStateCallback: () async {
+                            ref.invalidate(groupListProvider);
+                          },
+                        );
+                      },
+                    ),
+                  ];
 
-                return RefreshIndicator(
-                  onRefresh: () async {
-                    ref.invalidate(groupListFriendCellModelProvider);
-                    ref.invalidate(groupListCellModelProvider);
-                  },
-                  child: ListView.builder(
+                  return ListView.builder(
                     padding: const EdgeInsets.only(bottom: 60.0),
                     itemCount: groupListViewCellList.length,
                     itemBuilder: (context, index) {
@@ -107,19 +95,19 @@ class _GroupViewState extends ConsumerState<GroupView> {
                         child: groupListViewCellList[index],
                       );
                     },
-                  ),
-                );
-              },
-              error: (_, __) {
-                return const Center(
-                  child: Text('something went wrong'),
-                );
-              },
-              loading: () {
-                return Container();
-              },
-            );
-          },
+                  );
+                },
+                error: (_, __) {
+                  return const Center(
+                    child: Text('something went wrong'),
+                  );
+                },
+                loading: () {
+                  return Container();
+                },
+              );
+            },
+          ),
         ),
       ),
     );

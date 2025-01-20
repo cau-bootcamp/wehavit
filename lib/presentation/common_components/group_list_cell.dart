@@ -55,26 +55,34 @@ class GroupListCell extends StatelessWidget {
   const GroupListCell({
     super.key,
     required this.groupEntity,
+    this.onPressed,
   });
 
   final GroupEntity groupEntity;
+  final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: CustomColors.whGrey300,
+    return TextButton(
+      style: TextButton.styleFrom(
+        padding: EdgeInsets.zero,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        overlayColor: CustomColors.pointColorList[groupEntity.groupColor],
+        backgroundColor: CustomColors.whGrey300,
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-      child: Consumer(
-        builder: (context, ref, child) {
-          final AsyncValue<GroupListCellModel> cellModel = ref.watch(groupListCellModelProvider(groupEntity));
+      onPressed: onPressed,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+        child: Consumer(
+          builder: (context, ref, child) {
+            final AsyncValue<GroupListCellModel> cellModel = ref.watch(groupListCellModelProvider(groupEntity));
 
-          return GroupListCellContent(
-            asyncCellModel: cellModel,
-          );
-        },
+            return GroupListCellContent(
+              asyncCellModel: cellModel,
+            );
+          },
+        ),
       ),
     );
   }
@@ -83,25 +91,34 @@ class GroupListCell extends StatelessWidget {
 class GroupListFriendCell extends StatelessWidget {
   const GroupListFriendCell({
     super.key,
+    this.onPressed,
   });
+
+  final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: CustomColors.whGrey300,
+    return TextButton(
+      style: TextButton.styleFrom(
+        padding: EdgeInsets.zero,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        overlayColor: CustomColors.whYellow500,
+        backgroundColor: CustomColors.whGrey300,
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-      child: Consumer(
-        builder: (context, ref, child) {
-          final AsyncValue<GroupListCellModel> cellModel = ref.watch(groupListFriendCellModelProvider);
+      onPressed: onPressed,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+        child: Consumer(
+          builder: (context, ref, child) {
+            final AsyncValue<GroupListCellModel> cellModel = ref.watch(groupListFriendCellModelProvider);
 
-          return GroupListCellContent(
-            asyncCellModel: cellModel,
-            isFriendCell: true,
-          );
-        },
+            return GroupListCellContent(
+              asyncCellModel: cellModel,
+              isFriendCell: true,
+            );
+          },
+        ),
       ),
     );
   }

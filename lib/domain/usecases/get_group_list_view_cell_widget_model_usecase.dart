@@ -3,7 +3,6 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/repositories/group_repository.dart';
 import 'package:wehavit/presentation/common_components/group_list_cell.dart';
-import 'package:wehavit/presentation/group/model/model.dart';
 
 class GetGroupListViewCellWidgetModelUsecase {
   GetGroupListViewCellWidgetModelUsecase(

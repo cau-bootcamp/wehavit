@@ -14,11 +14,11 @@ import 'package:wehavit/presentation/presentation.dart';
 // ignore: must_be_immutable
 class FriendPostView extends ConsumerStatefulWidget {
   const FriendPostView({
-    required this.cellModel,
+    // required this.cellModel,
     super.key,
   });
 
-  final GroupListViewFriendCellWidgetModel cellModel;
+  // final GroupListViewFriendCellWidgetModel cellModel;
 
   @override
   ConsumerState<FriendPostView> createState() => _FriendPostViewState();
@@ -60,7 +60,7 @@ class _FriendPostViewState extends ConsumerState<FriendPostView> {
     final viewModel = ref.watch(friendPostViewModelProvider);
     final provider = ref.read(friendPostViewModelProvider.notifier);
 
-    viewModel.sharedResolutionIdList = widget.cellModel.friendIdResolutionMap.values.expand((list) => list).toList();
+    // viewModel.sharedResolutionIdList = widget.cellModel.friendIdResolutionMap.values.expand((list) => list).toList();
 
     ref.watch(resolutionListViewModelProvider).resolutionModelList?.forEach((model) {
       viewModel.sharedResolutionIdList.add(model.entity.resolutionId);
@@ -108,8 +108,8 @@ class _FriendPostViewState extends ConsumerState<FriendPostView> {
                 context: context,
                 builder: (context) {
                   return FriendListBottomSheet(
-                    friendIdResolutionMap: widget.cellModel.friendIdResolutionMap,
-                  );
+                      // friendIdResolutionMap: widget.cellModel.friendIdResolutionMap,
+                      );
                 },
               );
             },

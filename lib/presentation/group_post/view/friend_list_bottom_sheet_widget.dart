@@ -11,10 +11,10 @@ import 'package:wehavit/presentation/common_components/common_components.dart';
 class FriendListBottomSheet extends ConsumerStatefulWidget {
   const FriendListBottomSheet({
     super.key,
-    required this.friendIdResolutionMap,
+    // required this.friendIdResolutionMap,
   });
 
-  final Map<String, List<String>> friendIdResolutionMap;
+  // final Map<String, List<String>> friendIdResolutionMap;
 
   @override
   ConsumerState<FriendListBottomSheet> createState() => _FriendListBottomSheetState();
@@ -27,7 +27,7 @@ class _FriendListBottomSheetState extends ConsumerState<FriendListBottomSheet> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    friendIdList = widget.friendIdResolutionMap.keys.toList();
+    // friendIdList = widget.friendIdResolutionMap.keys.toList();
   }
 
   @override
@@ -81,19 +81,20 @@ class _FriendListBottomSheetState extends ConsumerState<FriendListBottomSheet> {
                   const SizedBox(
                     height: 16.0,
                   ),
-                  Column(
-                    children: List<Widget>.generate(
-                      widget.friendIdResolutionMap.keys.length,
-                      (index) => Padding(
-                        padding: const EdgeInsets.only(bottom: 12.0),
-                        child: FriendListBottomSheetCellWidget(
-                          memberId: friendIdList[index],
-                          resolutionIdList: widget.friendIdResolutionMap[friendIdList[index]] ?? [],
-                        ),
-                        // child: GroupMemberManageListCellWidget(),
-                      ),
-                    ),
-                  ),
+                  // TODO: 구현하기
+                  // Column(
+                  //   children: List<Widget>.generate(
+                  //     widget.friendIdResolutionMap.keys.length,
+                  //     (index) => Padding(
+                  //       padding: const EdgeInsets.only(bottom: 12.0),
+                  //       child: FriendListBottomSheetCellWidget(
+                  //         memberId: friendIdList[index],
+                  //         resolutionIdList: widget.friendIdResolutionMap[friendIdList[index]] ?? [],
+                  //       ),
+                  //       // child: GroupMemberManageListCellWidget(),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
