@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/group/group.dart';
 import 'package:wehavit/presentation/group_post/group_post.dart';
@@ -20,9 +19,6 @@ class GroupView extends ConsumerStatefulWidget {
 class _GroupViewState extends ConsumerState<GroupView> {
   @override
   Widget build(BuildContext context) {
-    // final viewModel = ref.watch(groupViewModelProvider);
-    // final provider = ref.read(groupViewModelProvider.notifier);
-
     return Scaffold(
       backgroundColor: CustomColors.whDarkBlack,
       appBar: const WehavitAppBar(
@@ -76,10 +72,9 @@ class _GroupViewState extends ConsumerState<GroupView> {
                       onPressed: () async {
                         showAddMenuBottomSheet(
                           context,
-                          setStateCallback: () async {
-                            ref.invalidate(groupListProvider);
-                          },
-                        );
+                        ).whenComplete(() {
+                          ref.invalidate(groupListProvider);
+                        });
                       },
                     ),
                   ];
@@ -113,17 +108,14 @@ class _GroupViewState extends ConsumerState<GroupView> {
     );
   }
 
-  Future<dynamic> showAddMenuBottomSheet(
-    BuildContext context, {
-    required void Function() setStateCallback,
-  }) {
+  Future<dynamic> showAddMenuBottomSheet(BuildContext context) {
     return showModalBottomSheet(
       context: context,
       builder: (context) {
         return GradientBottomSheet(
           Column(
             children: [
-              WideColoredButton(
+              WideOutlinedButton(
                 buttonTitle: '기존 그룹에 참여하기',
                 iconString: WHIcons.search,
                 onPressed: () {
@@ -135,14 +127,18 @@ class _GroupViewState extends ConsumerState<GroupView> {
                         return const JoinGroupView();
                       },
                     ),
-                  ).then((_) => Navigator.pop(context));
+                  ).then((_) {
+                    if (context.mounted) {
+                      Navigator.pop(context);
+                    }
+                  });
                 },
                 // isDiminished: true,
               ),
               const SizedBox(
                 height: 12,
               ),
-              WideColoredButton(
+              WideOutlinedButton(
                 buttonTitle: '새로운 그룹 만들기',
                 iconString: WHIcons.group,
                 onPressed: () {
@@ -155,8 +151,9 @@ class _GroupViewState extends ConsumerState<GroupView> {
                       },
                     ),
                   ).then((_) {
-                    setStateCallback();
-                    Navigator.pop(context);
+                    if (context.mounted) {
+                      Navigator.pop(context);
+                    }
                   });
                 },
               ),
@@ -176,32 +173,5 @@ class _GroupViewState extends ConsumerState<GroupView> {
         );
       },
     );
-  }
-
-  Future<void> loadGroupCellList() async {
-    ref.read(groupViewModelProvider.notifier).loadMyGroupCellList().whenComplete(() => setState(() {}));
-  }
-
-  Future<void> loadFriendCellList() async {
-    // TODO: FriendCellList 로직을 State로 분리
-    // // final userIdList = await Future.wait(
-    // //   ref.read(friendListViewModelProvider).friendFutureUserList?.map((futureFriendEntity) async {
-    // //         final result = await futureFriendEntity;
-    // //         return result.fold(
-    // //           (failure) => null,
-    // //           (entity) => entity.userId,
-    // //         );
-    // //       }).toList() ??
-    // //       [],
-    // // );
-
-    // final userIdListWithoutNull = userIdList.where((userId) => userId != null).cast<String>().toList();
-
-    // ref.watch(groupViewModelProvider).friendUidList = userIdListWithoutNull;
-
-    // await ref
-    //     .read(groupViewModelProvider.notifier)
-    //     .loadFriendCellWidgetModel(friendUidList: userIdListWithoutNull)
-    //     .whenComplete(() => setState(() {}));
   }
 }
