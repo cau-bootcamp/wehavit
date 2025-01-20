@@ -71,9 +71,9 @@ class _SearchFormFieldState extends State<SearchFormField> {
           textAlignVertical: TextAlignVertical.top,
           style: context.bodyMedium?.copyWith(color: CustomColors.whGrey900),
           decoration: InputDecoration(
-            prefixIconConstraints: const BoxConstraints.tightFor(height: 32),
-            prefixIcon: Padding(
-              padding: const EdgeInsets.only(left: 12.0, right: 12.0),
+            prefixIconConstraints: const BoxConstraints.tightFor(height: 28),
+            prefixIcon: const Padding(
+              padding: EdgeInsets.only(left: 12.0, right: 12.0),
               child: IntrinsicHeight(
                 child: WHIcon(size: WHIconsize.medium, iconString: WHIcons.search),
               ),

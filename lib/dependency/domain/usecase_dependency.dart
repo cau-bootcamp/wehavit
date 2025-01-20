@@ -137,6 +137,11 @@ final getFriendListUseCaseProvider = Provider<GetFriendListUsecase>((ref) {
   return GetFriendListUsecase(resolutionRepository);
 });
 
+final getFriendUidListUseCaseProvider = Provider<GetFriendUidListUsecase>((ref) {
+  final resolutionRepository = ref.watch(friendRepositoryProvider);
+  return GetFriendUidListUsecase(resolutionRepository);
+});
+
 final getGroupConfirmPostListByDateUsecaseProvider = Provider<GetGroupConfirmPostListByDateUsecase>((ref) {
   final confirmPostRepository = ref.watch(confirmPostRepositoryProvider);
   return GetGroupConfirmPostListByDateUsecase(confirmPostRepository);
@@ -295,9 +300,9 @@ final updateAboutMeUsecaseProvider = Provider<UpdateAboutMeUsecase>((ref) {
   return UpdateAboutMeUsecase(userModelRepository);
 });
 
-final getAppliedUserListForFriendUsecaseProvider = Provider<GetAppliedUserListForFriendUsecase>((ref) {
+final getAppliedUserUidListForFriendUsecaseProvider = Provider<GetAppliedUserUidListForFriendUsecase>((ref) {
   final userModelRepository = ref.watch(userModelRepositoryProvider);
-  return GetAppliedUserListForFriendUsecase(userModelRepository);
+  return GetAppliedUserUidListForFriendUsecase(userModelRepository);
 });
 
 final applyForUserFriendUsecaseProvider = Provider<ApplyForUserFriendUsecase>((ref) {
@@ -315,9 +320,9 @@ final searchUserDataListByNicknameUsecaseProvider = Provider<SearchUserDataListB
   return SearchUserDataListByNicknameUsecase(userModelRepository);
 });
 
-final searchUserDataListByHandleUsecaseProvider = Provider<SearchUserDataListByHandleUsecase>((ref) {
+final searchUserByHandleUsecaseProvider = Provider<SearchUserByHandleUsecase>((ref) {
   final userModelRepository = ref.watch(userModelRepositoryProvider);
-  return SearchUserDataListByHandleUsecase(userModelRepository);
+  return SearchUserByHandleUsecase(userModelRepository);
 });
 
 final acceptApplyingForFriendUsecaseProvider = Provider<AcceptApplyingForFriendUsecase>((ref) {

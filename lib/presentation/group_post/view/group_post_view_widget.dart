@@ -13,7 +13,6 @@ import 'package:wehavit/domain/usecases/get_target_resolution_done_list_for_week
 import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/effects/effects.dart';
 import 'package:wehavit/presentation/group_post/group_post.dart';
-import 'package:wehavit/presentation/state/user_data/my_user_data_provider.dart';
 
 class ConfirmPostWidget extends ConsumerStatefulWidget {
   const ConfirmPostWidget({
@@ -62,12 +61,7 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
       targetResolutionId: widget.confirmPostEntity.resolutionId,
     );
 
-    myUserEntity = await ref.read(getMyUserDataProvider).value!.then(
-          (result) => result.fold(
-            (failure) => null,
-            (entity) => entity,
-          ),
-        );
+    // myUserEntity = await ref.read(getMyUserDataProvider);
 
     ref.read(groupPostViewModelProvider.notifier).getQuickshotPresets();
   }
@@ -169,7 +163,6 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
                               alignment: Alignment.centerRight,
                               children: [
                                 MyProfileBlock(
-                                  futureUserEntity: futureUserDataEntity,
                                   secondaryText:
                                       // ignore: lines_longer_than_80_chars
                                       '${widget.confirmPostEntity.createdAt!.hour >= 12 ? '오후' : '오전'} ${widget.confirmPostEntity.createdAt!.hour > 12 ? widget.confirmPostEntity.createdAt!.hour - 12 : widget.confirmPostEntity.createdAt!.hour}시 ${widget.confirmPostEntity.createdAt!.minute}분',

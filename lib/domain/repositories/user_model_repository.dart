@@ -18,7 +18,7 @@ abstract class UserModelRepository {
 
   EitherFuture<void> applyForFriend({required String of});
 
-  EitherFuture<List<EitherFuture<UserDataEntity>>> getAppliedUserList({
+  EitherFuture<List<String>> getAppliedUserIdList({
     required String forUser,
   });
 
@@ -29,7 +29,7 @@ abstract class UserModelRepository {
 
   EitherFuture<void> removeFriend({required String targetUid});
 
-  EitherFuture<List<EitherFuture<UserDataEntity>>> getUserDataListByHandle({
+  EitherFuture<List<String>> getUidListByHandle({
     required String handle,
   });
 

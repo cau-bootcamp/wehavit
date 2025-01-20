@@ -46,15 +46,14 @@ class AddResolutionDoneViewModelProvider extends StateNotifier<AddResolutionDone
 
     final sharedFriendList = state.resolutionEntity?.shareFriendEntityList.map((entity) => entity.userId).toList();
 
-    final futureSelectedFriendList = state.friendList?.map((futureEntity) async {
-      final result = await futureEntity;
-      return result.fold(
-        (failure) => false,
-        (entity) => sharedFriendList?.contains(entity.userId) ?? false,
-      );
-    }).toList();
+    final futureSelectedFriendList = state.friendList
+        ?.map((entity) {
+          return sharedFriendList?.contains(entity.userId);
+        })
+        .nonNulls
+        .toList();
 
-    state.selectedFriendList = futureSelectedFriendList == null ? null : await Future.wait(futureSelectedFriendList);
+    state.selectedFriendList = futureSelectedFriendList;
   }
 
   Future<void> loadGroupList() async {
@@ -101,12 +100,7 @@ class AddResolutionDoneViewModelProvider extends StateNotifier<AddResolutionDone
       final value = entry.value;
 
       if (state.tempSelectedFriendList![index] != value) {
-        final userId = await state.friendList?[index].then(
-          (value) => value.fold(
-            (failure) => null,
-            (entity) => entity.userId,
-          ),
-        );
+        final userId = state.friendList?[index].userId;
 
         if (userId != null && state.resolutionEntity?.resolutionId != null) {
           // 공유하기

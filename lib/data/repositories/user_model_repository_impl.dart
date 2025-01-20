@@ -45,10 +45,10 @@ class UserModelRepositoryImpl implements UserModelRepository {
   }
 
   @override
-  EitherFuture<List<EitherFuture<UserDataEntity>>> getAppliedUserList({
+  EitherFuture<List<String>> getAppliedUserIdList({
     required String forUser,
   }) {
-    return _wehavitDatasource.getAppliedUserList(forUser: forUser);
+    return _wehavitDatasource.getAppliedUserIdList(forUser: forUser);
   }
 
   @override
@@ -75,10 +75,10 @@ class UserModelRepositoryImpl implements UserModelRepository {
   }
 
   @override
-  EitherFuture<List<EitherFuture<UserDataEntity>>> getUserDataListByHandle({
+  EitherFuture<List<String>> getUidListByHandle({
     required String handle,
   }) async {
-    return _wehavitDatasource.getUserDataListByHandle(handle: handle);
+    return _wehavitDatasource.getUidListByHandle(handle: handle);
   }
 
   @override

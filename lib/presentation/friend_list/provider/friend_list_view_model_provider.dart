@@ -1,119 +1,65 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
 import 'package:wehavit/presentation/friend_list/model/friend_list_view_model.dart';
+import 'package:wehavit/presentation/state/friend/friend_list_provider.dart';
+import 'package:wehavit/presentation/state/friend/friend_manage_list_provider.dart';
 
 class FriendListViewModelProvider extends StateNotifier<FriendListViewModel> {
   FriendListViewModelProvider(
-    this._getFriendListUsecase,
-    this._searchUserDataListByHandleUsecase,
-    this._getAppliedUserListForFriendUsecase,
+    this.ref,
     this._acceptApplyingForFriendUsecase,
     this._rejectApplyingForFriendUsecase,
     this._removeFriendUsecase,
     this._applyForUserFriendUsecase,
-    this._getUserDataFromIdUsecase,
   ) : super(FriendListViewModel());
 
-  final GetFriendListUsecase _getFriendListUsecase;
-  final GetAppliedUserListForFriendUsecase _getAppliedUserListForFriendUsecase;
-  final SearchUserDataListByHandleUsecase _searchUserDataListByHandleUsecase;
+  final Ref ref;
   final AcceptApplyingForFriendUsecase _acceptApplyingForFriendUsecase;
   final RejectApplyingForFriendUsecase _rejectApplyingForFriendUsecase;
   final RemoveFriendUsecase _removeFriendUsecase;
   final ApplyForUserFriendUsecase _applyForUserFriendUsecase;
-  final GetUserDataFromIdUsecase _getUserDataFromIdUsecase;
 
-  Future<void> getFriendList() async {
-    state.friendFutureUserList = await _getFriendListUsecase().then(
+  Future<void> removeFriend({required String targetUid}) async {
+    await _removeFriendUsecase(targetUid: targetUid).then(
       (result) => result.fold(
-        (failure) => null,
-        (list) => list,
+        (failure) {},
+        (success) {
+          ref.invalidate(friendUidListProvider);
+        },
       ),
     );
   }
 
-  Future<void> searchUserByHandle({required String handle}) async {
-    state.searchedFutureUserList = await _searchUserDataListByHandleUsecase(
-      handle: handle,
-    ).then(
+  Future<void> applyToBeFrendWith({required String targetUid}) async {
+    await _applyForUserFriendUsecase(targetUserId: targetUid).then(
       (result) => result.fold(
-        (failure) => null,
-        (list) => list,
+        (failure) {},
+        (success) {},
       ),
     );
   }
 
-  Future<void> getAppliedFriendList() async {
-    state.appliedFutureUserList = await _getAppliedUserListForFriendUsecase().then(
+  Future<void> refuseToBeFriendWith({required String targetUid}) async {
+    await _rejectApplyingForFriendUsecase(targetUid: targetUid).then(
       (result) => result.fold(
-        (failure) => null,
-        (list) => list,
+        (failure) {},
+        (success) {
+          ref.invalidate(appliedUserUidListProvider);
+          ref.invalidate(friendUidListProvider);
+        },
       ),
-    );
-  }
-
-  Future<void> rejectToBeFriendWith({required String targetUid}) async {
-    _rejectApplyingForFriendUsecase(targetUid: targetUid);
-
-    await removeTargetUserFrom(
-      target: targetUid,
-      from: state.appliedFutureUserList,
     );
   }
 
   Future<void> acceptToBeFriendWith({required String targetUid}) async {
-    _acceptApplyingForFriendUsecase(targetUid: targetUid);
-
-    await removeTargetUserFrom(
-      target: targetUid,
-      from: state.appliedFutureUserList,
-    );
-
-    state.friendFutureUserList?.add(_getUserDataFromIdUsecase(targetUid));
-  }
-
-  Future<void> removeTargetUserFrom({
-    required String target,
-    required List<EitherFuture<UserDataEntity>>? from,
-  }) async {
-    if (from == null) return;
-
-    List<bool> shouldRemove = await Future.wait(
-      from.map(
-        (future) async {
-          return future.then(
-            (value) => value.fold(
-              (failure) => false,
-              (entity) => entity.userId == target,
-            ),
-          );
+    await _acceptApplyingForFriendUsecase(targetUid: targetUid).then(
+      (result) => result.fold(
+        (failure) {},
+        (success) {
+          ref.invalidate(appliedUserUidListProvider);
+          ref.invalidate(friendUidListProvider);
         },
       ),
     );
-
-    for (int i = shouldRemove.length - 1; i >= 0; i--) {
-      if (shouldRemove[i]) {
-        from.removeAt(i);
-      }
-    }
-  }
-
-  EitherFuture<void> applyToBeFriendWith({required String targetUid}) async {
-    return await _applyForUserFriendUsecase(targetUserId: targetUid);
-  }
-
-  Future<void> removeFromFriendList({required String targetUid}) async {
-    await _removeFriendUsecase(targetUid: targetUid);
-
-    await removeTargetUserFrom(
-      target: targetUid,
-      from: state.friendFutureUserList,
-    );
-  }
-
-  void resetFriendSearchData() {
-    state.searchedFutureUserList = null;
   }
 }

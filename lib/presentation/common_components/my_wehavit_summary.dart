@@ -1,17 +1,15 @@
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
+import 'package:wehavit/presentation/state/user_data/my_user_data_provider.dart';
 
 class MyWehavitSummary extends StatelessWidget {
   const MyWehavitSummary({
-    required this.futureUserEntity,
     super.key,
   });
-
-  final EitherFuture<UserDataEntity> futureUserEntity;
 
   @override
   Widget build(BuildContext context) {
@@ -32,60 +30,69 @@ class MyWehavitSummary extends StatelessWidget {
               left: 20,
               right: 20,
             ),
-            child: Column(
-              children: [
-                UserProfileCell(
-                  futureUserEntity,
-                  type: UserProfileCellType.profile,
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                EitherFutureBuilder<UserDataEntity>(
-                  target: futureUserEntity,
-                  forWaiting: LoadingAnimationWidget.waveDots(
-                    color: CustomColors.whGrey700,
-                    size: 30,
-                  ),
-                  forFail: Text(
-                    '통계 정보를 가져오지 못했어요 😢',
-                    style: context.bodyMedium?.copyWith(color: CustomColors.whGrey600),
-                  ),
-                  mainWidgetCallback: (userEntity) {
-                    return VerticalLineWrapper(
-                      contents: [
-                        _MyWehavitSummaryBullet(
-                          iconString: WHIcons.emojiCalendar,
-                          preText: '위해빗과 함께한 지 ',
-                          highlightedText: '${DateTime.now().difference(userEntity.createdAt).inDays + 1}일째',
-                          postText: '가 되었어요.',
+            child: Consumer(
+              builder: (context, ref, child) {
+                final asyncMyUserData = ref.read(getMyUserDataProvider);
+
+                return asyncMyUserData.when(
+                  data: (userEntity) {
+                    return Column(
+                      children: [
+                        UserProfileCell(
+                          userEntity.userId,
+                          type: UserProfileCellType.profile,
                         ),
-                        const SizedBox(height: 12),
-                        _MyWehavitSummaryBullet(
-                          iconString: WHIcons.emojiPigeon,
-                          preText: '지금까지 ',
-                          highlightedText: '${userEntity.cumulativeGoals}개',
-                          postText: '의 목표에 도전했어요',
+                        const SizedBox(
+                          height: 16,
                         ),
-                        const SizedBox(height: 12),
-                        _MyWehavitSummaryBullet(
-                          iconString: WHIcons.emojiEyes,
-                          preText: '벌써 ',
-                          highlightedText: '${userEntity.cumulativePosts}개',
-                          postText: '의 실천을 인증했어요!',
-                        ),
-                        const SizedBox(height: 12),
-                        _MyWehavitSummaryBullet(
-                          iconString: WHIcons.emojiClap,
-                          preText: '그리고 ',
-                          highlightedText: '${userEntity.cumulativeReactions}번',
-                          postText: '이나 친구들을 응원했어요!',
+                        VerticalLineWrapper(
+                          contents: [
+                            _MyWehavitSummaryBullet(
+                              iconString: WHIcons.emojiCalendar,
+                              preText: '위해빗과 함께한 지 ',
+                              highlightedText: '${DateTime.now().difference(userEntity.createdAt).inDays + 1}일째',
+                              postText: '가 되었어요.',
+                            ),
+                            const SizedBox(height: 12),
+                            _MyWehavitSummaryBullet(
+                              iconString: WHIcons.emojiPigeon,
+                              preText: '지금까지 ',
+                              highlightedText: '${userEntity.cumulativeGoals}개',
+                              postText: '의 목표에 도전했어요',
+                            ),
+                            const SizedBox(height: 12),
+                            _MyWehavitSummaryBullet(
+                              iconString: WHIcons.emojiEyes,
+                              preText: '벌써 ',
+                              highlightedText: '${userEntity.cumulativePosts}개',
+                              postText: '의 실천을 인증했어요!',
+                            ),
+                            const SizedBox(height: 12),
+                            _MyWehavitSummaryBullet(
+                              iconString: WHIcons.emojiClap,
+                              preText: '그리고 ',
+                              highlightedText: '${userEntity.cumulativeReactions}번',
+                              postText: '이나 친구들을 응원했어요!',
+                            ),
+                          ],
                         ),
                       ],
                     );
                   },
-                ),
-              ],
+                  error: (_, __) {
+                    return Text(
+                      '통계 정보를 가져오지 못했어요 😢',
+                      style: context.bodyMedium?.copyWith(color: CustomColors.whGrey600),
+                    );
+                  },
+                  loading: () {
+                    return LoadingAnimationWidget.waveDots(
+                      color: CustomColors.whGrey700,
+                      size: 30,
+                    );
+                  },
+                );
+              },
             ),
           ),
           const Padding(
@@ -151,15 +158,15 @@ class _MyWehavitSummaryBullet extends StatelessWidget {
             children: [
               TextSpan(
                 text: preText,
-                style: context.bodyLarge?.copyWith(color: CustomColors.whGrey900),
+                style: context.bodyMedium?.copyWith(color: CustomColors.whGrey900),
               ),
               TextSpan(
                 text: highlightedText,
-                style: context.titleMedium?.copyWith(color: CustomColors.whYellow500),
+                style: context.titleSmall?.copyWith(color: CustomColors.whYellow500),
               ),
               TextSpan(
                 text: postText,
-                style: context.bodyLarge?.copyWith(color: CustomColors.whGrey900, overflow: TextOverflow.ellipsis),
+                style: context.bodyMedium?.copyWith(color: CustomColors.whGrey900, overflow: TextOverflow.ellipsis),
               ),
             ],
           ),

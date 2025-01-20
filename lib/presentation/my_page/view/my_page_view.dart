@@ -7,7 +7,6 @@ import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/presentation.dart';
 import 'package:wehavit/presentation/state/resolution_list/resolution_list_provider.dart';
-import 'package:wehavit/presentation/state/user_data/my_user_data_provider.dart';
 
 class MyPageView extends ConsumerStatefulWidget {
   const MyPageView(this.index, this.tabController, {super.key});
@@ -82,9 +81,7 @@ class MyPageScreenState extends ConsumerState<MyPageView> with AutomaticKeepAliv
                 padding: const EdgeInsets.only(bottom: 64.0),
                 children: [
                   // 내 프로필
-                  MyPageWehavitSummaryWidget(
-                    futureUserEntity: ref.read(getMyUserDataProvider).value,
-                  ),
+                  const MyWehavitSummary(),
                   // MyWehavitSummary(
                   //   futureUserEntity: ref.read(getMyUserDataProvider).value!,
                   // ),
