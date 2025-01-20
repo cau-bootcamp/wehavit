@@ -93,6 +93,7 @@ class WhIconButton extends StatelessWidget {
       WHIconsize.extraSmall => 2.0,
     };
     final whIcon = Stack(
+      clipBehavior: Clip.none,
       children: [
         WHIcon(
           size: size,

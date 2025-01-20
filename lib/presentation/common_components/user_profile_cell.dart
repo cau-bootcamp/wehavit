@@ -87,12 +87,12 @@ class UserProfileCell extends StatelessWidget {
                             ),
                             const SizedBox(width: 4),
                             // profile 유형이 아닐 때에만 아이디를 노출
-                            if (type != UserProfileCellType.profile)
-                              Text(
-                                entity.handle,
-                                overflow: TextOverflow.ellipsis,
-                                style: context.bodySmall,
-                              ),
+                            // if (type != UserProfileCellType.profile)
+                            Text(
+                              entity.handle,
+                              overflow: TextOverflow.ellipsis,
+                              style: context.bodySmall,
+                            ),
                           ],
                         ),
                         const SizedBox(height: 2),

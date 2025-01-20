@@ -25,6 +25,8 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
 
   @override
   Widget build(BuildContext context) {
+    // 친구 신청 시 debounce 처리
+    // 텍스트 입력 후 0.5초간의 debounce 후 검색을 자동으로 수행
     searchInputController.addListener(() {
       if (_debounce?.isActive ?? false) _debounce?.cancel();
       _debounce = Timer(const Duration(milliseconds: 500), () {

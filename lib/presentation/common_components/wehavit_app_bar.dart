@@ -59,6 +59,7 @@ class WehavitAppBar extends StatelessWidget implements PreferredSizeWidget {
               buttonLabel: trailingTitle,
               iconString: trailingIconString,
               onPressed: trailingAction ?? () {},
+              badgeCount: trailingIconBadgeCount,
             ),
           ),
       ],
