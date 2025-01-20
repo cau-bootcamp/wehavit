@@ -78,7 +78,7 @@ class _GroupFriendPostViewState extends ConsumerState<GroupFriendPostView> {
                 context: context,
                 builder: (context) {
                   return GroupMemberListBottomSheet(
-                    updateGroupEntity,
+                    // updateGroupEntity,
                     groupEntity: widget.groupEntity,
                   );
                 },
@@ -401,6 +401,6 @@ class _GroupFriendPostViewState extends ConsumerState<GroupFriendPostView> {
 
   Future<void> updateGroupEntity(GroupEntity groupEntity) async {
     widget.groupEntity = groupEntity;
-    ref.read(groupViewModelProvider.notifier).updateGroupEntity(forEntity: groupEntity);
+    // ref.read(groupViewModelProvider.notifier).updateGroupEntity(forEntity: groupEntity);
   }
 }

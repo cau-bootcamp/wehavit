@@ -6,8 +6,11 @@ class CreateGroupViewModel {
 
   int focusedStep = 0;
   int currentStep = 0;
-  bool isMovableToNextStep = false;
+
   List<bool> inputConditions = [false, false, false, true];
+
+  bool get isMovableToNextStep =>
+      inputConditions.sublist(0, currentStep + 1).reduce((value, element) => value & element);
 
   String groupName = '';
   String groupDescription = '';

@@ -64,7 +64,7 @@ class MainViewState extends ConsumerState<MainView> with TickerProviderStateMixi
 
   Future<void> loadGroupData() async {
     // 그룹리스트의 그룹 셀 로드
-    ref.read(groupViewModelProvider.notifier).loadMyGroupCellList().whenComplete(() => setState(() {}));
+    // ref.read(groupViewModelProvider.notifier).loadMyGroupCellList().whenComplete(() => setState(() {}));
   }
 
 // TODO: 제거하기

@@ -11,14 +11,13 @@ import 'package:wehavit/presentation/common_components/common_components.dart';
 
 // ignore: must_be_immutable
 class GroupMemberListBottomSheet extends ConsumerStatefulWidget {
-  GroupMemberListBottomSheet(
-    this.updateParentViewGroupEntity, {
+  GroupMemberListBottomSheet({
     super.key,
     required this.groupEntity,
   });
 
   GroupEntity groupEntity;
-  final Function(GroupEntity) updateParentViewGroupEntity;
+  // final Function(GroupEntity) updateParentViewGroupEntity;
 
   @override
   ConsumerState<GroupMemberListBottomSheet> createState() => _GroupMemberListBottomSheetState();
@@ -241,7 +240,7 @@ class _GroupMemberListBottomSheetState extends ConsumerState<GroupMemberListBott
     setState(() {
       widget.groupEntity = newGroupEntity;
       appliedUidList.remove(appliedUserId);
-      widget.updateParentViewGroupEntity(newGroupEntity);
+      // widget.updateParentViewGroupEntity(newGroupEntity);
     });
   }
 }

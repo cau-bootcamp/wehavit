@@ -237,7 +237,18 @@ class JoinGroupIntroduceView extends StatelessWidget {
               foregroundColor: CustomColors.whBalck,
               isDiminished: isApplied == null || isRegistered == null || isApplied == true || isRegistered == true,
               onPressed: () async {
-                await ref.read(applyForJoiningGroupUsecaseProvider).call(groupEntity.groupId).whenComplete(() {
+                await ref
+                    .read(applyForJoiningGroupUsecaseProvider)
+                    .call(groupEntity.groupId)
+                    .then(
+                      (result) => result.fold(
+                        (failure) {
+                          showToastMessage(context, text: '그룹 참여 신청에 실패했어요. 잠시 후 다시 시도해주세요');
+                        },
+                        (success) {},
+                      ),
+                    )
+                    .whenComplete(() {
                   ref.invalidate(groupApplyStateProvider(groupEntity.groupId));
                   ref.invalidate(groupRegisterStateProvider(groupEntity.groupId));
                 });
