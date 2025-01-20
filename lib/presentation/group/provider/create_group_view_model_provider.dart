@@ -8,14 +8,6 @@ class CreateGroupViewModelProvider extends StateNotifier<CreateGroupViewModel> {
 
   final CreateGroupUsecase _createGroupUsecase;
 
-  // bool isComplete() {
-  //   return !state.stepDoneList.contains(false);
-  // }
-
-  // void setStepDoneList(int index, bool value) {
-  //   state.stepDoneList[index] = value;
-  // }
-
   void setGroupName(String value) {
     if (value.isEmpty) {
       state.inputConditions[0] = false;
@@ -23,26 +15,16 @@ class CreateGroupViewModelProvider extends StateNotifier<CreateGroupViewModel> {
       state.inputConditions[0] = true;
     }
     state.groupName = value;
-    checkIsMovableToNextStep();
   }
 
-  // bool isGroupNameFilled() {
-  //   return state.groupName.isNotEmpty;
-  // }
-
-  void setDescriptionName(String value) {
+  void setGroupDescription(String value) {
     if (value.isEmpty) {
       state.inputConditions[1] = false;
     } else {
       state.inputConditions[1] = true;
     }
     state.groupDescription = value;
-    checkIsMovableToNextStep();
   }
-
-  // bool isGroupDescriptionFilled() {
-  //   return state.groupDescription.isNotEmpty;
-  // }
 
   void setGroupRule(String value) {
     if (value.isEmpty) {
@@ -51,20 +33,11 @@ class CreateGroupViewModelProvider extends StateNotifier<CreateGroupViewModel> {
       state.inputConditions[2] = true;
     }
     state.groupRule = value;
-    checkIsMovableToNextStep();
   }
-
-  // bool isGroupRuleFilled() {
-  //   return state.groupRule.isNotEmpty;
-  // }
 
   void setGroupColorIndex(int value) {
     state.groupColorIndex = value;
   }
-
-  // bool isGroupColorIndexFilled() {
-  //   return state.groupColorIndex >= 0;
-  // }
 
   void scrollDown() {
     state.scrollController.jumpTo(state.scrollController.position.maxScrollExtent);
@@ -84,11 +57,6 @@ class CreateGroupViewModelProvider extends StateNotifier<CreateGroupViewModel> {
             (entity) => entity,
           ),
         );
-  }
-
-  void checkIsMovableToNextStep() {
-    state.isMovableToNextStep =
-        state.inputConditions.sublist(0, state.currentStep + 1).reduce((value, element) => value & element);
   }
 
   void setFocusedStep(int value) {

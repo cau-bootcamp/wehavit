@@ -1,9 +1,10 @@
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:wehavit/common/constants/constants.dart';
 import 'package:wehavit/presentation/common_components/wh_icon.dart';
 
-class WideColoredButton extends StatelessWidget {
+class WideColoredButton extends StatefulWidget {
   const WideColoredButton({
     super.key,
     this.backgroundColor = CustomColors.whYellow500,
@@ -22,8 +23,14 @@ class WideColoredButton extends StatelessWidget {
   final bool isDiminished;
 
   @override
+  State<WideColoredButton> createState() => _WideColoredButtonState();
+}
+
+class _WideColoredButtonState extends State<WideColoredButton> {
+  bool isProgressing = false;
+  @override
   Widget build(BuildContext context) {
-    if (isDiminished) {
+    if (widget.isDiminished) {
       return ElevatedButton(
         onPressed: () {},
         style: ElevatedButton.styleFrom(
@@ -41,7 +48,7 @@ class WideColoredButton extends StatelessWidget {
           width: double.infinity,
           height: 58,
           child: Text(
-            buttonTitle,
+            widget.buttonTitle,
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
@@ -52,12 +59,19 @@ class WideColoredButton extends StatelessWidget {
       );
     } else {
       return ElevatedButton(
-        onPressed: () {
-          onPressed();
+        onPressed: () async {
+          setState(() {
+            isProgressing = true;
+          });
+          await Future.value(widget.onPressed()).whenComplete(() {
+            setState(() {
+              isProgressing = false;
+            });
+          });
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: backgroundColor,
-          foregroundColor: foregroundColor,
+          backgroundColor: widget.backgroundColor.darken(isProgressing ? 30 : 0),
+          foregroundColor: widget.foregroundColor,
           shadowColor: Colors.transparent,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
@@ -69,26 +83,28 @@ class WideColoredButton extends StatelessWidget {
           alignment: Alignment.center,
           width: double.infinity,
           height: 58,
-          child: iconString.isEmpty
-              ? Text(
-                  buttonTitle,
-                  style: context.bodyLarge?.bold.copyWith(color: foregroundColor),
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      buttonTitle,
-                      style: context.bodyLarge?.bold,
+          child: isProgressing
+              ? LoadingAnimationWidget.waveDots(color: widget.foregroundColor, size: 24)
+              : widget.iconString.isEmpty
+                  ? Text(
+                      widget.buttonTitle,
+                      style: context.bodyLarge?.bold.copyWith(color: widget.foregroundColor),
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          widget.buttonTitle,
+                          style: context.bodyLarge?.bold,
+                        ),
+                        const SizedBox(width: 8),
+                        WHIcon(
+                          size: WHIconsize.medium,
+                          iconString: widget.iconString,
+                          iconColor: widget.foregroundColor,
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 8),
-                    WHIcon(
-                      size: WHIconsize.medium,
-                      iconString: iconString,
-                      iconColor: foregroundColor,
-                    ),
-                  ],
-                ),
         ),
       );
     }

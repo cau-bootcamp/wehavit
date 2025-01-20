@@ -8,6 +8,7 @@ import 'package:wehavit/common/constants/constants.dart';
 class InputFormField extends StatefulWidget {
   const InputFormField({
     required this.textEditingController,
+    this.focusNode,
     this.placeholder = '',
     this.textInputType = TextInputType.text,
     this.textInputAction = TextInputAction.done,
@@ -19,6 +20,7 @@ class InputFormField extends StatefulWidget {
   });
 
   final TextEditingController textEditingController;
+  final FocusNode? focusNode;
   final String placeholder;
   final TextInputType textInputType;
   final TextInputAction textInputAction;
@@ -34,6 +36,7 @@ class InputFormField extends StatefulWidget {
   // ignore: no_logic_in_create_state
   State<InputFormField> createState() => _InputFormFieldState(
         textEditingController,
+        focusNode,
         placeholder,
         textInputType,
         textInputAction,
@@ -45,6 +48,7 @@ class InputFormField extends StatefulWidget {
 class _InputFormFieldState extends State<InputFormField> {
   _InputFormFieldState(
     this.controller,
+    this.focusNode,
     this.placeholder,
     this.textInputType,
     this.textInputAction,
@@ -53,6 +57,7 @@ class _InputFormFieldState extends State<InputFormField> {
   );
 
   final TextEditingController controller;
+  final FocusNode? focusNode;
   final String placeholder;
   final TextInputType textInputType;
   final TextInputAction textInputAction;
@@ -94,6 +99,7 @@ class _InputFormFieldState extends State<InputFormField> {
       children: [
         TextFormField(
           autovalidateMode: AutovalidateMode.onUserInteraction,
+          focusNode: focusNode,
           cursorColor: CustomColors.whWhite,
           maxLines: widget.maxLines,
           maxLength: widget.maxLength,

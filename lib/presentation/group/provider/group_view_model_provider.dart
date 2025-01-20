@@ -30,27 +30,6 @@ class GroupViewModelProvider extends StateNotifier<GroupViewModel> {
       state.groupListViewCellModelList = null;
       return;
     }
-
-    state.groupListViewCellModelList = (await Future.wait(
-      state.myGroupList!.map(
-        (groupEntity) async {
-          final groupModel = await getGroupListViewCellWidgetModelUsecase(
-            groupEntity: groupEntity,
-          ).then(
-            (value) => value.fold(
-              (failure) => null,
-              (model) => model,
-            ),
-          );
-
-          if (groupModel != null) {
-            return groupModel;
-          }
-        },
-      ),
-    ))
-        .nonNulls
-        .toList();
   }
 
   Future<void> loadFriendCellWidgetModel({
@@ -71,16 +50,16 @@ class GroupViewModelProvider extends StateNotifier<GroupViewModel> {
       }),
     );
 
-    state.groupListViewFriendCellModel = await getGroupListViewFriendCellWidgetModelUsecase(
-      userIdList: friendUidList,
-      sharedResolutionIdList: sharedResolutionIdMap.values.expand((list) => list).toList(),
-    ).then((result) {
-      return result.fold((failure) {
-        return null;
-      }, (model) {
-        return model;
-      });
-    });
+    // state.groupListViewFriendCellModel = await getGroupListViewFriendCellWidgetModelUsecase(
+    //   friendUidList: friendUidList,
+    //   sharedResolutionIdList: sharedResolutionIdMap.values.expand((list) => list).toList(),
+    // ).then((result) {
+    //   return result.fold((failure) {
+    //     return null;
+    //   }, (model) {
+    //     return model;
+    //   });
+    // });
 
     state.groupListViewFriendCellModel?.friendIdResolutionMap = sharedResolutionIdMap;
   }
@@ -105,9 +84,9 @@ class GroupViewModelProvider extends StateNotifier<GroupViewModel> {
         ),
       );
 
-      if (groupModel != null) {
-        state.groupListViewCellModelList?[groupCellIndex] = groupModel;
-      }
+      // if (groupModel != null) {
+      // state.groupListViewCellModelList?[groupCellIndex] = groupModel;
+      // }
     }
   }
 }

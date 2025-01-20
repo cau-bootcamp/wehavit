@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/presentation.dart';
+import 'package:wehavit/presentation/state/group_list/group_list_provider.dart';
 import 'package:wehavit/presentation/state/resolution_list/resolution_list_provider.dart';
 
 class AddResolutionDoneView extends ConsumerStatefulWidget {
@@ -22,15 +23,15 @@ class _AddResolutionDoneViewState extends ConsumerState<AddResolutionDoneView> {
     unawaited(
       ref.read(addResolutionDoneViewModelProvider.notifier).loadFriendList(),
     );
-    unawaited(
-      ref.read(addResolutionDoneViewModelProvider.notifier).loadGroupList(),
-    );
+    // unawaited(
+    //   ref.read(addResolutionDoneViewModelProvider.notifier).loadGroupList(),
+    // );
   }
 
   @override
   Widget build(BuildContext context) {
     final viewmodel = ref.watch(addResolutionDoneViewModelProvider);
-    final provider = ref.watch(addResolutionDoneViewModelProvider.notifier);
+    // final provider = ref.watch(addResolutionDoneViewModelProvider.notifier);
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -78,7 +79,7 @@ class _AddResolutionDoneViewState extends ConsumerState<AddResolutionDoneView> {
                 ),
                 child: WideColoredButton(
                   onPressed: () async {
-                    provider.resetTempFriendList();
+                    // provider.resetTempFriendList();
                     showModalBottomSheet(
                       isScrollControlled: true,
                       context: context,
@@ -100,7 +101,7 @@ class _AddResolutionDoneViewState extends ConsumerState<AddResolutionDoneView> {
                 ),
                 child: WideColoredButton(
                   onPressed: () async {
-                    await provider.resetTempGroupList();
+                    // await provider.resetTempGroupList();
 
                     showModalBottomSheet(
                       isScrollControlled: true,
@@ -159,9 +160,10 @@ class _ShareResolutionToFriendBottomSheetWidgetState extends ConsumerState<Share
               alignment: Alignment.topRight,
               child: TextButton(
                 onPressed: () async {
-                  provider.applyChangedSharingOfFriends().whenComplete(() {
-                    Navigator.pop(context, viewmodel.resolutionEntity);
-                  });
+                  // TODO : 추가하기
+                  // provider.applyChangedSharingOfFriends().whenComplete(() {
+                  //   Navigator.pop(context, viewmodel.resolutionEntity);
+                  // });
                 },
                 child: const Text(
                   '공유',
@@ -303,64 +305,83 @@ class _ShareResolutionToGroupBottomSheetWidgetState extends ConsumerState<ShareR
           height: 16.0,
         ),
         Expanded(
-          child: ListView(
-            children: List<Widget>.generate(
-              viewmodel.groupModelList?.length ?? 0,
-              (index) => Container(
-                margin: const EdgeInsets.only(bottom: 16.0),
-                child: TextButton(
-                  onPressed: () {
-                    setState(() {
-                      provider.toggleGroupSelection(index);
-                    });
-                  },
-                  style: TextButton.styleFrom(
-                    minimumSize: Size.zero,
-                    padding: EdgeInsets.zero,
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    side: BorderSide.none,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(8.0),
+          child: Consumer(
+            builder: (context, ref, child) {
+              final asyncGroupEntityList = ref.read(groupListProvider);
+
+              return asyncGroupEntityList.when(
+                data: (groupEntityList) {
+                  return ListView(
+                    children: List<Widget>.generate(
+                      groupEntityList.length,
+                      (index) => Container(
+                        margin: const EdgeInsets.only(bottom: 16.0),
+                        child: TextButton(
+                          onPressed: () {
+                            setState(() {
+                              provider.toggleGroupSelection(index);
+                            });
+                          },
+                          style: TextButton.styleFrom(
+                            minimumSize: Size.zero,
+                            padding: EdgeInsets.zero,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            side: BorderSide.none,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(8.0),
+                              ),
+                            ),
+                            overlayColor: CustomColors.whYellow,
+                          ),
+                          child: Stack(
+                            alignment: Alignment.topRight,
+                            children: [
+                              // TODO: CellModel 연결
+                              GroupListCell(
+                                groupEntity: groupEntityList[index],
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(
+                                  top: 16.0,
+                                  right: 16.0,
+                                ),
+                                width: 24,
+                                height: 24,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: viewmodel.tempSelectedGroupList![index]
+                                      ? CustomColors.whYellow
+                                      : Colors.transparent,
+                                  border: Border.all(
+                                    color: CustomColors.whBrightGrey,
+                                  ),
+                                ),
+                                child: Visibility(
+                                  visible: viewmodel.tempSelectedGroupList![index],
+                                  child: const Icon(
+                                    Icons.check,
+                                    color: CustomColors.whWhite,
+                                    size: 20,
+                                    weight: 500,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                    overlayColor: CustomColors.whYellow,
-                  ),
-                  child: Stack(
-                    alignment: Alignment.topRight,
-                    children: [
-                      GroupListViewCellWidget(
-                        cellModel: viewmodel.groupModelList![index],
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(
-                          top: 16.0,
-                          right: 16.0,
-                        ),
-                        width: 24,
-                        height: 24,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: viewmodel.tempSelectedGroupList![index] ? CustomColors.whYellow : Colors.transparent,
-                          border: Border.all(
-                            color: CustomColors.whBrightGrey,
-                          ),
-                        ),
-                        child: Visibility(
-                          visible: viewmodel.tempSelectedGroupList![index],
-                          child: const Icon(
-                            Icons.check,
-                            color: CustomColors.whWhite,
-                            size: 20,
-                            weight: 500,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+                  );
+                },
+                error: (_, __) {
+                  return Container();
+                },
+                loading: () {
+                  return Container();
+                },
+              );
+            },
           ),
         ),
       ],
