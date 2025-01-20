@@ -7,6 +7,7 @@ import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/group/group.dart';
 import 'package:wehavit/presentation/group_post/group_post.dart';
+import 'package:wehavit/presentation/state/group_list/group_list_cell_model_provider.dart';
 import 'package:wehavit/presentation/state/group_list/group_list_provider.dart';
 
 class GroupView extends ConsumerStatefulWidget {
@@ -53,9 +54,7 @@ class _GroupViewState extends ConsumerState<GroupView> {
                         ),
                       );
                     },
-                    child: GroupListViewFriendCellWidget(
-                      cellModel: viewModel.groupListViewFriendCellModel!,
-                    ),
+                    child: const GroupListFriendCell(),
                   ),
                   ...groupList.map(
                     (entity) => GestureDetector(
@@ -78,8 +77,9 @@ class _GroupViewState extends ConsumerState<GroupView> {
                       child: GroupListCell(groupEntity: entity),
                     ),
                   ),
-                  GroupListViewAddCellWidget(
-                    tapAddGroupCallback: () async {
+                  ListDashOutlinedCell(
+                    buttonLabel: '그룹 추가하기',
+                    onPressed: () async {
                       showAddMenuBottomSheet(
                         context,
                         setStateCallback: () async {
@@ -93,9 +93,8 @@ class _GroupViewState extends ConsumerState<GroupView> {
 
                 return RefreshIndicator(
                   onRefresh: () async {
-                    provider.loadMyGroupCellList().whenComplete(() => setState(() {}));
-
-                    loadFriendCellList();
+                    ref.invalidate(groupListFriendCellModelProvider);
+                    ref.invalidate(groupListCellModelProvider);
                   },
                   child: ListView.builder(
                     padding: const EdgeInsets.only(bottom: 60.0),

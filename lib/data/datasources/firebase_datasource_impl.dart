@@ -2204,7 +2204,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     try {
       int postCount = 0;
 
-      return Future.wait(
+      return await Future.wait(
         sharedResolutionIdList.map((id) {
           return firestore
               .collection(FirebaseCollectionName.confirmPosts)
@@ -2228,11 +2228,11 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
   @override
   EitherFuture<List<String>> getResolutionIdListSharedToMe({
     required String targetUid,
-  }) {
+  }) async {
     try {
       final myUid = getMyUserId();
 
-      return firestore
+      return await firestore
           .collection(
             FirebaseCollectionName.getTargetResolutionCollectionName(
               targetUid,

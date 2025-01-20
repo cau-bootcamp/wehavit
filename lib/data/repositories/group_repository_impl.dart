@@ -180,18 +180,16 @@ class GroupRepositoryImpl implements GroupRepository {
   }
 
   @override
-  EitherFuture<(EitherFuture<int>, EitherFuture<int>)> getGroupListViewFriendCellModelData(
+  EitherFuture<(int, int)> getGroupListViewFriendCellModelData(
     List<String> sharedResolutionIdList,
-  ) {
-    final sharedPostsCount = _wehavitDatasource.getFriendSharedPostCount(sharedResolutionIdList);
+  ) async {
+    final sharedPostsCount = await _wehavitDatasource.getFriendSharedPostCount(sharedResolutionIdList);
 
-    return Future(
-      () => right(
-        (
-          Future(() => right(sharedResolutionIdList.length)),
-          sharedPostsCount,
-        ),
-      ),
-    );
+    print(sharedPostsCount);
+
+    if (sharedPostsCount.isLeft()) return Future(() => left(const Failure('공유중인 인증글 수를 가져오는데에 실패했습니다')));
+    final postCount = sharedPostsCount.fold((_) => 0, (value) => value);
+
+    return Future(() => right((sharedResolutionIdList.length, postCount)));
   }
 }

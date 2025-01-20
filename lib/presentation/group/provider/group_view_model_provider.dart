@@ -71,16 +71,16 @@ class GroupViewModelProvider extends StateNotifier<GroupViewModel> {
       }),
     );
 
-    state.groupListViewFriendCellModel = await getGroupListViewFriendCellWidgetModelUsecase(
-      userIdList: friendUidList,
-      sharedResolutionIdList: sharedResolutionIdMap.values.expand((list) => list).toList(),
-    ).then((result) {
-      return result.fold((failure) {
-        return null;
-      }, (model) {
-        return model;
-      });
-    });
+    // state.groupListViewFriendCellModel = await getGroupListViewFriendCellWidgetModelUsecase(
+    //   friendUidList: friendUidList,
+    //   sharedResolutionIdList: sharedResolutionIdMap.values.expand((list) => list).toList(),
+    // ).then((result) {
+    //   return result.fold((failure) {
+    //     return null;
+    //   }, (model) {
+    //     return model;
+    //   });
+    // });
 
     state.groupListViewFriendCellModel?.friendIdResolutionMap = sharedResolutionIdMap;
   }

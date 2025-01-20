@@ -1,7 +1,8 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
+import 'package:wehavit/domain/entities/group_entity/group_entity.dart';
 import 'package:wehavit/domain/repositories/group_repository.dart';
-import 'package:wehavit/presentation/group/model/model.dart';
+import 'package:wehavit/presentation/common_components/group_list_cell.dart';
 
 class GetGroupListViewFriendCellWidgetModelUsecase {
   GetGroupListViewFriendCellWidgetModelUsecase(
@@ -9,11 +10,11 @@ class GetGroupListViewFriendCellWidgetModelUsecase {
   );
 
   final GroupRepository _groupRepository;
-  EitherFuture<GroupListViewFriendCellWidgetModel> call({
-    required List<String> userIdList,
+  EitherFuture<GroupListCellModel> call({
+    required List<String> friendUidList,
     required List<String> sharedResolutionIdList,
   }) async {
-    final (EitherFuture<int>, EitherFuture<int>)? countTuple =
+    final (int, int)? countTuple =
         await _groupRepository.getGroupListViewFriendCellModelData(sharedResolutionIdList).then(
               (value) => value.fold(
                 (failure) => null,
@@ -31,10 +32,10 @@ class GetGroupListViewFriendCellWidgetModelUsecase {
 
     return Future(
       () => right(
-        GroupListViewFriendCellWidgetModel(
-          friendCount: Future(() => right(userIdList.length)),
+        GroupListCellModel(
           sharedResolutionCount: countTuple.$1,
           sharedPostCount: countTuple.$2,
+          groupEntity: GroupEntity.dummy.copyWith(groupMemberUidList: friendUidList),
         ),
       ),
     );

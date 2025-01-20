@@ -73,6 +73,5 @@ abstract class GroupRepository {
     required String keyword,
   });
 
-  EitherFuture<(EitherFuture<int>, EitherFuture<int>)> getGroupListViewFriendCellModelData(
-      List<String> sharedResolutionIdList);
+  EitherFuture<(int, int)> getGroupListViewFriendCellModelData(List<String> sharedResolutionIdList);
 }
