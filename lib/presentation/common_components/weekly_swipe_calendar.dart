@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
+import 'package:wehavit/presentation/state/group_post/confirm_post_provider.dart';
 
 class WeeklyPostSwipeCalendar extends StatefulWidget {
   const WeeklyPostSwipeCalendar({
@@ -57,12 +58,14 @@ class _WeeklyPostSwipeCalendarState extends State<WeeklyPostSwipeCalendar> {
           curve: Curves.fastOutSlowIn,
           height: isShowingCarousel ? 64 : 0,
           child: WeeklySwipeCalendarCarousel(
+            groupId: widget.groupId,
             firstDate: widget.firstDate,
             calendartMondayDateList: calendartMondayDateList,
             onChangeDate: (newDate) {
               setState(() {
                 selectedDate = newDate;
               });
+              widget.onSelected(newDate);
             },
             selectedDate: selectedDate,
           ),
@@ -75,12 +78,14 @@ class _WeeklyPostSwipeCalendarState extends State<WeeklyPostSwipeCalendar> {
 class WeeklySwipeCalendarCarousel extends StatefulWidget {
   const WeeklySwipeCalendarCarousel({
     super.key,
+    required this.groupId,
     required this.calendartMondayDateList,
     required this.firstDate,
     required this.onChangeDate,
     required this.selectedDate,
   });
 
+  final String groupId;
   final DateTime firstDate;
   final DateTime selectedDate;
 
@@ -100,24 +105,30 @@ class _WeeklySwipeCalendarCarouselState extends State<WeeklySwipeCalendarCarouse
   Widget build(BuildContext context) {
     return CarouselSlider.builder(
       itemBuilder: (context, index, realIndex) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: List<Widget>.generate(7, (jndex) {
-            final cellDate = todayDate.subtract(
-              Duration(days: todayDate.weekday - 1 - jndex + 7 * index),
-            );
-            final isFuture = todayDate.isBefore(cellDate);
-            final isPast = widget.firstDate.isAfter(cellDate);
+        return Consumer(
+          builder: (context, ref, child) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: List<Widget>.generate(7, (jndex) {
+                final cellDate = todayDate.subtract(
+                  Duration(days: todayDate.weekday - 1 - jndex + 7 * index),
+                );
+                final isFuture = todayDate.isBefore(cellDate);
+                final isPast = widget.firstDate.isAfter(cellDate);
 
-            final asyncCellValue = AsyncValue<int>.data(3);
+                final asyncCellValue = ref
+                    .watch(confirmPostListProvider(GroupConfirmPostProviderParam(widget.groupId, cellDate)))
+                    .whenData((list) => list.length);
 
-            return WeeklyPostSwipeCalendarCell(
-              isValidDate: !(isFuture || isPast),
-              widget: widget,
-              cellDate: cellDate,
-              asyncConfirmPostCount: asyncCellValue,
+                return WeeklyPostSwipeCalendarCell(
+                  isValidDate: !(isFuture || isPast),
+                  widget: widget,
+                  cellDate: cellDate,
+                  asyncConfirmPostCount: asyncCellValue,
+                );
+              }),
             );
-          }),
+          },
         );
       },
       itemCount: widget.calendartMondayDateList.length,

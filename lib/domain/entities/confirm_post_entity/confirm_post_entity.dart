@@ -41,6 +41,22 @@ class ConfirmPostEntity with _$ConfirmPostEntity {
   }) = _ConfirmPostEntity;
 
   factory ConfirmPostEntity.fromJson(Map<String, dynamic> json) => _$ConfirmPostEntityFromJson(json);
+
+  static ConfirmPostEntity dummy = ConfirmPostEntity(
+    resolutionGoalStatement: 'dummy goal statement',
+    resolutionId: 'vR3lA2WTqm7wDC4ve1LN',
+    content: '본문이 길어지면 이런 느낌으로 본문이 길어지면 이런 느낌으로 ',
+    imageUrlList: [
+      // 'https://img.freepik.com/free-photo/close-up-portrait-beautiful-cat_23-2149214373.jpg?semt=ais_hybrid',
+      // 'https://img.freepik.com/free-photo/close-up-portrait-beautiful-cat_23-2149214373.jpg?semt=ais_hybrid',
+      'https://img.freepik.com/free-photo/close-up-portrait-beautiful-cat_23-2149214373.jpg?semt=ais_hybrid',
+    ],
+    owner: '69dlXoGSBKhzrySuhb8t9MvqzdD3',
+    recentStrike: 3,
+    createdAt: DateTime.now(),
+    updatedAt: DateTime.now(),
+    hasRested: true,
+  );
 }
 
 T? tryCast<T>(value) {
@@ -69,20 +85,4 @@ class TimestampConverter implements JsonConverter<DateTime, Timestamp> {
 
   @override
   Timestamp toJson(DateTime date) => Timestamp.fromDate(date);
-
-  static ConfirmPostEntity dummy = ConfirmPostEntity(
-    resolutionGoalStatement: 'dummy goal statement',
-    resolutionId: 'vR3lA2WTqm7wDC4ve1LN',
-    content: '본문이 길어지면 이런 느낌으로 본문이 길어지면 이런 느낌으로 ',
-    imageUrlList: [
-      // 'https://img.freepik.com/free-photo/close-up-portrait-beautiful-cat_23-2149214373.jpg?semt=ais_hybrid',
-      // 'https://img.freepik.com/free-photo/close-up-portrait-beautiful-cat_23-2149214373.jpg?semt=ais_hybrid',
-      'https://img.freepik.com/free-photo/close-up-portrait-beautiful-cat_23-2149214373.jpg?semt=ais_hybrid',
-    ],
-    owner: '69dlXoGSBKhzrySuhb8t9MvqzdD3',
-    recentStrike: 3,
-    createdAt: DateTime.now(),
-    updatedAt: DateTime.now(),
-    hasRested: true,
-  );
 }

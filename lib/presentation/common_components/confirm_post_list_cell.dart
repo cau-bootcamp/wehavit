@@ -9,7 +9,7 @@ class ConfirmPostListCell extends StatefulWidget {
   const ConfirmPostListCell({
     required this.confirmPostEntity,
     this.showActions = true,
-    required this.onCommentPressed,
+    required this.onSendCommentPressed,
     required this.onEmojiPressed,
     required this.onQuickshotTapUp,
     required this.onQuickshotLongPressStart,
@@ -21,7 +21,7 @@ class ConfirmPostListCell extends StatefulWidget {
   final ConfirmPostEntity confirmPostEntity;
   final bool showActions;
 
-  final Function() onCommentPressed;
+  final Function() onSendCommentPressed;
   final Function() onEmojiPressed;
   final Function(TapUpDetails) onQuickshotTapUp;
   final Function(LongPressStartDetails) onQuickshotLongPressStart;
@@ -116,7 +116,7 @@ class _ConfirmPostListCellState extends State<ConfirmPostListCell> {
               ),
               if (widget.showActions)
                 ConfirmPostReactionButtonList(
-                  onCommentPressed: widget.onCommentPressed,
+                  onCommentPressed: widget.onSendCommentPressed,
                   onEmojiPressed: () {},
                   onQuickshotTapUp: (_) {
                     setState(() {

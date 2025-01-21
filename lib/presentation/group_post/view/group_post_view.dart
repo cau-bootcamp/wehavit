@@ -9,6 +9,7 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
+import 'package:wehavit/presentation/state/group_post/confirm_post_provider.dart';
 
 // ignore: must_be_immutable
 class GroupPostView extends ConsumerStatefulWidget {
@@ -92,153 +93,225 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
     final viewModel = ref.watch(groupPostViewModelProvider);
     final provider = ref.read(groupPostViewModelProvider.notifier);
 
-    return Stack(
-      children: [
-        Scaffold(
-          backgroundColor: CustomColors.whDarkBlack,
-          resizeToAvoidBottomInset: true,
-          appBar: WehavitAppBar(
-            titleLabel: widget.groupEntity.groupName,
-            leadingIconString: WHIcons.back,
-            leadingAction: () {
-              Navigator.pop(context);
-            },
-            trailingIconString: WHIcons.friend,
-            trailingAction: () async {
-              // TODO? TrailingAction 수정 필요
-              showModalBottomSheet(
-                isScrollControlled: true,
-                context: context,
-                builder: (context) {
-                  return GroupMemberListBottomSheet(
-                    // updateGroupEntity,
-                    groupEntity: widget.groupEntity,
+    return PopScope(
+      onPopInvokedWithResult: (_, __) {
+        ref.invalidate(confirmPostListProvider);
+      },
+      child: Stack(
+        children: [
+          Scaffold(
+            backgroundColor: CustomColors.whGrey200,
+            resizeToAvoidBottomInset: true,
+            appBar: WehavitAppBar(
+              titleLabel: widget.groupEntity.groupName,
+              leadingIconString: WHIcons.back,
+              leadingAction: () {
+                Navigator.pop(context);
+              },
+              trailingIconString: WHIcons.friend,
+              trailingAction: () async {
+                // TODO? TrailingAction 수정 필요
+                showModalBottomSheet(
+                  isScrollControlled: true,
+                  context: context,
+                  builder: (context) {
+                    return GroupMemberListBottomSheet(
+                      // updateGroupEntity,
+                      groupEntity: widget.groupEntity,
+                    );
+                  },
+                ).whenComplete(() async {
+                  await provider.loadAppliedUserCount(
+                    entity: widget.groupEntity,
                   );
-                },
-              ).whenComplete(() async {
-                await provider.loadAppliedUserCount(
-                  entity: widget.groupEntity,
-                );
-                setState(() {});
-              });
-            },
-            trailingIconBadgeCount: viewModel.appliedUserCountForManager,
-          ),
-          body: Column(
-            children: [
-              Expanded(
-                child: Stack(
-                  children: [
-                    SafeArea(
-                      minimum: const EdgeInsets.symmetric(horizontal: 16.0),
-                      bottom: false,
-                      child: Column(
-                        children: [
-                          WeeklyPostSwipeCalendar(
-                            groupId: widget.groupEntity.groupId,
-                            firstDate: DateTime.now().subtract(Duration(days: 20)),
-                            onSelected: (selectedDate) {
-                              print(selectedDate);
-                            },
-                          ),
-                          const SizedBox(
-                            height: 12.0,
-                          ),
-                          Expanded(
-                            child: EitherFutureBuilder<List<ConfirmPostEntity>>(
-                              target: viewModel.confirmPostList[viewModel.selectedDate],
-                              forWaiting: const Center(
-                                child: SizedBox(
-                                  height: 50,
-                                  width: 50,
-                                  child: CircularProgressIndicator(
-                                    color: CustomColors.whGrey700,
-                                  ),
-                                ),
-                              ),
-                              forFail: const NoPostPlaceholder(),
-                              mainWidgetCallback: (entityList) {
-                                return Visibility(
-                                  visible: entityList.isNotEmpty,
-                                  replacement: const NoPostPlaceholder(),
-                                  child: SingleChildScrollView(
-                                    padding: const EdgeInsets.only(bottom: 20.0),
-                                    // physics: reactionCameraViewModel.nonScrollMode
-                                    //     ? const NeverScrollableScrollPhysics()
-                                    //     : const AlwaysScrollableScrollPhysics(),
-                                    child: Column(
-                                      children: List<Widget>.generate(
-                                        entityList.length,
-                                        (index) => Padding(
-                                          padding: const EdgeInsets.only(bottom: 12.0),
-                                          child: ConfirmPostWidget(
-                                            confirmPostEntity: entityList[index],
-                                            createdDate: viewModel.selectedDate,
-                                          ),
-                                          // child: ConfirmPostListCell(
-                                          //   confirmPostEntity: ConfirmPostEntityDummy.dummy,
-                                          //   onCommentPressed: () {
-                                          //     setState(() {
-                                          //       isCommentMode = true;
-                                          //     });
-                                          //   },
-                                          //   onEmojiPressed: () {},
-                                          //   onQuickshotTapUp: (_) {},
-                                          //   onQuickshotLongPressStart: (_) {},
-                                          //   onQuickshotLongPressMove: (_) {},
-                                          //   onQuickshotLongPressEnd: (_) {},
-                                          // ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                );
+                  setState(() {});
+                });
+              },
+              trailingIconBadgeCount: viewModel.appliedUserCountForManager,
+            ),
+            body: Column(
+              children: [
+                Expanded(
+                  child: Stack(
+                    children: [
+                      SafeArea(
+                        minimum: const EdgeInsets.symmetric(horizontal: 16.0),
+                        bottom: false,
+                        child: Column(
+                          children: [
+                            WeeklyPostSwipeCalendar(
+                              groupId: widget.groupEntity.groupId,
+                              firstDate: widget.groupEntity.groupCreatedAt,
+                              onSelected: (selectedDate) {
+                                setState(() {
+                                  this.selectedDate = selectedDate;
+                                });
                               },
                             ),
-                          ),
-                        ],
+                            const SizedBox(
+                              height: 12.0,
+                            ),
+                            Expanded(
+                              child: Consumer(
+                                builder: (context, ref, child) {
+                                  final asyncEntityList = ref.watch(
+                                    confirmPostListProvider(
+                                      GroupConfirmPostProviderParam(widget.groupEntity.groupId, selectedDate),
+                                    ),
+                                  );
+
+                                  return asyncEntityList.when(
+                                    data: (entityList) {
+                                      return Visibility(
+                                        visible: entityList.isNotEmpty,
+                                        replacement: const NoPostPlaceholder(),
+                                        child: SingleChildScrollView(
+                                          padding: const EdgeInsets.only(bottom: 20.0),
+                                          // physics: reactionCameraViewModel.nonScrollMode
+                                          //     ? const NeverScrollableScrollPhysics()
+                                          //     : const AlwaysScrollableScrollPhysics(),
+                                          child: Column(
+                                            children: List<Widget>.generate(
+                                              entityList.length,
+                                              (index) => Padding(
+                                                padding: const EdgeInsets.only(bottom: 12.0),
+                                                // child: ConfirmPostWidget(
+                                                //   confirmPostEntity: entityList[index],
+                                                //   createdDate: viewModel.selectedDate,
+                                                // ),
+                                                child: ConfirmPostListCell(
+                                                  confirmPostEntity: ConfirmPostEntity.dummy,
+                                                  onSendCommentPressed: () {
+                                                    setState(() {
+                                                      isCommentMode = true;
+                                                    });
+                                                  },
+                                                  onEmojiPressed: () {},
+                                                  onQuickshotTapUp: (_) {},
+                                                  onQuickshotLongPressStart: (_) {},
+                                                  onQuickshotLongPressMove: (_) {},
+                                                  onQuickshotLongPressEnd: (_) {},
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    error: (_, __) {
+                                      return const NoPostPlaceholder();
+                                    },
+                                    loading: () {
+                                      return const Center(
+                                        child: SizedBox(
+                                          height: 50,
+                                          width: 50,
+                                          child: CircularProgressIndicator(
+                                            color: CustomColors.whGrey700,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                  return Expanded(
+                                    child: EitherFutureBuilder<List<ConfirmPostEntity>>(
+                                      target: viewModel.confirmPostList[viewModel.selectedDate],
+                                      forWaiting: const Center(
+                                        child: SizedBox(
+                                          height: 50,
+                                          width: 50,
+                                          child: CircularProgressIndicator(
+                                            color: CustomColors.whGrey700,
+                                          ),
+                                        ),
+                                      ),
+                                      forFail: const NoPostPlaceholder(),
+                                      mainWidgetCallback: (entityList) {
+                                        return Visibility(
+                                          visible: entityList.isNotEmpty,
+                                          replacement: const NoPostPlaceholder(),
+                                          child: SingleChildScrollView(
+                                            padding: const EdgeInsets.only(bottom: 20.0),
+                                            // physics: reactionCameraViewModel.nonScrollMode
+                                            //     ? const NeverScrollableScrollPhysics()
+                                            //     : const AlwaysScrollableScrollPhysics(),
+                                            child: Column(
+                                              children: List<Widget>.generate(
+                                                entityList.length,
+                                                (index) => Padding(
+                                                  padding: const EdgeInsets.only(bottom: 12.0),
+                                                  child: ConfirmPostWidget(
+                                                    confirmPostEntity: entityList[index],
+                                                    createdDate: viewModel.selectedDate,
+                                                  ),
+                                                  // child: ConfirmPostListCell(
+                                                  //   confirmPostEntity: ConfirmPostEntityDummy.dummy,
+                                                  //   onCommentPressed: () {
+                                                  //     setState(() {
+                                                  //       isCommentMode = true;
+                                                  //     });
+                                                  //   },
+                                                  //   onEmojiPressed: () {},
+                                                  //   onQuickshotTapUp: (_) {},
+                                                  //   onQuickshotLongPressStart: (_) {},
+                                                  //   onQuickshotLongPressMove: (_) {},
+                                                  //   onQuickshotLongPressEnd: (_) {},
+                                                  // ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    if (isCommentMode)
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            isCommentMode = false;
-                            commentFocusNode.unfocus();
-                          });
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                Colors.transparent,
-                                CustomColors.whGrey100.withOpacity(0.6),
-                              ],
+                      if (isCommentMode)
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              isCommentMode = false;
+                              commentFocusNode.unfocus();
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Colors.transparent,
+                                  CustomColors.whGrey100.withOpacity(0.6),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              if (isCommentMode)
-                ReactionCommentBottomToolbar(commentFocusNode: commentFocusNode, onActionPressed: () {}),
-            ],
+                if (isCommentMode)
+                  ReactionCommentBottomToolbar(commentFocusNode: commentFocusNode, onActionPressed: () {}),
+              ],
+            ),
           ),
-        ),
-        ValueListenableBuilder(
-          valueListenable: reactionCameraWidgetModeNotifier,
-          builder: (context, value, child) {
-            if (value != ReactionCameraWidgetMode.none) {
-              return const ReactionCameraWidget();
-            } else {
-              return Container();
-            }
-          },
-        ),
-      ],
+          ValueListenableBuilder(
+            valueListenable: reactionCameraWidgetModeNotifier,
+            builder: (context, value, child) {
+              if (value != ReactionCameraWidgetMode.none) {
+                return const ReactionCameraWidget();
+              } else {
+                return Container();
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 
