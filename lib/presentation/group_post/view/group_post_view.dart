@@ -91,13 +91,11 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
   Widget build(BuildContext context) {
     final viewModel = ref.watch(groupPostViewModelProvider);
     final provider = ref.read(groupPostViewModelProvider.notifier);
-    // final reactionCameraViewModel =
-    //     ref.watch(reactionCameraWidgetModelProvider);
 
     return Stack(
       children: [
         Scaffold(
-          backgroundColor: CustomColors.whBlack,
+          backgroundColor: CustomColors.whDarkBlack,
           resizeToAvoidBottomInset: true,
           appBar: WehavitAppBar(
             titleLabel: widget.groupEntity.groupName,
@@ -107,6 +105,7 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
             },
             trailingIconString: WHIcons.friend,
             trailingAction: () async {
+              // TODO? TrailingAction 수정 필요
               showModalBottomSheet(
                 isScrollControlled: true,
                 context: context,
@@ -135,7 +134,13 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                       bottom: false,
                       child: Column(
                         children: [
-                          const WeeklySwipeCalendar(),
+                          WeeklyPostSwipeCalendar(
+                            groupId: widget.groupEntity.groupId,
+                            firstDate: DateTime.now().subtract(Duration(days: 20)),
+                            onSelected: (selectedDate) {
+                              print(selectedDate);
+                            },
+                          ),
                           const SizedBox(
                             height: 12.0,
                           ),
