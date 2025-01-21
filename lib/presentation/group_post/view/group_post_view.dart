@@ -112,7 +112,7 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                 context: context,
                 builder: (context) {
                   return GroupMemberListBottomSheet(
-                    updateGroupEntity,
+                    // updateGroupEntity,
                     groupEntity: widget.groupEntity,
                   );
                 },
@@ -416,10 +416,10 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
   //   );
   // }
 
-  Future<void> updateGroupEntity(GroupEntity groupEntity) async {
-    widget.groupEntity = groupEntity;
-    ref.read(groupViewModelProvider.notifier).updateGroupEntity(forEntity: groupEntity);
-  }
+  // Future<void> updateGroupEntity(GroupEntity groupEntity) async {
+  //   widget.groupEntity = groupEntity;
+  //   ref.read(groupViewModelProvider.notifier).updateGroupEntity(forEntity: groupEntity);
+  // }
 }
 
 class NoPostPlaceholder extends StatelessWidget {
