@@ -10,6 +10,7 @@ import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
 import 'package:wehavit/presentation/state/reaction/quickshot_preset_provider.dart';
+import 'package:wehavit/presentation/state/resolution_list/resolution_provider.dart';
 
 class ConfirmPostListCell extends StatefulWidget {
   const ConfirmPostListCell({
@@ -102,8 +103,34 @@ class _ConfirmPostListCellState extends State<ConfirmPostListCell> {
                           ],
                         ),
                         const SizedBox(height: 12.0),
-                        // ResolutionLinearGaugeIndicator(resolutionEntity: resolutionEntity, futureDoneList: futureDoneList),
-                        // const SizedBox(height: 12.0),
+                        Consumer(
+                          builder: (context, ref, child) {
+                            return ref
+                                .watch(
+                              resolutionProvider(
+                                ResolutionProviderParam(
+                                  userId: widget.confirmPostEntity.owner,
+                                  resolutionId: widget.confirmPostEntity.resolutionId,
+                                ),
+                              ),
+                            )
+                                .when(
+                              data: (resolutionEntity) {
+                                return ResolutionLinearGaugeIndicator(
+                                  resolutionEntity: resolutionEntity,
+                                  targetDate: widget.confirmPostEntity.createdAt,
+                                );
+                              },
+                              error: (_, __) {
+                                return Container();
+                              },
+                              loading: () {
+                                return Container();
+                              },
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 12.0),
                         ConfirmPostListCellContent(confirmPostEntity: widget.confirmPostEntity),
                       ],
                     ),
