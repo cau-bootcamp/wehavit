@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/common/utils/utils.dart';
-import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
 import 'package:wehavit/presentation/state/friend/friend_list_provider.dart';
 
@@ -118,84 +117,6 @@ class UserProfileCell extends StatelessWidget {
         );
       },
     );
-
-    // if (type == UserProfileCellType.loading) {
-    //   return Row(
-    //     children: [
-    //       Container(
-    //         width: 40,
-    //         height: 40,
-    //         decoration: const BoxDecoration(shape: BoxShape.circle, color: CustomColors.whGrey400),
-    //       ),
-    //       Expanded(
-    //         child: Padding(
-    //           padding: const EdgeInsets.symmetric(horizontal: 8),
-    //           child: Column(
-    //             crossAxisAlignment: CrossAxisAlignment.start,
-    //             children: [
-    //               Row(
-    //                 children: [
-    //                   Container(
-    //                     width: 90,
-    //                     height: 18,
-    //                     decoration:
-    //                         BoxDecoration(color: CustomColors.whGrey400, borderRadius: BorderRadius.circular(4)),
-    //                   ),
-    //                 ],
-    //               ),
-    //               const SizedBox(height: 2),
-    //               Container(
-    //                 width: 140,
-    //                 height: 14,
-    //                 decoration: BoxDecoration(color: CustomColors.whGrey400, borderRadius: BorderRadius.circular(4)),
-    //               ),
-    //             ],
-    //           ),
-    //         ),
-    //       ),
-    //       actions,
-    //     ],
-    //   );
-    // }
-
-    // return Row(
-    //   children: [
-    //     const CircleProfileImage(size: 40, url: 'https://cdn.sisain.co.kr/news/photo/202405/53124_99734_5711.jpg'),
-    //     Expanded(
-    //       child: Padding(
-    //         padding: const EdgeInsets.symmetric(horizontal: 8),
-    //         child: Column(
-    //           crossAxisAlignment: CrossAxisAlignment.start,
-    //           children: [
-    //             Row(
-    //               children: [
-    //                 Text(
-    //                   '닉네임',
-    //                   style: context.bodyMedium?.bold,
-    //                 ),
-    //                 const SizedBox(width: 4),
-    //                 // profile 유형이 아닐 때에만 아이디를 노출
-    //                 if (type != UserProfileCellType.profile)
-    //                   Text(
-    //                     '아이디',
-    //                     overflow: TextOverflow.ellipsis,
-    //                     style: context.bodySmall,
-    //                   ),
-    //               ],
-    //             ),
-    //             const SizedBox(height: 2),
-    //             Text(
-    //               '상태 메시지',
-    //               style: context.labelSmall?.copyWith(color: CustomColors.whGrey800),
-    //               overflow: TextOverflow.ellipsis,
-    //             ),
-    //           ],
-    //         ),
-    //       ),
-    //     ),
-    //     actions,
-    //   ],
-    // );
   }
 
   Row loadingCell(Widget actions) {
@@ -238,20 +159,66 @@ class UserProfileCell extends StatelessWidget {
 }
 
 class ConfirmPostUserProfile extends StatelessWidget {
-  const ConfirmPostUserProfile({
-    required this.userEntity,
+  const ConfirmPostUserProfile(
+    this.userId, {
     required this.uploadedAt,
     super.key,
   });
 
-  final UserDataEntity userEntity;
+  final String userId;
   final DateTime uploadedAt;
 
   @override
   Widget build(BuildContext context) {
+    return Consumer(
+      builder: (context, ref, child) {
+        return ref.watch(userDataEntityProvider.call(userId)).when(
+          data: (userEntity) {
+            return Row(
+              children: [
+                CircleProfileImage(size: 40, url: userEntity.userImageUrl),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          userEntity.userName,
+                          style: context.bodyMedium?.bold,
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          uploadedAt.formatToKoreanTime(),
+                          style: context.labelSmall?.copyWith(color: CustomColors.whGrey800),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+          error: (_, __) {
+            return Container();
+          },
+          loading: () {
+            return loadingCell(Container());
+          },
+        );
+      },
+    );
+  }
+
+  Row loadingCell(Widget actions) {
     return Row(
       children: [
-        const CircleProfileImage(size: 40, url: 'https://cdn.sisain.co.kr/news/photo/202405/53124_99734_5711.jpg'),
+        Container(
+          width: 40,
+          height: 40,
+          decoration: const BoxDecoration(shape: BoxShape.circle, color: CustomColors.whGrey400),
+        ),
         Expanded(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -260,22 +227,24 @@ class ConfirmPostUserProfile extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Text(
-                      userEntity.userName,
-                      style: context.bodyMedium?.bold,
+                    Container(
+                      width: 90,
+                      height: 18,
+                      decoration: BoxDecoration(color: CustomColors.whGrey400, borderRadius: BorderRadius.circular(4)),
                     ),
                   ],
                 ),
                 const SizedBox(height: 2),
-                Text(
-                  uploadedAt.formatToKoreanTime(),
-                  style: context.labelSmall?.copyWith(color: CustomColors.whGrey800),
-                  overflow: TextOverflow.ellipsis,
+                Container(
+                  width: 140,
+                  height: 14,
+                  decoration: BoxDecoration(color: CustomColors.whGrey400, borderRadius: BorderRadius.circular(4)),
                 ),
               ],
             ),
           ),
         ),
+        actions,
       ],
     );
   }

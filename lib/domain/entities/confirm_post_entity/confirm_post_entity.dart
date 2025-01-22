@@ -33,10 +33,10 @@ class ConfirmPostEntity with _$ConfirmPostEntity {
     @Default('') String resolutionId,
     @Default('') String content,
     @Default([]) List<String> imageUrlList,
-    @Default('') String? owner,
-    @Default(0) int? recentStrike,
-    required DateTime? createdAt,
-    required DateTime? updatedAt,
+    @Default('') String owner,
+    @Default(0) int recentStrike,
+    required DateTime createdAt,
+    required DateTime updatedAt,
     @Default(false) bool hasRested,
   }) = _ConfirmPostEntity;
 

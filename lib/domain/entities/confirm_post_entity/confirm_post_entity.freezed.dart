@@ -30,10 +30,10 @@ mixin _$ConfirmPostEntity {
   String get resolutionId => throw _privateConstructorUsedError;
   String get content => throw _privateConstructorUsedError;
   List<String> get imageUrlList => throw _privateConstructorUsedError;
-  String? get owner => throw _privateConstructorUsedError;
-  int? get recentStrike => throw _privateConstructorUsedError;
-  DateTime? get createdAt => throw _privateConstructorUsedError;
-  DateTime? get updatedAt => throw _privateConstructorUsedError;
+  String get owner => throw _privateConstructorUsedError;
+  int get recentStrike => throw _privateConstructorUsedError;
+  DateTime get createdAt => throw _privateConstructorUsedError;
+  DateTime get updatedAt => throw _privateConstructorUsedError;
   bool get hasRested => throw _privateConstructorUsedError;
 
   /// Serializes this ConfirmPostEntity to a JSON map.
@@ -58,10 +58,10 @@ abstract class $ConfirmPostEntityCopyWith<$Res> {
       String resolutionId,
       String content,
       List<String> imageUrlList,
-      String? owner,
-      int? recentStrike,
-      DateTime? createdAt,
-      DateTime? updatedAt,
+      String owner,
+      int recentStrike,
+      DateTime createdAt,
+      DateTime updatedAt,
       bool hasRested});
 }
 
@@ -87,10 +87,10 @@ class _$ConfirmPostEntityCopyWithImpl<$Res, $Val extends ConfirmPostEntity>
     Object? resolutionId = null,
     Object? content = null,
     Object? imageUrlList = null,
-    Object? owner = freezed,
-    Object? recentStrike = freezed,
-    Object? createdAt = freezed,
-    Object? updatedAt = freezed,
+    Object? owner = null,
+    Object? recentStrike = null,
+    Object? createdAt = null,
+    Object? updatedAt = null,
     Object? hasRested = null,
   }) {
     return _then(_value.copyWith(
@@ -122,22 +122,22 @@ class _$ConfirmPostEntityCopyWithImpl<$Res, $Val extends ConfirmPostEntity>
           ? _value.imageUrlList
           : imageUrlList // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      owner: freezed == owner
+      owner: null == owner
           ? _value.owner
           : owner // ignore: cast_nullable_to_non_nullable
-              as String?,
-      recentStrike: freezed == recentStrike
+              as String,
+      recentStrike: null == recentStrike
           ? _value.recentStrike
           : recentStrike // ignore: cast_nullable_to_non_nullable
-              as int?,
-      createdAt: freezed == createdAt
+              as int,
+      createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      updatedAt: freezed == updatedAt
+              as DateTime,
+      updatedAt: null == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+              as DateTime,
       hasRested: null == hasRested
           ? _value.hasRested
           : hasRested // ignore: cast_nullable_to_non_nullable
@@ -160,10 +160,10 @@ abstract class _$$ConfirmPostEntityImplCopyWith<$Res> implements $ConfirmPostEnt
       String resolutionId,
       String content,
       List<String> imageUrlList,
-      String? owner,
-      int? recentStrike,
-      DateTime? createdAt,
-      DateTime? updatedAt,
+      String owner,
+      int recentStrike,
+      DateTime createdAt,
+      DateTime updatedAt,
       bool hasRested});
 }
 
@@ -185,10 +185,10 @@ class __$$ConfirmPostEntityImplCopyWithImpl<$Res> extends _$ConfirmPostEntityCop
     Object? resolutionId = null,
     Object? content = null,
     Object? imageUrlList = null,
-    Object? owner = freezed,
-    Object? recentStrike = freezed,
-    Object? createdAt = freezed,
-    Object? updatedAt = freezed,
+    Object? owner = null,
+    Object? recentStrike = null,
+    Object? createdAt = null,
+    Object? updatedAt = null,
     Object? hasRested = null,
   }) {
     return _then(_$ConfirmPostEntityImpl(
@@ -220,22 +220,22 @@ class __$$ConfirmPostEntityImplCopyWithImpl<$Res> extends _$ConfirmPostEntityCop
           ? _value._imageUrlList
           : imageUrlList // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      owner: freezed == owner
+      owner: null == owner
           ? _value.owner
           : owner // ignore: cast_nullable_to_non_nullable
-              as String?,
-      recentStrike: freezed == recentStrike
+              as String,
+      recentStrike: null == recentStrike
           ? _value.recentStrike
           : recentStrike // ignore: cast_nullable_to_non_nullable
-              as int?,
-      createdAt: freezed == createdAt
+              as int,
+      createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      updatedAt: freezed == updatedAt
+              as DateTime,
+      updatedAt: null == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+              as DateTime,
       hasRested: null == hasRested
           ? _value.hasRested
           : hasRested // ignore: cast_nullable_to_non_nullable
@@ -302,14 +302,14 @@ class _$ConfirmPostEntityImpl implements _ConfirmPostEntity {
 
   @override
   @JsonKey()
-  final String? owner;
+  final String owner;
   @override
   @JsonKey()
-  final int? recentStrike;
+  final int recentStrike;
   @override
-  final DateTime? createdAt;
+  final DateTime createdAt;
   @override
-  final DateTime? updatedAt;
+  final DateTime updatedAt;
   @override
   @JsonKey()
   final bool hasRested;
@@ -381,10 +381,10 @@ abstract class _ConfirmPostEntity implements ConfirmPostEntity {
       final String resolutionId,
       final String content,
       final List<String> imageUrlList,
-      final String? owner,
-      final int? recentStrike,
-      required final DateTime? createdAt,
-      required final DateTime? updatedAt,
+      final String owner,
+      final int recentStrike,
+      required final DateTime createdAt,
+      required final DateTime updatedAt,
       final bool hasRested}) = _$ConfirmPostEntityImpl;
 
   factory _ConfirmPostEntity.fromJson(Map<String, dynamic> json) = _$ConfirmPostEntityImpl.fromJson;
@@ -407,13 +407,13 @@ abstract class _ConfirmPostEntity implements ConfirmPostEntity {
   @override
   List<String> get imageUrlList;
   @override
-  String? get owner;
+  String get owner;
   @override
-  int? get recentStrike;
+  int get recentStrike;
   @override
-  DateTime? get createdAt;
+  DateTime get createdAt;
   @override
-  DateTime? get updatedAt;
+  DateTime get updatedAt;
   @override
   bool get hasRested;
 

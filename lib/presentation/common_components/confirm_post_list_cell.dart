@@ -84,8 +84,8 @@ class _ConfirmPostListCellState extends State<ConfirmPostListCell> {
                           alignment: Alignment.centerRight,
                           children: [
                             ConfirmPostUserProfile(
-                              userEntity: UserDataEntity.dummyModel,
-                              uploadedAt: widget.confirmPostEntity.updatedAt ?? DateTime.now(),
+                              widget.confirmPostEntity.owner,
+                              uploadedAt: widget.confirmPostEntity.updatedAt,
                             ),
                             if (widget.confirmPostEntity.hasRested)
                               Container(
