@@ -60,13 +60,13 @@ class PostViewModel {
   bool isFocusingMode = false;
   Offset cameraButtonPosition = const Offset(0, 0);
 
+  late AnimationController animationController;
+  late Animation animation;
+
   // Emoji Reaction UI Variables
   Map<Key, ShootEmojiWidget> emojiWidgets = {};
   int countSend = 0;
   List<int> sendingEmojis = List<int>.generate(15, (index) => 0);
-
-  late AnimationController animationController;
-  late Animation animation;
 
   // Text Reaction UI Variables
   TextEditingController commentEditingController = TextEditingController();

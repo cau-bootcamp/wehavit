@@ -117,15 +117,15 @@ class _ConfirmPostListCellState extends State<ConfirmPostListCell> {
               if (widget.showActions)
                 ConfirmPostReactionButtonList(
                   onCommentPressed: widget.onSendCommentPressed,
-                  onEmojiPressed: () {},
+                  onEmojiPressed: widget.onEmojiPressed,
                   onQuickshotTapUp: (_) {
                     setState(() {
                       isShowingQuickshotPreset = !isShowingQuickshotPreset;
                     });
                   },
-                  onQuickshotLongPressStart: (_) {},
-                  onQuickshotLongPressMove: (_) {},
-                  onQuickshotLongPressEnd: (_) {},
+                  onQuickshotLongPressStart: widget.onQuickshotLongPressStart,
+                  onQuickshotLongPressMove: widget.onQuickshotLongPressMove,
+                  onQuickshotLongPressEnd: widget.onQuickshotLongPressEnd,
                 ),
             ],
           ),
