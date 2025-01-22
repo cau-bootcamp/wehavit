@@ -15,7 +15,7 @@ final reactionCameraWidgetModeNotifier = ValueNotifier<ReactionCameraWidgetMode>
   ReactionCameraWidgetMode.none,
 );
 
-final cameraPointerPositionNotifier = CameraPointerPositionNotifier(const Offset(0, 0));
+final cameraPointerPositionNotifier = CameraPointerPositionNotifier(const Offset(-20, -20));
 
 final reactionCameraWidgetModelProvider =
     StateNotifierProvider.autoDispose<ReactionCameraWidgetModelProvider, ReactionCameraWidgetModel>((ref) {

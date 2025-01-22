@@ -9,11 +9,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wehavit/common/common.dart';
+import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/group_post/provider/send_reaction_state_model_provider.dart';
 import 'package:wehavit/presentation/presentation.dart';
 import 'package:wehavit/presentation/state/group_post/confirm_post_provider.dart';
+import 'package:wehavit/presentation/state/reaction/quickshot_preset_provider.dart';
 
 // ignore: must_be_immutable
 class GroupPostView extends ConsumerStatefulWidget {
@@ -172,18 +174,11 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                         replacement: const NoPostPlaceholder(),
                                         child: SingleChildScrollView(
                                           padding: const EdgeInsets.only(bottom: 20.0),
-                                          // physics: reactionCameraViewModel.nonScrollMode
-                                          //     ? const NeverScrollableScrollPhysics()
-                                          //     : const AlwaysScrollableScrollPhysics(),
                                           child: Column(
                                             children: List<Widget>.generate(
                                               entityList.length,
                                               (index) => Padding(
                                                 padding: const EdgeInsets.only(bottom: 12.0),
-                                                // child: ConfirmPostWidget(
-                                                //   confirmPostEntity: entityList[index],
-                                                //   createdDate: viewModel.selectedDate,
-                                                // ),
                                                 child: ConfirmPostListCell(
                                                   confirmPostEntity: entityList[index],
                                                   onSendCommentPressed: () {
@@ -241,7 +236,6 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
 
                                                     ref.invalidate(sendReactionStateModelNotifierProvider);
                                                   },
-                                                  onQuickshotTapUp: (_) {},
                                                   onQuickshotLongPressStart: (_) async {
                                                     PermissionStatus permission = await Permission.camera.status;
 
@@ -294,6 +288,78 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                                         ref.invalidate(
                                                           sendReactionStateModelNotifierProvider(entityList[index]),
                                                         );
+                                                      });
+                                                    }
+                                                    reactionCameraWidgetModeNotifier.value =
+                                                        ReactionCameraWidgetMode.none;
+                                                  },
+                                                  onQuickshotPaletteCellTapUp: (imageFilePath) {
+                                                    // 보내기
+                                                    final _ = ref
+                                                        .watch(
+                                                          sendReactionStateModelNotifierProvider(entityList[index]),
+                                                        )
+                                                        .sendingQuickshotUrl = imageFilePath;
+
+                                                    ref
+                                                        .read(
+                                                          sendReactionStateModelNotifierProvider(
+                                                            entityList[index],
+                                                          ).notifier,
+                                                        )
+                                                        .sendReaction()
+                                                        .then((result) {
+                                                      final resultMessage = result.fold(
+                                                        (_) => '잠시 후 다시 시도해주세요',
+                                                        (_) => '친구에게 퀵샷으로 응원을 보냈어요',
+                                                      );
+
+                                                      if (context.mounted) {
+                                                        showToastMessage(
+                                                          context,
+                                                          text: resultMessage,
+                                                        );
+                                                      }
+                                                    });
+
+                                                    ref.invalidate(
+                                                      sendReactionStateModelNotifierProvider(entityList[index]),
+                                                    );
+                                                  },
+                                                  onQuickshotPaletteAddCellTapUp: () {
+                                                    showToastMessage(
+                                                      context,
+                                                      text: '추가 버튼을 누른 채로 드래그 해주세요!',
+                                                    );
+                                                  },
+                                                  onQuickshotPaletteAddCellLongPressStart: (detail) async {
+                                                    PermissionStatus permission = await Permission.camera.status;
+
+                                                    if (permission == PermissionStatus.denied) {
+                                                      await Permission.camera.request();
+                                                    }
+                                                    if (permission == PermissionStatus.granted) {
+                                                      reactionCameraWidgetModeNotifier.value =
+                                                          ReactionCameraWidgetMode.preset;
+                                                    }
+                                                  },
+                                                  onQuickshotPaletteAddCellLongPressMove: (detail) {
+                                                    cameraPointerPositionNotifier.value = detail.globalPosition;
+                                                  },
+                                                  onQuickshotPaletteAddCellLongPressEnd: (detail) async {
+                                                    final needCapture =
+                                                        cameraPointerPositionNotifier.isPosInCapturingArea;
+
+                                                    if (needCapture) {
+                                                      final imageFilePath = await ref
+                                                          .read(reactionCameraWidgetModelProvider.notifier)
+                                                          .endOnCapturingArea();
+
+                                                      ref
+                                                          .read(uploadQuickshotPresetUsecaseProvider)
+                                                          .call(localFileUrl: imageFilePath)
+                                                          .then((result) {
+                                                        ref.invalidate(quickshotPresetProvider);
                                                       });
                                                     }
                                                     reactionCameraWidgetModeNotifier.value =
