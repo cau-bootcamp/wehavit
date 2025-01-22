@@ -90,6 +90,7 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
   bool isCommentMode = false;
 
   final commentFocusNode = FocusNode();
+  final reactionCommentTextEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -185,9 +186,11 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                                 child: ConfirmPostListCell(
                                                   confirmPostEntity: entityList[index],
                                                   onSendCommentPressed: () {
+                                                    viewModel.commentTargetEntity = entityList[index];
                                                     setState(() {
                                                       isCommentMode = true;
                                                     });
+                                                    commentFocusNode.requestFocus();
                                                   },
                                                   onEmojiPressed: () async {
                                                     await showEmojiSheet(entityList[index], context).whenComplete(
@@ -293,8 +296,50 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                     ],
                   ),
                 ),
-                if (isCommentMode)
-                  ReactionCommentBottomToolbar(commentFocusNode: commentFocusNode, onActionPressed: () {}),
+                if (isCommentMode && viewModel.commentTargetEntity != null)
+                  ReactionCommentBottomToolbar(
+                    confirmPostEntity: viewModel.commentTargetEntity!,
+                    controller: reactionCommentTextEditingController,
+                    commentFocusNode: commentFocusNode,
+                    onActionPressed: () async {
+                      ref
+                          .watch(
+                            sendReactionStateModelNotifierProvider(
+                              viewModel.commentTargetEntity!,
+                            ),
+                          )
+                          .sendingComment = reactionCommentTextEditingController.text;
+
+                      ref
+                          .read(
+                            sendReactionStateModelNotifierProvider(
+                              viewModel.commentTargetEntity!,
+                            ).notifier,
+                          )
+                          .sendReaction()
+                          .then((result) {
+                        final resultMessage = result.fold(
+                          (_) => '잠시 후 다시 시도해주세요',
+                          (_) => '친구에게 응원의 메시지를 보냈어요',
+                        );
+
+                        if (context.mounted) {
+                          showToastMessage(
+                            context,
+                            text: resultMessage,
+                          );
+                        }
+
+                        if (result.isRight()) {
+                          reactionCommentTextEditingController.clear();
+                          ref.invalidate(sendReactionStateModelNotifierProvider(viewModel.commentTargetEntity!));
+                          setState(() {
+                            isCommentMode = false;
+                          });
+                        }
+                      });
+                    },
+                  ),
               ],
             ),
           ),

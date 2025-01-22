@@ -21,6 +21,9 @@ class GroupPostViewModel extends PostViewModel {
 }
 
 class PostViewModel {
+  ConfirmPostEntity? commentTargetEntity;
+
+  ///
   UserDataEntity? myUserEntity;
 
   final DateFormat formatter = DateFormat('yyyy년 MM월 dd일');

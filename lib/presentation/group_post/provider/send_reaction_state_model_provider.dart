@@ -29,7 +29,7 @@ class SendReactionStateModelNotifier extends StateNotifier<SendReactionStateMode
     }
 
     if (state.sendingComment.isNotEmpty) {
-      return Future.value(right(true));
+      return _sendCommentReactionToConfirmPostUsecase.call((state.confirmPostEntity!, state.sendingComment));
     }
 
     if (state.emojiSendCount != 0) {
