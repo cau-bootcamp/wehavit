@@ -37,10 +37,10 @@ class SendReactionStateModelNotifier extends StateNotifier<SendReactionStateMode
     }
 
     if (state.sendingQuickshotUrl.isNotEmpty) {
-      return Future.value(right(true));
+      return _sendQuickShotReactionToConfirmPostUsecase.call((state.confirmPostEntity!, state.sendingQuickshotUrl));
     }
 
-    return Future.value(left(const Failure('')));
+    return Future.value(left(const Failure('Reaction으로 전송할 데이터가 없음')));
   }
 }
 

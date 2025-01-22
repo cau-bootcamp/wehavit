@@ -6,6 +6,7 @@ import 'dart:math';
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
@@ -241,9 +242,63 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                                     ref.invalidate(sendReactionStateModelNotifierProvider);
                                                   },
                                                   onQuickshotTapUp: (_) {},
-                                                  onQuickshotLongPressStart: (_) {},
-                                                  onQuickshotLongPressMove: (_) {},
-                                                  onQuickshotLongPressEnd: (_) {},
+                                                  onQuickshotLongPressStart: (_) async {
+                                                    PermissionStatus permission = await Permission.camera.status;
+
+                                                    if (permission == PermissionStatus.denied) {
+                                                      await Permission.camera.request();
+                                                    }
+                                                    if (permission == PermissionStatus.granted) {
+                                                      reactionCameraWidgetModeNotifier.value =
+                                                          ReactionCameraWidgetMode.quickshot;
+                                                    }
+                                                  },
+                                                  onQuickshotLongPressMove: (detail) {
+                                                    cameraPointerPositionNotifier.value = detail.globalPosition;
+                                                  },
+                                                  onQuickshotLongPressEnd: (detail) async {
+                                                    final needCapture =
+                                                        cameraPointerPositionNotifier.isPosInCapturingArea;
+
+                                                    if (needCapture) {
+                                                      final imageFilePath = await ref
+                                                          .read(reactionCameraWidgetModelProvider.notifier)
+                                                          .endOnCapturingArea();
+
+                                                      final _ = ref
+                                                          .watch(
+                                                            sendReactionStateModelNotifierProvider(entityList[index]),
+                                                          )
+                                                          .sendingQuickshotUrl = imageFilePath;
+
+                                                      ref
+                                                          .read(
+                                                            sendReactionStateModelNotifierProvider(
+                                                              entityList[index],
+                                                            ).notifier,
+                                                          )
+                                                          .sendReaction()
+                                                          .then((result) {
+                                                        final resultMessage = result.fold(
+                                                          (_) => '잠시 후 다시 시도해주세요',
+                                                          (_) => '친구에게 퀵샷으로 응원을 보냈어요',
+                                                        );
+
+                                                        if (context.mounted) {
+                                                          showToastMessage(
+                                                            context,
+                                                            text: resultMessage,
+                                                          );
+                                                        }
+
+                                                        ref.invalidate(
+                                                          sendReactionStateModelNotifierProvider(entityList[index]),
+                                                        );
+                                                      });
+                                                    }
+                                                    reactionCameraWidgetModeNotifier.value =
+                                                        ReactionCameraWidgetMode.none;
+                                                  },
                                                 ),
                                               ),
                                             ),
