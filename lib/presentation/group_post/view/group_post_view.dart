@@ -56,39 +56,6 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
     });
   }
 
-  @override
-  Future<void> didChangeDependencies() async {
-    super.didChangeDependencies();
-
-    final viewModel = ref.watch(groupPostViewModelProvider);
-    final provider = ref.read(groupPostViewModelProvider.notifier);
-    viewModel.groupId = widget.groupEntity.groupId;
-
-    unawaited(
-      provider.loadAppliedUserCount(entity: widget.groupEntity).whenComplete(() {
-        setState(() {});
-      }),
-    );
-
-    unawaited(
-      provider
-          .loadConfirmPostsForWeek(
-            mondayOfTargetWeek: viewModel.calendartMondayDateList[0],
-          )
-          .whenComplete(() => setState(() {})),
-    );
-
-    unawaited(
-      provider
-          .loadConfirmPostsForWeek(
-            mondayOfTargetWeek: viewModel.calendartMondayDateList[1],
-          )
-          .whenComplete(() => setState(() {})),
-    );
-
-    unawaited(provider.loadConfirmPostEntityListFor(dateTime: DateTime.now()));
-  }
-
   DateTime selectedDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   bool isCommentMode = false;
 
@@ -98,7 +65,6 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
   @override
   Widget build(BuildContext context) {
     final viewModel = ref.watch(groupPostViewModelProvider);
-    final provider = ref.read(groupPostViewModelProvider.notifier);
 
     return PopScope(
       onPopInvokedWithResult: (_, __) {
@@ -123,18 +89,12 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                   context: context,
                   builder: (context) {
                     return GroupMemberListBottomSheet(
-                      // updateGroupEntity,
                       groupEntity: widget.groupEntity,
                     );
                   },
-                ).whenComplete(() async {
-                  await provider.loadAppliedUserCount(
-                    entity: widget.groupEntity,
-                  );
-                  setState(() {});
-                });
+                );
               },
-              trailingIconBadgeCount: viewModel.appliedUserCountForManager,
+              // trailingIconBadgeCount: viewModel.appliedUserCountForManager,
             ),
             body: Column(
               children: [

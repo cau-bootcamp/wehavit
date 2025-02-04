@@ -1570,7 +1570,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
         if (sharedGroupList.contains(groupId)) {
           final success = await getTargetResolutionDoneListForWeek(
             resolutionId: doc.reference.id,
-            startMonday: getThisMondayDateTime(),
+            startMonday: DateTime.now().getMondayDateTime(),
           ).then(
             (value) => value.fold(
               (failure) => -1,

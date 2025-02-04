@@ -12,6 +12,7 @@ enum UserProfileCellType {
   invited,
   inviting,
   profile,
+  groupMemberList,
   loading;
 }
 
@@ -19,6 +20,7 @@ class UserProfileCell extends StatelessWidget {
   const UserProfileCell(
     this.userId, {
     required this.type,
+    this.customDescription = '',
     this.onDelete,
     this.onRequest,
     this.onAccept,
@@ -28,6 +30,7 @@ class UserProfileCell extends StatelessWidget {
 
   final UserProfileCellType type;
   final String userId;
+  final String customDescription;
 
   final Function? onDelete;
   final Function? onRequest;
@@ -56,6 +59,7 @@ class UserProfileCell extends StatelessWidget {
             ),
           ],
         ),
+      UserProfileCellType.groupMemberList => Container(),
       UserProfileCellType.loading => Container(),
     };
 
@@ -96,7 +100,7 @@ class UserProfileCell extends StatelessWidget {
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          entity.aboutMe,
+                          customDescription.isNotEmpty ? customDescription : entity.aboutMe,
                           style: context.labelSmall?.copyWith(color: CustomColors.whGrey800),
                           overflow: TextOverflow.ellipsis,
                         ),
