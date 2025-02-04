@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
+import 'package:wehavit/domain/entities/entities.dart';
 
 final loadAchievePercentageProvider = FutureProvider.autoDispose.family<double, LoadAchievePercentageProviderParam>(
   (ref, param) => ref
@@ -30,7 +31,7 @@ class LoadAchievePercentageProviderParam {
   int get hashCode => groupId.hashCode ^ userId.hashCode;
 }
 
-final sharedResolutionCountProvider = FutureProvider.autoDispose.family<int, SharedResolutionCountProviderParam>(
+final sharedResolutionCountProvider = FutureProvider.family<int, SharedResolutionCountProviderParam>(
   (ref, param) => ref
       .read(getSharedResolutionListToGroupUsecaseProvider)
       .call(param.userId, param.groupId)
@@ -53,3 +54,10 @@ class SharedResolutionCountProviderParam {
   @override
   int get hashCode => groupId.hashCode ^ userId.hashCode;
 }
+
+final getAppliedUserIdListProvider = FutureProvider.autoDispose.family<List<String>, GroupEntity>(
+  (ref, groupEntity) => ref
+      .read(getAppliedUserListForGroupEntityUsecaseProvider)
+      .call(groupEntity)
+      .then((result) => result.fold((failure) => Future.error(failure.message), (success) => success)),
+);

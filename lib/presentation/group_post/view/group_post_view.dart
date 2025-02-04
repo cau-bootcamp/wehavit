@@ -89,7 +89,7 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                   context: context,
                   builder: (context) {
                     return GroupMemberListBottomSheet(
-                      groupEntity: widget.groupEntity,
+                      groupId: widget.groupEntity.groupId,
                     );
                   },
                 );

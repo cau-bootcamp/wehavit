@@ -20,7 +20,8 @@ class UserProfileCell extends StatelessWidget {
   const UserProfileCell(
     this.userId, {
     required this.type,
-    this.customDescription = '',
+    this.description = '',
+    this.deleteButtonLabel = '친구 삭제',
     this.onDelete,
     this.onRequest,
     this.onAccept,
@@ -30,7 +31,12 @@ class UserProfileCell extends StatelessWidget {
 
   final UserProfileCellType type;
   final String userId;
-  final String customDescription;
+
+  /// description이 없으면 aboutMe 가 보여진다.
+  final String description;
+
+  /// delete Type에서 deleteButtonLabel이 없으면 '친구 삭제'가 버튼의 레이블로 기본으로 보여진다.
+  final String deleteButtonLabel;
 
   final Function? onDelete;
   final Function? onRequest;
@@ -43,7 +49,7 @@ class UserProfileCell extends StatelessWidget {
       UserProfileCellType.normal => Container(),
       UserProfileCellType.profile => Container(),
       UserProfileCellType.deleteMode => SmallColoredButton(
-          buttonLabel: '친구 삭제',
+          buttonLabel: deleteButtonLabel,
           onPressed: onDelete ?? () {},
           backgroundColor: CustomColors.whGrey600,
         ),
@@ -100,7 +106,7 @@ class UserProfileCell extends StatelessWidget {
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          customDescription.isNotEmpty ? customDescription : entity.aboutMe,
+                          description.isNotEmpty ? description : entity.aboutMe,
                           style: context.labelSmall?.copyWith(color: CustomColors.whGrey800),
                           overflow: TextOverflow.ellipsis,
                         ),
