@@ -80,10 +80,32 @@ class _GroupMemberListBottomSheetState extends State<GroupMemberListBottomSheet>
                               child: Stack(
                                 alignment: Alignment.centerRight,
                                 children: [
-                                  UserProfileCell(
-                                    userId,
-                                    type: UserProfileCellType.normal,
-                                    customDescription: '공유중인 목표 3개',
+                                  Consumer(
+                                    builder: (context, ref, child) {
+                                      return ref
+                                          .watch(
+                                            sharedResolutionCountProvider(
+                                              SharedResolutionCountProviderParam(widget.groupEntity.groupId, userId),
+                                            ),
+                                          )
+                                          .when(
+                                            data: (count) => UserProfileCell(
+                                              userId,
+                                              type: UserProfileCellType.normal,
+                                              customDescription: '공유중인 목표 $count개',
+                                            ),
+                                            error: (_, __) => UserProfileCell(
+                                              userId,
+                                              type: UserProfileCellType.normal,
+                                              customDescription: ' ',
+                                            ),
+                                            loading: () => UserProfileCell(
+                                              userId,
+                                              type: UserProfileCellType.normal,
+                                              customDescription: '...',
+                                            ),
+                                          );
+                                    },
                                   ),
                                   Consumer(
                                     builder: (context, ref, child) {

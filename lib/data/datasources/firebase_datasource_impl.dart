@@ -2685,4 +2685,28 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       return Future(() => left(Failure(e.toString())));
     }
   }
+
+  @override
+  EitherFuture<List<String>> getResolutionIdListSharedToGroup({
+    required String fromUserId,
+    required String toGroupId,
+  }) async {
+    try {
+      return firestore
+          .collection(
+            FirebaseCollectionName.getTargetResolutionCollectionName(
+              fromUserId,
+            ),
+          )
+          .where(
+            FirebaseResolutionFieldName.resolutionShareGroupIdList,
+            arrayContains: toGroupId,
+          )
+          .get()
+          .then((result) => result.docs.map((doc) => doc.reference.id).toList())
+          .then((value) => right(value));
+    } on Exception catch (e) {
+      return Future(() => left(Failure(e.toString())));
+    }
+  }
 }

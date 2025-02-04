@@ -41,6 +41,11 @@ abstract class ResolutionRepository {
     required String from,
   });
 
+  EitherFuture<List<String>> getResolutionIdListSharedToGroup({
+    required String fromUserId,
+    required String toGroupId,
+  });
+
   EitherFuture<ResolutionEntity> getTargetResolutionEntity({
     required String targetUserId,
     required String targetResolutionId,

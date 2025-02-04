@@ -29,3 +29,27 @@ class LoadAchievePercentageProviderParam {
   @override
   int get hashCode => groupId.hashCode ^ userId.hashCode;
 }
+
+final sharedResolutionCountProvider = FutureProvider.autoDispose.family<int, SharedResolutionCountProviderParam>(
+  (ref, param) => ref
+      .read(getSharedResolutionListToGroupUsecaseProvider)
+      .call(param.userId, param.groupId)
+      .then((result) => result.fold((failure) => Future.error(failure.message), (success) => success.length)),
+);
+
+class SharedResolutionCountProviderParam {
+  SharedResolutionCountProviderParam(this.groupId, this.userId);
+
+  String groupId;
+  String userId;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is SharedResolutionCountProviderParam && other.groupId == groupId && other.userId == userId;
+  }
+
+  @override
+  int get hashCode => groupId.hashCode ^ userId.hashCode;
+}
