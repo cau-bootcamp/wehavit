@@ -38,6 +38,10 @@ class _GroupMemberListBottomSheetState extends State<GroupMemberListBottomSheet>
                       data: (groupEntity) {
                         final isManager = groupEntity.groupManagerUid == ref.read(getMyUserDataProvider).value?.userId;
 
+                        final newApplyCount = ref
+                            .watch(getAppliedUserIdListProvider(groupEntity))
+                            .when(data: (data) => data.length, error: (_, __) => 0, loading: () => 0);
+
                         return Column(
                           children: [
                             WehavitAppBar(
@@ -45,7 +49,7 @@ class _GroupMemberListBottomSheetState extends State<GroupMemberListBottomSheet>
                               leadingTitle: ' ',
                               trailingTitle: isManager ? (isManageMode ? '완료' : '') : '',
                               trailingIconString: isManager ? (isManageMode ? '' : WHIcons.friend) : '',
-                              trailingIconBadgeCount: 3,
+                              trailingIconBadgeCount: newApplyCount,
                               trailingAction: () {
                                 setState(() {
                                   isManageMode = !isManageMode;
@@ -174,14 +178,17 @@ class GroupAppliedUserList extends StatelessWidget {
                     ),
               error: (_, __) => Container(
                 width: double.infinity,
-                height: 100,
+                height: 80,
                 alignment: Alignment.center,
                 child: Text(
                   '지금은 정보를 불러올 수 없어요\n잠시 후 다시 시도해주세요',
                   style: context.labelMedium?.copyWith(color: CustomColors.whGrey700),
                 ),
               ),
-              loading: () => const SizedBox(height: 100, width: double.infinity),
+              loading: () => const SizedBox(
+                height: 80,
+                width: double.infinity,
+              ),
             );
       },
     );

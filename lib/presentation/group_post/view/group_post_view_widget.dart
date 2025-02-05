@@ -61,8 +61,6 @@ class _ConfirmPostWidgetState extends ConsumerState<ConfirmPostWidget> with Tick
       targetResolutionId: widget.confirmPostEntity.resolutionId,
     );
 
-    // myUserEntity = await ref.read(getMyUserDataProvider);
-
     ref.read(groupPostViewModelProvider.notifier).getQuickshotPresets();
   }
 
