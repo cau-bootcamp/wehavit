@@ -13,6 +13,8 @@ import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
 import 'package:wehavit/presentation/state/group_post/confirm_post_provider.dart';
 import 'package:wehavit/presentation/state/resolution_list/resolution_list_provider.dart';
+import 'package:wehavit/presentation/state/resolution_list/resolution_provider.dart';
+import 'package:wehavit/presentation/state/user_data/my_user_data_provider.dart';
 
 // ignore: must_be_immutable
 class ResolutionDetailView extends ConsumerStatefulWidget {
@@ -249,7 +251,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                 const SizedBox(height: 40.0),
                 Consumer(
                   builder: (context, ref, child) {
-                    return WideColoredButton(
+                    return WideOutlinedButton(
                       buttonTitle: '목표 삭제하기',
                       foregroundColor: CustomColors.whRed,
                       onPressed: () async {
@@ -319,7 +321,6 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
     ResolutionEntity entity,
   ) {
     ref.watch(addResolutionDoneViewModelProvider).resolutionEntity = entity;
-    final provider = ref.read(addResolutionDoneViewModelProvider.notifier);
 
     return showModalBottomSheet(
       context: context,
@@ -327,37 +328,36 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
         return GradientBottomSheet(
           Column(
             children: [
-              WideColoredButton(
+              WideOutlinedButton(
                 buttonTitle: '목표 공유 친구 수정하기',
                 iconString: WHIcons.friend,
                 onPressed: () async {
-                  provider.loadFriendList().whenComplete(() async {
-                    // await provider.resetTempFriendList();
-                    showModalBottomSheet(
-                      isScrollControlled: true,
-                      // ignore: use_build_context_synchronously
-                      context: context,
-                      builder: (context) => GradientBottomSheet(
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.82,
-                          child: const ShareResolutionToFriendBottomSheetWidget(),
+                  showModalBottomSheet(
+                    isScrollControlled: true,
+                    // ignore: use_build_context_synchronously
+                    context: context,
+                    builder: (context) => GradientBottomSheet(
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.82,
+                        child: ShareResolutionToFriendBottomSheetWidget(resolutionEntity: entity),
+                      ),
+                    ),
+                  ).whenComplete(() {
+                    ref.invalidate(
+                      resolutionProvider(
+                        ResolutionProviderParam(
+                          userId: ref.read(getMyUserDataProvider).value!.userId,
+                          resolutionId: widget.entity.resolutionId,
                         ),
                       ),
-                    ).then((newEntity) {
-                      widget.entity = newEntity;
-
-                      ref.watch(addResolutionDoneViewModelProvider).resolutionEntity = newEntity;
-                      ref.read(myPageViewModelProvider.notifier).getResolutionList().whenComplete(() {
-                        setState(() {});
-                      });
-                    });
+                    );
                   });
                 },
               ),
               const SizedBox(
                 height: 12,
               ),
-              WideColoredButton(
+              WideOutlinedButton(
                 buttonTitle: '목표 공유 그룹 수정하기',
                 iconString: WHIcons.group,
                 onPressed: () async {
@@ -387,7 +387,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
               const SizedBox(
                 height: 12,
               ),
-              WideColoredButton(
+              WideOutlinedButton(
                 buttonTitle: '목표 삭제하기',
                 iconString: WHIcons.delete,
                 foregroundColor: CustomColors.pointRed,
