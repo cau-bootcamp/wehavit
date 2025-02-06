@@ -72,316 +72,319 @@ class _EditUserDetailViewState extends ConsumerState<EditUserDetailView> {
 
     UniqueKey imageKey = UniqueKey();
 
-    return Stack(
-      children: [
-        Scaffold(
-          resizeToAvoidBottomInset: true,
-          backgroundColor: CustomColors.whDarkBlack,
-          appBar: WehavitAppBar(
-            titleLabel: widget.isModifying ? '내 정보 수정' : '회원가입',
-            leadingIconString: WHIcons.back,
-            leadingAction: () async {
-              if (!widget.isModifying) {
-                try {
-                  await provider.rollbackSignUp();
-                } on Exception catch (e) {
-                  // ignore: avoid_print
-                  print('DEBUG: ${e.toString()}');
+    return SafeArea(
+      minimum: const EdgeInsets.only(bottom: 8.0),
+      child: Stack(
+        children: [
+          Scaffold(
+            resizeToAvoidBottomInset: true,
+            backgroundColor: CustomColors.whDarkBlack,
+            appBar: WehavitAppBar(
+              titleLabel: widget.isModifying ? '내 정보 수정' : '회원가입',
+              leadingIconString: WHIcons.back,
+              leadingAction: () async {
+                if (!widget.isModifying) {
+                  try {
+                    await provider.rollbackSignUp();
+                  } on Exception catch (e) {
+                    // ignore: avoid_print
+                    print('DEBUG: ${e.toString()}');
+                  }
                 }
-              }
 
-              // ignore: use_build_context_synchronously
-              Navigator.pop(context);
-            },
-          ),
-          body: SafeArea(
-            minimum: const EdgeInsets.symmetric(horizontal: 16.0),
-            maintainBottomViewPadding: true,
-            child: Column(
-              children: [
-                Expanded(
-                  child: ListView(
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.only(top: 24.0, bottom: 32.0),
-                    keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TextButton(
-                            style: TextButton.styleFrom(
-                              overlayColor: CustomColors.whYellow,
-                            ),
-                            onPressed: () async {
-                              provider.pickProfileImage().whenComplete(
-                                    () => setState(() {}),
-                                  );
-                            },
-                            child: Stack(
-                              clipBehavior: Clip.none,
-                              children: [
-                                Container(
-                                  width: 85,
-                                  height: 85,
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: CustomColors.whGrey,
-                                  ),
-                                  clipBehavior: Clip.hardEdge,
-                                  child: viewmodel.profileImage != null
-                                      ? Image(
-                                          image: viewmodel.profileImage!,
-                                          key: imageKey,
-                                          fit: BoxFit.cover,
-                                        )
-                                      : Container(),
-                                ),
-                                Positioned(
-                                  bottom: 0,
-                                  right: -5,
-                                  child: Container(
-                                    width: 25,
-                                    height: 25,
+                // ignore: use_build_context_synchronously
+                Navigator.pop(context);
+              },
+            ),
+            body: SafeArea(
+              minimum: const EdgeInsets.symmetric(horizontal: 16.0),
+              maintainBottomViewPadding: true,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: ListView(
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.only(top: 24.0, bottom: 32.0),
+                      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                overlayColor: CustomColors.whYellow,
+                              ),
+                              onPressed: () async {
+                                provider.pickProfileImage().whenComplete(
+                                      () => setState(() {}),
+                                    );
+                              },
+                              child: Stack(
+                                clipBehavior: Clip.none,
+                                children: [
+                                  Container(
+                                    width: 85,
+                                    height: 85,
                                     decoration: const BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: CustomColors.whWhite,
+                                      color: CustomColors.whGrey,
                                     ),
-                                    child: const Icon(
-                                      Icons.photo_camera,
-                                      color: CustomColors.whBlack,
-                                      size: 18.0,
+                                    clipBehavior: Clip.hardEdge,
+                                    child: viewmodel.profileImage != null
+                                        ? Image(
+                                            image: viewmodel.profileImage!,
+                                            key: imageKey,
+                                            fit: BoxFit.cover,
+                                          )
+                                        : Container(),
+                                  ),
+                                  Positioned(
+                                    bottom: 0,
+                                    right: -5,
+                                    child: Container(
+                                      width: 25,
+                                      height: 25,
+                                      decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: CustomColors.whWhite,
+                                      ),
+                                      child: const Icon(
+                                        Icons.photo_camera,
+                                        color: CustomColors.whBlack,
+                                        size: 18.0,
+                                      ),
                                     ),
                                   ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              '이름',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                color: CustomColors.whWhite,
+                                fontSize: 20,
+                              ),
+                            ),
+                            Container(
+                              height: 8.0,
+                            ),
+                            // InputFormField(
+                            //   textEditingController: nameTextEditingController,
+                            //   descrptionHandler: (input) {
+                            //     if (input.length > 12)
+                            //       return ('너무 길다', FormFieldDescriptionType.warning);
+                            //     else if (input.length < 6)
+                            //       return ('6자 이상 12자 이하', FormFieldDescriptionType.normal);
+                            //     else {
+                            //       return ('6자 이상 12자 이하', FormFieldDescriptionType.clear);
+                            //     }
+                            //   },
+                            // ),
+                            SearchFormField(
+                              textEditingController: nameTextEditingController,
+                              placeholder: '검색어를 입력해주세요',
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 24,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              '사용자 ID',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                color: CustomColors.whWhite,
+                                fontSize: 20,
+                              ),
+                            ),
+                            Container(
+                              height: 8.0,
+                            ),
+                            TextFormField(
+                              initialValue: widget.handle,
+                              onChanged: (value) {
+                                provider.setHandle(value);
+                                setState(() {});
+                              },
+                              cursorColor: CustomColors.whWhite,
+                              textAlignVertical: TextAlignVertical.center,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.allow(
+                                  RegExp(r'[0-9a-zA-Z!@#$%^&*(),.?":{}|<>_]'),
                                 ),
                               ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            '이름',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              color: CustomColors.whWhite,
-                              fontSize: 20,
-                            ),
-                          ),
-                          Container(
-                            height: 8.0,
-                          ),
-                          // InputFormField(
-                          //   textEditingController: nameTextEditingController,
-                          //   descrptionHandler: (input) {
-                          //     if (input.length > 12)
-                          //       return ('너무 길다', FormFieldDescriptionType.warning);
-                          //     else if (input.length < 6)
-                          //       return ('6자 이상 12자 이하', FormFieldDescriptionType.normal);
-                          //     else {
-                          //       return ('6자 이상 12자 이하', FormFieldDescriptionType.clear);
-                          //     }
-                          //   },
-                          // ),
-                          SearchFormField(
-                            textEditingController: nameTextEditingController,
-                            placeholder: '검색어를 입력해주세요',
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 24,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            '사용자 ID',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              color: CustomColors.whWhite,
-                              fontSize: 20,
-                            ),
-                          ),
-                          Container(
-                            height: 8.0,
-                          ),
-                          TextFormField(
-                            initialValue: widget.handle,
-                            onChanged: (value) {
-                              provider.setHandle(value);
-                              setState(() {});
-                            },
-                            cursorColor: CustomColors.whWhite,
-                            textAlignVertical: TextAlignVertical.center,
-                            inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.allow(
-                                RegExp(r'[0-9a-zA-Z!@#$%^&*(),.?":{}|<>_]'),
+                              style: const TextStyle(
+                                color: CustomColors.whWhite,
+                                fontSize: 16.0,
                               ),
-                            ],
-                            style: const TextStyle(
-                              color: CustomColors.whWhite,
-                              fontSize: 16.0,
-                            ),
-                            decoration: InputDecoration(
-                              hintText: '친구가 나를 찾을 때 사용하는 ID예요',
-                              hintStyle: const TextStyle(
-                                fontSize: 16,
-                                color: CustomColors.whPlaceholderGrey,
-                              ),
-                              filled: true,
-                              fillColor: CustomColors.whGrey,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                  width: 0,
-                                  style: BorderStyle.none,
+                              decoration: InputDecoration(
+                                hintText: '친구가 나를 찾을 때 사용하는 ID예요',
+                                hintStyle: const TextStyle(
+                                  fontSize: 16,
+                                  color: CustomColors.whPlaceholderGrey,
                                 ),
-                              ),
-                              isCollapsed: true,
-                              contentPadding: const EdgeInsets.symmetric(
-                                vertical: 12.0,
-                                horizontal: 16.0,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 24,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            '한 줄 소개',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              color: CustomColors.whWhite,
-                              fontSize: 20,
-                            ),
-                          ),
-                          Container(
-                            height: 8.0,
-                          ),
-                          TextFormField(
-                            initialValue: widget.aboutMe,
-                            onChanged: (value) {
-                              provider.setAboutMe(value);
-                              setState(() {});
-                            },
-                            cursorColor: CustomColors.whWhite,
-                            textAlignVertical: TextAlignVertical.center,
-                            style: const TextStyle(
-                              color: CustomColors.whWhite,
-                              fontSize: 16.0,
-                            ),
-                            decoration: InputDecoration(
-                              hintText: '나에 대해 소개해주세요',
-                              hintStyle: const TextStyle(
-                                fontSize: 16,
-                                color: CustomColors.whPlaceholderGrey,
-                              ),
-                              filled: true,
-                              fillColor: CustomColors.whGrey,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                  width: 0,
-                                  style: BorderStyle.none,
-                                ),
-                              ),
-                              isCollapsed: true,
-                              contentPadding: const EdgeInsets.symmetric(
-                                vertical: 12.0,
-                                horizontal: 16.0,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      // Expanded(child: Container()),
-                    ],
-                  ),
-                ),
-                WideColoredButton(
-                  onPressed: () async {
-                    setState(() {
-                      viewmodel.isProcessing = true;
-                    });
-
-                    // TODO : 현재 프로필사진을 바꾸지 않고 나머지 데이터만 변경하더라도
-                    // 프로필사진을 다시 업로드하도록 구조가 작성되어있음
-                    // 낭비되는 Storage를 줄이기 위해서 여기 부분 수정해주기
-                    // (기존의 프로필사진은 삭제하는 방식도 고려해볼만 한 듯?)
-
-                    await provider.registerUserData().then(
-                          (result) => result.fold(
-                            (failure) {
-                              String toastMessage = '';
-                              switch (failure.message) {
-                                case 'handle-already-exist':
-                                  toastMessage = '이미 사용중인 ID예요';
-                                  break;
-                                case 'no-image-file':
-                                  toastMessage = '프로필 이미지를 업로드해주세요';
-                                  break;
-                                case 'no-handle':
-                                  toastMessage = '사용자 ID를 업로드해주세요';
-                                  break;
-                                default:
-                                  toastMessage = '잠시 후 다시 시도해주세요';
-                                  break;
-                              }
-
-                              showToastMessage(
-                                context,
-                                text: toastMessage,
-                              );
-                            },
-                            (success) async {
-                              ref.invalidate(getMyUserDataProvider);
-                              if (widget.isModifying) {
-                                Navigator.pop(context, true);
-                              } else {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    fullscreenDialog: true,
-                                    builder: (context) => const MainView(),
+                                filled: true,
+                                fillColor: CustomColors.whGrey,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: const BorderSide(
+                                    width: 0,
+                                    style: BorderStyle.none,
                                   ),
+                                ),
+                                isCollapsed: true,
+                                contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 12.0,
+                                  horizontal: 16.0,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 24,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              '한 줄 소개',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                color: CustomColors.whWhite,
+                                fontSize: 20,
+                              ),
+                            ),
+                            Container(
+                              height: 8.0,
+                            ),
+                            TextFormField(
+                              initialValue: widget.aboutMe,
+                              onChanged: (value) {
+                                provider.setAboutMe(value);
+                                setState(() {});
+                              },
+                              cursorColor: CustomColors.whWhite,
+                              textAlignVertical: TextAlignVertical.center,
+                              style: const TextStyle(
+                                color: CustomColors.whWhite,
+                                fontSize: 16.0,
+                              ),
+                              decoration: InputDecoration(
+                                hintText: '나에 대해 소개해주세요',
+                                hintStyle: const TextStyle(
+                                  fontSize: 16,
+                                  color: CustomColors.whPlaceholderGrey,
+                                ),
+                                filled: true,
+                                fillColor: CustomColors.whGrey,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: const BorderSide(
+                                    width: 0,
+                                    style: BorderStyle.none,
+                                  ),
+                                ),
+                                isCollapsed: true,
+                                contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 12.0,
+                                  horizontal: 16.0,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        // Expanded(child: Container()),
+                      ],
+                    ),
+                  ),
+                  WideColoredButton(
+                    onPressed: () async {
+                      setState(() {
+                        viewmodel.isProcessing = true;
+                      });
+
+                      // TODO : 현재 프로필사진을 바꾸지 않고 나머지 데이터만 변경하더라도
+                      // 프로필사진을 다시 업로드하도록 구조가 작성되어있음
+                      // 낭비되는 Storage를 줄이기 위해서 여기 부분 수정해주기
+                      // (기존의 프로필사진은 삭제하는 방식도 고려해볼만 한 듯?)
+
+                      await provider.registerUserData().then(
+                            (result) => result.fold(
+                              (failure) {
+                                String toastMessage = '';
+                                switch (failure.message) {
+                                  case 'handle-already-exist':
+                                    toastMessage = '이미 사용중인 ID예요';
+                                    break;
+                                  case 'no-image-file':
+                                    toastMessage = '프로필 이미지를 업로드해주세요';
+                                    break;
+                                  case 'no-handle':
+                                    toastMessage = '사용자 ID를 업로드해주세요';
+                                    break;
+                                  default:
+                                    toastMessage = '잠시 후 다시 시도해주세요';
+                                    break;
+                                }
+
+                                showToastMessage(
+                                  context,
+                                  text: toastMessage,
                                 );
-                              }
-                            },
-                          ),
-                        );
-                    setState(() {
-                      viewmodel.isProcessing = false;
-                    });
-                  },
-                  isDiminished:
-                      !((viewmodel.name.isNotEmpty & viewmodel.handle.isNotEmpty) & (viewmodel.profileImage != null)) |
-                          viewmodel.isProcessing,
-                  buttonTitle: viewmodel.isProcessing ? '처리 중' : '완료',
-                  foregroundColor: CustomColors.whBlack,
-                ),
-              ],
+                              },
+                              (success) async {
+                                ref.invalidate(getMyUserDataProvider);
+                                if (widget.isModifying) {
+                                  Navigator.pop(context, true);
+                                } else {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      fullscreenDialog: true,
+                                      builder: (context) => const MainView(),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                          );
+                      setState(() {
+                        viewmodel.isProcessing = false;
+                      });
+                    },
+                    isDiminished: !((viewmodel.name.isNotEmpty & viewmodel.handle.isNotEmpty) &
+                            (viewmodel.profileImage != null)) |
+                        viewmodel.isProcessing,
+                    buttonTitle: viewmodel.isProcessing ? '처리 중' : '완료',
+                    foregroundColor: CustomColors.whBlack,
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-        Visibility(
-          visible: viewmodel.isProcessing,
-          child: Container(
-            constraints: const BoxConstraints.expand(),
-            alignment: Alignment.center,
-            color: CustomColors.whDarkBlack.withAlpha(130),
-            child: const CircularProgressIndicator(
-              color: CustomColors.whYellow,
+          Visibility(
+            visible: viewmodel.isProcessing,
+            child: Container(
+              constraints: const BoxConstraints.expand(),
+              alignment: Alignment.center,
+              color: CustomColors.whDarkBlack.withAlpha(130),
+              child: const CircularProgressIndicator(
+                color: CustomColors.whYellow,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

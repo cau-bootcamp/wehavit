@@ -157,7 +157,7 @@ class MyPageScreenState extends ConsumerState<MyPageView> with AutomaticKeepAliv
         return GradientBottomSheet(
           Column(
             children: [
-              WideColoredButton(
+              WideOutlinedButton(
                 buttonTitle: '내 정보 수정하기',
                 iconString: WHIcons.manageMyInfo,
                 onPressed: () async {
@@ -198,7 +198,7 @@ class MyPageScreenState extends ConsumerState<MyPageView> with AutomaticKeepAliv
               const SizedBox(
                 height: 12,
               ),
-              WideColoredButton(
+              WideOutlinedButton(
                 buttonTitle: '로그아웃',
                 iconString: WHIcons.logout,
                 onPressed: () async {
@@ -213,7 +213,7 @@ class MyPageScreenState extends ConsumerState<MyPageView> with AutomaticKeepAliv
               const SizedBox(
                 height: 12,
               ),
-              WideColoredButton(
+              WideOutlinedButton(
                 buttonTitle: '회원탈퇴',
                 iconString: WHIcons.withdraw,
                 foregroundColor: CustomColors.pointRed,
