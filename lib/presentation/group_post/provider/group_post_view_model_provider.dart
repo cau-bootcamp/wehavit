@@ -20,7 +20,7 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
     this._removeQuickshotPresetUsecase,
   ) : super(GroupPostViewModel());
 
-  final GetGroupConfirmPostListByDateUsecase _getGroupConfirmPostListByDateUsecase;
+  final GetConfirmPostListByDateUsecase _getGroupConfirmPostListByDateUsecase;
   final SendEmojiReactionToConfirmPostUsecase _sendEmojiReactionToConfirmPostUsecase;
   final SendQuickShotReactionToConfirmPostUsecase _sendQuickShotReactionToConfirmPostUsecase;
   final SendCommentReactionToConfirmPostUsecase _sendCommentReactionToConfirmPostUsecase;
@@ -34,9 +34,9 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
   Future<void> loadConfirmPostEntityListFor({
     required DateTime dateTime,
   }) async {
-    final selectedDate = DateTime(dateTime.year, dateTime.month, dateTime.day);
+    // final selectedDate = DateTime(dateTime.year, dateTime.month, dateTime.day);
 
-    state.confirmPostList[selectedDate] = _getGroupConfirmPostListByDateUsecase(state.groupId, selectedDate);
+    // state.confirmPostList[selectedDate] = _getGroupConfirmPostListByDateUsecase(state.groupId, selectedDate);
   }
 
   // Reactions

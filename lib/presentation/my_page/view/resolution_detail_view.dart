@@ -1,10 +1,10 @@
 import 'dart:async';
 
+import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:wehavit/common/constants/constants.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
@@ -23,12 +23,6 @@ class ResolutionDetailView extends ConsumerStatefulWidget {
   @override
   ConsumerState<ResolutionDetailView> createState() => _ResolutionDetailViewState();
 }
-
-// class ChartData {
-//   ChartData(this.x, this.y);
-//   final String x;
-//   final double? y;
-// }
 
 class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
   @override
@@ -59,8 +53,6 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
     unawaited(provider.loadConfirmPostEntityListFor(dateTime: DateTime.now()));
   }
 
-  static List<String> weekdayString = ['월', '화', '수', '목', '금', '토', '일'];
-
   @override
   Widget build(BuildContext context) {
     final viewModel = ref.watch(resolutionDetailViewModelProvider);
@@ -90,14 +82,10 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  '나의 목표',
+                Text(
+                  '나의 도전',
                   textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
+                  style: context.headlineSmall,
                 ),
                 const SizedBox(
                   height: 16,
@@ -153,74 +141,15 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   '요일 별 인증 횟수',
                   textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
+                  style: context.headlineSmall,
                 ),
                 const SizedBox(
                   height: 16,
                 ),
-                Container(
-                  padding: const EdgeInsets.all(20.0),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16.0),
-                    color: CustomColors.whGrey,
-                  ),
-                  child: SizedBox(
-                    height: 200,
-                    child: SfCartesianChart(
-                      plotAreaBorderColor: Colors.transparent,
-                      primaryXAxis: const CategoryAxis(
-                        majorGridLines: MajorGridLines(color: Colors.transparent),
-                        majorTickLines: MajorTickLines(color: Colors.transparent),
-                        labelStyle: TextStyle(
-                          color: Colors.white, // 레이블 색상을 흰색으로 변경
-                          fontSize: 14, // 폰트 크기 (옵션)
-                          fontWeight: FontWeight.normal, // 폰트 굵기 (옵션)
-                        ),
-                      ),
-                      primaryYAxis: const NumericAxis(
-                        isVisible: false,
-                      ),
-                      series: <CartesianSeries>[
-                        // Renders bar chart
-                        ColumnSeries<ChartData, String>(
-                          animationDuration: 0,
-                          dataLabelMapper: (datum, index) => datum.y?.toInt().toString(),
-                          dataLabelSettings: const DataLabelSettings(
-                            isVisible: true,
-                            textStyle: TextStyle(
-                              color: CustomColors.whWhite,
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          color: CustomColors.pointColorList[widget.entity.colorIndex],
-                          dataSource: List<ChartData>.generate(
-                            widget.entity.weeklyPostCountList.length,
-                            (index) => ChartData(
-                              weekdayString[index],
-                              widget.entity.weeklyPostCountList[index].toDouble(),
-                            ),
-                          ),
-                          xValueMapper: (ChartData data, _) => data.x,
-                          yValueMapper: (ChartData data, _) => data.y,
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(8),
-                            topRight: Radius.circular(8),
-                          ),
-                          width: 0.5,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                ConfirmCountChart(resolutionEntity: widget.entity),
               ],
             ),
             const SizedBox(

@@ -143,9 +143,9 @@ final getFriendUidListUseCaseProvider = Provider<GetFriendUidListUsecase>((ref) 
   return GetFriendUidListUsecase(resolutionRepository);
 });
 
-final getGroupConfirmPostListByDateUsecaseProvider = Provider<GetGroupConfirmPostListByDateUsecase>((ref) {
+final getConfirmPostListByDateUsecaseProvider = Provider<GetConfirmPostListByDateUsecase>((ref) {
   final confirmPostRepository = ref.watch(confirmPostRepositoryProvider);
-  return GetGroupConfirmPostListByDateUsecase(confirmPostRepository);
+  return GetConfirmPostListByDateUsecase(confirmPostRepository);
 });
 
 final getConfirmPostListForResolutionIdUsecaseProvider = Provider<GetConfirmPostListForResolutionIdUsecase>((ref) {
