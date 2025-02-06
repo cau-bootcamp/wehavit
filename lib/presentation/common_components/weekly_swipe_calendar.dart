@@ -6,6 +6,7 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
 import 'package:wehavit/presentation/state/group_post/confirm_post_provider.dart';
+import 'package:wehavit/presentation/state/group_post/friend_post_provider.dart';
 
 class WeeklyPostSwipeCalendar extends StatefulWidget {
   const WeeklyPostSwipeCalendar({
@@ -15,6 +16,7 @@ class WeeklyPostSwipeCalendar extends StatefulWidget {
     required this.onSelected,
   });
 
+  /// groupId가 빈 문자열이면 내 친구들의 인증글을 조회함
   final String groupId;
   final DateTime firstDate;
   final Function(DateTime) onSelected;
@@ -116,9 +118,11 @@ class _WeeklySwipeCalendarCarouselState extends State<WeeklySwipeCalendarCarouse
                 final isFuture = todayDate.isBefore(cellDate);
                 final isPast = widget.firstDate.isAfter(cellDate);
 
-                final asyncCellValue = ref
-                    .watch(confirmPostListProvider(GroupConfirmPostProviderParam(widget.groupId, cellDate)))
-                    .whenData((list) => list.length);
+                final asyncCellValue = widget.groupId.isNotEmpty
+                    ? ref
+                        .watch(confirmPostListProvider(GroupConfirmPostProviderParam(widget.groupId, cellDate)))
+                        .whenData((list) => list.length)
+                    : ref.watch(friendPostListProvider(cellDate)).whenData((list) => list.length);
 
                 return WeeklyPostSwipeCalendarCell(
                   isValidDate: !(isFuture || isPast),
@@ -257,7 +261,7 @@ class WeeklyPostSwipeCalendarCell extends StatelessWidget {
                         loading: () {
                           return SizedBox(
                             width: 20,
-                            height: 20,
+                            height: 24,
                             child: Padding(
                               padding: const EdgeInsets.all(2.0),
                               child: CircularProgressIndicator(
@@ -268,34 +272,6 @@ class WeeklyPostSwipeCalendarCell extends StatelessWidget {
                           );
                         },
                       ),
-
-                      // EitherFutureBuilder<List<ConfirmPostEntity>>(
-                      //   target: confirmPostList[cellDate],
-                      // forWaiting: SizedBox(
-                      //   width: 20,
-                      //   height: 20,
-                      //   child: Padding(
-                      //     padding: const EdgeInsets.all(
-                      //       2.0,
-                      //     ),
-                      //     child: CircularProgressIndicator(
-                      //       strokeWidth: 2,
-                      //       color: !isValidDate || cellDate != widget.selectedDate
-                      //           ? CustomColors.whGrey700
-                      //           : CustomColors.whGrey100,
-                      //     ),
-                      //   ),
-                      // ),
-                      //   forFail: const Text('-'),
-                      // mainWidgetCallback: (entityList) => Text(
-                      //   entityList.length.toString(),
-                      //   style: context.displaySmall?.copyWith(
-                      //     color: !isValidDate || cellDate != widget.selectedDate
-                      //         ? CustomColors.whGrey700
-                      //         : CustomColors.whGrey100,
-                      //   ),
-                      // ),
-                      // ),
                     ),
                   ),
                 ),

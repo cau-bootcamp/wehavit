@@ -45,7 +45,7 @@ class _GroupViewState extends ConsumerState<GroupView> {
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return const FriendPostView();
+                              return GroupPostView(groupEntity: null);
                             },
                           ),
                         ).whenComplete(

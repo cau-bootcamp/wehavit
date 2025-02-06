@@ -228,14 +228,15 @@ class GroupListCellContent extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: 110,
-              height: 16,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(4)),
-                color: CustomColors.whGrey400,
+            if (!isFriendCell)
+              Container(
+                width: 110,
+                height: 16,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(4)),
+                  color: CustomColors.whGrey400,
+                ),
               ),
-            ),
             const SizedBox(height: 6),
             Container(
               width: 160,

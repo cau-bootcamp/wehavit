@@ -15,13 +15,16 @@ import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/group_post/provider/send_reaction_state_model_provider.dart';
 import 'package:wehavit/presentation/presentation.dart';
 import 'package:wehavit/presentation/state/group_post/confirm_post_provider.dart';
+import 'package:wehavit/presentation/state/group_post/friend_post_provider.dart';
 import 'package:wehavit/presentation/state/reaction/quickshot_preset_provider.dart';
+import 'package:wehavit/presentation/state/user_data/my_user_data_provider.dart';
 
 // ignore: must_be_immutable
 class GroupPostView extends ConsumerStatefulWidget {
   GroupPostView({super.key, required this.groupEntity});
 
-  GroupEntity groupEntity;
+  /// GroupEntity가 null인 경우에 '내 친구들' 페이지가 보여짐
+  GroupEntity? groupEntity;
 
   @override
   ConsumerState<GroupPostView> createState() => _GroupPostViewState();
@@ -67,8 +70,8 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
     final viewModel = ref.watch(groupPostViewModelProvider);
 
     return PopScope(
-      onPopInvokedWithResult: (_, __) {
-        ref.invalidate(confirmPostListProvider);
+      onPopInvokedWithResult: (_, __) async {
+        refreshPostList();
       },
       child: Stack(
         children: [
@@ -76,23 +79,23 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
             backgroundColor: CustomColors.whGrey200,
             resizeToAvoidBottomInset: true,
             appBar: WehavitAppBar(
-              titleLabel: widget.groupEntity.groupName,
+              titleLabel: widget.groupEntity?.groupName ?? '내 친구들',
               leadingIconString: WHIcons.back,
               leadingAction: () {
                 Navigator.pop(context);
               },
-              trailingIconString: WHIcons.friend,
+              trailingIconString: widget.groupEntity != null ? WHIcons.friend : '',
+
               trailingAction: () async {
-                // TODO? TrailingAction 수정 필요
-                showModalBottomSheet(
-                  isScrollControlled: true,
-                  context: context,
-                  builder: (context) {
-                    return GroupMemberListBottomSheet(
-                      groupId: widget.groupEntity.groupId,
-                    );
-                  },
-                );
+                if (widget.groupEntity != null) {
+                  showModalBottomSheet(
+                    isScrollControlled: true,
+                    context: context,
+                    builder: (context) {
+                      return GroupMemberListBottomSheet(groupId: widget.groupEntity!.groupId);
+                    },
+                  );
+                }
               },
               // trailingIconBadgeCount: viewModel.appliedUserCountForManager,
             ),
@@ -107,8 +110,9 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                         child: Column(
                           children: [
                             WeeklyPostSwipeCalendar(
-                              groupId: widget.groupEntity.groupId,
-                              firstDate: widget.groupEntity.groupCreatedAt,
+                              groupId: widget.groupEntity?.groupId ?? '',
+                              firstDate: widget.groupEntity?.groupCreatedAt ??
+                                  ref.watch(getMyUserDataProvider).value!.createdAt,
                               onSelected: (selectedDate) {
                                 setState(() {
                                   this.selectedDate = selectedDate;
@@ -121,23 +125,28 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                             Expanded(
                               child: Consumer(
                                 builder: (context, ref, child) {
-                                  final asyncEntityList = ref.watch(
-                                    confirmPostListProvider(
-                                      GroupConfirmPostProviderParam(widget.groupEntity.groupId, selectedDate),
-                                    ),
-                                  );
+                                  final asyncEntityList = widget.groupEntity != null
+                                      ? ref.watch(
+                                          confirmPostListProvider(
+                                            GroupConfirmPostProviderParam(widget.groupEntity!.groupId, selectedDate),
+                                          ),
+                                        )
+                                      : ref.watch(friendPostListProvider(selectedDate));
 
                                   return asyncEntityList.when(
                                     data: (entityList) {
                                       return Visibility(
                                         visible: entityList.isNotEmpty,
                                         replacement: const NoPostPlaceholder(),
-                                        child: SingleChildScrollView(
-                                          padding: const EdgeInsets.only(bottom: 20.0),
-                                          child: Column(
-                                            children: List<Widget>.generate(
-                                              entityList.length,
-                                              (index) => Padding(
+                                        child: RefreshIndicator(
+                                          onRefresh: () async {
+                                            refreshPostList(targetDate: selectedDate);
+                                          },
+                                          child: ListView.builder(
+                                            padding: const EdgeInsets.only(bottom: 20.0),
+                                            itemCount: entityList.length,
+                                            itemBuilder: (context, index) {
+                                              return Padding(
                                                 padding: const EdgeInsets.only(bottom: 12.0),
                                                 child: ConfirmPostListCell(
                                                   confirmPostEntity: entityList[index],
@@ -149,50 +158,42 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                                     commentFocusNode.requestFocus();
                                                   },
                                                   onEmojiPressed: () async {
-                                                    await showEmojiSheet(entityList[index], context).whenComplete(
-                                                      () {
-                                                        if (ref
-                                                                .read(
-                                                                  sendReactionStateModelNotifierProvider(
-                                                                    entityList[index],
-                                                                  ),
-                                                                )
-                                                                .emojiSendCount ==
-                                                            0) {
-                                                          return null;
+                                                    await showEmojiSheet(entityList[index], context).whenComplete(() {
+                                                      if (ref
+                                                              .read(
+                                                                sendReactionStateModelNotifierProvider(
+                                                                  entityList[index],
+                                                                ),
+                                                              )
+                                                              .emojiSendCount ==
+                                                          0) {
+                                                        return;
+                                                      }
+
+                                                      ref
+                                                          .read(
+                                                            sendReactionStateModelNotifierProvider(entityList[index]),
+                                                          )
+                                                          .emojiWidgets
+                                                          .clear();
+
+                                                      ref
+                                                          .read(
+                                                            sendReactionStateModelNotifierProvider(entityList[index])
+                                                                .notifier,
+                                                          )
+                                                          .sendReaction()
+                                                          .then((result) {
+                                                        final resultMessage = result.fold(
+                                                          (_) => '잠시 후 다시 시도해주세요',
+                                                          (_) => '친구에게 이모지로 응원을 보냈어요',
+                                                        );
+
+                                                        if (context.mounted) {
+                                                          showToastMessage(context, text: resultMessage);
                                                         }
-
-                                                        ref
-                                                            .read(
-                                                              sendReactionStateModelNotifierProvider(
-                                                                entityList[index],
-                                                              ),
-                                                            )
-                                                            .emojiWidgets
-                                                            .clear();
-
-                                                        return ref
-                                                            .read(
-                                                              sendReactionStateModelNotifierProvider(
-                                                                entityList[index],
-                                                              ).notifier,
-                                                            )
-                                                            .sendReaction()
-                                                            .then((result) {
-                                                          final resultMessage = result.fold(
-                                                            (_) => '잠시 후 다시 시도해주세요',
-                                                            (_) => '친구에게 이모지로 응원을 보냈어요',
-                                                          );
-
-                                                          if (context.mounted) {
-                                                            showToastMessage(
-                                                              context,
-                                                              text: resultMessage,
-                                                            );
-                                                          }
-                                                        });
-                                                      },
-                                                    );
+                                                      });
+                                                    });
 
                                                     ref.invalidate(sendReactionStateModelNotifierProvider);
                                                   },
@@ -219,7 +220,7 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                                           .read(reactionCameraWidgetModelProvider.notifier)
                                                           .endOnCapturingArea();
 
-                                                      final _ = ref
+                                                      ref
                                                           .watch(
                                                             sendReactionStateModelNotifierProvider(entityList[index]),
                                                           )
@@ -227,9 +228,8 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
 
                                                       ref
                                                           .read(
-                                                            sendReactionStateModelNotifierProvider(
-                                                              entityList[index],
-                                                            ).notifier,
+                                                            sendReactionStateModelNotifierProvider(entityList[index])
+                                                                .notifier,
                                                           )
                                                           .sendReaction()
                                                           .then((result) {
@@ -239,23 +239,21 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                                         );
 
                                                         if (context.mounted) {
-                                                          showToastMessage(
-                                                            context,
-                                                            text: resultMessage,
-                                                          );
+                                                          showToastMessage(context, text: resultMessage);
                                                         }
 
                                                         ref.invalidate(
-                                                          sendReactionStateModelNotifierProvider(entityList[index]),
+                                                          sendReactionStateModelNotifierProvider(
+                                                            entityList[index],
+                                                          ),
                                                         );
                                                       });
                                                     }
                                                     reactionCameraWidgetModeNotifier.value =
                                                         ReactionCameraWidgetMode.none;
                                                   },
-                                                  onQuickshotPaletteCellTapUp: (imageFilePath) {
-                                                    // 보내기
-                                                    final _ = ref
+                                                  onQuickshotPaletteCellTapUp: (imageFilePath) async {
+                                                    ref
                                                         .watch(
                                                           sendReactionStateModelNotifierProvider(entityList[index]),
                                                         )
@@ -263,9 +261,8 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
 
                                                     ref
                                                         .read(
-                                                          sendReactionStateModelNotifierProvider(
-                                                            entityList[index],
-                                                          ).notifier,
+                                                          sendReactionStateModelNotifierProvider(entityList[index])
+                                                              .notifier,
                                                         )
                                                         .sendReaction()
                                                         .then((result) {
@@ -275,10 +272,7 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                                       );
 
                                                       if (context.mounted) {
-                                                        showToastMessage(
-                                                          context,
-                                                          text: resultMessage,
-                                                        );
+                                                        showToastMessage(context, text: resultMessage);
                                                       }
                                                     });
 
@@ -287,10 +281,7 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                                     );
                                                   },
                                                   onQuickshotPaletteAddCellTapUp: () {
-                                                    showToastMessage(
-                                                      context,
-                                                      text: '추가 버튼을 누른 채로 드래그 해주세요!',
-                                                    );
+                                                    showToastMessage(context, text: '추가 버튼을 누른 채로 드래그 해주세요!');
                                                   },
                                                   onQuickshotPaletteAddCellLongPressStart: (detail) async {
                                                     PermissionStatus permission = await Permission.camera.status;
@@ -326,8 +317,8 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                                         ReactionCameraWidgetMode.none;
                                                   },
                                                 ),
-                                              ),
-                                            ),
+                                              );
+                                            },
                                           ),
                                         ),
                                       );
@@ -437,6 +428,22 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
         ],
       ),
     );
+  }
+
+  Future<void> refreshPostList({DateTime? targetDate}) async {
+    if (widget.groupEntity == null) {
+      if (targetDate == null) {
+        ref.invalidate(friendPostListProvider);
+      } else {
+        ref.invalidate(friendPostListProvider(targetDate));
+      }
+    } else {
+      if (targetDate == null) {
+        ref.invalidate(confirmPostListProvider);
+      } else {
+        ref.invalidate(confirmPostListProvider(GroupConfirmPostProviderParam(widget.groupEntity!.groupId, targetDate)));
+      }
+    }
   }
 
   Future<dynamic> showEmojiSheet(
@@ -571,43 +578,5 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
             ),
           }.entries,
         );
-  }
-}
-
-class NoPostPlaceholder extends StatelessWidget {
-  const NoPostPlaceholder({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            '아무도 인증글을 남기지 않은\n조용한 날이네요',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: CustomColors.whWhite,
-            ),
-          ),
-          Text(
-            '🤫',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 40,
-              fontWeight: FontWeight.bold,
-              color: CustomColors.whWhite,
-            ),
-          ),
-          SizedBox(
-            height: 60,
-          ),
-        ],
-      ),
-    );
   }
 }

@@ -122,10 +122,10 @@ class _ConfirmPostListCellState extends State<ConfirmPostListCell> {
                                 );
                               },
                               error: (_, __) {
-                                return Container();
+                                return Container(height: 20);
                               },
                               loading: () {
-                                return Container();
+                                return Container(height: 20);
                               },
                             );
                           },
