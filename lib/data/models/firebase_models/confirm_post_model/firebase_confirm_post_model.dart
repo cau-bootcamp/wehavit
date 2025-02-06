@@ -63,9 +63,9 @@ extension FirebaseConfirmPostModelConvert on FirebaseConfirmPostModel {
       content: content ?? '',
       imageUrlList: imageUrlList ?? [],
       owner: owner.userId,
-      recentStrike: recentStrike,
-      createdAt: createdAt,
-      updatedAt: updatedAt,
+      recentStrike: recentStrike ?? 0,
+      createdAt: createdAt ?? DateTime.now(),
+      updatedAt: updatedAt ?? DateTime.now(),
       hasRested: attributes?[FirebaseConfirmPostFieldName.attributesHasRested] ?? false,
     );
   }

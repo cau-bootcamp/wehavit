@@ -142,4 +142,9 @@ class ResolutionRepositoryImpl implements ResolutionRepository {
       targetResolutionId: targetResolutionId,
     );
   }
+
+  @override
+  EitherFuture<List<String>> getResolutionIdListSharedToGroup({required String fromUserId, required String toGroupId}) {
+    return _wehavitDatasource.getResolutionIdListSharedToGroup(fromUserId: fromUserId, toGroupId: toGroupId);
+  }
 }

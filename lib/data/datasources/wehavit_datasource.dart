@@ -244,4 +244,6 @@ abstract class WehavitDatasource {
   });
 
   EitherFuture<List<String>> getFriendUidList();
+
+  EitherFuture<List<String>> getResolutionIdListSharedToGroup({required String fromUserId, required String toGroupId});
 }

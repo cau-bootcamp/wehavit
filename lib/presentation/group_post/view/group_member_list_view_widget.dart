@@ -1,445 +1,310 @@
-import 'dart:async';
-
+import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/constants/constants.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/domain/usecases/usecases.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
+import 'package:wehavit/presentation/state/group_list/group_provider.dart';
+import 'package:wehavit/presentation/state/group_post/group_member_provider.dart';
+import 'package:wehavit/presentation/state/user_data/my_user_data_provider.dart';
 
 // ignore: must_be_immutable
-class GroupMemberListBottomSheet extends ConsumerStatefulWidget {
-  GroupMemberListBottomSheet({
+class GroupMemberListBottomSheet extends StatefulWidget {
+  const GroupMemberListBottomSheet({
     super.key,
-    required this.groupEntity,
+    required this.groupId,
   });
 
-  GroupEntity groupEntity;
-  // final Function(GroupEntity) updateParentViewGroupEntity;
+  final String groupId;
 
   @override
-  ConsumerState<GroupMemberListBottomSheet> createState() => _GroupMemberListBottomSheetState();
+  State<GroupMemberListBottomSheet> createState() => _GroupMemberListBottomSheetState();
 }
 
-class _GroupMemberListBottomSheetState extends ConsumerState<GroupMemberListBottomSheet> {
-  bool isManager = false;
-  bool isManagingMode = false;
-  List<String> appliedUidList = [];
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    unawaited(
-      ref.read(checkWeatherUserIsMnagerOfGroupEntityUsecaseProvider)(widget.groupEntity).then(
-        (result) {
-          return result.fold((failure) => false, (result) => result);
-        },
-      ).then((result) {
-        if (mounted) {
-          setState(() {
-            isManager = result;
-          });
-        }
-      }).whenComplete(() async {
-        if (isManager) {
-          appliedUidList = await ref.watch(getAppliedUserListForGroupEntityUsecaseProvider)(widget.groupEntity).then(
-                (result) => result.fold((failure) => [], (uidList) => uidList),
-              );
-          if (mounted) {
-            setState(() {});
-          }
-        }
-      }),
-    );
-  }
+class _GroupMemberListBottomSheetState extends State<GroupMemberListBottomSheet> {
+  bool isManageMode = false;
 
   @override
   Widget build(BuildContext context) {
-    return GradientBottomSheet(
-      Container(
-        height: MediaQuery.sizeOf(context).height * 0.80,
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: Column(
-          children: [
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                const Center(
-                  child: Text(
-                    '멤버 목록',
-                    style: TextStyle(
-                      color: CustomColors.whWhite,
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-                Visibility(
-                  visible: isManager,
-                  child: Container(
-                    alignment: Alignment.centerRight,
-                    child: Stack(
-                      alignment: Alignment.topRight,
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            setState(() {
-                              isManagingMode = !isManagingMode;
-                            });
-                          },
-                          child: isManagingMode
-                              ? const Text(
-                                  '완료',
-                                  style: TextStyle(
-                                    color: CustomColors.whWhite,
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.w600,
+    return Consumer(
+      builder: (context, ref, child) {
+        return GradientBottomSheet(
+          SizedBox(
+            height: MediaQuery.sizeOf(context).height * 0.80,
+            child: Consumer(
+              builder: (context, ref, child) {
+                return ref.watch(groupProvider(widget.groupId)).when(
+                      data: (groupEntity) {
+                        final isManager = groupEntity.groupManagerUid == ref.read(getMyUserDataProvider).value?.userId;
+
+                        final newApplyCount = ref
+                            .watch(getAppliedUserIdListProvider(groupEntity))
+                            .when(data: (data) => data.length, error: (_, __) => 0, loading: () => 0);
+
+                        return Column(
+                          children: [
+                            WehavitAppBar(
+                              titleLabel: '멤버 목록',
+                              leadingTitle: ' ',
+                              trailingTitle: isManager ? (isManageMode ? '완료' : '') : '',
+                              trailingIconString: isManager ? (isManageMode ? '' : WHIcons.friend) : '',
+                              trailingIconBadgeCount: newApplyCount,
+                              trailingAction: () {
+                                setState(() {
+                                  isManageMode = !isManageMode;
+                                });
+                              },
+                            ),
+                            const SizedBox(
+                              height: 16.0,
+                            ),
+                            !isManageMode
+                                ? Expanded(
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text('그룹 멤버', style: context.titleSmall),
+                                            Text('이번 주 목표 달성률', style: context.bodyMedium),
+                                          ],
+                                        ),
+                                        GroupMemberList(groupEntity, manageMode: false),
+                                      ],
+                                    ),
+                                  )
+                                : Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '그룹 가입 요청',
+                                          style: context.titleSmall,
+                                        ),
+                                        GroupAppliedUserList(groupEntity),
+                                        const SizedBox(height: 32),
+                                        Text(
+                                          '그룹 멤버',
+                                          style: context.titleSmall,
+                                        ),
+                                        GroupMemberList(groupEntity, manageMode: true),
+                                      ],
+                                    ),
                                   ),
-                                )
-                              : const Icon(
-                                  Icons.manage_accounts_outlined,
-                                  color: CustomColors.whWhite,
-                                  size: 24.0,
-                                ),
-                        ),
-                        Visibility(
-                          visible: appliedUidList.isNotEmpty,
-                          child: Container(
-                            margin: const EdgeInsets.only(
-                              top: 3,
-                              right: 5,
-                            ),
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: CustomColors.whRed,
-                            ),
-                            width: 18,
-                            height: 18,
-                            alignment: Alignment.center,
-                            child: Text(
-                              appliedUidList.length.toString(),
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: CustomColors.whWhite,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+                          ],
+                        );
+                      },
+                      error: (_, __) => Container(),
+                      loading: () => Container(),
+                    );
+              },
             ),
-            const SizedBox(
-              height: 16.0,
-            ),
-            Expanded(
-              child: ListView(
-                children: [
-                  Visibility(
-                    visible: isManagingMode && appliedUidList.isNotEmpty,
-                    child: Column(
-                      children: List<Widget>.generate(
-                        appliedUidList.length,
-                        (index) => Padding(
-                          padding: const EdgeInsets.only(bottom: 12.0),
-                          child: GroupMemberListCellWidget(
-                            memberId: appliedUidList[index],
-                            groupManagerUid: widget.groupEntity.groupManagerUid,
-                            groupEntity: widget.groupEntity,
-                            isManagingMode: isManagingMode,
-                            isAppliedUser: true,
-                            updateGroupEntity: updateGroupEntityForApply,
-                          ),
-                          // child: GroupMemberManageListCellWidget(),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTapUp: (_) {},
-                        // child: const Row(
-                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //   children: [
-                        //     Text(
-                        //       '가나다 순',
-                        //       style: TextStyle(
-                        //         color: CustomColors.whPlaceholderGrey,
-                        //         fontSize: 16.0,
-                        //         fontWeight: FontWeight.w600,
-                        //       ),
-                        //     ),
-                        //     Icon(
-                        //       Icons.keyboard_arrow_down,
-                        //       color: CustomColors.whPlaceholderGrey,
-                        //       size: 20.0,
-                        //     ),
-                        //   ],
-                        // ),
-                        child: Text(
-                          // ignore: lines_longer_than_80_chars
-                          '멤버 (${widget.groupEntity.groupMemberUidList.length})',
-                          style: const TextStyle(
-                            color: CustomColors.whPlaceholderGrey,
-                            fontSize: 17.0,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        isManagingMode ? '그룹에서 내보내기' : '이번주 목표 달성률',
-                        style: const TextStyle(
-                          color: CustomColors.whPlaceholderGrey,
-                          fontSize: 17.0,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 16.0,
-                  ),
-                  Column(
-                    children: List<Widget>.generate(
-                      widget.groupEntity.groupMemberUidList.length,
-                      (index) => Padding(
-                        padding: const EdgeInsets.only(bottom: 12.0),
-                        child: GroupMemberListCellWidget(
-                          memberId: widget.groupEntity.groupMemberUidList[index],
-                          groupManagerUid: widget.groupEntity.groupManagerUid,
-                          groupEntity: widget.groupEntity,
-                          isManagingMode: isManagingMode,
-                          isAppliedUser: false,
-                          updateGroupEntity: updateGroupEntityForApply,
-                        ),
-                        // child: GroupMemberManageListCellWidget(),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
-
-  void updateGroupEntityForApply(
-    GroupEntity newGroupEntity,
-    String appliedUserId,
-  ) {
-    setState(() {
-      widget.groupEntity = newGroupEntity;
-      appliedUidList.remove(appliedUserId);
-      // widget.updateParentViewGroupEntity(newGroupEntity);
-    });
-  }
 }
 
-class GroupMemberListCellWidget extends ConsumerStatefulWidget {
-  const GroupMemberListCellWidget({
+class GroupAppliedUserList extends StatelessWidget {
+  const GroupAppliedUserList(
+    this.groupEntity, {
     super.key,
-    required this.memberId,
-    required this.groupManagerUid,
-    required this.groupEntity,
-    required this.isManagingMode,
-    required this.isAppliedUser,
-    required this.updateGroupEntity,
   });
 
-  final bool isManagingMode;
-  final bool isAppliedUser;
-  final String memberId;
-  final String groupManagerUid;
   final GroupEntity groupEntity;
-  final Function(GroupEntity, String) updateGroupEntity;
-
-  @override
-  ConsumerState<GroupMemberListCellWidget> createState() => _GroupMemberListCellWidgetState();
-}
-
-class _GroupMemberListCellWidgetState extends ConsumerState<GroupMemberListCellWidget> {
-  UserDataEntity? userEntity;
-  double? achievePercentage;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    unawaited(loadEntity(widget.memberId));
-    if (!widget.isAppliedUser) {
-      unawaited(loadAchievePercentage());
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        CircleProfileImage(
-          size: 60,
-          url: userEntity?.userImageUrl ?? '',
-        ),
-
-        const SizedBox(
-          width: 20.0,
-        ),
-        Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                userEntity?.userName ?? '',
-                style: const TextStyle(
-                  color: CustomColors.whWhite,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w600,
-                  height: 1.0,
+    return Consumer(
+      builder: (context, ref, child) {
+        return ref.watch(getAppliedUserIdListProvider(groupEntity)).when(
+              data: (data) => data.isEmpty
+                  ? Container(
+                      width: double.infinity,
+                      height: 80,
+                      alignment: Alignment.center,
+                      child: Text(
+                        '새로운 그룹 가입 요청이 아직 없어요',
+                        style: context.labelMedium?.copyWith(color: CustomColors.whGrey700),
+                      ),
+                    )
+                  : Column(
+                      children: List.generate(data.length, (index) {
+                        final userId = data[index];
+                        return Container(
+                          padding: const EdgeInsets.only(top: 16.0),
+                          child: UserProfileCell(
+                            userId,
+                            type: UserProfileCellType.invited,
+                            onAccept: () async {
+                              ref
+                                  .read(acceptApplyingForJoiningGroupUsecaseProvider)
+                                  .call(groupId: groupEntity.groupId, userId: userId)
+                                  .then(
+                                    (result) => result.fold(
+                                      (failure) {
+                                        showToastMessage(context, text: '잠시 후 다시 시도해주세요');
+                                      },
+                                      (success) {
+                                        ref.invalidate(getAppliedUserIdListProvider(groupEntity));
+                                        ref.invalidate(groupProvider(groupEntity.groupId));
+                                        showToastMessage(context, text: '선택한 사용자가 이제부터 그룹과 함께합니다');
+                                      },
+                                    ),
+                                  );
+                            },
+                            onRefuse: () async {
+                              ref
+                                  .read(rejectApplyingForJoiningGroupUsecaseProvider)
+                                  .call(groupId: groupEntity.groupId, userId: userId)
+                                  .then(
+                                    (result) => result.fold(
+                                      (failure) {
+                                        showToastMessage(context, text: '잠시 후 다시 시도해주세요');
+                                      },
+                                      (success) {
+                                        ref.invalidate(getAppliedUserIdListProvider(groupEntity));
+                                        ref.invalidate(groupProvider(groupEntity.groupId));
+                                        showToastMessage(context, text: '선택한 사용자의 신청을 반려했어요');
+                                      },
+                                    ),
+                                  );
+                            },
+                          ),
+                        );
+                      }),
+                    ),
+              error: (_, __) => Container(
+                width: double.infinity,
+                height: 80,
+                alignment: Alignment.center,
+                child: Text(
+                  '지금은 정보를 불러올 수 없어요\n잠시 후 다시 시도해주세요',
+                  style: context.labelMedium?.copyWith(color: CustomColors.whGrey700),
                 ),
               ),
-              // 이후에 다시 추가하기
-              // Visibility(
-              //   visible: !widget.isAppliedUser,
-              //   child: Text(
-              //     '6개의 목표 공유중',
-              //     style: TextStyle(
-              //       color: CustomColors.whWhite,
-              //       fontSize: 14.0,
-              //       fontWeight: FontWeight.w300,
-              //     ),
-              //   ),
-              // ),
-            ],
-          ),
-        ),
-
-        // Apply Mode
-        Visibility(
-          visible: widget.isAppliedUser,
-          replacement: Visibility(
-            visible: widget.isManagingMode && achievePercentage != null,
-            replacement: Text(
-              '${((achievePercentage ?? 0) * 100).ceil().toString()}%',
-              style: const TextStyle(
-                color: CustomColors.whWhite,
-                fontSize: 16.0,
-                fontWeight: FontWeight.w600,
+              loading: () => const SizedBox(
+                height: 80,
+                width: double.infinity,
               ),
-            ),
-            child: Row(
-              children: [
-                Visibility(
-                  visible: widget.groupManagerUid != widget.memberId,
-                  child: SmallColoredButton(
-                    buttonLabel: '내보내기',
-                    backgroundColor: CustomColors.whBrightGrey,
-                    onPressed: () async {
-                      await ref
-                          .watch(withdrawalFromGroupUsecaseProvider)(
-                        groupId: widget.groupEntity.groupId,
-                        targetUserId: widget.memberId,
-                      )
-                          .then((result) {
-                        if (result.isRight()) {
-                          final List<String> uidList = widget.groupEntity.groupMemberUidList
-                              .where((element) => element != widget.memberId)
-                              .toList();
+            );
+      },
+    );
+  }
+}
 
-                          widget.updateGroupEntity(
-                            widget.groupEntity.copyWith(groupMemberUidList: uidList),
-                            widget.memberId,
+class GroupMemberList extends StatelessWidget {
+  const GroupMemberList(
+    this.groupEntity, {
+    required this.manageMode,
+    super.key,
+  });
+
+  final bool manageMode;
+  final GroupEntity groupEntity;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: ListView.builder(
+        itemCount: groupEntity.groupMemberUidList.length,
+        itemBuilder: (context, index) {
+          final userId = groupEntity.groupMemberUidList[index];
+          return Container(
+            padding: const EdgeInsets.only(top: 16.0),
+            child: Stack(
+              alignment: Alignment.centerRight,
+              children: [
+                Consumer(
+                  builder: (context, ref, child) {
+                    final description = ref
+                        .watch(
+                          sharedResolutionCountProvider(
+                            SharedResolutionCountProviderParam(
+                              groupEntity.groupId,
+                              userId,
+                            ),
+                          ),
+                        )
+                        .when(
+                          data: (count) => '공유중인 목표 $count개',
+                          error: (_, __) => ' ',
+                          loading: () => '...',
+                        );
+
+                    return UserProfileCell(
+                      userId,
+                      type: (manageMode && userId != ref.read(getMyUserDataProvider).value!.userId)
+                          ? UserProfileCellType.deleteMode
+                          : UserProfileCellType.normal,
+                      deleteButtonLabel: '내보내기',
+                      onDelete: () async {
+                        ref
+                            .read(withdrawalFromGroupUsecaseProvider)
+                            .call(groupId: groupEntity.groupId, targetUserId: userId)
+                            .then(
+                              (result) => result.fold(
+                                (failure) {
+                                  showToastMessage(context, text: '잠시 후 다시 시도해주세요');
+                                },
+                                (success) {
+                                  ref.invalidate(groupProvider(groupEntity.groupId));
+                                  showToastMessage(context, text: '선택한 사용자를 그룹에서 제외했어요');
+                                },
+                              ),
+                            );
+                      },
+                      description: description,
+                    );
+                  },
+                ),
+                if (!manageMode)
+                  Consumer(
+                    builder: (context, ref, child) {
+                      return ref
+                          .watch(
+                        loadAchievePercentageProvider(
+                          LoadAchievePercentageProviderParam(
+                            groupEntity.groupId,
+                            userId,
+                          ),
+                        ),
+                      )
+                          .when(
+                        data: (data) {
+                          return Text(
+                            '${(data * 100).ceil()}%',
+                            style: context.labelMedium?.bold.copyWith(
+                              color: data >= 0.8 ? CustomColors.whYellow500 : CustomColors.whGrey900,
+                            ),
                           );
-                        }
-                      });
+                        },
+                        error: (error, st) {
+                          return Text(
+                            '--',
+                            style: context.labelMedium?.bold.copyWith(
+                              color: CustomColors.whGrey700,
+                            ),
+                          );
+                        },
+                        loading: () {
+                          return Text(
+                            '--',
+                            style: context.labelMedium?.bold.copyWith(
+                              color: CustomColors.whGrey700,
+                            ),
+                          );
+                        },
+                      );
                     },
                   ),
-                ),
               ],
             ),
-          ),
-          child: Row(
-            children: [
-              SmallColoredButton(
-                buttonLabel: '거절',
-                backgroundColor: CustomColors.whBrightGrey,
-                onPressed: () async {
-                  ref
-                      .watch(rejectApplyingForJoiningGroupUsecaseProvider)(
-                    groupId: widget.groupEntity.groupId,
-                    userId: widget.memberId,
-                  )
-                      .then((result) {
-                    if (result.isRight()) {
-                      widget.updateGroupEntity(
-                        widget.groupEntity,
-                        widget.memberId,
-                      );
-                    }
-                  });
-                },
-              ),
-              const SizedBox(width: 4.0),
-              SmallColoredButton(
-                buttonLabel: '수락',
-                onPressed: () async {
-                  await ref
-                      .watch(acceptApplyingForJoiningGroupUsecaseProvider)(
-                    groupId: widget.groupEntity.groupId,
-                    userId: widget.memberId,
-                  )
-                      .then((result) {
-                    if (result.isRight()) {
-                      final List<String> uidList =
-                          widget.groupEntity.groupMemberUidList.append(widget.memberId).toList();
-
-                      widget.updateGroupEntity(
-                        widget.groupEntity.copyWith(groupMemberUidList: uidList),
-                        widget.memberId,
-                      );
-                    }
-                  });
-                },
-              ),
-            ],
-          ),
-        ),
-      ],
+          );
+        },
+      ),
     );
-  }
-
-  Future<void> loadEntity(String userId) async {
-    GetUserDataFromIdUsecase getUserDataFromIdUsecase = ref.watch(getUserDataFromIdUsecaseProvider);
-    userEntity = await getUserDataFromIdUsecase.call(widget.memberId).then(
-          (result) => result.fold((failure) => null, (entity) => entity),
-        );
-
-    if (mounted) {
-      setState(() {});
-    }
-  }
-
-  Future<void> loadAchievePercentage() async {
-    GetAchievementPercentageForGroupMemberUsecase getAchievementPercentageForGroupMemberUsecase =
-        ref.watch(getAchievementPercentageForGroupMemberUsecaseProvider);
-
-    achievePercentage = await getAchievementPercentageForGroupMemberUsecase(
-      groupId: widget.groupEntity.groupId,
-      userId: widget.memberId,
-    ).then(
-      (result) => result.fold((failure) => 0.0, (percentage) => percentage),
-    );
-    if (mounted) {
-      setState(() {});
-    }
   }
 }

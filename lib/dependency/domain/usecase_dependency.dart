@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/dependency/data/repository_dependency.dart';
 import 'package:wehavit/domain/usecases/get_quickshot_presets_usecase.dart';
+import 'package:wehavit/domain/usecases/get_shared_resolution_list_to_group_usecase.dart';
 import 'package:wehavit/domain/usecases/send_notification_to_shared_users_usecase.dart';
 import 'package:wehavit/domain/usecases/upload_quickshot_preset_usecase.dart';
 
@@ -451,5 +452,12 @@ final uploadQuickshotPresetUsecaseProvider = Provider<UploadQuickshotPresetUseca
   return UploadQuickshotPresetUsecase(
     userModelRepository,
     photoRepository,
+  );
+});
+
+final getSharedResolutionListToGroupUsecaseProvider = Provider<GetSharedResolutionListToGroupUsecase>((ref) {
+  final resolutionRepository = ref.watch(resolutionRepositoryProvider);
+  return GetSharedResolutionListToGroupUsecase(
+    resolutionRepository,
   );
 });

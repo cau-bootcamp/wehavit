@@ -1,32 +1,49 @@
+import 'dart:io';
+
 import 'package:awesome_extensions/awesome_extensions.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:wehavit/common/common.dart';
+import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
+import 'package:wehavit/presentation/state/reaction/quickshot_preset_provider.dart';
+import 'package:wehavit/presentation/state/resolution_list/resolution_provider.dart';
 
 class ConfirmPostListCell extends StatefulWidget {
   const ConfirmPostListCell({
+    super.key,
     required this.confirmPostEntity,
     this.showActions = true,
-    required this.onCommentPressed,
+    required this.onSendCommentPressed,
     required this.onEmojiPressed,
-    required this.onQuickshotTapUp,
     required this.onQuickshotLongPressStart,
     required this.onQuickshotLongPressMove,
     required this.onQuickshotLongPressEnd,
-    super.key,
+    required this.onQuickshotPaletteCellTapUp,
+    required this.onQuickshotPaletteAddCellTapUp,
+    required this.onQuickshotPaletteAddCellLongPressStart,
+    required this.onQuickshotPaletteAddCellLongPressMove,
+    required this.onQuickshotPaletteAddCellLongPressEnd,
   });
 
   final ConfirmPostEntity confirmPostEntity;
   final bool showActions;
 
-  final Function() onCommentPressed;
+  final Function() onSendCommentPressed;
   final Function() onEmojiPressed;
-  final Function(TapUpDetails) onQuickshotTapUp;
+
   final Function(LongPressStartDetails) onQuickshotLongPressStart;
   final Function(LongPressMoveUpdateDetails) onQuickshotLongPressMove;
   final Function(LongPressEndDetails) onQuickshotLongPressEnd;
+
+  final Function(String) onQuickshotPaletteCellTapUp;
+  final Function() onQuickshotPaletteAddCellTapUp;
+  final Function(LongPressStartDetails) onQuickshotPaletteAddCellLongPressStart;
+  final Function(LongPressMoveUpdateDetails) onQuickshotPaletteAddCellLongPressMove;
+  final Function(LongPressEndDetails) onQuickshotPaletteAddCellLongPressEnd;
 
   @override
   State<ConfirmPostListCell> createState() => _ConfirmPostListCellState();
@@ -68,8 +85,8 @@ class _ConfirmPostListCellState extends State<ConfirmPostListCell> {
                           alignment: Alignment.centerRight,
                           children: [
                             ConfirmPostUserProfile(
-                              userEntity: UserDataEntity.dummyModel,
-                              uploadedAt: widget.confirmPostEntity.updatedAt ?? DateTime.now(),
+                              widget.confirmPostEntity.owner,
+                              uploadedAt: widget.confirmPostEntity.updatedAt,
                             ),
                             if (widget.confirmPostEntity.hasRested)
                               Container(
@@ -86,46 +103,85 @@ class _ConfirmPostListCellState extends State<ConfirmPostListCell> {
                           ],
                         ),
                         const SizedBox(height: 12.0),
-                        // ResolutionLinearGaugeIndicator(resolutionEntity: resolutionEntity, futureDoneList: futureDoneList),
-                        // const SizedBox(height: 12.0),
+                        Consumer(
+                          builder: (context, ref, child) {
+                            return ref
+                                .watch(
+                              resolutionProvider(
+                                ResolutionProviderParam(
+                                  userId: widget.confirmPostEntity.owner,
+                                  resolutionId: widget.confirmPostEntity.resolutionId,
+                                ),
+                              ),
+                            )
+                                .when(
+                              data: (resolutionEntity) {
+                                return ResolutionLinearGaugeIndicator(
+                                  resolutionEntity: resolutionEntity,
+                                  targetDate: widget.confirmPostEntity.createdAt,
+                                );
+                              },
+                              error: (_, __) {
+                                return Container(height: 20);
+                              },
+                              loading: () {
+                                return Container(height: 20);
+                              },
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 12.0),
                         ConfirmPostListCellContent(confirmPostEntity: widget.confirmPostEntity),
                       ],
                     ),
                   ),
                   if (isShowingQuickshotPreset)
-                    Container(
-                      padding: const EdgeInsets.only(right: 8.0, bottom: 8.0),
-                      child: QuickshotPresetPalette(
-                        quickshotPresets: [
-                          // TODO : Test
-                          QuickshotPresetItemEntity(
-                            createdAt: DateTime.now(),
-                            url:
-                                'https://img.freepik.com/free-photo/close-up-portrait-beautiful-cat_23-2149214373.jpg?semt=ais_hybrid',
-                          ),
-                        ],
-                        onQuickshotPresetPressed: () {},
-                        onQuickshotPresetLongPressed: () {},
-                        onQuickshotPresetAddPressed: (_) {},
-                        onQuickshotPresetAddLongPressStart: (_) {},
-                        onQuickshotPresetAddLongPressMove: (_) {},
-                        onQuickshotPresetAddLongPressEnd: (_) {},
-                      ),
+                    Consumer(
+                      builder: (context, ref, child) {
+                        final asyncPalette = ref.watch(quickshotPresetProvider);
+
+                        return asyncPalette.when(
+                          data: (quickshotPresets) {
+                            return Container(
+                              padding: const EdgeInsets.only(right: 8.0, bottom: 8.0),
+                              child: QuickshotPresetPalette(
+                                quickshotPresets: quickshotPresets,
+                                onQuickshotPresetPressed: (imageFileUrl) {
+                                  widget.onQuickshotPaletteCellTapUp(imageFileUrl);
+                                  setState(() {
+                                    isShowingQuickshotPreset = false;
+                                  });
+                                },
+                                onQuickshotPresetAddPressed: widget.onQuickshotPaletteAddCellTapUp,
+                                onQuickshotPresetAddLongPressStart: widget.onQuickshotPaletteAddCellLongPressStart,
+                                onQuickshotPresetAddLongPressMove: widget.onQuickshotPaletteAddCellLongPressMove,
+                                onQuickshotPresetAddLongPressEnd: widget.onQuickshotPaletteAddCellLongPressEnd,
+                              ),
+                            );
+                          },
+                          error: (_, __) {
+                            return Container();
+                          },
+                          loading: () {
+                            return Container();
+                          },
+                        );
+                      },
                     ),
                 ],
               ),
               if (widget.showActions)
                 ConfirmPostReactionButtonList(
-                  onCommentPressed: widget.onCommentPressed,
-                  onEmojiPressed: () {},
+                  onCommentPressed: widget.onSendCommentPressed,
+                  onEmojiPressed: widget.onEmojiPressed,
                   onQuickshotTapUp: (_) {
                     setState(() {
                       isShowingQuickshotPreset = !isShowingQuickshotPreset;
                     });
                   },
-                  onQuickshotLongPressStart: (_) {},
-                  onQuickshotLongPressMove: (_) {},
-                  onQuickshotLongPressEnd: (_) {},
+                  onQuickshotLongPressStart: widget.onQuickshotLongPressStart,
+                  onQuickshotLongPressMove: widget.onQuickshotLongPressMove,
+                  onQuickshotLongPressEnd: widget.onQuickshotLongPressEnd,
                 ),
             ],
           ),
@@ -319,6 +375,7 @@ class ConfirmPostReactionButtonList extends ConsumerWidget {
   });
   final Function() onCommentPressed;
   final Function() onEmojiPressed;
+
   final Function(TapUpDetails) onQuickshotTapUp;
   final Function(LongPressStartDetails) onQuickshotLongPressStart;
   final Function(LongPressMoveUpdateDetails) onQuickshotLongPressMove;
@@ -380,7 +437,6 @@ class QuickshotPresetPalette extends StatelessWidget {
   const QuickshotPresetPalette({
     required this.quickshotPresets,
     required this.onQuickshotPresetPressed,
-    required this.onQuickshotPresetLongPressed,
     required this.onQuickshotPresetAddPressed,
     required this.onQuickshotPresetAddLongPressStart,
     required this.onQuickshotPresetAddLongPressMove,
@@ -392,9 +448,8 @@ class QuickshotPresetPalette extends StatelessWidget {
 
   final List<QuickshotPresetItemEntity> quickshotPresets;
 
-  final Function() onQuickshotPresetPressed;
-  final Function() onQuickshotPresetLongPressed;
-  final Function(TapUpDetails) onQuickshotPresetAddPressed;
+  final Function(String) onQuickshotPresetPressed;
+  final Function() onQuickshotPresetAddPressed;
   final Function(LongPressStartDetails) onQuickshotPresetAddLongPressStart;
   final Function(LongPressMoveUpdateDetails) onQuickshotPresetAddLongPressMove;
   final Function(LongPressEndDetails) onQuickshotPresetAddLongPressEnd;
@@ -433,57 +488,65 @@ class QuickshotPresetPalette extends StatelessWidget {
                 ),
                 clipBehavior: Clip.hardEdge,
                 child: MaterialButton(
-                  onPressed: onQuickshotPresetPressed,
+                  onPressed: () async {
+                    Dio dio = Dio();
+                    final tempDir = (await getTemporaryDirectory()).path;
 
-                  // () async {
-                  // await provider
-                  //     .sendPresetImageReaction(
-                  //   presetEntity: entity,
-                  //   entity: widget.confirmPostEntity,
-                  //   myUserEntity: myUserEntity,
-                  // )
-                  //     .whenComplete(() {
-                  //   showToastMessage(
-                  //     context,
-                  //     text: '친구에게 퀵샷으로 응원을 보냈어요',
-                  //   );
-                  // });
-                  // },
-                  onLongPress: onQuickshotPresetLongPressed,
-                  // () async {
-                  //   showDialog(
-                  //     context: context,
-                  //     builder: (context) {
-                  //       return AlertDialog(
-                  //         content: const Text(
-                  //           '저장된 퀵샷을 지우시겠어요?',
-                  //         ),
-                  //         actions: <Widget>[
-                  //           ElevatedButton(
-                  //             onPressed: () {
-                  //               Navigator.of(context).pop(); //창 닫기
-                  //             },
-                  //             child: const Text('아니요'),
-                  //           ),
-                  //           ElevatedButton(
-                  //             onPressed: () {
-                  //               provider
-                  //                   .removeQuickshotPresetEntity(
-                  //                 entity: entity,
-                  //               )
-                  //                   .whenComplete(() async {
-                  //                 await provider.getQuickshotPresets();
-                  //                 setState(() {});
-                  //                 Navigator.of(context).pop(); //창 닫기
-                  //               });
-                  //             },
-                  //             child: const Text('네'),
-                  //           ),
-                  //         ],
-                  //       );
-                  //     },
-                  //   );
-                  // },
+                    final tempDirPath = '$tempDir/preset_image';
+                    final tempFileName = entity.id;
+
+                    if (!(await Directory(tempDirPath).exists())) {
+                      await Directory(tempDirPath).create(recursive: true);
+                    }
+                    final filePath = '$tempDirPath/$tempFileName';
+                    final file = File('$tempDirPath/$tempFileName');
+                    if (!(await file.exists())) {
+                      final response = await dio.download(entity.url, filePath);
+
+                      if (response.statusCode != 200) {
+                        return;
+                      }
+                    }
+                    onQuickshotPresetPressed(filePath);
+                  },
+                  onLongPress: () async {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return Consumer(
+                          builder: (context, ref, child) {
+                            return AlertDialog(
+                              content: Text(
+                                '저장된 퀵샷을 지우시겠어요?',
+                                style: context.bodyMedium?.copyWith(color: CustomColors.whGrey100),
+                              ),
+                              actions: <Widget>[
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(); //창 닫기
+                                  },
+                                  child: const Text('아니요'),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    ref
+                                        .read(removeQuickshotPresetUsecaseProvider)
+                                        .call(quickshotEntity: entity)
+                                        .whenComplete(() async {
+                                      ref.invalidate(quickshotPresetProvider);
+                                    }).whenComplete(() {
+                                      if (context.mounted) Navigator.of(context).pop(); //창 닫기
+                                    });
+                                  },
+                                  child: const Text('네'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
                   padding: EdgeInsets.zero,
                   child: CircleProfileImage(
                     size: 40,
@@ -509,49 +572,10 @@ class QuickshotPresetPalette extends StatelessWidget {
               clipBehavior: Clip.hardEdge,
               child: GestureDetector(
                 behavior: HitTestBehavior.translucent,
-                onTapUp: onQuickshotPresetAddPressed,
+                onTapUp: (_) => onQuickshotPresetAddPressed,
                 onLongPressStart: onQuickshotPresetAddLongPressStart,
-                // (_) async {
-                // PermissionStatus permission = await Permission.camera.status;
-
-                // if (permission == PermissionStatus.denied) {
-                //   await Permission.camera.request();
-                // }
-                // if (permission == PermissionStatus.granted) {
-                //   reactionCameraWidgetModeNotifier.value = ReactionCameraWidgetMode.preset;
-                // }
-                // },
                 onLongPressMoveUpdate: onQuickshotPresetAddLongPressMove,
-                //  (detail) {
-                //   cameraPointerPositionNotifier.value = detail.globalPosition;
-                // },
                 onLongPressEnd: onQuickshotPresetAddLongPressEnd,
-                // (_) async {
-                // final needCapture = cameraPointerPositionNotifier.isPosInCapturingArea;
-
-                // if (needCapture) {
-                //   final imageFilePath =
-                //       await ref.read(reactionCameraWidgetModelProvider.notifier).endOnCapturingArea();
-
-                //   cameraPointerPositionNotifier.value = Offset.zero;
-                //   reactionCameraWidgetModeNotifier.value = ReactionCameraWidgetMode.none;
-
-                //   await provider.uploadQuickshotPreset(imageFilePath: imageFilePath).whenComplete(() async {
-                //     await provider.getQuickshotPresets();
-                //   }).whenComplete(() {
-                //     if (mounted) {
-                //       showToastMessage(
-                //         context,
-                //         text: '퀵샷을 저장했어요',
-                //       );
-                //     }
-                //     setState(() {});
-                //   });
-                // } else {
-                //   cameraPointerPositionNotifier.value = Offset.zero;
-                //   reactionCameraWidgetModeNotifier.value = ReactionCameraWidgetMode.none;
-                // }
-                // },
                 child: Container(
                   alignment: Alignment.center,
                   child: const Icon(

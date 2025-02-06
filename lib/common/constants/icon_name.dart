@@ -14,6 +14,8 @@ class WHIcons {
   static const String more = '􀍠';
   static const String back = '􀆉';
   static const String forward = '􀆊';
+  static const String chevronUp = '􀆇';
+  static const String chevronDown = '􀆈';
 
   static const String checkMark = '􀆅';
   static const String xMark = '􀆄';

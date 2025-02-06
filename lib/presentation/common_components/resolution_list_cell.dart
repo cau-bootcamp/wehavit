@@ -52,21 +52,11 @@ class ResolutionListCell extends ConsumerWidget {
             const SizedBox(height: 20),
             Consumer(
               builder: (_, ref, __) {
-                // final weeklySuccessList = ref.watch(getTargetResolutionDoneListForWeekUsecaseProvider).call(
-                //       param: GetTargetResolutionDoneListForWeekUsecaseParams(
-                // resolutionId: resolutionEntity.resolutionId,
-                // startMonday: DateTime.now().getMondayDateTime(),
-                //       ),
-                //     );
-
-                // return ResolutionLinearGaugeIndicator(
-                //   resolutionEntity: resolutionEntity,
-                //   futureDoneList: weeklySuccessList,
-                // );
+                final targetDate = DateTime.now().getMondayDateTime();
 
                 return ResolutionLinearGaugeIndicator(
                   resolutionEntity: resolutionEntity,
-                  targetDate: DateTime(2025, 1, 14).getMondayDateTime(),
+                  targetDate: targetDate,
                 );
               },
             ),

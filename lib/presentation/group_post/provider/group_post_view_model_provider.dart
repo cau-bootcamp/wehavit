@@ -236,12 +236,8 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
     required UserDataEntity myUserEntity,
     required ConfirmPostEntity postEntity,
   }) async {
-    if (postEntity.owner == null) {
-      return;
-    }
-
     final targetUserEntity = await _getUserDataFromIdUsecase
-        .call(postEntity.owner!)
+        .call(postEntity.owner)
         .then((result) => result.fold((failure) => null, (entity) => entity));
 
     if (targetUserEntity == null) {

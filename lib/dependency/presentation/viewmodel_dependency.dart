@@ -77,19 +77,19 @@ final reactionAnimationWidgetManagerProvider = StateNotifierProvider<ReactionAni
 });
 
 // Group View
-final groupViewModelProvider = StateNotifierProvider<GroupViewModelProvider, GroupViewModel>((ref) {
-  final getGroupListUsecase = ref.watch(getGroupListUseCaseProvider);
-  final getGroupListViewCellWidgetModelUsecase = ref.watch(getGroupListViewCellWidgetModelUsecaseProvider);
-  final getGroupListViewFriendCellWidgetModelUsecase = ref.watch(getGroupListViewFriendCellWidgetModelUsecaseProvider);
-  final getSharedResolutionIdListFromFriendUidUsecase =
-      ref.watch(getSharedResolutionIdListFromFriendUidUsecaseProvider);
-  return GroupViewModelProvider(
-    getGroupListUsecase,
-    getGroupListViewCellWidgetModelUsecase,
-    getGroupListViewFriendCellWidgetModelUsecase,
-    getSharedResolutionIdListFromFriendUidUsecase,
-  );
-});
+// final groupViewModelProvider = StateNotifierProvider<GroupViewModelProvider, GroupViewModel>((ref) {
+//   final getGroupListUsecase = ref.watch(getGroupListUseCaseProvider);
+//   final getGroupListViewCellWidgetModelUsecase = ref.watch(getGroupListViewCellWidgetModelUsecaseProvider);
+//   final getGroupListViewFriendCellWidgetModelUsecase = ref.watch(getGroupListViewFriendCellWidgetModelUsecaseProvider);
+//   final getSharedResolutionIdListFromFriendUidUsecase =
+//       ref.watch(getSharedResolutionIdListFromFriendUidUsecaseProvider);
+//   return GroupViewModelProvider(
+//     getGroupListUsecase,
+//     getGroupListViewCellWidgetModelUsecase,
+//     getGroupListViewFriendCellWidgetModelUsecase,
+//     getSharedResolutionIdListFromFriendUidUsecase,
+//   );
+// });
 
 final createGroupViewModelProvider =
     StateNotifierProvider.autoDispose<CreateGroupViewModelProvider, CreateGroupViewModel>((ref) {

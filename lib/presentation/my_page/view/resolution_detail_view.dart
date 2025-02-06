@@ -337,10 +337,23 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                               entityList.length,
                               (index) => Padding(
                                 padding: const EdgeInsets.only(bottom: 12.0),
-                                child: ConfirmPostWidget(
+                                child: ConfirmPostListCell(
                                   confirmPostEntity: entityList[index],
-                                  createdDate: viewModel.selectedDate,
-                                  showReactionToolbar: false,
+                                  onSendCommentPressed: () {},
+                                  onEmojiPressed: () {},
+                                  showActions: false,
+                                  onQuickshotLongPressStart: (_) {},
+                                  onQuickshotLongPressMove: (_) {},
+                                  onQuickshotLongPressEnd: (_) {},
+                                  onQuickshotPaletteCellTapUp: (_) {},
+                                  onQuickshotPaletteAddCellTapUp: () {},
+                                  onQuickshotPaletteAddCellLongPressStart: (_) {},
+                                  onQuickshotPaletteAddCellLongPressMove: (_) {},
+                                  onQuickshotPaletteAddCellLongPressEnd: (_) {},
+                                  // ConfirmPostWidget(
+                                  //   confirmPostEntity: entityList[index],
+                                  //   createdDate: viewModel.selectedDate,
+                                  //   showReactionToolbar: false,
                                 ),
                               ),
                             ),
