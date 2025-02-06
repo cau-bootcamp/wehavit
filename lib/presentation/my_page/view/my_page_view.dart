@@ -137,39 +137,6 @@ class MyPageScreenState extends ConsumerState<MyPageView> with AutomaticKeepAliv
                       );
                     },
                   ),
-                  // EitherFutureBuilder<List<ResolutionEntity>>(
-                  //   target: viewModel.futureMyyResolutionList,
-                  //   forWaiting: Container(),
-                  //   forFail: Container(),
-                  //   mainWidgetCallback: (resolutionList) {
-                  //     return Visibility(
-                  //       replacement: const ResolutionListPlaceholderWidget(),
-                  //       visible: resolutionList.isNotEmpty,
-                  //       child: Column(
-                  //         children: List<Widget>.generate(
-                  //           resolutionList.length,
-                  //           (index) => Container(
-                  //             margin: const EdgeInsets.only(bottom: 16.0),
-                  //             child: ResolutionListCell(
-                  //               resolutionEntity: resolutionList[index],
-                  //               showDetails: true,
-                  //               onPressed: () async {
-                  //                 Navigator.push(
-                  //                   context,
-                  //                   MaterialPageRoute(
-                  //                     builder: (context) => ResolutionDetailView(
-                  //                       entity: resolutionList[index],
-                  //                     ),
-                  //                   ),
-                  //                 );
-                  //               },
-                  //             ),
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     );
-                  //   },
-                  // ),
                 ],
               ),
             ),

@@ -1,9 +1,11 @@
 import 'dart:ui' as ui;
 
+import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
+import 'package:wehavit/presentation/state/user_data/my_user_data_provider.dart';
 
 class TabBarIconLabelButton extends StatelessWidget {
   const TabBarIconLabelButton({
@@ -19,8 +21,8 @@ class TabBarIconLabelButton extends StatelessWidget {
   final IconData? iconData;
   final String label;
 
-  final double iconWidth = 28;
-  final double iconHeight = 28;
+  final double iconWidth = 24;
+  final double iconHeight = 24;
 
   @override
   Widget build(BuildContext context) {
@@ -59,8 +61,7 @@ class TabBarIconLabelButton extends StatelessWidget {
         ),
         Text(
           label,
-          style: TextStyle(
-            fontSize: 12,
+          style: context.labelSmall?.bold.copyWith(
             color: isSelected ? CustomColors.whYellow : CustomColors.whWhite,
           ),
         ),
@@ -72,39 +73,58 @@ class TabBarIconLabelButton extends StatelessWidget {
 class TabBarProfileImageButton extends StatelessWidget {
   const TabBarProfileImageButton({
     required this.isSelected,
-    required this.futureUserDataEntity,
     super.key,
   });
 
   final bool isSelected;
-  final EitherFuture<UserDataEntity> futureUserDataEntity;
+  final double size = 40;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Container(
-          width: 40,
-          height: 40,
+          width: size,
+          height: size,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(
               // 테두리 스타일 설정
               color: isSelected ? CustomColors.whYellow : Colors.transparent,
-              width: 3, // 테두리 두께
+              width: 2, // 테두리 두께
               strokeAlign: BorderSide.strokeAlignOutside,
             ),
             color: CustomColors.whBrightGrey,
           ),
           clipBehavior: Clip.hardEdge,
-          child: EitherFutureBuilder<UserDataEntity>(
-            target: futureUserDataEntity,
-            forFail: Container(),
-            forWaiting: Container(),
-            mainWidgetCallback: (entity) {
-              return CircleProfileImage(
-                size: 40,
-                url: entity.userImageUrl,
+          child: Consumer(
+            builder: (context, ref, child) {
+              final asyncUserEntity = ref.watch(getMyUserDataProvider);
+
+              return asyncUserEntity.when(
+                data: (entity) {
+                  return CircleProfileImage(size: size, url: entity.userImageUrl);
+                },
+                error: (_, __) {
+                  return Container(
+                    width: size,
+                    height: size,
+                    decoration: const BoxDecoration(
+                      color: CustomColors.whGrey600,
+                      shape: BoxShape.circle,
+                    ),
+                  );
+                },
+                loading: () {
+                  return Container(
+                    width: size,
+                    height: size,
+                    decoration: const BoxDecoration(
+                      color: CustomColors.whGrey600,
+                      shape: BoxShape.circle,
+                    ),
+                  );
+                },
               );
             },
           ),
