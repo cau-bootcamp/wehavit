@@ -23,13 +23,6 @@ final groupSharedResolutionListProvider = FutureProvider.family<List<String>, Gr
     final List<String> sharedResolutionIdList = sharedResolutionIdMap.entries.expand((e) => e.value).toList();
 
     return sharedResolutionIdList;
-
-    // return ref.read(getSharedResolutionListToGroupUsecaseProvider).call('abc', groupId).then(
-    //       (result) => result.fold(
-    //         (failure) => Future.error(failure.message),
-    //         (success) => success,
-    //       ),
-    //     );
   },
 );
 

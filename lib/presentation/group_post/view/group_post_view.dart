@@ -189,7 +189,8 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                                               ref
                                                                   .read(
                                                                     sendReactionStateModelNotifierProvider(
-                                                                        entityList[index]),
+                                                                      entityList[index],
+                                                                    ),
                                                                   )
                                                                   .emojiWidgets
                                                                   .clear();
@@ -197,8 +198,8 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                                               ref
                                                                   .read(
                                                                     sendReactionStateModelNotifierProvider(
-                                                                            entityList[index])
-                                                                        .notifier,
+                                                                      entityList[index],
+                                                                    ).notifier,
                                                                   )
                                                                   .sendReaction()
                                                                   .then((result) {
@@ -242,15 +243,16 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                                               ref
                                                                   .watch(
                                                                     sendReactionStateModelNotifierProvider(
-                                                                        entityList[index]),
+                                                                      entityList[index],
+                                                                    ),
                                                                   )
                                                                   .sendingQuickshotUrl = imageFilePath;
 
                                                               ref
                                                                   .read(
                                                                     sendReactionStateModelNotifierProvider(
-                                                                            entityList[index])
-                                                                        .notifier,
+                                                                      entityList[index],
+                                                                    ).notifier,
                                                                   )
                                                                   .sendReaction()
                                                                   .then((result) {
