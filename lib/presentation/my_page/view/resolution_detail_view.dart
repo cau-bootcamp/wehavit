@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:awesome_extensions/awesome_extensions.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -305,7 +304,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                     );
                   },
                 ),
-                const SizedBox(height: 20)
+                const SizedBox(height: 20),
               ],
             ),
           ),
@@ -361,27 +360,26 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                 buttonTitle: '목표 공유 그룹 수정하기',
                 iconString: WHIcons.group,
                 onPressed: () async {
-                  // provider.loadGroupList().whenComplete(() async {
-                  //   // await provider.resetTempGroupList();
-                  //   showModalBottomSheet(
-                  //     isScrollControlled: true,
-                  //     // ignore: use_build_context_synchronously
-                  //     context: context,
-                  //     builder: (context) => GradientBottomSheet(
-                  //       SizedBox(
-                  //         height: MediaQuery.of(context).size.height * 0.82,
-                  //         child: const ShareResolutionToGroupBottomSheetWidget(),
-                  //       ),
-                  //     ),
-                  //   ).then((newEntity) {
-                  //     if (newEntity != null && newEntity is ResolutionEntity) {
-                  //       ref.watch(addResolutionDoneViewModelProvider).resolutionEntity = newEntity;
-                  //       ref.read(myPageViewModelProvider.notifier).getResolutionList().whenComplete(() {
-                  //         setState(() {});
-                  //       });
-                  //     }
-                  //   });
-                  // });
+                  showModalBottomSheet(
+                    isScrollControlled: true,
+                    // ignore: use_build_context_synchronously
+                    context: context,
+                    builder: (context) => GradientBottomSheet(
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.82,
+                        child: ShareResolutionToGroupBottomSheetWidget(resolutionEntity: entity),
+                      ),
+                    ),
+                  ).whenComplete(() {
+                    ref.invalidate(
+                      resolutionProvider(
+                        ResolutionProviderParam(
+                          userId: ref.read(getMyUserDataProvider).value!.userId,
+                          resolutionId: widget.entity.resolutionId,
+                        ),
+                      ),
+                    );
+                  });
                 },
               ),
               const SizedBox(
