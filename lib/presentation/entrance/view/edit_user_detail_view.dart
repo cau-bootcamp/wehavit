@@ -7,6 +7,7 @@ import 'package:wehavit/dependency/dependency.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/entrance/provider/edit_user_detail_view_provider.dart';
 import 'package:wehavit/presentation/main/main.dart';
+import 'package:wehavit/presentation/state/friend/friend_list_provider.dart';
 import 'package:wehavit/presentation/state/user_data/my_user_data_provider.dart';
 
 class EditUserDetailView extends ConsumerStatefulWidget {
@@ -316,6 +317,7 @@ class _EditUserDetailViewState extends ConsumerState<EditUserDetailView> {
                                   },
                                   (success) async {
                                     ref.invalidate(getMyUserDataProvider);
+                                    ref.invalidate(userDataEntityProvider(viewmodel.uid));
                                     if (widget.isModifying) {
                                       Navigator.pop(context, true);
                                     } else {
