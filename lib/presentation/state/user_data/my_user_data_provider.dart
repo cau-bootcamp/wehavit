@@ -16,7 +16,7 @@ import 'package:wehavit/domain/domain.dart';
 //   ),
 // );
 
-final getMyUserDataProvider = FutureProvider<UserDataEntity>(
+final getMyUserDataProvider = FutureProvider.autoDispose<UserDataEntity>(
   (ref) => ref.read(getMyUserDataUsecaseProvider).call().then(
         (result) => result.fold(
           (failure) => Future.error(failure.message),

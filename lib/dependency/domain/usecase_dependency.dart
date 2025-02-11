@@ -124,7 +124,7 @@ final getReactionListFromConfirmPostUsecaseProvider = Provider<GetReactionListFr
   return GetReactionListFromConfirmPostUsecase(repository);
 });
 
-final getMyResolutionListUsecaseProvider = Provider<GetMyResolutionListUsecase>((ref) {
+final getMyResolutionListUsecaseProvider = Provider.autoDispose<GetMyResolutionListUsecase>((ref) {
   final resolutionRepository = ref.watch(resolutionRepositoryProvider);
   final userModelRepository = ref.watch(userModelRepositoryProvider);
   return GetMyResolutionListUsecase(
@@ -143,9 +143,9 @@ final getFriendUidListUseCaseProvider = Provider<GetFriendUidListUsecase>((ref) 
   return GetFriendUidListUsecase(resolutionRepository);
 });
 
-final getGroupConfirmPostListByDateUsecaseProvider = Provider<GetGroupConfirmPostListByDateUsecase>((ref) {
+final getConfirmPostListByDateUsecaseProvider = Provider<GetConfirmPostListByDateUsecase>((ref) {
   final confirmPostRepository = ref.watch(confirmPostRepositoryProvider);
-  return GetGroupConfirmPostListByDateUsecase(confirmPostRepository);
+  return GetConfirmPostListByDateUsecase(confirmPostRepository);
 });
 
 final getConfirmPostListForResolutionIdUsecaseProvider = Provider<GetConfirmPostListForResolutionIdUsecase>((ref) {
@@ -158,12 +158,12 @@ final getUserDataFromIdUsecaseProvider = Provider<GetUserDataFromIdUsecase>((ref
   return GetUserDataFromIdUsecase(repository);
 });
 
-final getMyUserIdUsecaseProvider = Provider<GetMyUserIdUsecase>((ref) {
+final getMyUserIdUsecaseProvider = Provider.autoDispose<GetMyUserIdUsecase>((ref) {
   final repository = ref.watch(userModelRepositoryProvider);
   return GetMyUserIdUsecase(repository);
 });
 
-final getMyUserDataUsecaseProvider = Provider<GetMyUserDataUsecase>((ref) {
+final getMyUserDataUsecaseProvider = Provider.autoDispose<GetMyUserDataUsecase>((ref) {
   final repository = ref.watch(userModelRepositoryProvider);
   return GetMyUserDataUsecase(repository);
 });

@@ -6,18 +6,16 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
 import 'package:wehavit/presentation/state/group_post/confirm_post_provider.dart';
-import 'package:wehavit/presentation/state/group_post/friend_post_provider.dart';
 
 class WeeklyPostSwipeCalendar extends StatefulWidget {
   const WeeklyPostSwipeCalendar({
     super.key,
-    required this.groupId,
+    required this.resolutionList,
     required this.firstDate,
     required this.onSelected,
   });
 
-  /// groupId가 빈 문자열이면 내 친구들의 인증글을 조회함
-  final String groupId;
+  final List<String> resolutionList;
   final DateTime firstDate;
   final Function(DateTime) onSelected;
 
@@ -60,7 +58,7 @@ class _WeeklyPostSwipeCalendarState extends State<WeeklyPostSwipeCalendar> {
           curve: Curves.fastOutSlowIn,
           height: isShowingCarousel ? 64 : 0,
           child: WeeklySwipeCalendarCarousel(
-            groupId: widget.groupId,
+            resolutionList: widget.resolutionList,
             firstDate: widget.firstDate,
             calendartMondayDateList: calendartMondayDateList,
             onChangeDate: (newDate) {
@@ -80,14 +78,14 @@ class _WeeklyPostSwipeCalendarState extends State<WeeklyPostSwipeCalendar> {
 class WeeklySwipeCalendarCarousel extends StatefulWidget {
   const WeeklySwipeCalendarCarousel({
     super.key,
-    required this.groupId,
+    required this.resolutionList,
     required this.calendartMondayDateList,
     required this.firstDate,
     required this.onChangeDate,
     required this.selectedDate,
   });
 
-  final String groupId;
+  final List<String> resolutionList;
   final DateTime firstDate;
   final DateTime selectedDate;
 
@@ -118,11 +116,9 @@ class _WeeklySwipeCalendarCarouselState extends State<WeeklySwipeCalendarCarouse
                 final isFuture = todayDate.isBefore(cellDate);
                 final isPast = widget.firstDate.isAfter(cellDate);
 
-                final asyncCellValue = widget.groupId.isNotEmpty
-                    ? ref
-                        .watch(confirmPostListProvider(GroupConfirmPostProviderParam(widget.groupId, cellDate)))
-                        .whenData((list) => list.length)
-                    : ref.watch(friendPostListProvider(cellDate)).whenData((list) => list.length);
+                final asyncCellValue = ref
+                    .watch(confirmPostListProvider(ConfirmPostProviderParam(widget.resolutionList, cellDate)))
+                    .whenData((list) => list.length);
 
                 return WeeklyPostSwipeCalendarCell(
                   isValidDate: !(isFuture || isPast),
@@ -260,7 +256,7 @@ class WeeklyPostSwipeCalendarCell extends StatelessWidget {
                         },
                         loading: () {
                           return SizedBox(
-                            width: 20,
+                            width: 24,
                             height: 24,
                             child: Padding(
                               padding: const EdgeInsets.all(2.0),

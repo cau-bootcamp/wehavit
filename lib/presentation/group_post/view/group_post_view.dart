@@ -107,241 +107,278 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                       SafeArea(
                         minimum: const EdgeInsets.symmetric(horizontal: 16.0),
                         bottom: false,
-                        child: Column(
-                          children: [
-                            WeeklyPostSwipeCalendar(
-                              groupId: widget.groupEntity?.groupId ?? '',
-                              firstDate: widget.groupEntity?.groupCreatedAt ??
-                                  ref.watch(getMyUserDataProvider).value!.createdAt,
-                              onSelected: (selectedDate) {
-                                setState(() {
-                                  this.selectedDate = selectedDate;
-                                });
-                              },
-                            ),
-                            const SizedBox(
-                              height: 12.0,
-                            ),
-                            Expanded(
-                              child: Consumer(
-                                builder: (context, ref, child) {
-                                  final asyncEntityList = widget.groupEntity != null
-                                      ? ref.watch(
-                                          confirmPostListProvider(
-                                            GroupConfirmPostProviderParam(widget.groupEntity!.groupId, selectedDate),
-                                          ),
-                                        )
-                                      : ref.watch(friendPostListProvider(selectedDate));
+                        child: Consumer(
+                          builder: (context, ref, child) {
+                            final asyncResolutionList = widget.groupEntity != null
+                                ? ref.watch(
+                                    groupSharedResolutionListProvider(
+                                      GroupSharedResolutionProviderParam(
+                                        widget.groupEntity!.groupId,
+                                        widget.groupEntity!.groupMemberUidList,
+                                      ),
+                                    ),
+                                  )
+                                : ref.watch(friendSharedResolutionListProvider);
 
-                                  return asyncEntityList.when(
-                                    data: (entityList) {
-                                      return Visibility(
-                                        visible: entityList.isNotEmpty,
-                                        replacement: const NoPostPlaceholder(),
-                                        child: RefreshIndicator(
-                                          onRefresh: () async {
-                                            refreshPostList(targetDate: selectedDate);
-                                          },
-                                          child: ListView.builder(
-                                            padding: const EdgeInsets.only(bottom: 20.0),
-                                            itemCount: entityList.length,
-                                            itemBuilder: (context, index) {
-                                              return Padding(
-                                                padding: const EdgeInsets.only(bottom: 12.0),
-                                                child: ConfirmPostListCell(
-                                                  confirmPostEntity: entityList[index],
-                                                  onSendCommentPressed: () {
-                                                    viewModel.commentTargetEntity = entityList[index];
-                                                    setState(() {
-                                                      isCommentMode = true;
-                                                    });
-                                                    commentFocusNode.requestFocus();
+                            return asyncResolutionList.when(
+                              data: (resolutionList) {
+                                return Column(
+                                  children: [
+                                    WeeklyPostSwipeCalendar(
+                                      resolutionList: resolutionList,
+                                      firstDate: widget.groupEntity?.groupCreatedAt ??
+                                          ref.watch(getMyUserDataProvider).value!.createdAt,
+                                      onSelected: (selectedDate) {
+                                        setState(() {
+                                          this.selectedDate = selectedDate;
+                                        });
+                                      },
+                                    ),
+                                    const SizedBox(
+                                      height: 12.0,
+                                    ),
+                                    Expanded(
+                                      child: Consumer(
+                                        builder: (context, ref, child) {
+                                          final asyncEntityList = widget.groupEntity != null
+                                              ? ref.watch(
+                                                  confirmPostListProvider(
+                                                    ConfirmPostProviderParam(resolutionList, selectedDate),
+                                                  ),
+                                                )
+                                              : ref.watch(friendPostListProvider(selectedDate));
+
+                                          return asyncEntityList.when(
+                                            data: (entityList) {
+                                              return Visibility(
+                                                visible: entityList.isNotEmpty,
+                                                replacement: const NoPostPlaceholder(),
+                                                child: RefreshIndicator(
+                                                  onRefresh: () async {
+                                                    refreshPostList(targetDate: selectedDate);
                                                   },
-                                                  onEmojiPressed: () async {
-                                                    await showEmojiSheet(entityList[index], context).whenComplete(() {
-                                                      if (ref
-                                                              .read(
-                                                                sendReactionStateModelNotifierProvider(
-                                                                  entityList[index],
-                                                                ),
-                                                              )
-                                                              .emojiSendCount ==
-                                                          0) {
-                                                        return;
-                                                      }
+                                                  child: ListView.builder(
+                                                    padding: const EdgeInsets.only(bottom: 20.0),
+                                                    itemCount: entityList.length,
+                                                    itemBuilder: (context, index) {
+                                                      return Padding(
+                                                        padding: const EdgeInsets.only(bottom: 12.0),
+                                                        child: ConfirmPostListCell(
+                                                          confirmPostEntity: entityList[index],
+                                                          onSendCommentPressed: () {
+                                                            viewModel.commentTargetEntity = entityList[index];
+                                                            setState(() {
+                                                              isCommentMode = true;
+                                                            });
+                                                            commentFocusNode.requestFocus();
+                                                          },
+                                                          onEmojiPressed: () async {
+                                                            await showEmojiSheet(entityList[index], context)
+                                                                .whenComplete(() {
+                                                              if (ref
+                                                                      .read(
+                                                                        sendReactionStateModelNotifierProvider(
+                                                                          entityList[index],
+                                                                        ),
+                                                                      )
+                                                                      .emojiSendCount ==
+                                                                  0) {
+                                                                return;
+                                                              }
 
-                                                      ref
-                                                          .read(
-                                                            sendReactionStateModelNotifierProvider(entityList[index]),
-                                                          )
-                                                          .emojiWidgets
-                                                          .clear();
+                                                              ref
+                                                                  .read(
+                                                                    sendReactionStateModelNotifierProvider(
+                                                                      entityList[index],
+                                                                    ),
+                                                                  )
+                                                                  .emojiWidgets
+                                                                  .clear();
 
-                                                      ref
-                                                          .read(
-                                                            sendReactionStateModelNotifierProvider(entityList[index])
-                                                                .notifier,
-                                                          )
-                                                          .sendReaction()
-                                                          .then((result) {
-                                                        final resultMessage = result.fold(
-                                                          (_) => '잠시 후 다시 시도해주세요',
-                                                          (_) => '친구에게 이모지로 응원을 보냈어요',
-                                                        );
+                                                              ref
+                                                                  .read(
+                                                                    sendReactionStateModelNotifierProvider(
+                                                                      entityList[index],
+                                                                    ).notifier,
+                                                                  )
+                                                                  .sendReaction()
+                                                                  .then((result) {
+                                                                final resultMessage = result.fold(
+                                                                  (_) => '잠시 후 다시 시도해주세요',
+                                                                  (_) => '친구에게 이모지로 응원을 보냈어요',
+                                                                );
 
-                                                        if (context.mounted) {
-                                                          showToastMessage(context, text: resultMessage);
-                                                        }
-                                                      });
-                                                    });
+                                                                if (context.mounted) {
+                                                                  showToastMessage(context, text: resultMessage);
+                                                                }
+                                                              });
+                                                            });
 
-                                                    ref.invalidate(sendReactionStateModelNotifierProvider);
-                                                  },
-                                                  onQuickshotLongPressStart: (_) async {
-                                                    PermissionStatus permission = await Permission.camera.status;
+                                                            ref.invalidate(sendReactionStateModelNotifierProvider);
+                                                          },
+                                                          onQuickshotLongPressStart: (_) async {
+                                                            PermissionStatus permission =
+                                                                await Permission.camera.status;
 
-                                                    if (permission == PermissionStatus.denied) {
-                                                      await Permission.camera.request();
-                                                    }
-                                                    if (permission == PermissionStatus.granted) {
-                                                      reactionCameraWidgetModeNotifier.value =
-                                                          ReactionCameraWidgetMode.quickshot;
-                                                    }
-                                                  },
-                                                  onQuickshotLongPressMove: (detail) {
-                                                    cameraPointerPositionNotifier.value = detail.globalPosition;
-                                                  },
-                                                  onQuickshotLongPressEnd: (detail) async {
-                                                    final needCapture =
-                                                        cameraPointerPositionNotifier.isPosInCapturingArea;
+                                                            if (permission == PermissionStatus.denied) {
+                                                              await Permission.camera.request();
+                                                            }
+                                                            if (permission == PermissionStatus.granted) {
+                                                              reactionCameraWidgetModeNotifier.value =
+                                                                  ReactionCameraWidgetMode.quickshot;
+                                                            }
+                                                          },
+                                                          onQuickshotLongPressMove: (detail) {
+                                                            cameraPointerPositionNotifier.value = detail.globalPosition;
+                                                          },
+                                                          onQuickshotLongPressEnd: (detail) async {
+                                                            final needCapture =
+                                                                cameraPointerPositionNotifier.isPosInCapturingArea;
 
-                                                    if (needCapture) {
-                                                      final imageFilePath = await ref
-                                                          .read(reactionCameraWidgetModelProvider.notifier)
-                                                          .endOnCapturingArea();
+                                                            if (needCapture) {
+                                                              final imageFilePath = await ref
+                                                                  .read(reactionCameraWidgetModelProvider.notifier)
+                                                                  .endOnCapturingArea();
 
-                                                      ref
-                                                          .watch(
-                                                            sendReactionStateModelNotifierProvider(entityList[index]),
-                                                          )
-                                                          .sendingQuickshotUrl = imageFilePath;
+                                                              ref
+                                                                  .watch(
+                                                                    sendReactionStateModelNotifierProvider(
+                                                                      entityList[index],
+                                                                    ),
+                                                                  )
+                                                                  .sendingQuickshotUrl = imageFilePath;
 
-                                                      ref
-                                                          .read(
-                                                            sendReactionStateModelNotifierProvider(entityList[index])
-                                                                .notifier,
-                                                          )
-                                                          .sendReaction()
-                                                          .then((result) {
-                                                        final resultMessage = result.fold(
-                                                          (_) => '잠시 후 다시 시도해주세요',
-                                                          (_) => '친구에게 퀵샷으로 응원을 보냈어요',
-                                                        );
+                                                              ref
+                                                                  .read(
+                                                                    sendReactionStateModelNotifierProvider(
+                                                                      entityList[index],
+                                                                    ).notifier,
+                                                                  )
+                                                                  .sendReaction()
+                                                                  .then((result) {
+                                                                final resultMessage = result.fold(
+                                                                  (_) => '잠시 후 다시 시도해주세요',
+                                                                  (_) => '친구에게 퀵샷으로 응원을 보냈어요',
+                                                                );
 
-                                                        if (context.mounted) {
-                                                          showToastMessage(context, text: resultMessage);
-                                                        }
+                                                                if (context.mounted) {
+                                                                  showToastMessage(context, text: resultMessage);
+                                                                }
 
-                                                        ref.invalidate(
-                                                          sendReactionStateModelNotifierProvider(
-                                                            entityList[index],
-                                                          ),
-                                                        );
-                                                      });
-                                                    }
-                                                    reactionCameraWidgetModeNotifier.value =
-                                                        ReactionCameraWidgetMode.none;
-                                                  },
-                                                  onQuickshotPaletteCellTapUp: (imageFilePath) async {
-                                                    ref
-                                                        .watch(
-                                                          sendReactionStateModelNotifierProvider(entityList[index]),
-                                                        )
-                                                        .sendingQuickshotUrl = imageFilePath;
+                                                                ref.invalidate(
+                                                                  sendReactionStateModelNotifierProvider(
+                                                                    entityList[index],
+                                                                  ),
+                                                                );
+                                                              });
+                                                            }
+                                                            reactionCameraWidgetModeNotifier.value =
+                                                                ReactionCameraWidgetMode.none;
+                                                          },
+                                                          onQuickshotPaletteCellTapUp: (imageFilePath) async {
+                                                            ref
+                                                                .watch(
+                                                                  sendReactionStateModelNotifierProvider(
+                                                                    entityList[index],
+                                                                  ),
+                                                                )
+                                                                .sendingQuickshotUrl = imageFilePath;
 
-                                                    ref
-                                                        .read(
-                                                          sendReactionStateModelNotifierProvider(entityList[index])
-                                                              .notifier,
-                                                        )
-                                                        .sendReaction()
-                                                        .then((result) {
-                                                      final resultMessage = result.fold(
-                                                        (_) => '잠시 후 다시 시도해주세요',
-                                                        (_) => '친구에게 퀵샷으로 응원을 보냈어요',
+                                                            ref
+                                                                .read(
+                                                                  sendReactionStateModelNotifierProvider(
+                                                                    entityList[index],
+                                                                  ).notifier,
+                                                                )
+                                                                .sendReaction()
+                                                                .then((result) {
+                                                              final resultMessage = result.fold(
+                                                                (_) => '잠시 후 다시 시도해주세요',
+                                                                (_) => '친구에게 퀵샷으로 응원을 보냈어요',
+                                                              );
+
+                                                              if (context.mounted) {
+                                                                showToastMessage(context, text: resultMessage);
+                                                              }
+                                                            });
+
+                                                            ref.invalidate(
+                                                              sendReactionStateModelNotifierProvider(entityList[index]),
+                                                            );
+                                                          },
+                                                          onQuickshotPaletteAddCellTapUp: () {
+                                                            showToastMessage(context, text: '추가 버튼을 누른 채로 드래그 해주세요!');
+                                                          },
+                                                          onQuickshotPaletteAddCellLongPressStart: (detail) async {
+                                                            PermissionStatus permission =
+                                                                await Permission.camera.status;
+
+                                                            if (permission == PermissionStatus.denied) {
+                                                              await Permission.camera.request();
+                                                            }
+                                                            if (permission == PermissionStatus.granted) {
+                                                              reactionCameraWidgetModeNotifier.value =
+                                                                  ReactionCameraWidgetMode.preset;
+                                                            }
+                                                          },
+                                                          onQuickshotPaletteAddCellLongPressMove: (detail) {
+                                                            cameraPointerPositionNotifier.value = detail.globalPosition;
+                                                          },
+                                                          onQuickshotPaletteAddCellLongPressEnd: (detail) async {
+                                                            final needCapture =
+                                                                cameraPointerPositionNotifier.isPosInCapturingArea;
+
+                                                            if (needCapture) {
+                                                              final imageFilePath = await ref
+                                                                  .read(reactionCameraWidgetModelProvider.notifier)
+                                                                  .endOnCapturingArea();
+
+                                                              ref
+                                                                  .read(uploadQuickshotPresetUsecaseProvider)
+                                                                  .call(localFileUrl: imageFilePath)
+                                                                  .then((result) {
+                                                                ref.invalidate(quickshotPresetProvider);
+                                                              });
+                                                            }
+                                                            reactionCameraWidgetModeNotifier.value =
+                                                                ReactionCameraWidgetMode.none;
+                                                          },
+                                                        ),
                                                       );
-
-                                                      if (context.mounted) {
-                                                        showToastMessage(context, text: resultMessage);
-                                                      }
-                                                    });
-
-                                                    ref.invalidate(
-                                                      sendReactionStateModelNotifierProvider(entityList[index]),
-                                                    );
-                                                  },
-                                                  onQuickshotPaletteAddCellTapUp: () {
-                                                    showToastMessage(context, text: '추가 버튼을 누른 채로 드래그 해주세요!');
-                                                  },
-                                                  onQuickshotPaletteAddCellLongPressStart: (detail) async {
-                                                    PermissionStatus permission = await Permission.camera.status;
-
-                                                    if (permission == PermissionStatus.denied) {
-                                                      await Permission.camera.request();
-                                                    }
-                                                    if (permission == PermissionStatus.granted) {
-                                                      reactionCameraWidgetModeNotifier.value =
-                                                          ReactionCameraWidgetMode.preset;
-                                                    }
-                                                  },
-                                                  onQuickshotPaletteAddCellLongPressMove: (detail) {
-                                                    cameraPointerPositionNotifier.value = detail.globalPosition;
-                                                  },
-                                                  onQuickshotPaletteAddCellLongPressEnd: (detail) async {
-                                                    final needCapture =
-                                                        cameraPointerPositionNotifier.isPosInCapturingArea;
-
-                                                    if (needCapture) {
-                                                      final imageFilePath = await ref
-                                                          .read(reactionCameraWidgetModelProvider.notifier)
-                                                          .endOnCapturingArea();
-
-                                                      ref
-                                                          .read(uploadQuickshotPresetUsecaseProvider)
-                                                          .call(localFileUrl: imageFilePath)
-                                                          .then((result) {
-                                                        ref.invalidate(quickshotPresetProvider);
-                                                      });
-                                                    }
-                                                    reactionCameraWidgetModeNotifier.value =
-                                                        ReactionCameraWidgetMode.none;
-                                                  },
+                                                    },
+                                                  ),
                                                 ),
                                               );
                                             },
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    error: (_, __) {
-                                      return const NoPostPlaceholder();
-                                    },
-                                    loading: () {
-                                      return const Center(
-                                        child: SizedBox(
-                                          height: 50,
-                                          width: 50,
-                                          child: CircularProgressIndicator(
-                                            color: CustomColors.whGrey700,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
+                                            error: (_, __) {
+                                              return const NoPostPlaceholder();
+                                            },
+                                            loading: () {
+                                              return const Center(
+                                                child: SizedBox(
+                                                  height: 50,
+                                                  width: 50,
+                                                  child: CircularProgressIndicator(
+                                                    color: CustomColors.whGrey700,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                              error: (_, __) {
+                                return Container();
+                              },
+                              loading: () {
+                                return Container();
+                              },
+                            );
+                          },
                         ),
                       ),
                       if (isCommentMode)
@@ -441,7 +478,7 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
       if (targetDate == null) {
         ref.invalidate(confirmPostListProvider);
       } else {
-        ref.invalidate(confirmPostListProvider(GroupConfirmPostProviderParam(widget.groupEntity!.groupId, targetDate)));
+        ref.invalidate(confirmPostListProvider);
       }
     }
   }
