@@ -203,6 +203,7 @@ class MyPageScreenState extends ConsumerState<MyPageView> with AutomaticKeepAliv
                 iconString: WHIcons.logout,
                 onPressed: () async {
                   await ref.read(logOutUseCaseProvider).call();
+                  ref.invalidate(getMyUserDataUsecaseProvider);
                   if (mounted) {
                     // ignore: use_build_context_synchronously
                     Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);

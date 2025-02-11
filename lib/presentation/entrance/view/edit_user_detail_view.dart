@@ -1,3 +1,4 @@
+import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -163,13 +164,9 @@ class _EditUserDetailViewState extends ConsumerState<EditUserDetailView> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
+                            Text(
                               '이름',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                color: CustomColors.whWhite,
-                                fontSize: 20,
-                              ),
+                              style: context.titleSmall,
                             ),
                             Container(
                               height: 8.0,
@@ -186,9 +183,40 @@ class _EditUserDetailViewState extends ConsumerState<EditUserDetailView> {
                             //     }
                             //   },
                             // ),
-                            SearchFormField(
-                              textEditingController: nameTextEditingController,
-                              placeholder: '검색어를 입력해주세요',
+
+                            TextFormField(
+                              initialValue: widget.name,
+                              onChanged: (value) {
+                                provider.setName(value);
+                                setState(() {});
+                              },
+                              cursorColor: CustomColors.whWhite,
+                              textAlignVertical: TextAlignVertical.center,
+                              style: const TextStyle(
+                                color: CustomColors.whWhite,
+                                fontSize: 16.0,
+                              ),
+                              decoration: InputDecoration(
+                                hintText: '친구들에게 보여줄 이름이예요',
+                                hintStyle: const TextStyle(
+                                  fontSize: 16,
+                                  color: CustomColors.whPlaceholderGrey,
+                                ),
+                                filled: true,
+                                fillColor: CustomColors.whGrey,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: const BorderSide(
+                                    width: 0,
+                                    style: BorderStyle.none,
+                                  ),
+                                ),
+                                isCollapsed: true,
+                                contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 12.0,
+                                  horizontal: 16.0,
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -198,13 +226,9 @@ class _EditUserDetailViewState extends ConsumerState<EditUserDetailView> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
+                            Text(
                               '사용자 ID',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                color: CustomColors.whWhite,
-                                fontSize: 20,
-                              ),
+                              style: context.titleSmall,
                             ),
                             Container(
                               height: 8.0,
@@ -256,13 +280,9 @@ class _EditUserDetailViewState extends ConsumerState<EditUserDetailView> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
+                            Text(
                               '한 줄 소개',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                color: CustomColors.whWhite,
-                                fontSize: 20,
-                              ),
+                              style: context.titleSmall,
                             ),
                             Container(
                               height: 8.0,
