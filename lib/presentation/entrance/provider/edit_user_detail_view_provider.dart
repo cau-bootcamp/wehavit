@@ -12,14 +12,23 @@ import 'package:wehavit/presentation/entrance/entrance.dart';
 
 class EditUserDataViewModelProvider extends StateNotifier<EditUserDetailViewModel> {
   EditUserDataViewModelProvider(
+    this.ref,
     this.uploadUserDataUsecase,
     this.removeCurrentUserDataUsecase,
     this.logOutUseCase,
   ) : super(EditUserDetailViewModel());
 
+  Ref ref;
   UploadUserDataUsecase uploadUserDataUsecase;
   RemoveCurrentUserDataUsecase removeCurrentUserDataUsecase;
   LogOutUsecase logOutUseCase;
+
+  static const int nameMinLength = 4;
+  static const int nameMaxLength = 16;
+  static const int handleMinLength = 1;
+  static const int handleMaxLength = 16;
+  static const int aboutMeMinLength = 0;
+  static const int aboutMeMaxLength = 20;
 
   Future<void> pickProfileImage() async {
     final picker = ImagePicker();
@@ -38,14 +47,17 @@ class EditUserDataViewModelProvider extends StateNotifier<EditUserDetailViewMode
 
   void setName(String value) {
     state.name = value;
+    ref.notifyListeners();
   }
 
   void setHandle(String value) {
     state.handle = value;
+    ref.notifyListeners();
   }
 
   void setAboutMe(String value) {
     state.aboutMe = value;
+    ref.notifyListeners();
   }
 
   EitherFuture<void> registerUserData() async {

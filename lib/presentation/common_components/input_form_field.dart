@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:wehavit/common/constants/constants.dart';
 
@@ -12,6 +13,7 @@ class InputFormField extends StatefulWidget {
     this.placeholder = '',
     this.textInputType = TextInputType.text,
     this.textInputAction = TextInputAction.done,
+    this.textInputFormatters,
     this.isObscure = false,
     this.maxLines = 1,
     this.maxLength = 100,
@@ -24,6 +26,7 @@ class InputFormField extends StatefulWidget {
   final String placeholder;
   final TextInputType textInputType;
   final TextInputAction textInputAction;
+  final List<TextInputFormatter>? textInputFormatters;
   final int maxLines;
   final int maxLength;
   final bool isObscure;
@@ -42,6 +45,7 @@ class InputFormField extends StatefulWidget {
         textInputAction,
         isObscure,
         descrptionHandler,
+        textInputFormatters,
       );
 }
 
@@ -54,6 +58,7 @@ class _InputFormFieldState extends State<InputFormField> {
     this.textInputAction,
     this.isObscure,
     this.descrptionHandler,
+    this.textInputFormatters,
   );
 
   final TextEditingController controller;
@@ -61,6 +66,7 @@ class _InputFormFieldState extends State<InputFormField> {
   final String placeholder;
   final TextInputType textInputType;
   final TextInputAction textInputAction;
+  final List<TextInputFormatter>? textInputFormatters;
   final bool isObscure;
   final (String, FormFieldDescriptionType)? Function(String)? descrptionHandler;
   Timer? _debounce;
@@ -105,6 +111,7 @@ class _InputFormFieldState extends State<InputFormField> {
           maxLength: widget.maxLength,
           textAlignVertical: TextAlignVertical.top,
           style: context.bodyMedium?.copyWith(color: CustomColors.whGrey900),
+          inputFormatters: textInputFormatters,
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
             hintStyle: context.bodyMedium?.copyWith(color: CustomColors.whGrey700),

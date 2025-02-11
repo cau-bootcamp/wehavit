@@ -164,6 +164,7 @@ final editUserDataViewModelProvider =
   RemoveCurrentUserDataUsecase removeCurrentUserDataUsecase = ref.watch(removeCurrentUserDataUsecaseProvider);
   LogOutUsecase logOutUseCase = ref.watch(logOutUseCaseProvider);
   return EditUserDataViewModelProvider(
+    ref,
     uploadUserDataUsecase,
     removeCurrentUserDataUsecase,
     logOutUseCase,

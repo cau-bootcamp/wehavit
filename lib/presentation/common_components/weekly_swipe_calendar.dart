@@ -256,7 +256,7 @@ class WeeklyPostSwipeCalendarCell extends StatelessWidget {
                         },
                         loading: () {
                           return SizedBox(
-                            width: 20,
+                            width: 24,
                             height: 24,
                             child: Padding(
                               padding: const EdgeInsets.all(2.0),

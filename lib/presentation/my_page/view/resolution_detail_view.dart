@@ -6,12 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/constants/constants.dart';
 import 'package:wehavit/common/utils/utils.dart';
-import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
 import 'package:wehavit/presentation/state/group_post/confirm_post_provider.dart';
-import 'package:wehavit/presentation/state/resolution_list/resolution_list_provider.dart';
 import 'package:wehavit/presentation/state/resolution_list/resolution_provider.dart';
 import 'package:wehavit/presentation/state/user_data/my_user_data_provider.dart';
 
@@ -247,63 +245,62 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                     style: context.labelMedium?.copyWith(color: CustomColors.whGrey700),
                   ),
                 ),
-                const SizedBox(height: 40.0),
-                Consumer(
-                  builder: (context, ref, child) {
-                    return WideOutlinedButton(
-                      buttonTitle: '목표 삭제하기',
-                      foregroundColor: CustomColors.whRed,
-                      onPressed: () async {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text(
-                                '목표 삭제하기',
-                                style: TextStyle(color: CustomColors.whGrey100),
-                              ),
-                              content: Text(
-                                '${widget.entity.resolutionName} 을 비활성화 하시겠어요?\n해당 목표는 작성하기에서 숨김 처리됩니다.',
-                                style: const TextStyle(color: CustomColors.whGrey100),
-                              ),
-                              actions: [
-                                TextButton(
-                                  child: const Text(
-                                    '취소',
-                                    style: TextStyle(color: CustomColors.whGrey300),
-                                  ),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                                TextButton(
-                                  child: const Text(
-                                    '삭제하기',
-                                    style: TextStyle(color: CustomColors.whRed500),
-                                  ),
-                                  onPressed: () async {
-                                    // TODO: 삭제하기 로직 정리하기
-                                    await ref
-                                        .read(setResolutionDeactiveUsecaseProvider)
-                                        .call(resolutionId: widget.entity.resolutionId, entity: widget.entity)
-                                        .whenComplete(() {
-                                      setState(() {
-                                        ref.invalidate(resolutionListNotifierProvider);
-                                      });
-                                    });
-                                    Navigator.of(context).pop();
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                        ref.invalidate(resolutionListNotifierProvider);
-                      },
-                    );
-                  },
-                ),
+                // const SizedBox(height: 40.0),
+                // Consumer(
+                //   builder: (context, ref, child) {
+                //     return WideOutlinedButton(
+                //       buttonTitle: '목표 삭제하기',
+                //       foregroundColor: CustomColors.whRed,
+                //       onPressed: () async {
+                //         showDialog(
+                //           context: context,
+                //           builder: (context) {
+                //             return AlertDialog(
+                //               title: const Text(
+                //                 '목표 삭제하기',
+                //                 style: TextStyle(color: CustomColors.whGrey100),
+                //               ),
+                //               content: Text(
+                //                 '${widget.entity.resolutionName} 을 비활성화 하시겠어요?\n해당 목표는 작성하기에서 숨김 처리됩니다.',
+                //                 style: const TextStyle(color: CustomColors.whGrey100),
+                //               ),
+                //               actions: [
+                //                 TextButton(
+                //                   child: const Text(
+                //                     '취소',
+                //                     style: TextStyle(color: CustomColors.whGrey300),
+                //                   ),
+                //                   onPressed: () {
+                //                     Navigator.of(context).pop();
+                //                   },
+                //                 ),
+                //                 TextButton(
+                //                   child: const Text(
+                //                     '삭제하기',
+                //                     style: TextStyle(color: CustomColors.whRed500),
+                //                   ),
+                //                   onPressed: () async {
+                //                     await ref
+                //                         .read(setResolutionDeactiveUsecaseProvider)
+                //                         .call(resolutionId: widget.entity.resolutionId, entity: widget.entity)
+                //                         .whenComplete(() {
+                //                       setState(() {
+                //                         ref.invalidate(resolutionListNotifierProvider);
+                //                       });
+                //                     });
+                //                     Navigator.of(context).pop();
+                //                     Navigator.of(context).pop();
+                //                   },
+                //                 ),
+                //               ],
+                //             );
+                //           },
+                //         );
+                //         ref.invalidate(resolutionListNotifierProvider);
+                //       },
+                //     );
+                //   },
+                // ),
                 const SizedBox(height: 20),
               ],
             ),
