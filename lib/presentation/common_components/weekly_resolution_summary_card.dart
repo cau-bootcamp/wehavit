@@ -2,9 +2,6 @@ import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/dependency/dependency.dart';
-import 'package:wehavit/domain/usecases/usecases.dart';
-import 'package:wehavit/presentation/common_components/either_future_builder.dart';
 import 'package:wehavit/presentation/state/resolution_list/resolution_list_provider.dart';
 
 class WeeklyResolutionSummaryCard extends StatelessWidget {

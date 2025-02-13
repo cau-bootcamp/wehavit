@@ -5,12 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
-import 'package:wehavit/common/utils/datetime+.dart';
 import 'package:wehavit/common/utils/preference_key.dart';
-import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
 import 'package:wehavit/presentation/state/resolution_list/resolution_list_provider.dart';
+import 'package:wehavit/presentation/write_post/view/resolution_list_view_widget.dart';
 
 class ResolutionListView extends ConsumerStatefulWidget {
   const ResolutionListView({super.key});
@@ -21,6 +20,9 @@ class ResolutionListView extends ConsumerStatefulWidget {
 
 class _ResolutionListViewState extends ConsumerState<ResolutionListView>
     with AutomaticKeepAliveClientMixin<ResolutionListView> {
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -62,22 +64,18 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
 
                                 if (isGuideShown == null || isGuideShown == false) {
                                   // ignore: use_build_context_synchronously
-                                  showGuideBottomSheet(context).whenComplete(() async {
+                                  await showGuide(context).whenComplete(() async {
                                     await SharedPreferences.getInstance().then((instance) {
                                       instance.setBool(
                                         PreferenceKey.isWritingPostGuideShown,
                                         true,
                                       );
                                     });
-                                    showWritingOptionBottomSheet(
-                                      // ignore: use_build_context_synchronously
-                                      context,
-                                      resolutionList[index],
-                                    );
                                   });
-                                } else {
-                                  showWritingOptionBottomSheet(
-                                    // ignore: use_build_context_synchronously
+                                }
+
+                                if (context.mounted) {
+                                  showWritingMenu(
                                     context,
                                     resolutionList[index],
                                   );
@@ -127,21 +125,20 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
     );
   }
 
-  Future<dynamic> showWritingOptionBottomSheet(
+  Future<dynamic> showWritingMenu(
     BuildContext context,
     ResolutionEntity resolutionEntity,
   ) async {
     return showModalBottomSheet(
       isScrollControlled: true,
-      // ignore: use_build_context_synchronously
       context: context,
-      builder: (context) => WritingResolutionBottomSheetWidget(
+      builder: (context) => ResolutionWritingMenuBottomSheet(
         resolutionEntity: resolutionEntity,
       ),
     );
   }
 
-  Future<dynamic> showGuideBottomSheet(BuildContext context) {
+  Future<dynamic> showGuide(BuildContext context) {
     return showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -150,172 +147,6 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
           height: MediaQuery.sizeOf(context).height * 0.80,
           child: const WritingPostGuideView(),
         ),
-      ),
-    );
-  }
-
-  @override
-  bool get wantKeepAlive => true;
-}
-
-class WritingResolutionBottomSheetWidget extends StatelessWidget {
-  const WritingResolutionBottomSheetWidget({
-    super.key,
-    required this.resolutionEntity,
-  });
-
-  final ResolutionEntity resolutionEntity;
-
-  @override
-  Widget build(BuildContext context) {
-    return GradientBottomSheet(
-      Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Column(
-            children: [
-              Text(
-                resolutionEntity.resolutionName,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: CustomColors.pointColorList[resolutionEntity.colorIndex],
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 4.0),
-              Text(
-                resolutionEntity.goalStatement,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: CustomColors.whWhite,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              ResolutionLinearGaugeIndicator(
-                resolutionEntity: resolutionEntity,
-                targetDate: DateTime.now().getMondayDateTime(),
-                // weeklyDoneList: viewModel.resolutionModelList![index].doneList,
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 40.0,
-          ),
-          Consumer(
-            builder: (context, ref, _) {
-              return WideColoredButton(
-                buttonTitle: '인증글 작성하기',
-                foregroundColor: CustomColors.whBlack,
-                onPressed: () async {
-                  final bool result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return WritingConfirmPostView(
-                          entity: resolutionEntity,
-                          hasRested: false,
-                        );
-                      },
-                    ),
-                  );
-                  if (result == true) {
-                    // ignore: use_build_context_synchronously
-                    Navigator.of(context).pop(true);
-
-                    showToastMessage(
-                      // ignore: use_build_context_synchronously
-                      context,
-                      text: '성공적으로 인증글을 공유했어요',
-                    );
-                  }
-                },
-              );
-            },
-          ),
-          const SizedBox(
-            height: 16.0,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Consumer(
-                  builder: (context, ref, _) {
-                    return WideColoredButton(
-                      buttonTitle: '반성 남기기',
-                      foregroundColor: Colors.red,
-                      onPressed: () async {
-                        final result = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return WritingConfirmPostView(
-                                entity: resolutionEntity,
-                                hasRested: true,
-                              );
-                            },
-                          ),
-                        );
-                        if (result == true) {
-                          showToastMessage(
-                            // ignore: use_build_context_synchronously
-                            context,
-                            text: '성공적으로 반성글을 공유했어요',
-                          );
-                        }
-                      },
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(
-                width: 8,
-              ),
-              Expanded(
-                child: SizedBox(
-                  width: 150,
-                  child: Consumer(
-                    builder: (context, ref, _) {
-                      return WideColoredButton(
-                        buttonTitle: '완료 표시만 하기',
-                        onPressed: () async {
-                          ref
-                              .read(resolutionListViewModelProvider.notifier)
-                              .uploadPostWithoutContents(
-                                entity: resolutionEntity,
-                              )
-                              .whenComplete(() {
-                            Navigator.pop(context, true);
-                            showToastMessage(
-                              context,
-                              text: '성공적으로 인증을 남겼어요',
-                            );
-                          });
-                        },
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 16.0,
-          ),
-          WideColoredButton(
-            buttonTitle: '돌아가기',
-            backgroundColor: Colors.transparent,
-            foregroundColor: CustomColors.whPlaceholderGrey,
-            onPressed: () {
-              Navigator.pop(context, false);
-            },
-          ),
-        ],
       ),
     );
   }
