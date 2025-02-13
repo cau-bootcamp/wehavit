@@ -182,7 +182,7 @@ class ResolutionListWeeklyDoneWidget extends StatelessWidget {
 
     return Consumer(
       builder: (BuildContext context, WidgetRef ref, Widget? child) {
-        final param = GetTargetResolutionDoneListForWeekUsecaseParams(
+        final param = WeeklyResolutionInfoProviderParam(
           resolutionId: resolutionEntity.resolutionId,
           startMonday: targetDate.getMondayDateTime(),
         );

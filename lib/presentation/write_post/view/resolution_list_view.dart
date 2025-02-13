@@ -8,6 +8,7 @@ import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/common/utils/datetime+.dart';
 import 'package:wehavit/common/utils/preference_key.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
+import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
 import 'package:wehavit/presentation/state/resolution_list/resolution_list_provider.dart';
 
@@ -23,8 +24,7 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final viewModel = ref.watch(resolutionListViewModelProvider);
-    final provider = ref.read(resolutionListViewModelProvider.notifier);
+    // final provider = ref.read(resolutionListViewModelProvider.notifier);
 
     return Scaffold(
       backgroundColor: CustomColors.whDarkBlack,
@@ -35,21 +35,14 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
         minimum: const EdgeInsets.symmetric(horizontal: 16.0),
         child: RefreshIndicator(
           onRefresh: () async {
-            provider.loadResolutionModelList().whenComplete(() {
-              setState(() {
-                ref.watch(resolutionListViewModelProvider).isLoadingView = false;
-              });
-            });
+            ref.invalidate(myWeeklyResolutionSummaryProvider);
+            ref.invalidate(resolutionListNotifierProvider);
+            ref.invalidate(weeklyResolutionInfoProvider);
           },
           child: ListView(
             children: [
-              WeeklyResolutionSummaryCard(
-                futureDoneRatio: viewModel.futureDoneRatio,
-                futureDoneCount: viewModel.futureDoneCount,
-              ),
-              const SizedBox(
-                height: 16.0,
-              ),
+              const WeeklyResolutionSummaryCard(),
+              const SizedBox(height: 16.0),
               Consumer(
                 builder: (context, ref, child) {
                   final asyncResolutionList = ref.watch(resolutionListNotifierProvider);
@@ -79,35 +72,15 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
                                     showWritingOptionBottomSheet(
                                       // ignore: use_build_context_synchronously
                                       context,
-                                      viewModel,
-                                      provider,
-                                      index,
-                                    ).then((returnValue) async {
-                                      if (returnValue == true) {
-                                        await provider.loadResolutionModelList().whenComplete(() {
-                                          ref.watch(resolutionListViewModelProvider).isLoadingView = false;
-                                        });
-                                      } else {
-                                        //
-                                      }
-                                    });
+                                      resolutionList[index],
+                                    );
                                   });
                                 } else {
                                   showWritingOptionBottomSheet(
                                     // ignore: use_build_context_synchronously
                                     context,
-                                    viewModel,
-                                    provider,
-                                    index,
-                                  ).then((returnValue) async {
-                                    if (returnValue == true) {
-                                      await provider.loadResolutionModelList().whenComplete(() {
-                                        ref.watch(resolutionListViewModelProvider).isLoadingView = false;
-                                      });
-                                    } else {
-                                      //
-                                    }
-                                  });
+                                    resolutionList[index],
+                                  );
                                 }
                               },
                               resolutionEntity: ref.watch(resolutionListNotifierProvider).value![index],
@@ -126,12 +99,8 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
                                       builder: (context) => const AddResolutionView(),
                                     ),
                                   ).whenComplete(() async {
-                                    await ref.watch(myPageViewModelProvider.notifier).getMyResolutionListUsecase();
-                                    await provider.loadResolutionModelList().whenComplete(() {
-                                      setState(() {
-                                        ref.watch(resolutionListViewModelProvider).isLoadingView = false;
-                                      });
-                                    });
+                                    ref.invalidate(myWeeklyResolutionSummaryProvider);
+                                    ref.invalidate(resolutionListNotifierProvider);
                                   });
                                 },
                               ),
@@ -147,89 +116,6 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
                     },
                   );
                 },
-                // child:
-                // Column(
-                //   children: List<Widget>.generate(
-                //     ref.read(resolutionListNotifierProvider).value?.length ?? 0,
-                //     (index) => Container(
-                //       margin: const EdgeInsets.only(bottom: 16.0),
-                //       child: ResolutionListCell(
-                //         onPressed: () async {
-                //           final isGuideShown = await SharedPreferences.getInstance().then((instance) {
-                //             return instance.getBool(PreferenceKey.isWritingPostGuideShown);
-                //           });
-
-                //           if (isGuideShown == null || isGuideShown == false) {
-                //             // ignore: use_build_context_synchronously
-                //             showGuideBottomSheet(context).whenComplete(() async {
-                //               await SharedPreferences.getInstance().then((instance) {
-                //                 instance.setBool(
-                //                   PreferenceKey.isWritingPostGuideShown,
-                //                   true,
-                //                 );
-                //               });
-                //               showWritingOptionBottomSheet(
-                //                 // ignore: use_build_context_synchronously
-                //                 context,
-                //                 viewModel,
-                //                 provider,
-                //                 index,
-                //               ).then((returnValue) async {
-                //                 if (returnValue == true) {
-                //                   await provider.loadResolutionModelList().whenComplete(() {
-                //                     ref.watch(resolutionListViewModelProvider).isLoadingView = false;
-                //                   });
-                //                 } else {
-                //                   //
-                //                 }
-                //               });
-                //             });
-                //           } else {
-                //             showWritingOptionBottomSheet(
-                //               // ignore: use_build_context_synchronously
-                //               context,
-                //               viewModel,
-                //               provider,
-                //               index,
-                //             ).then((returnValue) async {
-                //               if (returnValue == true) {
-                //                 await provider.loadResolutionModelList().whenComplete(() {
-                //                   ref.watch(resolutionListViewModelProvider).isLoadingView = false;
-                //                 });
-                //               } else {
-                //                 //
-                //               }
-                //             });
-                //           }
-                //         },
-                //         resolutionEntity: ref.read(resolutionListNotifierProvider).value![index],
-                //         showDetails: false,
-                //       ),
-                //     ),
-                //   )
-                //       .append(
-                //         ListDashOutlinedCell(
-                //           buttonLabel: '새로운 목표 추가하기',
-                //           onPressed: () async {
-                //             Navigator.push(
-                //               context,
-                //               MaterialPageRoute(
-                //                 fullscreenDialog: true,
-                //                 builder: (context) => const AddResolutionView(),
-                //               ),
-                //             ).whenComplete(() async {
-                //               await ref.watch(myPageViewModelProvider.notifier).getMyResolutionListUsecase();
-                //               await provider.loadResolutionModelList().whenComplete(() {
-                //                 setState(() {
-                //                   ref.watch(resolutionListViewModelProvider).isLoadingView = false;
-                //                 });
-                //               });
-                //             });
-                //           },
-                //         ),
-                //       )
-                //       .toList(),
-                // ),
               ),
               Container(
                 height: 80,
@@ -243,18 +129,14 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
 
   Future<dynamic> showWritingOptionBottomSheet(
     BuildContext context,
-    ResolutionListViewModel viewModel,
-    ResolutionListViewModelProvider provider,
-    int index,
+    ResolutionEntity resolutionEntity,
   ) async {
     return showModalBottomSheet(
       isScrollControlled: true,
       // ignore: use_build_context_synchronously
       context: context,
       builder: (context) => WritingResolutionBottomSheetWidget(
-        viewModel: viewModel,
-        provider: provider,
-        index: index,
+        resolutionEntity: resolutionEntity,
       ),
     );
   }
@@ -279,14 +161,10 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
 class WritingResolutionBottomSheetWidget extends StatelessWidget {
   const WritingResolutionBottomSheetWidget({
     super.key,
-    required this.viewModel,
-    required this.provider,
-    required this.index,
+    required this.resolutionEntity,
   });
 
-  final ResolutionListViewModel viewModel;
-  final ResolutionListViewModelProvider provider;
-  final int index;
+  final ResolutionEntity resolutionEntity;
 
   @override
   Widget build(BuildContext context) {
@@ -297,17 +175,17 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
           Column(
             children: [
               Text(
-                viewModel.resolutionModelList![index].entity.resolutionName,
+                resolutionEntity.resolutionName,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: CustomColors.pointColorList[viewModel.resolutionModelList![index].entity.colorIndex],
+                  color: CustomColors.pointColorList[resolutionEntity.colorIndex],
                   fontSize: 18.0,
                   fontWeight: FontWeight.w600,
                 ),
               ),
               const SizedBox(height: 4.0),
               Text(
-                viewModel.resolutionModelList![index].entity.goalStatement,
+                resolutionEntity.goalStatement,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   color: CustomColors.whWhite,
@@ -319,8 +197,7 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
                 height: 16,
               ),
               ResolutionLinearGaugeIndicator(
-                resolutionEntity: viewModel.resolutionModelList![index].entity,
-                // TODO: edit
+                resolutionEntity: resolutionEntity,
                 targetDate: DateTime.now().getMondayDateTime(),
                 // weeklyDoneList: viewModel.resolutionModelList![index].doneList,
               ),
@@ -329,31 +206,35 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
           const SizedBox(
             height: 40.0,
           ),
-          WideColoredButton(
-            buttonTitle: '인증글 작성하기',
-            foregroundColor: CustomColors.whBlack,
-            onPressed: () async {
-              final bool result = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return WritingConfirmPostView(
-                      entity: viewModel.resolutionModelList![index].entity,
-                      hasRested: false,
-                    );
-                  },
-                ),
-              );
-              if (result == true) {
-                // ignore: use_build_context_synchronously
-                Navigator.of(context).pop(true);
+          Consumer(
+            builder: (context, ref, _) {
+              return WideColoredButton(
+                buttonTitle: '인증글 작성하기',
+                foregroundColor: CustomColors.whBlack,
+                onPressed: () async {
+                  final bool result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return WritingConfirmPostView(
+                          entity: resolutionEntity,
+                          hasRested: false,
+                        );
+                      },
+                    ),
+                  );
+                  if (result == true) {
+                    // ignore: use_build_context_synchronously
+                    Navigator.of(context).pop(true);
 
-                showToastMessage(
-                  // ignore: use_build_context_synchronously
-                  context,
-                  text: '성공적으로 인증글을 공유했어요',
-                );
-              }
+                    showToastMessage(
+                      // ignore: use_build_context_synchronously
+                      context,
+                      text: '성공적으로 인증글을 공유했어요',
+                    );
+                  }
+                },
+              );
             },
           ),
           const SizedBox(
@@ -363,28 +244,32 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: WideColoredButton(
-                  buttonTitle: '반성 남기기',
-                  foregroundColor: Colors.red,
-                  onPressed: () async {
-                    final result = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return WritingConfirmPostView(
-                            entity: viewModel.resolutionModelList![index].entity,
-                            hasRested: true,
+                child: Consumer(
+                  builder: (context, ref, _) {
+                    return WideColoredButton(
+                      buttonTitle: '반성 남기기',
+                      foregroundColor: Colors.red,
+                      onPressed: () async {
+                        final result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return WritingConfirmPostView(
+                                entity: resolutionEntity,
+                                hasRested: true,
+                              );
+                            },
+                          ),
+                        );
+                        if (result == true) {
+                          showToastMessage(
+                            // ignore: use_build_context_synchronously
+                            context,
+                            text: '성공적으로 반성글을 공유했어요',
                           );
-                        },
-                      ),
+                        }
+                      },
                     );
-                    if (result == true) {
-                      showToastMessage(
-                        // ignore: use_build_context_synchronously
-                        context,
-                        text: '성공적으로 반성글을 공유했어요',
-                      );
-                    }
                   },
                 ),
               ),
@@ -394,20 +279,25 @@ class WritingResolutionBottomSheetWidget extends StatelessWidget {
               Expanded(
                 child: SizedBox(
                   width: 150,
-                  child: WideColoredButton(
-                    buttonTitle: '완료 표시만 하기',
-                    onPressed: () async {
-                      provider
-                          .uploadPostWithoutContents(
-                        model: viewModel.resolutionModelList![index],
-                      )
-                          .whenComplete(() {
-                        Navigator.pop(context, true);
-                        showToastMessage(
-                          context,
-                          text: '성공적으로 인증을 남겼어요',
-                        );
-                      });
+                  child: Consumer(
+                    builder: (context, ref, _) {
+                      return WideColoredButton(
+                        buttonTitle: '완료 표시만 하기',
+                        onPressed: () async {
+                          ref
+                              .read(resolutionListViewModelProvider.notifier)
+                              .uploadPostWithoutContents(
+                                entity: resolutionEntity,
+                              )
+                              .whenComplete(() {
+                            Navigator.pop(context, true);
+                            showToastMessage(
+                              context,
+                              text: '성공적으로 인증을 남겼어요',
+                            );
+                          });
+                        },
+                      );
                     },
                   ),
                 ),

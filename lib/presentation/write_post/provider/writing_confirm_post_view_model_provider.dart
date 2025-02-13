@@ -47,7 +47,7 @@ class WritingConfirmPostViewModelProvider extends StateNotifier<WritingConfirmPo
         if (isPostingSuccess) {
           ref.invalidate(
             weeklyResolutionInfoProvider.call(
-              GetTargetResolutionDoneListForWeekUsecaseParams(
+              WeeklyResolutionInfoProviderParam(
                 resolutionId: state.entity!.resolutionId,
                 startMonday: DateTime.now().getMondayDateTime(),
               ),
