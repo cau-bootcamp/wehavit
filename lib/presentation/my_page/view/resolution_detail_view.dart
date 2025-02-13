@@ -10,6 +10,7 @@ import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
 import 'package:wehavit/presentation/state/group_post/confirm_post_provider.dart';
+import 'package:wehavit/presentation/state/resolution_list/resolution_list_provider.dart';
 import 'package:wehavit/presentation/state/resolution_list/resolution_provider.dart';
 import 'package:wehavit/presentation/state/user_data/my_user_data_provider.dart';
 
@@ -339,6 +340,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                       ),
                     ),
                   ).whenComplete(() {
+                    ref.invalidate(resolutionListNotifierProvider);
                     ref.invalidate(
                       resolutionProvider(
                         ResolutionProviderParam(
@@ -368,6 +370,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                       ),
                     ),
                   ).whenComplete(() {
+                    ref.invalidate(resolutionListNotifierProvider);
                     ref.invalidate(
                       resolutionProvider(
                         ResolutionProviderParam(

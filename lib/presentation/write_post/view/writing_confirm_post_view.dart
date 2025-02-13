@@ -176,7 +176,7 @@ class _WritingConfirmPostViewState extends ConsumerState<WritingConfirmPostView>
                       .read(writingConfirmPostViewModelProvider(widget.entity))
                       .imageMediaList
                       .every((entity) => entity.status == ImageUploadStatus.success)) {
-                    showToastMessage(context, text: '이미지 업로드 상태를 확인해주세요');
+                    showToastMessage(context, text: '아직 업로드 중이거나 업로드에 실패한 사진이 있어요');
                     return;
                   }
 
@@ -188,7 +188,6 @@ class _WritingConfirmPostViewState extends ConsumerState<WritingConfirmPostView>
                     myUserEntity: myUserEntity,
                   )
                       .whenComplete(() {
-                    // ignore: use_build_context_synchronously
                     if (context.mounted) {
                       Navigator.of(context).pop(true);
                     }
@@ -198,47 +197,11 @@ class _WritingConfirmPostViewState extends ConsumerState<WritingConfirmPostView>
             ],
           ),
         ),
-        Visibility(
-          visible: viewModel.isUploading,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Container(
-                width: double.infinity,
-                height: double.infinity,
-                color: CustomColors.whDarkBlack.withAlpha(100),
-              ),
-              const Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 80,
-                    height: 80,
-                    child: CircularProgressIndicator(
-                      color: CustomColors.whYellow,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 16.0,
-                  ),
-                  Text(
-                    '업로드 중입니다',
-                    style: TextStyle(
-                      color: CustomColors.whWhite,
-                      fontSize: 16.0,
-                      decoration: TextDecoration.none,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
       ],
     );
   }
 
-  void showShareTargetBottomSheet(BuildContext context) {
+  Future<void> showShareTargetBottomSheet(BuildContext context) async {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
