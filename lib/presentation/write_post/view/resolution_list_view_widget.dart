@@ -5,7 +5,6 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
-import 'package:wehavit/presentation/entrance/view/edit_user_detail_view.dart';
 import 'package:wehavit/presentation/write_post/write_post.dart';
 
 class ResolutionWritingMenuBottomSheet extends StatelessWidget {

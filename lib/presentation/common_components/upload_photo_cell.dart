@@ -2,13 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:wehavit/common/common.dart';
+import 'package:wehavit/common/utils/image_uploader.dart';
 import 'package:wehavit/presentation/presentation.dart';
-
-enum UploadPhotoCellState {
-  uploading,
-  failed,
-  success;
-}
 
 class UploadPhotoCell extends StatelessWidget {
   const UploadPhotoCell({
@@ -20,14 +15,14 @@ class UploadPhotoCell extends StatelessWidget {
   });
 
   final File imageFile;
-  final UploadPhotoCellState state;
+  final ImageUploadStatus state;
   final VoidCallback onCancel;
   final VoidCallback onRetry;
 
   @override
   Widget build(BuildContext context) {
     final indicator = switch (state) {
-      UploadPhotoCellState.uploading => Container(
+      ImageUploadStatus.uploading => Container(
           width: 90,
           height: 90,
           color: CustomColors.whGrey100.withOpacity(0.4),
@@ -40,7 +35,7 @@ class UploadPhotoCell extends StatelessWidget {
             ),
           ),
         ),
-      UploadPhotoCellState.failed => Container(
+      ImageUploadStatus.fail => Container(
           width: 90,
           height: 90,
           color: CustomColors.whGrey100.withOpacity(0.6),
@@ -52,7 +47,7 @@ class UploadPhotoCell extends StatelessWidget {
             onPressed: onRetry,
           ),
         ),
-      UploadPhotoCellState.success => Container(),
+      ImageUploadStatus.success => Container(),
     };
 
     final cancelButton = WhIconButton(

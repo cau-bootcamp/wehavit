@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:wehavit/common/common.dart';
+import 'package:wehavit/common/utils/image_uploader.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
@@ -25,16 +27,16 @@ class WritingConfirmPostView extends ConsumerStatefulWidget {
 class _WritingConfirmPostViewState extends ConsumerState<WritingConfirmPostView> {
   FocusNode contentFieldFocusNode = FocusNode();
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    ref.watch(writingConfirmPostViewModelProvider).entity = widget.entity;
-  }
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   ref.watch(writingConfirmPostViewModelProvider).entity = widget.entity;
+  // }
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = ref.watch(writingConfirmPostViewModelProvider);
-    final provider = ref.read(writingConfirmPostViewModelProvider.notifier);
+    final viewModel = ref.watch(writingConfirmPostViewModelProvider(widget.entity));
+    final provider = ref.read(writingConfirmPostViewModelProvider(widget.entity).notifier);
 
     return Stack(
       children: [
@@ -47,7 +49,7 @@ class _WritingConfirmPostViewState extends ConsumerState<WritingConfirmPostView>
             leadingAction: () {
               Navigator.of(context).pop(false);
             },
-            trailingTitle: '공유 대상',
+            trailingIconString: WHIcons.shareTo,
             trailingAction: () async {
               showModalBottomSheet(
                 isScrollControlled: true,
@@ -80,33 +82,28 @@ class _WritingConfirmPostViewState extends ConsumerState<WritingConfirmPostView>
                           Text(
                             DateFormat('yyyy년 M월 d일').format(
                               viewModel.todayDate.subtract(
-                                Duration(
-                                  days: viewModel.isWritingYesterdayPost ? 1 : 0,
-                                ),
+                                Duration(days: viewModel.isWritingYesterdayPost ? 1 : 0),
                               ),
                             ),
-                            style: const TextStyle(
-                              fontSize: 16.0,
-                              color: CustomColors.whSemiWhite,
-                            ),
+                            style: context.labelLarge,
                           ),
                           TextButton.icon(
                             onPressed: () {
-                              viewModel.isWritingYesterdayPost = !viewModel.isWritingYesterdayPost;
-                              setState(() {});
+                              provider.toggleYesterdayOption();
                             },
                             icon: Icon(
                               size: 20,
                               viewModel.isWritingYesterdayPost ? Icons.check_box : Icons.check_box_outline_blank,
-                              color:
-                                  viewModel.isWritingYesterdayPost ? CustomColors.whYellow : CustomColors.whSemiWhite,
+                              color: viewModel.isWritingYesterdayPost
+                                  ? CustomColors.whYellow500
+                                  : CustomColors.whSemiWhite,
                             ),
                             label: Text(
                               '전날 기록하기',
-                              style: TextStyle(
-                                color:
-                                    viewModel.isWritingYesterdayPost ? CustomColors.whYellow : CustomColors.whSemiWhite,
-                                fontSize: 16.0,
+                              style: context.labelLarge?.copyWith(
+                                color: viewModel.isWritingYesterdayPost
+                                    ? CustomColors.whYellow500
+                                    : CustomColors.whSemiWhite,
                               ),
                             ),
                             style: TextButton.styleFrom(
@@ -119,33 +116,23 @@ class _WritingConfirmPostViewState extends ConsumerState<WritingConfirmPostView>
                       ),
                       Text(
                         widget.entity.goalStatement,
-                        style: TextStyle(
+                        style: context.titleSmall?.copyWith(
                           color: CustomColors.pointColorList[widget.entity.colorIndex],
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w600,
                         ),
                       ),
                       Text(
                         widget.entity.actionStatement,
-                        style: const TextStyle(
-                          color: CustomColors.whSemiWhite,
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w400,
-                        ),
+                        style: context.bodyMedium,
                       ),
                       Expanded(
                         child: TextFormField(
                           focusNode: contentFieldFocusNode,
                           maxLines: null,
-                          style: const TextStyle(
-                            color: CustomColors.whWhite,
-                          ),
+                          style: context.bodyMedium,
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: '오늘의 발자국을 남겨주세요',
-                            hintStyle: TextStyle(
-                              color: CustomColors.whPlaceholderGrey.withAlpha(200),
-                            ),
+                            hintStyle: context.bodyMedium?.copyWith(color: CustomColors.whGrey600),
                           ),
                           onChanged: (value) {
                             viewModel.postContent = value;
@@ -162,8 +149,8 @@ class _WritingConfirmPostViewState extends ConsumerState<WritingConfirmPostView>
                               (index) => Padding(
                                 padding: const EdgeInsets.only(right: 8.0),
                                 child: UploadPhotoCell(
-                                  imageFile: File(viewModel.imageMediaList[index].path),
-                                  state: UploadPhotoCellState.failed,
+                                  imageFile: File(viewModel.imageMediaList[index].imageFile.path),
+                                  state: viewModel.imageMediaList[index].status,
                                   onCancel: () {
                                     setState(() {
                                       viewModel.imageMediaList.removeAt(index);
@@ -172,14 +159,6 @@ class _WritingConfirmPostViewState extends ConsumerState<WritingConfirmPostView>
                                   onRetry: () {},
                                 ),
                               ),
-                              // PhotoThumbnailWidget(
-                              //   viewModel: viewModel,
-                              //   index: index,
-                              //   onRemove: () {
-                              //     viewModel.imageMediaList.removeAt(index);
-                              //     setState(() {});
-                              //   },
-                              // ),
                             ),
                           ),
                         ),

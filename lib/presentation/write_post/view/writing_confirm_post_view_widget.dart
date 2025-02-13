@@ -220,48 +220,48 @@ class ShareTargetGroupListCellWidget extends StatelessWidget {
   }
 }
 
-class PhotoThumbnailWidget extends StatelessWidget {
-  const PhotoThumbnailWidget({
-    super.key,
-    required this.viewModel,
-    required this.index,
-    required this.onRemove,
-  });
+// class PhotoThumbnailWidget extends StatelessWidget {
+//   const PhotoThumbnailWidget({
+//     super.key,
+//     required this.viewModel,
+//     required this.index,
+//     required this.onRemove,
+//   });
 
-  final WritingConfirmPostViewModel viewModel;
-  final int index;
-  final Function onRemove;
+//   final WritingConfirmPostViewModel viewModel;
+//   final int index;
+//   final Function onRemove;
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 8.0),
-      child: Stack(
-        alignment: Alignment.topRight,
-        children: [
-          SizedBox(
-            width: 90,
-            height: 90,
-            child: Image.file(
-              File(viewModel.imageMediaList[index].path),
-              fit: BoxFit.cover,
-            ),
-          ),
-          GestureDetector(
-            child: const Padding(
-              padding: EdgeInsets.all(4.0),
-              child: Icon(
-                Icons.cancel,
-                size: 20,
-                color: CustomColors.whWhite,
-              ),
-            ),
-            onTapUp: (details) {
-              onRemove();
-            },
-          ),
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: const EdgeInsets.only(right: 8.0),
+//       child: Stack(
+//         alignment: Alignment.topRight,
+//         children: [
+//           SizedBox(
+//             width: 90,
+//             height: 90,
+//             child: Image.file(
+//               File(viewModel.imageMediaList[index].imageFile.path),
+//               fit: BoxFit.cover,
+//             ),
+//           ),
+//           GestureDetector(
+//             child: const Padding(
+//               padding: EdgeInsets.all(4.0),
+//               child: Icon(
+//                 Icons.cancel,
+//                 size: 20,
+//                 color: CustomColors.whWhite,
+//               ),
+//             ),
+//             onTapUp: (details) {
+//               onRemove();
+//             },
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
