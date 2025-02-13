@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/common/utils/image_uploader.dart';
-import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
 import 'package:wehavit/presentation/state/user_data/my_user_data_provider.dart';
@@ -27,11 +26,11 @@ class WritingConfirmPostView extends ConsumerStatefulWidget {
 class _WritingConfirmPostViewState extends ConsumerState<WritingConfirmPostView> {
   FocusNode contentFieldFocusNode = FocusNode();
 
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   ref.watch(writingConfirmPostViewModelProvider).entity = widget.entity;
-  // }
+  @override
+  void initState() {
+    super.initState();
+    contentFieldFocusNode.requestFocus();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,18 +50,7 @@ class _WritingConfirmPostViewState extends ConsumerState<WritingConfirmPostView>
             },
             trailingIconString: WHIcons.shareTo,
             trailingAction: () async {
-              showModalBottomSheet(
-                isScrollControlled: true,
-                context: context,
-                builder: (context) {
-                  return GradientBottomSheet(
-                    SizedBox(
-                      height: MediaQuery.sizeOf(context).height * 0.80,
-                      child: ShareTargetGroupCellWidget(widget.entity),
-                    ),
-                  );
-                },
-              );
+              showShareTargetBottomSheet(context);
             },
           ),
           body: Column(
@@ -94,16 +82,15 @@ class _WritingConfirmPostViewState extends ConsumerState<WritingConfirmPostView>
                             icon: Icon(
                               size: 20,
                               viewModel.isWritingYesterdayPost ? Icons.check_box : Icons.check_box_outline_blank,
-                              color: viewModel.isWritingYesterdayPost
-                                  ? CustomColors.whYellow500
-                                  : CustomColors.whSemiWhite,
+                              color:
+                                  viewModel.isWritingYesterdayPost ? CustomColors.whYellow500 : CustomColors.whGrey900,
                             ),
                             label: Text(
                               '전날 기록하기',
                               style: context.labelLarge?.copyWith(
                                 color: viewModel.isWritingYesterdayPost
                                     ? CustomColors.whYellow500
-                                    : CustomColors.whSemiWhite,
+                                    : CustomColors.whGrey900,
                               ),
                             ),
                             style: TextButton.styleFrom(
@@ -152,11 +139,11 @@ class _WritingConfirmPostViewState extends ConsumerState<WritingConfirmPostView>
                                   imageFile: File(viewModel.imageMediaList[index].imageFile.path),
                                   state: viewModel.imageMediaList[index].status,
                                   onCancel: () {
-                                    setState(() {
-                                      viewModel.imageMediaList.removeAt(index);
-                                    });
+                                    provider.cancelPhotoUpload(viewModel.imageMediaList[index]);
                                   },
-                                  onRetry: () {},
+                                  onRetry: () async {
+                                    provider.reuploadPhoto(viewModel.imageMediaList[index]);
+                                  },
                                 ),
                               ),
                             ),
@@ -184,8 +171,14 @@ class _WritingConfirmPostViewState extends ConsumerState<WritingConfirmPostView>
                   }
                 },
                 onActionPressed: () async {
-                  viewModel.isUploading = true;
-                  setState(() {});
+                  // 넘길 수 있는지 확인
+                  if (!ref
+                      .read(writingConfirmPostViewModelProvider(widget.entity))
+                      .imageMediaList
+                      .every((entity) => entity.status == ImageUploadStatus.success)) {
+                    showToastMessage(context, text: '이미지 업로드 상태를 확인해주세요');
+                    return;
+                  }
 
                   final myUserEntity = await ref.read(getMyUserDataProvider.future);
 
@@ -195,10 +188,10 @@ class _WritingConfirmPostViewState extends ConsumerState<WritingConfirmPostView>
                     myUserEntity: myUserEntity,
                   )
                       .whenComplete(() {
-                    viewModel.isUploading = false;
-
                     // ignore: use_build_context_synchronously
-                    Navigator.of(context).pop(true);
+                    if (context.mounted) {
+                      Navigator.of(context).pop(true);
+                    }
                   });
                 },
               ),
@@ -242,6 +235,21 @@ class _WritingConfirmPostViewState extends ConsumerState<WritingConfirmPostView>
           ),
         ),
       ],
+    );
+  }
+
+  void showShareTargetBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (context) {
+        return GradientBottomSheet(
+          SizedBox(
+            height: MediaQuery.sizeOf(context).height * 0.80,
+            child: ShareTargetGroupCellWidget(widget.entity),
+          ),
+        );
+      },
     );
   }
 }

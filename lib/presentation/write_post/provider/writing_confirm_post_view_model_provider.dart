@@ -1,10 +1,9 @@
-import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wehavit/common/utils/datetime+.dart';
 import 'package:wehavit/common/utils/image_uploader.dart';
-import 'package:wehavit/data/datasources/auth_social_datasource_impl.dart';
 import 'package:wehavit/dependency/dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/state/resolution_list/resolution_list_provider.dart';
@@ -33,12 +32,9 @@ class WritingConfirmPostViewModelProvider extends StateNotifier<WritingConfirmPo
       requestFullMetadata: false,
     );
 
-    final uploader = ImageUploader();
-
-    state.imageMediaList = imageList.asMap().entries.map((entry) {
+    state.imageMediaList = imageList.getRange(0, min(imageList.length, 3)).map((imageFile) {
       return ImageUploadEntity(
-        imageFile: entry.value,
-        index: entry.key,
+        imageFile: imageFile,
         status: ImageUploadStatus.uploading,
       );
     }).toList();
@@ -46,12 +42,43 @@ class WritingConfirmPostViewModelProvider extends StateNotifier<WritingConfirmPo
     ref.notifyListeners();
 
     for (ImageUploadEntity entity in state.imageMediaList) {
-      uploader.uploadFile(entity).then((result) {
-        state.imageMediaList[result.index].resultUrl = result.resultUrl;
-        state.imageMediaList[result.index].status = result.status;
+      _uploadPhoto(entity).whenComplete(() {
         ref.notifyListeners();
       });
     }
+  }
+
+  Future<void> _uploadPhoto(ImageUploadEntity entity) {
+    return ref.read(uploadConfirmPostImageUsecaseProvider).call(localImageFile: entity.imageFile).then((result) {
+      final index = state.imageMediaList.indexWhere((e) => e.imageFile.name == entity.imageFile.name);
+      if (index < 0) return;
+
+      result.fold((failure) {
+        state.imageMediaList[index].status = ImageUploadStatus.fail;
+      }, (url) {
+        state.imageMediaList[index].resultUrl = url;
+        state.imageMediaList[index].status = ImageUploadStatus.success;
+      });
+    });
+  }
+
+  Future<void> reuploadPhoto(ImageUploadEntity entity) async {
+    final index = state.imageMediaList.indexWhere((e) => e.imageFile.name == entity.imageFile.name);
+    if (index < 0) return;
+
+    state.imageMediaList[index].status = ImageUploadStatus.uploading;
+    ref.notifyListeners();
+
+    _uploadPhoto(state.imageMediaList[index]).whenComplete(() {
+      ref.notifyListeners();
+    });
+  }
+
+  void cancelPhotoUpload(ImageUploadEntity entity) {
+    final index = state.imageMediaList.indexWhere((e) => e.imageFile.name == entity.imageFile.name);
+    state.imageMediaList.removeAt(index);
+
+    ref.notifyListeners();
   }
 
   Future<void> uploadPost({
@@ -64,15 +91,17 @@ class WritingConfirmPostViewModelProvider extends StateNotifier<WritingConfirmPo
           resolutionGoalStatement: state.entity.goalStatement,
           resolutionId: state.entity.resolutionId,
           content: state.postContent,
-          localFileUrlList: state.imageMediaList.map((media) => media.imageFile.path.toString()).toList(),
+          fileUrlList: state.imageMediaList.map((e) => e.resultUrl).toList(),
           hasRested: hasRested,
           isPostingForYesterday: state.isWritingYesterdayPost,
         )
         .then(
-      (result) {
+      (result) async {
         final isPostingSuccess = result.fold((failure) => false, (value) => value);
 
         if (isPostingSuccess) {
+          await sendNotiToSharedUsers(myUserEntity: myUserEntity);
+
           ref.invalidate(
             weeklyResolutionInfoProvider.call(
               WeeklyResolutionInfoProviderParam(
@@ -81,8 +110,6 @@ class WritingConfirmPostViewModelProvider extends StateNotifier<WritingConfirmPo
               ),
             ),
           );
-
-          sendNotiToSharedUsers(myUserEntity: myUserEntity);
         }
       },
     );

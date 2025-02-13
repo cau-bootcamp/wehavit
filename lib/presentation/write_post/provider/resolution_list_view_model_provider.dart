@@ -97,7 +97,7 @@ class ResolutionListViewModelProvider extends StateNotifier<ResolutionListViewMo
       resolutionGoalStatement: entity.goalStatement,
       resolutionId: entity.resolutionId,
       content: '',
-      localFileUrlList: [],
+      fileUrlList: [],
       hasRested: false,
       isPostingForYesterday: false,
     ).then((result) {
