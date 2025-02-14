@@ -282,7 +282,6 @@ class ConfirmPostListCellContent extends StatelessWidget {
                 ],
               ),
               onPressed: () async {
-                // TODO: 이미지 보여주는 페이지로 이동
                 final imageList = confirmPostEntity.imageUrlList.map((imageUrl) {
                   return NetworkImage(imageUrl);
                 }).toList();
@@ -320,7 +319,7 @@ class ConfirmPostListCellContent extends StatelessWidget {
                   clipBehavior: Clip.hardEdge,
                   child: Image(
                     image: NetworkImage(
-                      confirmPostEntity.imageUrlList.first,
+                      confirmPostEntity.imageUrlList[index],
                     ),
                     loadingBuilder: (context, image, loadingProgress) {
                       if (loadingProgress == null) {
@@ -341,8 +340,19 @@ class ConfirmPostListCellContent extends StatelessWidget {
                   ),
                 ),
               ),
-              onPressed: () {
-                // TODO: 이미지 보여주는 페이지로 이동
+              onPressed: () async {
+                final imageList = confirmPostEntity.imageUrlList.map((imageUrl) {
+                  return NetworkImage(imageUrl);
+                }).toList();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ConfirmPostPhotoView(
+                      imageProviderList: imageList,
+                      initPageIndex: index,
+                    ),
+                  ),
+                );
               },
             ),
           );

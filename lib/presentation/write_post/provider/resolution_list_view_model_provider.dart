@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
+import 'package:wehavit/domain/entities/resolution_entity/resolution_entity.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
 import 'package:wehavit/presentation/state/resolution_list/resolution_list_provider.dart';
 import 'package:wehavit/presentation/write_post/write_post.dart';
@@ -90,13 +91,13 @@ class ResolutionListViewModelProvider extends StateNotifier<ResolutionListViewMo
   }
 
   Future<void> uploadPostWithoutContents({
-    required ResolutionListCellWidgetModel model,
+    required ResolutionEntity entity,
   }) async {
     _uploadConfirmPostUseCase(
-      resolutionGoalStatement: model.entity.goalStatement,
-      resolutionId: model.entity.resolutionId,
+      resolutionGoalStatement: entity.goalStatement,
+      resolutionId: entity.resolutionId,
       content: '',
-      localFileUrlList: [],
+      fileUrlList: [],
       hasRested: false,
       isPostingForYesterday: false,
     ).then((result) {
@@ -105,8 +106,8 @@ class ResolutionListViewModelProvider extends StateNotifier<ResolutionListViewMo
       if (isPostingSuccess) {
         ref.invalidate(
           weeklyResolutionInfoProvider.call(
-            GetTargetResolutionDoneListForWeekUsecaseParams(
-              resolutionId: model.entity.resolutionId,
+            WeeklyResolutionInfoProviderParam(
+              resolutionId: entity.resolutionId,
               startMonday: DateTime.now().getMondayDateTime(),
             ),
           ),

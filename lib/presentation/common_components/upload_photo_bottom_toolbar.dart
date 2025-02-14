@@ -28,14 +28,13 @@ class UploadPhotoBottomToolbar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const SizedBox(width: 8),
         WhIconButton(
           onPressed: type == UploadPhotoBottomToolbarType.upload ? onIconPressed : () {},
           iconString: iconString,
           size: WHIconsize.medium,
           color: type == UploadPhotoBottomToolbarType.upload ? CustomColors.whGrey900 : CustomColors.whGrey600,
         ),
-        const SizedBox(width: 16),
+        const SizedBox(width: 12),
         Expanded(
           child: Text(
             type == UploadPhotoBottomToolbarType.upload ? '인증샷은 최대 3장까지 공유할 수 있어요' : '반성글에서는 인증샷을 공유할 수 없어요',
@@ -50,7 +49,7 @@ class UploadPhotoBottomToolbar extends StatelessWidget {
           ),
           child: Text(
             actionLabel,
-            style: context.titleSmall?.bold.copyWith(color: CustomColors.whYellow500),
+            style: context.labelLarge?.bold.copyWith(color: CustomColors.whYellow500),
           ),
         ),
       ],

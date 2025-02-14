@@ -1,17 +1,13 @@
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/presentation/common_components/either_future_builder.dart';
+import 'package:wehavit/presentation/state/resolution_list/resolution_list_provider.dart';
 
 class WeeklyResolutionSummaryCard extends StatelessWidget {
   const WeeklyResolutionSummaryCard({
     super.key,
-    required this.futureDoneRatio,
-    required this.futureDoneCount,
   });
-
-  final EitherFuture<int>? futureDoneCount;
-  final EitherFuture<int>? futureDoneRatio;
 
   @override
   Widget build(BuildContext context) {
@@ -23,32 +19,47 @@ class WeeklyResolutionSummaryCard extends StatelessWidget {
           Radius.circular(16.0),
         ),
       ),
-      child: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 20.0,
-              horizontal: 20.0,
-            ),
-            child: Column(
-              children: [
-                ResolutionSummaryCardTextWidget(
-                  title: '이번 주 나의 노력 인증 횟수',
-                  futureValue: futureDoneCount,
-                  unit: '회',
+      child: Consumer(
+        builder: (context, ref, widget) {
+          final asyncSuccessCount = ref.watch(myWeeklyResolutionSummaryProvider);
+
+          final asyncResolutionList = ref.watch(resolutionListNotifierProvider);
+          final asyncSuccessRatio = asyncSuccessCount.whenData((successCount) {
+            final total = asyncResolutionList.value?.map((e) => e.actionPerWeek).reduce((v, e) => v + e) ?? 0;
+
+            if (total == 0) return 0;
+
+            return ((successCount * 100) / total).ceil();
+          });
+
+          return Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 20.0,
+                  horizontal: 20.0,
                 ),
-                const SizedBox(
-                  height: 16,
+                child: Column(
+                  children: [
+                    ResolutionSummaryCardTextWidget(
+                      title: '이번 주 나의 노력 인증 횟수',
+                      asyncValue: asyncSuccessCount,
+                      unit: '회',
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    ResolutionSummaryCardTextWidget(
+                      title: '이번 주 목표 달성 현황',
+                      asyncValue: asyncSuccessRatio,
+                      unit: '%',
+                    ),
+                  ],
                 ),
-                ResolutionSummaryCardTextWidget(
-                  title: '이번 주 목표 달성 현황',
-                  futureValue: futureDoneRatio,
-                  unit: '%',
-                ),
-              ],
-            ),
-          ),
-        ],
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -58,12 +69,12 @@ class ResolutionSummaryCardTextWidget extends StatefulWidget {
   const ResolutionSummaryCardTextWidget({
     super.key,
     required this.title,
-    required this.futureValue,
+    required this.asyncValue,
     required this.unit,
   });
 
   final String title;
-  final EitherFuture<int>? futureValue;
+  final AsyncValue<int> asyncValue;
   final String unit;
 
   @override
@@ -91,24 +102,27 @@ class _ResolutionSummaryCardTextWidgetState extends State<ResolutionSummaryCardT
           crossAxisAlignment: CrossAxisAlignment.baseline,
           textBaseline: TextBaseline.ideographic,
           children: [
-            EitherFutureBuilder<int>(
-              target: widget.futureValue,
-              forWaiting: Text(
-                '--',
-                style: context.displayMedium?.copyWith(
-                  color: CustomColors.whWhite,
-                ),
-              ),
-              forFail: Text(
-                '--',
-                style: context.displayMedium?.copyWith(
-                  color: CustomColors.whWhite,
-                ),
-              ),
-              mainWidgetCallback: (value) {
+            widget.asyncValue.when(
+              data: (data) {
                 return Text(
-                  value.toString(),
+                  data.toString(),
                   style: context.displayLarge?.copyWith(
+                    color: CustomColors.whWhite,
+                  ),
+                );
+              },
+              error: (_, __) {
+                return Text(
+                  '--',
+                  style: context.displayMedium?.copyWith(
+                    color: CustomColors.whWhite,
+                  ),
+                );
+              },
+              loading: () {
+                return Text(
+                  '--',
+                  style: context.displayMedium?.copyWith(
                     color: CustomColors.whWhite,
                   ),
                 );

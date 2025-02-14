@@ -1,11 +1,8 @@
-import 'dart:async';
-
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
-import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/group_entity/group_entity.dart';
 import 'package:wehavit/domain/entities/resolution_entity/resolution_entity.dart';
 import 'package:wehavit/presentation/presentation.dart';
@@ -16,7 +13,9 @@ import 'package:wehavit/presentation/state/resolution_list/resolution_provider.d
 import 'package:wehavit/presentation/state/user_data/my_user_data_provider.dart';
 
 class AddResolutionDoneView extends ConsumerStatefulWidget {
-  const AddResolutionDoneView({super.key});
+  const AddResolutionDoneView({required this.resolutionEntity, super.key});
+
+  final ResolutionEntity resolutionEntity;
 
   @override
   ConsumerState<AddResolutionDoneView> createState() => _AddResolutionDoneViewState();
@@ -24,22 +23,8 @@ class AddResolutionDoneView extends ConsumerStatefulWidget {
 
 class _AddResolutionDoneViewState extends ConsumerState<AddResolutionDoneView> {
   @override
-  void initState() {
-    super.initState();
-
-    unawaited(
-      ref.read(addResolutionDoneViewModelProvider.notifier).loadFriendList(),
-    );
-    // unawaited(
-    //   ref.read(addResolutionDoneViewModelProvider.notifier).loadGroupList(),
-    // );
-  }
-
   @override
   Widget build(BuildContext context) {
-    final viewmodel = ref.watch(addResolutionDoneViewModelProvider);
-    // final provider = ref.watch(addResolutionDoneViewModelProvider.notifier);
-
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: CustomColors.whDarkBlack,
@@ -71,7 +56,7 @@ class _AddResolutionDoneViewState extends ConsumerState<AddResolutionDoneView> {
                     borderRadius: BorderRadius.circular(16.0),
                   ),
                   child: ResolutionListCell(
-                    resolutionEntity: viewmodel.resolutionEntity!,
+                    resolutionEntity: widget.resolutionEntity,
                     showDetails: true,
                     onPressed: () {},
                   ),
@@ -80,11 +65,18 @@ class _AddResolutionDoneViewState extends ConsumerState<AddResolutionDoneView> {
               Expanded(
                 child: Container(),
               ),
+              Text(
+                '인증글을 공유하지 않고, 혼자서도 인증글을 남기고 확인할 수 있어요.\n다만, 조금 외로울 뿐!',
+                textAlign: TextAlign.center,
+                style: context.labelSmall?.copyWith(
+                  color: CustomColors.whGrey700,
+                ),
+              ),
               Container(
                 margin: const EdgeInsets.only(
-                  top: 12.0,
+                  top: 16.0,
                 ),
-                child: WideColoredButton(
+                child: WideOutlinedButton(
                   onPressed: () async {
                     // provider.resetTempFriendList();
                     showModalBottomSheet(
@@ -94,7 +86,7 @@ class _AddResolutionDoneViewState extends ConsumerState<AddResolutionDoneView> {
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.82,
                           child: ShareResolutionToFriendBottomSheetWidget(
-                            resolutionEntity: viewmodel.resolutionEntity!,
+                            resolutionEntity: widget.resolutionEntity,
                           ),
                         ),
                       ),
@@ -103,21 +95,21 @@ class _AddResolutionDoneViewState extends ConsumerState<AddResolutionDoneView> {
                         resolutionProvider(
                           ResolutionProviderParam(
                             userId: ref.read(getMyUserDataProvider).value!.userId,
-                            resolutionId: viewmodel.resolutionEntity!.resolutionId,
+                            resolutionId: widget.resolutionEntity.resolutionId,
                           ),
                         ),
                       );
                     });
                   },
-                  buttonTitle: '친구에게 공유하기',
+                  buttonTitle: '공유할 친구 선택하기',
                   iconString: WHIcons.friend,
                 ),
               ),
               Container(
                 margin: const EdgeInsets.only(
-                  top: 12.0,
+                  top: 16.0,
                 ),
-                child: WideColoredButton(
+                child: WideOutlinedButton(
                   onPressed: () async {
                     // await provider.resetTempGroupList();
 
@@ -128,12 +120,12 @@ class _AddResolutionDoneViewState extends ConsumerState<AddResolutionDoneView> {
                       builder: (context) => GradientBottomSheet(
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.82,
-                          child: ShareResolutionToGroupBottomSheetWidget(resolutionEntity: viewmodel.resolutionEntity!),
+                          child: ShareResolutionToGroupBottomSheetWidget(resolutionEntity: widget.resolutionEntity),
                         ),
                       ),
                     );
                   },
-                  buttonTitle: '그룹에게 공유하기',
+                  buttonTitle: '공유할 그룹 선택하기',
                   iconString: WHIcons.group,
                 ),
               ),
@@ -166,9 +158,6 @@ class _ShareResolutionToFriendBottomSheetWidgetState extends ConsumerState<Share
           trailingAction: () {
             Navigator.pop(context);
           },
-        ),
-        const SizedBox(
-          height: 16.0,
         ),
         Consumer(
           builder: (context, ref, child) {
@@ -429,9 +418,6 @@ class _ShareResolutionToGroupBottomSheetWidgetState extends ConsumerState<ShareR
           trailingAction: () {
             Navigator.pop(context);
           },
-        ),
-        const SizedBox(
-          height: 16.0,
         ),
         Consumer(
           builder: (context, ref, child) {

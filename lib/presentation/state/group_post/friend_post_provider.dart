@@ -20,6 +20,14 @@ final friendSharedResolutionListProvider = FutureProvider<List<String>>(
       }),
     );
 
+    // 내가 작성한 포스트도 함께 보여주기
+    final result = await ref.read(getMyResolutionListUsecaseProvider).call();
+    final list = result.fold(
+      (failure) => <String>[], // 실패 시 빈 리스트 반환
+      (list) => list.map((e) => e.resolutionId).toList(), // 성공 시 리스트 반환
+    );
+    sharedResolutionIdMap[''] = list;
+
     final List<String> sharedResolutionIdList = sharedResolutionIdMap.entries.expand((e) => e.value).toList();
 
     return sharedResolutionIdList;

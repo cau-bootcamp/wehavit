@@ -110,16 +110,16 @@ final resolutionListViewModelProvider =
   );
 });
 
-final writingConfirmPostViewModelProvider =
-    StateNotifierProvider.autoDispose<WritingConfirmPostViewModelProvider, WritingConfirmPostViewModel>((ref) {
-  final uploadConfirmPostUsecase = ref.watch(uploadConfirmPostUseCaseProvider);
-  final sendNotificationToSharedUsersUsecase = ref.watch(sendNotificationToSharedUsersUsecaseProvider);
-  return WritingConfirmPostViewModelProvider(
-    ref,
-    uploadConfirmPostUsecase,
-    sendNotificationToSharedUsersUsecase,
-  );
-});
+// final writingConfirmPostViewModelProvider =
+//     StateNotifierProvider.autoDispose<WritingConfirmPostViewModelProvider, WritingConfirmPostViewModel>((ref) {
+//   final uploadConfirmPostUsecase = ref.watch(uploadConfirmPostUseCaseProvider);
+//   final sendNotificationToSharedUsersUsecase = ref.watch(sendNotificationToSharedUsersUsecaseProvider);
+//   return WritingConfirmPostViewModelProvider(
+//     ref,
+//     uploadConfirmPostUsecase,
+//     sendNotificationToSharedUsersUsecase,
+//   );
+// });
 
 final groupPostViewModelProvider =
     StateNotifierProvider.autoDispose<GroupPostViewModelProvider, GroupPostViewModel>((ref) {
@@ -192,7 +192,10 @@ final logInViewModelProvider = StateNotifierProvider.autoDispose<LogInViewModelP
 final addResolutionViewModelProvider =
     StateNotifierProvider.autoDispose<AddResolutionViewModelProvider, AddResolutionViewModel>((ref) {
   UploadResolutionUseCase uploadResolutionUseCase = ref.watch(uploadResolutionUsecaseProvider);
-  return AddResolutionViewModelProvider(uploadResolutionUseCase);
+  return AddResolutionViewModelProvider(
+    ref,
+    uploadResolutionUseCase,
+  );
 });
 
 final addResolutionDoneViewModelProvider =

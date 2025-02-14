@@ -5,9 +5,11 @@ import 'package:wehavit/presentation/write_post/write_post.dart';
 
 class AddResolutionViewModelProvider extends StateNotifier<AddResolutionViewModel> {
   AddResolutionViewModelProvider(
+    this.ref,
     this.uploadResolutionUseCase,
   ) : super(AddResolutionViewModel());
 
+  Ref ref;
   UploadResolutionUseCase uploadResolutionUseCase;
 
   void setTimes(double value) {
@@ -61,10 +63,12 @@ class AddResolutionViewModelProvider extends StateNotifier<AddResolutionViewMode
   void checkIsMovableToNextStep() {
     state.isMovableToNextStep =
         state.inputConditions.sublist(0, state.currentStep + 1).reduce((value, element) => value & element);
+    ref.notifyListeners();
   }
 
   void setFocusedStep(int value) {
     state.focusedStep = value;
+    ref.notifyListeners();
   }
 
   Future<ResolutionEntity?> uploadResolution() async {

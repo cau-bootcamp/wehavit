@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/entities.dart';
-import 'package:wehavit/domain/usecases/get_target_resolution_done_list_for_week_usecase.dart';
 import 'package:wehavit/presentation/state/resolution_list/resolution_list_provider.dart';
 
 class ResolutionLinearGaugeIndicator extends StatelessWidget {
@@ -20,7 +19,7 @@ class ResolutionLinearGaugeIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (BuildContext context, WidgetRef ref, _) {
-        final param = GetTargetResolutionDoneListForWeekUsecaseParams(
+        final param = WeeklyResolutionInfoProviderParam(
           resolutionId: resolutionEntity.resolutionId,
           startMonday: targetDate.getMondayDateTime(),
         );
