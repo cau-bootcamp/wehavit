@@ -246,62 +246,6 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                     style: context.labelMedium?.copyWith(color: CustomColors.whGrey700),
                   ),
                 ),
-                // const SizedBox(height: 40.0),
-                // Consumer(
-                //   builder: (context, ref, child) {
-                //     return WideOutlinedButton(
-                //       buttonTitle: '목표 삭제하기',
-                //       foregroundColor: CustomColors.whRed,
-                //       onPressed: () async {
-                //         showDialog(
-                //           context: context,
-                //           builder: (context) {
-                //             return AlertDialog(
-                //               title: const Text(
-                //                 '목표 삭제하기',
-                //                 style: TextStyle(color: CustomColors.whGrey100),
-                //               ),
-                //               content: Text(
-                //                 '${widget.entity.resolutionName} 을 비활성화 하시겠어요?\n해당 목표는 작성하기에서 숨김 처리됩니다.',
-                //                 style: const TextStyle(color: CustomColors.whGrey100),
-                //               ),
-                //               actions: [
-                //                 TextButton(
-                //                   child: const Text(
-                //                     '취소',
-                //                     style: TextStyle(color: CustomColors.whGrey300),
-                //                   ),
-                //                   onPressed: () {
-                //                     Navigator.of(context).pop();
-                //                   },
-                //                 ),
-                //                 TextButton(
-                //                   child: const Text(
-                //                     '삭제하기',
-                //                     style: TextStyle(color: CustomColors.whRed500),
-                //                   ),
-                //                   onPressed: () async {
-                //                     await ref
-                //                         .read(setResolutionDeactiveUsecaseProvider)
-                //                         .call(resolutionId: widget.entity.resolutionId, entity: widget.entity)
-                //                         .whenComplete(() {
-                //                       setState(() {
-                //                         ref.invalidate(resolutionListNotifierProvider);
-                //                       });
-                //                     });
-                //                     Navigator.of(context).pop();
-                //                     Navigator.of(context).pop();
-                //                   },
-                //                 ),
-                //               ],
-                //             );
-                //           },
-                //         );
-                //         ref.invalidate(resolutionListNotifierProvider);
-                //       },
-                //     );
-                //   },
-                // ),
                 const SizedBox(height: 20),
               ],
             ),

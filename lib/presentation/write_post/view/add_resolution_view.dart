@@ -41,7 +41,7 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
       resizeToAvoidBottomInset: true,
       backgroundColor: CustomColors.whDarkBlack,
       appBar: WehavitAppBar(
-        titleLabel: '목표 추가하기',
+        titleLabel: '도전 추가하기',
         leadingTitle: '취소',
         leadingAction: () async {
           Navigator.pop(context);

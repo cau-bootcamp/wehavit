@@ -88,7 +88,7 @@ class _ResolutionListViewState extends ConsumerState<ResolutionListView>
                         )
                             .append(
                               ListDashOutlinedCell(
-                                buttonLabel: '새로운 목표 추가하기',
+                                buttonLabel: '새로운 도전 추가하기',
                                 onPressed: () async {
                                   Navigator.push(
                                     context,

@@ -179,15 +179,9 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
             isLessThanOrEqualTo: Timestamp.fromDate(endDate),
           )
           .where(
-            Filter.or(
-              Filter(
-                FirebaseConfirmPostFieldName.resolutionId,
-                whereIn: resolutionList,
-              ),
-              Filter(
-                FirebaseConfirmPostFieldName.owner,
-                isEqualTo: uid,
-              ),
+            Filter(
+              FirebaseConfirmPostFieldName.resolutionId,
+              whereIn: resolutionList,
             ),
           )
           .get();
