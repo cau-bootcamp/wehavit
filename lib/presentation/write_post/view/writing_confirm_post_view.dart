@@ -155,6 +155,7 @@ class _WritingConfirmPostViewState extends ConsumerState<WritingConfirmPostView>
                 ),
               ),
               UploadPhotoBottomToolbar(
+                type: widget.hasRested ? UploadPhotoBottomToolbarType.regret : UploadPhotoBottomToolbarType.upload,
                 onIconPressed: () async {
                   if (!widget.hasRested) {
                     FocusScope.of(context).unfocus();
