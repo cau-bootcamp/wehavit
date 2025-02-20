@@ -110,6 +110,7 @@ final resolutionListViewModelProvider =
   );
 });
 
+// 구조 개편을 위한 시도 중
 // final writingConfirmPostViewModelProvider =
 //     StateNotifierProvider.autoDispose<WritingConfirmPostViewModelProvider, WritingConfirmPostViewModel>((ref) {
 //   final uploadConfirmPostUsecase = ref.watch(uploadConfirmPostUseCaseProvider);
@@ -155,7 +156,7 @@ final mainViewModelProvider = StateNotifierProvider.autoDispose<MainViewModelPro
 
 final signUpAuthDataViewModelProvider =
     StateNotifierProvider.autoDispose<SignUpAuthDataViewModelProvider, SignUpAuthDataViewModel>((ref) {
-  return SignUpAuthDataViewModelProvider();
+  return SignUpAuthDataViewModelProvider(ref);
 });
 
 final editUserDataViewModelProvider =

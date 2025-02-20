@@ -18,10 +18,12 @@ class LogInView extends ConsumerStatefulWidget {
 }
 
 class _LogInViewState extends ConsumerState<LogInView> {
+  TextEditingController emailEditingController = TextEditingController();
+  TextEditingController passwordEditingController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final viewmodel = ref.watch(logInViewModelProvider);
-    // final provider = ;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -55,7 +57,7 @@ class _LogInViewState extends ConsumerState<LogInView> {
                       height: 16.0,
                     ),
                     InputFormField(
-                      textEditingController: viewmodel.emailEditingController,
+                      textEditingController: emailEditingController,
                       textInputType: TextInputType.emailAddress,
                       placeholder: '이메일',
                     ),
@@ -63,7 +65,7 @@ class _LogInViewState extends ConsumerState<LogInView> {
                       height: 12.0,
                     ),
                     InputFormField(
-                      textEditingController: viewmodel.passwordEditingController,
+                      textEditingController: passwordEditingController,
                       isObscure: true,
                       placeholder: '비밀번호',
                     ),
@@ -75,7 +77,10 @@ class _LogInViewState extends ConsumerState<LogInView> {
                 WideColoredButton(
                   onPressed: () async {
                     ref.read(logInViewModelProvider.notifier).setIsProcessing(true);
-                    ref.read(logInViewModelProvider.notifier).logInWithEmail().then((result) {
+                    ref
+                        .read(logInViewModelProvider.notifier)
+                        .logInWithEmail(email: emailEditingController.text, password: passwordEditingController.text)
+                        .then((result) {
                       result.fold(
                         (failure) {
                           String toastMessage = '';
@@ -133,8 +138,8 @@ class _LogInViewState extends ConsumerState<LogInView> {
                               },
                             ),
                           ).whenComplete(() {
-                            viewmodel.emailEditingController.clear();
-                            viewmodel.passwordEditingController.clear();
+                            emailEditingController.clear();
+                            passwordEditingController.clear();
                           });
                         },
                         child: Container(
@@ -170,22 +175,7 @@ class _LogInViewState extends ConsumerState<LogInView> {
                       children: [
                         SNSLoginButton(
                           onPressed: () async {
-                            ref.read(logInViewModelProvider.notifier).setIsProcessing(true);
-
-                            ref.read(logInViewModelProvider.notifier).logInWithGoogle().then((result) {
-                              return getUserIdFromAuthResult(
-                                result,
-                              );
-                            }).then((userInfo) {
-                              if (userInfo.$1 != null) {
-                                navigateBasedOnUserState(
-                                  userInfo.$1!,
-                                  userInfo.$2,
-                                );
-                              }
-                            });
-
-                            ref.read(logInViewModelProvider.notifier).setIsProcessing(false);
+                            await loginWithGoogle();
                           },
                           snsAuthType: SNSAuthType.google,
                         ),
@@ -193,22 +183,7 @@ class _LogInViewState extends ConsumerState<LogInView> {
                         if (Platform.isIOS)
                           SNSLoginButton(
                             onPressed: () async {
-                              ref.read(logInViewModelProvider.notifier).setIsProcessing(true);
-
-                              ref.read(logInViewModelProvider.notifier).logInWithApple().then((result) {
-                                return getUserIdFromAuthResult(
-                                  result,
-                                );
-                              }).then((userInfo) {
-                                if (userInfo.$1 != null) {
-                                  navigateBasedOnUserState(
-                                    userInfo.$1!,
-                                    userInfo.$2,
-                                  );
-                                }
-                              });
-
-                              ref.read(logInViewModelProvider.notifier).setIsProcessing(false);
+                              loginWithApple();
                             },
                             snsAuthType: SNSAuthType.apple,
                           ),
@@ -222,6 +197,44 @@ class _LogInViewState extends ConsumerState<LogInView> {
         ),
       ),
     );
+  }
+
+  Future<void> loginWithGoogle() async {
+    ref.read(logInViewModelProvider.notifier).setIsProcessing(true);
+
+    await ref.read(logInViewModelProvider.notifier).logInWithGoogle().then((result) {
+      return getUserIdFromAuthResult(
+        result,
+      );
+    }).then((userInfo) {
+      if (userInfo.$1 != null) {
+        navigateBasedOnUserState(
+          userInfo.$1!,
+          userInfo.$2,
+        );
+      }
+    });
+
+    ref.read(logInViewModelProvider.notifier).setIsProcessing(false);
+  }
+
+  Future<void> loginWithApple() async {
+    ref.read(logInViewModelProvider.notifier).setIsProcessing(true);
+
+    await ref.read(logInViewModelProvider.notifier).logInWithApple().then((result) {
+      return getUserIdFromAuthResult(
+        result,
+      );
+    }).then((userInfo) {
+      if (userInfo.$1 != null) {
+        navigateBasedOnUserState(
+          userInfo.$1!,
+          userInfo.$2,
+        );
+      }
+    });
+
+    ref.read(logInViewModelProvider.notifier).setIsProcessing(false);
   }
 
   Future<(String?, String?)> getUserIdFromAuthResult(

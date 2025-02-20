@@ -1,3 +1,4 @@
+import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,19 +17,24 @@ class SignUpAuthDataView extends ConsumerStatefulWidget {
 }
 
 class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    ref.watch(signUpAuthDataViewModelProvider).emailInputController.clear();
-    ref.watch(signUpAuthDataViewModelProvider).passwordInputController.clear();
-    ref.watch(signUpAuthDataViewModelProvider).passwordValidatorInputController.clear();
-  }
+  TextEditingController emailInputController = TextEditingController();
+  TextEditingController passwordInputController = TextEditingController();
+  TextEditingController passwordValidatorInputController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final viewmodel = ref.watch(signUpAuthDataViewModelProvider);
     final provider = ref.read(signUpAuthDataViewModelProvider.notifier);
+
+    emailInputController.addListener(() {
+      provider.setEmail(emailInputController.text);
+    });
+    passwordInputController.addListener(() {
+      provider.setPassword(passwordInputController.text);
+    });
+    passwordValidatorInputController.addListener(() {
+      provider.setPasswordValidator(passwordValidatorInputController.text);
+    });
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -50,50 +56,15 @@ class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       '이메일',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: CustomColors.whWhite,
-                        fontSize: 20,
-                      ),
+                      style: context.titleSmall,
                     ),
-                    Container(
-                      height: 8.0,
-                    ),
-                    TextFormField(
-                      keyboardType: TextInputType.emailAddress,
-                      controller: viewmodel.emailInputController,
-                      onChanged: (value) {
-                        provider.checkEmailEntered();
-                      },
-                      cursorColor: CustomColors.whWhite,
-                      textAlignVertical: TextAlignVertical.center,
-                      style: const TextStyle(
-                        color: CustomColors.whWhite,
-                        fontSize: 16.0,
-                      ),
-                      decoration: InputDecoration(
-                        hintText: '이메일',
-                        hintStyle: const TextStyle(
-                          fontSize: 16,
-                          color: CustomColors.whPlaceholderGrey,
-                        ),
-                        filled: true,
-                        fillColor: CustomColors.whGrey,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
-                            width: 0,
-                            style: BorderStyle.none,
-                          ),
-                        ),
-                        isCollapsed: true,
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 12.0,
-                          horizontal: 16.0,
-                        ),
-                      ),
+                    Container(height: 16.0),
+                    InputFormField(
+                      textEditingController: emailInputController,
+                      textInputType: TextInputType.emailAddress,
+                      placeholder: '이메일',
                     ),
                   ],
                 ),
@@ -103,75 +74,31 @@ class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       '비밀번호',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: CustomColors.whWhite,
-                        fontSize: 20,
-                      ),
+                      style: context.titleSmall,
                     ),
-                    Container(
-                      height: 8.0,
-                    ),
-                    TextFormField(
-                      controller: viewmodel.passwordInputController,
-                      obscureText: true,
-                      obscuringCharacter: '*',
-                      inputFormatters: <TextInputFormatter>[
+                    Container(height: 16.0),
+                    InputFormField(
+                      textEditingController: passwordInputController,
+                      textInputFormatters: <TextInputFormatter>[
                         FilteringTextInputFormatter.allow(
-                          RegExp(r'[0-9a-zA-Z!@#$%^&*(),.?":{}<>]'),
+                          RegExp(r'[0-9a-zA-Z!@#$%^&*(),.?":{}|<>_]'),
                         ),
                       ],
-                      onChanged: (value) {
-                        setState(() {
-                          provider.checkPasswordValidity();
-                        });
+                      descrptionHandler: (text) {
+                        switch (text.length) {
+                          case == 0:
+                            return ('6자리 이상, 20자리 이하의 알파벳, 숫자, 특수문자로 구성', FormFieldDescriptionType.normal);
+                          case >= 6 && <= 20:
+                            return ('6자리 이상, 20자리 이하의 알파벳, 숫자, 특수문자로 구성', FormFieldDescriptionType.clear);
+                          default:
+                            return ('6자리 이상, 20자리 이하의 알파벳, 숫자, 특수문자로 구성', FormFieldDescriptionType.warning);
+                        }
                       },
-                      cursorColor: CustomColors.whWhite,
-                      textAlignVertical: TextAlignVertical.center,
-                      style: const TextStyle(
-                        color: CustomColors.whWhite,
-                        fontSize: 16.0,
-                      ),
-                      decoration: InputDecoration(
-                        hintText: '비밀번호',
-                        hintStyle: const TextStyle(
-                          fontSize: 16,
-                          color: CustomColors.whPlaceholderGrey,
-                        ),
-                        filled: true,
-                        fillColor: CustomColors.whGrey,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
-                            width: 0,
-                            style: BorderStyle.none,
-                          ),
-                        ),
-                        isCollapsed: true,
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 12.0,
-                          horizontal: 16.0,
-                        ),
-                      ),
+                      placeholder: '비밀번호',
                     ),
-                    Container(
-                      height: 8.0,
-                    ),
-                    Container(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: Text(
-                        '6자리 이상의 알파벳, 숫자, 특수문자로 구성',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          color: viewmodel.isPasswordValid != null
-                              ? (viewmodel.isPasswordValid! ? CustomColors.pointGreen : CustomColors.pointRed)
-                              : CustomColors.whPlaceholderGrey,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
+                    Container(height: 16.0),
                   ],
                 ),
                 const SizedBox(
@@ -180,80 +107,23 @@ class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       '비밀번호 확인',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: CustomColors.whWhite,
-                        fontSize: 20,
-                      ),
+                      style: context.titleSmall,
                     ),
-                    Container(
-                      height: 8.0,
-                    ),
-                    TextFormField(
-                      controller: viewmodel.passwordValidatorInputController,
-                      obscureText: true,
-                      obscuringCharacter: '*',
-                      onChanged: (value) {
-                        setState(() {
-                          provider.matchPasswordAndValidator();
-                        });
-                      },
-                      cursorColor: CustomColors.whWhite,
-                      textAlignVertical: TextAlignVertical.center,
-                      style: const TextStyle(
-                        color: CustomColors.whWhite,
-                        fontSize: 16.0,
-                      ),
-                      decoration: InputDecoration(
-                        hintText: '비밀번호 확인',
-                        hintStyle: const TextStyle(
-                          fontSize: 16,
-                          color: CustomColors.whPlaceholderGrey,
-                        ),
-                        filled: true,
-                        fillColor: CustomColors.whGrey,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
-                            width: 0,
-                            style: BorderStyle.none,
-                          ),
-                        ),
-                        isCollapsed: true,
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 12.0,
-                          horizontal: 16.0,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: 8.0,
-                    ),
-                    Container(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: Visibility(
-                        visible: viewmodel.passwordValidatorInputController.text.isNotEmpty,
-                        child: Text(
-                          viewmodel.isPasswordMatched ? '일치합니다' : '비밀번호와 일치하지 않습니다',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            color: viewmodel.isPasswordMatched ? CustomColors.pointGreen : CustomColors.pointRed,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
+                    const SizedBox(height: 16),
+                    InputFormField(
+                      textEditingController: passwordValidatorInputController,
+                      // TODO: 비밀번호와 일치함 메시지 보여주기
+                      placeholder: '비밀번호 확인',
                     ),
                   ],
                 ),
                 Expanded(child: Container()),
                 WideColoredButton(
-                  isDiminished:
-                      !(viewmodel.isEmailEntered & (viewmodel.isPasswordValid ?? false) & viewmodel.isPasswordMatched) |
-                          viewmodel.isProcessing,
+                  isDiminished: !(viewmodel.isEmailValid & (viewmodel.isPasswordValid) & viewmodel.isValidatorValid) |
+                      viewmodel.isProcessing,
                   buttonTitle: viewmodel.isProcessing ? '처리 중' : '다음',
-                  backgroundColor: CustomColors.whYellow,
                   foregroundColor: CustomColors.whBlack,
                   onPressed: () async {
                     setState(() {
@@ -263,8 +133,8 @@ class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
                     ref
                         .read(signUpWithEmailAndPasswordUsecaseProvider)
                         .call(
-                          viewmodel.emailInputController.text,
-                          viewmodel.passwordInputController.text,
+                          emailInputController.text,
+                          passwordInputController.text,
                         )
                         .then((result) {
                       setState(() {
@@ -303,7 +173,7 @@ class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
                         return false;
                       });
                     }).then((canMoveToNextStep) {
-                      if (canMoveToNextStep) {
+                      if (canMoveToNextStep && context.mounted) {
                         Navigator.push(
                           context,
                           MaterialPageRoute(

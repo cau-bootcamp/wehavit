@@ -17,10 +17,10 @@ class LogInViewModelProvider extends StateNotifier<LogInViewModel> {
 
   final Ref ref;
 
-  EitherFuture<void> logInWithEmail() async {
+  EitherFuture<void> logInWithEmail({required String email, required String password}) async {
     return ref.read(logInWithEmailAndPasswordUsecaseProvider).call(
-          state.emailEditingController.text,
-          state.passwordEditingController.text,
+          email,
+          password,
         );
   }
 
