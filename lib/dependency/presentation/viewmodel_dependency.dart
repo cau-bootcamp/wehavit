@@ -171,24 +171,6 @@ final editUserDataViewModelProvider =
   );
 });
 
-final logInViewModelProvider = StateNotifierProvider.autoDispose<LogInViewModelProvider, LogInViewModel>((ref) {
-  LogInWithEmailUsecase logInWithEmailAndPasswordUsecase = ref.watch(logInWithEmailAndPasswordUsecaseProvider);
-  LogInWithAppleUsecase logInWithAppleUsecase = ref.watch(logInWithAppleUsecaseProvider);
-  LogInWithGoogleUsecase logInWithGoogleUsecase = ref.watch(logInWithGoogleUsecaseProvider);
-  LogOutUsecase logOutUsecase = ref.watch(logOutUseCaseProvider);
-  GetMyUserIdUsecase getMyUserIdUsecase = ref.watch(getMyUserIdUsecaseProvider);
-  GetUserDataFromIdUsecase getUserDataFromIdUsecase = ref.watch(getUserDataFromIdUsecaseProvider);
-
-  return LogInViewModelProvider(
-    logInWithEmailAndPasswordUsecase,
-    logInWithAppleUsecase,
-    logInWithGoogleUsecase,
-    logOutUsecase,
-    getMyUserIdUsecase,
-    getUserDataFromIdUsecase,
-  );
-});
-
 final addResolutionViewModelProvider =
     StateNotifierProvider.autoDispose<AddResolutionViewModelProvider, AddResolutionViewModel>((ref) {
   UploadResolutionUseCase uploadResolutionUseCase = ref.watch(uploadResolutionUsecaseProvider);

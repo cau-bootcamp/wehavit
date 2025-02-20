@@ -39,10 +39,6 @@ class _EntranceViewState extends ConsumerState<EntranceView> {
 
   @override
   Widget build(BuildContext context) {
-    // final textTheme = context.textTheme;
-    // final emailTextFieldController = useTextEditingController();
-    // final passwordTextFieldController = useTextEditingController();
-
     ref.listen(authProvider, (previous, next) {
       if (next.authResult == AuthResult.success) {
         context.go(RouteLocation.main);
@@ -91,7 +87,6 @@ class _EntranceViewState extends ConsumerState<EntranceView> {
                     WideColoredButton(
                       buttonTitle: '시작하기',
                       foregroundColor: CustomColors.whBlack,
-                      backgroundColor: CustomColors.whYellow,
                       onPressed: () async {
                         // view 이동하기
                         setState(() {
@@ -135,9 +130,6 @@ class _EntranceViewState extends ConsumerState<EntranceView> {
         });
       }
     }
-
-    ref.invalidate(mainViewModelProvider);
-    ref.invalidate(friendListViewModelProvider);
   }
 }
 

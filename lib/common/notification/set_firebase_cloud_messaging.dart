@@ -53,6 +53,7 @@ Future<String?> setFirebaseCloudMessaging(
       const InitializationSettings(
         android: AndroidInitializationSettings('@mipmap/appicon'),
         // iOS: IOSInitializationSettings(),
+        iOS: DarwinInitializationSettings(),
       ),
     );
 

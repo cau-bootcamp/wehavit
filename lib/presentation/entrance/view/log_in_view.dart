@@ -1,16 +1,12 @@
-// ignore: file_names
-
 import 'dart:io';
 
+import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
-
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
-import 'package:wehavit/presentation/common_components/sns_login_button.dart';
 import 'package:wehavit/presentation/entrance/entrance.dart';
 import 'package:wehavit/presentation/main/main.dart';
 
@@ -23,17 +19,9 @@ class LogInView extends ConsumerStatefulWidget {
 
 class _LogInViewState extends ConsumerState<LogInView> {
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    ref.watch(logInViewModelProvider).emailEditingController.clear();
-    ref.watch(logInViewModelProvider).passwordEditingController.clear();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final viewmodel = ref.watch(logInViewModelProvider);
-    final provider = ref.read(logInViewModelProvider.notifier);
+    // final provider = ;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -56,98 +44,38 @@ class _LogInViewState extends ConsumerState<LogInView> {
               children: [
                 Column(
                   children: [
-                    const Align(
+                    Align(
                       alignment: Alignment.topLeft,
                       child: Text(
                         '로그인',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: CustomColors.whWhite,
-                          fontSize: 20,
-                        ),
+                        style: context.titleSmall,
                       ),
                     ),
                     Container(
                       height: 16.0,
                     ),
-                    TextFormField(
-                      keyboardType: TextInputType.emailAddress,
-                      controller: viewmodel.emailEditingController,
-                      cursorColor: CustomColors.whWhite,
-                      textAlignVertical: TextAlignVertical.center,
-                      style: const TextStyle(
-                        color: CustomColors.whWhite,
-                        fontSize: 16.0,
-                      ),
-                      decoration: InputDecoration(
-                        hintText: '이메일',
-                        hintStyle: const TextStyle(
-                          fontSize: 16,
-                          color: CustomColors.whPlaceholderGrey,
-                        ),
-                        filled: true,
-                        fillColor: CustomColors.whGrey,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
-                            width: 0,
-                            style: BorderStyle.none,
-                          ),
-                        ),
-                        isCollapsed: true,
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 16.0,
-                          horizontal: 16.0,
-                        ),
-                      ),
+                    InputFormField(
+                      textEditingController: viewmodel.emailEditingController,
+                      textInputType: TextInputType.emailAddress,
+                      placeholder: '이메일',
                     ),
                     const SizedBox(
                       height: 12.0,
                     ),
-                    TextFormField(
-                      controller: viewmodel.passwordEditingController,
-                      cursorColor: CustomColors.whWhite,
-                      textAlignVertical: TextAlignVertical.center,
-                      style: const TextStyle(
-                        color: CustomColors.whWhite,
-                        fontSize: 16.0,
-                      ),
-                      obscureText: true,
-                      obscuringCharacter: '*',
-                      decoration: InputDecoration(
-                        hintText: '비밀번호',
-                        hintStyle: const TextStyle(
-                          fontSize: 16,
-                          color: CustomColors.whPlaceholderGrey,
-                        ),
-                        filled: true,
-                        fillColor: CustomColors.whGrey,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
-                            width: 0,
-                            style: BorderStyle.none,
-                          ),
-                        ),
-                        isCollapsed: true,
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 16.0,
-                          horizontal: 16.0,
-                        ),
-                      ),
+                    InputFormField(
+                      textEditingController: viewmodel.passwordEditingController,
+                      isObscure: true,
+                      placeholder: '비밀번호',
                     ),
                   ],
                 ),
                 const SizedBox(
-                  height: 40,
+                  height: 80,
                 ),
                 WideColoredButton(
                   onPressed: () async {
-                    setState(() {
-                      provider.setIsProcessing(true);
-                    });
-
-                    provider.logInWithEmail().then((result) {
+                    ref.read(logInViewModelProvider.notifier).setIsProcessing(true);
+                    ref.read(logInViewModelProvider.notifier).logInWithEmail().then((result) {
                       result.fold(
                         (failure) {
                           String toastMessage = '';
@@ -162,10 +90,10 @@ class _LogInViewState extends ConsumerState<LogInView> {
                               toastMessage = '사용자 정보를 찾을 수 없어요';
                               break;
                             case 'wrong-password':
-                              toastMessage = '비밀번호를 잘못 입력했어요';
+                              toastMessage = '이메일과 비밀번호를 잘못 입력했어요';
                               break;
                             case 'invalid-credential':
-                              toastMessage = '비밀번호를 잘못 입력했어요';
+                              toastMessage = '이메일과 비밀번호를 잘못 입력했어요';
                               break;
                             default:
                               toastMessage = '잠시 후 다시 시도해주세요';
@@ -178,14 +106,11 @@ class _LogInViewState extends ConsumerState<LogInView> {
                         (success) => navigateToMainView(),
                       );
                     }).whenComplete(() {
-                      setState(() {
-                        provider.setIsProcessing(false);
-                      });
+                      ref.read(logInViewModelProvider.notifier).setIsProcessing(false);
                     });
                   },
                   buttonTitle: viewmodel.isProcessing ? '처리중' : '로그인하기',
                   isDiminished: viewmodel.isProcessing,
-                  backgroundColor: CustomColors.whYellow,
                   foregroundColor: CustomColors.whBlack,
                 ),
                 const SizedBox(
@@ -214,11 +139,9 @@ class _LogInViewState extends ConsumerState<LogInView> {
                         },
                         child: Container(
                           alignment: Alignment.center,
-                          child: const Text(
+                          child: Text(
                             '회원가입',
-                            style: TextStyle(
-                              color: CustomColors.whWhite,
-                            ),
+                            style: context.labelMedium?.copyWith(color: CustomColors.whGrey800),
                           ),
                         ),
                       ),
@@ -235,13 +158,9 @@ class _LogInViewState extends ConsumerState<LogInView> {
                 padding: const EdgeInsets.only(bottom: 160),
                 child: Column(
                   children: [
-                    const Text(
+                    Text(
                       '다른 방법으로 로그인',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: CustomColors.whWhite,
-                        fontSize: 16,
-                      ),
+                      style: context.bodyMedium?.bold,
                     ),
                     const SizedBox(
                       height: 20,
@@ -251,56 +170,45 @@ class _LogInViewState extends ConsumerState<LogInView> {
                       children: [
                         SNSLoginButton(
                           onPressed: () async {
-                            setState(() {
-                              provider.setIsProcessing(true);
-                            });
+                            ref.read(logInViewModelProvider.notifier).setIsProcessing(true);
 
-                            provider.logInWithGoogle().then((result) {
+                            ref.read(logInViewModelProvider.notifier).logInWithGoogle().then((result) {
                               return getUserIdFromAuthResult(
-                                provider,
                                 result,
                               );
                             }).then((userInfo) {
                               if (userInfo.$1 != null) {
                                 navigateBasedOnUserState(
-                                  provider,
                                   userInfo.$1!,
                                   userInfo.$2,
                                 );
                               }
                             });
 
-                            setState(() {
-                              provider.setIsProcessing(false);
-                            });
+                            ref.read(logInViewModelProvider.notifier).setIsProcessing(false);
                           },
                           snsAuthType: SNSAuthType.google,
                         ),
+                        const SizedBox(width: 16),
                         if (Platform.isIOS)
                           SNSLoginButton(
                             onPressed: () async {
-                              setState(() {
-                                provider.setIsProcessing(true);
-                              });
+                              ref.read(logInViewModelProvider.notifier).setIsProcessing(true);
 
-                              provider.logInWithApple().then((result) {
+                              ref.read(logInViewModelProvider.notifier).logInWithApple().then((result) {
                                 return getUserIdFromAuthResult(
-                                  provider,
                                   result,
                                 );
                               }).then((userInfo) {
                                 if (userInfo.$1 != null) {
                                   navigateBasedOnUserState(
-                                    provider,
                                     userInfo.$1!,
                                     userInfo.$2,
                                   );
                                 }
                               });
 
-                              setState(() {
-                                provider.setIsProcessing(false);
-                              });
+                              ref.read(logInViewModelProvider.notifier).setIsProcessing(false);
                             },
                             snsAuthType: SNSAuthType.apple,
                           ),
@@ -317,7 +225,6 @@ class _LogInViewState extends ConsumerState<LogInView> {
   }
 
   Future<(String?, String?)> getUserIdFromAuthResult(
-    LogInViewModelProvider provider,
     Either<Failure, (AuthResult, String?)> result,
   ) {
     return result.fold(
@@ -328,7 +235,7 @@ class _LogInViewState extends ConsumerState<LogInView> {
         if (authResult.$1 != AuthResult.success) {
           return Future(() => (null, null));
         }
-        return provider.getMyUserId().then((result) {
+        return ref.read(logInViewModelProvider.notifier).getMyUserId().then((result) {
           return result.fold(
             (failure) => (null, authResult.$2),
             (uid) => (uid, authResult.$2),
@@ -339,11 +246,10 @@ class _LogInViewState extends ConsumerState<LogInView> {
   }
 
   Future<void> navigateBasedOnUserState(
-    LogInViewModelProvider provider,
     String userId,
     String? userName,
   ) async {
-    provider.getUserDataEntity(id: userId).then((result) {
+    ref.read(logInViewModelProvider.notifier).getUserDataEntity(id: userId).then((result) {
       result.fold(
         // 기존에 사용자에 대한 데이터가 없는 경우에는
         // 회원가입으로 이동
