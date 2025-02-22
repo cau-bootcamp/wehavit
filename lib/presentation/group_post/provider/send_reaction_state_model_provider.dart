@@ -46,7 +46,7 @@ class SendReactionStateModelNotifier extends StateNotifier<SendReactionStateMode
 
 final sendReactionStateModelNotifierProvider = StateNotifierProvider.family
     .autoDispose<SendReactionStateModelNotifier, SendReactionStateModel, ConfirmPostEntity>((ref, confirmPostEntity) {
-  final myUserEntity = ref.read(getMyUserDataProvider).value;
+  final myUserEntity = ref.read(myUserDataProvider).value;
 
   return SendReactionStateModelNotifier(
     SendReactionStateModel(myUserEntity, confirmPostEntity),

@@ -22,15 +22,20 @@ class WeeklyResolutionSummaryCard extends StatelessWidget {
       child: Consumer(
         builder: (context, ref, widget) {
           final asyncSuccessCount = ref.watch(myWeeklyResolutionSummaryProvider);
-
           final asyncResolutionList = ref.watch(resolutionListNotifierProvider);
+          //
           final asyncSuccessRatio = asyncSuccessCount.whenData((successCount) {
+            if (asyncResolutionList.hasValue && asyncResolutionList.value!.isEmpty) return 0;
+
             final total = asyncResolutionList.value?.map((e) => e.actionPerWeek).reduce((v, e) => v + e) ?? 0;
 
             if (total == 0) return 0;
 
             return ((successCount * 100) / total).ceil();
           });
+
+          // print("DEBUG");
+          // print(asyncSuccessRatio);
 
           return Stack(
             children: [

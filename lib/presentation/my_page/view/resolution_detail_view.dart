@@ -288,7 +288,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                     ref.invalidate(
                       resolutionProvider(
                         ResolutionProviderParam(
-                          userId: ref.read(getMyUserDataProvider).value!.userId,
+                          userId: ref.read(myUserDataProvider).value!.userId,
                           resolutionId: widget.entity.resolutionId,
                         ),
                       ),
@@ -318,7 +318,7 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                     ref.invalidate(
                       resolutionProvider(
                         ResolutionProviderParam(
-                          userId: ref.read(getMyUserDataProvider).value!.userId,
+                          userId: ref.read(myUserDataProvider).value!.userId,
                           resolutionId: widget.entity.resolutionId,
                         ),
                       ),

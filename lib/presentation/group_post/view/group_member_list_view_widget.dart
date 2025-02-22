@@ -36,7 +36,7 @@ class _GroupMemberListBottomSheetState extends State<GroupMemberListBottomSheet>
               builder: (context, ref, child) {
                 return ref.watch(groupProvider(widget.groupId)).when(
                       data: (groupEntity) {
-                        final isManager = groupEntity.groupManagerUid == ref.read(getMyUserDataProvider).value?.userId;
+                        final isManager = groupEntity.groupManagerUid == ref.read(myUserDataProvider).value?.userId;
 
                         final newApplyCount = ref
                             .watch(getAppliedUserIdListProvider(groupEntity))
@@ -236,7 +236,7 @@ class GroupMemberList extends StatelessWidget {
 
                     return UserProfileCell(
                       userId,
-                      type: (manageMode && userId != ref.read(getMyUserDataProvider).value!.userId)
+                      type: (manageMode && userId != ref.read(myUserDataProvider).value!.userId)
                           ? UserProfileCellType.deleteMode
                           : UserProfileCellType.normal,
                       deleteButtonLabel: '내보내기',
