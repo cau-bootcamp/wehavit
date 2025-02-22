@@ -124,7 +124,6 @@ final resolutionListViewModelProvider =
 
 final groupPostViewModelProvider =
     StateNotifierProvider.autoDispose<GroupPostViewModelProvider, GroupPostViewModel>((ref) {
-  final getGroupConfirmPostListByDateUsecase = ref.watch(getConfirmPostListByDateUsecaseProvider);
   final sendEmojiReactionToConfirmPostUsecase = ref.watch(sendEmojiReactionToConfirmPostUsecaseProvider);
   final sendQuickShotReactionToConfirmPostUsecase = ref.watch(sendQuickShotReactionToConfirmPostUsecaseProvider);
   final sendCommentReactionToConfirmPostUsecase = ref.watch(sendCommentReactionToConfirmPostUsecaseProvider);
@@ -136,7 +135,6 @@ final groupPostViewModelProvider =
   final removeQuickshotPresetUsecase = ref.watch(removeQuickshotPresetUsecaseProvider);
 
   return GroupPostViewModelProvider(
-    getGroupConfirmPostListByDateUsecase,
     sendEmojiReactionToConfirmPostUsecase,
     sendQuickShotReactionToConfirmPostUsecase,
     sendCommentReactionToConfirmPostUsecase,

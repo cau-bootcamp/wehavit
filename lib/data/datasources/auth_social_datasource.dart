@@ -1,5 +1,4 @@
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/entities/entities.dart';
 
 abstract class AuthSocialDataSource {
   EitherFuture<String> googleLogInAndSignUp();

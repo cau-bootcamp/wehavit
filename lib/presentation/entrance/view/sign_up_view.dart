@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
-import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/entrance/entrance.dart';
 
@@ -185,17 +184,6 @@ class _SignUpAuthDataViewState extends ConsumerState<SignUpAuthDataView> {
               },
             ),
           ),
-          // Visibility(
-          //   visible: viewmodel.isProcessing,
-          //   child: Container(
-          //     constraints: const BoxConstraints.expand(),
-          //     alignment: Alignment.center,
-          //     color: CustomColors.whDarkBlack.withAlpha(130),
-          //     child: const CircularProgressIndicator(
-          //       color: CustomColors.whYellow,
-          //     ),
-          //   ),
-          // ),
         ],
       ),
     );
