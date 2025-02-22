@@ -3,9 +3,7 @@ import 'dart:io';
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
 import 'package:wehavit/presentation/entrance/entrance.dart';
 import 'package:wehavit/presentation/main/main.dart';
@@ -122,32 +120,30 @@ class _LogInViewState extends ConsumerState<LogInView> {
                   height: 4,
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                          padding: const EdgeInsets.all(0),
-                        ),
-                        onPressed: () async {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return const SignUpAuthDataView();
-                              },
-                            ),
-                          ).whenComplete(() {
-                            emailEditingController.clear();
-                            passwordEditingController.clear();
-                          });
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: Text(
-                            '회원가입',
-                            style: context.labelMedium?.copyWith(color: CustomColors.whGrey800),
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.all(0),
+                      ),
+                      onPressed: () async {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return const SignUpAuthDataView();
+                            },
                           ),
+                        ).whenComplete(() {
+                          emailEditingController.clear();
+                          passwordEditingController.clear();
+                        });
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: Text(
+                          '회원가입',
+                          style: context.labelMedium?.copyWith(color: CustomColors.whGrey800),
                         ),
                       ),
                     ),
@@ -203,16 +199,13 @@ class _LogInViewState extends ConsumerState<LogInView> {
     ref.read(logInViewModelProvider.notifier).setIsProcessing(true);
 
     await ref.read(logInViewModelProvider.notifier).logInWithGoogle().then((result) {
-      return getUserIdFromAuthResult(
-        result,
+      result.fold(
+        (failure) => () {},
+        (success) => navigateBasedOnUserState(
+          success.$1,
+          success.$2,
+        ),
       );
-    }).then((userInfo) {
-      if (userInfo.$1 != null) {
-        navigateBasedOnUserState(
-          userInfo.$1!,
-          userInfo.$2,
-        );
-      }
     });
 
     ref.read(logInViewModelProvider.notifier).setIsProcessing(false);
@@ -222,41 +215,38 @@ class _LogInViewState extends ConsumerState<LogInView> {
     ref.read(logInViewModelProvider.notifier).setIsProcessing(true);
 
     await ref.read(logInViewModelProvider.notifier).logInWithApple().then((result) {
-      return getUserIdFromAuthResult(
-        result,
+      result.fold(
+        (failure) => () {},
+        (success) => navigateBasedOnUserState(
+          success.$1,
+          success.$2,
+        ),
       );
-    }).then((userInfo) {
-      if (userInfo.$1 != null) {
-        navigateBasedOnUserState(
-          userInfo.$1!,
-          userInfo.$2,
-        );
-      }
     });
 
     ref.read(logInViewModelProvider.notifier).setIsProcessing(false);
   }
 
-  Future<(String?, String?)> getUserIdFromAuthResult(
-    Either<Failure, (AuthResult, String?)> result,
-  ) {
-    return result.fold(
-      (failure) {
-        return Future(() => (null, null));
-      },
-      (authResult) async {
-        if (authResult.$1 != AuthResult.success) {
-          return Future(() => (null, null));
-        }
-        return ref.read(logInViewModelProvider.notifier).getMyUserId().then((result) {
-          return result.fold(
-            (failure) => (null, authResult.$2),
-            (uid) => (uid, authResult.$2),
-          );
-        });
-      },
-    );
-  }
+  // Future<(String?, String?)> getUserIdFromAuthResult(
+  //   Either<Failure, (AuthResult, String?)> result,
+  // ) {
+  //   return result.fold(
+  //     (failure) {
+  //       return Future(() => (null, null));
+  //     },
+  //     (authResult) async {
+  //       if (authResult.$1 != AuthResult.success) {
+  //         return Future(() => (null, null));
+  //       }
+  //       return ref.read(logInViewModelProvider.notifier).getMyUserId().then((result) {
+  //         return result.fold(
+  //           (failure) => (null, authResult.$2),
+  //           (uid) => (uid, authResult.$2),
+  //         );
+  //       });
+  //     },
+  //   );
+  // }
 
   Future<void> navigateBasedOnUserState(
     String userId,
@@ -284,8 +274,8 @@ class _LogInViewState extends ConsumerState<LogInView> {
         fullscreenDialog: true,
         builder: (context) {
           return EditUserDetailView(
-            isModifying: false,
-            name: name,
+            // TODO: UserId 전달하기
+            userId: '',
           );
         },
       ),

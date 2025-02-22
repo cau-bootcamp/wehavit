@@ -159,18 +159,18 @@ final signUpAuthDataViewModelProvider =
   return SignUpAuthDataViewModelProvider(ref);
 });
 
-final editUserDataViewModelProvider =
-    StateNotifierProvider.autoDispose<EditUserDataViewModelProvider, EditUserDetailViewModel>((ref) {
-  UploadUserDataUsecase uploadUserDataUsecase = ref.watch(uploadUserDataUsecaseProvider);
-  RemoveCurrentUserDataUsecase removeCurrentUserDataUsecase = ref.watch(removeCurrentUserDataUsecaseProvider);
-  LogOutUsecase logOutUseCase = ref.watch(logOutUseCaseProvider);
-  return EditUserDataViewModelProvider(
-    ref,
-    uploadUserDataUsecase,
-    removeCurrentUserDataUsecase,
-    logOutUseCase,
-  );
-});
+// final editUserDataViewModelProvider =
+//     StateNotifierProvider.autoDispose<EditUserDataViewModelProvider, EditUserDetailViewModel>((ref) {
+//   UploadUserDataUsecase uploadUserDataUsecase = ref.watch(uploadUserDataUsecaseProvider);
+//   RemoveCurrentUserDataUsecase removeCurrentUserDataUsecase = ref.watch(removeCurrentUserDataUsecaseProvider);
+//   LogOutUsecase logOutUseCase = ref.watch(logOutUseCaseProvider);
+//   return EditUserDataViewModelProvider(
+//     ref,
+//     uploadUserDataUsecase,
+//     removeCurrentUserDataUsecase,
+//     logOutUseCase,
+//   );
+// });
 
 final addResolutionViewModelProvider =
     StateNotifierProvider.autoDispose<AddResolutionViewModelProvider, AddResolutionViewModel>((ref) {

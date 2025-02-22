@@ -175,12 +175,12 @@ class MyPageScreenState extends ConsumerState<MyPageView> with AutomaticKeepAliv
                       MaterialPageRoute(
                         builder: (context) {
                           return EditUserDetailView(
-                            isModifying: true,
-                            uid: userEntity.userId,
-                            profileImageUrl: userEntity.userImageUrl,
-                            name: userEntity.userName,
-                            handle: userEntity.handle,
-                            aboutMe: userEntity.aboutMe,
+                            // isModifying: true,
+                            userId: userEntity.userId,
+                            // profileImageUrl: userEntity.userImageUrl,
+                            // name: userEntity.userName,
+                            // handle: userEntity.handle,
+                            // aboutMe: userEntity.aboutMe,
                           );
                         },
                       ),

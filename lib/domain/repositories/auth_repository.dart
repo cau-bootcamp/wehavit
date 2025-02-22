@@ -3,13 +3,13 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 
 abstract class AuthRepository {
-  EitherFuture<(AuthResult, String?)> logIn({
+  EitherFuture<(String, String?)> logIn({
     required LogInType type,
     String? email,
     String? password,
   });
 
-  EitherFuture<AuthResult> signUp({
+  EitherFuture<String> signUp({
     required LogInType type,
     String? email,
     String? password,

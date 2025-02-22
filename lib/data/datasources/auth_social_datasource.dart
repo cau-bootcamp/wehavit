@@ -2,11 +2,11 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 
 abstract class AuthSocialDataSource {
-  EitherFuture<AuthResult> googleLogInAndSignUp();
+  EitherFuture<String> googleLogInAndSignUp();
 
   Future<void> googleLogOut();
 
-  EitherFuture<(AuthResult, String?)> appleLogInAndSignUp();
+  EitherFuture<(String, String?)> appleLogInAndSignUp();
 
   Future<void> appleLogOut();
 

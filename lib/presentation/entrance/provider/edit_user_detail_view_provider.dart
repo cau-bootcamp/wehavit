@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/widgets.dart';
@@ -7,21 +8,52 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/usecases/usecases.dart';
+import 'package:wehavit/dependency/domain/usecase_dependency.dart';
+
 import 'package:wehavit/presentation/entrance/entrance.dart';
+
+final editUserDataViewActionProvider = StateProvider<EditUserDataViewAction>(
+  (ref) => EditUserDataViewAction(),
+);
+
+final editUserDataViewModelProvider = StateNotifierProvider.autoDispose
+    .family<EditUserDataViewModelProvider, EditUserDetailViewModel, String>((ref, userId) {
+  final viewModel = EditUserDataViewModelProvider(ref, userId);
+
+  ref.listenSelf((_, next) {
+    // 필요할 경우 로직 추가
+  });
+
+  return viewModel;
+
+  // return EditUserDataViewModelProvider(ref, userId);
+});
 
 class EditUserDataViewModelProvider extends StateNotifier<EditUserDetailViewModel> {
   EditUserDataViewModelProvider(
     this.ref,
-    this.uploadUserDataUsecase,
-    this.removeCurrentUserDataUsecase,
-    this.logOutUseCase,
-  ) : super(EditUserDetailViewModel());
+    this.userId,
+  ) : super(EditUserDetailViewModel()) {
+    unawaited(
+      ref.read(getUserDataFromIdUsecaseProvider).call(userId).then(
+            (result) => result.fold((failure) {
+              ref.read(editUserDataViewActionProvider.notifier).update((_) => EditUserDataViewNoDataAction());
+            }, (entity) {
+              ref.read(editUserDataViewActionProvider.notifier).update(
+                    (_) => EditUserDataViewSetDataAction(
+                      entity.userName,
+                      entity.handle,
+                      entity.aboutMe,
+                      entity.userImageUrl,
+                    ),
+                  );
+            }),
+          ),
+    );
+  }
 
   Ref ref;
-  UploadUserDataUsecase uploadUserDataUsecase;
-  RemoveCurrentUserDataUsecase removeCurrentUserDataUsecase;
-  LogOutUsecase logOutUseCase;
+  String userId;
 
   static const int nameMinLength = 4;
   static const int nameMaxLength = 16;
@@ -43,6 +75,7 @@ class EditUserDataViewModelProvider extends StateNotifier<EditUserDetailViewMode
 
       state.profileImage = FileImage(File(pickedFile.path));
     }
+    ref.notifyListeners();
   }
 
   void setName(String value) {
@@ -68,13 +101,15 @@ class EditUserDataViewModelProvider extends StateNotifier<EditUserDetailViewMode
       return Future(() => left(const Failure('no-handle')));
     }
 
-    return await uploadUserDataUsecase(
-      uid: state.uid,
+    return await ref
+        .read(uploadUserDataUsecaseProvider)(
+      uid: userId,
       name: state.name,
       userImageFile: state.profileImage!.file,
       aboutMe: state.aboutMe,
       handle: state.handle,
-    ).then((result) {
+    )
+        .then((result) {
       return result.fold(
         (failure) => left(failure),
         (success) => right(null),
@@ -88,11 +123,11 @@ class EditUserDataViewModelProvider extends StateNotifier<EditUserDetailViewMode
   }
 
   EitherFuture<void> _removeUserData() async {
-    return removeCurrentUserDataUsecase.call();
+    return ref.read(removeCurrentUserDataUsecaseProvider).call();
   }
 
   Future<void> _logOut() {
-    return logOutUseCase.call();
+    return ref.read(logOutUseCaseProvider).call();
   }
 
   Future<void> downloadImageToFile(String imageUrl) async {
@@ -111,6 +146,7 @@ class EditUserDataViewModelProvider extends StateNotifier<EditUserDetailViewMode
         await file.writeAsBytes(response.bodyBytes);
 
         state.profileImage = FileImage(file);
+        ref.notifyListeners();
       } else {
         throw Exception('이미지 다운로드 실패: 상태 코드 ${response.statusCode}');
       }

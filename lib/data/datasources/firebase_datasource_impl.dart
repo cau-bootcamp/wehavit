@@ -453,11 +453,16 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     String targetUserId,
   ) async {
     try {
-      final friendDocument = await firestore.collection(FirebaseCollectionName.users).doc(targetUserId).get();
+      final userDocument = await firestore.collection(FirebaseCollectionName.users).doc(targetUserId).get();
 
-      final model = FirebaseUserModel.fromFireStoreDocument(friendDocument);
+      // 이후 개선 때 failure message를 전역으로 관리하도록 개선하기
+      if (!userDocument.exists) {
+        return Future(() => left(const Failure('no-docs-exist')));
+      }
+
+      final model = FirebaseUserModel.fromFireStoreDocument(userDocument);
       final entity = model.toUserDataEntity(
-        userId: friendDocument.reference.id,
+        userId: userDocument.reference.id,
       );
 
       return Future(() => right(entity));

@@ -22,7 +22,7 @@ class AuthWehavitDataSourceImpl implements AuthDataSource {
   }
 
   @override
-  EitherFuture<AuthResult> signUpWithEmailAndPassword({
+  EitherFuture<String> signUpWithEmailAndPassword({
     String? email,
     String? password,
   }) async {
@@ -48,14 +48,14 @@ class AuthWehavitDataSourceImpl implements AuthDataSource {
 
       // Firestore에 사용자 정보 저장
 
-      return right(AuthResult.success);
+      return right(result.user!.uid);
     } on FirebaseAuthException catch (exception) {
       return left(Failure(exception.code));
     }
   }
 
   @override
-  EitherFuture<AuthResult> logInWithEmailAndPassword({
+  EitherFuture<String> logInWithEmailAndPassword({
     String? email,
     String? password,
   }) async {
@@ -73,33 +73,35 @@ class AuthWehavitDataSourceImpl implements AuthDataSource {
         return left(const Failure('user-not-found'));
       }
 
-      return right(AuthResult.success);
+      return right(result.user!.uid);
     } on FirebaseAuthException catch (e) {
       return left(Failure(e.code));
     }
   }
 
-  Future<void> createUserDataInUserCollection({
-    required String uid,
-    String? name,
-    String? email,
-    String? imageUrl,
-  }) async {
-    await FirebaseFirestore.instance
-        .collection(
-          FirebaseCollectionName.users,
-        )
-        .doc(uid)
-        .set({
-      FirebaseUserFieldName.displayName: name ?? 'NO_NAME',
-      FirebaseUserFieldName.imageUrl: 'NO_IMAGE_URL',
-      FirebaseUserFieldName.createdAt: DateTime.now(),
-      FirebaseUserFieldName.aboutMe: '',
-      FirebaseUserFieldName.cumulativeGoals: 0,
-      FirebaseUserFieldName.cumulativePosts: 0,
-      FirebaseUserFieldName.cumulativeReactions: 0,
-    });
-  }
+  // Future<void> createUserData({
+  //   required String uid,
+  //   String? name,
+  //   String? email,
+  //   String? imageUrl,
+  // }) async {
+  //   await FirebaseFirestore.instance
+  //       .collection(
+  //         FirebaseCollectionName.users,
+  //       )
+  //       .doc(uid)
+  //       .set({
+  //     FirebaseUserFieldName.displayName: name ?? '',
+  //     FirebaseUserFieldName.imageUrl: imageUrl ?? '',
+  //     FirebaseUserFieldName.createdAt: DateTime.now(),
+  //     FirebaseUserFieldName.aboutMe: '',
+  //     FirebaseUserFieldName.handle: '',
+  //     FirebaseUserFieldName.cumulativeGoals: 0,
+  //     FirebaseUserFieldName.cumulativePosts: 0,
+  //     FirebaseUserFieldName.cumulativeReactions: 0,
+  //     FirebaseUserFieldName.messageToken: '',
+  //   });
+  // }
 
   @override
   EitherFuture<void> removeCurrentUserData() async {

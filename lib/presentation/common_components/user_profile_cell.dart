@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
 import 'package:wehavit/common/utils/utils.dart';
 import 'package:wehavit/presentation/presentation.dart';
-import 'package:wehavit/presentation/state/friend/friend_list_provider.dart';
+import 'package:wehavit/presentation/state/user_data/my_user_data_provider.dart';
 
 enum UserProfileCellType {
   normal,
@@ -75,7 +75,7 @@ class UserProfileCell extends StatelessWidget {
 
     return Consumer(
       builder: (context, ref, child) {
-        final asyncUserEntity = ref.watch(userDataEntityProvider(userId));
+        final asyncUserEntity = ref.watch(userDataProvider(userId));
 
         return asyncUserEntity.when(
           data: (entity) {
@@ -182,7 +182,7 @@ class ConfirmPostUserProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (context, ref, child) {
-        return ref.watch(userDataEntityProvider.call(userId)).when(
+        return ref.watch(userDataProvider.call(userId)).when(
           data: (userEntity) {
             return Row(
               children: [
