@@ -453,6 +453,10 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     String targetUserId,
   ) async {
     try {
+      if (targetUserId.isEmpty) {
+        return Future(() => left(const Failure('no-docs-exist')));
+      }
+
       final userDocument = await firestore.collection(FirebaseCollectionName.users).doc(targetUserId).get();
 
       // 이후 개선 때 failure message를 전역으로 관리하도록 개선하기

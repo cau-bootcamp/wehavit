@@ -227,27 +227,6 @@ class _LogInViewState extends ConsumerState<LogInView> {
     ref.read(logInViewModelProvider.notifier).setIsProcessing(false);
   }
 
-  // Future<(String?, String?)> getUserIdFromAuthResult(
-  //   Either<Failure, (AuthResult, String?)> result,
-  // ) {
-  //   return result.fold(
-  //     (failure) {
-  //       return Future(() => (null, null));
-  //     },
-  //     (authResult) async {
-  //       if (authResult.$1 != AuthResult.success) {
-  //         return Future(() => (null, null));
-  //       }
-  //       return ref.read(logInViewModelProvider.notifier).getMyUserId().then((result) {
-  //         return result.fold(
-  //           (failure) => (null, authResult.$2),
-  //           (uid) => (uid, authResult.$2),
-  //         );
-  //       });
-  //     },
-  //   );
-  // }
-
   Future<void> navigateBasedOnUserState(
     String userId,
     String? userName,
@@ -256,7 +235,7 @@ class _LogInViewState extends ConsumerState<LogInView> {
       result.fold(
         // 기존에 사용자에 대한 데이터가 없는 경우에는
         // 회원가입으로 이동
-        (failure) => navigateToSignUpUserDetailView(name: userName),
+        (failure) => navigateToSignUpUserDetailView(userId: userId, name: userName),
         // 데이터가 있으면
         // 메인으로 이동
         (userData) => navigateToMainView(),
@@ -265,6 +244,7 @@ class _LogInViewState extends ConsumerState<LogInView> {
   }
 
   Future<void> navigateToSignUpUserDetailView({
+    required String userId,
     String? name,
     String? profileImageUrl,
   }) async {
@@ -274,8 +254,7 @@ class _LogInViewState extends ConsumerState<LogInView> {
         fullscreenDialog: true,
         builder: (context) {
           return EditUserDetailView(
-            // TODO: UserId 전달하기
-            userId: '',
+            userId: userId,
           );
         },
       ),
