@@ -110,6 +110,7 @@ final resolutionListViewModelProvider =
   );
 });
 
+// 구조 개편을 위한 시도 중
 // final writingConfirmPostViewModelProvider =
 //     StateNotifierProvider.autoDispose<WritingConfirmPostViewModelProvider, WritingConfirmPostViewModel>((ref) {
 //   final uploadConfirmPostUsecase = ref.watch(uploadConfirmPostUseCaseProvider);
@@ -123,7 +124,6 @@ final resolutionListViewModelProvider =
 
 final groupPostViewModelProvider =
     StateNotifierProvider.autoDispose<GroupPostViewModelProvider, GroupPostViewModel>((ref) {
-  final getGroupConfirmPostListByDateUsecase = ref.watch(getConfirmPostListByDateUsecaseProvider);
   final sendEmojiReactionToConfirmPostUsecase = ref.watch(sendEmojiReactionToConfirmPostUsecaseProvider);
   final sendQuickShotReactionToConfirmPostUsecase = ref.watch(sendQuickShotReactionToConfirmPostUsecaseProvider);
   final sendCommentReactionToConfirmPostUsecase = ref.watch(sendCommentReactionToConfirmPostUsecaseProvider);
@@ -135,7 +135,6 @@ final groupPostViewModelProvider =
   final removeQuickshotPresetUsecase = ref.watch(removeQuickshotPresetUsecaseProvider);
 
   return GroupPostViewModelProvider(
-    getGroupConfirmPostListByDateUsecase,
     sendEmojiReactionToConfirmPostUsecase,
     sendQuickShotReactionToConfirmPostUsecase,
     sendCommentReactionToConfirmPostUsecase,
@@ -155,39 +154,21 @@ final mainViewModelProvider = StateNotifierProvider.autoDispose<MainViewModelPro
 
 final signUpAuthDataViewModelProvider =
     StateNotifierProvider.autoDispose<SignUpAuthDataViewModelProvider, SignUpAuthDataViewModel>((ref) {
-  return SignUpAuthDataViewModelProvider();
+  return SignUpAuthDataViewModelProvider(ref);
 });
 
-final editUserDataViewModelProvider =
-    StateNotifierProvider.autoDispose<EditUserDataViewModelProvider, EditUserDetailViewModel>((ref) {
-  UploadUserDataUsecase uploadUserDataUsecase = ref.watch(uploadUserDataUsecaseProvider);
-  RemoveCurrentUserDataUsecase removeCurrentUserDataUsecase = ref.watch(removeCurrentUserDataUsecaseProvider);
-  LogOutUsecase logOutUseCase = ref.watch(logOutUseCaseProvider);
-  return EditUserDataViewModelProvider(
-    ref,
-    uploadUserDataUsecase,
-    removeCurrentUserDataUsecase,
-    logOutUseCase,
-  );
-});
-
-final logInViewModelProvider = StateNotifierProvider.autoDispose<LogInViewModelProvider, LogInViewModel>((ref) {
-  LogInWithEmailUsecase logInWithEmailAndPasswordUsecase = ref.watch(logInWithEmailAndPasswordUsecaseProvider);
-  LogInWithAppleUsecase logInWithAppleUsecase = ref.watch(logInWithAppleUsecaseProvider);
-  LogInWithGoogleUsecase logInWithGoogleUsecase = ref.watch(logInWithGoogleUsecaseProvider);
-  LogOutUsecase logOutUsecase = ref.watch(logOutUseCaseProvider);
-  GetMyUserIdUsecase getMyUserIdUsecase = ref.watch(getMyUserIdUsecaseProvider);
-  GetUserDataFromIdUsecase getUserDataFromIdUsecase = ref.watch(getUserDataFromIdUsecaseProvider);
-
-  return LogInViewModelProvider(
-    logInWithEmailAndPasswordUsecase,
-    logInWithAppleUsecase,
-    logInWithGoogleUsecase,
-    logOutUsecase,
-    getMyUserIdUsecase,
-    getUserDataFromIdUsecase,
-  );
-});
+// final editUserDataViewModelProvider =
+//     StateNotifierProvider.autoDispose<EditUserDataViewModelProvider, EditUserDetailViewModel>((ref) {
+//   UploadUserDataUsecase uploadUserDataUsecase = ref.watch(uploadUserDataUsecaseProvider);
+//   RemoveCurrentUserDataUsecase removeCurrentUserDataUsecase = ref.watch(removeCurrentUserDataUsecaseProvider);
+//   LogOutUsecase logOutUseCase = ref.watch(logOutUseCaseProvider);
+//   return EditUserDataViewModelProvider(
+//     ref,
+//     uploadUserDataUsecase,
+//     removeCurrentUserDataUsecase,
+//     logOutUseCase,
+//   );
+// });
 
 final addResolutionViewModelProvider =
     StateNotifierProvider.autoDispose<AddResolutionViewModelProvider, AddResolutionViewModel>((ref) {

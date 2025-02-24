@@ -131,7 +131,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
 
       DateTime endDate = DateTime(startDate.year, startDate.month, startDate.day).add(const Duration(days: 1));
 
-      final uid = getMyUserId();
+      // final uid = getMyUserId();
 
       // // 사용자가 속한 그룹에 속한 멤버들의 uid List
       // final groupMemberUidList = await firestore.collection(FirebaseCollectionName.groups).doc(groupId).get().then(
@@ -351,7 +351,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       await firestore
           .collection(
             FirebaseCollectionName.getTargetUserReactionBoxCollectionName(
-              targetEntity.owner!,
+              targetEntity.owner,
             ),
           )
           .add(reactionModel.toJson());
@@ -453,11 +453,20 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
     String targetUserId,
   ) async {
     try {
-      final friendDocument = await firestore.collection(FirebaseCollectionName.users).doc(targetUserId).get();
+      if (targetUserId.isEmpty) {
+        return Future(() => left(const Failure('no-docs-exist')));
+      }
 
-      final model = FirebaseUserModel.fromFireStoreDocument(friendDocument);
+      final userDocument = await firestore.collection(FirebaseCollectionName.users).doc(targetUserId).get();
+
+      // 이후 개선 때 failure message를 전역으로 관리하도록 개선하기
+      if (!userDocument.exists) {
+        return Future(() => left(const Failure('no-docs-exist')));
+      }
+
+      final model = FirebaseUserModel.fromFireStoreDocument(userDocument);
       final entity = model.toUserDataEntity(
-        userId: friendDocument.reference.id,
+        userId: userDocument.reference.id,
       );
 
       return Future(() => right(entity));
@@ -531,7 +540,7 @@ class FirebaseDatasourceImpl implements WehavitDatasource {
       }
 
       String storagePath = FirebaseStorageName.getConfirmPostQuickShotReactionStorageName(
-        entity.owner!,
+        entity.owner,
         entity.id,
       );
       final ref = FirebaseStorage.instance.ref(storagePath);

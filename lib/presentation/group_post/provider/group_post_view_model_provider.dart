@@ -8,7 +8,6 @@ import 'package:wehavit/presentation/group_post/group_post.dart';
 
 class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
   GroupPostViewModelProvider(
-    this._getGroupConfirmPostListByDateUsecase,
     this._sendEmojiReactionToConfirmPostUsecase,
     this._sendQuickShotReactionToConfirmPostUsecase,
     this._sendCommentReactionToConfirmPostUsecase,
@@ -20,7 +19,6 @@ class GroupPostViewModelProvider extends StateNotifier<GroupPostViewModel> {
     this._removeQuickshotPresetUsecase,
   ) : super(GroupPostViewModel());
 
-  final GetConfirmPostListByDateUsecase _getGroupConfirmPostListByDateUsecase;
   final SendEmojiReactionToConfirmPostUsecase _sendEmojiReactionToConfirmPostUsecase;
   final SendQuickShotReactionToConfirmPostUsecase _sendQuickShotReactionToConfirmPostUsecase;
   final SendCommentReactionToConfirmPostUsecase _sendCommentReactionToConfirmPostUsecase;

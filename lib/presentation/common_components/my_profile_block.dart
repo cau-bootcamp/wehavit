@@ -28,7 +28,7 @@ class MyProfileBlock extends StatelessWidget {
         padding: const EdgeInsets.all(12),
         child: Consumer(
           builder: (context, ref, child) {
-            final asyncMyUserData = ref.watch(getMyUserDataProvider);
+            final asyncMyUserData = ref.watch(myUserDataProvider);
 
             return asyncMyUserData.when(
               data: (myUserData) {

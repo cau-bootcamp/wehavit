@@ -32,7 +32,7 @@ class MyWehavitSummary extends StatelessWidget {
             ),
             child: Consumer(
               builder: (context, ref, child) {
-                final asyncMyUserData = ref.read(getMyUserDataProvider);
+                final asyncMyUserData = ref.read(myUserDataProvider);
 
                 return asyncMyUserData.when(
                   data: (userEntity) {

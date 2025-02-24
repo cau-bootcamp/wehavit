@@ -18,12 +18,12 @@ class AuthRepositoryImpl implements AuthRepository {
   final AuthSocialDataSource _authSocialDataSource;
 
   @override
-  EitherFuture<(AuthResult, String?)> logIn({
+  EitherFuture<(String, String?)> logIn({
     required LogInType type,
     String? email,
     String? password,
   }) async {
-    EitherFuture<(AuthResult, String?)> futureResult;
+    EitherFuture<(String, String?)> futureResult;
 
     switch (type) {
       case LogInType.wehavit:
@@ -33,7 +33,7 @@ class AuthRepositoryImpl implements AuthRepository {
               email: email,
               password: password,
             ))
-                .map((authResult) => (authResult, null)),
+                .map((userId) => (userId, null)),
           );
         } catch (e) {
           return left(Failure(AuthResult.failure.name));
@@ -41,7 +41,7 @@ class AuthRepositoryImpl implements AuthRepository {
       case LogInType.google:
         try {
           futureResult = Future(
-            () async => (await _authSocialDataSource.googleLogInAndSignUp()).map((authResult) => (authResult, null)),
+            () async => (await _authSocialDataSource.googleLogInAndSignUp()).map((userId) => (userId, null)),
           );
         } catch (e) {
           return left(Failure(AuthResult.failure.name));
@@ -63,12 +63,12 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  EitherFuture<AuthResult> signUp({
+  EitherFuture<String> signUp({
     required LogInType type,
     String? email,
     String? password,
   }) async {
-    EitherFuture<AuthResult> futureResult;
+    EitherFuture<String> futureResult;
 
     switch (type) {
       case LogInType.wehavit:

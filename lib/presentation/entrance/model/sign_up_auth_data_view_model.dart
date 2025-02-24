@@ -1,15 +1,13 @@
-import 'package:flutter/material.dart';
-
 class SignUpAuthDataViewModel {
-  TextEditingController emailInputController = TextEditingController();
-  TextEditingController passwordInputController = TextEditingController();
-  TextEditingController passwordValidatorInputController = TextEditingController();
+  String email = '';
+  String password = '';
+  String passwordValidator = '';
+
+  bool get isEmailValid => email.isNotEmpty;
+  bool get isPasswordValid => password.isNotEmpty && (password.length >= 6 && password.length <= 20);
+  bool get isValidatorValid => password.compareTo(passwordValidator) == 0;
 
   RegisterFailReason? registerFailReason;
-  bool isEmailEntered = false;
-  bool? isPasswordValid;
-  bool isPasswordMatched = false;
-
   bool isProcessing = false;
 }
 

@@ -94,7 +94,7 @@ class _AddResolutionDoneViewState extends ConsumerState<AddResolutionDoneView> {
                       ref.invalidate(
                         resolutionProvider(
                           ResolutionProviderParam(
-                            userId: ref.read(getMyUserDataProvider).value!.userId,
+                            userId: ref.read(myUserDataProvider).value!.userId,
                             resolutionId: widget.resolutionEntity.resolutionId,
                           ),
                         ),
@@ -166,7 +166,7 @@ class _ShareResolutionToFriendBottomSheetWidgetState extends ConsumerState<Share
                 final asyncResolutionEntity = ref.watch(
                   resolutionProvider(
                     ResolutionProviderParam(
-                      userId: ref.read(getMyUserDataProvider).value!.userId,
+                      userId: ref.read(myUserDataProvider).value!.userId,
                       resolutionId: widget.resolutionEntity.resolutionId,
                     ),
                   ),
@@ -426,7 +426,7 @@ class _ShareResolutionToGroupBottomSheetWidgetState extends ConsumerState<ShareR
                 final asyncResolutionEntity = ref.watch(
                   resolutionProvider(
                     ResolutionProviderParam(
-                      userId: ref.read(getMyUserDataProvider).value!.userId,
+                      userId: ref.read(myUserDataProvider).value!.userId,
                       resolutionId: widget.resolutionEntity.resolutionId,
                     ),
                   ),

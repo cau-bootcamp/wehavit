@@ -181,7 +181,7 @@ class _WritingConfirmPostViewState extends ConsumerState<WritingConfirmPostView>
                     return;
                   }
 
-                  final myUserEntity = await ref.read(getMyUserDataProvider.future);
+                  final myUserEntity = await ref.read(myUserDataProvider.future);
 
                   await provider
                       .uploadPost(

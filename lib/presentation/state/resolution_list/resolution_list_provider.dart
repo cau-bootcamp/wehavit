@@ -4,7 +4,7 @@ import 'package:wehavit/dependency/dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
 
-final resolutionListNotifierProvider = FutureProvider<List<ResolutionEntity>>(
+final resolutionListNotifierProvider = FutureProvider.autoDispose<List<ResolutionEntity>>(
   (ref) => ref.read(getMyResolutionListUsecaseProvider).call().then(
         (result) => result.fold(
           (failure) => [],
@@ -13,7 +13,7 @@ final resolutionListNotifierProvider = FutureProvider<List<ResolutionEntity>>(
       ),
 );
 
-final weeklyResolutionInfoProvider = FutureProvider.family<List<bool>, WeeklyResolutionInfoProviderParam>(
+final weeklyResolutionInfoProvider = FutureProvider.autoDispose.family<List<bool>, WeeklyResolutionInfoProviderParam>(
   (ref, param) async {
     return ref
         .read(getTargetResolutionDoneListForWeekUsecaseProvider)
@@ -51,8 +51,12 @@ class WeeklyResolutionInfoProviderParam {
   int get hashCode => resolutionId.hashCode ^ startMonday.hashCode;
 }
 
-final myWeeklyResolutionSummaryProvider = FutureProvider<int>((ref) async {
+final myWeeklyResolutionSummaryProvider = FutureProvider.autoDispose<int>((ref) async {
   final resolutionEntityList = await ref.watch(resolutionListNotifierProvider.future);
+
+  if (resolutionEntityList.isEmpty) {
+    return 0;
+  }
 
   final successCount = await Future.wait(
     resolutionEntityList.map((entity) async {

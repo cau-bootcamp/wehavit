@@ -99,7 +99,7 @@ class TabBarProfileImageButton extends StatelessWidget {
           clipBehavior: Clip.hardEdge,
           child: Consumer(
             builder: (context, ref, child) {
-              final asyncUserEntity = ref.watch(getMyUserDataProvider);
+              final asyncUserEntity = ref.watch(myUserDataProvider);
 
               return asyncUserEntity.when(
                 data: (entity) {

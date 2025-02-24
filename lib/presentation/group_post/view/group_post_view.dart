@@ -127,7 +127,7 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                     WeeklyPostSwipeCalendar(
                                       resolutionList: resolutionList,
                                       firstDate: widget.groupEntity?.groupCreatedAt ??
-                                          ref.watch(getMyUserDataProvider).value!.createdAt,
+                                          ref.watch(myUserDataProvider).value!.createdAt,
                                       onSelected: (selectedDate) {
                                         setState(() {
                                           this.selectedDate = selectedDate;
@@ -539,7 +539,6 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
                                       min(1, sendReactionState.emojiSendCount / 24),
                                     ),
                                     fontWeight: FontWeight.w700,
-                                    fontStyle: FontStyle.italic,
                                   ),
                                 ),
                               ),
