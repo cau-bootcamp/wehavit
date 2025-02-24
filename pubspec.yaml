@@ -62,6 +62,7 @@ dependencies:
   permission_handler: ^11.3.1
   awesome_extensions: 2.0.18
   cached_network_image: ^3.4.1
+  flutter_native_splash: ^2.3.1
 
 dev_dependencies:
   flutter_test:

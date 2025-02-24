@@ -76,6 +76,9 @@ Future<String?> setFirebaseCloudMessaging(
 
       (reactionWidgetChildKey as GlobalKey<ReactionAnimationWidgetState>).currentState?.showUnreadReactions();
     });
+
+    final apnToken = await FirebaseMessaging.instance.getAPNSToken();
+    debugPrint('APN token : $apnToken');
   } else if (DefaultFirebaseOptions.currentPlatform == DefaultFirebaseOptions.android) {
     const AndroidNotificationChannel channel = AndroidNotificationChannel(
       'wehavit_notification',

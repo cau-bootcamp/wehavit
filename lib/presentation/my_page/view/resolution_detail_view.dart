@@ -360,20 +360,9 @@ class _ResolutionDetailViewState extends ConsumerState<ResolutionDetailView> {
                                     targetResolutionEntity: entity,
                                   )
                                   .whenComplete(() async {
-                                ref
-                                    .read(
-                                      resolutionListViewModelProvider.notifier,
-                                    )
-                                    .loadResolutionModelList();
-                                await ref.read(myPageViewModelProvider.notifier).loadData().whenComplete(() {
-                                  // ignore: use_build_context_synchronously
-                                  context.findAncestorStateOfType<MyPageScreenState>()?.setState(() {});
-                                });
-                                // ignore: use_build_context_synchronously
+                                ref.invalidate(resolutionListNotifierProvider);
                                 Navigator.pop(context);
-                                // ignore: use_build_context_synchronously
                                 Navigator.pop(context);
-                                setState(() {});
                               });
                             },
                             child: const Text('삭제'),

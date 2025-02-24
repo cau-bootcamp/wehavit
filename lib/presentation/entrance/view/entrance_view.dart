@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wehavit/common/common.dart';
+import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
@@ -34,6 +35,7 @@ class _EntranceViewState extends ConsumerState<EntranceView> {
   @override
   void initState() {
     super.initState();
+
     unawaited(checkLoginState());
   }
 
@@ -48,6 +50,7 @@ class _EntranceViewState extends ConsumerState<EntranceView> {
     });
 
     return Scaffold(
+      backgroundColor: CustomColors.whBlack,
       resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
@@ -125,9 +128,15 @@ class _EntranceViewState extends ConsumerState<EntranceView> {
       User? user = _auth.currentUser;
 
       if (user != null) {
-        setState(() {
-          Navigator.pushReplacementNamed(context, '/main');
-        });
+        ref.read(getUserDataFromIdUsecaseProvider).call(user.uid).then(
+              (result) => result.fold((failure) {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => EditUserDetailView(userId: user.uid)));
+              }, (entity) {
+                setState(() {
+                  Navigator.pushReplacementNamed(context, '/main');
+                });
+              }),
+            );
       }
     }
   }
@@ -162,7 +171,6 @@ class _AutoEmojiFireworkViewState extends State<AutoEmojiFireworkView> {
   void initState() {
     super.initState();
 
-    addRandomFireworkShoot();
     _startTimer();
   }
 
