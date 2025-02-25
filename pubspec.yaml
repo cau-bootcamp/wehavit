@@ -2,7 +2,7 @@ name: wehavit
 description: A new Havit tracking app without the comparing others.
 publish_to: "none"
 
-version: 1.0.11+11
+version: 2.0.0+12
 
 environment:
   sdk: ">=3.4.3 <4.0.0"
@@ -34,7 +34,6 @@ dependencies:
   syncfusion_flutter_gauges: ^28.1.33
   carousel_slider: ^5.0.0
   camera: ^0.10.6
-  # flutter_native_image: ^0.0.6+1
   path: ^1.8.3
   path_provider: ^2.1.1
   firebase_storage: ^12.3.7
