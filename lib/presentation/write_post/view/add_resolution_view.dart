@@ -1,3 +1,4 @@
+import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
@@ -15,17 +16,32 @@ class AddResolutionView extends ConsumerStatefulWidget {
 
 class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
   List<FocusNode> focuseNodeList = [FocusNode(), FocusNode(), FocusNode()];
+  TextEditingController nameTextEditingController = TextEditingController();
+  TextEditingController goalTextEditingController = TextEditingController();
+  TextEditingController actionTextEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final viewmodel = ref.watch(addResolutionViewModelProvider);
     final provider = ref.read(addResolutionViewModelProvider.notifier);
 
+    nameTextEditingController.addListener(() {
+      provider.setNameString(nameTextEditingController.text);
+    });
+
+    goalTextEditingController.addListener(() {
+      provider.setGoalString(goalTextEditingController.text);
+    });
+
+    actionTextEditingController.addListener(() {
+      provider.setActionString(actionTextEditingController.text);
+    });
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: CustomColors.whDarkBlack,
       appBar: WehavitAppBar(
-        title: '도전 추가하기',
+        titleLabel: '도전 추가하기',
         leadingTitle: '취소',
         leadingAction: () async {
           Navigator.pop(context);
@@ -41,8 +57,7 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
           children: [
             Expanded(
               child: ListView(
-                keyboardDismissBehavior:
-                    ScrollViewKeyboardDismissBehavior.onDrag,
+                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                 children: [
                   Visibility(
                     maintainState: true,
@@ -50,58 +65,20 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Visibility(
-                          visible: viewmodel.focusedStep == 0,
-                          child: Container(
-                            margin: const EdgeInsets.only(bottom: 8),
-                            child: const Text(
-                              '도전의 이름을 지어주세요',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                color: CustomColors.whWhite,
-                                fontSize: 20,
-                              ),
-                            ),
-                          ),
-                        ),
-                        TextFormField(
-                          focusNode: focuseNodeList[0],
-                          onChanged: (value) {
-                            setState(() {
-                              provider.setNameString(value);
-                            });
-                          },
-                          cursorColor: CustomColors.whWhite,
-                          textAlignVertical: TextAlignVertical.center,
-                          style: const TextStyle(
-                            color: CustomColors.whWhite,
-                            fontSize: 16.0,
-                          ),
-                          autofocus: true,
-                          decoration: InputDecoration(
-                            hintText: '나의 새로운 도전',
-                            hintStyle: const TextStyle(
-                              fontSize: 16,
-                              color: CustomColors.whPlaceholderGrey,
-                            ),
-                            filled: true,
-                            fillColor: CustomColors.whGrey,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(
-                                width: 0,
-                                style: BorderStyle.none,
-                              ),
-                            ),
-                            isCollapsed: true,
-                            contentPadding: const EdgeInsets.symmetric(
-                              vertical: 12.0,
-                              horizontal: 16.0,
-                            ),
-                          ),
+                        Text(
+                          '도전명',
+                          style: context.titleSmall,
                         ),
                         Container(
-                          height: 24.0,
+                          height: 12.0,
+                        ),
+                        InputFormField(
+                          textEditingController: nameTextEditingController,
+                          focusNode: focuseNodeList[0],
+                          placeholder: '나의 도전에 멋진 이름을 붙여주세요',
+                        ),
+                        Container(
+                          height: 16.0,
                         ),
                       ],
                     ),
@@ -112,57 +89,20 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Visibility(
-                          visible: viewmodel.focusedStep == 1,
-                          child: Container(
-                            margin: const EdgeInsets.only(bottom: 8),
-                            child: const Text(
-                              '달성하려는 목표는 무엇인가요?',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                color: CustomColors.whWhite,
-                                fontSize: 20,
-                              ),
-                            ),
-                          ),
-                        ),
-                        TextFormField(
-                          focusNode: focuseNodeList[1],
-                          onChanged: (value) {
-                            setState(() {
-                              provider.setGoalString(value);
-                            });
-                          },
-                          cursorColor: CustomColors.whWhite,
-                          textAlignVertical: TextAlignVertical.center,
-                          style: const TextStyle(
-                            color: CustomColors.whWhite,
-                            fontSize: 16.0,
-                          ),
-                          decoration: InputDecoration(
-                            hintText: '좇으려는 목표',
-                            hintStyle: const TextStyle(
-                              fontSize: 16,
-                              color: CustomColors.whPlaceholderGrey,
-                            ),
-                            filled: true,
-                            fillColor: CustomColors.whGrey,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(
-                                width: 0,
-                                style: BorderStyle.none,
-                              ),
-                            ),
-                            isCollapsed: true,
-                            contentPadding: const EdgeInsets.symmetric(
-                              vertical: 12.0,
-                              horizontal: 16.0,
-                            ),
-                          ),
+                        Text(
+                          '목표',
+                          style: context.titleSmall,
                         ),
                         Container(
-                          height: 24.0,
+                          height: 12.0,
+                        ),
+                        InputFormField(
+                          textEditingController: goalTextEditingController,
+                          focusNode: focuseNodeList[1],
+                          placeholder: '도전으로 이루고싶은 바를 알려주세요',
+                        ),
+                        Container(
+                          height: 16.0,
                         ),
                       ],
                     ),
@@ -173,57 +113,20 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Visibility(
-                          visible: viewmodel.focusedStep == 2,
-                          child: Container(
-                            margin: const EdgeInsets.only(bottom: 8),
-                            child: const Text(
-                              '어떤 노력을 지속하실 건가요?',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                color: CustomColors.whWhite,
-                                fontSize: 20,
-                              ),
-                            ),
-                          ),
-                        ),
-                        TextFormField(
-                          focusNode: focuseNodeList[2],
-                          onChanged: (value) {
-                            setState(() {
-                              provider.setActionString(value);
-                            });
-                          },
-                          cursorColor: CustomColors.whWhite,
-                          textAlignVertical: TextAlignVertical.center,
-                          style: const TextStyle(
-                            color: CustomColors.whWhite,
-                            fontSize: 16.0,
-                          ),
-                          decoration: InputDecoration(
-                            hintText: '내가 실천할 행동',
-                            hintStyle: const TextStyle(
-                              fontSize: 16,
-                              color: CustomColors.whPlaceholderGrey,
-                            ),
-                            filled: true,
-                            fillColor: CustomColors.whGrey,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(
-                                width: 0,
-                                style: BorderStyle.none,
-                              ),
-                            ),
-                            isCollapsed: true,
-                            contentPadding: const EdgeInsets.symmetric(
-                              vertical: 12.0,
-                              horizontal: 16.0,
-                            ),
-                          ),
+                        Text(
+                          '실천할 액션',
+                          style: context.titleSmall,
                         ),
                         Container(
-                          height: 24.0,
+                          height: 12.0,
+                        ),
+                        InputFormField(
+                          textEditingController: actionTextEditingController,
+                          focusNode: focuseNodeList[2],
+                          placeholder: '내가 실천하고 인증할 노력이에요',
+                        ),
+                        Container(
+                          height: 16.0,
                         ),
                       ],
                     ),
@@ -233,16 +136,9 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Visibility(
-                          visible: viewmodel.focusedStep == 3,
-                          child: const Text(
-                            '일주일에 몇 번 실천하실건가요?',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              color: CustomColors.whWhite,
-                              fontSize: 20,
-                            ),
-                          ),
+                        Text(
+                          '일주일에 몇 번 실천하실건가요?',
+                          style: context.titleSmall,
                         ),
                         Container(
                           height: 24.0,
@@ -256,9 +152,7 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                             style: TextStyle(
                               fontSize: 13.0 + viewmodel.times,
                               color: CustomColors.whWhite,
-                              fontWeight: viewmodel.times > 4
-                                  ? FontWeight.w600
-                                  : FontWeight.w400,
+                              fontWeight: viewmodel.times > 4 ? FontWeight.w600 : FontWeight.w400,
                             ),
                           ),
                         ),
@@ -269,9 +163,9 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                             trackHeight: 2,
                           ),
                           child: Slider(
-                            inactiveColor: CustomColors.whGrey,
-                            activeColor: CustomColors.whYellow,
-                            secondaryActiveColor: CustomColors.whYellow,
+                            inactiveColor: CustomColors.whGrey400,
+                            activeColor: CustomColors.whYellow500,
+                            secondaryActiveColor: CustomColors.whYellow500,
                             min: 1,
                             max: 7,
                             value: viewmodel.timesTemp,
@@ -291,7 +185,7 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                           ),
                         ),
                         Container(
-                          height: 24.0,
+                          height: 16.0,
                         ),
                       ],
                     ),
@@ -301,30 +195,22 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Visibility(
-                          visible: viewmodel.focusedStep == 4,
-                          child: const Text(
-                            '도전의 색상을 골라주세요',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              color: CustomColors.whWhite,
-                              fontSize: 20,
-                            ),
-                          ),
+                        Text(
+                          '도전의 색상을 골라주세요',
+                          style: context.titleSmall,
                         ),
                         Container(
-                          height: 16.0,
+                          height: 12.0,
                         ),
                         SingleChildScrollView(
                           child: Row(
                             children: List<Widget>.generate(
-                              PointColors.colorList.length,
+                              CustomColors.pointColorList.length,
                               (int index) => TextButton(
                                 style: TextButton.styleFrom(
                                   minimumSize: Size.zero,
                                   padding: EdgeInsets.zero,
-                                  tapTargetSize:
-                                      MaterialTapTargetSize.shrinkWrap,
+                                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                 ),
                                 onPressed: () {
                                   setState(() {
@@ -339,7 +225,7 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                                   width: 36,
                                   height: 36,
                                   decoration: BoxDecoration(
-                                    color: PointColors.colorList[index],
+                                    color: CustomColors.pointColorList[index],
                                     shape: BoxShape.circle,
                                   ),
                                   child: Visibility(
@@ -359,7 +245,7 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                           ),
                         ),
                         Container(
-                          height: 40,
+                          height: 16.0,
                         ),
                       ],
                     ),
@@ -369,19 +255,12 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Visibility(
-                          visible: viewmodel.focusedStep == 5,
-                          child: const Text(
-                            '도전을 나타낼 아이콘을 골라주세요',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              color: CustomColors.whWhite,
-                              fontSize: 20,
-                            ),
-                          ),
+                        Text(
+                          '도전을 나타낼 아이콘을 골라주세요',
+                          style: context.titleSmall,
                         ),
                         Container(
-                          height: 16.0,
+                          height: 12.0,
                         ),
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
@@ -392,8 +271,7 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                                 style: TextButton.styleFrom(
                                   minimumSize: Size.zero,
                                   padding: EdgeInsets.zero,
-                                  tapTargetSize:
-                                      MaterialTapTargetSize.shrinkWrap,
+                                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                 ),
                                 onPressed: () {
                                   setState(() {
@@ -411,13 +289,13 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                                     borderRadius: BorderRadius.circular(12.0),
                                     border: Border.all(
                                       color: viewmodel.iconIndex == index
-                                          ? CustomColors.whYellow
+                                          ? CustomColors.whYellow500
                                           : CustomColors.whWhite,
                                       width: 2.0,
                                     ),
                                     color: viewmodel.iconIndex == index
-                                        ? CustomColors.whYellowDark
-                                        : CustomColors.whGrey,
+                                        ? CustomColors.whYellow300
+                                        : CustomColors.whGrey600,
                                   ),
                                   child: Image.asset(
                                     CustomIconImage.resolutionIcons[index],
@@ -467,13 +345,11 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                   else {
                     provider.uploadResolution().then((resolutionEntity) {
                       if (resolutionEntity != null) {
-                        updateResolutionEntity(resolutionEntity)
-                            .whenComplete(() {
+                        updateResolutionEntity(resolutionEntity).whenComplete(() {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  const AddResolutionDoneView(),
+                              builder: (context) => AddResolutionDoneView(resolutionEntity: resolutionEntity),
                             ),
                           );
                         });
@@ -481,7 +357,6 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                         showToastMessage(
                           context,
                           text: '잠시 후 다시 시도해주세요',
-                          icon: const Icon(Icons.not_interested),
                         );
                       }
                     });
@@ -492,7 +367,6 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
                     ? '다음 (${viewmodel.currentStep + 1}/${viewmodel.maxStep + 1})'
                     : '도전 만들기',
                 foregroundColor: CustomColors.whBlack,
-                backgroundColor: CustomColors.whYellow,
                 isDiminished: !viewmodel.isMovableToNextStep,
               ),
             ),
@@ -520,6 +394,7 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
     focuseNodeList[0].dispose();
     focuseNodeList[1].dispose();
     focuseNodeList[2].dispose();
+
     super.dispose();
   }
 
@@ -548,7 +423,6 @@ class _AddResolutionViewState extends ConsumerState<AddResolutionView> {
   }
 
   Future<void> updateResolutionEntity(ResolutionEntity resolutionEntity) async {
-    ref.watch(addResolutionDoneViewModelProvider).resolutionEntity =
-        resolutionEntity;
+    ref.watch(addResolutionDoneViewModelProvider).resolutionEntity = resolutionEntity;
   }
 }

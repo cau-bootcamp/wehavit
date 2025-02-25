@@ -1,31 +1,38 @@
+import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:wehavit/common/constants/constants.dart';
+import 'package:wehavit/presentation/common_components/wh_icon.dart';
 
-class WideColoredButton extends StatelessWidget {
+class WideColoredButton extends StatefulWidget {
   const WideColoredButton({
     super.key,
-    this.backgroundColor,
-    this.foregroundColor = CustomColors.whWhite,
+    this.backgroundColor = CustomColors.whYellow500,
+    this.foregroundColor = CustomColors.whGrey800,
     required this.buttonTitle,
-    this.buttonIcon,
-    this.onPressed,
+    required this.onPressed,
+    this.iconString = '',
     this.isDiminished = false,
   });
 
-  final Color? backgroundColor;
+  final Color backgroundColor;
   final Color foregroundColor;
   final String buttonTitle;
-  final IconData? buttonIcon;
-  final Function? onPressed;
+  final String iconString;
+  final Function onPressed;
   final bool isDiminished;
 
   @override
+  State<WideColoredButton> createState() => _WideColoredButtonState();
+}
+
+class _WideColoredButtonState extends State<WideColoredButton> {
+  bool isProgressing = false;
+  @override
   Widget build(BuildContext context) {
-    if (isDiminished) {
+    if (widget.isDiminished) {
       return ElevatedButton(
-        onPressed: () {
-          // Navigator.pop(context);
-        },
+        onPressed: () {},
         style: ElevatedButton.styleFrom(
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
@@ -41,7 +48,7 @@ class WideColoredButton extends StatelessWidget {
           width: double.infinity,
           height: 58,
           child: Text(
-            buttonTitle,
+            widget.buttonTitle,
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
@@ -52,53 +59,52 @@ class WideColoredButton extends StatelessWidget {
       );
     } else {
       return ElevatedButton(
-        onPressed: () {
-          if (onPressed != null) {
-            onPressed!();
-          }
+        onPressed: () async {
+          setState(() {
+            isProgressing = true;
+          });
+          await Future.value(widget.onPressed()).whenComplete(() {
+            setState(() {
+              isProgressing = false;
+            });
+          });
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: backgroundColor ?? Colors.transparent,
-          foregroundColor: foregroundColor,
+          backgroundColor: widget.backgroundColor.darken(isProgressing ? 30 : 0),
+          foregroundColor: widget.foregroundColor,
           shadowColor: Colors.transparent,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(20.0),
             ),
           ),
-          side: BorderSide(
-            color: backgroundColor != null ? backgroundColor! : foregroundColor,
-            width: 2,
-          ),
         ),
         child: Container(
           alignment: Alignment.center,
           width: double.infinity,
           height: 58,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                buttonTitle,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              Visibility(
-                visible: buttonIcon != null,
-                child: Row(
-                  children: [
-                    const SizedBox(width: 8),
-                    Icon(
-                      buttonIcon,
-                      size: 20,
+          child: isProgressing
+              ? LoadingAnimationWidget.waveDots(color: widget.foregroundColor, size: 24)
+              : widget.iconString.isEmpty
+                  ? Text(
+                      widget.buttonTitle,
+                      style: context.bodyLarge?.bold.copyWith(color: widget.foregroundColor),
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          widget.buttonTitle,
+                          style: context.bodyLarge?.bold,
+                        ),
+                        const SizedBox(width: 8),
+                        WHIcon(
+                          size: WHIconsize.medium,
+                          iconString: widget.iconString,
+                          iconColor: widget.foregroundColor,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-            ],
-          ),
         ),
       );
     }

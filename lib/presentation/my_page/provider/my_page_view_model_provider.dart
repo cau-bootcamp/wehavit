@@ -20,15 +20,10 @@ class MyPageViewModelProvider extends StateNotifier<MyPageViewModel> {
 
   Future<void> loadData() async {
     getResolutionList();
-    getMyUserData();
   }
 
   Future<void> getResolutionList() async {
     state.futureMyyResolutionList = getMyResolutionListUsecase();
-  }
-
-  Future<void> getMyUserData() async {
-    state.futureMyUserDataEntity = getMyUserDataUsecase();
   }
 
   Future<bool> revokeAppleSignIn() async {
@@ -76,7 +71,8 @@ class MyPageViewModelProvider extends StateNotifier<MyPageViewModel> {
         return true;
       }
     } on Exception catch (e) {
-      print("DEBUG : 사용자 계정 삭제 중 exception : ${e.toString()}");
+      // ignore: avoid_print
+      print('DEBUG : 사용자 계정 삭제 중 exception : ${e.toString()}');
       return false;
     }
     if (mounted) {
@@ -90,7 +86,7 @@ class MyPageViewModelProvider extends StateNotifier<MyPageViewModel> {
     required ResolutionEntity targetResolutionEntity,
   }) async {
     await setResolutionDeactiveUsecase.call(
-      resolutionId: targetResolutionEntity.resolutionId ?? '',
+      resolutionId: targetResolutionEntity.resolutionId,
       entity: targetResolutionEntity,
     );
   }

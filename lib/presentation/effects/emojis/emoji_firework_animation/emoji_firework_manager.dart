@@ -128,28 +128,20 @@ class FireworkWidget extends StatefulWidget {
   State<FireworkWidget> createState() => _FireworkWidgetState();
 }
 
-class _FireworkWidgetState extends State<FireworkWidget>
-    with TickerProviderStateMixin {
+class _FireworkWidgetState extends State<FireworkWidget> with TickerProviderStateMixin {
   // 불꽃놀이에서 움직이는 각각의 위젯들을 담아두는 리스트
   late List<EmojiWidget> emojiWidgetList;
   late List<(String, int)> emojiCountList;
 
   // 3가지 움직임을 위해, 3가지 AnimationController를 선언
-  AnimationController? emojiAnimationShootController,
-      emojiAnimationFloatController,
-      emojiAnimationLifeTimeController;
+  AnimationController? emojiAnimationShootController, emojiAnimationFloatController, emojiAnimationLifeTimeController;
 
   // AnimationController의 값에 대해 움직이는 double 값(Animation)들을 선언
-  late final Animation<double> emojiShootAnimation,
-      emojiFloatYAnimation,
-      emojiFloatXAnimation,
-      emojiLifeTimeAnimation;
+  late final Animation<double> emojiShootAnimation, emojiFloatYAnimation, emojiFloatXAnimation, emojiLifeTimeAnimation;
 
   // 애니메이션 지속 시간을 결정하는 변수
-  late final Duration _emojiLifetimeDuration =
-      Duration(seconds: widget.emojiLifetimeDurationSec);
-  late final Duration _emojiShootDuration =
-      Duration(seconds: widget.emojiShootDurationSec);
+  late final Duration _emojiLifetimeDuration = Duration(seconds: widget.emojiLifetimeDurationSec);
+  late final Duration _emojiShootDuration = Duration(seconds: widget.emojiShootDurationSec);
 
   // 이펙트로 한 번에 나오는 최소 이모지의 개수
   late int emojiAmount = widget.emojiAmount;
@@ -272,8 +264,7 @@ extension _FireworkWidgetStateAnimations on _FireworkWidgetState {
 
     // 불꽃놀이 위젯 자체의 지속시간과 관련된 Animation 관련 값 초기화
     // 여기에서 이모지 크기를 조정할 수 있는 애니메이션을 제공한다.
-    emojiAnimationLifeTimeController =
-        AnimationController(vsync: this, duration: _emojiLifetimeDuration);
+    emojiAnimationLifeTimeController = AnimationController(vsync: this, duration: _emojiLifetimeDuration);
     emojiLifeTimeAnimation = Tween(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: emojiAnimationLifeTimeController!,
@@ -325,10 +316,7 @@ class EmojiWidget extends StatefulWidget {
   });
 
   final AssetImage emojiAsset;
-  final Animation<double> emojiShootAnimation,
-      emojiFloatYAnimation,
-      emojiFloatXAnimation,
-      emojiLifeTimeAnimation;
+  final Animation<double> emojiShootAnimation, emojiFloatYAnimation, emojiFloatXAnimation, emojiLifeTimeAnimation;
   final Offset offset;
 
   final double emojiShootingXScale;
@@ -373,32 +361,23 @@ class EmojiWidgetState extends State<EmojiWidget> {
 
   @override
   Widget build(BuildContext context) {
-    var emojiAnimationShootX =
-        widget.emojiShootAnimation.value * emojiShootingXScale * randomScaleX;
-    var emojiAnimationShootY =
-        widget.emojiShootAnimation.value * emojiShootingYScale * randomScaleY;
+    var emojiAnimationShootX = widget.emojiShootAnimation.value * emojiShootingXScale * randomScaleX;
+    var emojiAnimationShootY = widget.emojiShootAnimation.value * emojiShootingYScale * randomScaleY;
 
-    var emojiAnimationFloatX =
-        sin(widget.emojiFloatXAnimation.value + distinctiveRandomSeed) *
-            emojiFloatingXScale;
-    var emojiAnimationFloatY = widget.emojiFloatYAnimation.value < 0
-        ? 0
-        : widget.emojiFloatYAnimation.value * -1 * emojiFloatingYScale;
+    var emojiAnimationFloatX = sin(widget.emojiFloatXAnimation.value + distinctiveRandomSeed) * emojiFloatingXScale;
+    var emojiAnimationFloatY =
+        widget.emojiFloatYAnimation.value < 0 ? 0 : widget.emojiFloatYAnimation.value * -1 * emojiFloatingYScale;
 
-    var emojiAnimationPositionX =
-        widget.offset.dx + emojiAnimationShootX + emojiAnimationFloatX;
-    var emojiAnimationPositionY =
-        widget.offset.dy + emojiAnimationShootY + emojiAnimationFloatY;
+    var emojiAnimationPositionX = widget.offset.dx + emojiAnimationShootX + emojiAnimationFloatX;
+    var emojiAnimationPositionY = widget.offset.dy + emojiAnimationShootY + emojiAnimationFloatY;
 
     var emojiScale = sin(
-              (widget.emojiLifeTimeAnimation.value + distinctiveRandomSeed) *
-                  10,
+              (widget.emojiLifeTimeAnimation.value + distinctiveRandomSeed) * 10,
             ) *
             emojiSizeDeltaScale +
         1;
     bool isEmojiTransparent =
-        (widget.emojiLifeTimeAnimation.value + distinctiveRandomSeed) / 2 >
-            emojiTransparentThreshold;
+        (widget.emojiLifeTimeAnimation.value + distinctiveRandomSeed) / 2 > emojiTransparentThreshold;
 
     return Positioned(
       left: emojiAnimationPositionX - emojiSize / 2,

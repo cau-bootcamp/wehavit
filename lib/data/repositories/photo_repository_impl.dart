@@ -13,10 +13,17 @@ class PhotoRepositoryImpl implements PhotoRepository {
     required String localPhotoUrl,
     required ConfirmPostEntity entity,
   }) {
-    final uploadResult =
-        _wehavitDatasource.uploadQuickShotFromLocalUrlToConfirmPost(
+    final uploadResult = _wehavitDatasource.uploadQuickShotFromLocalUrlToConfirmPost(
       localPhotoUrl: localPhotoUrl,
       entity: entity,
+    );
+    return uploadResult;
+  }
+
+  @override
+  EitherFuture<String> uploadQuickshotPresetImage({required localPhotoUrl}) {
+    final uploadResult = _wehavitDatasource.uploadQuickshotImageToPresetStorage(
+      localPhotoUrl: localPhotoUrl,
     );
     return uploadResult;
   }

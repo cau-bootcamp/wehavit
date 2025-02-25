@@ -2,9 +2,9 @@ import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 
 abstract class ConfirmPostRepository {
-  EitherFuture<List<ConfirmPostEntity>> getGroupConfirmPostEntityListByDate({
+  EitherFuture<List<ConfirmPostEntity>> getConfirmPostEntityListByDate({
     required DateTime selectedDate,
-    required String groupId,
+    required List<String> resolutionList,
   });
 
   EitherFuture<List<ConfirmPostEntity>> getConfirmPostEntityByDate({

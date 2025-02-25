@@ -17,8 +17,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class BalloonManager extends StateNotifier<Map<Key, BalloonWidget>> {
   BalloonManager() : super({});
 
-  late Function(Offset, List<int>, String, String)?
-      onTapCallbackWithTappedPositionOffset;
+  late Function(Offset, List<int>, String, String)? onTapCallbackWithTappedPositionOffset;
   double radius = 130;
 
   void addBalloon({
@@ -83,8 +82,7 @@ class BalloonWidget extends StatefulWidget {
   State<BalloonWidget> createState() => _BalloonWidgetState();
 }
 
-class _BalloonWidgetState extends State<BalloonWidget>
-    with TickerProviderStateMixin {
+class _BalloonWidgetState extends State<BalloonWidget> with TickerProviderStateMixin {
   // animation variables
   late AnimationController _animationController;
   late Animation _animation;
@@ -103,10 +101,9 @@ class _BalloonWidgetState extends State<BalloonWidget>
 
     // 불꽃놀이 위젯 자체의 지속시간과 관련된 Animation 관련 값 초기화
     // 여기에서 이모지 크기를 조정할 수 있는 값을 제공한다.
-    _animationController =
-        AnimationController(vsync: this, duration: const Duration(seconds: 3));
-    _animation = Tween<double>(begin: 0, end: 2 * pi).animate(
-        CurvedAnimation(parent: _animationController, curve: Curves.linear));
+    _animationController = AnimationController(vsync: this, duration: const Duration(seconds: 3));
+    _animation = Tween<double>(begin: 0, end: 2 * pi)
+        .animate(CurvedAnimation(parent: _animationController, curve: Curves.linear));
 
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
@@ -187,16 +184,23 @@ class BalloonParticleWidget extends StatelessWidget {
           notifyWidgetIsDisposed();
         },
         child: Container(
-          clipBehavior: Clip.hardEdge,
-          width: radius,
-          height: radius,
+          padding: const EdgeInsets.all(2),
           decoration: const BoxDecoration(
-            color: Colors.grey,
+            color: Colors.white,
             shape: BoxShape.circle,
           ),
-          child: Image(
-            fit: BoxFit.cover,
-            image: NetworkImage(imageUrl),
+          child: Container(
+            clipBehavior: Clip.hardEdge,
+            width: radius,
+            height: radius,
+            decoration: const BoxDecoration(
+              color: Colors.grey,
+              shape: BoxShape.circle,
+            ),
+            child: Image(
+              fit: BoxFit.cover,
+              image: NetworkImage(imageUrl),
+            ),
           ),
         ),
       ),

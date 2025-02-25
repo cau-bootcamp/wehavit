@@ -29,16 +29,18 @@ mixin _$FirebaseGroupModel {
   @TimestampConverter()
   DateTime get groupCreatedAt => throw _privateConstructorUsedError;
 
+  /// Serializes this FirebaseGroupModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
-  $FirebaseGroupModelCopyWith<FirebaseGroupModel> get copyWith =>
-      throw _privateConstructorUsedError;
+
+  /// Create a copy of FirebaseGroupModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $FirebaseGroupModelCopyWith<FirebaseGroupModel> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $FirebaseGroupModelCopyWith<$Res> {
-  factory $FirebaseGroupModelCopyWith(
-          FirebaseGroupModel value, $Res Function(FirebaseGroupModel) then) =
+  factory $FirebaseGroupModelCopyWith(FirebaseGroupModel value, $Res Function(FirebaseGroupModel) then) =
       _$FirebaseGroupModelCopyWithImpl<$Res, FirebaseGroupModel>;
   @useResult
   $Res call(
@@ -61,6 +63,8 @@ class _$FirebaseGroupModelCopyWithImpl<$Res, $Val extends FirebaseGroupModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of FirebaseGroupModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -106,10 +110,9 @@ class _$FirebaseGroupModelCopyWithImpl<$Res, $Val extends FirebaseGroupModel>
 }
 
 /// @nodoc
-abstract class _$$FirebaseGroupModelImplCopyWith<$Res>
-    implements $FirebaseGroupModelCopyWith<$Res> {
-  factory _$$FirebaseGroupModelImplCopyWith(_$FirebaseGroupModelImpl value,
-          $Res Function(_$FirebaseGroupModelImpl) then) =
+abstract class _$$FirebaseGroupModelImplCopyWith<$Res> implements $FirebaseGroupModelCopyWith<$Res> {
+  factory _$$FirebaseGroupModelImplCopyWith(
+          _$FirebaseGroupModelImpl value, $Res Function(_$FirebaseGroupModelImpl) then) =
       __$$FirebaseGroupModelImplCopyWithImpl<$Res>;
   @override
   @useResult
@@ -127,10 +130,11 @@ abstract class _$$FirebaseGroupModelImplCopyWith<$Res>
 class __$$FirebaseGroupModelImplCopyWithImpl<$Res>
     extends _$FirebaseGroupModelCopyWithImpl<$Res, _$FirebaseGroupModelImpl>
     implements _$$FirebaseGroupModelImplCopyWith<$Res> {
-  __$$FirebaseGroupModelImplCopyWithImpl(_$FirebaseGroupModelImpl _value,
-      $Res Function(_$FirebaseGroupModelImpl) _then)
+  __$$FirebaseGroupModelImplCopyWithImpl(_$FirebaseGroupModelImpl _value, $Res Function(_$FirebaseGroupModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of FirebaseGroupModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -189,8 +193,7 @@ class _$FirebaseGroupModelImpl implements _FirebaseGroupModel {
       @TimestampConverter() required this.groupCreatedAt})
       : _groupMemberUidList = groupMemberUidList;
 
-  factory _$FirebaseGroupModelImpl.fromJson(Map<String, dynamic> json) =>
-      _$$FirebaseGroupModelImplFromJson(json);
+  factory _$FirebaseGroupModelImpl.fromJson(Map<String, dynamic> json) => _$$FirebaseGroupModelImplFromJson(json);
 
   @override
   final String groupName;
@@ -205,8 +208,7 @@ class _$FirebaseGroupModelImpl implements _FirebaseGroupModel {
   final List<String> _groupMemberUidList;
   @override
   List<String> get groupMemberUidList {
-    if (_groupMemberUidList is EqualUnmodifiableListView)
-      return _groupMemberUidList;
+    if (_groupMemberUidList is EqualUnmodifiableListView) return _groupMemberUidList;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_groupMemberUidList);
   }
@@ -225,40 +227,27 @@ class _$FirebaseGroupModelImpl implements _FirebaseGroupModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$FirebaseGroupModelImpl &&
-            (identical(other.groupName, groupName) ||
-                other.groupName == groupName) &&
-            (identical(other.groupDescription, groupDescription) ||
-                other.groupDescription == groupDescription) &&
-            (identical(other.groupRule, groupRule) ||
-                other.groupRule == groupRule) &&
-            (identical(other.groupManagerUid, groupManagerUid) ||
-                other.groupManagerUid == groupManagerUid) &&
-            (identical(other.groupColor, groupColor) ||
-                other.groupColor == groupColor) &&
-            const DeepCollectionEquality()
-                .equals(other._groupMemberUidList, _groupMemberUidList) &&
-            (identical(other.groupCreatedAt, groupCreatedAt) ||
-                other.groupCreatedAt == groupCreatedAt));
+            (identical(other.groupName, groupName) || other.groupName == groupName) &&
+            (identical(other.groupDescription, groupDescription) || other.groupDescription == groupDescription) &&
+            (identical(other.groupRule, groupRule) || other.groupRule == groupRule) &&
+            (identical(other.groupManagerUid, groupManagerUid) || other.groupManagerUid == groupManagerUid) &&
+            (identical(other.groupColor, groupColor) || other.groupColor == groupColor) &&
+            const DeepCollectionEquality().equals(other._groupMemberUidList, _groupMemberUidList) &&
+            (identical(other.groupCreatedAt, groupCreatedAt) || other.groupCreatedAt == groupCreatedAt));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      groupName,
-      groupDescription,
-      groupRule,
-      groupManagerUid,
-      groupColor,
-      const DeepCollectionEquality().hash(_groupMemberUidList),
-      groupCreatedAt);
+  int get hashCode => Object.hash(runtimeType, groupName, groupDescription, groupRule, groupManagerUid, groupColor,
+      const DeepCollectionEquality().hash(_groupMemberUidList), groupCreatedAt);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FirebaseGroupModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FirebaseGroupModelImplCopyWith<_$FirebaseGroupModelImpl> get copyWith =>
-      __$$FirebaseGroupModelImplCopyWithImpl<_$FirebaseGroupModelImpl>(
-          this, _$identity);
+      __$$FirebaseGroupModelImplCopyWithImpl<_$FirebaseGroupModelImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -270,17 +259,15 @@ class _$FirebaseGroupModelImpl implements _FirebaseGroupModel {
 
 abstract class _FirebaseGroupModel implements FirebaseGroupModel {
   factory _FirebaseGroupModel(
-          {required final String groupName,
-          required final String groupDescription,
-          required final String groupRule,
-          required final String groupManagerUid,
-          required final int groupColor,
-          required final List<String> groupMemberUidList,
-          @TimestampConverter() required final DateTime groupCreatedAt}) =
-      _$FirebaseGroupModelImpl;
+      {required final String groupName,
+      required final String groupDescription,
+      required final String groupRule,
+      required final String groupManagerUid,
+      required final int groupColor,
+      required final List<String> groupMemberUidList,
+      @TimestampConverter() required final DateTime groupCreatedAt}) = _$FirebaseGroupModelImpl;
 
-  factory _FirebaseGroupModel.fromJson(Map<String, dynamic> json) =
-      _$FirebaseGroupModelImpl.fromJson;
+  factory _FirebaseGroupModel.fromJson(Map<String, dynamic> json) = _$FirebaseGroupModelImpl.fromJson;
 
   @override
   String get groupName;
@@ -297,8 +284,10 @@ abstract class _FirebaseGroupModel implements FirebaseGroupModel {
   @override
   @TimestampConverter()
   DateTime get groupCreatedAt;
+
+  /// Create a copy of FirebaseGroupModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
-  _$$FirebaseGroupModelImplCopyWith<_$FirebaseGroupModelImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$FirebaseGroupModelImplCopyWith<_$FirebaseGroupModelImpl> get copyWith => throw _privateConstructorUsedError;
 }

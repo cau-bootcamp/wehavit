@@ -1,15 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/entities/entities.dart';
 
-///
 abstract class AuthDataSource {
-  EitherFuture<AuthResult> signUpWithEmailAndPassword({
+  EitherFuture<String> signUpWithEmailAndPassword({
     String? email,
     String? password,
   });
 
-  EitherFuture<AuthResult> logInWithEmailAndPassword({
+  EitherFuture<String> logInWithEmailAndPassword({
     String? email,
     String? password,
   });

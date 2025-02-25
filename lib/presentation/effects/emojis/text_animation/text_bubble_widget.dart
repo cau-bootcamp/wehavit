@@ -52,8 +52,7 @@ class TextBubbleWidget extends StatefulWidget {
   State<TextBubbleWidget> createState() => _TextBubbleWidgetState();
 }
 
-class _TextBubbleWidgetState extends State<TextBubbleWidget>
-    with TickerProviderStateMixin {
+class _TextBubbleWidgetState extends State<TextBubbleWidget> with TickerProviderStateMixin {
   late final AnimationController _lifetimeAnimationController;
   late final AnimationController _avatarAnimationController;
   late final AnimationController _textBubbleAnimationController;
@@ -159,8 +158,7 @@ class _TextBubbleWidgetState extends State<TextBubbleWidget>
         alignment: Alignment.bottomCenter,
         children: [
           Positioned(
-            bottom:
-                _textBubbleAnimation.value - 300 + _disappearAnimation.value,
+            bottom: _textBubbleAnimation.value - 300 + _disappearAnimation.value,
             child: GestureDetector(
               onTapUp: (details) {
                 _lifetimeAnimationController.stop();
@@ -176,8 +174,7 @@ class _TextBubbleWidgetState extends State<TextBubbleWidget>
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 16.0),
                         child: Opacity(
-                          opacity: _textBubbleAnimationController.value -
-                              _disappearAnimationController.value,
+                          opacity: _textBubbleAnimationController.value - _disappearAnimationController.value,
                           child: Container(
                             decoration: const BoxDecoration(
                               color: Colors.amber,
@@ -221,14 +218,20 @@ class _TextBubbleWidgetState extends State<TextBubbleWidget>
                         child: Container(),
                       ),
                       Opacity(
-                        opacity: _avatarAnimationController.value -
-                            _disappearAnimationController.value,
+                        opacity: _avatarAnimationController.value - _disappearAnimationController.value,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8.0),
-                          child: CircleAvatar(
-                            radius: 30,
-                            backgroundColor: Colors.grey,
-                            foregroundImage: NetworkImage(widget.userImageUrl),
+                          child: Container(
+                            padding: const EdgeInsets.all(2),
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                            child: CircleAvatar(
+                              radius: 30,
+                              backgroundColor: Colors.grey,
+                              foregroundImage: NetworkImage(widget.userImageUrl),
+                            ),
                           ),
                         ),
                       ),

@@ -1,10 +1,10 @@
+import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
-import 'package:wehavit/dependency/domain/domain.dart';
-import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
+import 'package:wehavit/presentation/state/group_list/group_list_cell_model_provider.dart';
 
 class DoneCreatingGroupView extends ConsumerWidget {
   const DoneCreatingGroupView({super.key, required this.groupEntity});
@@ -13,22 +13,14 @@ class DoneCreatingGroupView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // ignore: discarded_futures
-    final futureUserModel = ref.read(getMyUserDataUsecaseProvider)();
-
     return PopScope(
       canPop: false,
-      // onWillPop: () async {
-      //   return false;
-      // },
       child: Scaffold(
         backgroundColor: CustomColors.whDarkBlack,
         appBar: WehavitAppBar(
-          title: '그룹 만들기 완료',
+          titleLabel: '그룹 만들기 완료',
           trailingTitle: '닫기',
           trailingAction: () async {
-            ref.read(groupViewModelProvider.notifier).loadMyGroupCellList();
-
             int count = 0;
             Navigator.of(context).popUntil((_) => count++ >= 2);
           },
@@ -40,154 +32,38 @@ class DoneCreatingGroupView extends ConsumerWidget {
               Expanded(
                 child: Column(
                   children: [
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: CustomColors.whGrey,
-                            borderRadius: BorderRadius.circular(15),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withAlpha(64),
-                                offset: const Offset(0, 4),
-                                blurRadius: 4,
+                    GroupListCell(
+                      groupEntity: groupEntity,
+                      onPressed: () async {
+                        showModalBottomSheet(
+                          isScrollControlled: true,
+                          context: context,
+                          builder: (context) {
+                            return GradientBottomSheet(
+                              SizedBox(
+                                height: MediaQuery.sizeOf(context).height * 0.80,
+                                child: CreatedGroupDetailView(
+                                  groupEntity: groupEntity,
+                                ),
                               ),
-                            ],
-                          ),
-                          child: Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 20,
-                              horizontal: 16,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  groupEntity.groupName,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontSize: 28.0,
-                                    fontWeight: FontWeight.w700,
-                                    color: PointColors
-                                        .colorList[groupEntity.groupColor],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 12.0,
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        '그룹 소개',
-                                        style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.w600,
-                                          color: CustomColors.whWhite,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 16.0),
-                                        child: Text(
-                                          groupEntity.groupDescription ?? '',
-                                          style: const TextStyle(
-                                            fontSize: 14.0,
-                                            fontWeight: FontWeight.w300,
-                                            color: CustomColors.whWhite,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 12.0,
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        '그룹 리더',
-                                        style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.w600,
-                                          color: CustomColors.whWhite,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                          left: 16.0,
-                                          top: 8.0,
-                                        ),
-                                        child: FriendListCellWidget(
-                                          futureUserEntity: futureUserModel,
-                                          cellState: FriendListCellState.normal,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 12.0,
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        '그룹 규칙',
-                                        style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.w600,
-                                          color: CustomColors.whWhite,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 16.0),
-                                        child: Text(
-                                          groupEntity.groupRule ?? '',
-                                          style: const TextStyle(
-                                            fontSize: 14.0,
-                                            fontWeight: FontWeight.w300,
-                                            color: CustomColors.whWhite,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
+                            );
+                          },
+                        );
+                      },
                     ),
                   ],
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 8.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Column(
                   children: [
                     Text(
                       textAlign: TextAlign.center,
                       '그룹 이름으로 검색하여\n참가 요청을 보낼 수 있습니다',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w600,
-                        color: CustomColors.whWhite,
-                      ),
+                      style: context.bodyMedium,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 24.0,
                     ),
 
@@ -220,6 +96,79 @@ class DoneCreatingGroupView extends ConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class CreatedGroupDetailView extends StatelessWidget {
+  const CreatedGroupDetailView({super.key, required this.groupEntity});
+
+  final GroupEntity groupEntity;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            child: SizedBox(
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Consumer(
+                    builder: (context, ref, child) {
+                      return GroupListCellContent(asyncCellModel: ref.watch(groupListCellModelProvider(groupEntity)));
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '그룹 소개',
+                        style: context.titleMedium,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        groupEntity.groupDescription,
+                        style: context.bodyMedium,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '그룹 리더',
+                        style: context.titleMedium,
+                      ),
+                      const SizedBox(height: 8),
+                      UserProfileCell(groupEntity.groupManagerUid, type: UserProfileCellType.normal)
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '그룹 규칙',
+                        style: context.titleMedium,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        groupEntity.groupRule,
+                        style: context.bodyMedium,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

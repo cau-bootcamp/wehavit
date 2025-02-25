@@ -1,3 +1,4 @@
+import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/constants/app_colors.dart';
@@ -13,17 +14,36 @@ class CreateGroupView extends ConsumerStatefulWidget {
 }
 
 class _CreateGroupViewState extends ConsumerState<CreateGroupView> {
-  List<FocusNode> focuseNodeList = [FocusNode(), FocusNode(), FocusNode()];
+  List<FocusNode> focusNodeList = [FocusNode(), FocusNode(), FocusNode()];
+
+  TextEditingController groupNameTextEditingController = TextEditingController();
+  TextEditingController groupDescriptionTextEditingController = TextEditingController();
+  TextEditingController groupRuleTextEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    groupNameTextEditingController.addListener(() {
+      setState(() {
+        ref.read(createGroupViewModelProvider.notifier).setGroupName(groupNameTextEditingController.text);
+      });
+    });
+    groupDescriptionTextEditingController.addListener(() {
+      setState(() {
+        ref.read(createGroupViewModelProvider.notifier).setGroupDescription(groupDescriptionTextEditingController.text);
+      });
+    });
+    groupRuleTextEditingController.addListener(() {
+      setState(() {
+        ref.read(createGroupViewModelProvider.notifier).setGroupRule(groupRuleTextEditingController.text);
+      });
+    });
+
     final viewModel = ref.watch(createGroupViewModelProvider);
-    final provider = ref.read(createGroupViewModelProvider.notifier);
 
     return Scaffold(
       backgroundColor: CustomColors.whDarkBlack,
       appBar: WehavitAppBar(
-        title: '그룹 만들기',
+        titleLabel: '그룹 만들기',
         leadingTitle: '취소',
         leadingAction: () {
           Navigator.pop(context);
@@ -41,108 +61,197 @@ class _CreateGroupViewState extends ConsumerState<CreateGroupView> {
                     Visibility(
                       visible: viewModel.currentStep >= 0,
                       maintainState: true,
-                      child: CreateGroupNameFieldWidget(
-                        provider: provider,
-                        focusNode: focuseNodeList[0],
-                        onPressed: () {
-                          setState(() {});
-                        },
+                      child: Container(
+                        padding: const EdgeInsets.only(bottom: 16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '그룹 이름을 지어주세요',
+                              style: context.titleSmall,
+                            ),
+                            const SizedBox(
+                              height: 8.0,
+                            ),
+                            InputFormField(
+                              textEditingController: groupNameTextEditingController,
+                              focusNode: focusNodeList[0],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     Visibility(
                       visible: viewModel.currentStep >= 1,
                       maintainState: true,
-                      child: CreateGroupDescriptionFieldWidget(
-                        provider: provider,
-                        focusNode: focuseNodeList[1],
-                        onPressed: () {
-                          setState(() {});
-                        },
+                      child: Container(
+                        padding: const EdgeInsets.only(bottom: 16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '어떤 그룹인지 설명해주세요',
+                              style: context.titleSmall,
+                            ),
+                            const SizedBox(
+                              height: 8.0,
+                            ),
+                            InputFormField(
+                              textEditingController: groupDescriptionTextEditingController,
+                              focusNode: focusNodeList[1],
+                              maxLines: 4,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     Visibility(
                       visible: viewModel.currentStep >= 2,
                       maintainState: true,
-                      child: CreateGroupRuleFieldWidget(
-                        provider: provider,
-                        focusNode: focuseNodeList[2],
-                        onPressed: () {
-                          setState(() {});
-                        },
+                      child: Container(
+                        padding: const EdgeInsets.only(bottom: 16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '그룹의 규칙을 작성해주세요',
+                              style: context.titleSmall,
+                            ),
+                            const SizedBox(
+                              height: 8.0,
+                            ),
+                            InputFormField(
+                              textEditingController: groupRuleTextEditingController,
+                              focusNode: focusNodeList[2],
+                              maxLines: 6,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     Visibility(
                       visible: viewModel.currentStep >= 3,
                       maintainState: true,
-                      child: CreateGroupColorSelectorWidget(
-                        viewModel: viewModel,
-                        provider: provider,
-                        onPressed: () {
-                          setState(() {});
-                        },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '그룹을 나타낼 색상을 골라주세요',
+                            style: context.titleSmall,
+                          ),
+                          const SizedBox(
+                            height: 8.0,
+                          ),
+                          SingleChildScrollView(
+                            child: Row(
+                              children: List<Widget>.generate(
+                                CustomColors.pointColorList.length,
+                                (int index) => TextButton(
+                                  style: TextButton.styleFrom(
+                                    minimumSize: Size.zero,
+                                    padding: EdgeInsets.zero,
+                                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      ref.read(createGroupViewModelProvider.notifier).setGroupColorIndex(index);
+                                    });
+                                  },
+                                  child: Container(
+                                    margin: const EdgeInsets.only(
+                                      right: 8.0,
+                                    ),
+                                    width: 36,
+                                    height: 36,
+                                    decoration: BoxDecoration(
+                                      color: CustomColors.pointColorList[index],
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Visibility(
+                                      visible: viewModel.groupColorIndex == index,
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        child: const Icon(
+                                          color: CustomColors.whDarkBlack,
+                                          Icons.check_circle_outline,
+                                          size: 36,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: WideColoredButton(
-                buttonTitle: viewModel.currentStep != 3
-                    ? '다음 (${viewModel.currentStep + 1} / ${viewModel.stepDoneList.length})'
-                    : '그룹 만들기',
-                isDiminished: !viewModel.isMovableToNextStep,
-                foregroundColor: CustomColors.whBlack,
-                backgroundColor: CustomColors.whYellow,
-                onPressed: () async {
-                  if (viewModel.currentStep != 3) {
-                    setState(() {
-                      viewModel.currentStep += 1;
-                      provider.setFocusedStep(viewModel.currentStep);
-                      provider.checkIsMovableToNextStep();
-                    });
+            Consumer(
+              builder: (context, ref, child) {
+                final viewModel = ref.watch(createGroupViewModelProvider);
 
-                    if (viewModel.currentStep < 3) {
-                      FocusScope.of(context).requestFocus(
-                        focuseNodeList[viewModel.currentStep],
-                      );
-                    } else {
-                      focuseNodeList[0].unfocus();
-                      focuseNodeList[1].unfocus();
-                      focuseNodeList[2].unfocus();
-                    }
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: WideColoredButton(
+                    buttonTitle: viewModel.currentStep != 3
+                        ? '다음 (${viewModel.currentStep + 1} / ${viewModel.stepDoneList.length})'
+                        : '그룹 만들기',
+                    isDiminished: !viewModel.isMovableToNextStep,
+                    foregroundColor: CustomColors.whBlack,
+                    onPressed: () async {
+                      if (viewModel.currentStep != 3) {
+                        setState(() {
+                          viewModel.currentStep += 1;
+                          ref.read(createGroupViewModelProvider.notifier).setFocusedStep(viewModel.currentStep);
+                        });
 
-                    setState(() {});
-                  }
+                        if (viewModel.currentStep < 3) {
+                          FocusScope.of(context).requestFocus(
+                            focusNodeList[viewModel.currentStep],
+                          );
+                        } else {
+                          focusNodeList[0].unfocus();
+                          focusNodeList[1].unfocus();
+                          focusNodeList[2].unfocus();
+                        }
 
-                  // 모든 데이터 다 채웠음
-                  else {
-                    final groupEntity = await provider.createGroup();
+                        setState(() {});
+                      }
 
-                    if (groupEntity != null) {
-                      Navigator.push(
-                        // ignore: use_build_context_synchronously
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return DoneCreatingGroupView(
-                              groupEntity: groupEntity,
+                      // 모든 데이터 다 채웠음
+                      else {
+                        final groupEntity = await ref.read(createGroupViewModelProvider.notifier).createGroup();
+
+                        if (groupEntity != null) {
+                          if (context.mounted) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return DoneCreatingGroupView(
+                                    groupEntity: groupEntity,
+                                  );
+                                },
+                              ),
                             );
-                          },
-                        ),
-                      );
-                    } else {
-                      showToastMessage(
-                        // ignore: use_build_context_synchronously
-                        context,
-                        text: '잠시 후 다시 시도해주세요',
-                        icon: const Icon(Icons.not_interested),
-                      );
-                    }
-                  }
-                },
-              ),
+                          }
+                        } else {
+                          if (context.mounted) {
+                            showToastMessage(
+                              context,
+                              text: '잠시 후 다시 시도해주세요',
+                            );
+                          }
+                        }
+                      }
+                    },
+                  ),
+                );
+              },
             ),
           ],
         ),
@@ -186,39 +295,48 @@ class CreateGroupColorSelectorWidget extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: List<Widget>.generate(
-                PointColors.colorList.length,
+                CustomColors.pointColorList.length,
                 (index) => Padding(
                   padding: const EdgeInsets.only(
                     right: 8.0,
                   ),
-                  child: GestureDetector(
-                    onTapUp: (details) {
+                  child: ColorSelectionListCell(
+                    isSelected: index == viewModel.groupColorIndex,
+                    backgroundColor: CustomColors.pointColorList[index],
+                    onTap: () {
                       provider.setGroupColorIndex(index);
-
                       onPressed();
                     },
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: PointColors.colorList[index],
-                          ),
-                          width: 36,
-                          height: 36,
-                        ),
-                        Visibility(
-                          visible: index == viewModel.groupColorIndex,
-                          child: const Icon(
-                            Icons.check_circle_outline,
-                            color: CustomColors.whBlack,
-                            size: 36,
-                          ),
-                        ),
-                      ],
-                    ),
                   ),
+
+                  // GestureDetector(
+                  //   onTapUp: (details) {
+                  //     provider.setGroupColorIndex(index);
+
+                  //     onPressed();
+                  //   },
+                  //   child: Stack(
+                  //     alignment: Alignment.center,
+                  //     children: [
+                  //       Container(
+                  //         decoration: BoxDecoration(
+                  //           shape: BoxShape.circle,
+                  //           color: CustomColors.pointColorList[index],
+                  //         ),
+                  //         width: 36,
+                  //         height: 36,
+                  //       ),
+                  //       Visibility(
+                  //         visible: index == viewModel.groupColorIndex,
+                  //         child: const Icon(
+                  //           Icons.check_circle_outline,
+                  //           color: CustomColors.whBlack,
+                  //           size: 36,
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                 ),
               ),
             ),
@@ -349,7 +467,7 @@ class CreateGroupDescriptionFieldWidget extends StatelessWidget {
               provider.setFocusedStep(1);
             },
             onChanged: (value) {
-              provider.setDescriptionName(value);
+              provider.setGroupDescription(value);
 
               onPressed();
             },

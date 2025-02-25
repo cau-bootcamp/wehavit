@@ -22,14 +22,12 @@ class FirebaseConfirmPostModel with _$FirebaseConfirmPostModel {
     required Map<String, bool>? attributes,
   }) = _FirebaseConfirmPostModel;
 
-  factory FirebaseConfirmPostModel.fromJson(Map<String, dynamic> json) =>
-      _$FirebaseConfirmPostModelFromJson(json);
+  factory FirebaseConfirmPostModel.fromJson(Map<String, dynamic> json) => _$FirebaseConfirmPostModelFromJson(json);
 
   factory FirebaseConfirmPostModel.fromFireStoreDocument(DocumentSnapshot doc) {
     if (doc.data() == null) throw Exception('Document data was null');
 
-    return FirebaseConfirmPostModel.fromJson(doc.data() as Map<String, Object?>)
-        .copyWith();
+    return FirebaseConfirmPostModel.fromJson(doc.data() as Map<String, Object?>).copyWith();
   }
 
   factory FirebaseConfirmPostModel.fromConfirmPostEntity(
@@ -60,26 +58,22 @@ extension FirebaseConfirmPostModelConvert on FirebaseConfirmPostModel {
       id: postId,
       userName: owner.userName,
       userImageUrl: owner.userImageUrl,
-      resolutionGoalStatement: resolutionGoalStatement,
-      resolutionId: resolutionId,
-      content: content,
-      imageUrlList: imageUrlList,
+      resolutionGoalStatement: resolutionGoalStatement ?? '',
+      resolutionId: resolutionId ?? '',
+      content: content ?? '',
+      imageUrlList: imageUrlList ?? [],
       owner: owner.userId,
-      recentStrike: recentStrike,
-      createdAt: createdAt,
-      updatedAt: updatedAt,
-      hasRested:
-          attributes?[FirebaseConfirmPostFieldName.attributesHasRested] ??
-              false,
+      recentStrike: recentStrike ?? 0,
+      createdAt: createdAt ?? DateTime.now(),
+      updatedAt: updatedAt ?? DateTime.now(),
+      hasRested: attributes?[FirebaseConfirmPostFieldName.attributesHasRested] ?? false,
     );
   }
 
   Map<String, dynamic> toFirestoreMap() {
     Map<String, dynamic> result = toJson();
-    result[FirebaseConfirmPostFieldName.updatedAt] =
-        Timestamp.fromDate(updatedAt!);
-    result[FirebaseConfirmPostFieldName.createdAt] =
-        Timestamp.fromDate(createdAt!);
+    result[FirebaseConfirmPostFieldName.updatedAt] = Timestamp.fromDate(updatedAt!);
+    result[FirebaseConfirmPostFieldName.createdAt] = Timestamp.fromDate(createdAt!);
 
     return result;
   }

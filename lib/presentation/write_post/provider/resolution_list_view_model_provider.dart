@@ -1,20 +1,22 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:wehavit/common/common.dart';
+import 'package:wehavit/domain/entities/resolution_entity/resolution_entity.dart';
 import 'package:wehavit/domain/usecases/usecases.dart';
+import 'package:wehavit/presentation/state/resolution_list/resolution_list_provider.dart';
 import 'package:wehavit/presentation/write_post/write_post.dart';
 
-class ResolutionListViewModelProvider
-    extends StateNotifier<ResolutionListViewModel> {
+class ResolutionListViewModelProvider extends StateNotifier<ResolutionListViewModel> {
   ResolutionListViewModelProvider(
+    this.ref,
     this._getMyResolutionListUsecase,
     this._getTargetResolutionDoneListForWeekUsecase,
     this._uploadConfirmPostUseCase,
   ) : super(ResolutionListViewModel());
 
+  final Ref ref;
   final GetMyResolutionListUsecase _getMyResolutionListUsecase;
-  final GetTargetResolutionDoneListForWeekUsecase
-      _getTargetResolutionDoneListForWeekUsecase;
+  final GetTargetResolutionDoneListForWeekUsecase _getTargetResolutionDoneListForWeekUsecase;
   final UploadConfirmPostUseCase _uploadConfirmPostUseCase;
 
   Future<void> loadResolutionModelList() async {
@@ -37,8 +39,10 @@ class ResolutionListViewModelProvider
     final List<ResolutionListCellWidgetModel> modelList = await Future.wait(
       resolutionList.map((entity) async {
         doneList = _getTargetResolutionDoneListForWeekUsecase(
-          resolutionId: entity.resolutionId,
-          startMonday: DateTime.now().getMondayDateTime(),
+          param: GetTargetResolutionDoneListForWeekUsecaseParams(
+            resolutionId: entity.resolutionId,
+            startMonday: DateTime.now().getMondayDateTime(),
+          ),
         );
 
         return ResolutionListCellWidgetModel(
@@ -53,7 +57,7 @@ class ResolutionListViewModelProvider
     int tempTotalCount = 0;
     state.futureDoneCount = Future(() async {
       final dones = modelList.map((model) {
-        tempTotalCount += model.entity.actionPerWeek ?? 0;
+        tempTotalCount += model.entity.actionPerWeek;
         return model.doneList;
       }).toList();
 
@@ -87,15 +91,28 @@ class ResolutionListViewModelProvider
   }
 
   Future<void> uploadPostWithoutContents({
-    required ResolutionListCellWidgetModel model,
+    required ResolutionEntity entity,
   }) async {
     _uploadConfirmPostUseCase(
-      resolutionGoalStatement: model.entity.goalStatement ?? '',
-      resolutionId: model.entity.resolutionId ?? '',
+      resolutionGoalStatement: entity.goalStatement,
+      resolutionId: entity.resolutionId,
       content: '',
-      localFileUrlList: [],
+      fileUrlList: [],
       hasRested: false,
       isPostingForYesterday: false,
-    );
+    ).then((result) {
+      final isPostingSuccess = result.fold((failure) => false, (value) => value);
+
+      if (isPostingSuccess) {
+        ref.invalidate(
+          weeklyResolutionInfoProvider.call(
+            WeeklyResolutionInfoProviderParam(
+              resolutionId: entity.resolutionId,
+              startMonday: DateTime.now().getMondayDateTime(),
+            ),
+          ),
+        );
+      }
+    });
   }
 }

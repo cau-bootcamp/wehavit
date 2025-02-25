@@ -3,8 +3,7 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
 
-class SendQuickShotReactionToConfirmPostUsecase
-    extends FutureUseCase<void, (ConfirmPostEntity, String)> {
+class SendQuickShotReactionToConfirmPostUsecase extends FutureUseCase<void, (ConfirmPostEntity, String)> {
   SendQuickShotReactionToConfirmPostUsecase(
     this._reactionRepository,
     this._userModelRepository,
@@ -28,8 +27,7 @@ class SendQuickShotReactionToConfirmPostUsecase
       return Future(() => left(const Failure('cannot get my user id')));
     }
 
-    final imageUploadResult =
-        await _photoRepository.uploadPhotoForConfirmPostAndGetDownloadUrl(
+    final imageUploadResult = await _photoRepository.uploadPhotoForConfirmPostAndGetDownloadUrl(
       localPhotoUrl: params.$2,
       entity: params.$1,
     );
@@ -60,7 +58,7 @@ class SendQuickShotReactionToConfirmPostUsecase
         type: UserIncrementalDataType.reaction,
       );
       _resolutionRepository.incrementReceivedReactionCount(
-        targetResolutionId: params.$1.resolutionId ?? '',
+        targetResolutionId: params.$1.resolutionId,
       );
     });
   }

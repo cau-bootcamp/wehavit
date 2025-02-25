@@ -8,7 +8,6 @@ class GetToWhomResolutionWillBeSharedUsecase {
   final ResolutionRepository _resolutionRepository;
 
   EitherFuture<List<GroupEntity>> call({required String resolutionId}) {
-    return _resolutionRepository
-        .getResolutionSharingTargetGroupList(resolutionId);
+    return _resolutionRepository.getResolutionSharingTargetGroupList(resolutionId);
   }
 }

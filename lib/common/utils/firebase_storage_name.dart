@@ -15,4 +15,8 @@ class FirebaseStorageName {
   static String getUserProfilePhotoPath(String userId) {
     return '$userId/profile_photo';
   }
+
+  static String getUserQuickshotPresetStorageName(String userId) {
+    return '$userId/quickshot_presets';
+  }
 }

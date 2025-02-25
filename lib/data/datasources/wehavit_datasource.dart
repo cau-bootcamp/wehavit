@@ -4,14 +4,14 @@ import 'package:wehavit/common/utils/custom_types.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 
 abstract class WehavitDatasource {
-  EitherFuture<List<EitherFuture<UserDataEntity>>> getFriendModelList();
+  EitherFuture<List<UserDataEntity>> getFriendModelList();
 
   EitherFuture<bool> registerFriend(
     String email,
   );
 
-  EitherFuture<List<ConfirmPostEntity>> getGroupConfirmPostEntityListByDate(
-    String groupId,
+  EitherFuture<List<ConfirmPostEntity>> getConfirmPostEntityListByDate(
+    List<String> resolutionList,
     DateTime selectedDate,
   );
 
@@ -150,7 +150,7 @@ abstract class WehavitDatasource {
 
   EitherFuture<void> applyForFriend({required String of});
 
-  EitherFuture<List<EitherFuture<UserDataEntity>>> getAppliedUserList({
+  EitherFuture<List<String>> getAppliedUserIdList({
     required String forUser,
   });
 
@@ -175,11 +175,11 @@ abstract class WehavitDatasource {
 
   EitherFuture<GroupEntity> getGroupEntityByName({required String groupName});
 
-  EitherFuture<List<EitherFuture<GroupEntity>>> getGroupEntityListByGroupName({
+  EitherFuture<List<GroupEntity>> getGroupEntityListByGroupName({
     required String keyword,
   });
 
-  EitherFuture<List<EitherFuture<UserDataEntity>>> getUserDataListByHandle({
+  EitherFuture<List<String>> getUidListByHandle({
     required String handle,
   });
 
@@ -228,4 +228,22 @@ abstract class WehavitDatasource {
   });
 
   EitherFuture<String> getUserFCMMessageToken({required String uid});
+
+  EitherFuture<String> uploadQuickshotImageToPresetStorage({
+    required localPhotoUrl,
+  });
+
+  EitherFuture<void> uploadQuickshotPreset({
+    required String quickshotImageUrl,
+  });
+
+  EitherFuture<List<QuickshotPresetItemEntity>> getQuickshotPresets();
+
+  EitherFuture<void> removeQuickshotPreset({
+    required QuickshotPresetItemEntity entity,
+  });
+
+  EitherFuture<List<String>> getFriendUidList();
+
+  EitherFuture<List<String>> getResolutionIdListSharedToGroup({required String fromUserId, required String toGroupId});
 }

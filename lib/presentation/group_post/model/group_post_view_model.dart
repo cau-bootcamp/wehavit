@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:camera/camera.dart';
-import 'package:carousel_slider/carousel_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:wehavit/common/common.dart';
@@ -22,6 +21,9 @@ class GroupPostViewModel extends PostViewModel {
 }
 
 class PostViewModel {
+  ConfirmPostEntity? commentTargetEntity;
+
+  ///
   UserDataEntity? myUserEntity;
 
   final DateFormat formatter = DateFormat('yyyy년 MM월 dd일');
@@ -30,8 +32,7 @@ class PostViewModel {
   ScrollController scrollController = ScrollController();
 
   bool isShowingCalendar = true;
-  DateTime selectedDate =
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  DateTime selectedDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
   final todayDate = DateTime(
     DateTime.now().year,
@@ -62,15 +63,19 @@ class PostViewModel {
   bool isFocusingMode = false;
   Offset cameraButtonPosition = const Offset(0, 0);
 
+  late AnimationController animationController;
+  late Animation animation;
+
   // Emoji Reaction UI Variables
   Map<Key, ShootEmojiWidget> emojiWidgets = {};
   int countSend = 0;
   List<int> sendingEmojis = List<int>.generate(15, (index) => 0);
 
-  late AnimationController animationController;
-  late Animation animation;
-
   // Text Reaction UI Variables
   TextEditingController commentEditingController = TextEditingController();
   FocusNode commentFieldFocus = FocusNode();
+
+  // Quickshot Presets
+
+  List<QuickshotPresetItemEntity> quickshotPresets = [];
 }

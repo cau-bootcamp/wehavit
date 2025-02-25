@@ -6,4 +6,8 @@ abstract class PhotoRepository {
     required String localPhotoUrl,
     required ConfirmPostEntity entity,
   });
+
+  EitherFuture<String> uploadQuickshotPresetImage({
+    required localPhotoUrl,
+  });
 }

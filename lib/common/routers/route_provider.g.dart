@@ -10,11 +10,8 @@ List<RouteBase> get $appRoutes => [
       $homeRoute,
       $splashRoute,
       $authRoute,
-      $testPageRoute,
       $addResolutionRoute,
       $animationSampleViewRoute,
-      $reactionSampleViewRoute,
-      $groupSampleViewRoute,
     ];
 
 RouteBase get $homeRoute => GoRouteData.$route(
@@ -33,8 +30,7 @@ extension $HomeRouteExtension on HomeRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -55,8 +51,7 @@ extension $SplashRouteExtension on SplashRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -77,30 +72,7 @@ extension $AuthRouteExtension on AuthRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-RouteBase get $testPageRoute => GoRouteData.$route(
-      path: '/testPage',
-      factory: $TestPageRouteExtension._fromState,
-    );
-
-extension $TestPageRouteExtension on TestPageRoute {
-  static TestPageRoute _fromState(GoRouterState state) => const TestPageRoute();
-
-  String get location => GoRouteData.$location(
-        '/testPage',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -111,8 +83,7 @@ RouteBase get $addResolutionRoute => GoRouteData.$route(
     );
 
 extension $AddResolutionRouteExtension on AddResolutionRoute {
-  static AddResolutionRoute _fromState(GoRouterState state) =>
-      const AddResolutionRoute();
+  static AddResolutionRoute _fromState(GoRouterState state) => const AddResolutionRoute();
 
   String get location => GoRouteData.$location(
         '/addResolution',
@@ -122,8 +93,7 @@ extension $AddResolutionRouteExtension on AddResolutionRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }
@@ -134,8 +104,7 @@ RouteBase get $animationSampleViewRoute => GoRouteData.$route(
     );
 
 extension $AnimationSampleViewRouteExtension on AnimationSampleViewRoute {
-  static AnimationSampleViewRoute _fromState(GoRouterState state) =>
-      const AnimationSampleViewRoute();
+  static AnimationSampleViewRoute _fromState(GoRouterState state) => const AnimationSampleViewRoute();
 
   String get location => GoRouteData.$location(
         '/animationSampleView',
@@ -145,54 +114,7 @@ extension $AnimationSampleViewRouteExtension on AnimationSampleViewRoute {
 
   Future<T?> push<T>(BuildContext context) => context.push<T>(location);
 
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-RouteBase get $reactionSampleViewRoute => GoRouteData.$route(
-      path: '/reactionSampleView',
-      factory: $ReactionSampleViewRouteExtension._fromState,
-    );
-
-extension $ReactionSampleViewRouteExtension on ReactionSampleViewRoute {
-  static ReactionSampleViewRoute _fromState(GoRouterState state) =>
-      const ReactionSampleViewRoute();
-
-  String get location => GoRouteData.$location(
-        '/reactionSampleView',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-RouteBase get $groupSampleViewRoute => GoRouteData.$route(
-      path: '/groupSampleView',
-      factory: $GroupSampleViewRouteExtension._fromState,
-    );
-
-extension $GroupSampleViewRouteExtension on GroupSampleViewRoute {
-  static GroupSampleViewRoute _fromState(GoRouterState state) =>
-      const GroupSampleViewRoute();
-
-  String get location => GoRouteData.$location(
-        '/groupSampleView',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+  void pushReplacement(BuildContext context) => context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
 }

@@ -11,14 +11,13 @@ import 'package:wehavit/presentation/common_components/common_components.dart';
 class FriendListBottomSheet extends ConsumerStatefulWidget {
   const FriendListBottomSheet({
     super.key,
-    required this.friendIdResolutionMap,
+    // required this.friendIdResolutionMap,
   });
 
-  final Map<String, List<String>> friendIdResolutionMap;
+  // final Map<String, List<String>> friendIdResolutionMap;
 
   @override
-  ConsumerState<FriendListBottomSheet> createState() =>
-      _FriendListBottomSheetState();
+  ConsumerState<FriendListBottomSheet> createState() => _FriendListBottomSheetState();
 }
 
 class _FriendListBottomSheetState extends ConsumerState<FriendListBottomSheet> {
@@ -28,7 +27,7 @@ class _FriendListBottomSheetState extends ConsumerState<FriendListBottomSheet> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    friendIdList = widget.friendIdResolutionMap.keys.toList();
+    // friendIdList = widget.friendIdResolutionMap.keys.toList();
   }
 
   @override
@@ -82,21 +81,20 @@ class _FriendListBottomSheetState extends ConsumerState<FriendListBottomSheet> {
                   const SizedBox(
                     height: 16.0,
                   ),
-                  Column(
-                    children: List<Widget>.generate(
-                      widget.friendIdResolutionMap.keys.length,
-                      (index) => Padding(
-                        padding: const EdgeInsets.only(bottom: 12.0),
-                        child: FriendListBottomSheetCellWidget(
-                          memberId: friendIdList[index],
-                          resolutionIdList: widget
-                                  .friendIdResolutionMap[friendIdList[index]] ??
-                              [],
-                        ),
-                        // child: GroupMemberManageListCellWidget(),
-                      ),
-                    ),
-                  ),
+                  // TODO: 구현하기
+                  // Column(
+                  //   children: List<Widget>.generate(
+                  //     widget.friendIdResolutionMap.keys.length,
+                  //     (index) => Padding(
+                  //       padding: const EdgeInsets.only(bottom: 12.0),
+                  //       child: FriendListBottomSheetCellWidget(
+                  //         memberId: friendIdList[index],
+                  //         resolutionIdList: widget.friendIdResolutionMap[friendIdList[index]] ?? [],
+                  //       ),
+                  //       // child: GroupMemberManageListCellWidget(),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -118,12 +116,10 @@ class FriendListBottomSheetCellWidget extends ConsumerStatefulWidget {
   final List<String> resolutionIdList;
 
   @override
-  ConsumerState<FriendListBottomSheetCellWidget> createState() =>
-      _FriendListCellWidgetState();
+  ConsumerState<FriendListBottomSheetCellWidget> createState() => _FriendListCellWidgetState();
 }
 
-class _FriendListCellWidgetState
-    extends ConsumerState<FriendListBottomSheetCellWidget> {
+class _FriendListCellWidgetState extends ConsumerState<FriendListBottomSheetCellWidget> {
   UserDataEntity? userEntity;
   double? achievePercentage;
 
@@ -139,7 +135,7 @@ class _FriendListCellWidgetState
   Widget build(BuildContext context) {
     return Row(
       children: [
-        ProfileImageCircleWidget(
+        CircleProfileImage(
           size: 60,
           url: userEntity?.userImageUrl ?? '',
         ),
@@ -179,9 +175,7 @@ class _FriendListCellWidgetState
 
         // Apply Mode
         Text(
-          achievePercentage == null
-              ? '...'
-              : '${(achievePercentage! * 100).ceil().toString()}%',
+          achievePercentage == null ? '...' : '${(achievePercentage! * 100).ceil().toString()}%',
           style: const TextStyle(
             color: CustomColors.whWhite,
             fontSize: 16.0,
@@ -193,8 +187,7 @@ class _FriendListCellWidgetState
   }
 
   Future<void> loadEntity(String userId) async {
-    GetUserDataFromIdUsecase getUserDataFromIdUsecase =
-        ref.watch(getUserDataFromIdUsecaseProvider);
+    GetUserDataFromIdUsecase getUserDataFromIdUsecase = ref.watch(getUserDataFromIdUsecaseProvider);
     userEntity = await getUserDataFromIdUsecase.call(widget.memberId).then(
           (result) => result.fold((failure) => null, (entity) => entity),
         );
@@ -205,9 +198,8 @@ class _FriendListCellWidgetState
   }
 
   Future<void> loadAchievePercentage() async {
-    GetTargetResolutionDoneListForWeekUsecase
-        getTargetResolutionDoneListForWeekUsecase =
-        ref.read(getTargetResolutionDoneListForWeekUsecaseProvider);
+    // GetTargetResolutionDoneListForWeekUsecase getTargetResolutionDoneListForWeekUsecase =
+    //     ref.read(getTargetResolutionDoneListForWeekUsecaseProvider);
 
     GetTargetResolutionEntityUsecase getTargetResolutionEntityUsecase =
         ref.read(getTargetResolutionEntityUsecaseProvider);
@@ -231,18 +223,19 @@ class _FriendListCellWidgetState
             );
 
         if (resolutionEntity != null) {
-          final doneList = await getTargetResolutionDoneListForWeekUsecase(
-            resolutionId: id,
-            startMonday: DateTime.now().getMondayDateTime(),
-          ).then(
-            (result) => result.fold(
-              (failure) => [] as List<bool>,
-              (doneList) => doneList,
-            ),
-          );
+          // final doneList = await getTargetResolutionDoneListForWeekUsecase(
+          //     param: GetTargetResolutionDoneListForWeekUsecaseParams(
+          //   resolutionId: id,
+          //   startMonday: DateTime.now().getMondayDateTime(),
+          // )).then(
+          //   (result) => result.fold(
+          //     (failure) => [] as List<bool>,
+          //     (doneList) => doneList,
+          //   ),
+          // );
 
-          totalPostCount += resolutionEntity.actionPerWeek ?? 0;
-          donePostCount += doneList.where((element) => element == true).length;
+          // totalPostCount += resolutionEntity.actionPerWeek;
+          // donePostCount += doneList.where((element) => element == true).length;
         }
       }),
     );

@@ -45,10 +45,10 @@ class UserModelRepositoryImpl implements UserModelRepository {
   }
 
   @override
-  EitherFuture<List<EitherFuture<UserDataEntity>>> getAppliedUserList({
+  EitherFuture<List<String>> getAppliedUserIdList({
     required String forUser,
   }) {
-    return _wehavitDatasource.getAppliedUserList(forUser: forUser);
+    return _wehavitDatasource.getAppliedUserIdList(forUser: forUser);
   }
 
   @override
@@ -75,10 +75,10 @@ class UserModelRepositoryImpl implements UserModelRepository {
   }
 
   @override
-  EitherFuture<List<EitherFuture<UserDataEntity>>> getUserDataListByHandle({
+  EitherFuture<List<String>> getUidListByHandle({
     required String handle,
   }) async {
-    return _wehavitDatasource.getUserDataListByHandle(handle: handle);
+    return _wehavitDatasource.getUidListByHandle(handle: handle);
   }
 
   @override
@@ -111,5 +111,28 @@ class UserModelRepositoryImpl implements UserModelRepository {
   @override
   EitherFuture<String> getUserFCMMessageToken({required String uid}) {
     return _wehavitDatasource.getUserFCMMessageToken(uid: uid);
+  }
+
+  @override
+  EitherFuture<List<QuickshotPresetItemEntity>> getQuickshotPresets() {
+    return _wehavitDatasource.getQuickshotPresets();
+  }
+
+  @override
+  EitherFuture<void> uploadQuickshotPreset(
+    String quickshotImageUrl,
+  ) {
+    return _wehavitDatasource.uploadQuickshotPreset(
+      quickshotImageUrl: quickshotImageUrl,
+    );
+  }
+
+  @override
+  EitherFuture<void> removeQuickshotPreset(
+    QuickshotPresetItemEntity quickshotPresetItemEntity,
+  ) {
+    return _wehavitDatasource.removeQuickshotPreset(
+      entity: quickshotPresetItemEntity,
+    );
   }
 }

@@ -31,22 +31,13 @@ class SendNotificationToTargetUserUsecase {
       );
     }
 
-    if (targetUserEntity.messageToken == null) {
-      print(targetUserEntity.userId);
-      return left(
-        const Failure(
-          'target user does not have message token value',
-        ),
-      );
-    }
-
-    List<String> sharingUserTokenList = [targetUserEntity.messageToken!];
+    List<String> sharingUserTokenList = [targetUserEntity.messageToken];
 
     await _notificationRepository.sendNotification(
       title: messageTitleTemplate,
       content: messageContentTemplate.replaceFirst(
         'NAME',
-        myUserEntity.userName ?? 'NULL',
+        myUserEntity.userName,
       ),
       targetTokenList: sharingUserTokenList,
     );

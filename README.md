@@ -3,12 +3,15 @@
 <div align="center"> <img align="center" src="https://github.com/cau-bootcamp/wehavit/assets/39216546/463b5439-155d-4b9c-b7e3-929984505bde" width=100 /> </div><br> 
 <div align="center"> 2023. 08. 19. ~ 진행중 <br><br></div>
 <div align="center">
-  <a href = "https://apps.apple.com/kr/app/wehavit/id6504269390" >
-    <img src="https://github.com/cau-bootcamp/wehavit/assets/39216546/754ff73d-5ef4-42c4-a643-be1bbee58e13" />
+  <a href='https://play.google.com/store/apps/details?id=com.bootcamp.wehavit&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'>
+    <img width=180 alt='다운로드하기 Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/ko_badge_web_generic.png'/>
   </a>
 </div>
-
-
+<div align="center">
+  <a href = "https://apps.apple.com/kr/app/wehavit/id6504269390" >
+    <img  width=180  src="https://github.com/cau-bootcamp/wehavit/assets/39216546/754ff73d-5ef4-42c4-a643-be1bbee58e13" />
+  </a>
+</div>
 
 
 # Background

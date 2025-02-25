@@ -1,21 +1,30 @@
 // ignore_for_file: lines_longer_than_80_chars
 
 import 'dart:async';
+import 'dart:math';
 
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wehavit/common/common.dart';
+import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
+import 'package:wehavit/presentation/group_post/provider/send_reaction_state_model_provider.dart';
 import 'package:wehavit/presentation/presentation.dart';
+import 'package:wehavit/presentation/state/group_post/confirm_post_provider.dart';
+import 'package:wehavit/presentation/state/group_post/friend_post_provider.dart';
+import 'package:wehavit/presentation/state/reaction/quickshot_preset_provider.dart';
+import 'package:wehavit/presentation/state/user_data/my_user_data_provider.dart';
 
 // ignore: must_be_immutable
 class GroupPostView extends ConsumerStatefulWidget {
   GroupPostView({super.key, required this.groupEntity});
 
-  GroupEntity groupEntity;
+  /// GroupEntity가 null인 경우에 '내 친구들' 페이지가 보여짐
+  GroupEntity? groupEntity;
 
   @override
   ConsumerState<GroupPostView> createState() => _GroupPostViewState();
@@ -26,8 +35,7 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final isGuideShown =
-          await SharedPreferences.getInstance().then((instance) {
+      final isGuideShown = await SharedPreferences.getInstance().then((instance) {
         return instance.getBool(PreferenceKey.isReactionGuideShown);
       });
 
@@ -51,405 +59,560 @@ class _GroupPostViewState extends ConsumerState<GroupPostView> {
     });
   }
 
-  @override
-  Future<void> didChangeDependencies() async {
-    super.didChangeDependencies();
+  DateTime selectedDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  bool isCommentMode = false;
 
-    final viewModel = ref.watch(groupPostViewModelProvider);
-    final provider = ref.read(groupPostViewModelProvider.notifier);
-    viewModel.groupId = widget.groupEntity.groupId;
-
-    unawaited(
-      provider
-          .loadAppliedUserCount(entity: widget.groupEntity)
-          .whenComplete(() {
-        setState(() {});
-      }),
-    );
-
-    unawaited(
-      provider
-          .loadConfirmPostsForWeek(
-            mondayOfTargetWeek: viewModel.calendartMondayDateList[0],
-          )
-          .whenComplete(() => setState(() {})),
-    );
-
-    unawaited(
-      provider
-          .loadConfirmPostsForWeek(
-            mondayOfTargetWeek: viewModel.calendartMondayDateList[1],
-          )
-          .whenComplete(() => setState(() {})),
-    );
-
-    unawaited(provider.loadConfirmPostEntityListFor(dateTime: DateTime.now()));
-  }
+  final commentFocusNode = FocusNode();
+  final reactionCommentTextEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final viewModel = ref.watch(groupPostViewModelProvider);
-    final provider = ref.read(groupPostViewModelProvider.notifier);
-    final reactionCameraViewModel =
-        ref.watch(reactionCameraWidgetModelProvider);
 
-    return Stack(
-      children: [
-        Scaffold(
-          backgroundColor: CustomColors.whBlack,
-          appBar: WehavitAppBar(
-            title: widget.groupEntity.groupName,
-            leadingIcon: Icons.chevron_left,
-            leadingTitle: '',
-            leadingAction: () {
-              Navigator.pop(context);
-            },
-            trailingTitle: '',
-            trailingIcon: Icons.people_outline,
-            trailingAction: () async {
-              showModalBottomSheet(
-                isScrollControlled: true,
-                context: context,
-                builder: (context) {
-                  return GroupMemberListBottomSheet(
-                    updateGroupEntity,
-                    groupEntity: widget.groupEntity,
+    return PopScope(
+      onPopInvokedWithResult: (_, __) async {
+        refreshPostList();
+      },
+      child: Stack(
+        children: [
+          Scaffold(
+            backgroundColor: CustomColors.whGrey200,
+            resizeToAvoidBottomInset: true,
+            appBar: WehavitAppBar(
+              titleLabel: widget.groupEntity?.groupName ?? '내 친구들',
+              leadingIconString: WHIcons.back,
+              leadingAction: () {
+                Navigator.pop(context);
+              },
+              trailingIconString: widget.groupEntity != null ? WHIcons.friend : '',
+
+              trailingAction: () async {
+                if (widget.groupEntity != null) {
+                  showModalBottomSheet(
+                    isScrollControlled: true,
+                    context: context,
+                    builder: (context) {
+                      return GroupMemberListBottomSheet(groupId: widget.groupEntity!.groupId);
+                    },
                   );
-                },
-              ).whenComplete(() async {
-                await provider.loadAppliedUserCount(entity: widget.groupEntity);
-                setState(() {});
-              });
-            },
-            trailingIconBadgeCount: viewModel.appliedUserCountForManager,
-          ),
-          body: SafeArea(
-            minimum: const EdgeInsets.symmetric(horizontal: 16.0),
-            bottom: false,
-            child: Column(
+                }
+              },
+              // trailingIconBadgeCount: viewModel.appliedUserCountForManager,
+            ),
+            body: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 12.0),
-                  child: Column(
+                Expanded(
+                  child: Stack(
                     children: [
-                      Row(
-                        children: [
-                          Text(
-                            viewModel.selectedDateString,
-                            style: const TextStyle(
-                              color: CustomColors.whWhite,
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              setState(() {
-                                viewModel.isShowingCalendar =
-                                    !viewModel.isShowingCalendar;
-                              });
-                            },
-                            icon: Icon(
-                              viewModel.isShowingCalendar
-                                  ? Icons.keyboard_arrow_up
-                                  : Icons.keyboard_arrow_down,
-                              color: CustomColors.whWhite,
-                            ),
-                          ),
-                        ],
+                      SafeArea(
+                        minimum: const EdgeInsets.symmetric(horizontal: 16.0),
+                        bottom: false,
+                        child: Consumer(
+                          builder: (context, ref, child) {
+                            final asyncResolutionList = widget.groupEntity != null
+                                ? ref.watch(
+                                    groupSharedResolutionListProvider(
+                                      GroupSharedResolutionProviderParam(
+                                        widget.groupEntity!.groupId,
+                                        widget.groupEntity!.groupMemberUidList,
+                                      ),
+                                    ),
+                                  )
+                                : ref.watch(friendSharedResolutionListProvider);
+
+                            return asyncResolutionList.when(
+                              data: (resolutionList) {
+                                return Column(
+                                  children: [
+                                    WeeklyPostSwipeCalendar(
+                                      resolutionList: resolutionList,
+                                      firstDate: widget.groupEntity?.groupCreatedAt ??
+                                          ref.watch(myUserDataProvider).value!.createdAt,
+                                      onSelected: (selectedDate) {
+                                        setState(() {
+                                          this.selectedDate = selectedDate;
+                                        });
+                                      },
+                                    ),
+                                    const SizedBox(
+                                      height: 12.0,
+                                    ),
+                                    Expanded(
+                                      child: Consumer(
+                                        builder: (context, ref, child) {
+                                          final asyncEntityList = widget.groupEntity != null
+                                              ? ref.watch(
+                                                  confirmPostListProvider(
+                                                    ConfirmPostProviderParam(resolutionList, selectedDate),
+                                                  ),
+                                                )
+                                              : ref.watch(friendPostListProvider(selectedDate));
+
+                                          return asyncEntityList.when(
+                                            data: (entityList) {
+                                              return Visibility(
+                                                visible: entityList.isNotEmpty,
+                                                replacement: const NoPostPlaceholder(),
+                                                child: RefreshIndicator(
+                                                  onRefresh: () async {
+                                                    refreshPostList(targetDate: selectedDate);
+                                                  },
+                                                  child: ListView.builder(
+                                                    padding: const EdgeInsets.only(bottom: 20.0),
+                                                    itemCount: entityList.length,
+                                                    itemBuilder: (context, index) {
+                                                      return Padding(
+                                                        padding: const EdgeInsets.only(bottom: 12.0),
+                                                        child: ConfirmPostListCell(
+                                                          confirmPostEntity: entityList[index],
+                                                          onSendCommentPressed: () {
+                                                            viewModel.commentTargetEntity = entityList[index];
+                                                            setState(() {
+                                                              isCommentMode = true;
+                                                            });
+                                                            commentFocusNode.requestFocus();
+                                                          },
+                                                          onEmojiPressed: () async {
+                                                            await showEmojiSheet(entityList[index], context)
+                                                                .whenComplete(() {
+                                                              if (ref
+                                                                      .read(
+                                                                        sendReactionStateModelNotifierProvider(
+                                                                          entityList[index],
+                                                                        ),
+                                                                      )
+                                                                      .emojiSendCount ==
+                                                                  0) {
+                                                                return;
+                                                              }
+
+                                                              ref
+                                                                  .read(
+                                                                    sendReactionStateModelNotifierProvider(
+                                                                      entityList[index],
+                                                                    ),
+                                                                  )
+                                                                  .emojiWidgets
+                                                                  .clear();
+
+                                                              ref
+                                                                  .read(
+                                                                    sendReactionStateModelNotifierProvider(
+                                                                      entityList[index],
+                                                                    ).notifier,
+                                                                  )
+                                                                  .sendReaction()
+                                                                  .then((result) {
+                                                                final resultMessage = result.fold(
+                                                                  (_) => '잠시 후 다시 시도해주세요',
+                                                                  (_) => '친구에게 이모지로 응원을 보냈어요',
+                                                                );
+
+                                                                if (context.mounted) {
+                                                                  showToastMessage(context, text: resultMessage);
+                                                                }
+                                                              });
+                                                            });
+
+                                                            ref.invalidate(sendReactionStateModelNotifierProvider);
+                                                          },
+                                                          onQuickshotLongPressStart: (_) async {
+                                                            PermissionStatus permission =
+                                                                await Permission.camera.status;
+
+                                                            if (permission == PermissionStatus.denied) {
+                                                              await Permission.camera.request();
+                                                            }
+                                                            if (permission == PermissionStatus.granted) {
+                                                              reactionCameraWidgetModeNotifier.value =
+                                                                  ReactionCameraWidgetMode.quickshot;
+                                                            }
+                                                          },
+                                                          onQuickshotLongPressMove: (detail) {
+                                                            cameraPointerPositionNotifier.value = detail.globalPosition;
+                                                          },
+                                                          onQuickshotLongPressEnd: (detail) async {
+                                                            final needCapture =
+                                                                cameraPointerPositionNotifier.isPosInCapturingArea;
+
+                                                            if (needCapture) {
+                                                              final imageFilePath = await ref
+                                                                  .read(reactionCameraWidgetModelProvider.notifier)
+                                                                  .endOnCapturingArea();
+
+                                                              ref
+                                                                  .watch(
+                                                                    sendReactionStateModelNotifierProvider(
+                                                                      entityList[index],
+                                                                    ),
+                                                                  )
+                                                                  .sendingQuickshotUrl = imageFilePath;
+
+                                                              ref
+                                                                  .read(
+                                                                    sendReactionStateModelNotifierProvider(
+                                                                      entityList[index],
+                                                                    ).notifier,
+                                                                  )
+                                                                  .sendReaction()
+                                                                  .then((result) {
+                                                                final resultMessage = result.fold(
+                                                                  (_) => '잠시 후 다시 시도해주세요',
+                                                                  (_) => '친구에게 퀵샷으로 응원을 보냈어요',
+                                                                );
+
+                                                                if (context.mounted) {
+                                                                  showToastMessage(context, text: resultMessage);
+                                                                }
+
+                                                                ref.invalidate(
+                                                                  sendReactionStateModelNotifierProvider(
+                                                                    entityList[index],
+                                                                  ),
+                                                                );
+                                                              });
+                                                            }
+                                                            reactionCameraWidgetModeNotifier.value =
+                                                                ReactionCameraWidgetMode.none;
+                                                          },
+                                                          onQuickshotPaletteCellTapUp: (imageFilePath) async {
+                                                            ref
+                                                                .watch(
+                                                                  sendReactionStateModelNotifierProvider(
+                                                                    entityList[index],
+                                                                  ),
+                                                                )
+                                                                .sendingQuickshotUrl = imageFilePath;
+
+                                                            ref
+                                                                .read(
+                                                                  sendReactionStateModelNotifierProvider(
+                                                                    entityList[index],
+                                                                  ).notifier,
+                                                                )
+                                                                .sendReaction()
+                                                                .then((result) {
+                                                              final resultMessage = result.fold(
+                                                                (_) => '잠시 후 다시 시도해주세요',
+                                                                (_) => '친구에게 퀵샷으로 응원을 보냈어요',
+                                                              );
+
+                                                              if (context.mounted) {
+                                                                showToastMessage(context, text: resultMessage);
+                                                              }
+                                                            });
+
+                                                            ref.invalidate(
+                                                              sendReactionStateModelNotifierProvider(entityList[index]),
+                                                            );
+                                                          },
+                                                          onQuickshotPaletteAddCellTapUp: () {
+                                                            showToastMessage(context, text: '추가 버튼을 누른 채로 드래그 해주세요!');
+                                                          },
+                                                          onQuickshotPaletteAddCellLongPressStart: (detail) async {
+                                                            PermissionStatus permission =
+                                                                await Permission.camera.status;
+
+                                                            if (permission == PermissionStatus.denied) {
+                                                              await Permission.camera.request();
+                                                            }
+                                                            if (permission == PermissionStatus.granted) {
+                                                              reactionCameraWidgetModeNotifier.value =
+                                                                  ReactionCameraWidgetMode.preset;
+                                                            }
+                                                          },
+                                                          onQuickshotPaletteAddCellLongPressMove: (detail) {
+                                                            cameraPointerPositionNotifier.value = detail.globalPosition;
+                                                          },
+                                                          onQuickshotPaletteAddCellLongPressEnd: (detail) async {
+                                                            final needCapture =
+                                                                cameraPointerPositionNotifier.isPosInCapturingArea;
+
+                                                            if (needCapture) {
+                                                              final imageFilePath = await ref
+                                                                  .read(reactionCameraWidgetModelProvider.notifier)
+                                                                  .endOnCapturingArea();
+
+                                                              ref
+                                                                  .read(uploadQuickshotPresetUsecaseProvider)
+                                                                  .call(localFileUrl: imageFilePath)
+                                                                  .then((result) {
+                                                                ref.invalidate(quickshotPresetProvider);
+                                                              });
+                                                            }
+                                                            reactionCameraWidgetModeNotifier.value =
+                                                                ReactionCameraWidgetMode.none;
+                                                          },
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            error: (_, __) {
+                                              return const NoPostPlaceholder();
+                                            },
+                                            loading: () {
+                                              return const Center(
+                                                child: SizedBox(
+                                                  height: 50,
+                                                  width: 50,
+                                                  child: CircularProgressIndicator(
+                                                    color: CustomColors.whGrey700,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                              error: (_, __) {
+                                return Container();
+                              },
+                              loading: () {
+                                return Container();
+                              },
+                            );
+                          },
+                        ),
                       ),
-                      putScrollCalendarWidget(viewModel, provider),
+                      if (isCommentMode)
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              isCommentMode = false;
+                              commentFocusNode.unfocus();
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Colors.transparent,
+                                  CustomColors.whGrey100.withOpacity(0.6),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
                     ],
                   ),
                 ),
-                Expanded(
-                  child: EitherFutureBuilder<List<ConfirmPostEntity>>(
-                    target: viewModel.confirmPostList[viewModel.selectedDate],
-                    forWaiting: const Center(
-                      child: SizedBox(
-                        height: 50,
-                        width: 50,
-                        child: CircularProgressIndicator(
-                          color: CustomColors.whBrightGrey,
-                        ),
-                      ),
-                    ),
-                    forFail: const Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            '아무도 인증글을 남기지 않은\n조용한 날이네요',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: CustomColors.whWhite,
+                if (isCommentMode && viewModel.commentTargetEntity != null)
+                  ReactionCommentBottomToolbar(
+                    confirmPostEntity: viewModel.commentTargetEntity!,
+                    controller: reactionCommentTextEditingController,
+                    commentFocusNode: commentFocusNode,
+                    onActionPressed: () async {
+                      ref
+                          .watch(
+                            sendReactionStateModelNotifierProvider(
+                              viewModel.commentTargetEntity!,
                             ),
-                          ),
-                          Text(
-                            '🤫',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 40,
-                              fontWeight: FontWeight.bold,
-                              color: CustomColors.whWhite,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 60,
-                          ),
-                        ],
-                      ),
-                    ),
-                    mainWidgetCallback: (entityList) {
-                      return Visibility(
-                        visible: entityList.isNotEmpty,
-                        replacement: const Center(
-                          child: Column(
+                          )
+                          .sendingComment = reactionCommentTextEditingController.text;
+
+                      ref
+                          .read(
+                            sendReactionStateModelNotifierProvider(
+                              viewModel.commentTargetEntity!,
+                            ).notifier,
+                          )
+                          .sendReaction()
+                          .then((result) {
+                        final resultMessage = result.fold(
+                          (_) => '잠시 후 다시 시도해주세요',
+                          (_) => '친구에게 응원의 메시지를 보냈어요',
+                        );
+
+                        if (context.mounted) {
+                          showToastMessage(
+                            context,
+                            text: resultMessage,
+                          );
+                        }
+
+                        if (result.isRight()) {
+                          reactionCommentTextEditingController.clear();
+                          ref.invalidate(sendReactionStateModelNotifierProvider(viewModel.commentTargetEntity!));
+                          setState(() {
+                            isCommentMode = false;
+                          });
+                        }
+                      });
+                    },
+                  ),
+              ],
+            ),
+          ),
+          ValueListenableBuilder(
+            valueListenable: reactionCameraWidgetModeNotifier,
+            builder: (context, value, child) {
+              if (value != ReactionCameraWidgetMode.none) {
+                return const ReactionCameraWidget();
+              } else {
+                return Container();
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> refreshPostList({DateTime? targetDate}) async {
+    if (widget.groupEntity == null) {
+      if (targetDate == null) {
+        ref.invalidate(friendPostListProvider);
+      } else {
+        ref.invalidate(friendPostListProvider(targetDate));
+      }
+    } else {
+      if (targetDate == null) {
+        ref.invalidate(confirmPostListProvider);
+      } else {
+        ref.invalidate(confirmPostListProvider);
+      }
+    }
+  }
+
+  Future<dynamic> showEmojiSheet(
+    ConfirmPostEntity postEntity,
+    BuildContext context,
+  ) {
+    void disposeWidget(UniqueKey key) {
+      if (mounted) {
+        ref.read(sendReactionStateModelNotifierProvider(postEntity)).emojiWidgets.remove(key);
+      }
+    }
+
+    return showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      clipBehavior: Clip.none,
+      elevation: 0,
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Stack(
+              alignment: Alignment.center,
+              clipBehavior: Clip.none,
+              children: [
+                Consumer(
+                  builder: (context, ref, child) {
+                    return Stack(
+                      alignment: Alignment.bottomCenter,
+                      clipBehavior: Clip.none,
+                      children:
+                          ref.watch(sendReactionStateModelNotifierProvider(postEntity)).emojiWidgets.values.toList(),
+                    );
+                  },
+                ),
+                GradientBottomSheet(
+                  Consumer(
+                    builder: (context, ref, child) {
+                      final sendReactionState = ref.watch(sendReactionStateModelNotifierProvider(postEntity));
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(
-                                '아무도 인증글을 남기지 않은\n조용한 날이네요',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: CustomColors.whWhite,
+                              Container(
+                                alignment: Alignment.bottomCenter,
+                                margin: const EdgeInsets.only(bottom: 16),
+                                height: 70,
+                                child: Text(
+                                  sendReactionState.emojiSendCount.toString(),
+                                  style: TextStyle(
+                                    fontSize: 40 + 24 * min(1, sendReactionState.emojiSendCount / 24),
+                                    color: Color.lerp(
+                                      CustomColors.whYellow500,
+                                      CustomColors.whRed500,
+                                      min(1, sendReactionState.emojiSendCount / 24),
+                                    ),
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
                               ),
                               Text(
-                                '🤫',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 40,
-                                  fontWeight: FontWeight.bold,
-                                  color: CustomColors.whWhite,
+                                '반응을 보내주세요!',
+                                style: context.titleMedium?.copyWith(
+                                  color: CustomColors.whYellow500,
                                 ),
                               ),
-                              SizedBox(
-                                height: 60,
-                              ),
+                              const SizedBox(height: 36.0),
                             ],
                           ),
-                        ),
-                        child: SingleChildScrollView(
-                          padding: const EdgeInsets.only(bottom: 20.0),
-                          physics: reactionCameraViewModel.isFocusingMode
-                              ? const NeverScrollableScrollPhysics()
-                              : const AlwaysScrollableScrollPhysics(),
-                          child: Column(
-                            children: List<Widget>.generate(
-                              entityList.length,
-                              (index) => Padding(
-                                padding: const EdgeInsets.only(bottom: 12.0),
-                                child: ConfirmPostWidget(
-                                  confirmPostEntity: entityList[index],
-                                  createdDate: viewModel.selectedDate,
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            child: Column(
+                              children: List<Widget>.generate(
+                                3,
+                                (index) => Row(
+                                  children: List<Widget>.generate(5, (jndex) {
+                                    final key = UniqueKey();
+                                    return Expanded(
+                                      key: key,
+                                      child: GestureDetector(
+                                        onTapUp: (detail) {
+                                          final emojiIndex = index * 5 + jndex;
+                                          setState(() {
+                                            ref
+                                                .read(sendReactionStateModelNotifierProvider(postEntity).notifier)
+                                                .addEmoji(emojiIndex);
+                                          });
+
+                                          shootEmoji(emojiIndex, postEntity, context, disposeWidget);
+                                        },
+                                        child: Image(image: AssetImage(Emojis.emojiList[index * 5 + jndex])),
+                                      ),
+                                    );
+                                  }),
                                 ),
                               ),
                             ),
                           ),
-                        ),
+                        ],
                       );
                     },
                   ),
                 ),
               ],
-            ),
-          ),
-        ),
-        const ReactionCameraWidget(),
-      ],
-    );
-  }
-
-  AnimatedContainer putScrollCalendarWidget(
-    GroupPostViewModel viewModel,
-    GroupPostViewModelProvider provider,
-  ) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 250),
-      curve: Curves.fastOutSlowIn,
-      height: viewModel.isShowingCalendar ? 64 : 0,
-      child: ProviderScope(
-        child: CarouselSlider.builder(
-          itemBuilder: (context, index, realIndex) {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: List<Widget>.generate(7, (jndex) {
-                final cellDate = viewModel.todayDate.subtract(
-                  Duration(
-                    days: viewModel.todayDate.weekday - 1 - jndex + 7 * index,
-                  ),
-                );
-                final isFuture = viewModel.todayDate.isBefore(cellDate);
-
-                return Expanded(
-                  child: GestureDetector(
-                    onTapUp: (details) async {
-                      if (!isFuture) {
-                        provider
-                            .changeSelectedDate(
-                          to: cellDate,
-                        )
-                            .then((value) {
-                          if (mounted) {
-                            setState(() {});
-                          }
-                        });
-                      }
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 4.0,
-                      ),
-                      clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: CustomColors.whBlack,
-                          width: 2,
-                          strokeAlign: BorderSide.strokeAlignOutside,
-                        ),
-                        borderRadius: BorderRadius.circular(
-                          14.0,
-                        ),
-                      ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            const BoxShadow(
-                              blurRadius: 4,
-                              color: CustomColors.whBlack,
-                            ),
-                            BoxShadow(
-                              offset: const Offset(0, 4),
-                              blurRadius: 6,
-                              color: isFuture
-                                  ? CustomColors.whGrey
-                                  : cellDate == viewModel.selectedDate
-                                      ? CustomColors.whYellow
-                                      : CustomColors.whYellowDark,
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Flexible(
-                              child: FittedBox(
-                                fit: BoxFit.scaleDown,
-                                child: Text(
-                                  cellDate.day == 1
-                                      ? '${cellDate.month}/${cellDate.day}'
-                                      : cellDate.day.toString(),
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                    color: isFuture ||
-                                            cellDate != viewModel.selectedDate
-                                        ? CustomColors.whPlaceholderGrey
-                                        : CustomColors.whBlack,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Flexible(
-                              child: FittedBox(
-                                fit: BoxFit.scaleDown,
-                                child: Visibility(
-                                  visible: !isFuture,
-                                  replacement: Text(
-                                    '-',
-                                    style: TextStyle(
-                                      height: 1.0,
-                                      fontFamily: 'Giants',
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.w700,
-                                      color: isFuture ||
-                                              cellDate != viewModel.selectedDate
-                                          ? CustomColors.whPlaceholderGrey
-                                          : CustomColors.whBlack,
-                                    ),
-                                  ),
-                                  child: EitherFutureBuilder<
-                                      List<ConfirmPostEntity>>(
-                                    target: viewModel.confirmPostList[cellDate],
-                                    forWaiting: const SizedBox(
-                                      width: 20,
-                                      height: 20,
-                                      child: Padding(
-                                        padding: EdgeInsets.all(
-                                          2.0,
-                                        ),
-                                        child: CircularProgressIndicator(
-                                          color: CustomColors.whBrightGrey,
-                                        ),
-                                      ),
-                                    ),
-                                    forFail: const Text('-'),
-                                    mainWidgetCallback: (entityList) => Text(
-                                      entityList.length.toString(),
-                                      style: TextStyle(
-                                        height: 1.0,
-                                        fontFamily: 'Giants',
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.w700,
-                                        color: isFuture ||
-                                                cellDate !=
-                                                    viewModel.selectedDate
-                                            ? CustomColors.whPlaceholderGrey
-                                            : CustomColors.whBlack,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              }),
             );
           },
-          itemCount: viewModel.calendartMondayDateList.length,
-          options: CarouselOptions(
-            height: 64,
-            viewportFraction: 1.0,
-            enableInfiniteScroll: false,
-            reverse: true,
-            onPageChanged: (index, reason) async {
-              if (index == viewModel.calendartMondayDateList.length - 1) {
-                // 마지막 페이지에 도달했을 때 추가 요소를 추가합니다.
-                viewModel.calendartMondayDateList.insert(
-                  0,
-                  viewModel.calendartMondayDateList.first.subtract(
-                    const Duration(days: 7),
-                  ),
-                );
-
-                await provider
-                    .loadConfirmPostsForWeek(
-                  mondayOfTargetWeek: viewModel.calendartMondayDateList[0],
-                )
-                    .whenComplete(() {
-                  setState(() {});
-                });
-              }
-            },
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 
-  Future<void> updateGroupEntity(GroupEntity groupEntity) async {
-    widget.groupEntity = groupEntity;
-    ref
-        .read(groupViewModelProvider.notifier)
-        .updateGroupEntity(forEntity: groupEntity);
+  void shootEmoji(
+    int emojiIndex,
+    ConfirmPostEntity postEntity,
+    BuildContext context,
+    void Function(UniqueKey key) disposeWidget,
+  ) {
+    final animationWidgetKey = UniqueKey();
+    ref.read(sendReactionStateModelNotifierProvider(postEntity)).emojiWidgets.addEntries(
+          {
+            animationWidgetKey: ShootEmojiWidget(
+              key: animationWidgetKey,
+              emojiIndex: emojiIndex,
+              currentPos: Point(MediaQuery.of(context).size.width * Random().nextDouble(), 0),
+              targetPos: Point(
+                MediaQuery.of(context).size.width / 2,
+                MediaQuery.of(context).size.height - 500 + 200,
+              ),
+              disposeWidgetFromParent: disposeWidget,
+            ),
+          }.entries,
+        );
   }
 }

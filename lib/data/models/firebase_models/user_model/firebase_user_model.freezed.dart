@@ -31,16 +31,18 @@ mixin _$FirebaseUserModel {
   int? get cumulativePosts => throw _privateConstructorUsedError;
   int? get cumulativeReactions => throw _privateConstructorUsedError;
 
+  /// Serializes this FirebaseUserModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
-  $FirebaseUserModelCopyWith<FirebaseUserModel> get copyWith =>
-      throw _privateConstructorUsedError;
+
+  /// Create a copy of FirebaseUserModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $FirebaseUserModelCopyWith<FirebaseUserModel> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $FirebaseUserModelCopyWith<$Res> {
-  factory $FirebaseUserModelCopyWith(
-          FirebaseUserModel value, $Res Function(FirebaseUserModel) then) =
+  factory $FirebaseUserModelCopyWith(FirebaseUserModel value, $Res Function(FirebaseUserModel) then) =
       _$FirebaseUserModelCopyWithImpl<$Res, FirebaseUserModel>;
   @useResult
   $Res call(
@@ -65,6 +67,8 @@ class _$FirebaseUserModelCopyWithImpl<$Res, $Val extends FirebaseUserModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of FirebaseUserModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -120,10 +124,8 @@ class _$FirebaseUserModelCopyWithImpl<$Res, $Val extends FirebaseUserModel>
 }
 
 /// @nodoc
-abstract class _$$FirebaseUserModelImplCopyWith<$Res>
-    implements $FirebaseUserModelCopyWith<$Res> {
-  factory _$$FirebaseUserModelImplCopyWith(_$FirebaseUserModelImpl value,
-          $Res Function(_$FirebaseUserModelImpl) then) =
+abstract class _$$FirebaseUserModelImplCopyWith<$Res> implements $FirebaseUserModelCopyWith<$Res> {
+  factory _$$FirebaseUserModelImplCopyWith(_$FirebaseUserModelImpl value, $Res Function(_$FirebaseUserModelImpl) then) =
       __$$FirebaseUserModelImplCopyWithImpl<$Res>;
   @override
   @useResult
@@ -140,13 +142,13 @@ abstract class _$$FirebaseUserModelImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$FirebaseUserModelImplCopyWithImpl<$Res>
-    extends _$FirebaseUserModelCopyWithImpl<$Res, _$FirebaseUserModelImpl>
+class __$$FirebaseUserModelImplCopyWithImpl<$Res> extends _$FirebaseUserModelCopyWithImpl<$Res, _$FirebaseUserModelImpl>
     implements _$$FirebaseUserModelImplCopyWith<$Res> {
-  __$$FirebaseUserModelImplCopyWithImpl(_$FirebaseUserModelImpl _value,
-      $Res Function(_$FirebaseUserModelImpl) _then)
+  __$$FirebaseUserModelImplCopyWithImpl(_$FirebaseUserModelImpl _value, $Res Function(_$FirebaseUserModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of FirebaseUserModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -216,8 +218,7 @@ class _$FirebaseUserModelImpl implements _FirebaseUserModel {
       this.cumulativePosts,
       this.cumulativeReactions});
 
-  factory _$FirebaseUserModelImpl.fromJson(Map<String, dynamic> json) =>
-      _$$FirebaseUserModelImplFromJson(json);
+  factory _$FirebaseUserModelImpl.fromJson(Map<String, dynamic> json) => _$$FirebaseUserModelImplFromJson(json);
 
   @override
   final String? handle;
@@ -250,43 +251,29 @@ class _$FirebaseUserModelImpl implements _FirebaseUserModel {
         (other.runtimeType == runtimeType &&
             other is _$FirebaseUserModelImpl &&
             (identical(other.handle, handle) || other.handle == handle) &&
-            (identical(other.displayName, displayName) ||
-                other.displayName == displayName) &&
-            (identical(other.imageUrl, imageUrl) ||
-                other.imageUrl == imageUrl) &&
+            (identical(other.displayName, displayName) || other.displayName == displayName) &&
+            (identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl) &&
             (identical(other.aboutMe, aboutMe) || other.aboutMe == aboutMe) &&
-            (identical(other.messageToken, messageToken) ||
-                other.messageToken == messageToken) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt) &&
-            (identical(other.cumulativeGoals, cumulativeGoals) ||
-                other.cumulativeGoals == cumulativeGoals) &&
-            (identical(other.cumulativePosts, cumulativePosts) ||
-                other.cumulativePosts == cumulativePosts) &&
+            (identical(other.messageToken, messageToken) || other.messageToken == messageToken) &&
+            (identical(other.createdAt, createdAt) || other.createdAt == createdAt) &&
+            (identical(other.cumulativeGoals, cumulativeGoals) || other.cumulativeGoals == cumulativeGoals) &&
+            (identical(other.cumulativePosts, cumulativePosts) || other.cumulativePosts == cumulativePosts) &&
             (identical(other.cumulativeReactions, cumulativeReactions) ||
                 other.cumulativeReactions == cumulativeReactions));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      handle,
-      displayName,
-      imageUrl,
-      aboutMe,
-      messageToken,
-      createdAt,
-      cumulativeGoals,
-      cumulativePosts,
-      cumulativeReactions);
+  int get hashCode => Object.hash(runtimeType, handle, displayName, imageUrl, aboutMe, messageToken, createdAt,
+      cumulativeGoals, cumulativePosts, cumulativeReactions);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FirebaseUserModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FirebaseUserModelImplCopyWith<_$FirebaseUserModelImpl> get copyWith =>
-      __$$FirebaseUserModelImplCopyWithImpl<_$FirebaseUserModelImpl>(
-          this, _$identity);
+      __$$FirebaseUserModelImplCopyWithImpl<_$FirebaseUserModelImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -308,8 +295,7 @@ abstract class _FirebaseUserModel implements FirebaseUserModel {
       final int? cumulativePosts,
       final int? cumulativeReactions}) = _$FirebaseUserModelImpl;
 
-  factory _FirebaseUserModel.fromJson(Map<String, dynamic> json) =
-      _$FirebaseUserModelImpl.fromJson;
+  factory _FirebaseUserModel.fromJson(Map<String, dynamic> json) = _$FirebaseUserModelImpl.fromJson;
 
   @override
   String? get handle;
@@ -330,8 +316,10 @@ abstract class _FirebaseUserModel implements FirebaseUserModel {
   int? get cumulativePosts;
   @override
   int? get cumulativeReactions;
+
+  /// Create a copy of FirebaseUserModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
-  _$$FirebaseUserModelImplCopyWith<_$FirebaseUserModelImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$FirebaseUserModelImplCopyWith<_$FirebaseUserModelImpl> get copyWith => throw _privateConstructorUsedError;
 }

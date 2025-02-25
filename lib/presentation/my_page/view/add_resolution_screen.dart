@@ -83,8 +83,7 @@ class AddResolutionScreen extends HookConsumerWidget {
                                 width: 3.0,
                               ),
                             ),
-                            contentPadding:
-                                EdgeInsets.symmetric(horizontal: 8.0),
+                            contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
                             fillColor: CustomColors.whSemiWhite,
                             filled: true,
                           ),
@@ -94,9 +93,7 @@ class AddResolutionScreen extends HookConsumerWidget {
                             color: CustomColors.whDarkBlack,
                           ),
                           onChanged: (value) {
-                            ref
-                                .read(addResolutionProvider.notifier)
-                                .changeGoalStatement(value);
+                            ref.read(addResolutionProvider.notifier).changeGoalStatement(value);
                           },
                         ),
                       ),
@@ -131,8 +128,7 @@ class AddResolutionScreen extends HookConsumerWidget {
                                 width: 3.0,
                               ),
                             ),
-                            contentPadding:
-                                EdgeInsets.symmetric(horizontal: 8.0),
+                            contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
                             fillColor: CustomColors.whSemiWhite,
                             filled: true,
                           ),
@@ -142,9 +138,7 @@ class AddResolutionScreen extends HookConsumerWidget {
                             color: CustomColors.whDarkBlack,
                           ),
                           onChanged: (value) {
-                            ref
-                                .read(addResolutionProvider.notifier)
-                                .changeActionStatement(value);
+                            ref.read(addResolutionProvider.notifier).changeActionStatement(value);
                           },
                         ),
                       ),
@@ -169,17 +163,15 @@ class AddResolutionScreen extends HookConsumerWidget {
                             height: 100,
                             child: WheelChooser.custom(
                               horizontal: true,
-                              onValueChanged: (a) => ref
-                                  .read(addResolutionProvider.notifier)
-                                  .changeActionPerWeekState(a + 1),
+                              onValueChanged: (a) =>
+                                  ref.read(addResolutionProvider.notifier).changeActionPerWeekState(a + 1),
                               children: List<Widget>.generate(
                                 7,
                                 (index) => Container(
                                   alignment: Alignment.center,
                                   decoration: const BoxDecoration(
                                     color: Colors.white,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
+                                    borderRadius: BorderRadius.all(Radius.circular(10)),
                                   ),
                                   child: Text(
                                     (index + 1).toString(),
@@ -376,7 +368,7 @@ class AddResolutionScreen extends HookConsumerWidget {
 //   }
 // }
 
-EitherFuture<List<EitherFuture<UserDataEntity>>> getFriendList(WidgetRef ref) {
+EitherFuture<List<UserDataEntity>> getFriendList(WidgetRef ref) {
   return ref.read(getFriendListUseCaseProvider)();
 }
 

@@ -14,8 +14,7 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-FirebaseGroupAnnouncementModel _$FirebaseGroupAnnouncementModelFromJson(
-    Map<String, dynamic> json) {
+FirebaseGroupAnnouncementModel _$FirebaseGroupAnnouncementModelFromJson(Map<String, dynamic> json) {
   return _FirebaseGroupAnnouncementModel.fromJson(json);
 }
 
@@ -29,19 +28,21 @@ mixin _$FirebaseGroupAnnouncementModel {
   DateTime get createdAt => throw _privateConstructorUsedError;
   List<String> get readByUidList => throw _privateConstructorUsedError;
 
+  /// Serializes this FirebaseGroupAnnouncementModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
-  $FirebaseGroupAnnouncementModelCopyWith<FirebaseGroupAnnouncementModel>
-      get copyWith => throw _privateConstructorUsedError;
+
+  /// Create a copy of FirebaseGroupAnnouncementModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $FirebaseGroupAnnouncementModelCopyWith<FirebaseGroupAnnouncementModel> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $FirebaseGroupAnnouncementModelCopyWith<$Res> {
   factory $FirebaseGroupAnnouncementModelCopyWith(
-          FirebaseGroupAnnouncementModel value,
-          $Res Function(FirebaseGroupAnnouncementModel) then) =
-      _$FirebaseGroupAnnouncementModelCopyWithImpl<$Res,
-          FirebaseGroupAnnouncementModel>;
+          FirebaseGroupAnnouncementModel value, $Res Function(FirebaseGroupAnnouncementModel) then) =
+      _$FirebaseGroupAnnouncementModelCopyWithImpl<$Res, FirebaseGroupAnnouncementModel>;
   @useResult
   $Res call(
       {String groupId,
@@ -53,8 +54,7 @@ abstract class $FirebaseGroupAnnouncementModelCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$FirebaseGroupAnnouncementModelCopyWithImpl<$Res,
-        $Val extends FirebaseGroupAnnouncementModel>
+class _$FirebaseGroupAnnouncementModelCopyWithImpl<$Res, $Val extends FirebaseGroupAnnouncementModel>
     implements $FirebaseGroupAnnouncementModelCopyWith<$Res> {
   _$FirebaseGroupAnnouncementModelCopyWithImpl(this._value, this._then);
 
@@ -63,6 +63,8 @@ class _$FirebaseGroupAnnouncementModelCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of FirebaseGroupAnnouncementModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -106,8 +108,7 @@ class _$FirebaseGroupAnnouncementModelCopyWithImpl<$Res,
 abstract class _$$FirebaseGroupAnnouncementModelImplCopyWith<$Res>
     implements $FirebaseGroupAnnouncementModelCopyWith<$Res> {
   factory _$$FirebaseGroupAnnouncementModelImplCopyWith(
-          _$FirebaseGroupAnnouncementModelImpl value,
-          $Res Function(_$FirebaseGroupAnnouncementModelImpl) then) =
+          _$FirebaseGroupAnnouncementModelImpl value, $Res Function(_$FirebaseGroupAnnouncementModelImpl) then) =
       __$$FirebaseGroupAnnouncementModelImplCopyWithImpl<$Res>;
   @override
   @useResult
@@ -122,14 +123,14 @@ abstract class _$$FirebaseGroupAnnouncementModelImplCopyWith<$Res>
 
 /// @nodoc
 class __$$FirebaseGroupAnnouncementModelImplCopyWithImpl<$Res>
-    extends _$FirebaseGroupAnnouncementModelCopyWithImpl<$Res,
-        _$FirebaseGroupAnnouncementModelImpl>
+    extends _$FirebaseGroupAnnouncementModelCopyWithImpl<$Res, _$FirebaseGroupAnnouncementModelImpl>
     implements _$$FirebaseGroupAnnouncementModelImplCopyWith<$Res> {
   __$$FirebaseGroupAnnouncementModelImplCopyWithImpl(
-      _$FirebaseGroupAnnouncementModelImpl _value,
-      $Res Function(_$FirebaseGroupAnnouncementModelImpl) _then)
+      _$FirebaseGroupAnnouncementModelImpl _value, $Res Function(_$FirebaseGroupAnnouncementModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of FirebaseGroupAnnouncementModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -172,8 +173,7 @@ class __$$FirebaseGroupAnnouncementModelImplCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable()
-class _$FirebaseGroupAnnouncementModelImpl
-    implements _FirebaseGroupAnnouncementModel {
+class _$FirebaseGroupAnnouncementModelImpl implements _FirebaseGroupAnnouncementModel {
   _$FirebaseGroupAnnouncementModelImpl(
       {required this.groupId,
       required this.writerUid,
@@ -183,8 +183,7 @@ class _$FirebaseGroupAnnouncementModelImpl
       required final List<String> readByUidList})
       : _readByUidList = readByUidList;
 
-  factory _$FirebaseGroupAnnouncementModelImpl.fromJson(
-          Map<String, dynamic> json) =>
+  factory _$FirebaseGroupAnnouncementModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$FirebaseGroupAnnouncementModelImplFromJson(json);
 
   @override
@@ -217,28 +216,25 @@ class _$FirebaseGroupAnnouncementModelImpl
         (other.runtimeType == runtimeType &&
             other is _$FirebaseGroupAnnouncementModelImpl &&
             (identical(other.groupId, groupId) || other.groupId == groupId) &&
-            (identical(other.writerUid, writerUid) ||
-                other.writerUid == writerUid) &&
+            (identical(other.writerUid, writerUid) || other.writerUid == writerUid) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.content, content) || other.content == content) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt) &&
-            const DeepCollectionEquality()
-                .equals(other._readByUidList, _readByUidList));
+            (identical(other.createdAt, createdAt) || other.createdAt == createdAt) &&
+            const DeepCollectionEquality().equals(other._readByUidList, _readByUidList));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, groupId, writerUid, title,
-      content, createdAt, const DeepCollectionEquality().hash(_readByUidList));
+  int get hashCode => Object.hash(
+      runtimeType, groupId, writerUid, title, content, createdAt, const DeepCollectionEquality().hash(_readByUidList));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FirebaseGroupAnnouncementModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$FirebaseGroupAnnouncementModelImplCopyWith<
-          _$FirebaseGroupAnnouncementModelImpl>
-      get copyWith => __$$FirebaseGroupAnnouncementModelImplCopyWithImpl<
-          _$FirebaseGroupAnnouncementModelImpl>(this, _$identity);
+  _$$FirebaseGroupAnnouncementModelImplCopyWith<_$FirebaseGroupAnnouncementModelImpl> get copyWith =>
+      __$$FirebaseGroupAnnouncementModelImplCopyWithImpl<_$FirebaseGroupAnnouncementModelImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -248,16 +244,14 @@ class _$FirebaseGroupAnnouncementModelImpl
   }
 }
 
-abstract class _FirebaseGroupAnnouncementModel
-    implements FirebaseGroupAnnouncementModel {
+abstract class _FirebaseGroupAnnouncementModel implements FirebaseGroupAnnouncementModel {
   factory _FirebaseGroupAnnouncementModel(
-          {required final String groupId,
-          required final String writerUid,
-          required final String title,
-          required final String content,
-          @TimestampConverter() required final DateTime createdAt,
-          required final List<String> readByUidList}) =
-      _$FirebaseGroupAnnouncementModelImpl;
+      {required final String groupId,
+      required final String writerUid,
+      required final String title,
+      required final String content,
+      @TimestampConverter() required final DateTime createdAt,
+      required final List<String> readByUidList}) = _$FirebaseGroupAnnouncementModelImpl;
 
   factory _FirebaseGroupAnnouncementModel.fromJson(Map<String, dynamic> json) =
       _$FirebaseGroupAnnouncementModelImpl.fromJson;
@@ -275,9 +269,11 @@ abstract class _FirebaseGroupAnnouncementModel
   DateTime get createdAt;
   @override
   List<String> get readByUidList;
+
+  /// Create a copy of FirebaseGroupAnnouncementModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
-  _$$FirebaseGroupAnnouncementModelImplCopyWith<
-          _$FirebaseGroupAnnouncementModelImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$FirebaseGroupAnnouncementModelImplCopyWith<_$FirebaseGroupAnnouncementModelImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }

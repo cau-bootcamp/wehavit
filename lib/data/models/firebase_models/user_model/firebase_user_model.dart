@@ -21,14 +21,12 @@ class FirebaseUserModel with _$FirebaseUserModel {
     int? cumulativeReactions,
   }) = _FirebaseUserModel;
 
-  factory FirebaseUserModel.fromJson(Map<String, dynamic> json) =>
-      _$FirebaseUserModelFromJson(json);
+  factory FirebaseUserModel.fromJson(Map<String, dynamic> json) => _$FirebaseUserModelFromJson(json);
 
   factory FirebaseUserModel.fromFireStoreDocument(DocumentSnapshot doc) {
     if (doc.data() == null) throw Exception('Document data was null');
 
-    return FirebaseUserModel.fromJson(doc.data() as Map<String, Object?>)
-        .copyWith();
+    return FirebaseUserModel.fromJson(doc.data() as Map<String, Object?>).copyWith();
   }
 }
 
@@ -37,16 +35,16 @@ extension ConvertFirebaseUserModel on FirebaseUserModel {
     required String userId,
   }) {
     return UserDataEntity(
-      handle: handle,
-      userImageUrl: imageUrl,
-      userName: displayName,
+      handle: handle ?? '',
+      userImageUrl: imageUrl ?? '',
+      userName: displayName ?? '',
       userId: userId,
-      aboutMe: aboutMe,
-      createdAt: createdAt,
-      messageToken: messageToken,
-      cumulativeGoals: cumulativeGoals,
-      cumulativePosts: cumulativePosts,
-      cumulativeReactions: cumulativeReactions,
+      aboutMe: aboutMe ?? '',
+      createdAt: createdAt ?? DateTime.now(),
+      messageToken: messageToken ?? '',
+      cumulativeGoals: cumulativeGoals ?? 0,
+      cumulativePosts: cumulativePosts ?? 0,
+      cumulativeReactions: cumulativeReactions ?? 0,
     );
   }
 }

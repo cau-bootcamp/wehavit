@@ -26,29 +26,25 @@ mixin _$ReactionEntity {
   String get comment => throw _privateConstructorUsedError;
   Map<String, int> get emoji => throw _privateConstructorUsedError;
 
+  /// Serializes this ReactionEntity to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
-  $ReactionEntityCopyWith<ReactionEntity> get copyWith =>
-      throw _privateConstructorUsedError;
+
+  /// Create a copy of ReactionEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $ReactionEntityCopyWith<ReactionEntity> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $ReactionEntityCopyWith<$Res> {
-  factory $ReactionEntityCopyWith(
-          ReactionEntity value, $Res Function(ReactionEntity) then) =
+  factory $ReactionEntityCopyWith(ReactionEntity value, $Res Function(ReactionEntity) then) =
       _$ReactionEntityCopyWithImpl<$Res, ReactionEntity>;
   @useResult
-  $Res call(
-      {String complimenterUid,
-      int reactionType,
-      String quickShotUrl,
-      String comment,
-      Map<String, int> emoji});
+  $Res call({String complimenterUid, int reactionType, String quickShotUrl, String comment, Map<String, int> emoji});
 }
 
 /// @nodoc
-class _$ReactionEntityCopyWithImpl<$Res, $Val extends ReactionEntity>
-    implements $ReactionEntityCopyWith<$Res> {
+class _$ReactionEntityCopyWithImpl<$Res, $Val extends ReactionEntity> implements $ReactionEntityCopyWith<$Res> {
   _$ReactionEntityCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
@@ -56,6 +52,8 @@ class _$ReactionEntityCopyWithImpl<$Res, $Val extends ReactionEntity>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ReactionEntity
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -91,29 +89,22 @@ class _$ReactionEntityCopyWithImpl<$Res, $Val extends ReactionEntity>
 }
 
 /// @nodoc
-abstract class _$$ReactionEntityImplCopyWith<$Res>
-    implements $ReactionEntityCopyWith<$Res> {
-  factory _$$ReactionEntityImplCopyWith(_$ReactionEntityImpl value,
-          $Res Function(_$ReactionEntityImpl) then) =
+abstract class _$$ReactionEntityImplCopyWith<$Res> implements $ReactionEntityCopyWith<$Res> {
+  factory _$$ReactionEntityImplCopyWith(_$ReactionEntityImpl value, $Res Function(_$ReactionEntityImpl) then) =
       __$$ReactionEntityImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String complimenterUid,
-      int reactionType,
-      String quickShotUrl,
-      String comment,
-      Map<String, int> emoji});
+  $Res call({String complimenterUid, int reactionType, String quickShotUrl, String comment, Map<String, int> emoji});
 }
 
 /// @nodoc
-class __$$ReactionEntityImplCopyWithImpl<$Res>
-    extends _$ReactionEntityCopyWithImpl<$Res, _$ReactionEntityImpl>
+class __$$ReactionEntityImplCopyWithImpl<$Res> extends _$ReactionEntityCopyWithImpl<$Res, _$ReactionEntityImpl>
     implements _$$ReactionEntityImplCopyWith<$Res> {
-  __$$ReactionEntityImplCopyWithImpl(
-      _$ReactionEntityImpl _value, $Res Function(_$ReactionEntityImpl) _then)
+  __$$ReactionEntityImplCopyWithImpl(_$ReactionEntityImpl _value, $Res Function(_$ReactionEntityImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ReactionEntity
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -160,8 +151,7 @@ class _$ReactionEntityImpl implements _ReactionEntity {
       final Map<String, int> emoji = const {}})
       : _emoji = emoji;
 
-  factory _$ReactionEntityImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ReactionEntityImplFromJson(json);
+  factory _$ReactionEntityImpl.fromJson(Map<String, dynamic> json) => _$$ReactionEntityImplFromJson(json);
 
   @override
   final String complimenterUid;
@@ -192,27 +182,25 @@ class _$ReactionEntityImpl implements _ReactionEntity {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ReactionEntityImpl &&
-            (identical(other.complimenterUid, complimenterUid) ||
-                other.complimenterUid == complimenterUid) &&
-            (identical(other.reactionType, reactionType) ||
-                other.reactionType == reactionType) &&
-            (identical(other.quickShotUrl, quickShotUrl) ||
-                other.quickShotUrl == quickShotUrl) &&
+            (identical(other.complimenterUid, complimenterUid) || other.complimenterUid == complimenterUid) &&
+            (identical(other.reactionType, reactionType) || other.reactionType == reactionType) &&
+            (identical(other.quickShotUrl, quickShotUrl) || other.quickShotUrl == quickShotUrl) &&
             (identical(other.comment, comment) || other.comment == comment) &&
             const DeepCollectionEquality().equals(other._emoji, _emoji));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, complimenterUid, reactionType,
-      quickShotUrl, comment, const DeepCollectionEquality().hash(_emoji));
+  int get hashCode => Object.hash(
+      runtimeType, complimenterUid, reactionType, quickShotUrl, comment, const DeepCollectionEquality().hash(_emoji));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ReactionEntity
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ReactionEntityImplCopyWith<_$ReactionEntityImpl> get copyWith =>
-      __$$ReactionEntityImplCopyWithImpl<_$ReactionEntityImpl>(
-          this, _$identity);
+      __$$ReactionEntityImplCopyWithImpl<_$ReactionEntityImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -230,8 +218,7 @@ abstract class _ReactionEntity implements ReactionEntity {
       final String comment,
       final Map<String, int> emoji}) = _$ReactionEntityImpl;
 
-  factory _ReactionEntity.fromJson(Map<String, dynamic> json) =
-      _$ReactionEntityImpl.fromJson;
+  factory _ReactionEntity.fromJson(Map<String, dynamic> json) = _$ReactionEntityImpl.fromJson;
 
   @override
   String get complimenterUid;
@@ -243,8 +230,10 @@ abstract class _ReactionEntity implements ReactionEntity {
   String get comment;
   @override
   Map<String, int> get emoji;
+
+  /// Create a copy of ReactionEntity
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
-  _$$ReactionEntityImplCopyWith<_$ReactionEntityImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ReactionEntityImplCopyWith<_$ReactionEntityImpl> get copyWith => throw _privateConstructorUsedError;
 }

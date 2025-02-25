@@ -19,8 +19,7 @@ class FirebaseGroupModel with _$FirebaseGroupModel {
     @TimestampConverter() required DateTime groupCreatedAt,
   }) = _FirebaseGroupModel;
 
-  factory FirebaseGroupModel.fromJson(Map<String, dynamic> json) =>
-      _$FirebaseGroupModelFromJson(json);
+  factory FirebaseGroupModel.fromJson(Map<String, dynamic> json) => _$FirebaseGroupModelFromJson(json);
 
   factory FirebaseGroupModel.fromFireStoreDocument(DocumentSnapshot doc) {
     if (doc.data() == null) throw Exception('Document data was null');

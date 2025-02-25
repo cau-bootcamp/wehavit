@@ -17,7 +17,7 @@ final googleAuthDatasourceProvider = Provider<AuthSocialDataSource>((ref) {
 
 class AuthSocialDataSourceImpl implements AuthSocialDataSource {
   @override
-  EitherFuture<AuthResult> googleLogInAndSignUp() async {
+  EitherFuture<String> googleLogInAndSignUp() async {
     final GoogleSignIn googleSignIn = GoogleSignIn(
       scopes: [
         AppKeys.emailScope,
@@ -43,7 +43,11 @@ class AuthSocialDataSourceImpl implements AuthSocialDataSource {
         oauthCredentials,
       );
 
-      return right(AuthResult.success);
+      if (FirebaseAuth.instance.currentUser == null) {
+        return left(const Failure('Firebase Auth 인증 중 currentUser 가져오기 실패'));
+      }
+
+      return right(FirebaseAuth.instance.currentUser!.uid);
     } on FirebaseAuthException catch (exception) {
       return left(Failure(exception.code));
     }
@@ -56,7 +60,7 @@ class AuthSocialDataSourceImpl implements AuthSocialDataSource {
   }
 
   @override
-  EitherFuture<(AuthResult, String?)> appleLogInAndSignUp() async {
+  EitherFuture<(String, String?)> appleLogInAndSignUp() async {
     try {
       final appleCredential = await SignInWithApple.getAppleIDCredential(
         scopes: [
@@ -73,7 +77,11 @@ class AuthSocialDataSourceImpl implements AuthSocialDataSource {
 
       await FirebaseAuth.instance.signInWithCredential(oauthCredential);
 
-      return right((AuthResult.success, appleCredential.givenName));
+      if (FirebaseAuth.instance.currentUser == null) {
+        return left(const Failure('Firebase Auth 인증 중 currentUser 가져오기 실패'));
+      }
+
+      return right((FirebaseAuth.instance.currentUser!.uid, appleCredential.givenName));
     } on FirebaseAuthException catch (exception) {
       return left(Failure(exception.code));
     } on Exception catch (exception) {
@@ -123,8 +131,7 @@ class AuthSocialDataSourceImpl implements AuthSocialDataSource {
 
       // 사용자 재인증
       try {
-        await FirebaseAuth.instance.currentUser
-            ?.reauthenticateWithCredential(oauthCredential);
+        await FirebaseAuth.instance.currentUser?.reauthenticateWithCredential(oauthCredential);
       } on Exception catch (e) {
         return left(
           Failure(

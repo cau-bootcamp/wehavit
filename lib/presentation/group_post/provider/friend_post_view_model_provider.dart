@@ -13,17 +13,12 @@ class FriendPostViewModelProvider extends StateNotifier<FriendPostViewModel> {
     this._getUserDataFromIdUsecase,
   ) : super(FriendPostViewModel());
 
-  final GetFriendConfirmPostListByDateUsecase
-      _getFriendConfirmPostListByDateUsecase;
+  final GetFriendConfirmPostListByDateUsecase _getFriendConfirmPostListByDateUsecase;
 
-  final SendEmojiReactionToConfirmPostUsecase
-      _sendEmojiReactionToConfirmPostUsecase;
-  final SendQuickShotReactionToConfirmPostUsecase
-      _sendQuickShotReactionToConfirmPostUsecase;
-  final SendCommentReactionToConfirmPostUsecase
-      _sendCommentReactionToConfirmPostUsecase;
-  final SendNotificationToTargetUserUsecase
-      _sendNotificationToTargetUserUsecase;
+  final SendEmojiReactionToConfirmPostUsecase _sendEmojiReactionToConfirmPostUsecase;
+  final SendQuickShotReactionToConfirmPostUsecase _sendQuickShotReactionToConfirmPostUsecase;
+  final SendCommentReactionToConfirmPostUsecase _sendCommentReactionToConfirmPostUsecase;
+  final SendNotificationToTargetUserUsecase _sendNotificationToTargetUserUsecase;
   final GetUserDataFromIdUsecase _getUserDataFromIdUsecase;
 
   Future<void> loadConfirmPostEntityListFor({
@@ -31,8 +26,7 @@ class FriendPostViewModelProvider extends StateNotifier<FriendPostViewModel> {
   }) async {
     final selectedDate = DateTime(dateTime.year, dateTime.month, dateTime.day);
 
-    state.confirmPostList[selectedDate] =
-        _getFriendConfirmPostListByDateUsecase(
+    state.confirmPostList[selectedDate] = _getFriendConfirmPostListByDateUsecase(
       state.sharedResolutionIdList,
       selectedDate,
     );
@@ -117,12 +111,8 @@ class FriendPostViewModelProvider extends StateNotifier<FriendPostViewModel> {
     required UserDataEntity myUserEntity,
     required ConfirmPostEntity postEntity,
   }) async {
-    if (postEntity.owner == null) {
-      return;
-    }
-
     final targetUserEntity = await _getUserDataFromIdUsecase
-        .call(postEntity.owner!)
+        .call(postEntity.owner)
         .then((result) => result.fold((failure) => null, (entity) => entity));
 
     if (targetUserEntity == null) {

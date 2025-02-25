@@ -5,8 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/domain/usecase_dependency.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
-import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/presentation.dart';
+import 'package:wehavit/presentation/state/resolution_list/resolution_list_provider.dart';
 
 class MyPageView extends ConsumerStatefulWidget {
   const MyPageView(this.index, this.tabController, {super.key});
@@ -18,8 +18,7 @@ class MyPageView extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => MyPageScreenState();
 }
 
-class MyPageScreenState extends ConsumerState<MyPageView>
-    with AutomaticKeepAliveClientMixin<MyPageView> {
+class MyPageScreenState extends ConsumerState<MyPageView> with AutomaticKeepAliveClientMixin<MyPageView> {
   @override
   bool get wantKeepAlive => true;
 
@@ -50,7 +49,7 @@ class MyPageScreenState extends ConsumerState<MyPageView>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final viewModel = ref.watch(myPageViewModelProvider);
+    // final viewModel = ref.watch(myPageViewModelProvider);
     final provider = ref.watch(myPageViewModelProvider.notifier);
 
     return Stack(
@@ -58,13 +57,11 @@ class MyPageScreenState extends ConsumerState<MyPageView>
         Scaffold(
           backgroundColor: CustomColors.whDarkBlack,
           appBar: WehavitAppBar(
-            title: '내 정보',
-            trailingTitle: '',
-            trailingIcon: Icons.menu,
+            titleLabel: '내 정보',
+            trailingIconString: WHIcons.menu,
             trailingAction: () async {
               // 변경사항을 TabBar에 알리기 위해 mainViewState를 참조
-              MainViewState? mainViewState =
-                  context.findAncestorStateOfType<MainViewState>();
+              MainViewState? mainViewState = context.findAncestorStateOfType<MainViewState>();
               showMyPageMenuBottomSheet(
                 context,
                 mainViewState,
@@ -84,9 +81,10 @@ class MyPageScreenState extends ConsumerState<MyPageView>
                 padding: const EdgeInsets.only(bottom: 64.0),
                 children: [
                   // 내 프로필
-                  MyPageWehavitSummaryWidget(
-                    futureUserEntity: viewModel.futureMyUserDataEntity,
-                  ),
+                  const MyWehavitSummary(),
+                  // MyWehavitSummary(
+                  //   futureUserEntity: ref.read(getMyUserDataProvider).value!,
+                  // ),
                   const SizedBox(
                     height: 16,
                   ),
@@ -101,50 +99,41 @@ class MyPageScreenState extends ConsumerState<MyPageView>
                   const SizedBox(
                     height: 16,
                   ),
-                  EitherFutureBuilder<List<ResolutionEntity>>(
-                    target: viewModel.futureMyyResolutionList,
-                    forWaiting: Container(),
-                    forFail: Container(),
-                    mainWidgetCallback: (resolutionList) {
-                      return Visibility(
-                        replacement: const ResolutionListPlaceholderWidget(),
-                        visible: resolutionList.isNotEmpty,
-                        child: Column(
-                          children: List<Widget>.generate(
-                            resolutionList.length,
-                            (index) => Container(
-                              margin: const EdgeInsets.only(bottom: 16.0),
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  backgroundColor: CustomColors.whSemiBlack,
-                                  shadowColor: Colors.transparent,
-                                  surfaceTintColor: Colors.transparent,
-                                  overlayColor: PointColors.colorList[
-                                      resolutionList[index].colorIndex ?? 0],
-                                  padding: const EdgeInsets.all(0),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16.0),
+                  Consumer(
+                    builder: (context, ref, child) {
+                      final asyncResolutionList = ref.watch(resolutionListNotifierProvider);
+
+                      return asyncResolutionList.when(
+                        data: (resolutionList) {
+                          return Visibility(
+                            replacement: const ResolutionListPlaceholderWidget(),
+                            visible: resolutionList.isNotEmpty,
+                            child: Column(
+                              children: List<Widget>.generate(
+                                resolutionList.length,
+                                (index) => Container(
+                                  margin: const EdgeInsets.only(bottom: 16.0),
+                                  child: ResolutionListCell(
+                                    resolutionEntity: resolutionList[index],
+                                    showDetails: true,
+                                    onPressed: () async {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ResolutionDetailView(
+                                            entity: resolutionList[index],
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
-                                ),
-                                onPressed: () async {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          ResolutionDetailView(
-                                        entity: resolutionList[index],
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: ResolutionListCellWidget(
-                                  resolutionEntity: resolutionList[index],
-                                  showDetails: true,
                                 ),
                               ),
                             ),
-                          ),
-                        ),
+                          );
+                        },
+                        error: (_, __) => Container(),
+                        loading: () => Container(),
                       );
                     },
                   ),
@@ -168,14 +157,11 @@ class MyPageScreenState extends ConsumerState<MyPageView>
         return GradientBottomSheet(
           Column(
             children: [
-              WideColoredButton(
+              WideOutlinedButton(
                 buttonTitle: '내 정보 수정하기',
-                buttonIcon: Icons.person,
+                iconString: WHIcons.manageMyInfo,
                 onPressed: () async {
-                  final userEntity = await ref
-                      .read(getMyUserDataUsecaseProvider)
-                      .call()
-                      .then((result) {
+                  final userEntity = await ref.read(getMyUserDataUsecaseProvider).call().then((result) {
                     return result.fold((failure) {
                       return null;
                     }, (entity) {
@@ -189,25 +175,18 @@ class MyPageScreenState extends ConsumerState<MyPageView>
                       MaterialPageRoute(
                         builder: (context) {
                           return EditUserDetailView(
-                            isModifying: true,
-                            uid: userEntity.userId,
-                            profileImageUrl: userEntity.userImageUrl,
-                            name: userEntity.userName,
-                            handle: userEntity.handle,
-                            aboutMe: userEntity.aboutMe,
+                            // isModifying: true,
+                            userId: userEntity.userId,
+                            // profileImageUrl: userEntity.userImageUrl,
+                            // name: userEntity.userName,
+                            // handle: userEntity.handle,
+                            // aboutMe: userEntity.aboutMe,
                           );
                         },
                       ),
                     ).then((result) {
                       if (result == true) {
                         mainViewState?.setState(() {});
-
-                        ref
-                            .read(myPageViewModelProvider.notifier)
-                            .getMyUserData()
-                            .whenComplete(() {
-                          setState(() {});
-                        });
                       }
 
                       Navigator.pop(context);
@@ -219,24 +198,26 @@ class MyPageScreenState extends ConsumerState<MyPageView>
               const SizedBox(
                 height: 12,
               ),
-              WideColoredButton(
+              WideOutlinedButton(
                 buttonTitle: '로그아웃',
-                buttonIcon: Icons.person_off_outlined,
+                iconString: WHIcons.logout,
                 onPressed: () async {
                   await ref.read(logOutUseCaseProvider).call();
+                  ref.invalidate(getMyUserDataUsecaseProvider);
                   if (mounted) {
                     // ignore: use_build_context_synchronously
-                    Navigator.pushReplacementNamed(context, '/entrance');
+                    Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+                    Navigator.pushNamed(context, '/entrance');
                   }
                 },
               ),
               const SizedBox(
                 height: 12,
               ),
-              WideColoredButton(
+              WideOutlinedButton(
                 buttonTitle: '회원탈퇴',
-                buttonIcon: Icons.no_accounts_outlined,
-                foregroundColor: PointColors.red,
+                iconString: WHIcons.withdraw,
+                foregroundColor: CustomColors.pointRed,
                 onPressed: () async {
                   showCupertinoDialog(
                     context: context,
@@ -247,7 +228,7 @@ class MyPageScreenState extends ConsumerState<MyPageView>
                         actions: [
                           CupertinoDialogAction(
                             textStyle: const TextStyle(
-                              color: PointColors.blue,
+                              color: CustomColors.pointBlue,
                             ),
                             isDefaultAction: true,
                             child: const Text('취소'),
@@ -268,10 +249,6 @@ class MyPageScreenState extends ConsumerState<MyPageView>
                       showToastMessage(
                         context,
                         text: '오류 발생, 문의 부탁드립니다',
-                        icon: const Icon(
-                          Icons.report_problem,
-                          color: CustomColors.whYellow,
-                        ),
                       );
                     }
                   });

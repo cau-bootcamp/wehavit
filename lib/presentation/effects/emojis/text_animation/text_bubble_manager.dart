@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/presentation/effects/emojis/text_animation/text_bubble_widget.dart';
 
-final textBubbleAnimationManagerProvider = StateNotifierProvider<
-    TextBubbleAnimationManager, Map<Key, TextBubbleFrameWidget>>(
+final textBubbleAnimationManagerProvider =
+    StateNotifierProvider<TextBubbleAnimationManager, Map<Key, TextBubbleFrameWidget>>(
   (ref) {
     return TextBubbleAnimationManager();
   },
@@ -21,8 +21,7 @@ final textBubbleAnimationManagerProvider = StateNotifierProvider<
 /// 3. `_textBubbleAnimationManager = ref.read(textBubbleAnimationManagerProvider.notifier)`를
 /// 통해 가져온 textBubbleAnimationManager 대해
 ///  `_textBubbleAnimationManager.addTextBubble(...)` 함수를 호출해 위젯을 추가해주기
-class TextBubbleAnimationManager
-    extends StateNotifier<Map<Key, TextBubbleFrameWidget>> {
+class TextBubbleAnimationManager extends StateNotifier<Map<Key, TextBubbleFrameWidget>> {
   TextBubbleAnimationManager() : super({});
 
   List<TextBubbleWidget> queue = [];

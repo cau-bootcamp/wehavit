@@ -9,12 +9,17 @@ class FriendRepositoryImpl implements FriendRepository {
   final WehavitDatasource _wehavitDatasource;
 
   @override
-  EitherFuture<List<EitherFuture<UserDataEntity>>> getFriendEntityList() async {
+  EitherFuture<List<UserDataEntity>> getFriendEntityList() async {
     return _wehavitDatasource.getFriendModelList();
   }
 
   @override
   EitherFuture<bool> registerFriend(String email) async {
     return _wehavitDatasource.registerFriend(email);
+  }
+
+  @override
+  EitherFuture<List<String>> getFriendUidList() {
+    return _wehavitDatasource.getFriendUidList();
   }
 }

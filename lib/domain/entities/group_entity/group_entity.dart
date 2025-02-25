@@ -10,22 +10,22 @@ class GroupEntity with _$GroupEntity {
   @JsonSerializable()
   factory GroupEntity({
     required String groupName,
-    @Default('') String? groupDescription,
-    @Default('') String? groupRule,
+    required String groupDescription,
+    required String groupRule,
     required String groupManagerUid,
     required List<String> groupMemberUidList,
     required DateTime groupCreatedAt,
     required int groupColor,
-    @JsonKey(includeFromJson: true, includeToJson: false)
-    required String groupId,
+    @JsonKey(includeFromJson: true, includeToJson: false) required String groupId,
   }) = _GroupEntity;
 
-  factory GroupEntity.fromJson(Map<String, dynamic> json) =>
-      _$GroupEntityFromJson(json);
+  factory GroupEntity.fromJson(Map<String, dynamic> json) => _$GroupEntityFromJson(json);
 
   static GroupEntity dummy = GroupEntity(
     groupName: 'dummy name',
     groupManagerUid: '',
+    groupDescription: '',
+    groupRule: '',
     groupMemberUidList: [],
     groupCreatedAt: DateTime.now(),
     groupColor: 0,

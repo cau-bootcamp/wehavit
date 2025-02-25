@@ -93,3 +93,8 @@ class FirebaseGroupAnnouncementFieldName {
   static const String title = 'title';
   static const String writerUid = 'writerUid';
 }
+
+class FirebaseQuickshotPresetItemFieldName {
+  static const String url = 'url';
+  static const String createdAt = 'createdAt';
+}

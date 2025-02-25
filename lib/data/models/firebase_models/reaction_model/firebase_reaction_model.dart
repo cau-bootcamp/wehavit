@@ -17,8 +17,7 @@ class FirebaseReactionModel with _$FirebaseReactionModel {
     required Map<String, int> emoji,
   }) = _FirebaseReactionModel;
 
-  factory FirebaseReactionModel.fromJson(Map<String, dynamic> json) =>
-      _$FirebaseReactionModelFromJson(json);
+  factory FirebaseReactionModel.fromJson(Map<String, dynamic> json) => _$FirebaseReactionModelFromJson(json);
 
   factory FirebaseReactionModel.fromFireStoreDocument(DocumentSnapshot doc) {
     if (doc.data() == null) throw Exception('Document data was null');
@@ -26,8 +25,7 @@ class FirebaseReactionModel with _$FirebaseReactionModel {
     return FirebaseReactionModel.fromJson(doc.data() as Map<String, Object?>);
   }
 
-  factory FirebaseReactionModel.fromReactionEntity(ReactionEntity entity) =>
-      FirebaseReactionModel(
+  factory FirebaseReactionModel.fromReactionEntity(ReactionEntity entity) => FirebaseReactionModel(
         complimenterUid: entity.complimenterUid,
         reactionType: entity.reactionType,
         quickShotUrl: entity.quickShotUrl,

@@ -14,8 +14,7 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-FirebaseReactionModel _$FirebaseReactionModelFromJson(
-    Map<String, dynamic> json) {
+FirebaseReactionModel _$FirebaseReactionModelFromJson(Map<String, dynamic> json) {
   return _FirebaseReactionModel.fromJson(json);
 }
 
@@ -27,29 +26,25 @@ mixin _$FirebaseReactionModel {
   String get comment => throw _privateConstructorUsedError;
   Map<String, int> get emoji => throw _privateConstructorUsedError;
 
+  /// Serializes this FirebaseReactionModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
-  $FirebaseReactionModelCopyWith<FirebaseReactionModel> get copyWith =>
-      throw _privateConstructorUsedError;
+
+  /// Create a copy of FirebaseReactionModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $FirebaseReactionModelCopyWith<FirebaseReactionModel> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $FirebaseReactionModelCopyWith<$Res> {
-  factory $FirebaseReactionModelCopyWith(FirebaseReactionModel value,
-          $Res Function(FirebaseReactionModel) then) =
+  factory $FirebaseReactionModelCopyWith(FirebaseReactionModel value, $Res Function(FirebaseReactionModel) then) =
       _$FirebaseReactionModelCopyWithImpl<$Res, FirebaseReactionModel>;
   @useResult
-  $Res call(
-      {String complimenterUid,
-      int reactionType,
-      String quickShotUrl,
-      String comment,
-      Map<String, int> emoji});
+  $Res call({String complimenterUid, int reactionType, String quickShotUrl, String comment, Map<String, int> emoji});
 }
 
 /// @nodoc
-class _$FirebaseReactionModelCopyWithImpl<$Res,
-        $Val extends FirebaseReactionModel>
+class _$FirebaseReactionModelCopyWithImpl<$Res, $Val extends FirebaseReactionModel>
     implements $FirebaseReactionModelCopyWith<$Res> {
   _$FirebaseReactionModelCopyWithImpl(this._value, this._then);
 
@@ -58,6 +53,8 @@ class _$FirebaseReactionModelCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of FirebaseReactionModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -93,31 +90,25 @@ class _$FirebaseReactionModelCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$FirebaseReactionModelImplCopyWith<$Res>
-    implements $FirebaseReactionModelCopyWith<$Res> {
+abstract class _$$FirebaseReactionModelImplCopyWith<$Res> implements $FirebaseReactionModelCopyWith<$Res> {
   factory _$$FirebaseReactionModelImplCopyWith(
-          _$FirebaseReactionModelImpl value,
-          $Res Function(_$FirebaseReactionModelImpl) then) =
+          _$FirebaseReactionModelImpl value, $Res Function(_$FirebaseReactionModelImpl) then) =
       __$$FirebaseReactionModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String complimenterUid,
-      int reactionType,
-      String quickShotUrl,
-      String comment,
-      Map<String, int> emoji});
+  $Res call({String complimenterUid, int reactionType, String quickShotUrl, String comment, Map<String, int> emoji});
 }
 
 /// @nodoc
 class __$$FirebaseReactionModelImplCopyWithImpl<$Res>
-    extends _$FirebaseReactionModelCopyWithImpl<$Res,
-        _$FirebaseReactionModelImpl>
+    extends _$FirebaseReactionModelCopyWithImpl<$Res, _$FirebaseReactionModelImpl>
     implements _$$FirebaseReactionModelImplCopyWith<$Res> {
-  __$$FirebaseReactionModelImplCopyWithImpl(_$FirebaseReactionModelImpl _value,
-      $Res Function(_$FirebaseReactionModelImpl) _then)
+  __$$FirebaseReactionModelImplCopyWithImpl(
+      _$FirebaseReactionModelImpl _value, $Res Function(_$FirebaseReactionModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of FirebaseReactionModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -164,8 +155,7 @@ class _$FirebaseReactionModelImpl implements _FirebaseReactionModel {
       required final Map<String, int> emoji})
       : _emoji = emoji;
 
-  factory _$FirebaseReactionModelImpl.fromJson(Map<String, dynamic> json) =>
-      _$$FirebaseReactionModelImplFromJson(json);
+  factory _$FirebaseReactionModelImpl.fromJson(Map<String, dynamic> json) => _$$FirebaseReactionModelImplFromJson(json);
 
   @override
   final String complimenterUid;
@@ -193,27 +183,25 @@ class _$FirebaseReactionModelImpl implements _FirebaseReactionModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$FirebaseReactionModelImpl &&
-            (identical(other.complimenterUid, complimenterUid) ||
-                other.complimenterUid == complimenterUid) &&
-            (identical(other.reactionType, reactionType) ||
-                other.reactionType == reactionType) &&
-            (identical(other.quickShotUrl, quickShotUrl) ||
-                other.quickShotUrl == quickShotUrl) &&
+            (identical(other.complimenterUid, complimenterUid) || other.complimenterUid == complimenterUid) &&
+            (identical(other.reactionType, reactionType) || other.reactionType == reactionType) &&
+            (identical(other.quickShotUrl, quickShotUrl) || other.quickShotUrl == quickShotUrl) &&
             (identical(other.comment, comment) || other.comment == comment) &&
             const DeepCollectionEquality().equals(other._emoji, _emoji));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, complimenterUid, reactionType,
-      quickShotUrl, comment, const DeepCollectionEquality().hash(_emoji));
+  int get hashCode => Object.hash(
+      runtimeType, complimenterUid, reactionType, quickShotUrl, comment, const DeepCollectionEquality().hash(_emoji));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FirebaseReactionModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$FirebaseReactionModelImplCopyWith<_$FirebaseReactionModelImpl>
-      get copyWith => __$$FirebaseReactionModelImplCopyWithImpl<
-          _$FirebaseReactionModelImpl>(this, _$identity);
+  _$$FirebaseReactionModelImplCopyWith<_$FirebaseReactionModelImpl> get copyWith =>
+      __$$FirebaseReactionModelImplCopyWithImpl<_$FirebaseReactionModelImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -231,8 +219,7 @@ abstract class _FirebaseReactionModel implements FirebaseReactionModel {
       required final String comment,
       required final Map<String, int> emoji}) = _$FirebaseReactionModelImpl;
 
-  factory _FirebaseReactionModel.fromJson(Map<String, dynamic> json) =
-      _$FirebaseReactionModelImpl.fromJson;
+  factory _FirebaseReactionModel.fromJson(Map<String, dynamic> json) = _$FirebaseReactionModelImpl.fromJson;
 
   @override
   String get complimenterUid;
@@ -244,8 +231,10 @@ abstract class _FirebaseReactionModel implements FirebaseReactionModel {
   String get comment;
   @override
   Map<String, int> get emoji;
+
+  /// Create a copy of FirebaseReactionModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
-  _$$FirebaseReactionModelImplCopyWith<_$FirebaseReactionModelImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$FirebaseReactionModelImplCopyWith<_$FirebaseReactionModelImpl> get copyWith => throw _privateConstructorUsedError;
 }

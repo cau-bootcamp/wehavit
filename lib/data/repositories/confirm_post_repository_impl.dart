@@ -15,11 +15,10 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
   EitherFuture<bool> createConfirmPost(
     ConfirmPostEntity confirmPostEntity,
   ) async {
-    final String resolutionId = confirmPostEntity.resolutionId!;
+    final String resolutionId = confirmPostEntity.resolutionId;
     try {
-      final existingPost =
-          await _wehavitDatasource.getConfirmPostOfTargetDateByResolutionGoalId(
-        confirmPostEntity.createdAt!,
+      final existingPost = await _wehavitDatasource.getConfirmPostOfTargetDateByResolutionGoalId(
+        confirmPostEntity.createdAt,
         resolutionId,
       );
 
@@ -98,8 +97,7 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
     required String resolutionId,
   }) async {
     try {
-      final getResult =
-          await _wehavitDatasource.getConfirmPostEntityListByResolutionId(
+      final getResult = await _wehavitDatasource.getConfirmPostEntityListByResolutionId(
         resolutionId,
       );
 
@@ -113,12 +111,12 @@ class ConfirmPostRepositoryImpl implements ConfirmPostRepository {
   }
 
   @override
-  EitherFuture<List<ConfirmPostEntity>> getGroupConfirmPostEntityListByDate({
-    required String groupId,
+  EitherFuture<List<ConfirmPostEntity>> getConfirmPostEntityListByDate({
+    required List<String> resolutionList,
     required DateTime selectedDate,
   }) async {
-    return _wehavitDatasource.getGroupConfirmPostEntityListByDate(
-      groupId,
+    return _wehavitDatasource.getConfirmPostEntityListByDate(
+      resolutionList,
       selectedDate,
     );
   }

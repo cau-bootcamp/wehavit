@@ -1,15 +1,14 @@
 import 'package:wehavit/common/utils/custom_types.dart';
-import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
 
-class SearchUserDataListByHandleUsecase {
-  SearchUserDataListByHandleUsecase(this._userModelRepository);
+class SearchUserByHandleUsecase {
+  SearchUserByHandleUsecase(this._userModelRepository);
 
   final UserModelRepository _userModelRepository;
 
-  EitherFuture<List<EitherFuture<UserDataEntity>>> call({
+  EitherFuture<List<String>> call({
     required String handle,
   }) async {
-    return _userModelRepository.getUserDataListByHandle(handle: handle);
+    return _userModelRepository.getUidListByHandle(handle: handle);
   }
 }

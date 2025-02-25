@@ -7,7 +7,7 @@ class SearchGroupEntityListByGroupNameUsecase {
 
   final GroupRepository _groupRepository;
 
-  EitherFuture<List<EitherFuture<GroupEntity>>> call({
+  EitherFuture<List<GroupEntity>> call({
     required String searchKeyword,
   }) async {
     return _groupRepository.getGroupEntityListByGroupName(

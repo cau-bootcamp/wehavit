@@ -1,5 +1,4 @@
 import 'package:wehavit/common/common.dart';
-import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/domain/repositories/repositories.dart';
 
 class SignUpWithEmailAndPasswordUsecase {
@@ -7,7 +6,7 @@ class SignUpWithEmailAndPasswordUsecase {
 
   final AuthRepository _authRepository;
 
-  EitherFuture<AuthResult> call(String email, String password) {
+  EitherFuture<String> call(String email, String password) {
     return _authRepository.signUp(
       type: LogInType.wehavit,
       email: email,
