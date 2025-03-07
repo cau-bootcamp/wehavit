@@ -31,8 +31,11 @@ class SendNotificationToTargetUserUsecase {
       );
     }
 
-    if (myUserEntity.userId == targetUserEntity.userId)
-      List<String> sharingUserTokenList = [targetUserEntity.messageToken];
+    // 스스로에게는 메시지를 보내지 않는다.
+    if (myUserEntity.userId == targetUserEntity.userId) {
+      return left(const Failure('나에게는 메시지를 보낼 수 없어요'));
+    }
+    List<String> sharingUserTokenList = [targetUserEntity.messageToken];
 
     await _notificationRepository.sendNotification(
       title: messageTitleTemplate,
