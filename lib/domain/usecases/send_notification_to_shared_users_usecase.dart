@@ -35,6 +35,11 @@ class SendNotificationToSharedUsersUsecase {
 
     await Future.forEach(groupEntityList, (GroupEntity groupEntity) async {
       await Future.forEach(groupEntity.groupMemberUidList, (String uid) async {
+        // 스스로에게는 메시지를 보내지 않는다.
+        if (myUserEntity.userId == uid) {
+          return;
+        }
+
         final token = await _userModelRepository.getUserFCMMessageToken(uid: uid).then(
               (result) => result.fold(
                 (failure) => null,

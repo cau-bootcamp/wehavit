@@ -31,7 +31,8 @@ class SendNotificationToTargetUserUsecase {
       );
     }
 
-    List<String> sharingUserTokenList = [targetUserEntity.messageToken];
+    if (myUserEntity.userId == targetUserEntity.userId)
+      List<String> sharingUserTokenList = [targetUserEntity.messageToken];
 
     await _notificationRepository.sendNotification(
       title: messageTitleTemplate,
