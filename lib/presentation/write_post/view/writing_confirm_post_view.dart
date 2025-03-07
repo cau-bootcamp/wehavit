@@ -53,149 +53,152 @@ class _WritingConfirmPostViewState extends ConsumerState<WritingConfirmPostView>
               showShareTargetBottomSheet(context);
             },
           ),
-          body: Column(
-            children: [
-              Expanded(
-                child: SafeArea(
-                  minimum: const EdgeInsets.only(
-                    left: 16.0,
-                    right: 16.0,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            DateFormat('yyyy년 M월 d일').format(
-                              viewModel.todayDate.subtract(
-                                Duration(days: viewModel.isWritingYesterdayPost ? 1 : 0),
+          body: SafeArea(
+            child: Column(
+              children: [
+                Expanded(
+                  child: SafeArea(
+                    minimum: const EdgeInsets.only(
+                      left: 16.0,
+                      right: 16.0,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              DateFormat('yyyy년 M월 d일').format(
+                                viewModel.todayDate.subtract(
+                                  Duration(days: viewModel.isWritingYesterdayPost ? 1 : 0),
+                                ),
                               ),
+                              style: context.labelLarge,
                             ),
-                            style: context.labelLarge,
-                          ),
-                          TextButton.icon(
-                            onPressed: () {
-                              provider.toggleYesterdayOption();
-                            },
-                            icon: Icon(
-                              size: 20,
-                              viewModel.isWritingYesterdayPost ? Icons.check_box : Icons.check_box_outline_blank,
-                              color:
-                                  viewModel.isWritingYesterdayPost ? CustomColors.whYellow500 : CustomColors.whGrey900,
-                            ),
-                            label: Text(
-                              '전날 기록하기',
-                              style: context.labelLarge?.copyWith(
+                            TextButton.icon(
+                              onPressed: () {
+                                provider.toggleYesterdayOption();
+                              },
+                              icon: Icon(
+                                size: 20,
+                                viewModel.isWritingYesterdayPost ? Icons.check_box : Icons.check_box_outline_blank,
                                 color: viewModel.isWritingYesterdayPost
                                     ? CustomColors.whYellow500
                                     : CustomColors.whGrey900,
                               ),
+                              label: Text(
+                                '전날 기록하기',
+                                style: context.labelLarge?.copyWith(
+                                  color: viewModel.isWritingYesterdayPost
+                                      ? CustomColors.whYellow500
+                                      : CustomColors.whGrey900,
+                                ),
+                              ),
+                              style: TextButton.styleFrom(
+                                padding: const EdgeInsets.all(0),
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                alignment: Alignment.centerLeft,
+                              ),
                             ),
-                            style: TextButton.styleFrom(
-                              padding: const EdgeInsets.all(0),
-                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              alignment: Alignment.centerLeft,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Text(
-                        widget.entity.goalStatement,
-                        style: context.titleSmall?.copyWith(
-                          color: CustomColors.pointColorList[widget.entity.colorIndex],
+                          ],
                         ),
-                      ),
-                      Text(
-                        widget.entity.actionStatement,
-                        style: context.bodyMedium,
-                      ),
-                      Expanded(
-                        child: TextFormField(
-                          focusNode: contentFieldFocusNode,
-                          maxLines: null,
+                        Text(
+                          widget.entity.goalStatement,
+                          style: context.titleSmall?.copyWith(
+                            color: CustomColors.pointColorList[widget.entity.colorIndex],
+                          ),
+                        ),
+                        Text(
+                          widget.entity.actionStatement,
                           style: context.bodyMedium,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: '오늘의 발자국을 남겨주세요',
-                            hintStyle: context.bodyMedium?.copyWith(color: CustomColors.whGrey600),
-                          ),
-                          onChanged: (value) {
-                            viewModel.postContent = value;
-                          },
                         ),
-                      ),
-                      Visibility(
-                        visible: viewModel.imageMediaList.isNotEmpty,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4.0),
-                          child: Row(
-                            children: List<Widget>.generate(
-                              viewModel.imageMediaList.length,
-                              (index) => Padding(
-                                padding: const EdgeInsets.only(right: 8.0),
-                                child: UploadPhotoCell(
-                                  imageFile: File(viewModel.imageMediaList[index].imageFile.path),
-                                  state: viewModel.imageMediaList[index].status,
-                                  onCancel: () {
-                                    provider.cancelPhotoUpload(viewModel.imageMediaList[index]);
-                                  },
-                                  onRetry: () async {
-                                    provider.reuploadPhoto(viewModel.imageMediaList[index]);
-                                  },
+                        Expanded(
+                          child: TextFormField(
+                            focusNode: contentFieldFocusNode,
+                            maxLines: null,
+                            style: context.bodyMedium,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: '오늘의 발자국을 남겨주세요',
+                              hintStyle: context.bodyMedium?.copyWith(color: CustomColors.whGrey600),
+                            ),
+                            onChanged: (value) {
+                              viewModel.postContent = value;
+                            },
+                          ),
+                        ),
+                        Visibility(
+                          visible: viewModel.imageMediaList.isNotEmpty,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4.0),
+                            child: Row(
+                              children: List<Widget>.generate(
+                                viewModel.imageMediaList.length,
+                                (index) => Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: UploadPhotoCell(
+                                    imageFile: File(viewModel.imageMediaList[index].imageFile.path),
+                                    state: viewModel.imageMediaList[index].status,
+                                    onCancel: () {
+                                      provider.cancelPhotoUpload(viewModel.imageMediaList[index]);
+                                    },
+                                    onRetry: () async {
+                                      provider.reuploadPhoto(viewModel.imageMediaList[index]);
+                                    },
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              UploadPhotoBottomToolbar(
-                type: widget.hasRested ? UploadPhotoBottomToolbarType.regret : UploadPhotoBottomToolbarType.upload,
-                onIconPressed: () async {
-                  if (!widget.hasRested) {
-                    FocusScope.of(context).unfocus();
-                    provider.pickPhotos().whenComplete(
-                          () => setState(() {
-                            Future.delayed(
-                              const Duration(
-                                milliseconds: 100,
-                              ),
-                              () => contentFieldFocusNode.requestFocus(),
-                            );
-                          }),
-                        );
-                  }
-                },
-                onActionPressed: () async {
-                  // 넘길 수 있는지 확인
-                  if (!ref
-                      .read(writingConfirmPostViewModelProvider(widget.entity))
-                      .imageMediaList
-                      .every((entity) => entity.status == ImageUploadStatus.success)) {
-                    showToastMessage(context, text: '아직 업로드 중이거나 업로드에 실패한 사진이 있어요');
-                    return;
-                  }
-
-                  final myUserEntity = await ref.read(myUserDataProvider.future);
-
-                  await provider
-                      .uploadPost(
-                    hasRested: widget.hasRested,
-                    myUserEntity: myUserEntity,
-                  )
-                      .whenComplete(() {
-                    if (context.mounted) {
-                      Navigator.of(context).pop(true);
+                UploadPhotoBottomToolbar(
+                  type: widget.hasRested ? UploadPhotoBottomToolbarType.regret : UploadPhotoBottomToolbarType.upload,
+                  onIconPressed: () async {
+                    if (!widget.hasRested) {
+                      FocusScope.of(context).unfocus();
+                      provider.pickPhotos().whenComplete(
+                            () => setState(() {
+                              Future.delayed(
+                                const Duration(
+                                  milliseconds: 100,
+                                ),
+                                () => contentFieldFocusNode.requestFocus(),
+                              );
+                            }),
+                          );
                     }
-                  });
-                },
-              ),
-            ],
+                  },
+                  onActionPressed: () async {
+                    // 넘길 수 있는지 확인
+                    if (!ref
+                        .read(writingConfirmPostViewModelProvider(widget.entity))
+                        .imageMediaList
+                        .every((entity) => entity.status == ImageUploadStatus.success)) {
+                      showToastMessage(context, text: '아직 업로드 중이거나 업로드에 실패한 사진이 있어요');
+                      return;
+                    }
+
+                    final myUserEntity = await ref.read(myUserDataProvider.future);
+
+                    await provider
+                        .uploadPost(
+                      hasRested: widget.hasRested,
+                      myUserEntity: myUserEntity,
+                    )
+                        .whenComplete(() {
+                      if (context.mounted) {
+                        Navigator.of(context).pop(true);
+                      }
+                    });
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ],
