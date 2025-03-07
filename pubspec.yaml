@@ -87,6 +87,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/emoji_3d/
+    - assets/images/profile/
     - assets/logo/
     - assets/images/icons/
     - assets/images/guide/
