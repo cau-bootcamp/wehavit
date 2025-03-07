@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
@@ -37,6 +39,11 @@ class EditUserDataViewModelProvider extends StateNotifier<EditUserDetailViewMode
     unawaited(
       ref.read(getUserDataFromIdUsecaseProvider).call(userId).then(
             (result) => result.fold((failure) {
+              final randomImageOffset = Random().nextInt(8);
+
+              final defaultProfileImagePath = 'assets/images/profile/default-profile-image$randomImageOffset.png';
+              getAssetImageToFile(defaultProfileImagePath);
+
               ref.read(editUserDataViewActionProvider.notifier).update((_) => EditUserDataViewNoDataAction());
             }, (entity) {
               ref.read(editUserDataViewActionProvider.notifier).update(
@@ -152,6 +159,25 @@ class EditUserDataViewModelProvider extends StateNotifier<EditUserDetailViewMode
       }
     } on Exception catch (e) {
       throw Exception('이미지 다운로드 중 오류 발생: $e');
+    }
+  }
+
+  Future<void> getAssetImageToFile(String assetPath) async {
+    // 1. assets에서 바이트 데이터 로드
+    try {
+      ByteData data = await rootBundle.load(assetPath);
+      List<int> bytes = data.buffer.asUint8List();
+
+      // 2. 임시 디렉토리에 파일 저장
+      Directory tempDir = await getTemporaryDirectory();
+      String tempPath = '${tempDir.path}/temp_image.png';
+      File file = File(tempPath);
+      await file.writeAsBytes(bytes);
+
+      state.profileImage = FileImage(file);
+      ref.notifyListeners();
+    } on Exception catch (e) {
+      throw Exception('기본 프로필 로드 중 오류 발생: $e');
     }
   }
 }
