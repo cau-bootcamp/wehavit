@@ -5,6 +5,7 @@ import 'package:wehavit/common/common.dart';
 import 'package:wehavit/dependency/presentation/viewmodel_dependency.dart';
 import 'package:wehavit/domain/entities/entities.dart';
 import 'package:wehavit/presentation/common_components/common_components.dart';
+import 'package:wehavit/presentation/state/resolution_list/resolution_list_provider.dart';
 import 'package:wehavit/presentation/write_post/write_post.dart';
 
 class ResolutionWritingMenuBottomSheet extends StatelessWidget {
@@ -68,7 +69,9 @@ class ResolutionWritingMenuBottomSheet extends StatelessWidget {
                   if (result == true) {
                     // ignore: use_build_context_synchronously
                     Navigator.of(context).pop(true);
-
+                    ref.invalidate(myWeeklyResolutionSummaryProvider);
+                    ref.invalidate(resolutionListNotifierProvider);
+                    ref.invalidate(weeklyResolutionInfoProvider);
                     showToastMessage(
                       // ignore: use_build_context_synchronously
                       context,
@@ -104,6 +107,9 @@ class ResolutionWritingMenuBottomSheet extends StatelessWidget {
                           ),
                         );
                         if (result == true) {
+                          ref.invalidate(myWeeklyResolutionSummaryProvider);
+                          ref.invalidate(resolutionListNotifierProvider);
+                          ref.invalidate(weeklyResolutionInfoProvider);
                           showToastMessage(
                             // ignore: use_build_context_synchronously
                             context,
@@ -132,6 +138,9 @@ class ResolutionWritingMenuBottomSheet extends StatelessWidget {
                                 entity: resolutionEntity,
                               )
                               .whenComplete(() {
+                            ref.invalidate(myWeeklyResolutionSummaryProvider);
+                            ref.invalidate(resolutionListNotifierProvider);
+                            ref.invalidate(weeklyResolutionInfoProvider);
                             Navigator.pop(context, true);
                             showToastMessage(
                               context,
