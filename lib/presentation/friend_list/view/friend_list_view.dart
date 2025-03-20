@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:awesome_extensions/awesome_extensions.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -283,7 +284,40 @@ class FrinedListViewState extends ConsumerState<FriendListView> {
                         friendUidList[index],
                         type: isManagingMode ? UserProfileCellType.deleteMode : UserProfileCellType.normal,
                         onDelete: () async {
-                          ref.read(friendListViewModelProvider.notifier).removeFriend(targetUid: friendUidList[index]);
+                          showCupertinoDialog(
+                            context: context,
+                            builder: (context) {
+                              return CupertinoAlertDialog(
+                                title: const Text('정말 친구를 삭제하시겠어요?'),
+                                actions: [
+                                  CupertinoDialogAction(
+                                    textStyle: const TextStyle(
+                                      color: CustomColors.pointBlue,
+                                    ),
+                                    isDefaultAction: true,
+                                    child: const Text('취소'),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  CupertinoDialogAction(
+                                    isDestructiveAction: true,
+                                    onPressed: () async {
+                                      await ref
+                                          .read(friendListViewModelProvider.notifier)
+                                          .removeFriend(targetUid: friendUidList[index])
+                                          .whenComplete(() {
+                                        if (mounted) {
+                                          Navigator.pop(context);
+                                        }
+                                      });
+                                    },
+                                    child: const Text('친구 삭제'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
                         },
                       ),
                     );

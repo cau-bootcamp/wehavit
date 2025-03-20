@@ -1,4 +1,3 @@
-import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wehavit/common/common.dart';
@@ -35,13 +34,14 @@ class MyProfileBlock extends StatelessWidget {
                 return Row(
                   children: [
                     Expanded(child: UserProfileCell(myUserData.userId, type: UserProfileCellType.profile)),
-                    Column(
-                      children: [
-                        Image.asset(CustomIconImage.linkIcon, width: 20, height: 20),
-                        const SizedBox(height: 4),
-                        Text('초대하기', style: context.labelMedium),
-                      ],
-                    ),
+                    // TODO: 딥링크 통해 앱 공유 링크 생성 시 추가하기
+                    // Column(
+                    //   children: [
+                    //     Image.asset(CustomIconImage.linkIcon, width: 20, height: 20),
+                    //     const SizedBox(height: 4),
+                    //     Text('초대하기', style: context.labelMedium),
+                    //   ],
+                    // ),
                   ],
                 );
               },
