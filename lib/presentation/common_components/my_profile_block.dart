@@ -35,13 +35,13 @@ class MyProfileBlock extends StatelessWidget {
                 return Row(
                   children: [
                     Expanded(child: UserProfileCell(myUserData.userId, type: UserProfileCellType.profile)),
-                    Column(
-                      children: [
-                        Image.asset(CustomIconImage.linkIcon, width: 20, height: 20),
-                        const SizedBox(height: 4),
-                        Text('초대하기', style: context.labelMedium),
-                      ],
-                    ),
+                    // Column(
+                    //   children: [
+                    //     Image.asset(CustomIconImage.linkIcon, width: 20, height: 20),
+                    //     const SizedBox(height: 4),
+                    //     Text('초대하기', style: context.labelMedium),
+                    //   ],
+                    // ),
                   ],
                 );
               },
