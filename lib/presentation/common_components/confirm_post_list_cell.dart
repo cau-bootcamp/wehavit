@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
@@ -520,25 +521,28 @@ class QuickshotPresetPalette extends StatelessWidget {
                     onQuickshotPresetPressed(filePath);
                   },
                   onLongPress: () async {
-                    showDialog(
+                    showCupertinoDialog(
                       context: context,
                       builder: (context) {
                         return Consumer(
-                          builder: (context, ref, child) {
-                            return AlertDialog(
-                              content: Text(
-                                '저장된 퀵샷을 지우시겠어요?',
-                                style: context.bodyMedium?.copyWith(color: CustomColors.whGrey100),
-                              ),
-                              actions: <Widget>[
-                                ElevatedButton(
+                          builder: (context, ref, _) {
+                            return CupertinoAlertDialog(
+                              title: const Text('저장된 퀵샷을 삭제하시겠어요?'),
+                              content: const Text('삭제된 퀵샷은 복구하지 못해요.'),
+                              actions: [
+                                CupertinoDialogAction(
+                                  textStyle: const TextStyle(
+                                    color: CustomColors.pointBlue,
+                                  ),
+                                  isDefaultAction: true,
+                                  child: const Text('취소'),
                                   onPressed: () {
-                                    Navigator.of(context).pop(); //창 닫기
+                                    Navigator.pop(context);
                                   },
-                                  child: const Text('아니요'),
                                 ),
-                                ElevatedButton(
-                                  onPressed: () {
+                                CupertinoDialogAction(
+                                  isDestructiveAction: true,
+                                  onPressed: () async {
                                     ref
                                         .read(removeQuickshotPresetUsecaseProvider)
                                         .call(quickshotEntity: entity)
@@ -548,7 +552,7 @@ class QuickshotPresetPalette extends StatelessWidget {
                                       if (context.mounted) Navigator.of(context).pop(); //창 닫기
                                     });
                                   },
-                                  child: const Text('네'),
+                                  child: const Text('삭제'),
                                 ),
                               ],
                             );
