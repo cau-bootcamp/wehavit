@@ -2,6 +2,7 @@ import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:wehavit/common/constants/constants.dart';
+import 'package:wehavit/presentation/common_components/debouncer.dart';
 import 'package:wehavit/presentation/common_components/wh_icon.dart';
 
 class WideColoredButton extends StatefulWidget {
@@ -27,6 +28,7 @@ class WideColoredButton extends StatefulWidget {
 }
 
 class _WideColoredButtonState extends State<WideColoredButton> {
+  final _debouncer = Debouncer(delay: const Duration(milliseconds: 100));
   bool isProgressing = false;
   @override
   Widget build(BuildContext context) {
@@ -60,12 +62,14 @@ class _WideColoredButtonState extends State<WideColoredButton> {
     } else {
       return ElevatedButton(
         onPressed: () async {
-          setState(() {
-            isProgressing = true;
-          });
-          await Future.value(widget.onPressed()).whenComplete(() {
+          _debouncer.run(() async {
             setState(() {
-              isProgressing = false;
+              isProgressing = true;
+            });
+            await Future.value(widget.onPressed()).whenComplete(() {
+              setState(() {
+                isProgressing = false;
+              });
             });
           });
         },

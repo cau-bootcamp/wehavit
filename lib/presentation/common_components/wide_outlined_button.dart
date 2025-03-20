@@ -1,9 +1,10 @@
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:wehavit/common/constants/constants.dart';
+import 'package:wehavit/presentation/common_components/debouncer.dart';
 import 'package:wehavit/presentation/common_components/wh_icon.dart';
 
-class WideOutlinedButton extends StatelessWidget {
+class WideOutlinedButton extends StatefulWidget {
   const WideOutlinedButton({
     super.key,
     this.foregroundColor = CustomColors.whGrey800,
@@ -20,8 +21,15 @@ class WideOutlinedButton extends StatelessWidget {
   final bool isDiminished;
 
   @override
+  State<WideOutlinedButton> createState() => _WideOutlinedButtonState();
+}
+
+class _WideOutlinedButtonState extends State<WideOutlinedButton> {
+  final _debouncer = Debouncer(delay: const Duration(milliseconds: 100));
+
+  @override
   Widget build(BuildContext context) {
-    if (isDiminished) {
+    if (widget.isDiminished) {
       return ElevatedButton(
         onPressed: () {},
         style: ElevatedButton.styleFrom(
@@ -43,7 +51,7 @@ class WideOutlinedButton extends StatelessWidget {
           width: double.infinity,
           height: 58,
           child: Text(
-            buttonTitle,
+            widget.buttonTitle,
             style: context.bodyLarge?.bold.copyWith(
               color: CustomColors.whGrey500,
             ),
@@ -53,11 +61,13 @@ class WideOutlinedButton extends StatelessWidget {
     } else {
       return ElevatedButton(
         onPressed: () {
-          onPressed();
+          _debouncer.run(() {
+            widget.onPressed();
+          });
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.transparent,
-          foregroundColor: foregroundColor,
+          foregroundColor: widget.foregroundColor,
           shadowColor: Colors.transparent,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
@@ -65,7 +75,7 @@ class WideOutlinedButton extends StatelessWidget {
             ),
           ),
           side: BorderSide(
-            color: foregroundColor,
+            color: widget.foregroundColor,
             width: 2,
           ),
         ),
@@ -73,23 +83,23 @@ class WideOutlinedButton extends StatelessWidget {
           alignment: Alignment.center,
           width: double.infinity,
           height: 58,
-          child: iconString.isEmpty
+          child: widget.iconString.isEmpty
               ? Text(
-                  buttonTitle,
-                  style: context.bodyLarge?.bold.copyWith(color: foregroundColor),
+                  widget.buttonTitle,
+                  style: context.bodyLarge?.bold.copyWith(color: widget.foregroundColor),
                 )
               : Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      buttonTitle,
-                      style: context.bodyLarge?.bold.copyWith(color: foregroundColor),
+                      widget.buttonTitle,
+                      style: context.bodyLarge?.bold.copyWith(color: widget.foregroundColor),
                     ),
                     const SizedBox(width: 8),
                     WHIcon(
                       size: WHIconsize.medium,
-                      iconString: iconString,
-                      iconColor: foregroundColor,
+                      iconString: widget.iconString,
+                      iconColor: widget.foregroundColor,
                     ),
                   ],
                 ),
