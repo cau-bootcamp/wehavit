@@ -2,7 +2,7 @@ name: wehavit
 description: A new Havit tracking app without the comparing others.
 publish_to: "none"
 
-version: 2.0.0+12
+version: 2.0.1+13
 
 environment:
   sdk: ">=3.4.3 <4.0.0"
@@ -87,6 +87,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/emoji_3d/
+    - assets/images/profile/
     - assets/logo/
     - assets/images/icons/
     - assets/images/guide/

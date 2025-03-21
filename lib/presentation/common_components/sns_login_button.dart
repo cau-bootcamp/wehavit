@@ -15,7 +15,7 @@ class SNSLoginButton extends StatelessWidget {
     super.key,
   });
 
-  final VoidCallback onPressed;
+  final void Function() onPressed;
   final SNSAuthType snsAuthType;
 
   @override

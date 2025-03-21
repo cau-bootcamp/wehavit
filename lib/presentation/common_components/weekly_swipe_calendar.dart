@@ -59,7 +59,7 @@ class _WeeklyPostSwipeCalendarState extends State<WeeklyPostSwipeCalendar> {
           height: isShowingCarousel ? 64 : 0,
           child: WeeklySwipeCalendarCarousel(
             resolutionList: widget.resolutionList,
-            firstDate: widget.firstDate,
+            firstDate: widget.firstDate.parseDateOnly(),
             calendartMondayDateList: calendartMondayDateList,
             onChangeDate: (newDate) {
               setState(() {

@@ -1,6 +1,7 @@
 import 'package:awesome_extensions/awesome_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:wehavit/common/constants/constants.dart';
+import 'package:wehavit/presentation/common_components/debouncer.dart';
 
 enum WHIconsize {
   large,
@@ -48,7 +49,7 @@ class WHIcon extends StatelessWidget {
   }
 }
 
-class WhIconButton extends StatelessWidget {
+class WhIconButton extends StatefulWidget {
   const WhIconButton({
     required this.size,
     required this.iconString,
@@ -67,26 +68,33 @@ class WhIconButton extends StatelessWidget {
   final Color color;
 
   @override
+  State<WhIconButton> createState() => _WhIconButtonState();
+}
+
+class _WhIconButtonState extends State<WhIconButton> {
+  final _debouncer = Debouncer(delay: const Duration(milliseconds: 100));
+
+  @override
   Widget build(BuildContext context) {
-    final labelTextStyle = switch (size) {
-      WHIconsize.large => context.labelLarge?.copyWith(color: color),
-      WHIconsize.medium => context.labelLarge?.copyWith(color: color),
-      WHIconsize.small => context.labelMedium?.copyWith(color: color),
-      WHIconsize.extraSmall => context.labelSmall?.copyWith(color: color),
+    final labelTextStyle = switch (widget.size) {
+      WHIconsize.large => context.labelLarge?.copyWith(color: widget.color),
+      WHIconsize.medium => context.labelLarge?.copyWith(color: widget.color),
+      WHIconsize.small => context.labelMedium?.copyWith(color: widget.color),
+      WHIconsize.extraSmall => context.labelSmall?.copyWith(color: widget.color),
     };
-    final contentGap = switch (size) {
+    final contentGap = switch (widget.size) {
       WHIconsize.large => 16.0,
       WHIconsize.medium => 14.0,
       WHIconsize.small => 10.0,
       WHIconsize.extraSmall => 8.0,
     };
-    final badgeTextStyle = switch (size) {
+    final badgeTextStyle = switch (widget.size) {
       WHIconsize.large => context.labelMedium?.bold,
       WHIconsize.medium => context.labelSmall?.bold,
       WHIconsize.small => context.labelSmall?.copyWith(fontSize: 9.0).bold,
       WHIconsize.extraSmall => context.labelSmall,
     };
-    final badgePadding = switch (size) {
+    final badgePadding = switch (widget.size) {
       WHIconsize.large => 4.0,
       WHIconsize.medium => 3.0,
       WHIconsize.small => 2.0,
@@ -96,11 +104,11 @@ class WhIconButton extends StatelessWidget {
       clipBehavior: Clip.none,
       children: [
         WHIcon(
-          size: size,
-          iconString: iconString,
-          iconColor: color,
+          size: widget.size,
+          iconString: widget.iconString,
+          iconColor: widget.color,
         ),
-        if (badgeCount > 0)
+        if (widget.badgeCount > 0)
           Positioned(
             right: -1.5 * badgePadding,
             top: -1.5 * badgePadding,
@@ -109,7 +117,7 @@ class WhIconButton extends StatelessWidget {
               padding: EdgeInsets.all(badgePadding),
               decoration: const BoxDecoration(shape: BoxShape.circle, color: CustomColors.whRed500),
               child: Text(
-                badgeCount.toString(),
+                widget.badgeCount.toString(),
                 style: badgeTextStyle,
               ),
             ),
@@ -124,19 +132,21 @@ class WhIconButton extends StatelessWidget {
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       ),
       onPressed: () {
-        onPressed();
+        _debouncer.run(() {
+          widget.onPressed();
+        });
       },
-      child: switch ((buttonLabel.isNotEmpty, iconString.isNotEmpty)) {
+      child: switch ((widget.buttonLabel.isNotEmpty, widget.iconString.isNotEmpty)) {
         (true, true) => Row(
             children: [
               whIcon,
               SizedBox(width: contentGap),
-              Text(buttonLabel, style: labelTextStyle),
+              Text(widget.buttonLabel, style: labelTextStyle),
             ],
           ),
         (false, true) => whIcon,
         (true, false) => Text(
-            buttonLabel,
+            widget.buttonLabel,
             style: labelTextStyle,
             textAlign: TextAlign.left,
           ),

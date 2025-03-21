@@ -202,13 +202,40 @@ class MyPageScreenState extends ConsumerState<MyPageView> with AutomaticKeepAliv
                 buttonTitle: '로그아웃',
                 iconString: WHIcons.logout,
                 onPressed: () async {
-                  await ref.read(logOutUseCaseProvider).call();
-                  ref.invalidate(getMyUserDataUsecaseProvider);
-                  if (mounted) {
-                    // ignore: use_build_context_synchronously
-                    Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
-                    Navigator.pushNamed(context, '/entrance');
-                  }
+                  showCupertinoDialog(
+                    context: context,
+                    builder: (context) {
+                      return CupertinoAlertDialog(
+                        title: const Text('정말 로그아웃하시겠어요?'),
+                        actions: [
+                          CupertinoDialogAction(
+                            textStyle: const TextStyle(
+                              color: CustomColors.pointBlue,
+                            ),
+                            isDefaultAction: true,
+                            child: const Text('취소'),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          CupertinoDialogAction(
+                            isDestructiveAction: true,
+                            onPressed: () async {
+                              await ref.read(logOutUseCaseProvider).call();
+                              ref.invalidate(getMyUserDataUsecaseProvider);
+                              if (mounted) {
+                                // ignore: use_build_context_synchronously
+                                Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+                                // ignore: use_build_context_synchronously
+                                Navigator.pushNamed(context, '/entrance');
+                              }
+                            },
+                            child: const Text('로그아웃'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 },
               ),
               const SizedBox(
